@@ -5282,5 +5282,5 @@
     {"module": "hydra.dsl.errors"},
     {"module": "hydra.dsl.packaging"},
     {"module": "hydra.dsl.typing"}],
-  "description": "DSL functions for hydra.graph",
+  "metadata": {"comments": [], "description": "DSL functions for hydra.graph", "seeAlso": []},
   "name": "hydra.dsl.graph"}

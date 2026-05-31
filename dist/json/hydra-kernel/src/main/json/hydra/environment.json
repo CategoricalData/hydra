@@ -1611,5 +1611,5 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "description": "Graph to type environment conversions",
+  "metadata": {"comments": [], "description": "Graph to type environment conversions", "seeAlso": []},
   "name": "hydra.environment"}

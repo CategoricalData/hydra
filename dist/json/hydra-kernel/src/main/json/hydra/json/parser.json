@@ -1241,5 +1241,5 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "description": "JSON parser using Hydra parser combinators",
+  "metadata": {"comments": [], "description": "JSON parser using Hydra parser combinators", "seeAlso": []},
   "name": "hydra.json.parser"}

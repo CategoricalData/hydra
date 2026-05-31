@@ -4201,5 +4201,8 @@
     {"module": "hydra.pg.model"},
     {"module": "hydra.tabular"},
     {"module": "hydra.relational"}],
-  "description": "Functions for transforming property graph mappings into property graph elements.",
+  "metadata": {
+    "comments": [],
+    "description": "Functions for transforming property graph mappings into property graph elements.",
+    "seeAlso": []},
   "name": "hydra.demos.genpg.transform"}

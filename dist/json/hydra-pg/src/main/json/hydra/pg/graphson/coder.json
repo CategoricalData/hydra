@@ -1332,5 +1332,5 @@
     {"module": "hydra.variants"},
     {"module": "hydra.pg.graphson.syntax"},
     {"module": "hydra.json.model"}],
-  "description": "Encoding functions for converting GraphSON syntax to JSON.",
+  "metadata": {"comments": [], "description": "Encoding functions for converting GraphSON syntax to JSON.", "seeAlso": []},
   "name": "hydra.pg.graphson.coder"}

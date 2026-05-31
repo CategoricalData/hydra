@@ -27581,5 +27581,8 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "description": "Nominal type checking test cases: records, unions, field access, injection, projection",
+  "metadata": {
+    "comments": [],
+    "description": "Nominal type checking test cases: records, unions, field access, injection, projection",
+    "seeAlso": []},
   "name": "hydra.test.checking.nominalTypes"}

@@ -1515,5 +1515,8 @@
               "body": {"wrap": {"variable": "hydra.haskell.syntax.Name"}}}},
           "variables": []}}}],
   "dependencies": [{"module": "hydra.core"}],
-  "description": "A Haskell syntax model for Hydra. Originally inspired by Language.Haskell.Tools.AST, but now diverges freely to suit Hydra's needs.",
+  "metadata": {
+    "comments": [],
+    "description": "A Haskell syntax model for Hydra. Originally inspired by Language.Haskell.Tools.AST, but now diverges freely to suit Hydra's needs.",
+    "seeAlso": []},
   "name": "hydra.haskell.syntax"}

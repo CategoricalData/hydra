@@ -26240,5 +26240,5 @@
                   "application": {"argument": {"variable": "hydra.haskell.syntax.Variable"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}}}}],
   "dependencies": [{"module": "hydra.haskell.syntax"}, {"module": "hydra.typed"}, {"module": "hydra.core"}, {"module": "hydra.dsl.core"}],
-  "description": "DSL functions for hydra.haskell.syntax",
+  "metadata": {"comments": [], "description": "DSL functions for hydra.haskell.syntax", "seeAlso": []},
   "name": "hydra.dsl.haskell.syntax"}

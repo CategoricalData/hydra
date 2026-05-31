@@ -4179,5 +4179,5 @@
     {"module": "hydra.query"},
     {"module": "hydra.util"},
     {"module": "hydra.decode.core"}],
-  "description": "Term decoders for hydra.query",
+  "metadata": {"comments": [], "description": "Term decoders for hydra.query", "seeAlso": []},
   "name": "hydra.decode.query"}

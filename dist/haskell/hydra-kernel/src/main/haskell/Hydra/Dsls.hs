@@ -114,9 +114,13 @@ dslModule cx graph mod =
             Core.typeSchemeConstraints = Nothing}))}) (Packaging.typeDefinitionName v0) (Core.typeSchemeBody (Packaging.typeDefinitionTypeScheme v0)))
       _ -> Nothing) (Packaging.moduleDefinitions mod)))) (\typeBindings -> Logic.ifElse (Lists.null typeBindings) (Right Nothing) (Eithers.bind (Eithers.mapList (\b -> Eithers.bimap (\_e -> Errors.ErrorDecoding _e) (\x -> x) (generateBindingsForType cx graph b)) typeBindings) (\dslBindings -> Right (Just (Packaging.Module {
       Packaging.moduleName = (dslNamespace (Packaging.moduleName mod)),
-      Packaging.moduleDescription = (Just (Strings.cat [
-        "DSL functions for ",
-        (Packaging.unModuleName (Packaging.moduleName mod))])),
+      Packaging.moduleMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just (Strings.cat [
+          "DSL functions for ",
+          (Packaging.unModuleName (Packaging.moduleName mod))])),
+        Packaging.entityMetadataComments = [],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.moduleDependencies = (Lists.map (\ns -> Packaging.ModuleDependency {
         Packaging.moduleDependencyModule = ns,
         Packaging.moduleDependencyPackage = Nothing}) (Lists.nub (Lists.concat2 [
@@ -124,6 +128,7 @@ dslModule cx graph mod =
         (Packaging.ModuleName "hydra.typed")] (Lists.concat2 (Lists.map (\dep -> Packaging.moduleDependencyModule dep) (Packaging.moduleDependencies mod)) (Lists.map dslNamespace (Lists.map (\dep -> Packaging.moduleDependencyModule dep) (Packaging.moduleDependencies mod))))))),
       Packaging.moduleDefinitions = (Lists.map (\b -> Packaging.DefinitionTerm (Packaging.TermDefinition {
         Packaging.termDefinitionName = (Core.bindingName b),
+        Packaging.termDefinitionMetadata = Nothing,
         Packaging.termDefinitionTerm = (Core.bindingTerm b),
         Packaging.termDefinitionSignature = (Maybes.map Scoping.typeSchemeToTermSignature (Core.bindingTypeScheme b))})) (deduplicateBindings (Lists.concat dslBindings)))})))))
 -- | Generate a DSL module namespace from a source module namespace

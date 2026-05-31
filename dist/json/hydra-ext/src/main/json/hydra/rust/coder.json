@@ -4917,5 +4917,8 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "description": "Rust code generator: converts Hydra type and term modules to Rust source code",
+  "metadata": {
+    "comments": [],
+    "description": "Rust code generator: converts Hydra type and term modules to Rust source code",
+    "seeAlso": []},
   "name": "hydra.rust.coder"}

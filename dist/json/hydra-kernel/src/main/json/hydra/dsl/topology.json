@@ -2486,5 +2486,5 @@
                   "application": {"argument": {"variable": "hydra.topology.TarjanState"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "original"}}}}}}],
   "dependencies": [{"module": "hydra.topology"}, {"module": "hydra.typed"}, {"module": "hydra.core"}, {"module": "hydra.dsl.core"}],
-  "description": "DSL functions for hydra.topology",
+  "metadata": {"comments": [], "description": "DSL functions for hydra.topology", "seeAlso": []},
   "name": "hydra.dsl.topology"}

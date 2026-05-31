@@ -152,5 +152,5 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "description": "Language constraints for Apache Avro",
+  "metadata": {"comments": [], "description": "Language constraints for Apache Avro", "seeAlso": []},
   "name": "hydra.avro.language"}

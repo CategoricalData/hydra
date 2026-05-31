@@ -808,5 +808,8 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "description": "Round-trip test cases for the JSON<->YAML bridge, focused on decimal precision",
+  "metadata": {
+    "comments": [],
+    "description": "Round-trip test cases for the JSON<->YAML bridge, focused on decimal precision",
+    "seeAlso": []},
   "name": "hydra.test.json.yaml"}

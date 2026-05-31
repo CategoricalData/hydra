@@ -229,5 +229,5 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "description": "Conversion functions for literal values.",
+  "metadata": {"comments": [], "description": "Conversion functions for literal values.", "seeAlso": []},
   "name": "hydra.literals"}

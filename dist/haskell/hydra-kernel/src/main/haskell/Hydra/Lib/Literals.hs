@@ -41,13 +41,14 @@ bigintToDecimal =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeLiteral Core.LiteralTypeDecimal)}},
-      Packaging.primitiveDefinitionDescription = "Convert a bigint to a decimal.",
-      Packaging.primitiveDefinitionComments = (Just "bigintToDecimal(x) returns the exact decimal representation of x. Since decimal is arbitrary-precision and bigint is also arbitrary-precision, the conversion is lossless. Total."),
-      Packaging.primitiveDefinitionSeeAlso = [],
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "Convert a bigint to a decimal."),
+        Packaging.entityMetadataComments = [
+          "bigintToDecimal(x) returns the exact decimal representation of x. Since decimal is arbitrary-precision and bigint is also arbitrary-precision, the conversion is lossless. Total."],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
-      Packaging.primitiveDefinitionAvailableSince = Nothing,
-      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 bigintToInt16 :: Packaging.PrimitiveDefinition
 bigintToInt16 =
@@ -64,13 +65,14 @@ bigintToInt16 =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt16))}},
-      Packaging.primitiveDefinitionDescription = "Convert a bigint to an int16 (truncating).",
-      Packaging.primitiveDefinitionComments = (Just "bigintToInt16(x) returns x reduced modulo 2^16 and reinterpreted as a signed two's-complement int16. Values outside [-2^15, 2^15-1] wrap silently with no exception. Total."),
-      Packaging.primitiveDefinitionSeeAlso = [],
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "Convert a bigint to an int16 (truncating)."),
+        Packaging.entityMetadataComments = [
+          "bigintToInt16(x) returns x reduced modulo 2^16 and reinterpreted as a signed two's-complement int16. Values outside [-2^15, 2^15-1] wrap silently with no exception. Total."],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
-      Packaging.primitiveDefinitionAvailableSince = Nothing,
-      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 bigintToInt32 :: Packaging.PrimitiveDefinition
 bigintToInt32 =
@@ -87,13 +89,14 @@ bigintToInt32 =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}},
-      Packaging.primitiveDefinitionDescription = "Convert a bigint to an int32 (truncating).",
-      Packaging.primitiveDefinitionComments = (Just "bigintToInt32(x) returns x reduced modulo 2^32 and reinterpreted as a signed two's-complement int32. Values outside [-2^31, 2^31-1] wrap silently with no exception. Total."),
-      Packaging.primitiveDefinitionSeeAlso = [],
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "Convert a bigint to an int32 (truncating)."),
+        Packaging.entityMetadataComments = [
+          "bigintToInt32(x) returns x reduced modulo 2^32 and reinterpreted as a signed two's-complement int32. Values outside [-2^31, 2^31-1] wrap silently with no exception. Total."],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
-      Packaging.primitiveDefinitionAvailableSince = Nothing,
-      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 bigintToInt64 :: Packaging.PrimitiveDefinition
 bigintToInt64 =
@@ -110,13 +113,14 @@ bigintToInt64 =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt64))}},
-      Packaging.primitiveDefinitionDescription = "Convert a bigint to an int64 (truncating).",
-      Packaging.primitiveDefinitionComments = (Just "bigintToInt64(x) returns x reduced modulo 2^64 and reinterpreted as a signed two's-complement int64. Values outside [-2^63, 2^63-1] wrap silently with no exception. Total."),
-      Packaging.primitiveDefinitionSeeAlso = [],
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "Convert a bigint to an int64 (truncating)."),
+        Packaging.entityMetadataComments = [
+          "bigintToInt64(x) returns x reduced modulo 2^64 and reinterpreted as a signed two's-complement int64. Values outside [-2^63, 2^63-1] wrap silently with no exception. Total."],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
-      Packaging.primitiveDefinitionAvailableSince = Nothing,
-      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 bigintToInt8 :: Packaging.PrimitiveDefinition
 bigintToInt8 =
@@ -133,13 +137,14 @@ bigintToInt8 =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt8))}},
-      Packaging.primitiveDefinitionDescription = "Convert a bigint to an int8 (truncating).",
-      Packaging.primitiveDefinitionComments = (Just "bigintToInt8(x) returns x reduced modulo 2^8 and reinterpreted as a signed two's-complement int8. Values outside [-128, 127] wrap silently with no exception. Total."),
-      Packaging.primitiveDefinitionSeeAlso = [],
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "Convert a bigint to an int8 (truncating)."),
+        Packaging.entityMetadataComments = [
+          "bigintToInt8(x) returns x reduced modulo 2^8 and reinterpreted as a signed two's-complement int8. Values outside [-128, 127] wrap silently with no exception. Total."],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
-      Packaging.primitiveDefinitionAvailableSince = Nothing,
-      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 bigintToUint16 :: Packaging.PrimitiveDefinition
 bigintToUint16 =
@@ -156,13 +161,14 @@ bigintToUint16 =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeUint16))}},
-      Packaging.primitiveDefinitionDescription = "Convert a bigint to a uint16 (truncating).",
-      Packaging.primitiveDefinitionComments = (Just "bigintToUint16(x) returns x reduced modulo 2^16 as an unsigned uint16. Values outside [0, 2^16-1] wrap silently with no exception. Total."),
-      Packaging.primitiveDefinitionSeeAlso = [],
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "Convert a bigint to a uint16 (truncating)."),
+        Packaging.entityMetadataComments = [
+          "bigintToUint16(x) returns x reduced modulo 2^16 as an unsigned uint16. Values outside [0, 2^16-1] wrap silently with no exception. Total."],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
-      Packaging.primitiveDefinitionAvailableSince = Nothing,
-      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 bigintToUint32 :: Packaging.PrimitiveDefinition
 bigintToUint32 =
@@ -179,13 +185,14 @@ bigintToUint32 =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeUint32))}},
-      Packaging.primitiveDefinitionDescription = "Convert a bigint to a uint32 (truncating).",
-      Packaging.primitiveDefinitionComments = (Just "bigintToUint32(x) returns x reduced modulo 2^32 as an unsigned uint32. Values outside [0, 2^32-1] wrap silently with no exception. Total."),
-      Packaging.primitiveDefinitionSeeAlso = [],
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "Convert a bigint to a uint32 (truncating)."),
+        Packaging.entityMetadataComments = [
+          "bigintToUint32(x) returns x reduced modulo 2^32 as an unsigned uint32. Values outside [0, 2^32-1] wrap silently with no exception. Total."],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
-      Packaging.primitiveDefinitionAvailableSince = Nothing,
-      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 bigintToUint64 :: Packaging.PrimitiveDefinition
 bigintToUint64 =
@@ -202,13 +209,14 @@ bigintToUint64 =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeUint64))}},
-      Packaging.primitiveDefinitionDescription = "Convert a bigint to a uint64 (truncating).",
-      Packaging.primitiveDefinitionComments = (Just "bigintToUint64(x) returns x reduced modulo 2^64 as an unsigned uint64. Values outside [0, 2^64-1] wrap silently with no exception. Total."),
-      Packaging.primitiveDefinitionSeeAlso = [],
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "Convert a bigint to a uint64 (truncating)."),
+        Packaging.entityMetadataComments = [
+          "bigintToUint64(x) returns x reduced modulo 2^64 as an unsigned uint64. Values outside [0, 2^64-1] wrap silently with no exception. Total."],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
-      Packaging.primitiveDefinitionAvailableSince = Nothing,
-      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 bigintToUint8 :: Packaging.PrimitiveDefinition
 bigintToUint8 =
@@ -225,13 +233,14 @@ bigintToUint8 =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeUint8))}},
-      Packaging.primitiveDefinitionDescription = "Convert a bigint to a uint8 (truncating).",
-      Packaging.primitiveDefinitionComments = (Just "bigintToUint8(x) returns x reduced modulo 2^8 as an unsigned uint8. Values outside [0, 255] wrap silently with no exception. Total."),
-      Packaging.primitiveDefinitionSeeAlso = [],
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "Convert a bigint to a uint8 (truncating)."),
+        Packaging.entityMetadataComments = [
+          "bigintToUint8(x) returns x reduced modulo 2^8 as an unsigned uint8. Values outside [0, 255] wrap silently with no exception. Total."],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
-      Packaging.primitiveDefinitionAvailableSince = Nothing,
-      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 binaryToBytes :: Packaging.PrimitiveDefinition
 binaryToBytes =
@@ -248,13 +257,14 @@ binaryToBytes =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeList (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)))}},
-      Packaging.primitiveDefinitionDescription = "Convert binary data to a list of byte values.",
-      Packaging.primitiveDefinitionComments = (Just "binaryToBytes(b) returns the bytes of b as an int32 list with values in [0, 255], preserving byte order. Total. (The result list element type is int32 rather than uint8 because Hydra's primitive collections work most naturally with int32 indices.)"),
-      Packaging.primitiveDefinitionSeeAlso = [],
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "Convert binary data to a list of byte values."),
+        Packaging.entityMetadataComments = [
+          "binaryToBytes(b) returns the bytes of b as an int32 list with values in [0, 255], preserving byte order. Total. (The result list element type is int32 rather than uint8 because Hydra's primitive collections work most naturally with int32 indices.)"],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
-      Packaging.primitiveDefinitionAvailableSince = Nothing,
-      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 binaryToString :: Packaging.PrimitiveDefinition
 binaryToString =
@@ -271,13 +281,14 @@ binaryToString =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeLiteral Core.LiteralTypeString)}},
-      Packaging.primitiveDefinitionDescription = "Convert binary data to a UTF-8 string.",
-      Packaging.primitiveDefinitionComments = (Just "binaryToString(b) interprets the bytes of b as a UTF-8-encoded string and returns the decoded value. The behavior on invalid UTF-8 byte sequences is host-defined: most hosts substitute the replacement character U+FFFD; some may signal an error or truncate. Total in the sense that it does not raise from the kernel's perspective, but the result may carry the host's replacement semantics."),
-      Packaging.primitiveDefinitionSeeAlso = [],
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "Convert binary data to a UTF-8 string."),
+        Packaging.entityMetadataComments = [
+          "binaryToString(b) interprets the bytes of b as a UTF-8-encoded string and returns the decoded value. The behavior on invalid UTF-8 byte sequences is host-defined: most hosts substitute the replacement character U+FFFD; some may signal an error or truncate. Total in the sense that it does not raise from the kernel's perspective, but the result may carry the host's replacement semantics."],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
-      Packaging.primitiveDefinitionAvailableSince = Nothing,
-      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 decimalToBigint :: Packaging.PrimitiveDefinition
 decimalToBigint =
@@ -294,13 +305,14 @@ decimalToBigint =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeBigint))}},
-      Packaging.primitiveDefinitionDescription = "Convert a decimal to a bigint (truncating).",
-      Packaging.primitiveDefinitionComments = (Just "decimalToBigint(x) returns x truncated toward zero. Fractional parts are discarded. Total."),
-      Packaging.primitiveDefinitionSeeAlso = [],
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "Convert a decimal to a bigint (truncating)."),
+        Packaging.entityMetadataComments = [
+          "decimalToBigint(x) returns x truncated toward zero. Fractional parts are discarded. Total."],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
-      Packaging.primitiveDefinitionAvailableSince = Nothing,
-      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 decimalToFloat32 :: Packaging.PrimitiveDefinition
 decimalToFloat32 =
@@ -317,13 +329,14 @@ decimalToFloat32 =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat32))}},
-      Packaging.primitiveDefinitionDescription = "Convert a decimal to a float32.",
-      Packaging.primitiveDefinitionComments = (Just "decimalToFloat32(x) returns the IEEE 754 binary32 value closest to x under roundTiesToEven. Values outside the float32 representable range overflow to \177\8734. Subnormal precision loss is silent. Total."),
-      Packaging.primitiveDefinitionSeeAlso = [],
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "Convert a decimal to a float32."),
+        Packaging.entityMetadataComments = [
+          "decimalToFloat32(x) returns the IEEE 754 binary32 value closest to x under roundTiesToEven. Values outside the float32 representable range overflow to \177\8734. Subnormal precision loss is silent. Total."],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
-      Packaging.primitiveDefinitionAvailableSince = Nothing,
-      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 decimalToFloat64 :: Packaging.PrimitiveDefinition
 decimalToFloat64 =
@@ -340,13 +353,14 @@ decimalToFloat64 =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat64))}},
-      Packaging.primitiveDefinitionDescription = "Convert a decimal to a float64.",
-      Packaging.primitiveDefinitionComments = (Just "decimalToFloat64(x) returns the IEEE 754 binary64 value closest to x under roundTiesToEven. Values outside the float64 representable range overflow to \177\8734. Subnormal precision loss is silent. Total."),
-      Packaging.primitiveDefinitionSeeAlso = [],
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "Convert a decimal to a float64."),
+        Packaging.entityMetadataComments = [
+          "decimalToFloat64(x) returns the IEEE 754 binary64 value closest to x under roundTiesToEven. Values outside the float64 representable range overflow to \177\8734. Subnormal precision loss is silent. Total."],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
-      Packaging.primitiveDefinitionAvailableSince = Nothing,
-      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 float32ToDecimal :: Packaging.PrimitiveDefinition
 float32ToDecimal =
@@ -363,13 +377,14 @@ float32ToDecimal =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeLiteral Core.LiteralTypeDecimal)}},
-      Packaging.primitiveDefinitionDescription = "Convert a float32 to a decimal.",
-      Packaging.primitiveDefinitionComments = (Just "float32ToDecimal(x) returns the exact decimal representation of the binary32 value x. Special float32 values (\177\8734, NaN) have a host-defined decimal representation; finite values convert exactly since binary32 values are dyadic rationals. Total."),
-      Packaging.primitiveDefinitionSeeAlso = [],
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "Convert a float32 to a decimal."),
+        Packaging.entityMetadataComments = [
+          "float32ToDecimal(x) returns the exact decimal representation of the binary32 value x. Special float32 values (\177\8734, NaN) have a host-defined decimal representation; finite values convert exactly since binary32 values are dyadic rationals. Total."],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
-      Packaging.primitiveDefinitionAvailableSince = Nothing,
-      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 float32ToFloat64 :: Packaging.PrimitiveDefinition
 float32ToFloat64 =
@@ -386,13 +401,14 @@ float32ToFloat64 =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat64))}},
-      Packaging.primitiveDefinitionDescription = "Convert a float32 to a float64.",
-      Packaging.primitiveDefinitionComments = (Just "float32ToFloat64(x) returns the binary64 value with the same numeric value as x; \177\8734 and NaN pass through. The conversion is exact and lossless. Total."),
-      Packaging.primitiveDefinitionSeeAlso = [],
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "Convert a float32 to a float64."),
+        Packaging.entityMetadataComments = [
+          "float32ToFloat64(x) returns the binary64 value with the same numeric value as x; \177\8734 and NaN pass through. The conversion is exact and lossless. Total."],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
-      Packaging.primitiveDefinitionAvailableSince = Nothing,
-      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 float64ToDecimal :: Packaging.PrimitiveDefinition
 float64ToDecimal =
@@ -409,13 +425,14 @@ float64ToDecimal =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeLiteral Core.LiteralTypeDecimal)}},
-      Packaging.primitiveDefinitionDescription = "Convert a float64 to a decimal.",
-      Packaging.primitiveDefinitionComments = (Just "float64ToDecimal(x) returns the exact decimal representation of the binary64 value x. Special float64 values (\177\8734, NaN) have a host-defined decimal representation; finite values convert exactly since binary64 values are dyadic rationals. Total."),
-      Packaging.primitiveDefinitionSeeAlso = [],
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "Convert a float64 to a decimal."),
+        Packaging.entityMetadataComments = [
+          "float64ToDecimal(x) returns the exact decimal representation of the binary64 value x. Special float64 values (\177\8734, NaN) have a host-defined decimal representation; finite values convert exactly since binary64 values are dyadic rationals. Total."],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
-      Packaging.primitiveDefinitionAvailableSince = Nothing,
-      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 float64ToFloat32 :: Packaging.PrimitiveDefinition
 float64ToFloat32 =
@@ -432,13 +449,14 @@ float64ToFloat32 =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat32))}},
-      Packaging.primitiveDefinitionDescription = "Convert a float64 to a float32 (lossy).",
-      Packaging.primitiveDefinitionComments = (Just "float64ToFloat32(x) returns the binary32 value closest to x under roundTiesToEven. Values outside the binary32 range overflow to \177\8734; subnormal precision loss is silent; NaN payload may be canonicalized by the host. Total."),
-      Packaging.primitiveDefinitionSeeAlso = [],
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "Convert a float64 to a float32 (lossy)."),
+        Packaging.entityMetadataComments = [
+          "float64ToFloat32(x) returns the binary32 value closest to x under roundTiesToEven. Values outside the binary32 range overflow to \177\8734; subnormal precision loss is silent; NaN payload may be canonicalized by the host. Total."],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
-      Packaging.primitiveDefinitionAvailableSince = Nothing,
-      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 int16ToBigint :: Packaging.PrimitiveDefinition
 int16ToBigint =
@@ -455,13 +473,14 @@ int16ToBigint =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeBigint))}},
-      Packaging.primitiveDefinitionDescription = "Convert an int16 to a bigint.",
-      Packaging.primitiveDefinitionComments = (Just "int16ToBigint(x) returns the bigint with the same numeric value as x. The conversion is exact and lossless. Total."),
-      Packaging.primitiveDefinitionSeeAlso = [],
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "Convert an int16 to a bigint."),
+        Packaging.entityMetadataComments = [
+          "int16ToBigint(x) returns the bigint with the same numeric value as x. The conversion is exact and lossless. Total."],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
-      Packaging.primitiveDefinitionAvailableSince = Nothing,
-      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 int32ToBigint :: Packaging.PrimitiveDefinition
 int32ToBigint =
@@ -478,13 +497,14 @@ int32ToBigint =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeBigint))}},
-      Packaging.primitiveDefinitionDescription = "Convert an int32 to a bigint.",
-      Packaging.primitiveDefinitionComments = (Just "int32ToBigint(x) returns the bigint with the same numeric value as x. The conversion is exact and lossless. Total."),
-      Packaging.primitiveDefinitionSeeAlso = [],
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "Convert an int32 to a bigint."),
+        Packaging.entityMetadataComments = [
+          "int32ToBigint(x) returns the bigint with the same numeric value as x. The conversion is exact and lossless. Total."],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
-      Packaging.primitiveDefinitionAvailableSince = Nothing,
-      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 int64ToBigint :: Packaging.PrimitiveDefinition
 int64ToBigint =
@@ -501,13 +521,14 @@ int64ToBigint =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeBigint))}},
-      Packaging.primitiveDefinitionDescription = "Convert an int64 to a bigint.",
-      Packaging.primitiveDefinitionComments = (Just "int64ToBigint(x) returns the bigint with the same numeric value as x. The conversion is exact and lossless. Total."),
-      Packaging.primitiveDefinitionSeeAlso = [],
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "Convert an int64 to a bigint."),
+        Packaging.entityMetadataComments = [
+          "int64ToBigint(x) returns the bigint with the same numeric value as x. The conversion is exact and lossless. Total."],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
-      Packaging.primitiveDefinitionAvailableSince = Nothing,
-      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 int8ToBigint :: Packaging.PrimitiveDefinition
 int8ToBigint =
@@ -524,13 +545,14 @@ int8ToBigint =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeBigint))}},
-      Packaging.primitiveDefinitionDescription = "Convert an int8 to a bigint.",
-      Packaging.primitiveDefinitionComments = (Just "int8ToBigint(x) returns the bigint with the same numeric value as x. The conversion is exact and lossless. Total."),
-      Packaging.primitiveDefinitionSeeAlso = [],
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "Convert an int8 to a bigint."),
+        Packaging.entityMetadataComments = [
+          "int8ToBigint(x) returns the bigint with the same numeric value as x. The conversion is exact and lossless. Total."],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
-      Packaging.primitiveDefinitionAvailableSince = Nothing,
-      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 readBigint :: Packaging.PrimitiveDefinition
 readBigint =
@@ -547,13 +569,14 @@ readBigint =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeMaybe (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeBigint)))}},
-      Packaging.primitiveDefinitionDescription = "Parse a string as a bigint.",
-      Packaging.primitiveDefinitionComments = (Just "readBigint(s) returns Just(x) where x is the bigint parsed from s, or Nothing if s is not a valid bigint literal. Accepted syntax follows the Haskell Show/Read convention: an optional leading minus sign followed by a sequence of decimal digits. Whitespace is not stripped; leading or trailing whitespace causes parse failure. Total."),
-      Packaging.primitiveDefinitionSeeAlso = [],
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "Parse a string as a bigint."),
+        Packaging.entityMetadataComments = [
+          "readBigint(s) returns Just(x) where x is the bigint parsed from s, or Nothing if s is not a valid bigint literal. Accepted syntax follows the Haskell Show/Read convention: an optional leading minus sign followed by a sequence of decimal digits. Whitespace is not stripped; leading or trailing whitespace causes parse failure. Total."],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
-      Packaging.primitiveDefinitionAvailableSince = Nothing,
-      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 readBoolean :: Packaging.PrimitiveDefinition
 readBoolean =
@@ -570,13 +593,14 @@ readBoolean =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeMaybe (Core.TypeLiteral Core.LiteralTypeBoolean))}},
-      Packaging.primitiveDefinitionDescription = "Parse a string as a boolean.",
-      Packaging.primitiveDefinitionComments = (Just "readBoolean(s) returns Just(true) for \"true\", Just(false) for \"false\", and Nothing for any other input (including \"True\"/\"False\" with capital initial letter on some hosts; behavior on capitalized forms is host-defined and should not be relied upon). Total."),
-      Packaging.primitiveDefinitionSeeAlso = [],
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "Parse a string as a boolean."),
+        Packaging.entityMetadataComments = [
+          "readBoolean(s) returns Just(true) for \"true\", Just(false) for \"false\", and Nothing for any other input (including \"True\"/\"False\" with capital initial letter on some hosts; behavior on capitalized forms is host-defined and should not be relied upon). Total."],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
-      Packaging.primitiveDefinitionAvailableSince = Nothing,
-      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 readDecimal :: Packaging.PrimitiveDefinition
 readDecimal =
@@ -593,13 +617,14 @@ readDecimal =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeMaybe (Core.TypeLiteral Core.LiteralTypeDecimal))}},
-      Packaging.primitiveDefinitionDescription = "Parse a string as a decimal.",
-      Packaging.primitiveDefinitionComments = (Just "readDecimal(s) returns Just(x) where x is the decimal parsed from s, or Nothing on parse failure. Accepted syntax is the standard decimal literal: an optional sign, an integer part, an optional fractional part, and an optional exponent (e.g. -1.5, 2e10, 0.0). Total."),
-      Packaging.primitiveDefinitionSeeAlso = [],
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "Parse a string as a decimal."),
+        Packaging.entityMetadataComments = [
+          "readDecimal(s) returns Just(x) where x is the decimal parsed from s, or Nothing on parse failure. Accepted syntax is the standard decimal literal: an optional sign, an integer part, an optional fractional part, and an optional exponent (e.g. -1.5, 2e10, 0.0). Total."],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
-      Packaging.primitiveDefinitionAvailableSince = Nothing,
-      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 readFloat32 :: Packaging.PrimitiveDefinition
 readFloat32 =
@@ -616,13 +641,14 @@ readFloat32 =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeMaybe (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat32)))}},
-      Packaging.primitiveDefinitionDescription = "Parse a string as a float32.",
-      Packaging.primitiveDefinitionComments = (Just "readFloat32(s) returns Just(x) where x is the IEEE 754 binary32 value closest to the number parsed from s under roundTiesToEven, or Nothing on parse failure. Accepted special-value literals (\"NaN\", \"Infinity\", \"-Infinity\", etc.) and their capitalization are host-defined. Total."),
-      Packaging.primitiveDefinitionSeeAlso = [],
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "Parse a string as a float32."),
+        Packaging.entityMetadataComments = [
+          "readFloat32(s) returns Just(x) where x is the IEEE 754 binary32 value closest to the number parsed from s under roundTiesToEven, or Nothing on parse failure. Accepted special-value literals (\"NaN\", \"Infinity\", \"-Infinity\", etc.) and their capitalization are host-defined. Total."],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
-      Packaging.primitiveDefinitionAvailableSince = Nothing,
-      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 readFloat64 :: Packaging.PrimitiveDefinition
 readFloat64 =
@@ -639,13 +665,14 @@ readFloat64 =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeMaybe (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat64)))}},
-      Packaging.primitiveDefinitionDescription = "Parse a string as a float64.",
-      Packaging.primitiveDefinitionComments = (Just "readFloat64(s) returns Just(x) where x is the IEEE 754 binary64 value closest to the number parsed from s under roundTiesToEven, or Nothing on parse failure. Accepted special-value literals (\"NaN\", \"Infinity\", \"-Infinity\", etc.) and their capitalization are host-defined. Total."),
-      Packaging.primitiveDefinitionSeeAlso = [],
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "Parse a string as a float64."),
+        Packaging.entityMetadataComments = [
+          "readFloat64(s) returns Just(x) where x is the IEEE 754 binary64 value closest to the number parsed from s under roundTiesToEven, or Nothing on parse failure. Accepted special-value literals (\"NaN\", \"Infinity\", \"-Infinity\", etc.) and their capitalization are host-defined. Total."],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
-      Packaging.primitiveDefinitionAvailableSince = Nothing,
-      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 readInt16 :: Packaging.PrimitiveDefinition
 readInt16 =
@@ -662,13 +689,14 @@ readInt16 =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeMaybe (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt16)))}},
-      Packaging.primitiveDefinitionDescription = "Parse a string as an int16.",
-      Packaging.primitiveDefinitionComments = (Just "readInt16(s) returns Just(x) where x is the int16 parsed from s, or Nothing if s is not a valid integer literal or the parsed value is outside [-2^15, 2^15-1]. Total."),
-      Packaging.primitiveDefinitionSeeAlso = [],
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "Parse a string as an int16."),
+        Packaging.entityMetadataComments = [
+          "readInt16(s) returns Just(x) where x is the int16 parsed from s, or Nothing if s is not a valid integer literal or the parsed value is outside [-2^15, 2^15-1]. Total."],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
-      Packaging.primitiveDefinitionAvailableSince = Nothing,
-      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 readInt32 :: Packaging.PrimitiveDefinition
 readInt32 =
@@ -685,13 +713,14 @@ readInt32 =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeMaybe (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)))}},
-      Packaging.primitiveDefinitionDescription = "Parse a string as an int32.",
-      Packaging.primitiveDefinitionComments = (Just "readInt32(s) returns Just(x) where x is the int32 parsed from s, or Nothing if s is not a valid integer literal or the parsed value is outside [-2^31, 2^31-1]. Total."),
-      Packaging.primitiveDefinitionSeeAlso = [],
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "Parse a string as an int32."),
+        Packaging.entityMetadataComments = [
+          "readInt32(s) returns Just(x) where x is the int32 parsed from s, or Nothing if s is not a valid integer literal or the parsed value is outside [-2^31, 2^31-1]. Total."],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
-      Packaging.primitiveDefinitionAvailableSince = Nothing,
-      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 readInt64 :: Packaging.PrimitiveDefinition
 readInt64 =
@@ -708,13 +737,14 @@ readInt64 =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeMaybe (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt64)))}},
-      Packaging.primitiveDefinitionDescription = "Parse a string as an int64.",
-      Packaging.primitiveDefinitionComments = (Just "readInt64(s) returns Just(x) where x is the int64 parsed from s, or Nothing if s is not a valid integer literal or the parsed value is outside [-2^63, 2^63-1]. Total."),
-      Packaging.primitiveDefinitionSeeAlso = [],
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "Parse a string as an int64."),
+        Packaging.entityMetadataComments = [
+          "readInt64(s) returns Just(x) where x is the int64 parsed from s, or Nothing if s is not a valid integer literal or the parsed value is outside [-2^63, 2^63-1]. Total."],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
-      Packaging.primitiveDefinitionAvailableSince = Nothing,
-      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 readInt8 :: Packaging.PrimitiveDefinition
 readInt8 =
@@ -731,13 +761,14 @@ readInt8 =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeMaybe (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt8)))}},
-      Packaging.primitiveDefinitionDescription = "Parse a string as an int8.",
-      Packaging.primitiveDefinitionComments = (Just "readInt8(s) returns Just(x) where x is the int8 parsed from s, or Nothing if s is not a valid integer literal or the parsed value is outside [-128, 127]. Total."),
-      Packaging.primitiveDefinitionSeeAlso = [],
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "Parse a string as an int8."),
+        Packaging.entityMetadataComments = [
+          "readInt8(s) returns Just(x) where x is the int8 parsed from s, or Nothing if s is not a valid integer literal or the parsed value is outside [-128, 127]. Total."],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
-      Packaging.primitiveDefinitionAvailableSince = Nothing,
-      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 readString :: Packaging.PrimitiveDefinition
 readString =
@@ -754,13 +785,14 @@ readString =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeMaybe (Core.TypeLiteral Core.LiteralTypeString))}},
-      Packaging.primitiveDefinitionDescription = "Parse a string-literal token to a plain string (Just) or Nothing on parse failure.",
-      Packaging.primitiveDefinitionComments = (Just "readString(s) parses s as a Haskell-syntax string literal token: an opening double-quote, escaped characters per the Haskell lexical grammar (backslash escapes for special characters and Unicode code points), and a closing double-quote. Returns Just of the decoded payload on success or Nothing on malformed input. Total. The inverse of showString."),
-      Packaging.primitiveDefinitionSeeAlso = [],
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "Parse a string-literal token to a plain string (Just) or Nothing on parse failure."),
+        Packaging.entityMetadataComments = [
+          "readString(s) parses s as a Haskell-syntax string literal token: an opening double-quote, escaped characters per the Haskell lexical grammar (backslash escapes for special characters and Unicode code points), and a closing double-quote. Returns Just of the decoded payload on success or Nothing on malformed input. Total. The inverse of showString."],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
-      Packaging.primitiveDefinitionAvailableSince = Nothing,
-      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 readUint16 :: Packaging.PrimitiveDefinition
 readUint16 =
@@ -777,13 +809,14 @@ readUint16 =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeMaybe (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeUint16)))}},
-      Packaging.primitiveDefinitionDescription = "Parse a string as a uint16.",
-      Packaging.primitiveDefinitionComments = (Just "readUint16(s) returns Just(x) where x is the uint16 parsed from s, or Nothing if s is not a valid non-negative integer literal or the parsed value is outside [0, 2^16-1]. Total."),
-      Packaging.primitiveDefinitionSeeAlso = [],
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "Parse a string as a uint16."),
+        Packaging.entityMetadataComments = [
+          "readUint16(s) returns Just(x) where x is the uint16 parsed from s, or Nothing if s is not a valid non-negative integer literal or the parsed value is outside [0, 2^16-1]. Total."],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
-      Packaging.primitiveDefinitionAvailableSince = Nothing,
-      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 readUint32 :: Packaging.PrimitiveDefinition
 readUint32 =
@@ -800,13 +833,14 @@ readUint32 =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeMaybe (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeUint32)))}},
-      Packaging.primitiveDefinitionDescription = "Parse a string as a uint32.",
-      Packaging.primitiveDefinitionComments = (Just "readUint32(s) returns Just(x) where x is the uint32 parsed from s, or Nothing if s is not a valid non-negative integer literal or the parsed value is outside [0, 2^32-1]. Total."),
-      Packaging.primitiveDefinitionSeeAlso = [],
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "Parse a string as a uint32."),
+        Packaging.entityMetadataComments = [
+          "readUint32(s) returns Just(x) where x is the uint32 parsed from s, or Nothing if s is not a valid non-negative integer literal or the parsed value is outside [0, 2^32-1]. Total."],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
-      Packaging.primitiveDefinitionAvailableSince = Nothing,
-      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 readUint64 :: Packaging.PrimitiveDefinition
 readUint64 =
@@ -823,13 +857,14 @@ readUint64 =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeMaybe (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeUint64)))}},
-      Packaging.primitiveDefinitionDescription = "Parse a string as a uint64.",
-      Packaging.primitiveDefinitionComments = (Just "readUint64(s) returns Just(x) where x is the uint64 parsed from s, or Nothing if s is not a valid non-negative integer literal or the parsed value is outside [0, 2^64-1]. Total."),
-      Packaging.primitiveDefinitionSeeAlso = [],
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "Parse a string as a uint64."),
+        Packaging.entityMetadataComments = [
+          "readUint64(s) returns Just(x) where x is the uint64 parsed from s, or Nothing if s is not a valid non-negative integer literal or the parsed value is outside [0, 2^64-1]. Total."],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
-      Packaging.primitiveDefinitionAvailableSince = Nothing,
-      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 readUint8 :: Packaging.PrimitiveDefinition
 readUint8 =
@@ -846,13 +881,14 @@ readUint8 =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeMaybe (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeUint8)))}},
-      Packaging.primitiveDefinitionDescription = "Parse a string as a uint8.",
-      Packaging.primitiveDefinitionComments = (Just "readUint8(s) returns Just(x) where x is the uint8 parsed from s, or Nothing if s is not a valid non-negative integer literal or the parsed value is outside [0, 255]. Total."),
-      Packaging.primitiveDefinitionSeeAlso = [],
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "Parse a string as a uint8."),
+        Packaging.entityMetadataComments = [
+          "readUint8(s) returns Just(x) where x is the uint8 parsed from s, or Nothing if s is not a valid non-negative integer literal or the parsed value is outside [0, 255]. Total."],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
-      Packaging.primitiveDefinitionAvailableSince = Nothing,
-      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 showBigint :: Packaging.PrimitiveDefinition
 showBigint =
@@ -869,13 +905,14 @@ showBigint =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeLiteral Core.LiteralTypeString)}},
-      Packaging.primitiveDefinitionDescription = "Render a bigint as a string.",
-      Packaging.primitiveDefinitionComments = (Just "showBigint(x) returns the canonical decimal representation of x: an optional leading minus sign followed by decimal digits. No leading zeros are produced (except for the value 0 itself, which renders as \"0\"). Total. The inverse of readBigint."),
-      Packaging.primitiveDefinitionSeeAlso = [],
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "Render a bigint as a string."),
+        Packaging.entityMetadataComments = [
+          "showBigint(x) returns the canonical decimal representation of x: an optional leading minus sign followed by decimal digits. No leading zeros are produced (except for the value 0 itself, which renders as \"0\"). Total. The inverse of readBigint."],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
-      Packaging.primitiveDefinitionAvailableSince = Nothing,
-      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 showBoolean :: Packaging.PrimitiveDefinition
 showBoolean =
@@ -892,13 +929,14 @@ showBoolean =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeLiteral Core.LiteralTypeString)}},
-      Packaging.primitiveDefinitionDescription = "Render a boolean as a string.",
-      Packaging.primitiveDefinitionComments = (Just "showBoolean(true) = \"true\"; showBoolean(false) = \"false\". Total. The inverse of readBoolean."),
-      Packaging.primitiveDefinitionSeeAlso = [],
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "Render a boolean as a string."),
+        Packaging.entityMetadataComments = [
+          "showBoolean(true) = \"true\"; showBoolean(false) = \"false\". Total. The inverse of readBoolean."],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
-      Packaging.primitiveDefinitionAvailableSince = Nothing,
-      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 showDecimal :: Packaging.PrimitiveDefinition
 showDecimal =
@@ -915,13 +953,14 @@ showDecimal =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeLiteral Core.LiteralTypeString)}},
-      Packaging.primitiveDefinitionDescription = "Render a decimal as a string.",
-      Packaging.primitiveDefinitionComments = (Just "showDecimal(x) returns the canonical decimal representation of x as a string. The exact form (use of scientific notation, trailing zeros, etc.) is host-defined but always round-trips with readDecimal. Total."),
-      Packaging.primitiveDefinitionSeeAlso = [],
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "Render a decimal as a string."),
+        Packaging.entityMetadataComments = [
+          "showDecimal(x) returns the canonical decimal representation of x as a string. The exact form (use of scientific notation, trailing zeros, etc.) is host-defined but always round-trips with readDecimal. Total."],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
-      Packaging.primitiveDefinitionAvailableSince = Nothing,
-      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 showFloat32 :: Packaging.PrimitiveDefinition
 showFloat32 =
@@ -938,13 +977,14 @@ showFloat32 =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeLiteral Core.LiteralTypeString)}},
-      Packaging.primitiveDefinitionDescription = "Render a float32 as a string.",
-      Packaging.primitiveDefinitionComments = (Just "showFloat32(x) returns a string representation of x. Finite values use the shortest decimal that round-trips through readFloat32 back to x. Special values render as \"NaN\", \"Infinity\", or \"-Infinity\" (capitalization is host-defined). Total."),
-      Packaging.primitiveDefinitionSeeAlso = [],
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "Render a float32 as a string."),
+        Packaging.entityMetadataComments = [
+          "showFloat32(x) returns a string representation of x. Finite values use the shortest decimal that round-trips through readFloat32 back to x. Special values render as \"NaN\", \"Infinity\", or \"-Infinity\" (capitalization is host-defined). Total."],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
-      Packaging.primitiveDefinitionAvailableSince = Nothing,
-      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 showFloat64 :: Packaging.PrimitiveDefinition
 showFloat64 =
@@ -961,13 +1001,14 @@ showFloat64 =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeLiteral Core.LiteralTypeString)}},
-      Packaging.primitiveDefinitionDescription = "Render a float64 as a string.",
-      Packaging.primitiveDefinitionComments = (Just "showFloat64(x) returns a string representation of x. Finite values use the shortest decimal that round-trips through readFloat64 back to x. Special values render as \"NaN\", \"Infinity\", or \"-Infinity\" (capitalization is host-defined). Total."),
-      Packaging.primitiveDefinitionSeeAlso = [],
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "Render a float64 as a string."),
+        Packaging.entityMetadataComments = [
+          "showFloat64(x) returns a string representation of x. Finite values use the shortest decimal that round-trips through readFloat64 back to x. Special values render as \"NaN\", \"Infinity\", or \"-Infinity\" (capitalization is host-defined). Total."],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
-      Packaging.primitiveDefinitionAvailableSince = Nothing,
-      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 showInt16 :: Packaging.PrimitiveDefinition
 showInt16 =
@@ -984,13 +1025,14 @@ showInt16 =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeLiteral Core.LiteralTypeString)}},
-      Packaging.primitiveDefinitionDescription = "Render an int16 as a string.",
-      Packaging.primitiveDefinitionComments = (Just "showInt16(x) returns the canonical decimal representation of x: an optional leading minus sign followed by decimal digits. Total. The inverse of readInt16."),
-      Packaging.primitiveDefinitionSeeAlso = [],
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "Render an int16 as a string."),
+        Packaging.entityMetadataComments = [
+          "showInt16(x) returns the canonical decimal representation of x: an optional leading minus sign followed by decimal digits. Total. The inverse of readInt16."],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
-      Packaging.primitiveDefinitionAvailableSince = Nothing,
-      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 showInt32 :: Packaging.PrimitiveDefinition
 showInt32 =
@@ -1007,13 +1049,14 @@ showInt32 =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeLiteral Core.LiteralTypeString)}},
-      Packaging.primitiveDefinitionDescription = "Render an int32 as a string.",
-      Packaging.primitiveDefinitionComments = (Just "showInt32(x) returns the canonical decimal representation of x: an optional leading minus sign followed by decimal digits. Total. The inverse of readInt32."),
-      Packaging.primitiveDefinitionSeeAlso = [],
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "Render an int32 as a string."),
+        Packaging.entityMetadataComments = [
+          "showInt32(x) returns the canonical decimal representation of x: an optional leading minus sign followed by decimal digits. Total. The inverse of readInt32."],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
-      Packaging.primitiveDefinitionAvailableSince = Nothing,
-      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 showInt64 :: Packaging.PrimitiveDefinition
 showInt64 =
@@ -1030,13 +1073,14 @@ showInt64 =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeLiteral Core.LiteralTypeString)}},
-      Packaging.primitiveDefinitionDescription = "Render an int64 as a string.",
-      Packaging.primitiveDefinitionComments = (Just "showInt64(x) returns the canonical decimal representation of x: an optional leading minus sign followed by decimal digits. Total. The inverse of readInt64."),
-      Packaging.primitiveDefinitionSeeAlso = [],
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "Render an int64 as a string."),
+        Packaging.entityMetadataComments = [
+          "showInt64(x) returns the canonical decimal representation of x: an optional leading minus sign followed by decimal digits. Total. The inverse of readInt64."],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
-      Packaging.primitiveDefinitionAvailableSince = Nothing,
-      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 showInt8 :: Packaging.PrimitiveDefinition
 showInt8 =
@@ -1053,13 +1097,14 @@ showInt8 =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeLiteral Core.LiteralTypeString)}},
-      Packaging.primitiveDefinitionDescription = "Render an int8 as a string.",
-      Packaging.primitiveDefinitionComments = (Just "showInt8(x) returns the canonical decimal representation of x: an optional leading minus sign followed by decimal digits. Total. The inverse of readInt8."),
-      Packaging.primitiveDefinitionSeeAlso = [],
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "Render an int8 as a string."),
+        Packaging.entityMetadataComments = [
+          "showInt8(x) returns the canonical decimal representation of x: an optional leading minus sign followed by decimal digits. Total. The inverse of readInt8."],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
-      Packaging.primitiveDefinitionAvailableSince = Nothing,
-      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 showString :: Packaging.PrimitiveDefinition
 showString =
@@ -1076,13 +1121,14 @@ showString =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeLiteral Core.LiteralTypeString)}},
-      Packaging.primitiveDefinitionDescription = "Render a string as a string-literal token (escaped and quoted).",
-      Packaging.primitiveDefinitionComments = (Just "showString(s) returns a Haskell-syntax string literal token representing s: an opening double-quote, the characters of s with special characters escaped (backslash sequences for control characters, quotes, and non-printable Unicode code points), and a closing double-quote. Total. The inverse of readString."),
-      Packaging.primitiveDefinitionSeeAlso = [],
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "Render a string as a string-literal token (escaped and quoted)."),
+        Packaging.entityMetadataComments = [
+          "showString(s) returns a Haskell-syntax string literal token representing s: an opening double-quote, the characters of s with special characters escaped (backslash sequences for control characters, quotes, and non-printable Unicode code points), and a closing double-quote. Total. The inverse of readString."],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
-      Packaging.primitiveDefinitionAvailableSince = Nothing,
-      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 showUint16 :: Packaging.PrimitiveDefinition
 showUint16 =
@@ -1099,13 +1145,14 @@ showUint16 =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeLiteral Core.LiteralTypeString)}},
-      Packaging.primitiveDefinitionDescription = "Render a uint16 as a string.",
-      Packaging.primitiveDefinitionComments = (Just "showUint16(x) returns the canonical decimal representation of x. Total. The inverse of readUint16."),
-      Packaging.primitiveDefinitionSeeAlso = [],
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "Render a uint16 as a string."),
+        Packaging.entityMetadataComments = [
+          "showUint16(x) returns the canonical decimal representation of x. Total. The inverse of readUint16."],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
-      Packaging.primitiveDefinitionAvailableSince = Nothing,
-      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 showUint32 :: Packaging.PrimitiveDefinition
 showUint32 =
@@ -1122,13 +1169,14 @@ showUint32 =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeLiteral Core.LiteralTypeString)}},
-      Packaging.primitiveDefinitionDescription = "Render a uint32 as a string.",
-      Packaging.primitiveDefinitionComments = (Just "showUint32(x) returns the canonical decimal representation of x. Total. The inverse of readUint32."),
-      Packaging.primitiveDefinitionSeeAlso = [],
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "Render a uint32 as a string."),
+        Packaging.entityMetadataComments = [
+          "showUint32(x) returns the canonical decimal representation of x. Total. The inverse of readUint32."],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
-      Packaging.primitiveDefinitionAvailableSince = Nothing,
-      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 showUint64 :: Packaging.PrimitiveDefinition
 showUint64 =
@@ -1145,13 +1193,14 @@ showUint64 =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeLiteral Core.LiteralTypeString)}},
-      Packaging.primitiveDefinitionDescription = "Render a uint64 as a string.",
-      Packaging.primitiveDefinitionComments = (Just "showUint64(x) returns the canonical decimal representation of x. Total. The inverse of readUint64."),
-      Packaging.primitiveDefinitionSeeAlso = [],
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "Render a uint64 as a string."),
+        Packaging.entityMetadataComments = [
+          "showUint64(x) returns the canonical decimal representation of x. Total. The inverse of readUint64."],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
-      Packaging.primitiveDefinitionAvailableSince = Nothing,
-      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 showUint8 :: Packaging.PrimitiveDefinition
 showUint8 =
@@ -1168,13 +1217,14 @@ showUint8 =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeLiteral Core.LiteralTypeString)}},
-      Packaging.primitiveDefinitionDescription = "Render a uint8 as a string.",
-      Packaging.primitiveDefinitionComments = (Just "showUint8(x) returns the canonical decimal representation of x. Total. The inverse of readUint8."),
-      Packaging.primitiveDefinitionSeeAlso = [],
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "Render a uint8 as a string."),
+        Packaging.entityMetadataComments = [
+          "showUint8(x) returns the canonical decimal representation of x. Total. The inverse of readUint8."],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
-      Packaging.primitiveDefinitionAvailableSince = Nothing,
-      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 stringToBinary :: Packaging.PrimitiveDefinition
 stringToBinary =
@@ -1191,13 +1241,14 @@ stringToBinary =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeLiteral Core.LiteralTypeBinary)}},
-      Packaging.primitiveDefinitionDescription = "Convert a UTF-8 string to binary data.",
-      Packaging.primitiveDefinitionComments = (Just "stringToBinary(s) encodes s as a UTF-8 byte sequence and returns the result as binary data. Total."),
-      Packaging.primitiveDefinitionSeeAlso = [],
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "Convert a UTF-8 string to binary data."),
+        Packaging.entityMetadataComments = [
+          "stringToBinary(s) encodes s as a UTF-8 byte sequence and returns the result as binary data. Total."],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
-      Packaging.primitiveDefinitionAvailableSince = Nothing,
-      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 uint16ToBigint :: Packaging.PrimitiveDefinition
 uint16ToBigint =
@@ -1214,13 +1265,14 @@ uint16ToBigint =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeBigint))}},
-      Packaging.primitiveDefinitionDescription = "Convert a uint16 to a bigint.",
-      Packaging.primitiveDefinitionComments = (Just "uint16ToBigint(x) returns the bigint with the same numeric value as x. The conversion is exact and lossless. Total."),
-      Packaging.primitiveDefinitionSeeAlso = [],
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "Convert a uint16 to a bigint."),
+        Packaging.entityMetadataComments = [
+          "uint16ToBigint(x) returns the bigint with the same numeric value as x. The conversion is exact and lossless. Total."],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
-      Packaging.primitiveDefinitionAvailableSince = Nothing,
-      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 uint32ToBigint :: Packaging.PrimitiveDefinition
 uint32ToBigint =
@@ -1237,13 +1289,14 @@ uint32ToBigint =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeBigint))}},
-      Packaging.primitiveDefinitionDescription = "Convert a uint32 to a bigint.",
-      Packaging.primitiveDefinitionComments = (Just "uint32ToBigint(x) returns the bigint with the same numeric value as x. The conversion is exact and lossless. Total."),
-      Packaging.primitiveDefinitionSeeAlso = [],
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "Convert a uint32 to a bigint."),
+        Packaging.entityMetadataComments = [
+          "uint32ToBigint(x) returns the bigint with the same numeric value as x. The conversion is exact and lossless. Total."],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
-      Packaging.primitiveDefinitionAvailableSince = Nothing,
-      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 uint64ToBigint :: Packaging.PrimitiveDefinition
 uint64ToBigint =
@@ -1260,13 +1313,14 @@ uint64ToBigint =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeBigint))}},
-      Packaging.primitiveDefinitionDescription = "Convert a uint64 to a bigint.",
-      Packaging.primitiveDefinitionComments = (Just "uint64ToBigint(x) returns the bigint with the same numeric value as x. The conversion is exact and lossless. Total."),
-      Packaging.primitiveDefinitionSeeAlso = [],
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "Convert a uint64 to a bigint."),
+        Packaging.entityMetadataComments = [
+          "uint64ToBigint(x) returns the bigint with the same numeric value as x. The conversion is exact and lossless. Total."],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
-      Packaging.primitiveDefinitionAvailableSince = Nothing,
-      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 uint8ToBigint :: Packaging.PrimitiveDefinition
 uint8ToBigint =
@@ -1283,11 +1337,12 @@ uint8ToBigint =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeBigint))}},
-      Packaging.primitiveDefinitionDescription = "Convert a uint8 to a bigint.",
-      Packaging.primitiveDefinitionComments = (Just "uint8ToBigint(x) returns the bigint with the same numeric value as x. The conversion is exact and lossless. Total."),
-      Packaging.primitiveDefinitionSeeAlso = [],
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "Convert a uint8 to a bigint."),
+        Packaging.entityMetadataComments = [
+          "uint8ToBigint(x) returns the bigint with the same numeric value as x. The conversion is exact and lossless. Total."],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
-      Packaging.primitiveDefinitionAvailableSince = Nothing,
-      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}

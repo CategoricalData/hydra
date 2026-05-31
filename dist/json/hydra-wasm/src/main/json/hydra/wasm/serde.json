@@ -2929,5 +2929,5 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "description": "WebAssembly serializer: converts WAT AST to concrete WAT text format",
+  "metadata": {"comments": [], "description": "WebAssembly serializer: converts WAT AST to concrete WAT text format", "seeAlso": []},
   "name": "hydra.wasm.serde"}

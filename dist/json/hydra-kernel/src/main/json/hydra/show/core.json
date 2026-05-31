@@ -2726,5 +2726,5 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "description": "String representations of hydra.core types",
+  "metadata": {"comments": [], "description": "String representations of hydra.core types", "seeAlso": []},
   "name": "hydra.show.core"}

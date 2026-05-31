@@ -6548,5 +6548,5 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "description": "Lisp code generator: converts Hydra type and term modules to Lisp AST",
+  "metadata": {"comments": [], "description": "Lisp code generator: converts Hydra type and term modules to Lisp AST", "seeAlso": []},
   "name": "hydra.lisp.coder"}

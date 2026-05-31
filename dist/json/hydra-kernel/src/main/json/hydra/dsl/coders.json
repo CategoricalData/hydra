@@ -6104,5 +6104,5 @@
     {"module": "hydra.dsl.variants"},
     {"module": "hydra.dsl.core"},
     {"module": "hydra.dsl.typing"}],
-  "description": "DSL functions for hydra.coders",
+  "metadata": {"comments": [], "description": "DSL functions for hydra.coders", "seeAlso": []},
   "name": "hydra.dsl.coders"}

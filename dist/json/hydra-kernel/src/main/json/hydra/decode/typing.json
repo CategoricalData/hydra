@@ -2735,5 +2735,5 @@
     {"module": "hydra.util"},
     {"module": "hydra.decode.core"},
     {"module": "hydra.decode.paths"}],
-  "description": "Term decoders for hydra.typing",
+  "metadata": {"comments": [], "description": "Term decoders for hydra.typing", "seeAlso": []},
   "name": "hydra.decode.typing"}

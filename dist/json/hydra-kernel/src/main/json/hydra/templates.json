@@ -1022,5 +1022,5 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "description": "A utility which instantiates a nonrecursive type with default values",
+  "metadata": {"comments": [], "description": "A utility which instantiates a nonrecursive type with default values", "seeAlso": []},
   "name": "hydra.templates"}

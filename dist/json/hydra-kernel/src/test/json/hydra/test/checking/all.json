@@ -56,5 +56,5 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "description": "Hydra's type checking test suite",
+  "metadata": {"comments": [], "description": "Hydra's type checking test suite", "seeAlso": []},
   "name": "hydra.test.checking.all"}

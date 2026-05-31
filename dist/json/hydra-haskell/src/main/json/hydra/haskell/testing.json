@@ -251,11 +251,11 @@
                                         "term": {
                                           "application": {"argument": {"variable": "mod"}, "function": {"project": {"fieldName": "name", "typeName": "hydra.packaging.Module"}}}}},
                                       {
-                                        "name": "description",
+                                        "name": "metadata",
                                         "term": {
                                           "application": {
                                             "argument": {"variable": "mod"},
-                                            "function": {"project": {"fieldName": "description", "typeName": "hydra.packaging.Module"}}}}},
+                                            "function": {"project": {"fieldName": "metadata", "typeName": "hydra.packaging.Module"}}}}},
                                       {
                                         "name": "dependencies",
                                         "term": {
@@ -282,6 +282,9 @@
                                                                   "name": "name",
                                                                   "term": {
                                                                     "application": {"argument": {"variable": "b"}, "function": {"project": {"fieldName": "name", "typeName": "hydra.core.Binding"}}}}},
+                                                                {
+                                                                  "name": "metadata",
+                                                                  "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.packaging.EntityMetadata"}}}},
                                                                 {
                                                                   "name": "term",
                                                                   "term": {
@@ -1548,5 +1551,5 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "description": "Haskell test code generation for HSpec-based generation tests",
+  "metadata": {"comments": [], "description": "Haskell test code generation for HSpec-based generation tests", "seeAlso": []},
   "name": "hydra.haskell.testing"}

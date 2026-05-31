@@ -2707,5 +2707,8 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "description": "JSON Schema code generator: converts Hydra modules to JSON Schema documents",
+  "metadata": {
+    "comments": [],
+    "description": "JSON Schema code generator: converts Hydra modules to JSON Schema documents",
+    "seeAlso": []},
   "name": "hydra.json.schema.coder"}

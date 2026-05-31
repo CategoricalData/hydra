@@ -15611,5 +15611,5 @@
     {"module": "hydra.errors"},
     {"module": "hydra.test.testGraph"},
     {"module": "hydra.testing"}],
-  "description": "Test cases for hydra.annotations functions",
+  "metadata": {"comments": [], "description": "Test cases for hydra.annotations functions", "seeAlso": []},
   "name": "hydra.test.annotations"}

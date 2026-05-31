@@ -497,5 +497,5 @@
                         "parameter": "y"}}}],
                 "typeName": "hydra.util.Precision"}}}}}}],
   "dependencies": [{"module": "hydra.encode.core"}, {"module": "hydra.encode.packaging"}, {"module": "hydra.util"}],
-  "description": "Term encoders for hydra.util",
+  "metadata": {"comments": [], "description": "Term encoders for hydra.util", "seeAlso": []},
   "name": "hydra.encode.util"}

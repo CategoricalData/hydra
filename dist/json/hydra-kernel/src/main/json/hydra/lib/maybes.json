@@ -2,7 +2,6 @@
   "definitions": [
     {
       "primitive": {
-        "comments": "apply(mf, mx) returns Just(f x) when mf is Just(f) and mx is Just(x), and Nothing if either is Nothing. The applicative apply for maybe; threads a function-in-context with a value-in-context. Total. Corresponds to Haskell's (<*>) :: Maybe (a -> b) -> Maybe a -> Maybe b.",
         "defaultImplementation": {
           "annotated": {
             "annotation": [
@@ -28,11 +27,14 @@
                         "function": {"application": {"argument": {"variable": "mf"}, "function": {"variable": "hydra.lib.maybes.bind"}}}}},
                     "parameter": "mx"}},
                 "parameter": "mf"}}}},
-        "description": "Applicative apply for maybes: combine a maybe function and a maybe argument.",
         "isPure": true,
         "isTotal": true,
+        "metadata": {
+          "comments": [
+            "apply(mf, mx) returns Just(f x) when mf is Just(f) and mx is Just(x), and Nothing if either is Nothing. The applicative apply for maybe; threads a function-in-context with a value-in-context. Total. Corresponds to Haskell's (<*>) :: Maybe (a -> b) -> Maybe a -> Maybe b."],
+          "description": "Applicative apply for maybes: combine a maybe function and a maybe argument.",
+          "seeAlso": []},
         "name": "hydra.lib.maybes.apply",
-        "seeAlso": [],
         "signature": {
           "parameters": [
             {
@@ -44,7 +46,6 @@
           "typeParameters": [{"constraints": [], "name": "x"}, {"constraints": [], "name": "y"}]}}},
     {
       "primitive": {
-        "comments": "bind(m, f) returns f(x) when m is Just(x), and Nothing when m is Nothing. The monadic bind for maybe; used to chain computations that may be absent. Total. Corresponds to Haskell's (>>=) :: Maybe a -> (a -> Maybe b) -> Maybe b.",
         "defaultImplementation": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Monadic bind for optionals, defined in terms of maybe."}}}],
@@ -61,11 +62,14 @@
                             "function": {"application": {"argument": {"maybe": null}, "function": {"variable": "hydra.lib.maybes.maybe"}}}}}}},
                     "parameter": "f"}},
                 "parameter": "m"}}}},
-        "description": "Monadic bind for maybes.",
         "isPure": true,
         "isTotal": true,
+        "metadata": {
+          "comments": [
+            "bind(m, f) returns f(x) when m is Just(x), and Nothing when m is Nothing. The monadic bind for maybe; used to chain computations that may be absent. Total. Corresponds to Haskell's (>>=) :: Maybe a -> (a -> Maybe b) -> Maybe b."],
+          "description": "Monadic bind for maybes.",
+          "seeAlso": []},
         "name": "hydra.lib.maybes.bind",
-        "seeAlso": [],
         "signature": {
           "parameters": [
             {"isLazy": false, "name": "arg0", "type": {"maybe": {"variable": "x"}}},
@@ -77,12 +81,14 @@
           "typeParameters": [{"constraints": [], "name": "x"}, {"constraints": [], "name": "y"}]}}},
     {
       "primitive": {
-        "comments": "cases(m, def, f) returns f(x) when m is Just(x), and def when m is Nothing. Identical in behavior to the maybe primitive but with the maybe value as the first argument (matching the convention for case-statement-like elimination). Total. Argument order is (m, def, f) rather than Haskell's (def, f, m).",
-        "description": "Case analysis on a maybe, with cases-style argument order.",
         "isPure": true,
         "isTotal": true,
+        "metadata": {
+          "comments": [
+            "cases(m, def, f) returns f(x) when m is Just(x), and def when m is Nothing. Identical in behavior to the maybe primitive but with the maybe value as the first argument (matching the convention for case-statement-like elimination). Total. Argument order is (m, def, f) rather than Haskell's (def, f, m)."],
+          "description": "Case analysis on a maybe, with cases-style argument order.",
+          "seeAlso": []},
         "name": "hydra.lib.maybes.cases",
-        "seeAlso": [],
         "signature": {
           "parameters": [
             {"isLazy": false, "name": "arg0", "type": {"maybe": {"variable": "x"}}},
@@ -92,7 +98,6 @@
           "typeParameters": [{"constraints": [], "name": "x"}, {"constraints": [], "name": "y"}]}}},
     {
       "primitive": {
-        "comments": "cat(xs) returns the list of contained values from Just elements of xs, in original order; Nothing elements are discarded. Total. Corresponds to Haskell's Data.Maybe.catMaybes :: [Maybe a] -> [a].",
         "defaultImplementation": {
           "annotated": {
             "annotation": [
@@ -130,18 +135,20 @@
                                 "parameter": "m"}},
                             "function": {"variable": "hydra.lib.lists.foldr"}}}}}}},
                 "parameter": "xs"}}}},
-        "description": "Concatenate maybes, keeping only the present values.",
         "isPure": true,
         "isTotal": true,
+        "metadata": {
+          "comments": [
+            "cat(xs) returns the list of contained values from Just elements of xs, in original order; Nothing elements are discarded. Total. Corresponds to Haskell's Data.Maybe.catMaybes :: [Maybe a] -> [a]."],
+          "description": "Concatenate maybes, keeping only the present values.",
+          "seeAlso": []},
         "name": "hydra.lib.maybes.cat",
-        "seeAlso": [],
         "signature": {
           "parameters": [{"isLazy": false, "name": "arg0", "type": {"list": {"maybe": {"variable": "x"}}}}],
           "result": {"type": {"list": {"variable": "x"}}},
           "typeParameters": [{"constraints": [], "name": "x"}]}}},
     {
       "primitive": {
-        "comments": "compose(f, g, x) returns the Kleisli composition of f and g applied to x: bind(f(x), g). If either f or the second stage produces Nothing, the result is Nothing. Total. Corresponds to Haskell's Kleisli composition for Maybe, (>=>) :: (a -> Maybe b) -> (b -> Maybe c) -> a -> Maybe c.",
         "defaultImplementation": {
           "annotated": {
             "annotation": [
@@ -162,11 +169,14 @@
                         "parameter": "x"}},
                     "parameter": "g"}},
                 "parameter": "f"}}}},
-        "description": "Kleisli composition for maybes.",
         "isPure": true,
         "isTotal": true,
+        "metadata": {
+          "comments": [
+            "compose(f, g, x) returns the Kleisli composition of f and g applied to x: bind(f(x), g). If either f or the second stage produces Nothing, the result is Nothing. Total. Corresponds to Haskell's Kleisli composition for Maybe, (>=>) :: (a -> Maybe b) -> (b -> Maybe c) -> a -> Maybe c."],
+          "description": "Kleisli composition for maybes.",
+          "seeAlso": []},
         "name": "hydra.lib.maybes.compose",
-        "seeAlso": [],
         "signature": {
           "parameters": [
             {
@@ -182,7 +192,6 @@
           "typeParameters": [{"constraints": [], "name": "x"}, {"constraints": [], "name": "y"}, {"constraints": [], "name": "z"}]}}},
     {
       "primitive": {
-        "comments": "fromMaybe(def, m) returns x when m is Just(x), and def when m is Nothing. Total. Corresponds to Haskell's Data.Maybe.fromMaybe :: a -> Maybe a -> a.",
         "defaultImplementation": {
           "annotated": {
             "annotation": [
@@ -202,11 +211,14 @@
                             "function": {"application": {"argument": {"variable": "def"}, "function": {"variable": "hydra.lib.maybes.maybe"}}}}}}},
                     "parameter": "m"}},
                 "parameter": "def"}}}},
-        "description": "Return the value contained in a maybe, falling back to a default if absent.",
         "isPure": true,
         "isTotal": true,
+        "metadata": {
+          "comments": [
+            "fromMaybe(def, m) returns x when m is Just(x), and def when m is Nothing. Total. Corresponds to Haskell's Data.Maybe.fromMaybe :: a -> Maybe a -> a."],
+          "description": "Return the value contained in a maybe, falling back to a default if absent.",
+          "seeAlso": []},
         "name": "hydra.lib.maybes.fromMaybe",
-        "seeAlso": [],
         "signature": {
           "parameters": [
             {"isLazy": false, "name": "arg0", "type": {"variable": "x"}},
@@ -215,7 +227,6 @@
           "typeParameters": [{"constraints": [], "name": "x"}]}}},
     {
       "primitive": {
-        "comments": "isJust(m) returns true iff m is a Just variant. Total. Corresponds to Haskell's Data.Maybe.isJust :: Maybe a -> Bool.",
         "defaultImplementation": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Test for presence, defined in terms of maybe."}}}],
@@ -229,18 +240,20 @@
                         "argument": {"lambda": {"body": {"literal": {"boolean": true}}, "parameter": "_"}},
                         "function": {"application": {"argument": {"literal": {"boolean": false}}, "function": {"variable": "hydra.lib.maybes.maybe"}}}}}}},
                 "parameter": "m"}}}},
-        "description": "Test whether a maybe is present (Just).",
         "isPure": true,
         "isTotal": true,
+        "metadata": {
+          "comments": [
+            "isJust(m) returns true iff m is a Just variant. Total. Corresponds to Haskell's Data.Maybe.isJust :: Maybe a -> Bool."],
+          "description": "Test whether a maybe is present (Just).",
+          "seeAlso": []},
         "name": "hydra.lib.maybes.isJust",
-        "seeAlso": [],
         "signature": {
           "parameters": [{"isLazy": false, "name": "arg0", "type": {"maybe": {"variable": "x"}}}],
           "result": {"type": {"literal": {"boolean": {}}}},
           "typeParameters": [{"constraints": [], "name": "x"}]}}},
     {
       "primitive": {
-        "comments": "isNothing(m) returns true iff m is the Nothing variant. Total. Corresponds to Haskell's Data.Maybe.isNothing :: Maybe a -> Bool.",
         "defaultImplementation": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Test for absence, defined in terms of maybe."}}}],
@@ -254,18 +267,20 @@
                         "argument": {"lambda": {"body": {"literal": {"boolean": false}}, "parameter": "_"}},
                         "function": {"application": {"argument": {"literal": {"boolean": true}}, "function": {"variable": "hydra.lib.maybes.maybe"}}}}}}},
                 "parameter": "m"}}}},
-        "description": "Test whether a maybe is absent (Nothing).",
         "isPure": true,
         "isTotal": true,
+        "metadata": {
+          "comments": [
+            "isNothing(m) returns true iff m is the Nothing variant. Total. Corresponds to Haskell's Data.Maybe.isNothing :: Maybe a -> Bool."],
+          "description": "Test whether a maybe is absent (Nothing).",
+          "seeAlso": []},
         "name": "hydra.lib.maybes.isNothing",
-        "seeAlso": [],
         "signature": {
           "parameters": [{"isLazy": false, "name": "arg0", "type": {"maybe": {"variable": "x"}}}],
           "result": {"type": {"literal": {"boolean": {}}}},
           "typeParameters": [{"constraints": [], "name": "x"}]}}},
     {
       "primitive": {
-        "comments": "map(f, m) returns Just(f x) when m is Just(x), and Nothing when m is Nothing. The functor instance for maybe. Total. Corresponds to Haskell's fmap :: (a -> b) -> Maybe a -> Maybe b.",
         "defaultImplementation": {
           "annotated": {
             "annotation": [
@@ -284,11 +299,14 @@
                             "function": {"application": {"argument": {"maybe": null}, "function": {"variable": "hydra.lib.maybes.maybe"}}}}}}},
                     "parameter": "m"}},
                 "parameter": "f"}}}},
-        "description": "Map a function over a maybe.",
         "isPure": true,
         "isTotal": true,
+        "metadata": {
+          "comments": [
+            "map(f, m) returns Just(f x) when m is Just(x), and Nothing when m is Nothing. The functor instance for maybe. Total. Corresponds to Haskell's fmap :: (a -> b) -> Maybe a -> Maybe b."],
+          "description": "Map a function over a maybe.",
+          "seeAlso": []},
         "name": "hydra.lib.maybes.map",
-        "seeAlso": [],
         "signature": {
           "parameters": [
             {"isLazy": false, "name": "arg0", "type": {"function": {"codomain": {"variable": "y"}, "domain": {"variable": "x"}}}},
@@ -297,7 +315,6 @@
           "typeParameters": [{"constraints": [], "name": "x"}, {"constraints": [], "name": "y"}]}}},
     {
       "primitive": {
-        "comments": "mapMaybe(f, xs) applies f to each element of xs and returns the list of contained values from Just results in original order; Nothing results are discarded. Total. Corresponds to Haskell's Data.Maybe.mapMaybe :: (a -> Maybe b) -> [a] -> [b].",
         "defaultImplementation": {
           "annotated": {
             "annotation": [
@@ -318,11 +335,14 @@
                         "function": {"variable": "hydra.lib.maybes.cat"}}},
                     "parameter": "xs"}},
                 "parameter": "f"}}}},
-        "description": "Map a partial function over a list, keeping only the present results.",
         "isPure": true,
         "isTotal": true,
+        "metadata": {
+          "comments": [
+            "mapMaybe(f, xs) applies f to each element of xs and returns the list of contained values from Just results in original order; Nothing results are discarded. Total. Corresponds to Haskell's Data.Maybe.mapMaybe :: (a -> Maybe b) -> [a] -> [b]."],
+          "description": "Map a partial function over a list, keeping only the present results.",
+          "seeAlso": []},
         "name": "hydra.lib.maybes.mapMaybe",
-        "seeAlso": [],
         "signature": {
           "parameters": [
             {
@@ -334,12 +354,14 @@
           "typeParameters": [{"constraints": [], "name": "x"}, {"constraints": [], "name": "y"}]}}},
     {
       "primitive": {
-        "comments": "maybe(def, f, m) returns f(x) when m is Just(x), and def when m is Nothing. The fundamental eliminator for the maybe type; every other primitive in this namespace can be derived from it. Total. Corresponds to Haskell's maybe :: b -> (a -> b) -> Maybe a -> b.",
-        "description": "Case analysis on a maybe, applying a function if present or returning a default if absent.",
         "isPure": true,
         "isTotal": true,
+        "metadata": {
+          "comments": [
+            "maybe(def, f, m) returns f(x) when m is Just(x), and def when m is Nothing. The fundamental eliminator for the maybe type; every other primitive in this namespace can be derived from it. Total. Corresponds to Haskell's maybe :: b -> (a -> b) -> Maybe a -> b."],
+          "description": "Case analysis on a maybe, applying a function if present or returning a default if absent.",
+          "seeAlso": []},
         "name": "hydra.lib.maybes.maybe",
-        "seeAlso": [],
         "signature": {
           "parameters": [
             {"isLazy": false, "name": "arg0", "type": {"variable": "y"}},
@@ -349,23 +371,23 @@
           "typeParameters": [{"constraints": [], "name": "y"}, {"constraints": [], "name": "x"}]}}},
     {
       "primitive": {
-        "comments": "pure(x) = Just(x). The applicative pure for maybe. Total. Corresponds to Haskell's pure :: a -> Maybe a / Just.",
         "defaultImplementation": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Wrap a value in Just."}}}],
             "body": {"lambda": {"body": {"maybe": {"variable": "x"}}, "parameter": "x"}}}},
-        "description": "Wrap a value in Just.",
         "isPure": true,
         "isTotal": true,
+        "metadata": {
+          "comments": ["pure(x) = Just(x). The applicative pure for maybe. Total. Corresponds to Haskell's pure :: a -> Maybe a / Just."],
+          "description": "Wrap a value in Just.",
+          "seeAlso": []},
         "name": "hydra.lib.maybes.pure",
-        "seeAlso": [],
         "signature": {
           "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "x"}}],
           "result": {"type": {"maybe": {"variable": "x"}}},
           "typeParameters": [{"constraints": [], "name": "x"}]}}},
     {
       "primitive": {
-        "comments": "toList(m) returns [x] when m is Just(x), and the empty list when m is Nothing. Total. Corresponds to Haskell's Data.Maybe.maybeToList :: Maybe a -> [a].",
         "defaultImplementation": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert an optional to a list, defined in terms of maybe."}}}],
@@ -379,11 +401,14 @@
                         "argument": {"lambda": {"body": {"list": [{"variable": "x"}]}, "parameter": "x"}},
                         "function": {"application": {"argument": {"list": []}, "function": {"variable": "hydra.lib.maybes.maybe"}}}}}}},
                 "parameter": "m"}}}},
-        "description": "Convert a maybe to a list: Just x maps to [x], Nothing to [].",
         "isPure": true,
         "isTotal": true,
+        "metadata": {
+          "comments": [
+            "toList(m) returns [x] when m is Just(x), and the empty list when m is Nothing. Total. Corresponds to Haskell's Data.Maybe.maybeToList :: Maybe a -> [a]."],
+          "description": "Convert a maybe to a list: Just x maps to [x], Nothing to [].",
+          "seeAlso": []},
         "name": "hydra.lib.maybes.toList",
-        "seeAlso": [],
         "signature": {
           "parameters": [{"isLazy": false, "name": "arg0", "type": {"maybe": {"variable": "x"}}}],
           "result": {"type": {"list": {"variable": "x"}}},
@@ -411,5 +436,5 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "description": "Primitives in the hydra.lib.maybes namespace.",
+  "metadata": {"comments": [], "description": "Primitives in the hydra.lib.maybes namespace.", "seeAlso": []},
   "name": "hydra.lib.maybes"}

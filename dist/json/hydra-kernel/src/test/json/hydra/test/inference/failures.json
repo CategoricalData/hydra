@@ -18788,5 +18788,5 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "description": "Inference tests for expected failures",
+  "metadata": {"comments": [], "description": "Inference tests for expected failures", "seeAlso": []},
   "name": "hydra.test.inference.failures"}

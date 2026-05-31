@@ -10431,5 +10431,8 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "description": "WebAssembly code generator: converts Hydra type and term modules to WAT source code",
+  "metadata": {
+    "comments": [],
+    "description": "WebAssembly code generator: converts Hydra type and term modules to WAT source code",
+    "seeAlso": []},
   "name": "hydra.wasm.coder"}

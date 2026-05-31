@@ -5530,5 +5530,5 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "description": "Python serializer: converts Python AST to concrete syntax",
+  "metadata": {"comments": [], "description": "Python serializer: converts Python AST to concrete syntax", "seeAlso": []},
   "name": "hydra.python.serde"}

@@ -3784,5 +3784,5 @@
     {"module": "hydra.ast"},
     {"module": "hydra.util"},
     {"module": "hydra.decode.core"}],
-  "description": "Term decoders for hydra.ast",
+  "metadata": {"comments": [], "description": "Term decoders for hydra.ast", "seeAlso": []},
   "name": "hydra.decode.ast"}

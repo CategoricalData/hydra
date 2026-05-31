@@ -7116,5 +7116,5 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "description": "Collection type checking test cases: lists, sets, maps",
+  "metadata": {"comments": [], "description": "Collection type checking test cases: lists, sets, maps", "seeAlso": []},
   "name": "hydra.test.checking.collections"}

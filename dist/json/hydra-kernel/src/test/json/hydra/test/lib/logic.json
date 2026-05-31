@@ -2038,5 +2038,5 @@
     {"module": "hydra.errors"},
     {"module": "hydra.test.testGraph"},
     {"module": "hydra.testing"}],
-  "description": "Test cases for hydra.lib.logic primitives",
+  "metadata": {"comments": [], "description": "Test cases for hydra.lib.logic primitives", "seeAlso": []},
   "name": "hydra.test.lib.logic"}

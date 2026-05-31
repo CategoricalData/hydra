@@ -6771,5 +6771,5 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "description": "Test cases for dependency analysis and let-term transformations",
+  "metadata": {"comments": [], "description": "Test cases for dependency analysis and let-term transformations", "seeAlso": []},
   "name": "hydra.test.dependencies"}

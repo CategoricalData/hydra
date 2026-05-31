@@ -160,7 +160,7 @@ constructModule namespaces mod defs cx g =
                         (("Hydra.Haskell.Lib.Literals", (Just "Literals")), [])] [])]))
       in (Eithers.bind (Eithers.mapList createDeclarations defs) (\declLists ->
         let decls = Lists.concat declLists
-            mc = Packaging.moduleDescription mod
+            mc = Maybes.bind (Packaging.moduleMetadata mod) (\em -> Packaging.entityMetadataDescription em)
         in (Right (Syntax.Module {
           Syntax.moduleHead = (Just (Syntax.ModuleHead {
             Syntax.moduleHeadComments = mc,

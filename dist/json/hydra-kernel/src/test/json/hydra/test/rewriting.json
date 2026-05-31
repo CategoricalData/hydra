@@ -9624,5 +9624,5 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "description": "Test cases for core rewrite/fold combinators",
+  "metadata": {"comments": [], "description": "Test cases for core rewrite/fold combinators", "seeAlso": []},
   "name": "hydra.test.rewriting"}

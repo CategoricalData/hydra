@@ -17284,5 +17284,5 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "description": "Test cases for let-binding hoisting transformations",
+  "metadata": {"comments": [], "description": "Test cases for let-binding hoisting transformations", "seeAlso": []},
   "name": "hydra.test.hoisting.let"}

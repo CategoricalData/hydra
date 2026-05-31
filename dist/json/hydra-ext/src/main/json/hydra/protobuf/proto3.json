@@ -288,5 +288,8 @@
                 "union": [{"name": "boolean", "type": {"literal": {"boolean": {}}}}, {"name": "string", "type": {"literal": {"string": {}}}}]}}},
           "variables": []}}}],
   "dependencies": [{"module": "hydra.core"}],
-  "description": "A model for Protocol Buffers v3 enum and message types, designed as a target for transformations.This model is loosely based on https://github.com/protocolbuffers/protobuf/blob/main/src/google/protobuf/type.proto, as well as the proto3 reference documentation",
+  "metadata": {
+    "comments": [],
+    "description": "A model for Protocol Buffers v3 enum and message types, designed as a target for transformations.This model is loosely based on https://github.com/protocolbuffers/protobuf/blob/main/src/google/protobuf/type.proto, as well as the proto3 reference documentation",
+    "seeAlso": []},
   "name": "hydra.protobuf.proto3"}

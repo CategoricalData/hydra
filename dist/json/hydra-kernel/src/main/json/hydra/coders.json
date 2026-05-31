@@ -385,5 +385,5 @@
     {"module": "hydra.variants"},
     {"module": "hydra.core"},
     {"module": "hydra.typing"}],
-  "description": "Abstractions for paired transformations between languages",
+  "metadata": {"comments": [], "description": "Abstractions for paired transformations between languages", "seeAlso": []},
   "name": "hydra.coders"}

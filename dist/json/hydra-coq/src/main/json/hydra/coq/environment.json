@@ -55,5 +55,5 @@
                         "body": {"set": {"literal": {"string": {}}}}}}}]}}},
           "variables": []}}}],
   "dependencies": [{"module": "hydra.core"}],
-  "description": "Environment types for Coq code generation",
+  "metadata": {"comments": [], "description": "Environment types for Coq code generation", "seeAlso": []},
   "name": "hydra.coq.environment"}

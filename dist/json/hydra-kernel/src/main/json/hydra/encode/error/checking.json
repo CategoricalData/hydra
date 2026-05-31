@@ -1254,5 +1254,5 @@
     {"module": "hydra.encode.typing"},
     {"module": "hydra.encode.variants"},
     {"module": "hydra.error.checking"}],
-  "description": "Term encoders for hydra.error.checking",
+  "metadata": {"comments": [], "description": "Term encoders for hydra.error.checking", "seeAlso": []},
   "name": "hydra.encode.error.checking"}

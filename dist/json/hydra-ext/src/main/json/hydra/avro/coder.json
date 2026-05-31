@@ -10268,5 +10268,8 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "description": "Avro-to-Hydra adapter for converting Avro schemas and data to Hydra types and terms",
+  "metadata": {
+    "comments": [],
+    "description": "Avro-to-Hydra adapter for converting Avro schemas and data to Hydra types and terms",
+    "seeAlso": []},
   "name": "hydra.avro.coder"}

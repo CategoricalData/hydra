@@ -1239,5 +1239,5 @@
                         "parameter": "y"}}}],
                 "typeName": "hydra.ast.Ws"}}}}}}],
   "dependencies": [{"module": "hydra.encode.core"}, {"module": "hydra.ast"}],
-  "description": "Term encoders for hydra.ast",
+  "metadata": {"comments": [], "description": "Term encoders for hydra.ast", "seeAlso": []},
   "name": "hydra.encode.ast"}

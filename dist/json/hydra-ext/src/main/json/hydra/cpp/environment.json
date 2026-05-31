@@ -26,5 +26,5 @@
                             "second": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"literal": {"string": {}}}}}}}}}}]}}},
           "variables": []}}}],
   "dependencies": [{"module": "hydra.core"}, {"module": "hydra.packaging"}, {"module": "hydra.util"}],
-  "description": "Type definitions for C++ code generation environment",
+  "metadata": {"comments": [], "description": "Type definitions for C++ code generation environment", "seeAlso": []},
   "name": "hydra.cpp.environment"}

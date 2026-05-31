@@ -989,8 +989,25 @@
                                                         "name": "mc",
                                                         "term": {
                                                           "application": {
-                                                            "argument": {"variable": "mod"},
-                                                            "function": {"project": {"fieldName": "description", "typeName": "hydra.packaging.Module"}}}},
+                                                            "argument": {
+                                                              "lambda": {
+                                                                "body": {
+                                                                  "application": {
+                                                                    "argument": {"variable": "em"},
+                                                                    "function": {"project": {"fieldName": "description", "typeName": "hydra.packaging.EntityMetadata"}}}},
+                                                                "domain": {"variable": "hydra.packaging.EntityMetadata"},
+                                                                "parameter": "em"}},
+                                                            "function": {
+                                                              "application": {
+                                                                "argument": {
+                                                                  "application": {
+                                                                    "argument": {"variable": "mod"},
+                                                                    "function": {"project": {"fieldName": "metadata", "typeName": "hydra.packaging.Module"}}}},
+                                                                "function": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "typeApplication": {"body": {"variable": "hydra.lib.maybes.bind"}, "type": {"variable": "hydra.packaging.EntityMetadata"}}},
+                                                                    "type": {"literal": {"string": {}}}}}}}}},
                                                         "typeScheme": {"body": {"maybe": {"literal": {"string": {}}}}, "variables": []}}],
                                                     "body": {
                                                       "typeApplication": {
@@ -9128,5 +9145,5 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "description": "Functions for encoding Hydra modules as Haskell modules",
+  "metadata": {"comments": [], "description": "Functions for encoding Hydra modules as Haskell modules", "seeAlso": []},
   "name": "hydra.haskell.coder"}

@@ -546,5 +546,5 @@
                         "body": {"variable": "hydra.avro.testing.SchemaSerializationTestCase"}}}}]}}},
           "variables": []}}}],
   "dependencies": [{"module": "hydra.core"}, {"module": "hydra.avro.schema"}, {"module": "hydra.json.model"}],
-  "description": "Test case types for the bidirectional Avro coder",
+  "metadata": {"comments": [], "description": "Test case types for the bidirectional Avro coder", "seeAlso": []},
   "name": "hydra.avro.testing"}

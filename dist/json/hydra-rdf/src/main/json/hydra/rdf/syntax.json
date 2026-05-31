@@ -200,5 +200,5 @@
                   {"name": "object", "type": {"variable": "hydra.rdf.syntax.Node"}}]}}},
           "variables": []}}}],
   "dependencies": [{"module": "hydra.core"}],
-  "description": "An RDF 1.1 syntax model",
+  "metadata": {"comments": [], "description": "An RDF 1.1 syntax model", "seeAlso": []},
   "name": "hydra.rdf.syntax"}

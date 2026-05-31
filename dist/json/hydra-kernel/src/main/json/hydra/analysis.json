@@ -3196,5 +3196,5 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "description": "Module dependency namespace analysis",
+  "metadata": {"comments": [], "description": "Module dependency namespace analysis", "seeAlso": []},
   "name": "hydra.analysis"}

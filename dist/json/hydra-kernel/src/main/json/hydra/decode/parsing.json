@@ -936,5 +936,5 @@
     {"module": "hydra.parsing"},
     {"module": "hydra.util"},
     {"module": "hydra.decode.core"}],
-  "description": "Term decoders for hydra.parsing",
+  "metadata": {"comments": [], "description": "Term decoders for hydra.parsing", "seeAlso": []},
   "name": "hydra.decode.parsing"}

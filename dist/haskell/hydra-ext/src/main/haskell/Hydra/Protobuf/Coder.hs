@@ -60,7 +60,7 @@ constructModule :: Typing.InferenceContext -> Graph.Graph -> Packaging.Module ->
 constructModule cx g mod typeDefs =
 
       let ns_ = Packaging.moduleName mod
-          desc = Packaging.moduleDescription mod
+          desc = (Maybes.bind (Packaging.moduleMetadata mod) Packaging.entityMetadataDescription)
           toDef =
                   \td ->
                     let name = Packaging.typeDefinitionName td

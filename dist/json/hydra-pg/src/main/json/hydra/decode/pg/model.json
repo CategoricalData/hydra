@@ -5370,5 +5370,5 @@
     {"module": "hydra.pg.model"},
     {"module": "hydra.util"},
     {"module": "hydra.decode.core"}],
-  "description": "Term decoders for hydra.pg.model",
+  "metadata": {"comments": [], "description": "Term decoders for hydra.pg.model", "seeAlso": []},
   "name": "hydra.decode.pg.model"}

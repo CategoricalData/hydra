@@ -3289,5 +3289,8 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "description": "SHACL coder: converts Hydra types and terms to SHACL shapes and RDF descriptions",
+  "metadata": {
+    "comments": [],
+    "description": "SHACL coder: converts Hydra types and terms to SHACL shapes and RDF descriptions",
+    "seeAlso": []},
   "name": "hydra.shacl.coder"}

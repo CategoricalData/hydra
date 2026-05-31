@@ -29,6 +29,74 @@ definition x =
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "primitive"),
           Core.fieldTerm = (primitiveDefinition v0)}})
+-- | Encoder for hydra.packaging.DefinitionReference
+definitionReference :: Packaging.DefinitionReference -> Core.Term
+definitionReference x =
+    case x of
+      Packaging.DefinitionReferenceType v0 -> Core.TermInject (Core.Injection {
+        Core.injectionTypeName = (Core.Name "hydra.packaging.DefinitionReference"),
+        Core.injectionField = Core.Field {
+          Core.fieldName = (Core.Name "type"),
+          Core.fieldTerm = (EncodeCore.name v0)}})
+      Packaging.DefinitionReferenceTerm v0 -> Core.TermInject (Core.Injection {
+        Core.injectionTypeName = (Core.Name "hydra.packaging.DefinitionReference"),
+        Core.injectionField = Core.Field {
+          Core.fieldName = (Core.Name "term"),
+          Core.fieldTerm = (EncodeCore.name v0)}})
+      Packaging.DefinitionReferencePrimitive v0 -> Core.TermInject (Core.Injection {
+        Core.injectionTypeName = (Core.Name "hydra.packaging.DefinitionReference"),
+        Core.injectionField = Core.Field {
+          Core.fieldName = (Core.Name "primitive"),
+          Core.fieldTerm = (EncodeCore.name v0)}})
+-- | Encoder for hydra.packaging.EntityLifecycle
+entityLifecycle :: Packaging.EntityLifecycle -> Core.Term
+entityLifecycle x =
+    Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.packaging.EntityLifecycle"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "availableSince"),
+          Core.fieldTerm = ((\opt -> Core.TermMaybe (Maybes.map version opt)) (Packaging.entityLifecycleAvailableSince x))},
+        Core.Field {
+          Core.fieldName = (Core.Name "deprecatedSince"),
+          Core.fieldTerm = ((\opt -> Core.TermMaybe (Maybes.map version opt)) (Packaging.entityLifecycleDeprecatedSince x))}]})
+-- | Encoder for hydra.packaging.EntityMetadata
+entityMetadata :: Packaging.EntityMetadata -> Core.Term
+entityMetadata x =
+    Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.packaging.EntityMetadata"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "description"),
+          Core.fieldTerm = ((\opt -> Core.TermMaybe (Maybes.map (\x2 -> Core.TermLiteral (Core.LiteralString x2)) opt)) (Packaging.entityMetadataDescription x))},
+        Core.Field {
+          Core.fieldName = (Core.Name "comments"),
+          Core.fieldTerm = ((\xs -> Core.TermList (Lists.map (\x2 -> Core.TermLiteral (Core.LiteralString x2)) xs)) (Packaging.entityMetadataComments x))},
+        Core.Field {
+          Core.fieldName = (Core.Name "seeAlso"),
+          Core.fieldTerm = ((\xs -> Core.TermList (Lists.map entityReference xs)) (Packaging.entityMetadataSeeAlso x))},
+        Core.Field {
+          Core.fieldName = (Core.Name "lifecycle"),
+          Core.fieldTerm = ((\opt -> Core.TermMaybe (Maybes.map entityLifecycle opt)) (Packaging.entityMetadataLifecycle x))}]})
+-- | Encoder for hydra.packaging.EntityReference
+entityReference :: Packaging.EntityReference -> Core.Term
+entityReference x =
+    case x of
+      Packaging.EntityReferencePackage v0 -> Core.TermInject (Core.Injection {
+        Core.injectionTypeName = (Core.Name "hydra.packaging.EntityReference"),
+        Core.injectionField = Core.Field {
+          Core.fieldName = (Core.Name "package"),
+          Core.fieldTerm = (packageName v0)}})
+      Packaging.EntityReferenceModule v0 -> Core.TermInject (Core.Injection {
+        Core.injectionTypeName = (Core.Name "hydra.packaging.EntityReference"),
+        Core.injectionField = Core.Field {
+          Core.fieldName = (Core.Name "module"),
+          Core.fieldTerm = (moduleName v0)}})
+      Packaging.EntityReferenceDefinition v0 -> Core.TermInject (Core.Injection {
+        Core.injectionTypeName = (Core.Name "hydra.packaging.EntityReference"),
+        Core.injectionField = Core.Field {
+          Core.fieldName = (Core.Name "definition"),
+          Core.fieldTerm = (definitionReference v0)}})
 -- | Encoder for hydra.packaging.FileExtension
 fileExtension :: Packaging.FileExtension -> Core.Term
 fileExtension x =
@@ -45,8 +113,8 @@ module_ x =
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (moduleName (Packaging.moduleName x))},
         Core.Field {
-          Core.fieldName = (Core.Name "description"),
-          Core.fieldTerm = ((\opt -> Core.TermMaybe (Maybes.map (\x2 -> Core.TermLiteral (Core.LiteralString x2)) opt)) (Packaging.moduleDescription x))},
+          Core.fieldName = (Core.Name "metadata"),
+          Core.fieldTerm = ((\opt -> Core.TermMaybe (Maybes.map entityMetadata opt)) (Packaging.moduleMetadata x))},
         Core.Field {
           Core.fieldName = (Core.Name "dependencies"),
           Core.fieldTerm = ((\xs -> Core.TermList (Lists.map moduleDependency xs)) (Packaging.moduleDependencies x))},
@@ -81,8 +149,8 @@ package x =
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (packageName (Packaging.packageName x))},
         Core.Field {
-          Core.fieldName = (Core.Name "description"),
-          Core.fieldTerm = ((\opt -> Core.TermMaybe (Maybes.map (\x2 -> Core.TermLiteral (Core.LiteralString x2)) opt)) (Packaging.packageDescription x))},
+          Core.fieldName = (Core.Name "metadata"),
+          Core.fieldTerm = ((\opt -> Core.TermMaybe (Maybes.map entityMetadata opt)) (Packaging.packageMetadata x))},
         Core.Field {
           Core.fieldName = (Core.Name "dependencies"),
           Core.fieldTerm = ((\xs -> Core.TermList (Lists.map packageDependency xs)) (Packaging.packageDependencies x))},
@@ -129,26 +197,14 @@ primitiveDefinition x =
           Core.fieldName = (Core.Name "signature"),
           Core.fieldTerm = (Typing.termSignature (Packaging.primitiveDefinitionSignature x))},
         Core.Field {
-          Core.fieldName = (Core.Name "description"),
-          Core.fieldTerm = ((\x2 -> Core.TermLiteral (Core.LiteralString x2)) (Packaging.primitiveDefinitionDescription x))},
-        Core.Field {
-          Core.fieldName = (Core.Name "comments"),
-          Core.fieldTerm = ((\opt -> Core.TermMaybe (Maybes.map (\x2 -> Core.TermLiteral (Core.LiteralString x2)) opt)) (Packaging.primitiveDefinitionComments x))},
-        Core.Field {
-          Core.fieldName = (Core.Name "seeAlso"),
-          Core.fieldTerm = ((\xs -> Core.TermList (Lists.map EncodeCore.name xs)) (Packaging.primitiveDefinitionSeeAlso x))},
+          Core.fieldName = (Core.Name "metadata"),
+          Core.fieldTerm = ((\opt -> Core.TermMaybe (Maybes.map entityMetadata opt)) (Packaging.primitiveDefinitionMetadata x))},
         Core.Field {
           Core.fieldName = (Core.Name "isPure"),
           Core.fieldTerm = ((\x2 -> Core.TermLiteral (Core.LiteralBoolean x2)) (Packaging.primitiveDefinitionIsPure x))},
         Core.Field {
           Core.fieldName = (Core.Name "isTotal"),
           Core.fieldTerm = ((\x2 -> Core.TermLiteral (Core.LiteralBoolean x2)) (Packaging.primitiveDefinitionIsTotal x))},
-        Core.Field {
-          Core.fieldName = (Core.Name "availableSince"),
-          Core.fieldTerm = ((\opt -> Core.TermMaybe (Maybes.map version opt)) (Packaging.primitiveDefinitionAvailableSince x))},
-        Core.Field {
-          Core.fieldName = (Core.Name "deprecatedSince"),
-          Core.fieldTerm = ((\opt -> Core.TermMaybe (Maybes.map version opt)) (Packaging.primitiveDefinitionDeprecatedSince x))},
         Core.Field {
           Core.fieldName = (Core.Name "defaultImplementation"),
           Core.fieldTerm = ((\opt -> Core.TermMaybe (Maybes.map EncodeCore.term opt)) (Packaging.primitiveDefinitionDefaultImplementation x))}]})
@@ -174,6 +230,9 @@ termDefinition x =
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (EncodeCore.name (Packaging.termDefinitionName x))},
         Core.Field {
+          Core.fieldName = (Core.Name "metadata"),
+          Core.fieldTerm = ((\opt -> Core.TermMaybe (Maybes.map entityMetadata opt)) (Packaging.termDefinitionMetadata x))},
+        Core.Field {
           Core.fieldName = (Core.Name "term"),
           Core.fieldTerm = (EncodeCore.term (Packaging.termDefinitionTerm x))},
         Core.Field {
@@ -188,6 +247,9 @@ typeDefinition x =
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (EncodeCore.name (Packaging.typeDefinitionName x))},
+        Core.Field {
+          Core.fieldName = (Core.Name "metadata"),
+          Core.fieldTerm = ((\opt -> Core.TermMaybe (Maybes.map entityMetadata opt)) (Packaging.typeDefinitionMetadata x))},
         Core.Field {
           Core.fieldName = (Core.Name "typeScheme"),
           Core.fieldTerm = (EncodeCore.typeScheme (Packaging.typeDefinitionTypeScheme x))}]})

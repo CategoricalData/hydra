@@ -294,5 +294,5 @@
                         "body": {"variable": "hydra.pg.model.VertexLabel"}}}}]}}},
           "variables": []}}}],
   "dependencies": [{"module": "hydra.pg.model"}],
-  "description": "Error types for property graph validation",
+  "metadata": {"comments": [], "description": "Error types for property graph validation", "seeAlso": []},
   "name": "hydra.error.pg"}

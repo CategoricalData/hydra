@@ -64,13 +64,14 @@ alter =
           Typing.resultType = (Core.TypeMap (Core.MapType {
             Core.mapTypeKeys = (Core.TypeVariable (Core.Name "k")),
             Core.mapTypeValues = (Core.TypeVariable (Core.Name "v"))}))}},
-      Packaging.primitiveDefinitionDescription = "Alter a value at a key using a function which sees the optional current value.",
-      Packaging.primitiveDefinitionComments = (Just "alter(f, k, m) applies f to Just(v) when m contains key k with value v, or to Nothing when k is absent. If f returns Just(v'), the binding (k, v') is set in the result; if f returns Nothing, k is removed from the result. A single primitive that subsumes insert, delete, and adjust. Requires an 'ordering' constraint on the key type. Total. Corresponds to Haskell's Data.Map.alter :: Ord k => (Maybe v -> Maybe v) -> k -> Map k v -> Map k v."),
-      Packaging.primitiveDefinitionSeeAlso = [],
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "Alter a value at a key using a function which sees the optional current value."),
+        Packaging.entityMetadataComments = [
+          "alter(f, k, m) applies f to Just(v) when m contains key k with value v, or to Nothing when k is absent. If f returns Just(v'), the binding (k, v') is set in the result; if f returns Nothing, k is removed from the result. A single primitive that subsumes insert, delete, and adjust. Requires an 'ordering' constraint on the key type. Total. Corresponds to Haskell's Data.Map.alter :: Ord k => (Maybe v -> Maybe v) -> k -> Map k v -> Map k v."],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
-      Packaging.primitiveDefinitionAvailableSince = Nothing,
-      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 bimap :: Packaging.PrimitiveDefinition
 bimap =
@@ -119,13 +120,14 @@ bimap =
           Typing.resultType = (Core.TypeMap (Core.MapType {
             Core.mapTypeKeys = (Core.TypeVariable (Core.Name "k2")),
             Core.mapTypeValues = (Core.TypeVariable (Core.Name "v2"))}))}},
-      Packaging.primitiveDefinitionDescription = "Map functions over both the keys and values of a map.",
-      Packaging.primitiveDefinitionComments = (Just "bimap(fk, fv, m) returns a new map with key fk(k) and value fv(v) for each binding (k, v) in m. Key collisions after applying fk are resolved by keeping the last binding encountered (host may differ on collision policy if fk is not injective). Requires 'ordering' constraints on both the input and output key types. Total. Corresponds to a key-and-value lift of Haskell's Data.Map.fromList . map (\\(k,v) -> (fk k, fv v)) . toList."),
-      Packaging.primitiveDefinitionSeeAlso = [],
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "Map functions over both the keys and values of a map."),
+        Packaging.entityMetadataComments = [
+          "bimap(fk, fv, m) returns a new map with key fk(k) and value fv(v) for each binding (k, v) in m. Key collisions after applying fk are resolved by keeping the last binding encountered (host may differ on collision policy if fk is not injective). Requires 'ordering' constraints on both the input and output key types. Total. Corresponds to a key-and-value lift of Haskell's Data.Map.fromList . map (\\(k,v) -> (fk k, fv v)) . toList."],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
-      Packaging.primitiveDefinitionAvailableSince = Nothing,
-      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 delete :: Packaging.PrimitiveDefinition
 delete =
@@ -158,13 +160,14 @@ delete =
           Typing.resultType = (Core.TypeMap (Core.MapType {
             Core.mapTypeKeys = (Core.TypeVariable (Core.Name "k")),
             Core.mapTypeValues = (Core.TypeVariable (Core.Name "v"))}))}},
-      Packaging.primitiveDefinitionDescription = "Remove a key from a map.",
-      Packaging.primitiveDefinitionComments = (Just "delete(k, m) returns m with the binding for k removed; if k is not present, m is returned unchanged. Requires an 'ordering' constraint on the key type. Total. Corresponds to Haskell's Data.Map.delete :: Ord k => k -> Map k v -> Map k v."),
-      Packaging.primitiveDefinitionSeeAlso = [],
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "Remove a key from a map."),
+        Packaging.entityMetadataComments = [
+          "delete(k, m) returns m with the binding for k removed; if k is not present, m is returned unchanged. Requires an 'ordering' constraint on the key type. Total. Corresponds to Haskell's Data.Map.delete :: Ord k => k -> Map k v -> Map k v."],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
-      Packaging.primitiveDefinitionAvailableSince = Nothing,
-      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 elems :: Packaging.PrimitiveDefinition
 elems =
@@ -190,13 +193,14 @@ elems =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeList (Core.TypeVariable (Core.Name "v")))}},
-      Packaging.primitiveDefinitionDescription = "Return the values of a map (in key order).",
-      Packaging.primitiveDefinitionComments = (Just "elems(m) returns the values of m as a list, ordered by their keys' ascending order. Requires an 'ordering' constraint on the key type. Total. Corresponds to Haskell's Data.Map.elems :: Map k v -> [v]."),
-      Packaging.primitiveDefinitionSeeAlso = [],
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "Return the values of a map (in key order)."),
+        Packaging.entityMetadataComments = [
+          "elems(m) returns the values of m as a list, ordered by their keys' ascending order. Requires an 'ordering' constraint on the key type. Total. Corresponds to Haskell's Data.Map.elems :: Map k v -> [v]."],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
-      Packaging.primitiveDefinitionAvailableSince = Nothing,
-      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 empty :: Packaging.PrimitiveDefinition
 empty =
@@ -217,13 +221,14 @@ empty =
           Typing.resultType = (Core.TypeMap (Core.MapType {
             Core.mapTypeKeys = (Core.TypeVariable (Core.Name "k")),
             Core.mapTypeValues = (Core.TypeVariable (Core.Name "v"))}))}},
-      Packaging.primitiveDefinitionDescription = "The empty map.",
-      Packaging.primitiveDefinitionComments = (Just "empty is the map with no bindings. Requires an 'ordering' constraint on the key type. Total. Corresponds to Haskell's Data.Map.empty :: Map k v."),
-      Packaging.primitiveDefinitionSeeAlso = [],
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "The empty map."),
+        Packaging.entityMetadataComments = [
+          "empty is the map with no bindings. Requires an 'ordering' constraint on the key type. Total. Corresponds to Haskell's Data.Map.empty :: Map k v."],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
-      Packaging.primitiveDefinitionAvailableSince = Nothing,
-      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 filter :: Packaging.PrimitiveDefinition
 filter =
@@ -258,13 +263,14 @@ filter =
           Typing.resultType = (Core.TypeMap (Core.MapType {
             Core.mapTypeKeys = (Core.TypeVariable (Core.Name "k")),
             Core.mapTypeValues = (Core.TypeVariable (Core.Name "v"))}))}},
-      Packaging.primitiveDefinitionDescription = "Filter a map by value.",
-      Packaging.primitiveDefinitionComments = (Just "filter(p, m) returns the submap of m containing exactly the bindings (k, v) for which p(v) is true. Requires an 'ordering' constraint on the key type. Total. Corresponds to Haskell's Data.Map.filter :: (v -> Bool) -> Map k v -> Map k v."),
-      Packaging.primitiveDefinitionSeeAlso = [],
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "Filter a map by value."),
+        Packaging.entityMetadataComments = [
+          "filter(p, m) returns the submap of m containing exactly the bindings (k, v) for which p(v) is true. Requires an 'ordering' constraint on the key type. Total. Corresponds to Haskell's Data.Map.filter :: (v -> Bool) -> Map k v -> Map k v."],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
-      Packaging.primitiveDefinitionAvailableSince = Nothing,
-      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 filterWithKey :: Packaging.PrimitiveDefinition
 filterWithKey =
@@ -301,13 +307,14 @@ filterWithKey =
           Typing.resultType = (Core.TypeMap (Core.MapType {
             Core.mapTypeKeys = (Core.TypeVariable (Core.Name "k")),
             Core.mapTypeValues = (Core.TypeVariable (Core.Name "v"))}))}},
-      Packaging.primitiveDefinitionDescription = "Filter a map by key and value.",
-      Packaging.primitiveDefinitionComments = (Just "filterWithKey(p, m) returns the submap of m containing exactly the bindings (k, v) for which p(k, v) is true. Requires an 'ordering' constraint on the key type. Total. Corresponds to Haskell's Data.Map.filterWithKey :: (k -> v -> Bool) -> Map k v -> Map k v."),
-      Packaging.primitiveDefinitionSeeAlso = [],
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "Filter a map by key and value."),
+        Packaging.entityMetadataComments = [
+          "filterWithKey(p, m) returns the submap of m containing exactly the bindings (k, v) for which p(k, v) is true. Requires an 'ordering' constraint on the key type. Total. Corresponds to Haskell's Data.Map.filterWithKey :: (k -> v -> Bool) -> Map k v -> Map k v."],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
-      Packaging.primitiveDefinitionAvailableSince = Nothing,
-      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 findWithDefault :: Packaging.PrimitiveDefinition
 findWithDefault =
@@ -343,13 +350,14 @@ findWithDefault =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeVariable (Core.Name "v"))}},
-      Packaging.primitiveDefinitionDescription = "Look up a value with a default if the key is absent.",
-      Packaging.primitiveDefinitionComments = (Just "findWithDefault(def, k, m) returns the value bound to k in m if k is present, or def otherwise. Equivalent to maybe(def, identity, lookup(k, m)). Requires an 'ordering' constraint on the key type. Total. Corresponds to Haskell's Data.Map.findWithDefault :: Ord k => v -> k -> Map k v -> v."),
-      Packaging.primitiveDefinitionSeeAlso = [],
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "Look up a value with a default if the key is absent."),
+        Packaging.entityMetadataComments = [
+          "findWithDefault(def, k, m) returns the value bound to k in m if k is present, or def otherwise. Equivalent to maybe(def, identity, lookup(k, m)). Requires an 'ordering' constraint on the key type. Total. Corresponds to Haskell's Data.Map.findWithDefault :: Ord k => v -> k -> Map k v -> v."],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
-      Packaging.primitiveDefinitionAvailableSince = Nothing,
-      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 fromList :: Packaging.PrimitiveDefinition
 fromList =
@@ -377,13 +385,14 @@ fromList =
           Typing.resultType = (Core.TypeMap (Core.MapType {
             Core.mapTypeKeys = (Core.TypeVariable (Core.Name "k")),
             Core.mapTypeValues = (Core.TypeVariable (Core.Name "v"))}))}},
-      Packaging.primitiveDefinitionDescription = "Build a map from a list of key-value pairs.",
-      Packaging.primitiveDefinitionComments = (Just "fromList(xs) returns the map containing exactly the bindings in xs. If xs contains multiple entries for the same key, the last one wins (matching Haskell's fromList behavior). Requires an 'ordering' constraint on the key type. Total. Corresponds to Haskell's Data.Map.fromList :: Ord k => [(k, v)] -> Map k v."),
-      Packaging.primitiveDefinitionSeeAlso = [],
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "Build a map from a list of key-value pairs."),
+        Packaging.entityMetadataComments = [
+          "fromList(xs) returns the map containing exactly the bindings in xs. If xs contains multiple entries for the same key, the last one wins (matching Haskell's fromList behavior). Requires an 'ordering' constraint on the key type. Total. Corresponds to Haskell's Data.Map.fromList :: Ord k => [(k, v)] -> Map k v."],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
-      Packaging.primitiveDefinitionAvailableSince = Nothing,
-      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 insert :: Packaging.PrimitiveDefinition
 insert =
@@ -421,13 +430,14 @@ insert =
           Typing.resultType = (Core.TypeMap (Core.MapType {
             Core.mapTypeKeys = (Core.TypeVariable (Core.Name "k")),
             Core.mapTypeValues = (Core.TypeVariable (Core.Name "v"))}))}},
-      Packaging.primitiveDefinitionDescription = "Insert a key-value pair into a map.",
-      Packaging.primitiveDefinitionComments = (Just "insert(k, v, m) returns m with the binding (k, v) added or updated. If k is already present, its value is overwritten. Requires an 'ordering' constraint on the key type. Total. Corresponds to Haskell's Data.Map.insert :: Ord k => k -> v -> Map k v -> Map k v."),
-      Packaging.primitiveDefinitionSeeAlso = [],
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "Insert a key-value pair into a map."),
+        Packaging.entityMetadataComments = [
+          "insert(k, v, m) returns m with the binding (k, v) added or updated. If k is already present, its value is overwritten. Requires an 'ordering' constraint on the key type. Total. Corresponds to Haskell's Data.Map.insert :: Ord k => k -> v -> Map k v -> Map k v."],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
-      Packaging.primitiveDefinitionAvailableSince = Nothing,
-      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 keys :: Packaging.PrimitiveDefinition
 keys =
@@ -453,13 +463,14 @@ keys =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeList (Core.TypeVariable (Core.Name "k")))}},
-      Packaging.primitiveDefinitionDescription = "Return the keys of a map (in key order).",
-      Packaging.primitiveDefinitionComments = (Just "keys(m) returns the keys of m as a list, in ascending order. Requires an 'ordering' constraint on the key type. Total. Corresponds to Haskell's Data.Map.keys :: Map k v -> [k]."),
-      Packaging.primitiveDefinitionSeeAlso = [],
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "Return the keys of a map (in key order)."),
+        Packaging.entityMetadataComments = [
+          "keys(m) returns the keys of m as a list, in ascending order. Requires an 'ordering' constraint on the key type. Total. Corresponds to Haskell's Data.Map.keys :: Map k v -> [k]."],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
-      Packaging.primitiveDefinitionAvailableSince = Nothing,
-      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 lookup :: Packaging.PrimitiveDefinition
 lookup =
@@ -490,13 +501,14 @@ lookup =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeMaybe (Core.TypeVariable (Core.Name "v")))}},
-      Packaging.primitiveDefinitionDescription = "Look up a value in a map by key, returning Nothing if absent.",
-      Packaging.primitiveDefinitionComments = (Just "lookup(k, m) returns Just(v) where v is the value bound to k in m, or Nothing if k is not present. Requires an 'ordering' constraint on the key type. Total. Corresponds to Haskell's Data.Map.lookup :: Ord k => k -> Map k v -> Maybe v."),
-      Packaging.primitiveDefinitionSeeAlso = [],
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "Look up a value in a map by key, returning Nothing if absent."),
+        Packaging.entityMetadataComments = [
+          "lookup(k, m) returns Just(v) where v is the value bound to k in m, or Nothing if k is not present. Requires an 'ordering' constraint on the key type. Total. Corresponds to Haskell's Data.Map.lookup :: Ord k => k -> Map k v -> Maybe v."],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
-      Packaging.primitiveDefinitionAvailableSince = Nothing,
-      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 map :: Packaging.PrimitiveDefinition
 map =
@@ -534,13 +546,14 @@ map =
           Typing.resultType = (Core.TypeMap (Core.MapType {
             Core.mapTypeKeys = (Core.TypeVariable (Core.Name "k")),
             Core.mapTypeValues = (Core.TypeVariable (Core.Name "v2"))}))}},
-      Packaging.primitiveDefinitionDescription = "Map a function over the values of a map.",
-      Packaging.primitiveDefinitionComments = (Just "map(f, m) returns a map with the same keys as m and value f(v) for each binding (k, v). Requires an 'ordering' constraint on the key type. Total. Corresponds to Haskell's Data.Map.map :: (v -> w) -> Map k v -> Map k w / fmap on Map."),
-      Packaging.primitiveDefinitionSeeAlso = [],
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "Map a function over the values of a map."),
+        Packaging.entityMetadataComments = [
+          "map(f, m) returns a map with the same keys as m and value f(v) for each binding (k, v). Requires an 'ordering' constraint on the key type. Total. Corresponds to Haskell's Data.Map.map :: (v -> w) -> Map k v -> Map k w / fmap on Map."],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
-      Packaging.primitiveDefinitionAvailableSince = Nothing,
-      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 mapKeys :: Packaging.PrimitiveDefinition
 mapKeys =
@@ -579,13 +592,14 @@ mapKeys =
           Typing.resultType = (Core.TypeMap (Core.MapType {
             Core.mapTypeKeys = (Core.TypeVariable (Core.Name "k2")),
             Core.mapTypeValues = (Core.TypeVariable (Core.Name "v"))}))}},
-      Packaging.primitiveDefinitionDescription = "Map a function over the keys of a map.",
-      Packaging.primitiveDefinitionComments = (Just "mapKeys(f, m) returns a map where each binding (k, v) becomes (f(k), v). If f maps multiple keys to the same image, key collisions are resolved by keeping the binding with the greater original key (matching Haskell's mapKeys behavior). Requires 'ordering' constraints on both the input and output key types. Total. Corresponds to Haskell's Data.Map.mapKeys :: (Ord k1, Ord k2) => (k1 -> k2) -> Map k1 v -> Map k2 v."),
-      Packaging.primitiveDefinitionSeeAlso = [],
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "Map a function over the keys of a map."),
+        Packaging.entityMetadataComments = [
+          "mapKeys(f, m) returns a map where each binding (k, v) becomes (f(k), v). If f maps multiple keys to the same image, key collisions are resolved by keeping the binding with the greater original key (matching Haskell's mapKeys behavior). Requires 'ordering' constraints on both the input and output key types. Total. Corresponds to Haskell's Data.Map.mapKeys :: (Ord k1, Ord k2) => (k1 -> k2) -> Map k1 v -> Map k2 v."],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
-      Packaging.primitiveDefinitionAvailableSince = Nothing,
-      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 member :: Packaging.PrimitiveDefinition
 member =
@@ -616,13 +630,14 @@ member =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeLiteral Core.LiteralTypeBoolean)}},
-      Packaging.primitiveDefinitionDescription = "Test whether a key is present in a map.",
-      Packaging.primitiveDefinitionComments = (Just "member(k, m) returns true iff k is a key in m. Requires an 'ordering' constraint on the key type. Total. Corresponds to Haskell's Data.Map.member :: Ord k => k -> Map k v -> Bool."),
-      Packaging.primitiveDefinitionSeeAlso = [],
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "Test whether a key is present in a map."),
+        Packaging.entityMetadataComments = [
+          "member(k, m) returns true iff k is a key in m. Requires an 'ordering' constraint on the key type. Total. Corresponds to Haskell's Data.Map.member :: Ord k => k -> Map k v -> Bool."],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
-      Packaging.primitiveDefinitionAvailableSince = Nothing,
-      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 null :: Packaging.PrimitiveDefinition
 null =
@@ -648,13 +663,14 @@ null =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeLiteral Core.LiteralTypeBoolean)}},
-      Packaging.primitiveDefinitionDescription = "Test whether a map is empty.",
-      Packaging.primitiveDefinitionComments = (Just "null(m) returns true iff m has no bindings. Requires an 'ordering' constraint on the key type. Total. Corresponds to Haskell's Data.Map.null :: Map k v -> Bool."),
-      Packaging.primitiveDefinitionSeeAlso = [],
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "Test whether a map is empty."),
+        Packaging.entityMetadataComments = [
+          "null(m) returns true iff m has no bindings. Requires an 'ordering' constraint on the key type. Total. Corresponds to Haskell's Data.Map.null :: Map k v -> Bool."],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
-      Packaging.primitiveDefinitionAvailableSince = Nothing,
-      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 singleton :: Packaging.PrimitiveDefinition
 singleton =
@@ -685,13 +701,14 @@ singleton =
           Typing.resultType = (Core.TypeMap (Core.MapType {
             Core.mapTypeKeys = (Core.TypeVariable (Core.Name "k")),
             Core.mapTypeValues = (Core.TypeVariable (Core.Name "v"))}))}},
-      Packaging.primitiveDefinitionDescription = "Construct a map with a single key-value pair.",
-      Packaging.primitiveDefinitionComments = (Just "singleton(k, v) returns the map containing exactly the binding (k, v). Requires an 'ordering' constraint on the key type. Total. Corresponds to Haskell's Data.Map.singleton :: k -> v -> Map k v."),
-      Packaging.primitiveDefinitionSeeAlso = [],
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "Construct a map with a single key-value pair."),
+        Packaging.entityMetadataComments = [
+          "singleton(k, v) returns the map containing exactly the binding (k, v). Requires an 'ordering' constraint on the key type. Total. Corresponds to Haskell's Data.Map.singleton :: k -> v -> Map k v."],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
-      Packaging.primitiveDefinitionAvailableSince = Nothing,
-      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 size :: Packaging.PrimitiveDefinition
 size =
@@ -717,13 +734,14 @@ size =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}},
-      Packaging.primitiveDefinitionDescription = "Return the number of key-value pairs in a map.",
-      Packaging.primitiveDefinitionComments = (Just "size(m) returns the number of bindings in m as an int32. Requires an 'ordering' constraint on the key type. Total. Corresponds to Haskell's Data.Map.size :: Map k v -> Int (with narrowing to int32)."),
-      Packaging.primitiveDefinitionSeeAlso = [],
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "Return the number of key-value pairs in a map."),
+        Packaging.entityMetadataComments = [
+          "size(m) returns the number of bindings in m as an int32. Requires an 'ordering' constraint on the key type. Total. Corresponds to Haskell's Data.Map.size :: Map k v -> Int (with narrowing to int32)."],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
-      Packaging.primitiveDefinitionAvailableSince = Nothing,
-      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 toList :: Packaging.PrimitiveDefinition
 toList =
@@ -751,13 +769,14 @@ toList =
           Typing.resultType = (Core.TypeList (Core.TypePair (Core.PairType {
             Core.pairTypeFirst = (Core.TypeVariable (Core.Name "k")),
             Core.pairTypeSecond = (Core.TypeVariable (Core.Name "v"))})))}},
-      Packaging.primitiveDefinitionDescription = "Convert a map to a list of key-value pairs (in key order).",
-      Packaging.primitiveDefinitionComments = (Just "toList(m) returns the bindings of m as a list of (key, value) pairs, in ascending key order. Requires an 'ordering' constraint on the key type. Total. Corresponds to Haskell's Data.Map.toList :: Map k v -> [(k, v)]."),
-      Packaging.primitiveDefinitionSeeAlso = [],
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "Convert a map to a list of key-value pairs (in key order)."),
+        Packaging.entityMetadataComments = [
+          "toList(m) returns the bindings of m as a list of (key, value) pairs, in ascending key order. Requires an 'ordering' constraint on the key type. Total. Corresponds to Haskell's Data.Map.toList :: Map k v -> [(k, v)]."],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
-      Packaging.primitiveDefinitionAvailableSince = Nothing,
-      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 union :: Packaging.PrimitiveDefinition
 union =
@@ -792,11 +811,12 @@ union =
           Typing.resultType = (Core.TypeMap (Core.MapType {
             Core.mapTypeKeys = (Core.TypeVariable (Core.Name "k")),
             Core.mapTypeValues = (Core.TypeVariable (Core.Name "v"))}))}},
-      Packaging.primitiveDefinitionDescription = "Compute the union of two maps; the first map's bindings take precedence on key collision.",
-      Packaging.primitiveDefinitionComments = (Just "union(m1, m2) returns the map containing all bindings from m1 plus the bindings of m2 whose keys are not in m1. On key collision, the binding from m1 is preferred. Requires an 'ordering' constraint on the key type. Total. Corresponds to Haskell's Data.Map.union :: Ord k => Map k v -> Map k v -> Map k v."),
-      Packaging.primitiveDefinitionSeeAlso = [],
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "Compute the union of two maps; the first map's bindings take precedence on key collision."),
+        Packaging.entityMetadataComments = [
+          "union(m1, m2) returns the map containing all bindings from m1 plus the bindings of m2 whose keys are not in m1. On key collision, the binding from m1 is preferred. Requires an 'ordering' constraint on the key type. Total. Corresponds to Haskell's Data.Map.union :: Ord k => Map k v -> Map k v -> Map k v."],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
-      Packaging.primitiveDefinitionAvailableSince = Nothing,
-      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}

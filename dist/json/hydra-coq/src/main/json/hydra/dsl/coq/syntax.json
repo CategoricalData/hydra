@@ -37621,5 +37621,5 @@
                     "typeName": "hydra.core.Term"}},
                 "typeName": "hydra.typed.TypedTerm"}}}}}}],
   "dependencies": [{"module": "hydra.coq.syntax"}, {"module": "hydra.typed"}],
-  "description": "DSL functions for hydra.coq.syntax",
+  "metadata": {"comments": [], "description": "DSL functions for hydra.coq.syntax", "seeAlso": []},
   "name": "hydra.dsl.coq.syntax"}

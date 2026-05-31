@@ -163,5 +163,8 @@
               {"name": "businessMetadata", "type": {"unit": {}}}]},
           "variables": []}}}],
   "dependencies": [{"module": "hydra.xml.schema"}],
-  "description": "The Apache Atlas meta-model\nBased on the the org.apache.atlas.model package in the master branch as of 2022-06-01\n  https://github.com/apache/atlas/tree/master/intg/src/main/java/org/apache/atlas/model",
+  "metadata": {
+    "comments": [],
+    "description": "The Apache Atlas meta-model\nBased on the the org.apache.atlas.model package in the master branch as of 2022-06-01\n  https://github.com/apache/atlas/tree/master/intg/src/main/java/org/apache/atlas/model",
+    "seeAlso": []},
   "name": "hydra.atlas"}

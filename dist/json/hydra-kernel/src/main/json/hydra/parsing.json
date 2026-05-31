@@ -98,5 +98,5 @@
                   "parameter": "a"}}}},
           "variables": []}}}],
   "dependencies": [{"module": "hydra.core"}],
-  "description": "Parser combinator types for text parsing",
+  "metadata": {"comments": [], "description": "Parser combinator types for text parsing", "seeAlso": []},
   "name": "hydra.parsing"}
