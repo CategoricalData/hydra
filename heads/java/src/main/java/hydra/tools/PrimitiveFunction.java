@@ -9,9 +9,12 @@ import hydra.graph.Graph;
 import hydra.graph.Primitive;
 import hydra.packaging.PrimitiveDefinition;
 import hydra.typing.InferenceContext;
+import hydra.typing.Parameter;
+import hydra.typing.TermSignature;
 import hydra.util.Either;
 import hydra.util.Maybe;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
@@ -40,11 +43,42 @@ public abstract class PrimitiveFunction {
     protected abstract Function<List<Term>, Function<InferenceContext, Function<Graph, Either<Error_, Term>>>> implementation();
 
     /**
+     * The 0-based positions of value parameters that must be passed lazily (thunked) at call sites
+     * in hosts that distinguish strict from lazy evaluation (issue #391). Defaults to none; lazy
+     * primitives (e.g. maybes.maybe, logic.ifElse) override this. Mirrors Hydra.Dsl.Prims.lazyArgs
+     * on the Haskell host, which is the source of truth for the laziness metadata.
+     * @return the lazy parameter positions
+     */
+    protected List<Integer> lazyParams() {
+        return java.util.Collections.emptyList();
+    }
+
+    /**
      * The primitive function as a term.
      * @return the primitive function as a Hydra term
      */
     public Term term() {
         return hydra.dsl.Terms.primitive(name());
+    }
+
+    /**
+     * Derive the term signature from {@link #type()} and apply this primitive's {@link #lazyParams()}
+     * by marking those parameter positions lazy. typeSchemeToTermSignature cannot infer laziness (a
+     * TypeScheme carries none), so the per-primitive lazyParams() is what records it for coders.
+     */
+    private TermSignature signatureWithLaziness() {
+        TermSignature sig = Scoping.typeSchemeToTermSignature(type());
+        List<Integer> lazy = lazyParams();
+        if (lazy.isEmpty()) {
+            return sig;
+        }
+        List<Parameter> params = new ArrayList<>(sig.parameters);
+        for (Integer i : lazy) {
+            if (i >= 0 && i < params.size()) {
+                params.set(i, params.get(i).withIsLazy(Boolean.TRUE));
+            }
+        }
+        return sig.withParameters(params);
     }
 
     /**
@@ -65,7 +99,7 @@ public abstract class PrimitiveFunction {
             };
         PrimitiveDefinition definition = new PrimitiveDefinition(
             name(),
-            Scoping.typeSchemeToTermSignature(type()),
+            signatureWithLaziness(),
             "",
             Maybe.nothing(),
             java.util.Collections.emptyList(),

@@ -50,20 +50,20 @@ def foldl(f: Callable[[A], Callable[[B], Either[C, A]]], acc: A, xs: frozenlist[
     return Right(result)
 
 
-def from_left(default: A, e: Either[A, B]) -> A:
-    """Extract the Left value, or return a default."""
+def from_left(default: A | Callable[[], A], e: Either[A, B]) -> A:
+    """Extract the Left value, or return a default. The default is lazy (#391)."""
     match e:
         case Left(val):
             return val
         case Right(_):
-            return default
+            return default() if callable(default) else default  # type: ignore[return-value]
 
 
-def from_right(default: B, e: Either[A, B]) -> B:
-    """Extract the Right value, or return a default."""
+def from_right(default: B | Callable[[], B], e: Either[A, B]) -> B:
+    """Extract the Right value, or return a default. The default is lazy (#391)."""
     match e:
         case Left(_):
-            return default
+            return default() if callable(default) else default  # type: ignore[return-value]
         case Right(val):
             return val
 
