@@ -2,7 +2,7 @@
 module Hydra.Sources.Test.Inference.All where
 
 import Hydra.Kernel
-import           Hydra.Dsl.Bootstrap (unqualifiedDep)
+import           Hydra.Dsl.Bootstrap (unqualifiedDep, descriptionMetadata)
 import Hydra.Dsl.Meta.Testing as Testing
 import Hydra.Sources.Kernel.Types.All
 import Hydra.Dsl.Meta.Phantoms as Phantoms
@@ -31,7 +31,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = unqualifiedDep <$> (namespaces Prelude.++ kernelTypesModuleNames),
-            moduleDescription = Just "Hydra's inference test suite"}
+            moduleMetadata = descriptionMetadata (Just "Hydra's inference test suite")}
   where
     definitions = [Phantoms.toDefinition allTests]
     namespaces = [

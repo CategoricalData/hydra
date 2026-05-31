@@ -22,7 +22,7 @@
 module Hydra.Sources.Bench.FanOut where
 
 import Hydra.Kernel
-import           Hydra.Dsl.Bootstrap (unqualifiedDep)
+import           Hydra.Dsl.Bootstrap (unqualifiedDep, descriptionMetadata)
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Meta.Core         as Core
 import qualified Hydra.Dsl.Meta.Lib.Maybes   as Maybes
@@ -44,7 +44,7 @@ module_ = Module {
   moduleName = ns,
   moduleDefinitions = definitions,
   moduleDependencies = unqualifiedDep <$> ([Strip.ns] `L.union` kernelTypesModuleNames),
-  moduleDescription = Just "Fan-out inference benchmark. Each fanWalker_K branches to three smaller fanWalkers via _Term cases — closer to real codegen DAG shape than LinearChain."
+  moduleMetadata = descriptionMetadata (Just "Fan-out inference benchmark. Each fanWalker_K branches to three smaller fanWalkers via _Term cases — closer to real codegen DAG shape than LinearChain.")
   }
   where
     definitions = [toDefinition (mkFanWalker k) | k <- [0 .. numFanWalkers - 1]]

@@ -98,7 +98,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> ([Reduction.ns, Rewriting.ns, Strip.ns, ExtractCore.ns] L.++ (kernelTypesModuleNames L.++ [PgModel.ns, TabularModel.ns, RelationalModel.ns])),
-            moduleDescription = Just "Functions for transforming property graph mappings into property graph elements."}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just "Functions for transforming property graph mappings into property graph elements.")}
   where
     definitions = [
       toDefinition concatPairs,

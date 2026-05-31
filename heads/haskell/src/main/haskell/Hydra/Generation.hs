@@ -149,7 +149,7 @@ definitionAsBinding (DefinitionType td) = Binding {
 -- TODO(#156): Implement DefinitionPrimitive handling once primitive modules land. For now, primitives don't appear in modules that go through this function.
 definitionAsBinding (DefinitionPrimitive pd) = Binding {
     bindingName = primitiveDefinitionName pd,
-    bindingTerm = TermLiteral (LiteralString (primitiveDefinitionDescription pd)),
+    bindingTerm = TermLiteral (LiteralString (maybe "" (\em -> maybe "" id (entityMetadataDescription em)) (primitiveDefinitionMetadata pd))),
     bindingTypeScheme = Just (termSignatureToTypeScheme (primitiveDefinitionSignature pd))}
 
 -- | Extract a module's definitions in the legacy Binding view, suitable for

@@ -65,7 +65,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> (kernelTypesModuleNames),
-            moduleDescription = Just ("A module for tier-0 constants.")}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just ("A module for tier-0 constants."))}
   where
    definitions = [
      toDefinition debugInference,

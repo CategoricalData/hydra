@@ -73,7 +73,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> (kernelTypesModuleNames),
-            moduleDescription = Just ("Graph context extension and type scheme conversion")}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just ("Graph context extension and type scheme conversion"))}
   where
    definitions = [
      toDefinition extendGraphForLambda,

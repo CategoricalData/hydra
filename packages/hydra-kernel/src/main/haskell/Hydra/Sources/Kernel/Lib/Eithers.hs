@@ -23,7 +23,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> kernelTypesModuleNames,
-            moduleDescription = Just "Primitives in the hydra.lib.eithers namespace."}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just "Primitives in the hydra.lib.eithers namespace.")}
   where
     definitions = [
       toPrimitive "Map over both sides of an either value." bimapSig (Just

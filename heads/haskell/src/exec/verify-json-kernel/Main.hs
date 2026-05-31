@@ -249,8 +249,8 @@ findDifference orig decoded
       "element count differs: " ++ show (length (moduleDefinitions orig)) ++ " vs " ++ show (length (moduleDefinitions decoded))
   | moduleDependencies orig /= moduleDependencies decoded =
       "dependencies differ"
-  | moduleDescription orig /= moduleDescription decoded =
-      "description differs"
+  | moduleMetadata orig /= moduleMetadata decoded =
+      "metadata differs"
   | otherwise =
       "elements differ (checking first mismatch...)" ++ findElementDiff (moduleDefinitions orig) (moduleDefinitions decoded)
 

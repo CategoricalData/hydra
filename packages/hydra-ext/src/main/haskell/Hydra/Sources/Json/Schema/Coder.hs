@@ -103,7 +103,7 @@ module_ = Module {
             moduleDependencies = Bootstrap.unqualifiedDep <$> ([Annotations.ns, Constants.ns, Dependencies.ns, Environment.ns,
               Formatting.ns, Names.ns, Predicates.ns, Reflect.ns,
               ShowVariants.ns, Strip.ns, Variables.ns, JsonSchemaSerde.ns] L.++ (moduleName JsonSchema.module_:jsonModelNs:KernelTypes.kernelTypesModuleNames)),
-            moduleDescription = Just "JSON Schema code generator: converts Hydra modules to JSON Schema documents"}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just "JSON Schema code generator: converts Hydra modules to JSON Schema documents")}
   where
     definitions = [
       toDefinition constructModule,

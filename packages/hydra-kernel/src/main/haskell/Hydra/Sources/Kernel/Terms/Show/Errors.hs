@@ -68,7 +68,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> ([ShowCore.ns, ShowErrorCore.ns, ShowVariants.ns, ShowTyping.ns, Formatting.ns] L.++ kernelTypesModuleNames),
-            moduleDescription = Just "String representations of hydra.error types"}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just "String representations of hydra.error types")}
   where
    definitions = [
      toDefinition checkingError,

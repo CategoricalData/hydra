@@ -24,8 +24,8 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = (DefinitionType <$> definitions),
             moduleDependencies = unqualifiedDep <$> [Core.ns],
-            moduleDescription = Just ("A model from the Graphviz DOT graph description language."
-      ++ " Based on the grammar at https://graphviz.org/doc/info/lang.html")}
+            moduleMetadata = descriptionMetadata (Just ("A model from the Graphviz DOT graph description language."
+      ++ " Based on the grammar at https://graphviz.org/doc/info/lang.html"))}
   where
     definitions = [
       id_,

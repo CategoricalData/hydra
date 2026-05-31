@@ -8,7 +8,7 @@ module Hydra.Sources.Test.Json.Yaml where
 
 -- Standard imports for tests
 import Hydra.Kernel
-import           Hydra.Dsl.Bootstrap (unqualifiedDep)
+import           Hydra.Dsl.Bootstrap (unqualifiedDep, descriptionMetadata)
 import Hydra.Dsl.Meta.Testing                 as Testing
 import Hydra.Dsl.Meta.Terms                   as Terms hiding ((@@))
 import Hydra.Sources.Kernel.Types.All
@@ -42,7 +42,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = unqualifiedDep <$> ([ModuleName "hydra.json.writer", ModuleName "hydra.json.yaml.encode", ModuleName "hydra.json.yaml.decode"] ++ (ModuleName "hydra.yaml.model" : kernelTypesModuleNames)),
-            moduleDescription = (Just "Round-trip test cases for the JSON<->YAML bridge, focused on decimal precision")}
+            moduleMetadata = descriptionMetadata ((Just "Round-trip test cases for the JSON<->YAML bridge, focused on decimal precision"))}
   where
     definitions = [
         Phantoms.toDefinition allTests]
