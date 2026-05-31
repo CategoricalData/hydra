@@ -185,5 +185,8 @@
               {"name": "unsignedShort", "type": {"unit": {}}}]},
           "variables": []}}}],
   "dependencies": [{"module": "hydra.core"}],
-  "description": "A partial XML Schema model, focusing on datatypes. All simple datatypes (i.e. xsd:anySimpleType and below) are included.\nSee: https://www.w3.org/TR/xmlschema-2\nNote: for most of the XML Schema datatype definitions included here, the associated Hydra type is simply\n      the string type. Exceptions are made for xsd:boolean and most of the numeric types, where there is a clearly\n      corresponding Hydra literal type.",
+  "metadata": {
+    "comments": [],
+    "description": "A partial XML Schema model, focusing on datatypes. All simple datatypes (i.e. xsd:anySimpleType and below) are included.\nSee: https://www.w3.org/TR/xmlschema-2\nNote: for most of the XML Schema datatype definitions included here, the associated Hydra type is simply\n      the string type. Exceptions are made for xsd:boolean and most of the numeric types, where there is a clearly\n      corresponding Hydra literal type.",
+    "seeAlso": []},
   "name": "hydra.xml.schema"}

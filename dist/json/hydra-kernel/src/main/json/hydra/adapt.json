@@ -2306,23 +2306,11 @@
                                                         "name": "signature",
                                                         "term": {"application": {"argument": {"variable": "ts1"}, "function": {"variable": "hydra.scoping.typeSchemeToTermSignature"}}}},
                                                       {
-                                                        "name": "description",
+                                                        "name": "metadata",
                                                         "term": {
                                                           "application": {
                                                             "argument": {"variable": "def0"},
-                                                            "function": {"project": {"fieldName": "description", "typeName": "hydra.packaging.PrimitiveDefinition"}}}}},
-                                                      {
-                                                        "name": "comments",
-                                                        "term": {
-                                                          "application": {
-                                                            "argument": {"variable": "def0"},
-                                                            "function": {"project": {"fieldName": "comments", "typeName": "hydra.packaging.PrimitiveDefinition"}}}}},
-                                                      {
-                                                        "name": "seeAlso",
-                                                        "term": {
-                                                          "application": {
-                                                            "argument": {"variable": "def0"},
-                                                            "function": {"project": {"fieldName": "seeAlso", "typeName": "hydra.packaging.PrimitiveDefinition"}}}}},
+                                                            "function": {"project": {"fieldName": "metadata", "typeName": "hydra.packaging.PrimitiveDefinition"}}}}},
                                                       {
                                                         "name": "isPure",
                                                         "term": {
@@ -2335,18 +2323,6 @@
                                                           "application": {
                                                             "argument": {"variable": "def0"},
                                                             "function": {"project": {"fieldName": "isTotal", "typeName": "hydra.packaging.PrimitiveDefinition"}}}}},
-                                                      {
-                                                        "name": "availableSince",
-                                                        "term": {
-                                                          "application": {
-                                                            "argument": {"variable": "def0"},
-                                                            "function": {"project": {"fieldName": "availableSince", "typeName": "hydra.packaging.PrimitiveDefinition"}}}}},
-                                                      {
-                                                        "name": "deprecatedSince",
-                                                        "term": {
-                                                          "application": {
-                                                            "argument": {"variable": "def0"},
-                                                            "function": {"project": {"fieldName": "deprecatedSince", "typeName": "hydra.packaging.PrimitiveDefinition"}}}}},
                                                       {
                                                         "name": "defaultImplementation",
                                                         "term": {
@@ -4529,6 +4505,9 @@
                                                                                                                                                                                         "name": "name",
                                                                                                                                                                                         "term": {
                                                                                                                                                                                           "application": {"argument": {"variable": "el"}, "function": {"project": {"fieldName": "name", "typeName": "hydra.core.Binding"}}}}},
+                                                                                                                                                                                      {
+                                                                                                                                                                                        "name": "metadata",
+                                                                                                                                                                                        "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.packaging.EntityMetadata"}}}},
                                                                                                                                                                                       {
                                                                                                                                                                                         "name": "term",
                                                                                                                                                                                         "term": {
@@ -7115,6 +7094,9 @@
                                                                                 "body": {"typeApplication": {"body": {"variable": "hydra.lib.pairs.first"}, "type": {"variable": "hydra.core.Name"}}},
                                                                                 "type": {"variable": "hydra.core.Type"}}}}}},
                                                                       {
+                                                                        "name": "metadata",
+                                                                        "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.packaging.EntityMetadata"}}}},
+                                                                      {
                                                                         "name": "typeScheme",
                                                                         "term": {
                                                                           "record": {
@@ -7977,5 +7959,5 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "description": "Simple, one-way adapters for types and terms",
+  "metadata": {"comments": [], "description": "Simple, one-way adapters for types and terms", "seeAlso": []},
   "name": "hydra.adapt"}

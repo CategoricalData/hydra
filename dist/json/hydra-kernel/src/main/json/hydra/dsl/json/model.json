@@ -331,5 +331,5 @@
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}}}}],
   "dependencies": [{"module": "hydra.json.model"}, {"module": "hydra.typed"}, {"module": "hydra.core"}, {"module": "hydra.dsl.core"}],
-  "description": "DSL functions for hydra.json.model",
+  "metadata": {"comments": [], "description": "DSL functions for hydra.json.model", "seeAlso": []},
   "name": "hydra.dsl.json.model"}

@@ -2,7 +2,6 @@
   "definitions": [
     {
       "primitive": {
-        "comments": "bimap(f, g, p) returns a new pair (f(first(p)), g(second(p))). The bifunctor map for pairs. Total. Corresponds to Haskell's Data.Bifunctor.bimap :: (a -> c) -> (b -> d) -> (a, b) -> (c, d).",
         "defaultImplementation": {
           "annotated": {
             "annotation": [
@@ -28,11 +27,14 @@
                         "parameter": "p"}},
                     "parameter": "g"}},
                 "parameter": "f"}}}},
-        "description": "Map over both elements of a pair.",
         "isPure": true,
         "isTotal": true,
+        "metadata": {
+          "comments": [
+            "bimap(f, g, p) returns a new pair (f(first(p)), g(second(p))). The bifunctor map for pairs. Total. Corresponds to Haskell's Data.Bifunctor.bimap :: (a -> c) -> (b -> d) -> (a, b) -> (c, d)."],
+          "description": "Map over both elements of a pair.",
+          "seeAlso": []},
         "name": "hydra.lib.pairs.bimap",
-        "seeAlso": [],
         "signature": {
           "parameters": [
             {"isLazy": false, "name": "arg0", "type": {"function": {"codomain": {"variable": "c"}, "domain": {"variable": "a"}}}},
@@ -46,24 +48,26 @@
             {"constraints": [], "name": "d"}]}}},
     {
       "primitive": {
-        "comments": "first(p) returns the first component of the pair p. Total. Corresponds to Haskell's fst :: (a, b) -> a.",
-        "description": "Get the first element of a pair.",
         "isPure": true,
         "isTotal": true,
+        "metadata": {
+          "comments": ["first(p) returns the first component of the pair p. Total. Corresponds to Haskell's fst :: (a, b) -> a."],
+          "description": "Get the first element of a pair.",
+          "seeAlso": []},
         "name": "hydra.lib.pairs.first",
-        "seeAlso": [],
         "signature": {
           "parameters": [{"isLazy": false, "name": "arg0", "type": {"pair": {"first": {"variable": "a"}, "second": {"variable": "b"}}}}],
           "result": {"type": {"variable": "a"}},
           "typeParameters": [{"constraints": [], "name": "a"}, {"constraints": [], "name": "b"}]}}},
     {
       "primitive": {
-        "comments": "second(p) returns the second component of the pair p. Total. Corresponds to Haskell's snd :: (a, b) -> b.",
-        "description": "Get the second element of a pair.",
         "isPure": true,
         "isTotal": true,
+        "metadata": {
+          "comments": ["second(p) returns the second component of the pair p. Total. Corresponds to Haskell's snd :: (a, b) -> b."],
+          "description": "Get the second element of a pair.",
+          "seeAlso": []},
         "name": "hydra.lib.pairs.second",
-        "seeAlso": [],
         "signature": {
           "parameters": [{"isLazy": false, "name": "arg0", "type": {"pair": {"first": {"variable": "a"}, "second": {"variable": "b"}}}}],
           "result": {"type": {"variable": "b"}},
@@ -91,5 +95,5 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "description": "Primitives in the hydra.lib.pairs namespace.",
+  "metadata": {"comments": [], "description": "Primitives in the hydra.lib.pairs namespace.", "seeAlso": []},
   "name": "hydra.lib.pairs"}

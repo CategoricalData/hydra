@@ -5954,5 +5954,5 @@
     {"module": "hydra.dsl.paths"},
     {"module": "hydra.dsl.typing"},
     {"module": "hydra.dsl.variants"}],
-  "description": "DSL functions for hydra.error.checking",
+  "metadata": {"comments": [], "description": "DSL functions for hydra.error.checking", "seeAlso": []},
   "name": "hydra.dsl.error.checking"}

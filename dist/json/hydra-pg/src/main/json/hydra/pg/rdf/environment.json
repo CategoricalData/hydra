@@ -51,5 +51,5 @@
                   "parameter": "v"}}}},
           "variables": []}}}],
   "dependencies": [{"module": "hydra.rdf.syntax"}, {"module": "hydra.pg.model"}, {"module": "hydra.core"}],
-  "description": "Environment types for property graph to RDF mapping",
+  "metadata": {"comments": [], "description": "Environment types for property graph to RDF mapping", "seeAlso": []},
   "name": "hydra.pg.rdf.environment"}

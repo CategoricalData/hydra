@@ -9520,5 +9520,5 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "description": "Test cases for variable analysis and manipulation",
+  "metadata": {"comments": [], "description": "Test cases for variable analysis and manipulation", "seeAlso": []},
   "name": "hydra.test.variables"}

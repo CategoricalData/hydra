@@ -820,5 +820,5 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "description": "Utility functions for working with RDF graphs and descriptions",
+  "metadata": {"comments": [], "description": "Utility functions for working with RDF graphs and descriptions", "seeAlso": []},
   "name": "hydra.rdf.utils"}

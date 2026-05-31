@@ -7312,8 +7312,25 @@
                                                                                                     "name": "mModuleDoc",
                                                                                                     "term": {
                                                                                                       "application": {
-                                                                                                        "argument": {"variable": "mod"},
-                                                                                                        "function": {"project": {"fieldName": "description", "typeName": "hydra.packaging.Module"}}}},
+                                                                                                        "argument": {
+                                                                                                          "lambda": {
+                                                                                                            "body": {
+                                                                                                              "application": {
+                                                                                                                "argument": {"variable": "em"},
+                                                                                                                "function": {"project": {"fieldName": "description", "typeName": "hydra.packaging.EntityMetadata"}}}},
+                                                                                                            "domain": {"variable": "hydra.packaging.EntityMetadata"},
+                                                                                                            "parameter": "em"}},
+                                                                                                        "function": {
+                                                                                                          "application": {
+                                                                                                            "argument": {
+                                                                                                              "application": {
+                                                                                                                "argument": {"variable": "mod"},
+                                                                                                                "function": {"project": {"fieldName": "metadata", "typeName": "hydra.packaging.Module"}}}},
+                                                                                                            "function": {
+                                                                                                              "typeApplication": {
+                                                                                                                "body": {
+                                                                                                                  "typeApplication": {"body": {"variable": "hydra.lib.maybes.bind"}, "type": {"variable": "hydra.packaging.EntityMetadata"}}},
+                                                                                                                "type": {"literal": {"string": {}}}}}}}}},
                                                                                                     "typeScheme": {"body": {"maybe": {"literal": {"string": {}}}}, "variables": []}}],
                                                                                                 "body": {
                                                                                                   "let": {
@@ -9684,5 +9701,8 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "description": "TypeScript code generator: emits TypeScript type declarations from Hydra modules",
+  "metadata": {
+    "comments": [],
+    "description": "TypeScript code generator: emits TypeScript type declarations from Hydra modules",
+    "seeAlso": []},
   "name": "hydra.typeScript.coder"}

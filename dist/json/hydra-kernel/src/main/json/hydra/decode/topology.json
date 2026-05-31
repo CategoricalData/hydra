@@ -802,5 +802,5 @@
     {"module": "hydra.topology"},
     {"module": "hydra.util"},
     {"module": "hydra.decode.core"}],
-  "description": "Term decoders for hydra.topology",
+  "metadata": {"comments": [], "description": "Term decoders for hydra.topology", "seeAlso": []},
   "name": "hydra.decode.topology"}

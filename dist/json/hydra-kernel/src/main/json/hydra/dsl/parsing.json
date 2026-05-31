@@ -1103,5 +1103,5 @@
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}}}}],
   "dependencies": [{"module": "hydra.parsing"}, {"module": "hydra.typed"}, {"module": "hydra.core"}, {"module": "hydra.dsl.core"}],
-  "description": "DSL functions for hydra.parsing",
+  "metadata": {"comments": [], "description": "DSL functions for hydra.parsing", "seeAlso": []},
   "name": "hydra.dsl.parsing"}

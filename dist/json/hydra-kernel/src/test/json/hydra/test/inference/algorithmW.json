@@ -3508,5 +3508,5 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "description": "Algorithm W inference tests",
+  "metadata": {"comments": [], "description": "Algorithm W inference tests", "seeAlso": []},
   "name": "hydra.test.inference.algorithmW"}

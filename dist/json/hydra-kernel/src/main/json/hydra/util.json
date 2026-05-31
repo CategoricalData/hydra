@@ -83,5 +83,5 @@
                         "body": {"literal": {"integer": {"int32": {}}}}}}}]}}},
           "variables": []}}}],
   "dependencies": [{"module": "hydra.core"}, {"module": "hydra.packaging"}],
-  "description": "General-purpose utility types used across Hydra.",
+  "metadata": {"comments": [], "description": "General-purpose utility types used across Hydra.", "seeAlso": []},
   "name": "hydra.util"}

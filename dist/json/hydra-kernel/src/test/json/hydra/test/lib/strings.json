@@ -6403,5 +6403,5 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "description": "Test cases for hydra.lib.strings primitives",
+  "metadata": {"comments": [], "description": "Test cases for hydra.lib.strings primitives", "seeAlso": []},
   "name": "hydra.test.lib.strings"}

@@ -3,6 +3,7 @@
 
 module Hydra.Java.Utils where
 import qualified Hydra.Ast as Ast
+import qualified Hydra.Classes as Classes
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
 import qualified Hydra.Error.Checking as Checking
@@ -694,7 +695,7 @@ methodInvocationStatic self methodName args =
     methodInvocation (Just (Left (javaIdentifierToJavaExpressionName self))) methodName args
 methodInvocationStaticWithTypeArgs :: Syntax.Identifier -> Syntax.Identifier -> [Syntax.TypeArgument] -> [Syntax.Expression] -> Syntax.MethodInvocation
 methodInvocationStaticWithTypeArgs self methodName targs args =
-
+    Logic.ifElse (Lists.null targs) (methodInvocationStatic self methodName args) (
       let header =
               Syntax.MethodInvocation_HeaderComplex (Syntax.MethodInvocation_Complex {
                 Syntax.methodInvocation_ComplexVariant = (Syntax.MethodInvocation_VariantExpression (javaIdentifierToJavaExpressionName self)),
@@ -702,7 +703,7 @@ methodInvocationStaticWithTypeArgs self methodName targs args =
                 Syntax.methodInvocation_ComplexIdentifier = methodName})
       in Syntax.MethodInvocation {
         Syntax.methodInvocationHeader = header,
-        Syntax.methodInvocationArguments = args}
+        Syntax.methodInvocationArguments = args})
 nameToJavaClassType :: Environment.Aliases -> Bool -> [Syntax.TypeArgument] -> Core.Name -> Maybe String -> Syntax.ClassType
 nameToJavaClassType aliases qualify args name mlocal =
 

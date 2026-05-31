@@ -660,7 +660,7 @@ moduleToTypeScript mod defs cx g =
       in (Eithers.bind (Eithers.mapList (encodeTypeDefinition cx g) typeDefs) (\typeItems ->
         let termItems = Lists.map (encodeTermDefinition cx g currentNs) termDefs
             allItems = Lists.concat2 typeItems termItems
-            mModuleDoc = Packaging.moduleDescription mod
+            mModuleDoc = Maybes.bind (Packaging.moduleMetadata mod) (\em -> Packaging.entityMetadataDescription em)
             moduleDocText = Maybes.cases mModuleDoc "" (\d -> Strings.cat2 (Serde.toTypeScriptComments d []) "\n\n")
             header = Strings.cat2 "// Note: this is an automatically generated file. Do not edit.\n\n" moduleDocText
             renderItem =
