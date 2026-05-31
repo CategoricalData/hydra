@@ -41,8 +41,8 @@
         "signature": {
           "parameters": [
             {"isLazy": false, "name": "arg0", "type": {"literal": {"boolean": {}}}},
-            {"isLazy": false, "name": "arg1", "type": {"variable": "x"}},
-            {"isLazy": false, "name": "arg2", "type": {"variable": "x"}}],
+            {"isLazy": true, "name": "arg1", "type": {"variable": "x"}},
+            {"isLazy": true, "name": "arg2", "type": {"variable": "x"}}],
           "result": {"type": {"variable": "x"}},
           "typeParameters": [{"constraints": [], "name": "x"}]}}},
     {

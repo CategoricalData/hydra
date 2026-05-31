@@ -288,7 +288,7 @@ fromLeft =
             Typing.parameterName = (Core.Name "arg0"),
             Typing.parameterDescription = Nothing,
             Typing.parameterType = (Core.TypeVariable (Core.Name "x")),
-            Typing.parameterIsLazy = False},
+            Typing.parameterIsLazy = True},
           Typing.Parameter {
             Typing.parameterName = (Core.Name "arg1"),
             Typing.parameterDescription = Nothing,
@@ -347,7 +347,7 @@ fromRight =
             Typing.parameterName = (Core.Name "arg0"),
             Typing.parameterDescription = Nothing,
             Typing.parameterType = (Core.TypeVariable (Core.Name "y")),
-            Typing.parameterIsLazy = False},
+            Typing.parameterIsLazy = True},
           Typing.Parameter {
             Typing.parameterName = (Core.Name "arg1"),
             Typing.parameterDescription = Nothing,
