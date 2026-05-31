@@ -2,7 +2,7 @@ module Hydra.Sources.Test.Lib.Chars where
 
 -- Standard imports for term-encoded tests
 import Hydra.Kernel
-import           Hydra.Dsl.Bootstrap (unqualifiedDep)
+import           Hydra.Dsl.Bootstrap (unqualifiedDep, descriptionMetadata)
 import Hydra.Dsl.Meta.Testing                 as Testing
 import Hydra.Dsl.Meta.Terms                   as Terms
 import Hydra.Sources.Kernel.Types.All
@@ -29,7 +29,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = unqualifiedDep <$> [ModuleName "hydra.reduction", ModuleName "hydra.show.core", ModuleName "hydra.core", ModuleName "hydra.errors", ModuleName "hydra.test.testGraph", ModuleName "hydra.testing"],
-            moduleDescription = Just "Test cases for hydra.lib.chars primitives"}
+            moduleMetadata = descriptionMetadata (Just "Test cases for hydra.lib.chars primitives")}
   where
     definitions = [Phantoms.toDefinition allTests]
 

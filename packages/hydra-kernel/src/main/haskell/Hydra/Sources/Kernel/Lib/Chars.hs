@@ -18,7 +18,18 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> kernelTypesModuleNames,
-            moduleDescription = Just "Primitives in the hydra.lib.chars namespace."}
+            moduleMetadata = Just (EntityMetadata
+              (Just "Primitives in the hydra.lib.chars namespace.")
+              [ "Characters are represented as Unicode code points carried in an int32. Each primitive interprets its\
+                \ argument as a code point; arguments outside the valid range [0, 0x10FFFF] yield an\
+                \ implementation-defined result (typically false for the predicates).",
+                "All classification predicates in this namespace are total functions: every int32 argument maps to a\
+                \ defined Boolean result, with no partiality or exceptions.",
+                "Character classification follows the Unicode general categories, matching the behaviour of Haskell's\
+                \ Data.Char functions of the same names. Hosts are expected to reproduce these categories rather than\
+                \ a locale- or ASCII-only notion of letter, digit, or whitespace." ]
+              []
+              Nothing)}
   where
     definitions = [
       primNoDef "isAlphaNum" "Check whether a character is alphanumeric." intToBoolSig (Just
