@@ -1512,8 +1512,7 @@
            (full (string-append path " > " tname))
            (tags (hydra_testing_test_case_with_metadata-tags tcase))
            (disabled? (member "disabled" tags))
-           (tc (hydra_testing_test_case_with_metadata-case tcase))
-           (_ (when (eq? (car tc) 'universal) (display (string-append "TRACE: " tname "\n")))))
+           (tc (hydra_testing_test_case_with_metadata-case tcase)))
       (if disabled?
           (list 0 0 1)
           (let ((case-type (car tc))
