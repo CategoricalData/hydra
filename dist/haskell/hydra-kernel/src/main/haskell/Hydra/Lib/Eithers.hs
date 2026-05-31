@@ -75,7 +75,8 @@ bimap =
       Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
         Packaging.entityMetadataDescription = (Just "Map over both sides of an either value."),
         Packaging.entityMetadataComments = [
-          "bimap(f, g, e) applies f to the contained value if e is a Left, or g if e is a Right; the result retains the same Left/Right variant. Total. Corresponds to Haskell's Data.Bifunctor.bimap :: (a -> c) -> (b -> d) -> Either a b -> Either c d."],
+          "bimap(f, g, e) applies f to the contained value if e is a Left, or g if e is a Right; the result retains the same Left/Right variant.",
+          "Total. Corresponds to Haskell's Data.Bifunctor.bimap :: (a -> c) -> (b -> d) -> Either a b -> Either c d."],
         Packaging.entityMetadataSeeAlso = [],
         Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
@@ -151,7 +152,9 @@ bind =
       Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
         Packaging.entityMetadataDescription = (Just "Bind (flatMap) for either: if Right, apply the function; if Left, return unchanged."),
         Packaging.entityMetadataComments = [
-          "bind(e, f) is the monadic bind for either with a fixed Left type: if e is Right v, the result is f(v); if e is Left x, the result is Left x with the Left type preserved. Total. Used to chain computations that may fail with a common error type. Corresponds to Haskell's (>>=) :: Either a b -> (b -> Either a c) -> Either a c."],
+          "bind(e, f) is the monadic bind for either with a fixed Left type: if e is Right v, the result is f(v); if e is Left x, the result is Left x with the Left type preserved.",
+          "Used to chain computations that may fail with a common error type.",
+          "Total. Corresponds to Haskell's (>>=) :: Either a b -> (b -> Either a c) -> Either a c."],
         Packaging.entityMetadataSeeAlso = [],
         Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
@@ -218,7 +221,9 @@ either =
       Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
         Packaging.entityMetadataDescription = (Just "Eliminate an either value by applying one of two functions."),
         Packaging.entityMetadataComments = [
-          "either(f, g, e) returns f(x) if e is Left x and g(y) if e is Right y. The fundamental eliminator for the either type; every other primitive in this namespace can be derived from it. Total. Corresponds to Haskell's either :: (a -> c) -> (b -> c) -> Either a b -> c."],
+          "either(f, g, e) returns f(x) if e is Left x and g(y) if e is Right y.",
+          "The fundamental eliminator for the either type; every other primitive in this namespace can be derived from it.",
+          "Total. Corresponds to Haskell's either :: (a -> c) -> (b -> c) -> Either a b -> c."],
         Packaging.entityMetadataSeeAlso = [],
         Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
@@ -269,7 +274,9 @@ foldl =
       Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
         Packaging.entityMetadataDescription = (Just "Left-fold over a list with an Either-returning function, short-circuiting on Left."),
         Packaging.entityMetadataComments = [
-          "foldl(f, acc0, xs) folds f over xs from the left, threading an accumulator of type a, where each application may fail with Left e: foldl iterates while f returns Right, propagates Left on the first failure, and returns Right (final accumulator) if all elements were processed. Equivalent to chaining bind over the list. Total in the sense that it terminates on finite inputs; the result is a Left whenever any application of f returns one. Corresponds to a short-circuiting variant of Haskell's foldM specialised to Either."],
+          "foldl(f, acc0, xs) folds f over xs from the left, threading an accumulator of type a, where each application may fail with Left e: foldl iterates while f returns Right, propagates Left on the first failure, and returns Right (final accumulator) if all elements were processed. Equivalent to chaining bind over the list.",
+          "Total in the sense that it terminates on finite inputs; the result is a Left whenever any application of f returns one.",
+          "Corresponds to a short-circuiting variant of Haskell's foldM specialised to Either."],
         Packaging.entityMetadataSeeAlso = [],
         Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
@@ -306,7 +313,8 @@ fromLeft =
       Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
         Packaging.entityMetadataDescription = (Just "Extract the Left value, or return a default."),
         Packaging.entityMetadataComments = [
-          "fromLeft(def, e) returns the contained Left value if e is a Left, or def if e is a Right. Total. Corresponds to Haskell's Data.Either.fromLeft :: a -> Either a b -> a."],
+          "fromLeft(def, e) returns the contained Left value if e is a Left, or def if e is a Right.",
+          "Total. Corresponds to Haskell's Data.Either.fromLeft :: a -> Either a b -> a."],
         Packaging.entityMetadataSeeAlso = [],
         Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
@@ -366,7 +374,8 @@ fromRight =
       Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
         Packaging.entityMetadataDescription = (Just "Extract the Right value, or return a default."),
         Packaging.entityMetadataComments = [
-          "fromRight(def, e) returns the contained Right value if e is a Right, or def if e is a Left. Total. Corresponds to Haskell's Data.Either.fromRight :: b -> Either a b -> b."],
+          "fromRight(def, e) returns the contained Right value if e is a Right, or def if e is a Left.",
+          "Total. Corresponds to Haskell's Data.Either.fromRight :: b -> Either a b -> b."],
         Packaging.entityMetadataSeeAlso = [],
         Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
@@ -421,7 +430,8 @@ isLeft =
       Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
         Packaging.entityMetadataDescription = (Just "Check whether an either is a Left value."),
         Packaging.entityMetadataComments = [
-          "True if the argument is a Left variant, false if a Right. Total. Corresponds to Haskell's Data.Either.isLeft :: Either a b -> Bool."],
+          "True if the argument is a Left variant, false if a Right.",
+          "Total. Corresponds to Haskell's Data.Either.isLeft :: Either a b -> Bool."],
         Packaging.entityMetadataSeeAlso = [],
         Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
@@ -473,7 +483,8 @@ isRight =
       Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
         Packaging.entityMetadataDescription = (Just "Check whether an either is a Right value."),
         Packaging.entityMetadataComments = [
-          "True if the argument is a Right variant, false if a Left. Total. Corresponds to Haskell's Data.Either.isRight :: Either a b -> Bool."],
+          "True if the argument is a Right variant, false if a Left.",
+          "Total. Corresponds to Haskell's Data.Either.isRight :: Either a b -> Bool."],
         Packaging.entityMetadataSeeAlso = [],
         Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
@@ -525,7 +536,8 @@ lefts =
       Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
         Packaging.entityMetadataDescription = (Just "Extract all Left values from a list of either values."),
         Packaging.entityMetadataComments = [
-          "lefts(xs) returns a list containing every Left value in xs, in original order, with Right values discarded. Total. Corresponds to Haskell's Data.Either.lefts :: [Either a b] -> [a]."],
+          "lefts(xs) returns a list containing every Left value in xs, in original order, with Right values discarded.",
+          "Total. Corresponds to Haskell's Data.Either.lefts :: [Either a b] -> [a]."],
         Packaging.entityMetadataSeeAlso = [],
         Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
@@ -569,7 +581,9 @@ map =
       Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
         Packaging.entityMetadataDescription = (Just "Map a function over the Right side of an either (standard functor map)."),
         Packaging.entityMetadataComments = [
-          "map(f, e) returns Right (f y) if e is Right y, or Left x unchanged if e is Left x. The functor instance for either; treats the Right variant as the focus and leaves the Left variant alone. Total. Corresponds to Haskell's fmap :: (a -> b) -> Either e a -> Either e b."],
+          "map(f, e) returns Right (f y) if e is Right y, or Left x unchanged if e is Left x.",
+          "The functor instance for either; treats the Right variant as the focus and leaves the Left variant alone.",
+          "Total. Corresponds to Haskell's fmap :: (a -> b) -> Either e a -> Either e b."],
         Packaging.entityMetadataSeeAlso = [],
         Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
@@ -638,7 +652,8 @@ mapList =
       Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
         Packaging.entityMetadataDescription = (Just "Map a function returning either over a list, collecting results or short-circuiting on Left."),
         Packaging.entityMetadataComments = [
-          "mapList(f, xs) applies f to each element of xs. If every application returns Right, the result is Right of the list of contained values, in original order. The first application that returns Left short-circuits the whole result to that Left. Total. Corresponds to Haskell's traverse :: (a -> Either e b) -> [a] -> Either e [b]."],
+          "mapList(f, xs) applies f to each element of xs. If every application returns Right, the result is Right of the list of contained values, in original order. The first application that returns Left short-circuits the whole result to that Left.",
+          "Total. Corresponds to Haskell's traverse :: (a -> Either e b) -> [a] -> Either e [b]."],
         Packaging.entityMetadataSeeAlso = [],
         Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
@@ -682,7 +697,8 @@ mapMaybe =
       Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
         Packaging.entityMetadataDescription = (Just "Map a function returning either over a maybe, or return Right Nothing if Nothing."),
         Packaging.entityMetadataComments = [
-          "mapMaybe(f, m) returns Right Nothing if m is Nothing; otherwise applies f to the contained value and returns the result with Right wrapped around Just. Total. Corresponds to Haskell's traverse :: (a -> Either e b) -> Maybe a -> Either e (Maybe b)."],
+          "mapMaybe(f, m) returns Right Nothing if m is Nothing; otherwise applies f to the contained value and returns the result with Right wrapped around Just.",
+          "Total. Corresponds to Haskell's traverse :: (a -> Either e b) -> Maybe a -> Either e (Maybe b)."],
         Packaging.entityMetadataSeeAlso = [],
         Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
@@ -726,7 +742,8 @@ mapSet =
       Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
         Packaging.entityMetadataDescription = (Just "Map a function returning either over a set, collecting results or short-circuiting on Left."),
         Packaging.entityMetadataComments = [
-          "mapSet(f, s) applies f to each element of s in unspecified order. If every application returns Right, the result is Right of the set of contained values (deduplicated by the result type's ordering); the first application returning Left short-circuits the whole result to that Left. Total. Corresponds to Haskell's traverse-style operation specialised to Set."],
+          "mapSet(f, s) applies f to each element of s in unspecified order. If every application returns Right, the result is Right of the set of contained values (deduplicated by the result type's ordering); the first application returning Left short-circuits the whole result to that Left.",
+          "Total. Corresponds to Haskell's traverse-style operation specialised to Set."],
         Packaging.entityMetadataSeeAlso = [],
         Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
@@ -760,7 +777,8 @@ partitionEithers =
       Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
         Packaging.entityMetadataDescription = (Just "Partition a list of either values into lefts and rights."),
         Packaging.entityMetadataComments = [
-          "partitionEithers(xs) returns a pair (lefts, rights) where lefts contains every Left value from xs in original order and rights contains every Right value from xs in original order. Total. Corresponds to Haskell's Data.Either.partitionEithers :: [Either a b] -> ([a], [b])."],
+          "partitionEithers(xs) returns a pair (lefts, rights) where lefts contains every Left value from xs in original order and rights contains every Right value from xs in original order.",
+          "Total. Corresponds to Haskell's Data.Either.partitionEithers :: [Either a b] -> ([a], [b])."],
         Packaging.entityMetadataSeeAlso = [],
         Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
@@ -792,7 +810,8 @@ rights =
       Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
         Packaging.entityMetadataDescription = (Just "Extract all Right values from a list of either values."),
         Packaging.entityMetadataComments = [
-          "rights(xs) returns a list containing every Right value in xs, in original order, with Left values discarded. Total. Corresponds to Haskell's Data.Either.rights :: [Either a b] -> [b]."],
+          "rights(xs) returns a list containing every Right value in xs, in original order, with Left values discarded.",
+          "Total. Corresponds to Haskell's Data.Either.rights :: [Either a b] -> [b]."],
         Packaging.entityMetadataSeeAlso = [],
         Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,

@@ -6,7 +6,9 @@
         "isTotal": true,
         "metadata": {
           "comments": [
-            "delete(x, s) returns s with x removed; if x is not in s, s is returned unchanged. Requires an 'ordering' constraint on the element type. Total. Corresponds to Haskell's Data.Set.delete :: Ord a => a -> Set a -> Set a."],
+            "delete(x, s) returns s with x removed; if x is not in s, s is returned unchanged.",
+            "Requires an 'ordering' constraint on the element type.",
+            "Total. Corresponds to Haskell's Data.Set.delete :: Ord a => a -> Set a -> Set a."],
           "description": "Remove an element from a set.",
           "seeAlso": []},
         "name": "hydra.lib.sets.delete",
@@ -62,7 +64,9 @@
         "isTotal": true,
         "metadata": {
           "comments": [
-            "difference(s1, s2) returns the set of elements that are in s1 but not in s2. Requires an 'ordering' constraint on the element type. Total. Corresponds to Haskell's Data.Set.difference :: Ord a => Set a -> Set a -> Set a."],
+            "difference(s1, s2) returns the set of elements that are in s1 but not in s2.",
+            "Requires an 'ordering' constraint on the element type.",
+            "Total. Corresponds to Haskell's Data.Set.difference :: Ord a => Set a -> Set a -> Set a."],
           "description": "Compute the difference of two sets: elements in the first that are not in the second.",
           "seeAlso": []},
         "name": "hydra.lib.sets.difference",
@@ -78,7 +82,9 @@
         "isTotal": true,
         "metadata": {
           "comments": [
-            "empty is the set with no elements. Requires an 'ordering' constraint on the element type. Total. Corresponds to Haskell's Data.Set.empty :: Set a."],
+            "empty is the set with no elements.",
+            "Requires an 'ordering' constraint on the element type.",
+            "Total. Corresponds to Haskell's Data.Set.empty :: Set a."],
           "description": "The empty set.",
           "seeAlso": []},
         "name": "hydra.lib.sets.empty",
@@ -92,7 +98,9 @@
         "isTotal": true,
         "metadata": {
           "comments": [
-            "fromList(xs) returns the set containing exactly the distinct elements of xs; duplicates are discarded. Requires an 'ordering' constraint on the element type. Total. Corresponds to Haskell's Data.Set.fromList :: Ord a => [a] -> Set a."],
+            "fromList(xs) returns the set containing exactly the distinct elements of xs; duplicates are discarded.",
+            "Requires an 'ordering' constraint on the element type.",
+            "Total. Corresponds to Haskell's Data.Set.fromList :: Ord a => [a] -> Set a."],
           "description": "Construct a set from a list of elements (duplicates removed).",
           "seeAlso": []},
         "name": "hydra.lib.sets.fromList",
@@ -106,7 +114,9 @@
         "isTotal": true,
         "metadata": {
           "comments": [
-            "insert(x, s) returns s with x added; if x is already in s, s is returned unchanged. Requires an 'ordering' constraint on the element type. Total. Corresponds to Haskell's Data.Set.insert :: Ord a => a -> Set a -> Set a."],
+            "insert(x, s) returns s with x added; if x is already in s, s is returned unchanged.",
+            "Requires an 'ordering' constraint on the element type.",
+            "Total. Corresponds to Haskell's Data.Set.insert :: Ord a => a -> Set a -> Set a."],
           "description": "Add an element to a set.",
           "seeAlso": []},
         "name": "hydra.lib.sets.insert",
@@ -162,7 +172,9 @@
         "isTotal": true,
         "metadata": {
           "comments": [
-            "intersection(s1, s2) returns the set of elements present in both s1 and s2. Requires an 'ordering' constraint on the element type. Total. Corresponds to Haskell's Data.Set.intersection :: Ord a => Set a -> Set a -> Set a."],
+            "intersection(s1, s2) returns the set of elements present in both s1 and s2.",
+            "Requires an 'ordering' constraint on the element type.",
+            "Total. Corresponds to Haskell's Data.Set.intersection :: Ord a => Set a -> Set a -> Set a."],
           "description": "Compute the intersection of two sets: elements present in both.",
           "seeAlso": []},
         "name": "hydra.lib.sets.intersection",
@@ -197,7 +209,9 @@
         "isTotal": true,
         "metadata": {
           "comments": [
-            "map(f, s) returns the set of f(x) for each x in s. Elements that f maps to the same image are deduplicated by the result type's ordering. Requires 'ordering' constraints on both the input and output element types. Total. Corresponds to Haskell's Data.Set.map :: (Ord a, Ord b) => (a -> b) -> Set a -> Set b."],
+            "map(f, s) returns the set of f(x) for each x in s. Elements that f maps to the same image are deduplicated by the result type's ordering.",
+            "Requires 'ordering' constraints on both the input and output element types.",
+            "Total. Corresponds to Haskell's Data.Set.map :: (Ord a, Ord b) => (a -> b) -> Set a -> Set b."],
           "description": "Map a function over a set.",
           "seeAlso": []},
         "name": "hydra.lib.sets.map",
@@ -213,7 +227,9 @@
         "isTotal": true,
         "metadata": {
           "comments": [
-            "member(x, s) returns true iff x is an element of s. Requires an 'ordering' constraint on the element type. Total. Corresponds to Haskell's Data.Set.member :: Ord a => a -> Set a -> Bool."],
+            "member(x, s) returns true iff x is an element of s.",
+            "Requires an 'ordering' constraint on the element type.",
+            "Total. Corresponds to Haskell's Data.Set.member :: Ord a => a -> Set a -> Bool."],
           "description": "Test whether an element is in a set.",
           "seeAlso": []},
         "name": "hydra.lib.sets.member",
@@ -229,7 +245,9 @@
         "isTotal": true,
         "metadata": {
           "comments": [
-            "null(s) returns true iff s has no elements. Requires an 'ordering' constraint on the element type. Total. Corresponds to Haskell's Data.Set.null :: Set a -> Bool."],
+            "null(s) returns true iff s has no elements.",
+            "Requires an 'ordering' constraint on the element type.",
+            "Total. Corresponds to Haskell's Data.Set.null :: Set a -> Bool."],
           "description": "Test whether a set is empty.",
           "seeAlso": []},
         "name": "hydra.lib.sets.null",
@@ -243,7 +261,9 @@
         "isTotal": true,
         "metadata": {
           "comments": [
-            "singleton(x) returns the set containing exactly the element x. Requires an 'ordering' constraint on the element type. Total. Corresponds to Haskell's Data.Set.singleton :: a -> Set a."],
+            "singleton(x) returns the set containing exactly the element x.",
+            "Requires an 'ordering' constraint on the element type.",
+            "Total. Corresponds to Haskell's Data.Set.singleton :: a -> Set a."],
           "description": "Construct a set containing a single element.",
           "seeAlso": []},
         "name": "hydra.lib.sets.singleton",
@@ -257,7 +277,9 @@
         "isTotal": true,
         "metadata": {
           "comments": [
-            "size(s) returns the number of elements in s as an int32. Requires an 'ordering' constraint on the element type. Total. Corresponds to Haskell's Data.Set.size :: Set a -> Int (with narrowing to int32)."],
+            "size(s) returns the number of elements in s as an int32.",
+            "Requires an 'ordering' constraint on the element type.",
+            "Total. Corresponds to Haskell's Data.Set.size :: Set a -> Int (with narrowing to int32)."],
           "description": "Return the number of elements in a set.",
           "seeAlso": []},
         "name": "hydra.lib.sets.size",
@@ -271,7 +293,9 @@
         "isTotal": true,
         "metadata": {
           "comments": [
-            "toList(s) returns the elements of s as a list, in ascending order under the element type's ordering. Requires an 'ordering' constraint on the element type. Total. Corresponds to Haskell's Data.Set.toAscList :: Set a -> [a]."],
+            "toList(s) returns the elements of s as a list, in ascending order under the element type's ordering.",
+            "Requires an 'ordering' constraint on the element type.",
+            "Total. Corresponds to Haskell's Data.Set.toAscList :: Set a -> [a]."],
           "description": "Convert a set to a list (in ascending order).",
           "seeAlso": []},
         "name": "hydra.lib.sets.toList",
@@ -313,7 +337,9 @@
         "isTotal": true,
         "metadata": {
           "comments": [
-            "union(s1, s2) returns the set of elements that are in s1 or in s2 (or both). Requires an 'ordering' constraint on the element type. Total. Corresponds to Haskell's Data.Set.union :: Ord a => Set a -> Set a -> Set a."],
+            "union(s1, s2) returns the set of elements that are in s1 or in s2 (or both).",
+            "Requires an 'ordering' constraint on the element type.",
+            "Total. Corresponds to Haskell's Data.Set.union :: Ord a => Set a -> Set a -> Set a."],
           "description": "Compute the union of two sets: elements in either.",
           "seeAlso": []},
         "name": "hydra.lib.sets.union",
@@ -357,7 +383,9 @@
         "isTotal": true,
         "metadata": {
           "comments": [
-            "unions(ss) returns the union of every set in ss. Equivalent to folding union over ss starting from empty. Requires an 'ordering' constraint on the element type. Total. Corresponds to Haskell's Data.Set.unions :: Ord a => [Set a] -> Set a."],
+            "unions(ss) returns the union of every set in ss. Equivalent to folding union over ss starting from empty.",
+            "Requires an 'ordering' constraint on the element type.",
+            "Total. Corresponds to Haskell's Data.Set.unions :: Ord a => [Set a] -> Set a."],
           "description": "Compute the union of a list of sets.",
           "seeAlso": []},
         "name": "hydra.lib.sets.unions",

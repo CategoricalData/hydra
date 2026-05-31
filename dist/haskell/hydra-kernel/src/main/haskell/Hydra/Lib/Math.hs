@@ -45,7 +45,9 @@ abs =
       Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
         Packaging.entityMetadataDescription = (Just "The absolute value of an integer."),
         Packaging.entityMetadataComments = [
-          "Absolute value of a signed 32-bit two's-complement integer. For non-negative inputs the result equals the input; for negative inputs the result is the arithmetic negation. The function is total but not injective at the boundary: abs(minBound) = minBound (i.e. abs(-2147483648) = -2147483648), because +2147483648 is not representable in int32. Corresponds to Haskell's abs :: Int32 -> Int32."],
+          "Absolute value of a signed 32-bit two's-complement integer. For non-negative inputs the result equals the input; for negative inputs the result is the arithmetic negation.",
+          "The function is total but not injective at the boundary: abs(minBound) = minBound (i.e. abs(-2147483648) = -2147483648), because +2147483648 is not representable in int32.",
+          "Corresponds to Haskell's abs :: Int32 -> Int32."],
         Packaging.entityMetadataSeeAlso = [],
         Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
@@ -69,7 +71,9 @@ acos =
       Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
         Packaging.entityMetadataDescription = (Just "The arc cosine of a floating-point number."),
         Packaging.entityMetadataComments = [
-          "Principal value of the inverse cosine, in radians. The result is in [0, \960]. For arguments outside the domain [-1, +1] (including \177\8734), the result is NaN. acos(NaN) is NaN. Corresponds to the IEEE 754 \2681.2 acos operation and to Haskell's acos :: Double -> Double."],
+          "Principal value of the inverse cosine, in radians. The result is in [0, \960].",
+          "For arguments outside the domain [-1, +1] (including \177\8734), the result is NaN. acos(NaN) is NaN.",
+          "Corresponds to the IEEE 754 \2681.2 acos operation and to Haskell's acos :: Double -> Double."],
         Packaging.entityMetadataSeeAlso = [],
         Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
@@ -93,7 +97,9 @@ acosh =
       Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
         Packaging.entityMetadataDescription = (Just "The hyperbolic arc cosine of a floating-point number."),
         Packaging.entityMetadataComments = [
-          "Principal value of the inverse hyperbolic cosine. The result is in [0, +\8734). For arguments less than 1 the result is NaN; acosh(1) = +0; acosh(+\8734) = +\8734; acosh(NaN) is NaN. Corresponds to the IEEE 754 \2681.2 acosh operation and to Haskell's acosh :: Double -> Double."],
+          "Principal value of the inverse hyperbolic cosine. The result is in [0, +\8734).",
+          "For arguments less than 1 the result is NaN; acosh(1) = +0; acosh(+\8734) = +\8734; acosh(NaN) is NaN.",
+          "Corresponds to the IEEE 754 \2681.2 acosh operation and to Haskell's acosh :: Double -> Double."],
         Packaging.entityMetadataSeeAlso = [],
         Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
@@ -122,7 +128,8 @@ add =
       Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
         Packaging.entityMetadataDescription = (Just "Integer addition."),
         Packaging.entityMetadataComments = [
-          "Two's-complement 32-bit signed integer addition. The result is x + y reduced modulo 2^32 and reinterpreted as a signed int32 (i.e. arithmetic wraps silently on overflow, with no exception raised). The operation is total. Corresponds to Haskell's (+) :: Int32 -> Int32 -> Int32."],
+          "Two's-complement 32-bit signed integer addition. The result is x + y reduced modulo 2^32 and reinterpreted as a signed int32 (i.e. arithmetic wraps silently on overflow, with no exception raised).",
+          "The operation is total. Corresponds to Haskell's (+) :: Int32 -> Int32 -> Int32."],
         Packaging.entityMetadataSeeAlso = [],
         Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
@@ -151,7 +158,9 @@ addFloat64 =
       Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
         Packaging.entityMetadataDescription = (Just "Floating-point addition."),
         Packaging.entityMetadataComments = [
-          "IEEE 754 binary64 addition. The result is the value of x + y rounded to the nearest representable float64 under the roundTiesToEven rounding-direction attribute. Adding infinities of opposite sign (+\8734 + -\8734 or -\8734 + +\8734) produces a NaN; adding any value to NaN produces a NaN. The sum of two zeros is +0, except (-0) + (-0) = -0. The operation is total: it never raises, but it may produce NaN. Corresponds to the IEEE 754 \2677.4.1 addition operation and to Haskell's (+) :: Double -> Double -> Double."],
+          "IEEE 754 binary64 addition. The result is the value of x + y rounded to the nearest representable float64 under the roundTiesToEven rounding-direction attribute.",
+          "Adding infinities of opposite sign (+\8734 + -\8734 or -\8734 + +\8734) produces a NaN; adding any value to NaN produces a NaN. The sum of two zeros is +0, except (-0) + (-0) = -0.",
+          "The operation is total: it never raises, but it may produce NaN. Corresponds to the IEEE 754 \2677.4.1 addition operation and to Haskell's (+) :: Double -> Double -> Double."],
         Packaging.entityMetadataSeeAlso = [],
         Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
@@ -175,7 +184,9 @@ asin =
       Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
         Packaging.entityMetadataDescription = (Just "The arc sine of a floating-point number."),
         Packaging.entityMetadataComments = [
-          "Principal value of the inverse sine, in radians. The result is in [-\960/2, +\960/2]. For arguments outside the domain [-1, +1] (including \177\8734), the result is NaN; asin(\2832) = \2832; asin(NaN) is NaN. Corresponds to the IEEE 754 \2681.2 asin operation and to Haskell's asin :: Double -> Double."],
+          "Principal value of the inverse sine, in radians. The result is in [-\960/2, +\960/2].",
+          "For arguments outside the domain [-1, +1] (including \177\8734), the result is NaN; asin(\2832) = \2832; asin(NaN) is NaN.",
+          "Corresponds to the IEEE 754 \2681.2 asin operation and to Haskell's asin :: Double -> Double."],
         Packaging.entityMetadataSeeAlso = [],
         Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
@@ -199,7 +210,8 @@ asinh =
       Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
         Packaging.entityMetadataDescription = (Just "The hyperbolic arc sine of a floating-point number."),
         Packaging.entityMetadataComments = [
-          "Principal value of the inverse hyperbolic sine. Defined for all finite reals; asinh(\2832) = \2832; asinh(\177\8734) = \177\8734; asinh(NaN) is NaN. Corresponds to the IEEE 754 \2681.2 asinh operation and to Haskell's asinh :: Double -> Double."],
+          "Principal value of the inverse hyperbolic sine. Defined for all finite reals; asinh(\2832) = \2832; asinh(\177\8734) = \177\8734; asinh(NaN) is NaN.",
+          "Corresponds to the IEEE 754 \2681.2 asinh operation and to Haskell's asinh :: Double -> Double."],
         Packaging.entityMetadataSeeAlso = [],
         Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
@@ -223,7 +235,8 @@ atan =
       Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
         Packaging.entityMetadataDescription = (Just "The arc tangent of a floating-point number."),
         Packaging.entityMetadataComments = [
-          "Principal value of the inverse tangent, in radians. The result is in (-\960/2, +\960/2); atan(\2832) = \2832; atan(\177\8734) = \177\960/2; atan(NaN) is NaN. Corresponds to the IEEE 754 \2681.2 atan operation and to Haskell's atan :: Double -> Double."],
+          "Principal value of the inverse tangent, in radians. The result is in (-\960/2, +\960/2); atan(\2832) = \2832; atan(\177\8734) = \177\960/2; atan(NaN) is NaN.",
+          "Corresponds to the IEEE 754 \2681.2 atan operation and to Haskell's atan :: Double -> Double."],
         Packaging.entityMetadataSeeAlso = [],
         Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
@@ -252,7 +265,9 @@ atan2 =
       Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
         Packaging.entityMetadataDescription = (Just "The two-argument arc tangent (atan2)."),
         Packaging.entityMetadataComments = [
-          "atan2(y, x) returns the angle in radians, in (-\960, +\960], from the positive x-axis to the point (x, y), using the signs of both arguments to determine the quadrant. Special cases follow IEEE 754 \2681.2: atan2(\2832, +x>0) = \2832; atan2(\2832, -x<0) = \177\960; atan2(\177y>0, 0) = \177\960/2; atan2(\177y, +\8734) = \2832; atan2(\177y, -\8734) = \177\960; atan2(\177\8734, finite) = \177\960/2; atan2(\177\8734, +\8734) = \177\960/4; atan2(\177\8734, -\8734) = \2835\960/4; atan2 of any NaN argument is NaN. Corresponds to Haskell's atan2 :: Double -> Double -> Double."],
+          "atan2(y, x) returns the angle in radians, in (-\960, +\960], from the positive x-axis to the point (x, y), using the signs of both arguments to determine the quadrant.",
+          "Special cases follow IEEE 754 \2681.2: atan2(\2832, +x>0) = \2832; atan2(\2832, -x<0) = \177\960; atan2(\177y>0, 0) = \177\960/2; atan2(\177y, +\8734) = \2832; atan2(\177y, -\8734) = \177\960; atan2(\177\8734, finite) = \177\960/2; atan2(\177\8734, +\8734) = \177\960/4; atan2(\177\8734, -\8734) = \2835\960/4; atan2 of any NaN argument is NaN.",
+          "Corresponds to Haskell's atan2 :: Double -> Double -> Double."],
         Packaging.entityMetadataSeeAlso = [],
         Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
@@ -276,7 +291,8 @@ atanh =
       Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
         Packaging.entityMetadataDescription = (Just "The hyperbolic arc tangent of a floating-point number."),
         Packaging.entityMetadataComments = [
-          "Principal value of the inverse hyperbolic tangent. Defined for arguments in (-1, +1); atanh(\2833) = \177\8734 (with division-by-zero exception in IEEE 754); arguments outside [-1, +1] produce NaN; atanh(\2832) = \2832; atanh(NaN) is NaN. Corresponds to the IEEE 754 \2681.2 atanh operation and to Haskell's atanh :: Double -> Double."],
+          "Principal value of the inverse hyperbolic tangent. Defined for arguments in (-1, +1); atanh(\2833) = \177\8734 (with division-by-zero exception in IEEE 754); arguments outside [-1, +1] produce NaN; atanh(\2832) = \2832; atanh(NaN) is NaN.",
+          "Corresponds to the IEEE 754 \2681.2 atanh operation and to Haskell's atanh :: Double -> Double."],
         Packaging.entityMetadataSeeAlso = [],
         Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
@@ -300,7 +316,9 @@ ceiling =
       Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
         Packaging.entityMetadataDescription = (Just "The smallest integer greater than or equal to the argument, as a float."),
         Packaging.entityMetadataComments = [
-          "The smallest integer value not less than the argument, returned as a float64. Equivalent to IEEE 754 \2677.3.1 roundToIntegralTowardPositive: ceiling(\2832) = \2832; ceiling(\177\8734) = \177\8734; ceiling(NaN) is NaN; the sign of a negative result is preserved when rounding to zero (e.g. ceiling(-0.5) = -0). Note that the return type is float64, not an integer type, so the result can exceed the integer range. Corresponds to Haskell's fromIntegral . ceiling :: Double -> Double."],
+          "The smallest integer value not less than the argument, returned as a float64. Equivalent to IEEE 754 \2677.3.1 roundToIntegralTowardPositive: ceiling(\2832) = \2832; ceiling(\177\8734) = \177\8734; ceiling(NaN) is NaN; the sign of a negative result is preserved when rounding to zero (e.g. ceiling(-0.5) = -0).",
+          "Note that the return type is float64, not an integer type, so the result can exceed the integer range.",
+          "Corresponds to Haskell's fromIntegral . ceiling :: Double -> Double."],
         Packaging.entityMetadataSeeAlso = [],
         Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
@@ -324,7 +342,8 @@ cos =
       Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
         Packaging.entityMetadataDescription = (Just "The cosine of a floating-point number."),
         Packaging.entityMetadataComments = [
-          "Cosine of an angle in radians, correctly rounded for finite arguments. The result is in [-1, +1]; cos(\2832) = 1; cos(\177\8734) is NaN (with invalid-operation exception in IEEE 754); cos(NaN) is NaN. Corresponds to the IEEE 754 \2681.2 cos operation and to Haskell's cos :: Double -> Double."],
+          "Cosine of an angle in radians, correctly rounded for finite arguments. The result is in [-1, +1]; cos(\2832) = 1; cos(\177\8734) is NaN (with invalid-operation exception in IEEE 754); cos(NaN) is NaN.",
+          "Corresponds to the IEEE 754 \2681.2 cos operation and to Haskell's cos :: Double -> Double."],
         Packaging.entityMetadataSeeAlso = [],
         Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
@@ -348,7 +367,8 @@ cosh =
       Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
         Packaging.entityMetadataDescription = (Just "The hyperbolic cosine of a floating-point number."),
         Packaging.entityMetadataComments = [
-          "Hyperbolic cosine. The result is in [1, +\8734]; cosh(\2832) = 1; cosh(\177\8734) = +\8734; cosh(NaN) is NaN. Large-magnitude arguments overflow to +\8734. Corresponds to the IEEE 754 \2681.2 cosh operation and to Haskell's cosh :: Double -> Double."],
+          "Hyperbolic cosine. The result is in [1, +\8734]; cosh(\2832) = 1; cosh(\177\8734) = +\8734; cosh(NaN) is NaN. Large-magnitude arguments overflow to +\8734.",
+          "Corresponds to the IEEE 754 \2681.2 cosh operation and to Haskell's cosh :: Double -> Double."],
         Packaging.entityMetadataSeeAlso = [],
         Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
@@ -367,7 +387,8 @@ e =
       Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
         Packaging.entityMetadataDescription = (Just "Euler's constant (the base of the natural logarithm)."),
         Packaging.entityMetadataComments = [
-          "The mathematical constant e \8776 2.718281828459045, the base of the natural logarithm, as the nearest representable float64. Equal to exp(1). Corresponds to Haskell's exp 1 :: Double."],
+          "The mathematical constant e \8776 2.718281828459045, the base of the natural logarithm, as the nearest representable float64. Equal to exp(1).",
+          "Corresponds to Haskell's exp 1 :: Double."],
         Packaging.entityMetadataSeeAlso = [],
         Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
@@ -391,7 +412,8 @@ even =
       Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
         Packaging.entityMetadataDescription = (Just "Test whether an integer is even."),
         Packaging.entityMetadataComments = [
-          "True if the argument is divisible by 2 (i.e. x mod 2 = 0), false otherwise. Total on all int32 inputs including negative numbers and minBound. Corresponds to Haskell's even :: Int32 -> Bool."],
+          "True if the argument is divisible by 2 (i.e. x mod 2 = 0), false otherwise.",
+          "Total on all int32 inputs including negative numbers and minBound. Corresponds to Haskell's even :: Int32 -> Bool."],
         Packaging.entityMetadataSeeAlso = [],
         Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
@@ -435,7 +457,8 @@ exp =
       Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
         Packaging.entityMetadataDescription = (Just "The exponential function."),
         Packaging.entityMetadataComments = [
-          "The exponential function: exp(x) = e^x. exp(\2832) = 1; exp(-\8734) = +0; exp(+\8734) = +\8734; exp(NaN) is NaN. Large positive arguments overflow to +\8734; large negative arguments underflow to +0. Corresponds to the IEEE 754 \2681.2 exp operation and to Haskell's exp :: Double -> Double."],
+          "The exponential function: exp(x) = e^x. exp(\2832) = 1; exp(-\8734) = +0; exp(+\8734) = +\8734; exp(NaN) is NaN. Large positive arguments overflow to +\8734; large negative arguments underflow to +0.",
+          "Corresponds to the IEEE 754 \2681.2 exp operation and to Haskell's exp :: Double -> Double."],
         Packaging.entityMetadataSeeAlso = [],
         Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
@@ -459,7 +482,9 @@ floor =
       Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
         Packaging.entityMetadataDescription = (Just "The largest integer less than or equal to the argument, as a float."),
         Packaging.entityMetadataComments = [
-          "The largest integer value not greater than the argument, returned as a float64. Equivalent to IEEE 754 \2677.3.1 roundToIntegralTowardNegative: floor(\2832) = \2832; floor(\177\8734) = \177\8734; floor(NaN) is NaN. Note that the return type is float64, not an integer type, so the result can exceed the integer range. Corresponds to Haskell's fromIntegral . floor :: Double -> Double."],
+          "The largest integer value not greater than the argument, returned as a float64. Equivalent to IEEE 754 \2677.3.1 roundToIntegralTowardNegative: floor(\2832) = \2832; floor(\177\8734) = \177\8734; floor(NaN) is NaN.",
+          "Note that the return type is float64, not an integer type, so the result can exceed the integer range.",
+          "Corresponds to Haskell's fromIntegral . floor :: Double -> Double."],
         Packaging.entityMetadataSeeAlso = [],
         Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
@@ -483,7 +508,8 @@ log =
       Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
         Packaging.entityMetadataDescription = (Just "The natural logarithm."),
         Packaging.entityMetadataComments = [
-          "The natural (base-e) logarithm. log(1) = +0; log(+0) = log(-0) = -\8734 (with division-by-zero exception in IEEE 754); log(x) for x < 0 is NaN (with invalid-operation exception); log(+\8734) = +\8734; log(NaN) is NaN. Corresponds to the IEEE 754 \2681.2 log operation and to Haskell's log :: Double -> Double."],
+          "The natural (base-e) logarithm. log(1) = +0; log(+0) = log(-0) = -\8734 (with division-by-zero exception in IEEE 754); log(x) for x < 0 is NaN (with invalid-operation exception); log(+\8734) = +\8734; log(NaN) is NaN.",
+          "Corresponds to the IEEE 754 \2681.2 log operation and to Haskell's log :: Double -> Double."],
         Packaging.entityMetadataSeeAlso = [],
         Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
@@ -512,7 +538,9 @@ logBase =
       Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
         Packaging.entityMetadataDescription = (Just "Logarithm of the second argument in the base of the first."),
         Packaging.entityMetadataComments = [
-          "logBase(b, x) computes the logarithm of x in base b, equivalent to log(x) / log(b). Inherits the special-case behavior of log for each argument (NaN propagation, sign of zeros, division by zero on log of a zero, NaN on negative arguments). Corresponds to Haskell's logBase :: Double -> Double -> Double."],
+          "logBase(b, x) computes the logarithm of x in base b, equivalent to log(x) / log(b).",
+          "Inherits the special-case behavior of log for each argument (NaN propagation, sign of zeros, division by zero on log of a zero, NaN on negative arguments).",
+          "Corresponds to Haskell's logBase :: Double -> Double -> Double."],
         Packaging.entityMetadataSeeAlso = [],
         Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
@@ -541,7 +569,8 @@ max =
       Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
         Packaging.entityMetadataDescription = (Just "The maximum of two integers."),
         Packaging.entityMetadataComments = [
-          "Return the larger of two int32 values under the usual signed-integer total order. Total on all inputs. Corresponds to Haskell's max :: Int32 -> Int32 -> Int32."],
+          "Return the larger of two int32 values under the usual signed-integer total order.",
+          "Total on all inputs. Corresponds to Haskell's max :: Int32 -> Int32 -> Int32."],
         Packaging.entityMetadataSeeAlso = [],
         Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
@@ -570,7 +599,10 @@ maybeDiv =
       Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
         Packaging.entityMetadataDescription = (Just "Integer division, or Nothing if dividing by zero."),
         Packaging.entityMetadataComments = [
-          "Total integer division: maybeDiv(x, y) returns Just(x divided by y, rounded toward negative infinity) when y is non-zero, and Nothing when y = 0. The division rounds toward negative infinity (floor), so for example maybeDiv(-7, 2) = Just(-4). The boundary case maybeDiv(minBound, -1), whose mathematical result +2147483648 is not representable in int32, wraps to minBound (the two's-complement overflow). Corresponds to Haskell's div :: Int32 -> Int32 -> Int32, wrapped in maybe to make the zero-divisor case total."],
+          "Total integer division: maybeDiv(x, y) returns Just(x divided by y, rounded toward negative infinity) when y is non-zero, and Nothing when y = 0.",
+          "The division rounds toward negative infinity (floor), so for example maybeDiv(-7, 2) = Just(-4).",
+          "The boundary case maybeDiv(minBound, -1), whose mathematical result +2147483648 is not representable in int32, wraps to minBound (the two's-complement overflow).",
+          "Corresponds to Haskell's div :: Int32 -> Int32 -> Int32, wrapped in maybe to make the zero-divisor case total."],
         Packaging.entityMetadataSeeAlso = [],
         Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
@@ -599,7 +631,9 @@ maybeMod =
       Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
         Packaging.entityMetadataDescription = (Just "Integer modulus, or Nothing if dividing by zero."),
         Packaging.entityMetadataComments = [
-          "Total integer modulus: maybeMod(x, y) returns Just(x mod y) when y is non-zero, and Nothing when y = 0. The result satisfies the identity x = (maybeDiv(x, y) result) * y + (maybeMod(x, y) result), so the sign of the result matches the sign of y (Knuth-style floor division). For example maybeMod(-7, 2) = Just(1). Corresponds to Haskell's mod :: Int32 -> Int32 -> Int32, wrapped in maybe to make the zero-divisor case total."],
+          "Total integer modulus: maybeMod(x, y) returns Just(x mod y) when y is non-zero, and Nothing when y = 0.",
+          "The result satisfies the identity x = (maybeDiv(x, y) result) * y + (maybeMod(x, y) result), so the sign of the result matches the sign of y (Knuth-style floor division). For example maybeMod(-7, 2) = Just(1).",
+          "Corresponds to Haskell's mod :: Int32 -> Int32 -> Int32, wrapped in maybe to make the zero-divisor case total."],
         Packaging.entityMetadataSeeAlso = [],
         Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
@@ -623,7 +657,8 @@ maybePred =
       Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
         Packaging.entityMetadataDescription = (Just "The predecessor of an integer, or Nothing on underflow."),
         Packaging.entityMetadataComments = [
-          "maybePred(x) returns Just(x - 1) when x > minBound, and Nothing when x = minBound (i.e. -2147483648). The function is total and does not wrap. Corresponds to Haskell's pred :: Int32 -> Int32, wrapped in maybe to make the boundary case total (Haskell's pred is a partial function that raises an error on minBound)."],
+          "maybePred(x) returns Just(x - 1) when x > minBound, and Nothing when x = minBound (i.e. -2147483648). The function is total and does not wrap.",
+          "Corresponds to Haskell's pred :: Int32 -> Int32, wrapped in maybe to make the boundary case total (Haskell's pred is a partial function that raises an error on minBound)."],
         Packaging.entityMetadataSeeAlso = [],
         Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
@@ -652,7 +687,10 @@ maybeRem =
       Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
         Packaging.entityMetadataDescription = (Just "Integer remainder, or Nothing if dividing by zero."),
         Packaging.entityMetadataComments = [
-          "Total integer remainder: maybeRem(x, y) returns Just(x rem y) when y is non-zero, and Nothing when y = 0. The result satisfies x = (truncate(x / y)) * y + (maybeRem(x, y) result), so the sign of the result matches the sign of x (truncated division, C-style remainder). For example maybeRem(-7, 2) = Just(-1). The boundary case maybeRem(minBound, -1) is 0 (no overflow, since the quotient overflow is absorbed). Corresponds to Haskell's rem :: Int32 -> Int32 -> Int32, wrapped in maybe to make the zero-divisor case total."],
+          "Total integer remainder: maybeRem(x, y) returns Just(x rem y) when y is non-zero, and Nothing when y = 0.",
+          "The result satisfies x = (truncate(x / y)) * y + (maybeRem(x, y) result), so the sign of the result matches the sign of x (truncated division, C-style remainder). For example maybeRem(-7, 2) = Just(-1).",
+          "The boundary case maybeRem(minBound, -1) is 0 (no overflow, since the quotient overflow is absorbed).",
+          "Corresponds to Haskell's rem :: Int32 -> Int32 -> Int32, wrapped in maybe to make the zero-divisor case total."],
         Packaging.entityMetadataSeeAlso = [],
         Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
@@ -676,7 +714,8 @@ maybeSucc =
       Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
         Packaging.entityMetadataDescription = (Just "The successor of an integer, or Nothing on overflow."),
         Packaging.entityMetadataComments = [
-          "maybeSucc(x) returns Just(x + 1) when x < maxBound, and Nothing when x = maxBound (i.e. 2147483647). The function is total and does not wrap. Corresponds to Haskell's succ :: Int32 -> Int32, wrapped in maybe to make the boundary case total (Haskell's succ is a partial function that raises an error on maxBound)."],
+          "maybeSucc(x) returns Just(x + 1) when x < maxBound, and Nothing when x = maxBound (i.e. 2147483647). The function is total and does not wrap.",
+          "Corresponds to Haskell's succ :: Int32 -> Int32, wrapped in maybe to make the boundary case total (Haskell's succ is a partial function that raises an error on maxBound)."],
         Packaging.entityMetadataSeeAlso = [],
         Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
@@ -705,7 +744,8 @@ min =
       Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
         Packaging.entityMetadataDescription = (Just "The minimum of two integers."),
         Packaging.entityMetadataComments = [
-          "Return the smaller of two int32 values under the usual signed-integer total order. Total on all inputs. Corresponds to Haskell's min :: Int32 -> Int32 -> Int32."],
+          "Return the smaller of two int32 values under the usual signed-integer total order.",
+          "Total on all inputs. Corresponds to Haskell's min :: Int32 -> Int32 -> Int32."],
         Packaging.entityMetadataSeeAlso = [],
         Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
@@ -734,7 +774,8 @@ mul =
       Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
         Packaging.entityMetadataDescription = (Just "Integer multiplication."),
         Packaging.entityMetadataComments = [
-          "Two's-complement 32-bit signed integer multiplication. The result is x * y reduced modulo 2^32 and reinterpreted as a signed int32 (i.e. arithmetic wraps silently on overflow, with no exception raised). The operation is total. Corresponds to Haskell's (*) :: Int32 -> Int32 -> Int32."],
+          "Two's-complement 32-bit signed integer multiplication. The result is x * y reduced modulo 2^32 and reinterpreted as a signed int32 (i.e. arithmetic wraps silently on overflow, with no exception raised).",
+          "The operation is total. Corresponds to Haskell's (*) :: Int32 -> Int32 -> Int32."],
         Packaging.entityMetadataSeeAlso = [],
         Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
@@ -763,7 +804,9 @@ mulFloat64 =
       Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
         Packaging.entityMetadataDescription = (Just "Floating-point multiplication."),
         Packaging.entityMetadataComments = [
-          "IEEE 754 binary64 multiplication. The result is the value of x * y rounded to the nearest representable float64 under the roundTiesToEven rounding-direction attribute. Multiplying 0 by \177\8734 (in either order) produces a NaN (with invalid-operation exception in IEEE 754); multiplying any value by NaN produces a NaN. The result's sign is the XOR of the operand signs (\2832 * \2832 = \2832 accordingly). The operation is total: it never raises, but it may produce NaN or \177\8734. Corresponds to the IEEE 754 \2677.4.1 multiplication operation and to Haskell's (*) :: Double -> Double -> Double."],
+          "IEEE 754 binary64 multiplication. The result is the value of x * y rounded to the nearest representable float64 under the roundTiesToEven rounding-direction attribute.",
+          "Multiplying 0 by \177\8734 (in either order) produces a NaN (with invalid-operation exception in IEEE 754); multiplying any value by NaN produces a NaN. The result's sign is the XOR of the operand signs (\2832 * \2832 = \2832 accordingly).",
+          "The operation is total: it never raises, but it may produce NaN or \177\8734. Corresponds to the IEEE 754 \2677.4.1 multiplication operation and to Haskell's (*) :: Double -> Double -> Double."],
         Packaging.entityMetadataSeeAlso = [],
         Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
@@ -787,7 +830,9 @@ negate =
       Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
         Packaging.entityMetadataDescription = (Just "Negate an integer."),
         Packaging.entityMetadataComments = [
-          "Arithmetic negation of a 32-bit signed integer. The result is 0 - x reduced modulo 2^32 and reinterpreted as a signed int32. The function is total but not injective at the boundary: negate(minBound) = minBound (i.e. negate(-2147483648) = -2147483648), because +2147483648 is not representable in int32. Corresponds to Haskell's negate :: Int32 -> Int32."],
+          "Arithmetic negation of a 32-bit signed integer. The result is 0 - x reduced modulo 2^32 and reinterpreted as a signed int32.",
+          "The function is total but not injective at the boundary: negate(minBound) = minBound (i.e. negate(-2147483648) = -2147483648), because +2147483648 is not representable in int32.",
+          "Corresponds to Haskell's negate :: Int32 -> Int32."],
         Packaging.entityMetadataSeeAlso = [],
         Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
@@ -811,7 +856,8 @@ negateFloat64 =
       Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
         Packaging.entityMetadataDescription = (Just "Negate a floating-point number."),
         Packaging.entityMetadataComments = [
-          "Sign reversal of a float64. Equivalent to IEEE 754 \2677.5.1 negate: flips the sign bit, so negate(\2832) = \2832 (sign flips), negate(\177\8734) = \177\8734 (sign flips), and negate(NaN) is a NaN (sign may flip; payload preserved). This is a bit-level operation that does not raise any floating-point exception. Corresponds to Haskell's negate :: Double -> Double."],
+          "Sign reversal of a float64. Equivalent to IEEE 754 \2677.5.1 negate: flips the sign bit, so negate(\2832) = \2832 (sign flips), negate(\177\8734) = \177\8734 (sign flips), and negate(NaN) is a NaN (sign may flip; payload preserved).",
+          "This is a bit-level operation that does not raise any floating-point exception. Corresponds to Haskell's negate :: Double -> Double."],
         Packaging.entityMetadataSeeAlso = [],
         Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
@@ -835,7 +881,8 @@ odd =
       Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
         Packaging.entityMetadataDescription = (Just "Test whether an integer is odd."),
         Packaging.entityMetadataComments = [
-          "True if the argument is not divisible by 2 (i.e. x mod 2 \8800 0), false otherwise. Total on all int32 inputs including negative numbers and minBound. Corresponds to Haskell's odd :: Int32 -> Bool."],
+          "True if the argument is not divisible by 2 (i.e. x mod 2 \8800 0), false otherwise.",
+          "Total on all int32 inputs including negative numbers and minBound. Corresponds to Haskell's odd :: Int32 -> Bool."],
         Packaging.entityMetadataSeeAlso = [],
         Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
@@ -866,7 +913,8 @@ pi =
       Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
         Packaging.entityMetadataDescription = (Just "The mathematical constant pi."),
         Packaging.entityMetadataComments = [
-          "The mathematical constant \960 \8776 3.141592653589793, the ratio of a circle's circumference to its diameter, as the nearest representable float64. Corresponds to Haskell's pi :: Double."],
+          "The mathematical constant \960 \8776 3.141592653589793, the ratio of a circle's circumference to its diameter, as the nearest representable float64.",
+          "Corresponds to Haskell's pi :: Double."],
         Packaging.entityMetadataSeeAlso = [],
         Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
@@ -895,7 +943,9 @@ pow =
       Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
         Packaging.entityMetadataDescription = (Just "Raise the first argument to the power of the second."),
         Packaging.entityMetadataComments = [
-          "pow(x, y) = x^y. Follows the IEEE 754 \2681.2 pow operation: pow(\2832, y) for y < 0 is \177\8734 (with division-by-zero exception); pow(\2832, y) for y > 0 is \2832 if y is an odd integer, else +0; pow(1, y) = 1 for any y including NaN; pow(x, \2832) = 1 for any x including NaN; pow(x, y) for negative x and non-integer y is NaN (with invalid-operation exception); pow(\177\8734, y) follows the limits in the usual way. Otherwise the result is x^y rounded to the nearest representable float64. Corresponds to Haskell's (**) :: Double -> Double -> Double."],
+          "pow(x, y) = x^y.",
+          "Follows the IEEE 754 \2681.2 pow operation: pow(\2832, y) for y < 0 is \177\8734 (with division-by-zero exception); pow(\2832, y) for y > 0 is \2832 if y is an odd integer, else +0; pow(1, y) = 1 for any y including NaN; pow(x, \2832) = 1 for any x including NaN; pow(x, y) for negative x and non-integer y is NaN (with invalid-operation exception); pow(\177\8734, y) follows the limits in the usual way. Otherwise the result is x^y rounded to the nearest representable float64.",
+          "Corresponds to Haskell's (**) :: Double -> Double -> Double."],
         Packaging.entityMetadataSeeAlso = [],
         Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
@@ -924,7 +974,8 @@ range =
       Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
         Packaging.entityMetadataDescription = (Just "Construct the inclusive integer range from the first to the second argument."),
         Packaging.entityMetadataComments = [
-          "range(a, b) returns the list [a, a+1, ..., b]. The range is inclusive at both ends; if a > b the result is the empty list (i.e. the range does not count downward). For a = b the result is the singleton [a]. The length of the result is max(0, b - a + 1). Corresponds to Haskell's enumFromTo :: Int32 -> Int32 -> [Int32], equivalent to the list-comprehension form [a..b]."],
+          "range(a, b) returns the list [a, a+1, ..., b]. The range is inclusive at both ends; if a > b the result is the empty list (i.e. the range does not count downward). For a = b the result is the singleton [a]. The length of the result is max(0, b - a + 1).",
+          "Corresponds to Haskell's enumFromTo :: Int32 -> Int32 -> [Int32], equivalent to the list-comprehension form [a..b]."],
         Packaging.entityMetadataSeeAlso = [],
         Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
@@ -948,7 +999,9 @@ round =
       Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
         Packaging.entityMetadataDescription = (Just "Round a floating-point number to the nearest integer-valued float."),
         Packaging.entityMetadataComments = [
-          "Round to the nearest integer value, returned as a float64, with ties rounded to the nearest even integer (banker's rounding). Equivalent to IEEE 754 \2677.3.1 roundToIntegralTiesToEven: round(\2832) = \2832; round(\177\8734) = \177\8734; round(NaN) is NaN. Note that the return type is float64, not an integer type, so the result can exceed the integer range. Corresponds to Haskell's fromIntegral . round :: Double -> Double."],
+          "Round to the nearest integer value, returned as a float64, with ties rounded to the nearest even integer (banker's rounding). Equivalent to IEEE 754 \2677.3.1 roundToIntegralTiesToEven: round(\2832) = \2832; round(\177\8734) = \177\8734; round(NaN) is NaN.",
+          "Note that the return type is float64, not an integer type, so the result can exceed the integer range.",
+          "Corresponds to Haskell's fromIntegral . round :: Double -> Double."],
         Packaging.entityMetadataSeeAlso = [],
         Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
@@ -977,7 +1030,9 @@ roundFloat32 =
       Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
         Packaging.entityMetadataDescription = (Just "Round a float32 to the given number of decimal places."),
         Packaging.entityMetadataComments = [
-          "roundFloat32(n, x) rounds the float32 value x to n decimal places using round-half-to-even. The result is the nearest float32 representation of x rounded to that decimal precision; if the exact decimal-rounded value is not representable in float32 (the usual case), the closest float32 is returned. Special values pass through: roundFloat32(n, \2832) = \2832; roundFloat32(n, \177\8734) = \177\8734; roundFloat32(n, NaN) is NaN. Negative n is supported in principle (rounding to powers of ten above 1); host implementations may differ on out-of-range n."],
+          "roundFloat32(n, x) rounds the float32 value x to n decimal places using round-half-to-even. The result is the nearest float32 representation of x rounded to that decimal precision; if the exact decimal-rounded value is not representable in float32 (the usual case), the closest float32 is returned.",
+          "Special values pass through: roundFloat32(n, \2832) = \2832; roundFloat32(n, \177\8734) = \177\8734; roundFloat32(n, NaN) is NaN.",
+          "Negative n is supported in principle (rounding to powers of ten above 1); host implementations may differ on out-of-range n."],
         Packaging.entityMetadataSeeAlso = [],
         Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
@@ -1006,7 +1061,9 @@ roundFloat64 =
       Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
         Packaging.entityMetadataDescription = (Just "Round a float64 to the given number of decimal places."),
         Packaging.entityMetadataComments = [
-          "roundFloat64(n, x) rounds the float64 value x to n decimal places using round-half-to-even. The result is the nearest float64 representation of x rounded to that decimal precision; if the exact decimal-rounded value is not representable in float64 (the usual case), the closest float64 is returned. Special values pass through: roundFloat64(n, \2832) = \2832; roundFloat64(n, \177\8734) = \177\8734; roundFloat64(n, NaN) is NaN. Negative n is supported in principle (rounding to powers of ten above 1); host implementations may differ on out-of-range n."],
+          "roundFloat64(n, x) rounds the float64 value x to n decimal places using round-half-to-even. The result is the nearest float64 representation of x rounded to that decimal precision; if the exact decimal-rounded value is not representable in float64 (the usual case), the closest float64 is returned.",
+          "Special values pass through: roundFloat64(n, \2832) = \2832; roundFloat64(n, \177\8734) = \177\8734; roundFloat64(n, NaN) is NaN.",
+          "Negative n is supported in principle (rounding to powers of ten above 1); host implementations may differ on out-of-range n."],
         Packaging.entityMetadataSeeAlso = [],
         Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
@@ -1030,7 +1087,9 @@ signum =
       Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
         Packaging.entityMetadataDescription = (Just "Return the sign of an integer as -1, 0, or 1."),
         Packaging.entityMetadataComments = [
-          "signum(x) returns -1 if x < 0, 0 if x = 0, and 1 if x > 0. The function is total and satisfies the identity abs(x) * signum(x) = x for all int32 except minBound (where abs(minBound) * (-1) wraps to minBound rather than equalling -minBound, since +2147483648 is not representable). Corresponds to Haskell's signum :: Int32 -> Int32."],
+          "signum(x) returns -1 if x < 0, 0 if x = 0, and 1 if x > 0.",
+          "The function is total and satisfies the identity abs(x) * signum(x) = x for all int32 except minBound (where abs(minBound) * (-1) wraps to minBound rather than equalling -minBound, since +2147483648 is not representable).",
+          "Corresponds to Haskell's signum :: Int32 -> Int32."],
         Packaging.entityMetadataSeeAlso = [],
         Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
@@ -1054,7 +1113,8 @@ sin =
       Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
         Packaging.entityMetadataDescription = (Just "The sine of a floating-point number."),
         Packaging.entityMetadataComments = [
-          "Sine of an angle in radians, correctly rounded for finite arguments. The result is in [-1, +1]; sin(\2832) = \2832; sin(\177\8734) is NaN (with invalid-operation exception in IEEE 754); sin(NaN) is NaN. Corresponds to the IEEE 754 \2681.2 sin operation and to Haskell's sin :: Double -> Double."],
+          "Sine of an angle in radians, correctly rounded for finite arguments. The result is in [-1, +1]; sin(\2832) = \2832; sin(\177\8734) is NaN (with invalid-operation exception in IEEE 754); sin(NaN) is NaN.",
+          "Corresponds to the IEEE 754 \2681.2 sin operation and to Haskell's sin :: Double -> Double."],
         Packaging.entityMetadataSeeAlso = [],
         Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
@@ -1078,7 +1138,8 @@ sinh =
       Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
         Packaging.entityMetadataDescription = (Just "The hyperbolic sine of a floating-point number."),
         Packaging.entityMetadataComments = [
-          "Hyperbolic sine. sinh(\2832) = \2832; sinh(\177\8734) = \177\8734; sinh(NaN) is NaN. Large-magnitude arguments overflow to \177\8734. Corresponds to the IEEE 754 \2681.2 sinh operation and to Haskell's sinh :: Double -> Double."],
+          "Hyperbolic sine. sinh(\2832) = \2832; sinh(\177\8734) = \177\8734; sinh(NaN) is NaN. Large-magnitude arguments overflow to \177\8734.",
+          "Corresponds to the IEEE 754 \2681.2 sinh operation and to Haskell's sinh :: Double -> Double."],
         Packaging.entityMetadataSeeAlso = [],
         Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
@@ -1102,7 +1163,9 @@ sqrt =
       Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
         Packaging.entityMetadataDescription = (Just "The non-negative square root of a floating-point number."),
         Packaging.entityMetadataComments = [
-          "IEEE 754 binary64 square root. The result is the value of \8730x correctly rounded to the nearest representable float64 under roundTiesToEven. sqrt(+0) = +0; sqrt(-0) = -0 (sign preserved); sqrt(x) for x < 0 (including -\8734) is NaN (with invalid-operation exception); sqrt(+\8734) = +\8734; sqrt(NaN) is NaN. Corresponds to the IEEE 754 \2677.4.1 squareRoot operation and to Haskell's sqrt :: Double -> Double."],
+          "IEEE 754 binary64 square root. The result is the value of \8730x correctly rounded to the nearest representable float64 under roundTiesToEven.",
+          "sqrt(+0) = +0; sqrt(-0) = -0 (sign preserved); sqrt(x) for x < 0 (including -\8734) is NaN (with invalid-operation exception); sqrt(+\8734) = +\8734; sqrt(NaN) is NaN.",
+          "Corresponds to the IEEE 754 \2677.4.1 squareRoot operation and to Haskell's sqrt :: Double -> Double."],
         Packaging.entityMetadataSeeAlso = [],
         Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
@@ -1131,7 +1194,8 @@ sub =
       Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
         Packaging.entityMetadataDescription = (Just "Integer subtraction."),
         Packaging.entityMetadataComments = [
-          "Two's-complement 32-bit signed integer subtraction. The result is x - y reduced modulo 2^32 and reinterpreted as a signed int32 (i.e. arithmetic wraps silently on overflow, with no exception raised). The operation is total. Corresponds to Haskell's (-) :: Int32 -> Int32 -> Int32."],
+          "Two's-complement 32-bit signed integer subtraction. The result is x - y reduced modulo 2^32 and reinterpreted as a signed int32 (i.e. arithmetic wraps silently on overflow, with no exception raised).",
+          "The operation is total. Corresponds to Haskell's (-) :: Int32 -> Int32 -> Int32."],
         Packaging.entityMetadataSeeAlso = [],
         Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
@@ -1160,7 +1224,9 @@ subFloat64 =
       Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
         Packaging.entityMetadataDescription = (Just "Floating-point subtraction."),
         Packaging.entityMetadataComments = [
-          "IEEE 754 binary64 subtraction, defined as x + (-y). The result is correctly rounded to the nearest representable float64 under roundTiesToEven. Subtracting infinities of the same sign (+\8734 - +\8734 or -\8734 - -\8734) produces a NaN; subtracting any value involving NaN produces a NaN. The difference of two equal finite values is +0 (or -0 under round-toward-negative, which is not the default). The operation is total: it never raises, but it may produce NaN. Corresponds to the IEEE 754 \2677.4.1 subtraction operation and to Haskell's (-) :: Double -> Double -> Double."],
+          "IEEE 754 binary64 subtraction, defined as x + (-y). The result is correctly rounded to the nearest representable float64 under roundTiesToEven.",
+          "Subtracting infinities of the same sign (+\8734 - +\8734 or -\8734 - -\8734) produces a NaN; subtracting any value involving NaN produces a NaN. The difference of two equal finite values is +0 (or -0 under round-toward-negative, which is not the default).",
+          "The operation is total: it never raises, but it may produce NaN. Corresponds to the IEEE 754 \2677.4.1 subtraction operation and to Haskell's (-) :: Double -> Double -> Double."],
         Packaging.entityMetadataSeeAlso = [],
         Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
@@ -1184,7 +1250,8 @@ tan =
       Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
         Packaging.entityMetadataDescription = (Just "The tangent of a floating-point number."),
         Packaging.entityMetadataComments = [
-          "Tangent of an angle in radians, correctly rounded for finite arguments. tan(\2832) = \2832; near odd multiples of \960/2 the result has large magnitude but remains finite (no exception is raised); tan(\177\8734) is NaN (with invalid-operation exception in IEEE 754); tan(NaN) is NaN. Corresponds to the IEEE 754 \2681.2 tan operation and to Haskell's tan :: Double -> Double."],
+          "Tangent of an angle in radians, correctly rounded for finite arguments. tan(\2832) = \2832; near odd multiples of \960/2 the result has large magnitude but remains finite (no exception is raised); tan(\177\8734) is NaN (with invalid-operation exception in IEEE 754); tan(NaN) is NaN.",
+          "Corresponds to the IEEE 754 \2681.2 tan operation and to Haskell's tan :: Double -> Double."],
         Packaging.entityMetadataSeeAlso = [],
         Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
@@ -1208,7 +1275,8 @@ tanh =
       Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
         Packaging.entityMetadataDescription = (Just "The hyperbolic tangent of a floating-point number."),
         Packaging.entityMetadataComments = [
-          "Hyperbolic tangent. The result is in [-1, +1]; tanh(\2832) = \2832; tanh(\177\8734) = \2833; tanh(NaN) is NaN. Corresponds to the IEEE 754 \2681.2 tanh operation and to Haskell's tanh :: Double -> Double."],
+          "Hyperbolic tangent. The result is in [-1, +1]; tanh(\2832) = \2832; tanh(\177\8734) = \2833; tanh(NaN) is NaN.",
+          "Corresponds to the IEEE 754 \2681.2 tanh operation and to Haskell's tanh :: Double -> Double."],
         Packaging.entityMetadataSeeAlso = [],
         Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
@@ -1232,7 +1300,9 @@ truncate =
       Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
         Packaging.entityMetadataDescription = (Just "Truncate a floating-point number toward zero, as a float."),
         Packaging.entityMetadataComments = [
-          "Round toward zero (truncate the fractional part), returned as a float64. Equivalent to IEEE 754 \2677.3.1 roundToIntegralTowardZero: truncate(\2832) = \2832; truncate(\177\8734) = \177\8734; truncate(NaN) is NaN; sign of the result matches the sign of the argument (so truncate(-0.7) = -0, truncate(+0.7) = +0). Note that the return type is float64, not an integer type, so the result can exceed the integer range. Corresponds to Haskell's fromIntegral . truncate :: Double -> Double."],
+          "Round toward zero (truncate the fractional part), returned as a float64. Equivalent to IEEE 754 \2677.3.1 roundToIntegralTowardZero: truncate(\2832) = \2832; truncate(\177\8734) = \177\8734; truncate(NaN) is NaN; sign of the result matches the sign of the argument (so truncate(-0.7) = -0, truncate(+0.7) = +0).",
+          "Note that the return type is float64, not an integer type, so the result can exceed the integer range.",
+          "Corresponds to Haskell's fromIntegral . truncate :: Double -> Double."],
         Packaging.entityMetadataSeeAlso = [],
         Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,

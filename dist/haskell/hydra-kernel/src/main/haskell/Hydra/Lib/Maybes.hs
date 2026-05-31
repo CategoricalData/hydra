@@ -58,7 +58,9 @@ apply =
       Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
         Packaging.entityMetadataDescription = (Just "Applicative apply for maybes: combine a maybe function and a maybe argument."),
         Packaging.entityMetadataComments = [
-          "apply(mf, mx) returns Just(f x) when mf is Just(f) and mx is Just(x), and Nothing if either is Nothing. The applicative apply for maybe; threads a function-in-context with a value-in-context. Total. Corresponds to Haskell's (<*>) :: Maybe (a -> b) -> Maybe a -> Maybe b."],
+          "apply(mf, mx) returns Just(f x) when mf is Just(f) and mx is Just(x), and Nothing if either is Nothing.",
+          "The applicative apply for maybe; threads a function-in-context with a value-in-context.",
+          "Total. Corresponds to Haskell's (<*>) :: Maybe (a -> b) -> Maybe a -> Maybe b."],
         Packaging.entityMetadataSeeAlso = [],
         Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
@@ -122,7 +124,9 @@ bind =
       Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
         Packaging.entityMetadataDescription = (Just "Monadic bind for maybes."),
         Packaging.entityMetadataComments = [
-          "bind(m, f) returns f(x) when m is Just(x), and Nothing when m is Nothing. The monadic bind for maybe; used to chain computations that may be absent. Total. Corresponds to Haskell's (>>=) :: Maybe a -> (a -> Maybe b) -> Maybe b."],
+          "bind(m, f) returns f(x) when m is Just(x), and Nothing when m is Nothing.",
+          "The monadic bind for maybe; used to chain computations that may be absent.",
+          "Total. Corresponds to Haskell's (>>=) :: Maybe a -> (a -> Maybe b) -> Maybe b."],
         Packaging.entityMetadataSeeAlso = [],
         Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
@@ -179,7 +183,9 @@ cases =
       Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
         Packaging.entityMetadataDescription = (Just "Case analysis on a maybe, with cases-style argument order."),
         Packaging.entityMetadataComments = [
-          "cases(m, def, f) returns f(x) when m is Just(x), and def when m is Nothing. Identical in behavior to the maybe primitive but with the maybe value as the first argument (matching the convention for case-statement-like elimination). Total. Argument order is (m, def, f) rather than Haskell's (def, f, m)."],
+          "cases(m, def, f) returns f(x) when m is Just(x), and def when m is Nothing.",
+          "Identical in behavior to the maybe primitive but with the maybe value as the first argument (matching the convention for case-statement-like elimination).",
+          "Total. Argument order is (m, def, f) rather than Haskell's (def, f, m)."],
         Packaging.entityMetadataSeeAlso = [],
         Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
@@ -206,7 +212,8 @@ cat =
       Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
         Packaging.entityMetadataDescription = (Just "Concatenate maybes, keeping only the present values."),
         Packaging.entityMetadataComments = [
-          "cat(xs) returns the list of contained values from Just elements of xs, in original order; Nothing elements are discarded. Total. Corresponds to Haskell's Data.Maybe.catMaybes :: [Maybe a] -> [a]."],
+          "cat(xs) returns the list of contained values from Just elements of xs, in original order; Nothing elements are discarded.",
+          "Total. Corresponds to Haskell's Data.Maybe.catMaybes :: [Maybe a] -> [a]."],
         Packaging.entityMetadataSeeAlso = [],
         Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
@@ -286,7 +293,9 @@ compose =
       Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
         Packaging.entityMetadataDescription = (Just "Kleisli composition for maybes."),
         Packaging.entityMetadataComments = [
-          "compose(f, g, x) returns the Kleisli composition of f and g applied to x: bind(f(x), g). If either f or the second stage produces Nothing, the result is Nothing. Total. Corresponds to Haskell's Kleisli composition for Maybe, (>=>) :: (a -> Maybe b) -> (b -> Maybe c) -> a -> Maybe c."],
+          "compose(f, g, x) returns the Kleisli composition of f and g applied to x: bind(f(x), g).",
+          "If either f or the second stage produces Nothing, the result is Nothing.",
+          "Total. Corresponds to Haskell's Kleisli composition for Maybe, (>=>) :: (a -> Maybe b) -> (b -> Maybe c) -> a -> Maybe c."],
         Packaging.entityMetadataSeeAlso = [],
         Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
@@ -338,7 +347,8 @@ fromMaybe =
       Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
         Packaging.entityMetadataDescription = (Just "Return the value contained in a maybe, falling back to a default if absent."),
         Packaging.entityMetadataComments = [
-          "fromMaybe(def, m) returns x when m is Just(x), and def when m is Nothing. Total. Corresponds to Haskell's Data.Maybe.fromMaybe :: a -> Maybe a -> a."],
+          "fromMaybe(def, m) returns x when m is Just(x), and def when m is Nothing.",
+          "Total. Corresponds to Haskell's Data.Maybe.fromMaybe :: a -> Maybe a -> a."],
         Packaging.entityMetadataSeeAlso = [],
         Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
@@ -385,7 +395,8 @@ isJust =
       Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
         Packaging.entityMetadataDescription = (Just "Test whether a maybe is present (Just)."),
         Packaging.entityMetadataComments = [
-          "isJust(m) returns true iff m is a Just variant. Total. Corresponds to Haskell's Data.Maybe.isJust :: Maybe a -> Bool."],
+          "isJust(m) returns true iff m is a Just variant.",
+          "Total. Corresponds to Haskell's Data.Maybe.isJust :: Maybe a -> Bool."],
         Packaging.entityMetadataSeeAlso = [],
         Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
@@ -427,7 +438,8 @@ isNothing =
       Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
         Packaging.entityMetadataDescription = (Just "Test whether a maybe is absent (Nothing)."),
         Packaging.entityMetadataComments = [
-          "isNothing(m) returns true iff m is the Nothing variant. Total. Corresponds to Haskell's Data.Maybe.isNothing :: Maybe a -> Bool."],
+          "isNothing(m) returns true iff m is the Nothing variant.",
+          "Total. Corresponds to Haskell's Data.Maybe.isNothing :: Maybe a -> Bool."],
         Packaging.entityMetadataSeeAlso = [],
         Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
@@ -479,7 +491,9 @@ map =
       Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
         Packaging.entityMetadataDescription = (Just "Map a function over a maybe."),
         Packaging.entityMetadataComments = [
-          "map(f, m) returns Just(f x) when m is Just(x), and Nothing when m is Nothing. The functor instance for maybe. Total. Corresponds to Haskell's fmap :: (a -> b) -> Maybe a -> Maybe b."],
+          "map(f, m) returns Just(f x) when m is Just(x), and Nothing when m is Nothing.",
+          "The functor instance for maybe.",
+          "Total. Corresponds to Haskell's fmap :: (a -> b) -> Maybe a -> Maybe b."],
         Packaging.entityMetadataSeeAlso = [],
         Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
@@ -538,7 +552,8 @@ mapMaybe =
       Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
         Packaging.entityMetadataDescription = (Just "Map a partial function over a list, keeping only the present results."),
         Packaging.entityMetadataComments = [
-          "mapMaybe(f, xs) applies f to each element of xs and returns the list of contained values from Just results in original order; Nothing results are discarded. Total. Corresponds to Haskell's Data.Maybe.mapMaybe :: (a -> Maybe b) -> [a] -> [b]."],
+          "mapMaybe(f, xs) applies f to each element of xs and returns the list of contained values from Just results in original order; Nothing results are discarded.",
+          "Total. Corresponds to Haskell's Data.Maybe.mapMaybe :: (a -> Maybe b) -> [a] -> [b]."],
         Packaging.entityMetadataSeeAlso = [],
         Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
@@ -597,7 +612,9 @@ maybe =
       Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
         Packaging.entityMetadataDescription = (Just "Case analysis on a maybe, applying a function if present or returning a default if absent."),
         Packaging.entityMetadataComments = [
-          "maybe(def, f, m) returns f(x) when m is Just(x), and def when m is Nothing. The fundamental eliminator for the maybe type; every other primitive in this namespace can be derived from it. Total. Corresponds to Haskell's maybe :: b -> (a -> b) -> Maybe a -> b."],
+          "maybe(def, f, m) returns f(x) when m is Just(x), and def when m is Nothing.",
+          "The fundamental eliminator for the maybe type; every other primitive in this namespace can be derived from it.",
+          "Total. Corresponds to Haskell's maybe :: b -> (a -> b) -> Maybe a -> b."],
         Packaging.entityMetadataSeeAlso = [],
         Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
@@ -624,7 +641,8 @@ pure =
       Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
         Packaging.entityMetadataDescription = (Just "Wrap a value in Just."),
         Packaging.entityMetadataComments = [
-          "pure(x) = Just(x). The applicative pure for maybe. Total. Corresponds to Haskell's pure :: a -> Maybe a / Just."],
+          "pure(x) = Just(x). The applicative pure for maybe.",
+          "Total. Corresponds to Haskell's pure :: a -> Maybe a / Just."],
         Packaging.entityMetadataSeeAlso = [],
         Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
@@ -657,7 +675,8 @@ toList =
       Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
         Packaging.entityMetadataDescription = (Just "Convert a maybe to a list: Just x maps to [x], Nothing to []."),
         Packaging.entityMetadataComments = [
-          "toList(m) returns [x] when m is Just(x), and the empty list when m is Nothing. Total. Corresponds to Haskell's Data.Maybe.maybeToList :: Maybe a -> [a]."],
+          "toList(m) returns [x] when m is Just(x), and the empty list when m is Nothing.",
+          "Total. Corresponds to Haskell's Data.Maybe.maybeToList :: Maybe a -> [a]."],
         Packaging.entityMetadataSeeAlso = [],
         Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
