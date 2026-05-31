@@ -539,7 +539,7 @@ public class Generation {
                     TermDefinition t = td.value;
                     Term newTerm = Strip.removeTypesFromTerm(t.term);
                     Maybe<TermSignature> newType = Maybe.nothing();
-                    stripped.add(new Definition.Term(new TermDefinition(t.name, newTerm, newType)));
+                    stripped.add(new Definition.Term(new TermDefinition(t.name, hydra.util.Maybe.nothing(), newTerm, newType)));
                     return null;
                 }
                 @Override public Void visit(Definition.Type td) {
@@ -552,7 +552,7 @@ public class Generation {
                 }
             });
         }
-        return new Module(m.name, m.description, m.dependencies, stripped);
+        return new Module(m.name, m.metadata, m.dependencies, stripped);
     }
 
     /**

@@ -89,13 +89,9 @@ def default_primitive_definition(name: Name, typ) -> PrimitiveDefinition:
     return PrimitiveDefinition(
         name=name,
         signature=type_scheme_to_term_signature(typ),
-        description="",
-        comments=Nothing(),
-        see_also=[],
+        metadata=Nothing(),
         is_pure=True,
         is_total=True,
-        available_since=Nothing(),
-        deprecated_since=Nothing(),
         default_implementation=Nothing(),
     )
 
