@@ -31,6 +31,11 @@ public class Maybe extends PrimitiveFunction {
         return new Name("hydra.lib.maybes.maybe");
     }
 
+    @Override
+    protected List<Integer> lazyParams() {
+        return List.of(0);
+    }
+
     /**
      * Returns the type scheme of this primitive function.
      * @return the type scheme for pattern matching on optional values with a default
