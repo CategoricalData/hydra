@@ -68,8 +68,14 @@ they were committed before the ignore rule was added and need `git rm --cached`:
 ## Finding stale generated files
 
 When a Hydra module is renamed or deleted, or when types within a module are renamed or deleted,
-the old generated files remain.
-The sync scripts generate new files but **never delete old ones**.
+old generated files can remain.
+The build prunes stale outputs via `bootstrap-from-json --prune-stale` and an orphan-aware
+`digest-check fresh` (#357, #393): the recorded output digest is the keep-set, and files in an
+emitted package's output dir that are absent from the keep-set are deleted in place.
+This pruning is **per-package and gated on that package re-emitting** — so orphans can still
+survive when the owning package is a cache hit, or when a module is removed from the emission set
+entirely (its output dir is no longer reconciled). Treat the audit below as a backstop for those
+gaps, not a routine necessity.
 
 This is especially problematic in Java, where each type becomes its own `.java` file —
 renaming a single type leaves an orphan class file on the classpath.
@@ -497,7 +503,7 @@ remains:
 - `dist/haskell/hydra-kernel/src/test/haskell/Hydra/Test/TestEnv.hs` —
   the Haskell-level runtime counterpart of the DSL stub
   `Hydra.Sources.Test.TestEnv`. The kernel filters `hydra.test.testEnv`
-  from emitted output (via `testSkipEmitNamespaces` in
+  from emitted output (via `testSkipEmitModuleNames` in
   `Hydra.Sources.Test.All`), so this file is left alone by regeneration.
   Tolerated for now because the Haskell test build's source set spans
   `dist/haskell/.../src/test/haskell/`, and moving the file to `heads/`

@@ -388,5 +388,5 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "metadata": {"comments": [], "description": "Primitives in the hydra.lib.sets namespace.", "seeAlso": []},
+  "metadata": {"comments": [], "description": "Primitives in the hydra.lib.sets module.", "seeAlso": []},
   "name": "hydra.lib.sets"}

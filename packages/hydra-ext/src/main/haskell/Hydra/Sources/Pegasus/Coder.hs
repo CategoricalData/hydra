@@ -363,7 +363,7 @@ importAliasesForModule :: TypedTermDefinition (InferenceContext -> Graph -> Modu
 importAliasesForModule = def "importAliasesForModule" $
   doc "Compute import aliases for a module's dependencies" $
   "cx" ~> "g" ~> "mod" ~>
-    "nss" <<~ (Analysis.moduleDependencyNamespaces @@ var "cx" @@ var "g" @@ false @@ true @@ true @@ false @@ var "mod") $
+    "nss" <<~ (Analysis.moduleDependencyModuleNames @@ var "cx" @@ var "g" @@ false @@ true @@ true @@ false @@ var "mod") $
     right (Maps.fromList (Lists.map
       (lambda "ns_" $ pair (var "ns_") (slashesToDots @@ (unwrap _ModuleName @@ var "ns_")))
       (Sets.toList (var "nss"))))
@@ -435,7 +435,7 @@ toPair = def "toPair" $
     "imports" <~ Pairs.second (var "schemaPair") $
     "ns_" <~ (pdlNameForModule @@ var "mod") $
     "local" <~ (unwrap PDL._Name @@ (project PDL._QualifiedName PDL._QualifiedName_name @@ (project PDL._NamedSchema PDL._NamedSchema_qualifiedName @@ var "schema"))) $
-    "path" <~ (Names.namespaceToFilePath @@ Util.caseConventionCamel @@ wrap _FileExtension (string "pdl") @@ (wrap _ModuleName (Strings.cat2 (unwrap _ModuleName @@ Packaging.moduleName (var "mod")) (Strings.cat2 (string "/") (var "local"))))) $
+    "path" <~ (Names.moduleNameToFilePath @@ Util.caseConventionCamel @@ wrap _FileExtension (string "pdl") @@ (wrap _ModuleName (Strings.cat2 (unwrap _ModuleName @@ Packaging.moduleName (var "mod")) (Strings.cat2 (string "/") (var "local"))))) $
     pair (var "path") (record PDL._SchemaFile [
       PDL._SchemaFile_namespace>>: var "ns_",
       PDL._SchemaFile_package>>: nothing,

@@ -54,15 +54,15 @@ comparison cx raw =
           (Core.unName fname),
           " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
       _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)
--- | Decoder for hydra.util.Namespaces
-namespaces :: (Graph.Graph -> Core.Term -> Either Errors.DecodingError t0) -> Graph.Graph -> Core.Term -> Either Errors.DecodingError (Util.Namespaces t0)
-namespaces n cx raw =
+-- | Decoder for hydra.util.ModuleNames
+moduleNames :: (Graph.Graph -> Core.Term -> Either Errors.DecodingError t0) -> Graph.Graph -> Core.Term -> Either Errors.DecodingError (Util.ModuleNames t0)
+moduleNames n cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
       Core.TermRecord v0 ->
         let fieldMap = ExtractCore.toFieldMap v0
-        in (Eithers.bind (ExtractCore.requireField "focus" (ExtractCore.decodePair Packaging.moduleName n) fieldMap cx) (\field_focus -> Eithers.bind (ExtractCore.requireField "mapping" (ExtractCore.decodeMap Packaging.moduleName n) fieldMap cx) (\field_mapping -> Right (Util.Namespaces {
-          Util.namespacesFocus = field_focus,
-          Util.namespacesMapping = field_mapping}))))
+        in (Eithers.bind (ExtractCore.requireField "focus" (ExtractCore.decodePair Packaging.moduleName n) fieldMap cx) (\field_focus -> Eithers.bind (ExtractCore.requireField "mapping" (ExtractCore.decodeMap Packaging.moduleName n) fieldMap cx) (\field_mapping -> Right (Util.ModuleNames {
+          Util.moduleNamesFocus = field_focus,
+          Util.moduleNamesMapping = field_mapping}))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.util.Precision
 precision :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Util.Precision

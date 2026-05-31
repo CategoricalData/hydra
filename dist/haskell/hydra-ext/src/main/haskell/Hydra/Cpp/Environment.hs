@@ -11,7 +11,7 @@ import qualified Data.Map as M
 data CppEnvironment =
   CppEnvironment {
     -- | Namespace mapping for code generation
-    cppEnvironmentNamespaces :: (Util.Namespaces String),
+    cppEnvironmentNamespaces :: (Util.ModuleNames String),
     -- | Type variables in scope, with their C++ names
     cppEnvironmentBoundTypeVariables :: ([Core.Name], (M.Map Core.Name String))}
   deriving (Eq, Ord, Read, Show)

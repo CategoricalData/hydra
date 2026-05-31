@@ -166,7 +166,7 @@
         "name": "hydra.lib.eithers.fromLeft",
         "signature": {
           "parameters": [
-            {"isLazy": false, "name": "arg0", "type": {"variable": "x"}},
+            {"isLazy": true, "name": "arg0", "type": {"variable": "x"}},
             {"isLazy": false, "name": "arg1", "type": {"either": {"left": {"variable": "x"}, "right": {"variable": "y"}}}}],
           "result": {"type": {"variable": "x"}},
           "typeParameters": [{"constraints": [], "name": "x"}, {"constraints": [], "name": "y"}]}}},
@@ -204,7 +204,7 @@
         "name": "hydra.lib.eithers.fromRight",
         "signature": {
           "parameters": [
-            {"isLazy": false, "name": "arg0", "type": {"variable": "y"}},
+            {"isLazy": true, "name": "arg0", "type": {"variable": "y"}},
             {"isLazy": false, "name": "arg1", "type": {"either": {"left": {"variable": "x"}, "right": {"variable": "y"}}}}],
           "result": {"type": {"variable": "y"}},
           "typeParameters": [{"constraints": [], "name": "x"}, {"constraints": [], "name": "y"}]}}},
@@ -443,5 +443,5 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "metadata": {"comments": [], "description": "Primitives in the hydra.lib.eithers namespace.", "seeAlso": []},
+  "metadata": {"comments": [], "description": "Primitives in the hydra.lib.eithers module.", "seeAlso": []},
   "name": "hydra.lib.eithers"}

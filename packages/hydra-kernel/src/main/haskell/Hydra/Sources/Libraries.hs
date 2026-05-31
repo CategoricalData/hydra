@@ -388,8 +388,8 @@ hydraLibEithers = standardLibrary _hydra_lib_eithers [
     prim2       _eithers_bind             Eithers.bind             [_x, _y, _z]     (Prims.either_ x_ y_) (fun y_ (Prims.either_ x_ z_)) (Prims.either_ x_ z_),
     prim3       _eithers_either           Eithers.either           [_x, _y, _z]     (fun x_ z_) (fun y_ z_) (Prims.either_ x_ y_) z_,
     prim3       _eithers_foldl            Eithers.foldl            [_x, _y, _z]     (fun x_ (fun y_ (Prims.either_ z_ x_))) x_ (list y_) (Prims.either_ z_ x_),
-    prim2       _eithers_fromLeft         Eithers.fromLeft         [_x, _y]         x_ (Prims.either_ x_ y_) x_,
-    prim2       _eithers_fromRight        Eithers.fromRight        [_x, _y]         y_ (Prims.either_ x_ y_) y_,
+    Prims.lazyArgs [0] $ prim2 _eithers_fromLeft  Eithers.fromLeft  [_x, _y]         x_ (Prims.either_ x_ y_) x_,
+    Prims.lazyArgs [0] $ prim2 _eithers_fromRight Eithers.fromRight [_x, _y]         y_ (Prims.either_ x_ y_) y_,
     prim1       _eithers_isLeft           Eithers.isLeft           [_x, _y]         (Prims.either_ x_ y_) boolean,
     prim1       _eithers_isRight          Eithers.isRight          [_x, _y]         (Prims.either_ x_ y_) boolean,
     prim1       _eithers_lefts            Eithers.lefts            [_x, _y]         (list $ Prims.either_ x_ y_) (list x_),
@@ -513,7 +513,7 @@ hydraLibLiterals = standardLibrary _hydra_lib_literals [
 hydraLibLogic :: Library
 hydraLibLogic = standardLibrary _hydra_lib_logic [
     prim2 _logic_and    Logic.and    []   boolean boolean boolean,
-    prim3 _logic_ifElse Logic.ifElse [_x] boolean x_ x_ x_,
+    Prims.lazyArgs [1, 2] $ prim3 _logic_ifElse Logic.ifElse [_x] boolean x_ x_ x_,
     prim1 _logic_not    Logic.not    []   boolean boolean,
     prim2 _logic_or     Logic.or     []   boolean boolean boolean]
 
@@ -526,7 +526,7 @@ hydraLibMaps = standardLibrary _hydra_lib_maps [
     prim0     _maps_empty           Maps.empty             [_kOrd, _v]                  mapKv,
     prim2     _maps_filter          Maps.filter            [_v, _kOrd]                  (fun v_ boolean) mapKv mapKv,
     prim2     _maps_filterWithKey   Maps.filterWithKey     [_kOrd, _v]                  (fun k_ (fun v_ boolean)) mapKv mapKv,
-    prim3     _maps_findWithDefault Maps.findWithDefault   [_v, _kOrd]                  v_ k_ mapKv v_,
+    Prims.lazyArgs [0] $ prim3 _maps_findWithDefault Maps.findWithDefault   [_v, _kOrd]                  v_ k_ mapKv v_,
     prim1     _maps_fromList        Maps.fromList          [_kOrd, _v]                  (list $ pair k_ v_) mapKv,
     prim3     _maps_insert          Maps.insert            [_kOrd, _v]                  k_ v_ mapKv mapKv,
     prim1     _maps_keys            Maps.keys              [_kOrd, _v]                  mapKv (list k_),
@@ -598,15 +598,15 @@ hydraLibMaybes :: Library
 hydraLibMaybes = standardLibrary _hydra_lib_maybes [
     prim2     _maybes_apply     Maybes.apply        [_x, _y]     (optional $ fun x_ y_) (optional x_) (optional y_),
     prim2     _maybes_bind      Maybes.bind         [_x, _y]     (optional x_) (fun x_ (optional y_)) (optional y_),
-    prim3     _maybes_cases     Maybes.cases        [_x, _y]     (optional x_) y_ (fun x_ y_) y_,
+    Prims.lazyArgs [1] $ prim3 _maybes_cases     Maybes.cases        [_x, _y]     (optional x_) y_ (fun x_ y_) y_,
     prim1     _maybes_cat       Maybes.cat          [_x]         (list $ optional x_) (list x_),
     prim3     _maybes_compose   Maybes.compose      [_x, _y, _z] (fun x_ $ optional y_) (fun y_ $ optional z_) x_ (optional z_),
-    prim2     _maybes_fromMaybe Maybes.fromMaybe    [_x]         x_ (optional x_) x_,
+    Prims.lazyArgs [0] $ prim2 _maybes_fromMaybe Maybes.fromMaybe    [_x]         x_ (optional x_) x_,
     prim1     _maybes_isJust    Maybes.isJust       [_x]         (optional x_) boolean,
     prim1     _maybes_isNothing Maybes.isNothing    [_x]         (optional x_) boolean,
     prim2     _maybes_map       Maybes.map          [_x, _y]     (fun x_ y_) (optional x_) (optional y_),
     prim2     _maybes_mapMaybe  Maybes.mapMaybe     [_x, _y]     (fun x_ $ optional y_) (list x_) (list y_),
-    prim3     _maybes_maybe     Maybes.maybe        [_y, _x]     y_ (fun x_ y_) (optional x_) y_,
+    Prims.lazyArgs [0] $ prim3 _maybes_maybe     Maybes.maybe        [_y, _x]     y_ (fun x_ y_) (optional x_) y_,
     prim1     _maybes_pure      Maybes.pure         [_x]         x_ (optional x_),
     prim1     _maybes_toList    Maybes.toList       [_x]         (optional x_) (list x_)]
 

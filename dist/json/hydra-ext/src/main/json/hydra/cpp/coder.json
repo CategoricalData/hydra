@@ -4789,7 +4789,7 @@
                                       "application": {
                                         "argument": {
                                           "application": {
-                                            "argument": {"application": {"argument": {"variable": "n"}, "function": {"variable": "hydra.names.namespaceOf"}}},
+                                            "argument": {"application": {"argument": {"variable": "n"}, "function": {"variable": "hydra.names.moduleNameOf"}}},
                                             "function": {
                                               "application": {
                                                 "argument": {"unwrap": "hydra.packaging.ModuleName"},
