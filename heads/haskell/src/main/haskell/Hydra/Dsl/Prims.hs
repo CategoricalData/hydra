@@ -87,6 +87,23 @@ defaultPrimitiveDefinition name typ = PrimitiveDefinition {
   primitiveDefinitionDeprecatedSince = Nothing,
   primitiveDefinitionDefaultImplementation = Nothing}
 
+-- | Mark the value parameters at the given (0-based) positions of a primitive's
+-- signature as lazy. Used at the prim*-based registration sites in
+-- Hydra.Sources.Libraries to record which arguments coders must thunk in hosts
+-- that distinguish strict from lazy evaluation (issue #391). The kernel DSL
+-- sources (Hydra.Sources.Kernel.Lib.*) carry the same flags via lazySig; this
+-- keeps the Haskell-host bootstrapGraph in agreement with the JSON.
+lazyArgs :: [Int] -> Primitive -> Primitive
+lazyArgs idxs p = p { primitiveDefinition = markLazyDef (primitiveDefinition p) }
+  where
+    markLazyDef d = d {
+      primitiveDefinitionSignature = markLazySig (primitiveDefinitionSignature d) }
+    markLazySig s = s {
+      Typing.termSignatureParameters =
+        zipWith markParam [0..] (Typing.termSignatureParameters s) }
+    markParam i param =
+      if i `elem` idxs then param { Typing.parameterIsLazy = True } else param
+
 either_ :: TermCoder x -> TermCoder y -> TermCoder (Prelude.Either x y)
 either_ xCoder yCoder = TermCoder (Types.either_ (termCoderType xCoder) (termCoderType yCoder)) encode decode
   where

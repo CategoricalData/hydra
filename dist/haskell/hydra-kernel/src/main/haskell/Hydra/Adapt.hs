@@ -216,12 +216,11 @@ adaptPrimitive :: Coders.LanguageConstraints -> M.Map Core.LiteralType Core.Lite
 adaptPrimitive constraints litmap prim0 =
 
       let def0 = Graph.primitiveDefinition prim0
-          ts0 = Scoping.termSignatureToTypeScheme (Packaging.primitiveDefinitionSignature def0)
-      in (Eithers.bind (adaptTypeScheme constraints litmap ts0) (\ts1 ->
+      in (Eithers.bind (adaptTermSignature constraints litmap (Packaging.primitiveDefinitionSignature def0)) (\sig1 ->
         let def1 =
                 Packaging.PrimitiveDefinition {
                   Packaging.primitiveDefinitionName = (Packaging.primitiveDefinitionName def0),
-                  Packaging.primitiveDefinitionSignature = (Scoping.typeSchemeToTermSignature ts1),
+                  Packaging.primitiveDefinitionSignature = sig1,
                   Packaging.primitiveDefinitionDescription = (Packaging.primitiveDefinitionDescription def0),
                   Packaging.primitiveDefinitionComments = (Packaging.primitiveDefinitionComments def0),
                   Packaging.primitiveDefinitionSeeAlso = (Packaging.primitiveDefinitionSeeAlso def0),
@@ -269,6 +268,21 @@ adaptTermForLanguage lang cx g term =
       let constraints = Coders.languageConstraints lang
           litmap = adaptLiteralTypesMap constraints
       in (adaptTerm constraints litmap cx g term)
+-- | Adapt the types within a term signature to the given language constraints, in place. Parameter names, descriptions, and per-parameter isLazy flags, as well as type parameters, are preserved; only the parameter and result types are adapted. Unlike routing through TypeScheme (the type-only view), this retains the full TermSignature metadata, including primitive laziness flags.
+adaptTermSignature :: Coders.LanguageConstraints -> M.Map Core.LiteralType Core.LiteralType -> Typing.TermSignature -> Either Errors.Error Typing.TermSignature
+adaptTermSignature constraints litmap sig0 =
+
+      let result0 = Typing.termSignatureResult sig0
+      in (Eithers.bind (adaptType constraints litmap (Typing.resultType result0)) (\resultType1 -> Eithers.bind (Eithers.mapList (\p -> Eithers.map (\ty1 -> Typing.Parameter {
+        Typing.parameterName = (Typing.parameterName p),
+        Typing.parameterDescription = (Typing.parameterDescription p),
+        Typing.parameterType = ty1,
+        Typing.parameterIsLazy = (Typing.parameterIsLazy p)}) (adaptType constraints litmap (Typing.parameterType p))) (Typing.termSignatureParameters sig0)) (\params1 -> Right (Typing.TermSignature {
+        Typing.termSignatureTypeParameters = (Typing.termSignatureTypeParameters sig0),
+        Typing.termSignatureParameters = params1,
+        Typing.termSignatureResult = Typing.Result {
+          Typing.resultDescription = (Typing.resultDescription result0),
+          Typing.resultType = resultType1}}))))
 -- | Adapt a type using the given language constraints
 adaptType :: Coders.LanguageConstraints -> M.Map Core.LiteralType Core.LiteralType -> Core.Type -> Either Errors.Error Core.Type
 adaptType constraints litmap type0 =

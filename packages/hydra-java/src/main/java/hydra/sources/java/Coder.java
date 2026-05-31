@@ -159,6 +159,8 @@ import hydra.sources.java.Names;  // AUTO-IMPORT (hydra-java DSL)
 import hydra.sources.java.Serde;  // AUTO-IMPORT (hydra-java DSL)
 import hydra.sources.java.Utils;  // AUTO-IMPORT (hydra-java DSL)
 import hydra.typing.FunctionStructure;  // AUTO-IMPORT (hydra-java DSL)
+import hydra.typing.Parameter;  // AUTO-IMPORT (hydra-java DSL)
+import hydra.typing.TermSignature;  // AUTO-IMPORT (hydra-java DSL)
 import hydra.util.CaseConvention;  // AUTO-IMPORT (hydra-java DSL)
 
 /**
@@ -10314,7 +10316,7 @@ public class Coder {
                         lambda("jargs0",
                             let(
                                 field("wrapResult",
-                                    apply(ref(Coder.wrapLazyArguments), var("name"), var("jargs0"))),
+                                    apply(ref(Coder.wrapLazyArguments), var("g"), var("name"), var("jargs0"))),
                                 field("jargs",
                                     Pairs.first(var("wrapResult"))),
                                 field("mMethodOverride",
@@ -13979,104 +13981,66 @@ public class Coder {
                                 LambdaBody.EXPRESSION,
                                 var("expr")))))));
 
+    // Look up a primitive by name and return its per-parameter laziness flags
+    // (the isLazy flag of each signature parameter), in order. Empty if the name
+    // is not a registered primitive. The single source of truth for which
+    // arguments must be thunked, replacing the former hard-coded name table
+    // (issue #391).
+    public static final Def lazyFlagsForPrimitive = def(
+        "lazyFlagsForPrimitive",
+        () -> lambda(
+                "g",
+                "name",
+                Maybes.cases(
+                    Maps.lookup(var("name"), proj(Graph.TYPE_, Graph.PRIMITIVES, "g")),
+                    list(),
+                    lambda("prim",
+                        Lists.map(
+                            lambda("p", proj(Parameter.TYPE_, Parameter.IS_LAZY, "p")),
+                            proj(TermSignature.TYPE_, TermSignature.PARAMETERS,
+                                proj(PrimitiveDefinition.TYPE_, PrimitiveDefinition.SIGNATURE,
+                                    proj(Primitive.TYPE_, Primitive.DEFINITION, "prim"))))))));
+
+    // For primitives requiring lazy evaluation, wrap the lazy-flagged arguments
+    // in Supplier lambdas. Java eagerly evaluates all method arguments, so e.g.
+    // ifElse branches must be wrapped in () -> expr and called via IfElse.lazy();
+    // maybe's default must be wrapped to avoid constructing expensive values on
+    // the success path. Which positions are lazy comes from the primitive's
+    // isLazy metadata (issue #391), not a hard-coded name table. Only fires when
+    // the primitive is fully applied (argc == parameter count) and has at least
+    // one lazy parameter. The returned Maybe String is the Java method-name
+    // override: ifElse dispatches to `lazy`, the others to `applyLazy`.
     public static final Def wrapLazyArguments = def(
         "wrapLazyArguments",
         () -> lambda(
+                "g",
                 "name",
                 "args",
                 let(
-                    field("dummyExpr",
-                        apply(
-                            ref(Utils.javaIntExpression),
-                            bigint(java.math.BigInteger.valueOf(0L)))),
-                    field("argAt",
-                        lambda("i",
-                            Maybes.fromMaybe(var("dummyExpr"), Lists.maybeAt(var("i"), var("args"))))),
+                    field("lazyFlags",
+                        apply(ref(Coder.lazyFlagsForPrimitive), var("g"), var("name"))),
+                    field("anyLazy",
+                        Lists.foldl(
+                            lambda("b", "f", Logic.or_(var("b"), var("f"))),
+                            bool(false),
+                            var("lazyFlags"))),
                     Logic.ifElse(
                         Logic.and_(
-                            Equality.equal(
-                                var("name"),
-                                wrap(Name.TYPE_, string("hydra.lib.logic.ifElse"))),
-                            Equality.equal(Lists.length(var("args")), int32(3))),
+                            var("anyLazy"),
+                            Equality.equal(Lists.length(var("args")), Lists.length(var("lazyFlags")))),
                         pair(
-                            list(
-                                apply(var("argAt"), int32(0)),
-                                apply(
-                                    ref(Coder.wrapInSupplierLambda),
-                                    apply(var("argAt"), int32(1))),
-                                apply(
-                                    ref(Coder.wrapInSupplierLambda),
-                                    apply(var("argAt"), int32(2)))),
-                            just(string("lazy"))),
-                        Logic.ifElse(
-                            Logic.and_(
-                                Equality.equal(
-                                    var("name"),
-                                    wrap(Name.TYPE_, string("hydra.lib.maybes.maybe"))),
-                                Equality.equal(Lists.length(var("args")), int32(3))),
-                            pair(
-                                list(
-                                    apply(
-                                        ref(Coder.wrapInSupplierLambda),
-                                        apply(var("argAt"), int32(0))),
-                                    apply(var("argAt"), int32(1)),
-                                    apply(var("argAt"), int32(2))),
-                                just(string("applyLazy"))),
-                            Logic.ifElse(
-                                Logic.and_(
-                                    Equality.equal(
-                                        var("name"),
-                                        wrap(Name.TYPE_,
-                                            string("hydra.lib.maybes.cases"))),
-                                    Equality.equal(Lists.length(var("args")), int32(3))),
-                                pair(
-                                    list(
-                                        apply(var("argAt"), int32(0)),
-                                        apply(
-                                            ref(Coder.wrapInSupplierLambda),
-                                            apply(var("argAt"), int32(1))),
-                                        apply(var("argAt"), int32(2))),
-                                    just(string("applyLazy"))),
-                                Logic.ifElse(
-                                    Logic.and_(
-                                        Equality.equal(
-                                            var("name"),
-                                            wrap(Name.TYPE_,
-                                                string("hydra.lib.maps.findWithDefault"))),
-                                        Equality.equal(Lists.length(var("args")), int32(3))),
-                                    pair(
-                                        list(
-                                            apply(
-                                                ref(Coder.wrapInSupplierLambda),
-                                                apply(var("argAt"), int32(0))),
-                                            apply(var("argAt"), int32(1)),
-                                            apply(var("argAt"), int32(2))),
-                                        just(string("applyLazy"))),
+                            Lists.map(
+                                lambda("pair",
                                     Logic.ifElse(
-                                        Logic.and_(
-                                            Logic.or_(
-                                                Equality.equal(
-                                                    var("name"),
-                                                    wrap(Name.TYPE_,
-                                                        string("hydra.lib.maybes.fromMaybe"))),
-                                                Logic.or_(
-                                                    Equality.equal(
-                                                        var("name"),
-                                                        wrap(Name.TYPE_,
-                                                            string("hydra.lib.eithers.fromLeft"))),
-                                                    Equality.equal(
-                                                        var("name"),
-                                                        wrap(Name.TYPE_,
-                                                            string("hydra.lib.eithers.fromRight"))))),
-                                            Equality.equal(Lists.length(var("args")), int32(2))),
-                                        pair(
-                                            list(
-                                                apply(
-                                                    ref(Coder.wrapInSupplierLambda),
-                                                    apply(var("argAt"), int32(0))),
-                                                apply(var("argAt"), int32(1))),
-                                            just(string("applyLazy"))),
-                                        pair(var("args"), nothing())))))))));
+                                        Pairs.second(var("pair")),
+                                        apply(ref(Coder.wrapInSupplierLambda), Pairs.first(var("pair"))),
+                                        Pairs.first(var("pair")))),
+                                Lists.zip(var("args"), var("lazyFlags"))),
+                            just(Logic.ifElse(
+                                Equality.equal(var("name"), wrap(Name.TYPE_, string("hydra.lib.logic.ifElse"))),
+                                string("lazy"),
+                                string("applyLazy")))),
+                        pair(var("args"), nothing())))));
 
 
 
@@ -14236,6 +14200,7 @@ public class Coder {
             javaTypeArgumentsForType,
             javaTypeParametersForType,
             javaTypeParametersForType_bvars,
+            lazyFlagsForPrimitive,
             moduleToJava,
             nameMapToTypeMap,
             namespaceParent,

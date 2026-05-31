@@ -23,6 +23,7 @@ import qualified Hydra.Dsl.Meta.Core                       as Core
 import qualified Hydra.Dsl.Coders                     as Coders
 import qualified Hydra.Dsl.Errors                      as Error
 import qualified Hydra.Dsl.Packaging                     as Packaging
+import qualified Hydra.Dsl.Typing                      as Typing
 import qualified Hydra.Dsl.Util                       as Util
 import qualified Hydra.Sources.Kernel.Terms.Formatting     as Formatting
 import qualified Hydra.Sources.Kernel.Terms.Names          as Names
@@ -228,6 +229,7 @@ module_ = Module {
       toDefinition javaTypeArgumentsForType,
       toDefinition javaTypeParametersForType,
       toDefinition javaTypeParametersForType_bvars,
+      toDefinition lazyFlagsForPrimitive,
       toDefinition moduleToJava,
       toDefinition nameMapToTypeMap,
       toDefinition namespaceParent,
@@ -3980,7 +3982,7 @@ functionCall = def "functionCall" $
       @@ (project JavaHelpers._Aliases JavaHelpers._Aliases_lambdaVars @@ var "aliases")) $
     -- Encode arguments and generate method invocation
     ("jargs0" <<~ (Eithers.mapList (lambda "arg" $ encodeTerm @@ var "env" @@ var "arg" @@ var "cx" @@ var "g") (var "args")) $
-        "wrapResult" <~ (wrapLazyArguments @@ var "name" @@ var "jargs0") $
+        "wrapResult" <~ (wrapLazyArguments @@ var "g" @@ var "name" @@ var "jargs0") $
         "jargs" <~ Pairs.first (var "wrapResult") $
         "mMethodOverride" <~ Pairs.second (var "wrapResult") $
         Logic.ifElse (Logic.or (isLocalVariable @@ var "name") (var "isLambdaBound"))
@@ -5401,66 +5403,45 @@ wrapInSupplierLambda = def "wrapInSupplierLambda" $
           (list ([] :: [TypedTerm Java.FormalParameter])))
         (inject Java._LambdaBody Java._LambdaBody_expression (var "expr")))
 
--- | For primitives requiring lazy evaluation, wrap branch arguments in Supplier lambdas.
--- Java eagerly evaluates all method arguments, so ifElse branches must be wrapped
--- in () -> expr and called via IfElse.lazy(). Similarly, maybe's nothing case must be
--- wrapped to avoid constructing expensive error messages on the success path.
-wrapLazyArguments :: TypedTermDefinition (Name -> [Java.Expression] -> ([Java.Expression], Maybe String))
+-- | Look up a primitive by name and return its per-parameter laziness flags
+-- (the `isLazy` flag of each signature parameter), in order. Empty if the name
+-- is not a registered primitive. The single source of truth for which arguments
+-- must be thunked, replacing per-coder hard-coded name tables (issue #391).
+lazyFlagsForPrimitive :: TypedTermDefinition (Graph -> Name -> [Bool])
+lazyFlagsForPrimitive = def "lazyFlagsForPrimitive" $
+  lambda "g" $ lambda "name" $
+    Maybes.cases (Maps.lookup (var "name") (Graph.graphPrimitives (var "g")))
+      (list ([] :: [TypedTerm Bool]))
+      (lambda "prim" $
+        Lists.map (lambda "p" $ Typing.parameterIsLazy (var "p"))
+          (Typing.termSignatureParameters
+            (Packaging.primitiveDefinitionSignature
+              (Graph.primitiveDefinition (var "prim")))))
+
+-- | For primitives requiring lazy evaluation, wrap the lazy-flagged arguments in
+-- Supplier lambdas. Java eagerly evaluates all method arguments, so e.g. ifElse
+-- branches must be wrapped in () -> expr and called via IfElse.lazy(); maybe's
+-- default must be wrapped to avoid constructing expensive values on the success
+-- path. Which positions are lazy comes from the primitive's `isLazy` metadata
+-- (issue #391), not a hard-coded name table. Only fires when the primitive is
+-- fully applied (argc == parameter count) and has at least one lazy parameter.
+-- The returned Maybe String is the Java method-name override: ifElse dispatches
+-- to `lazy`, the others to `applyLazy`.
+wrapLazyArguments :: TypedTermDefinition (Graph -> Name -> [Java.Expression] -> ([Java.Expression], Maybe String))
 wrapLazyArguments = def "wrapLazyArguments" $
-  lambda "name" $ lambda "args" $ lets [
-    "dummyExpr">: JavaUtilsSource.javaIntExpression @@ bigintAsInt (bigint 0),
-    "argAt">: "i" ~> Maybes.fromMaybe (var "dummyExpr") (Lists.maybeAt (var "i") (var "args"))] $
+  lambda "g" $ lambda "name" $ lambda "args" $ lets [
+    "lazyFlags">: lazyFlagsForPrimitive @@ var "g" @@ var "name",
+    "anyLazy">: Lists.foldl (lambda "b" $ lambda "f" $ Logic.or (var "b") (var "f")) false (var "lazyFlags")] $
     Logic.ifElse
-      (Logic.and
-        (Equality.equal (var "name") (Core.nameLift _logic_ifElse))
-        (Equality.equal (Lists.length (var "args")) (int32 3)))
+      (Logic.and (var "anyLazy")
+        (Equality.equal (Lists.length (var "args")) (Lists.length (var "lazyFlags"))))
       (pair
-        (list [
-          var "argAt" @@ int32 0,
-          wrapInSupplierLambda @@ (var "argAt" @@ int32 1),
-          wrapInSupplierLambda @@ (var "argAt" @@ int32 2)])
-        (just (string "lazy")))
-      (Logic.ifElse
-        (Logic.and
-          (Equality.equal (var "name") (Core.nameLift _maybes_maybe))
-          (Equality.equal (Lists.length (var "args")) (int32 3)))
-        (pair
-          (list [
-            wrapInSupplierLambda @@ (var "argAt" @@ int32 0),
-            var "argAt" @@ int32 1,
-            var "argAt" @@ int32 2])
-          (just (string "applyLazy")))
-      (Logic.ifElse
-        (Logic.and
-          (Equality.equal (var "name") (Core.nameLift _maybes_cases))
-          (Equality.equal (Lists.length (var "args")) (int32 3)))
-        (pair
-          (list [
-            var "argAt" @@ int32 0,
-            wrapInSupplierLambda @@ (var "argAt" @@ int32 1),
-            var "argAt" @@ int32 2])
-          (just (string "applyLazy")))
-      (Logic.ifElse
-        (Logic.and
-          (Equality.equal (var "name") (Core.nameLift _maps_findWithDefault))
-          (Equality.equal (Lists.length (var "args")) (int32 3)))
-        (pair
-          (list [
-            wrapInSupplierLambda @@ (var "argAt" @@ int32 0),
-            var "argAt" @@ int32 1,
-            var "argAt" @@ int32 2])
-          (just (string "applyLazy")))
-      (Logic.ifElse
-        (Logic.and
-          (Logic.or
-            (Equality.equal (var "name") (Core.nameLift _maybes_fromMaybe))
-            (Logic.or
-              (Equality.equal (var "name") (Core.nameLift _eithers_fromLeft))
-              (Equality.equal (var "name") (Core.nameLift _eithers_fromRight))))
-          (Equality.equal (Lists.length (var "args")) (int32 2)))
-        (pair
-          (list [
-            wrapInSupplierLambda @@ (var "argAt" @@ int32 0),
-            var "argAt" @@ int32 1])
-          (just (string "applyLazy")))
-        (pair (var "args") (nothing :: TypedTerm (Maybe String)))))))
+        (Lists.map
+          (lambda "pair" $ Logic.ifElse (Pairs.second (var "pair"))
+            (wrapInSupplierLambda @@ Pairs.first (var "pair"))
+            (Pairs.first (var "pair")))
+          (Lists.zip (var "args") (var "lazyFlags")))
+        (just (Logic.ifElse (Equality.equal (var "name") (Core.nameLift _logic_ifElse))
+          (string "lazy")
+          (string "applyLazy"))))
+      (pair (var "args") (nothing :: TypedTerm (Maybe String)))

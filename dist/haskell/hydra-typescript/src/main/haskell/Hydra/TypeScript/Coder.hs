@@ -236,24 +236,9 @@ encodeTerm cx g currentNs term =
             argc = Lists.length args
             lazyMaybe =
                     Maybes.cases mName Nothing (\n ->
-                      let qn = Core.unName n
-                      in (Logic.ifElse (Logic.and (Equality.equal qn "hydra.lib.logic.ifElse") (Equality.equal argc 3)) (Just (encodeLazyCall cx g currentNs headTerm args [
-                        False,
-                        True,
-                        True])) (Logic.ifElse (Logic.and (Equality.equal qn "hydra.lib.maybes.cases") (Equality.equal argc 3)) (Just (encodeLazyCall cx g currentNs headTerm args [
-                        False,
-                        True,
-                        False])) (Logic.ifElse (Logic.and (Equality.equal qn "hydra.lib.maybes.maybe") (Equality.equal argc 3)) (Just (encodeLazyCall cx g currentNs headTerm args [
-                        True,
-                        False,
-                        False])) (Logic.ifElse (Logic.and (Equality.equal qn "hydra.lib.maybes.fromMaybe") (Equality.equal argc 2)) (Just (encodeLazyCall cx g currentNs headTerm args [
-                        True,
-                        False])) (Logic.ifElse (Logic.and (Logic.or (Equality.equal qn "hydra.lib.eithers.fromLeft") (Equality.equal qn "hydra.lib.eithers.fromRight")) (Equality.equal argc 2)) (Just (encodeLazyCall cx g currentNs headTerm args [
-                        True,
-                        False])) (Logic.ifElse (Logic.and (Equality.equal qn "hydra.lib.maps.findWithDefault") (Equality.equal argc 3)) (Just (encodeLazyCall cx g currentNs headTerm args [
-                        True,
-                        False,
-                        False])) Nothing)))))))
+                      let lazyFlags = lazyFlagsForPrimitive g n
+                          anyLazy = Lists.foldl (\b -> \f -> Logic.or b f) False lazyFlags
+                      in (Logic.ifElse (Logic.and anyLazy (Equality.equal argc (Lists.length lazyFlags))) (Just (encodeLazyCall cx g currentNs headTerm args lazyFlags)) Nothing))
         in (Maybes.cases lazyMaybe (
           let dHead = Strip.deannotateAndDetypeTerm headTerm
               encArgs = Lists.map (encodeTerm cx g currentNs) args
@@ -632,6 +617,9 @@ importsToText kind currentNs names =
                       targetPath,
                       ".js\";\n"]))) (Maps.toList grouped)
       in (Strings.cat lines)
+lazyFlagsForPrimitive :: Graph.Graph -> Core.Name -> [Bool]
+lazyFlagsForPrimitive g name =
+    Maybes.cases (Maps.lookup name (Graph.graphPrimitives g)) [] (\prim -> Lists.map (\p -> Typing.parameterIsLazy p) (Typing.termSignatureParameters (Packaging.primitiveDefinitionSignature (Graph.primitiveDefinition prim))))
 mkDocComment :: Maybe String -> Maybe Syntax.DocumentationComment
 mkDocComment mdesc =
     Maybes.cases mdesc Nothing (\d -> Logic.ifElse (Equality.equal d "") Nothing (Just (Syntax.DocumentationComment {

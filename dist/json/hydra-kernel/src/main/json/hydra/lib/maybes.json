@@ -86,7 +86,7 @@
         "signature": {
           "parameters": [
             {"isLazy": false, "name": "arg0", "type": {"maybe": {"variable": "x"}}},
-            {"isLazy": false, "name": "arg1", "type": {"variable": "y"}},
+            {"isLazy": true, "name": "arg1", "type": {"variable": "y"}},
             {"isLazy": false, "name": "arg2", "type": {"function": {"codomain": {"variable": "y"}, "domain": {"variable": "x"}}}}],
           "result": {"type": {"variable": "y"}},
           "typeParameters": [{"constraints": [], "name": "x"}, {"constraints": [], "name": "y"}]}}},
@@ -209,7 +209,7 @@
         "seeAlso": [],
         "signature": {
           "parameters": [
-            {"isLazy": false, "name": "arg0", "type": {"variable": "x"}},
+            {"isLazy": true, "name": "arg0", "type": {"variable": "x"}},
             {"isLazy": false, "name": "arg1", "type": {"maybe": {"variable": "x"}}}],
           "result": {"type": {"variable": "x"}},
           "typeParameters": [{"constraints": [], "name": "x"}]}}},
@@ -342,7 +342,7 @@
         "seeAlso": [],
         "signature": {
           "parameters": [
-            {"isLazy": false, "name": "arg0", "type": {"variable": "y"}},
+            {"isLazy": true, "name": "arg0", "type": {"variable": "y"}},
             {"isLazy": false, "name": "arg1", "type": {"function": {"codomain": {"variable": "y"}, "domain": {"variable": "x"}}}},
             {"isLazy": false, "name": "arg2", "type": {"maybe": {"variable": "x"}}}],
           "result": {"type": {"variable": "y"}},
