@@ -2,7 +2,7 @@ module Hydra.Sources.Kernel.Terms.Validate.Packaging where
 
 -- Standard imports for kernel terms modules
 import Hydra.Kernel
-import           Hydra.Dsl.Bootstrap (unqualifiedDep)
+import           Hydra.Dsl.Bootstrap (unqualifiedDep, descriptionMetadata)
 import Hydra.Error.Packaging (
   InvalidModuleError, InvalidPackageError,
   _InvalidModuleError,
@@ -54,7 +54,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = unqualifiedDep <$> ([Annotations.ns, Constants.ns, Formatting.ns, Names.ns] L.++ kernelTypesModuleNames),
-            moduleDescription = Just "Validation functions for modules and packages"}
+            moduleMetadata = descriptionMetadata (Just "Validation functions for modules and packages")}
   where
     definitions = [
       toDefinition appendFindingModule,
@@ -259,7 +259,11 @@ checkDefinitionDocumentation = define "checkDefinitionDocumentation" $
                 _Type_annotated>>: "at" ~>
                   Annotations.hasDescription @@ (Core.annotatedTypeAnnotation $ var "at")],
             _Definition_primitive>>: "pd" ~>
-              Logic.not (Equality.equal (Packaging.primitiveDefinitionDescription $ var "pd") (string ""))] $
+              Maybes.maybe false
+                ("em" ~> Logic.not (Equality.equal
+                  (Maybes.fromMaybe (string "") (Packaging.entityMetadataDescription $ var "em"))
+                  (string "")))
+                (Packaging.primitiveDefinitionMetadata $ var "pd")] $
           Logic.ifElse (var "documented")
             nothing
             (just $ ErrorPackaging.invalidModuleErrorMissingDocumentation $

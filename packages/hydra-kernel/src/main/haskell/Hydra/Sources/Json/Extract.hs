@@ -92,7 +92,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> (KernelTypes.kernelTypesModuleNames),
-            moduleDescription = Just "Utilities for extracting values from JSON objects"}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just "Utilities for extracting values from JSON objects")}
   where
     definitions = [
       toDefinition expectArray,

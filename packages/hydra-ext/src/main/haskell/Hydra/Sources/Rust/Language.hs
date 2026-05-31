@@ -86,7 +86,7 @@ module_ = Module {
             moduleName = (ModuleName "hydra.rust.language"),
             moduleDefinitions = [toDefinition rustLanguage, toDefinition rustReservedWords],
             moduleDependencies = Bootstrap.unqualifiedDep <$> ([Lexical.ns] L.++ KernelTypes.kernelTypesModuleNames),
-            moduleDescription = Just "Language constraints and reserved words for Rust"}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just "Language constraints and reserved words for Rust")}
 rustLanguage :: TypedTermDefinition Language
 rustLanguage = define "rustLanguage" $
     doc "Language constraints for Rust" $ lets [

@@ -20,7 +20,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = (DefinitionType <$> definitions),
             moduleDependencies = unqualifiedDep <$> [Core.ns],
-            moduleDescription = Just "A model which provides a common syntax tree for Hydra serializers"}
+            moduleMetadata = descriptionMetadata (Just "A model which provides a common syntax tree for Hydra serializers")}
   where
     definitions = [
       associativity,
