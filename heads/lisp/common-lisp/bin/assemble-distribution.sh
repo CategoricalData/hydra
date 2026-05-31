@@ -25,3 +25,19 @@ LISP_TEST_ENV=""
 source "$SCRIPT_DIR/../../bin/common.sh"
 
 lisp_assemble_main "$@"
+
+# Step 4 (Common Lisp only): regenerate the alist-based struct compatibility
+# layer from the freshly generated kernel structs.
+#
+# struct-compat.lisp provides positional (make-<struct> v1 v2 ...) constructors
+# whose argument-to-field mapping is a hardcoded keyword list in field-declaration
+# order. The Lisp coder emits record construction positionally, so any kernel
+# record field reorder (e.g. #402's Module/Package identity-first reorder) silently
+# desyncs this file and routes values into the wrong fields — see #407. gen-compat.sh
+# reads dist/common-lisp/hydra-kernel/.../hydra/*.lisp, so it must run after the
+# kernel has been assembled. Regenerating it here makes it impossible to go stale.
+if [ "${PACKAGE:-}" = "hydra-kernel" ]; then
+    echo ""
+    echo "Step 4: Regenerating struct-compat.lisp from generated kernel structs..."
+    bash "$LISP_HEAD_DIR/src/main/common-lisp/hydra/gen-compat.sh"
+fi
