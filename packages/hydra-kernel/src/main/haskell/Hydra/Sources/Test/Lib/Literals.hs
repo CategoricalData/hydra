@@ -457,7 +457,7 @@ literalsReadBigint = subgroup "readBigint" [
     testNothing name x = primCase name _literals_readBigint [string x] (Core.termMaybe nothing)
 
 -- Binary/String conversion
--- Note: binaryToStringBS and stringToBinary use base64 encoding
+-- Note: binaryToString and stringToBinary use base64 encoding
 
 literalsReadBoolean :: TypedTerm TestGroup
 literalsReadBoolean = subgroup "readBoolean" [

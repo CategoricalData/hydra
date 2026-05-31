@@ -201,12 +201,12 @@ moduleToGraphql mod defs cx g =
           typeDefs = Pairs.first partitioned
           prefixes =
                   (\modNs -> \tdefs ->
-                    let namespaces = Lists.nub (Maybes.cat (Lists.map (\td -> Names.namespaceOf (Packaging.typeDefinitionName td)) tdefs))
+                    let namespaces = Lists.nub (Maybes.cat (Lists.map (\td -> Names.moduleNameOf (Packaging.typeDefinitionName td)) tdefs))
                     in (Maps.fromList (Lists.map (\ns_ -> (
                       ns_,
                       (Logic.ifElse (Equality.equal ns_ modNs) "" (Strings.cat2 (Formatting.sanitizeWithUnderscores Sets.empty (Packaging.unModuleName ns_)) "_")))) namespaces))) (Packaging.moduleName mod) typeDefs
           filePath =
-                  Names.namespaceToFilePath Util.CaseConventionCamel (Packaging.FileExtension "graphql") (Packaging.moduleName mod)
+                  Names.moduleNameToFilePath Util.CaseConventionCamel (Packaging.FileExtension "graphql") (Packaging.moduleName mod)
       in (Eithers.bind (Eithers.mapList (\td -> encodeTypeDefinition cx g prefixes td) typeDefs) (\gtdefs -> Right (Maps.fromList (Lists.pure (
         filePath,
         (Serialization.printExpr (Serialization.parenthesize (Serde.documentToExpr (Syntax.Document (Lists.map (\gtdef -> Syntax.DefinitionTypeSystem (Syntax.TypeSystemDefinitionOrExtensionDefinition (Syntax.TypeSystemDefinitionType gtdef))) gtdefs))))))))))

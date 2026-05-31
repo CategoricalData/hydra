@@ -1,5 +1,5 @@
 -- Note: this is an automatically generated file. Do not edit.
--- | Primitives in the hydra.lib.literals namespace.
+-- | Primitives in the hydra.lib.literals module.
 
 module Hydra.Lib.Literals where
 import qualified Hydra.Ast as Ast

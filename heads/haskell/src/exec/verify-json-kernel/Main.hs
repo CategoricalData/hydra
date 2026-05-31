@@ -9,7 +9,7 @@ import Hydra.Kernel
 import Hydra.Packaging (_Module)
 import Hydra.Sources.All (kernelModules)
 import Hydra.Generation (modulesToGraph)
-import Hydra.Codegen (namespaceToPath)
+import Hydra.Codegen (moduleNameToPath)
 import qualified Hydra.Json.Model as Json
 import qualified Hydra.Json.Decode as JsonDecode
 import qualified Hydra.Decode.Packaging as DecodePackaging
@@ -147,7 +147,7 @@ main = do
   results <- forM kernelModules $ \origMod -> do
     let ns = moduleName origMod
         nsStr = unModuleName ns
-        filePath = basePath </> namespaceToPath ns ++ ".json"
+        filePath = basePath </> moduleNameToPath ns ++ ".json"
 
     exists <- doesFileExist filePath
     if not exists

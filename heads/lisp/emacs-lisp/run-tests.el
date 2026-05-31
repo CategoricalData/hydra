@@ -57,7 +57,7 @@
 ;; the test types and terms needed by hydra-ensure-test-graph for schema
 ;; construction. test_env.el is the hand-written counterpart of the DSL's
 ;; hydra.test.testEnv stub (filtered from emitted output via
-;; testSkipEmitNamespaces); it must load before test_graph.el so the
+;; testSkipEmitModuleNames); it must load before test_graph.el so the
 ;; generated (require 'hydra.test.testEnv) resolves.
 (let ((base hydra-gen-test-dir))
   (dolist (f '("test/test_types.el" "test/test_terms.el"
