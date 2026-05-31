@@ -75,7 +75,8 @@ bimap =
       Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
         Packaging.entityMetadataDescription = (Just "Map over both elements of a pair."),
         Packaging.entityMetadataComments = [
-          "bimap(f, g, p) returns a new pair (f(first(p)), g(second(p))). The bifunctor map for pairs. Total. Corresponds to Haskell's Data.Bifunctor.bimap :: (a -> c) -> (b -> d) -> (a, b) -> (c, d)."],
+          "bimap(f, g, p) returns a new pair (f(first(p)), g(second(p))). The bifunctor map for pairs.",
+          "Total. Corresponds to Haskell's Data.Bifunctor.bimap :: (a -> c) -> (b -> d) -> (a, b) -> (c, d)."],
         Packaging.entityMetadataSeeAlso = [],
         Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
@@ -131,7 +132,8 @@ first =
       Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
         Packaging.entityMetadataDescription = (Just "Get the first element of a pair."),
         Packaging.entityMetadataComments = [
-          "first(p) returns the first component of the pair p. Total. Corresponds to Haskell's fst :: (a, b) -> a."],
+          "first(p) returns the first component of the pair p.",
+          "Total. Corresponds to Haskell's fst :: (a, b) -> a."],
         Packaging.entityMetadataSeeAlso = [],
         Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
@@ -163,7 +165,8 @@ second =
       Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
         Packaging.entityMetadataDescription = (Just "Get the second element of a pair."),
         Packaging.entityMetadataComments = [
-          "second(p) returns the second component of the pair p. Total. Corresponds to Haskell's snd :: (a, b) -> b."],
+          "second(p) returns the second component of the pair p.",
+          "Total. Corresponds to Haskell's snd :: (a, b) -> b."],
         Packaging.entityMetadataSeeAlso = [],
         Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,

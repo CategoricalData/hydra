@@ -22,7 +22,9 @@
         "isTotal": true,
         "metadata": {
           "comments": [
-            "and(p, q) returns true iff both p and q are true. Evaluation is strict in both arguments at the primitive level; for short-circuiting behavior, use ifElse. Total. Corresponds to Haskell's (&&) :: Bool -> Bool -> Bool (but without short-circuit evaluation)."],
+            "and(p, q) returns true iff both p and q are true.",
+            "Evaluation is strict in both arguments at the primitive level; for short-circuiting behavior, use ifElse.",
+            "Total. Corresponds to Haskell's (&&) :: Bool -> Bool -> Bool (but without short-circuit evaluation)."],
           "description": "Compute the logical AND of two boolean values.",
           "seeAlso": []},
         "name": "hydra.lib.logic.and",
@@ -38,7 +40,9 @@
         "isTotal": true,
         "metadata": {
           "comments": [
-            "ifElse(p, t, f) returns t if p is true, or f if p is false. The unselected branch is not necessarily evaluated; ifElse is the standard way to express short-circuiting boolean logic and branching in Hydra. Total. Corresponds to Haskell's if/then/else."],
+            "ifElse(p, t, f) returns t if p is true, or f if p is false.",
+            "The unselected branch is not necessarily evaluated; ifElse is the standard way to express short-circuiting boolean logic and branching in Hydra.",
+            "Total. Corresponds to Haskell's if/then/else."],
           "description": "Compute a conditional expression.",
           "seeAlso": []},
         "name": "hydra.lib.logic.ifElse",
@@ -67,7 +71,7 @@
         "isPure": true,
         "isTotal": true,
         "metadata": {
-          "comments": ["not(p) returns false if p is true, or true if p is false. Total. Corresponds to Haskell's not :: Bool -> Bool."],
+          "comments": ["not(p) returns false if p is true, or true if p is false.", "Total. Corresponds to Haskell's not :: Bool -> Bool."],
           "description": "Compute the logical NOT of a boolean value.",
           "seeAlso": []},
         "name": "hydra.lib.logic.not",
@@ -97,7 +101,9 @@
         "isTotal": true,
         "metadata": {
           "comments": [
-            "or(p, q) returns true iff at least one of p and q is true. Evaluation is strict in both arguments at the primitive level; for short-circuiting behavior, use ifElse. Total. Corresponds to Haskell's (||) :: Bool -> Bool -> Bool (but without short-circuit evaluation)."],
+            "or(p, q) returns true iff at least one of p and q is true.",
+            "Evaluation is strict in both arguments at the primitive level; for short-circuiting behavior, use ifElse.",
+            "Total. Corresponds to Haskell's (||) :: Bool -> Bool -> Bool (but without short-circuit evaluation)."],
           "description": "Compute the logical OR of two boolean values.",
           "seeAlso": []},
         "name": "hydra.lib.logic.or",
