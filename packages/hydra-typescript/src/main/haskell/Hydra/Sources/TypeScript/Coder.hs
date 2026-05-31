@@ -30,8 +30,10 @@ import qualified Hydra.Dsl.Meta.Lib.Maybes                 as Maybes
 import qualified Hydra.Dsl.Meta.Lib.Pairs                  as Pairs
 import qualified Hydra.Dsl.Meta.Lib.Sets                   as Sets
 import qualified Hydra.Dsl.Meta.Core                       as Core
+import qualified Hydra.Dsl.Meta.Graph                      as Graph
 import qualified Hydra.Dsl.Errors                          as Error
 import qualified Hydra.Dsl.Packaging                       as Packaging
+import qualified Hydra.Dsl.Typing                          as Typing
 import qualified Hydra.Dsl.Util                            as Util
 import qualified Hydra.Sources.Kernel.Terms.Analysis       as Analysis
 import qualified Hydra.Sources.Kernel.Terms.Annotations    as Annotations
@@ -88,6 +90,7 @@ module_ = Module {
       toDefinition encodeTerm,
       toDefinition encodeTermDefinition,
       toDefinition encodeLazyCall,
+      toDefinition lazyFlagsForPrimitive,
       toDefinition encodeTypeOrAny,
       toDefinition functionDeclarationFromTerm,
       toDefinition sanitizeParamName,
@@ -278,6 +281,22 @@ encodeLazyCall = def "encodeLazyCall" $
         (var "expr")) $
     "argExprs" <~ Lists.map (var "renderArg") (var "paired") $
     tsCall @@ var "headExpr" @@ var "argExprs"
+
+-- | Look up a primitive by name and return its per-parameter laziness flags
+-- (the `isLazy` flag of each parameter of its signature), in parameter order.
+-- Returns the empty list if the name is not a registered primitive. Coders
+-- consult these flags instead of hard-coding which primitive arguments are
+-- lazy. See issue #391.
+lazyFlagsForPrimitive :: TypedTermDefinition (Graph -> Name -> [Bool])
+lazyFlagsForPrimitive = def "lazyFlagsForPrimitive" $
+  lambda "g" $ lambda "name" $
+    Maybes.cases (Maps.lookup (var "name") (Graph.graphPrimitives (var "g")))
+      (list ([] :: [TypedTerm Bool]))
+      (lambda "prim" $
+        Lists.map (lambda "p" $ Typing.parameterIsLazy (var "p"))
+          (Typing.termSignatureParameters
+            (Packaging.primitiveDefinitionSignature
+              (Graph.primitiveDefinition (var "prim")))))
 
 -- | Render a Hydra Literal as a TypeScript Expression.
 --
@@ -520,54 +539,25 @@ encodeTerm = def "encodeTerm" $
        "args" <~ Pairs.second (var "flat") $
        "mName" <~ (termHeadVariable @@ var "headTerm") $
        "argc" <~ Lists.length (var "args") $
-       -- Returns `Just <full call Expression>` if this head matches one of
-       -- the lazy primitives at exactly the expected arity, with the right
-       -- args already wrapped. `Nothing` otherwise.
+       -- Returns `Just <full call Expression>` if the head is a registered
+       -- primitive, applied to exactly its full arity, with at least one
+       -- parameter flagged lazy in the primitive's signature metadata; the
+       -- flagged args are then wrapped as thunks. `Nothing` otherwise. The
+       -- lazy positions come from the primitive's `isLazy` flags, not a
+       -- hard-coded name table (issue #391).
        "lazyMaybe" <~ Maybes.cases (var "mName")
          (nothing :: TypedTerm (Maybe TS.Expression))
          (lambda "n" $
-           "qn" <~ Core.unName (var "n") $
+           "lazyFlags" <~ (lazyFlagsForPrimitive @@ var "g" @@ var "n") $
+           "anyLazy" <~ Lists.foldl (lambda "b" $ lambda "f" $ Logic.or (var "b") (var "f"))
+                          false (var "lazyFlags") $
            Logic.ifElse
-             (Logic.and (Equality.equal (var "qn") (string "hydra.lib.logic.ifElse"))
-                        (Equality.equal (var "argc") (int32 3)))
+             (Logic.and (var "anyLazy")
+                        (Equality.equal (var "argc") (Lists.length (var "lazyFlags"))))
              (just (encodeLazyCall
                      @@ var "cx" @@ var "g" @@ var "currentNs" @@ var "headTerm" @@ var "args"
-                     @@ list [false, true, true]))
-             (Logic.ifElse
-               (Logic.and (Equality.equal (var "qn") (string "hydra.lib.maybes.cases"))
-                          (Equality.equal (var "argc") (int32 3)))
-               (just (encodeLazyCall
-                       @@ var "cx" @@ var "g" @@ var "currentNs" @@ var "headTerm" @@ var "args"
-                       @@ list [false, true, false]))
-               (Logic.ifElse
-                 (Logic.and
-                   (Equality.equal (var "qn") (string "hydra.lib.maybes.maybe"))
-                   (Equality.equal (var "argc") (int32 3)))
-                 (just (encodeLazyCall
-                         @@ var "cx" @@ var "g" @@ var "currentNs" @@ var "headTerm" @@ var "args"
-                         @@ list [true, false, false]))
-               (Logic.ifElse
-                 (Logic.and
-                   (Equality.equal (var "qn") (string "hydra.lib.maybes.fromMaybe"))
-                   (Equality.equal (var "argc") (int32 2)))
-                 (just (encodeLazyCall
-                         @@ var "cx" @@ var "g" @@ var "currentNs" @@ var "headTerm" @@ var "args"
-                         @@ list [true, false]))
-                 (Logic.ifElse
-                   (Logic.and
-                     (Logic.or (Equality.equal (var "qn") (string "hydra.lib.eithers.fromLeft"))
-                               (Equality.equal (var "qn") (string "hydra.lib.eithers.fromRight")))
-                     (Equality.equal (var "argc") (int32 2)))
-                   (just (encodeLazyCall
-                           @@ var "cx" @@ var "g" @@ var "currentNs" @@ var "headTerm" @@ var "args"
-                           @@ list [true, false]))
-                   (Logic.ifElse
-                     (Logic.and (Equality.equal (var "qn") (string "hydra.lib.maps.findWithDefault"))
-                                (Equality.equal (var "argc") (int32 3)))
-                     (just (encodeLazyCall
-                             @@ var "cx" @@ var "g" @@ var "currentNs" @@ var "headTerm" @@ var "args"
-                             @@ list [true, false, false]))
-                     (nothing :: TypedTerm (Maybe TS.Expression)))))))) $
+                     @@ var "lazyFlags"))
+             (nothing :: TypedTerm (Maybe TS.Expression))) $
        Maybes.cases (var "lazyMaybe")
          -- Default eager emission: detect projection/unwrap heads applied
          -- to one or more args, and inline as `firstArg.field(restArgs...)`
@@ -1389,21 +1379,19 @@ importsToText = def "importsToText" $
 -- Application flattening + laziness wrapping
 -- =============================================================================
 --
--- Hydra's `ifElse` and several `maybes`/`eithers` primitives have lazy
--- semantics in the Haskell source: the unselected branch is never
--- evaluated. JavaScript is strict, so we wrap the lazy positions in
--- nullary arrow functions `() => expr` and the runtime primitive
--- invokes them on demand. See docs/recipes/new-implementation.md
+-- Hydra's `ifElse` and several `maybes`/`eithers`/`maps` primitives have
+-- lazy semantics in the Haskell source: an unselected branch or unused
+-- default is never evaluated. JavaScript is strict, so we wrap the lazy
+-- positions in nullary arrow functions `() => expr` and the runtime
+-- primitive invokes them on demand. See docs/recipes/new-implementation.md
 -- (section "Lazy evaluation and thunking") for the full rationale.
 --
--- The lazy-arg positions, mirroring Java's `wrapLazyArguments`:
---   hydra.lib.logic.ifElse        — positions 1, 2 (then, else)
---   hydra.lib.maybes.cases        — position 1 (nothing case)
---   hydra.lib.maybes.maybe        — position 0 (default)
---   hydra.lib.maybes.fromMaybe    — position 0 (default)
---   hydra.lib.eithers.fromLeft    — position 0 (default)
---   hydra.lib.eithers.fromRight   — position 0 (default)
---   hydra.lib.maps.findWithDefault — position 0 (default)
+-- Which argument positions are lazy is determined by each primitive's
+-- per-parameter `isLazy` metadata (the `parameterIsLazy` flag on the
+-- primitive's signature), looked up via `lazyFlagsForPrimitive`. This
+-- replaces the former hard-coded primitive-name table (issue #391); the
+-- kernel signatures in Hydra.Sources.Kernel.Lib.{Logic,Maybes,Eithers,Maps}
+-- are the single source of truth.
 --
 -- The TS-side primitive accepts either a value or a thunk and calls the
 -- thunk when needed (mirroring Python's `callable()` check).
