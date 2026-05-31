@@ -73,13 +73,14 @@ def filter_with_key(
     return _to_pmap(mapping).filter_with_key(predicate)
 
 
-def find_with_default(default: V, key: K, mapping: Mapping[K, V]) -> V:
-    """Lookup a value with a default."""
+def find_with_default(default: V | Callable[[], V], key: K, mapping: Mapping[K, V]) -> V:
+    """Lookup a value with a default. The default is lazy (#391)."""
     if isinstance(mapping, PersistentMap):
         if mapping.contains_key(key):
             return mapping[key]
-        return default
-    return mapping.get(key, default)
+    elif key in mapping:
+        return mapping[key]
+    return default() if callable(default) else default  # type: ignore[return-value]
 
 
 def from_list(pairs: Sequence[tuple[K, V]]) -> Mapping[K, V]:

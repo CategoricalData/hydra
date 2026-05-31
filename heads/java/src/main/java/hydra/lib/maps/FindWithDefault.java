@@ -32,6 +32,11 @@ public class FindWithDefault extends PrimitiveFunction {
         return new Name("hydra.lib.maps.findWithDefault");
     }
 
+    @Override
+    protected List<Integer> lazyParams() {
+        return List.of(0);
+    }
+
     /**
      * Get the type scheme of this primitive function.
      * @return the type scheme

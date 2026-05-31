@@ -138,11 +138,13 @@ def register_eithers_primitives() -> dict[Name, Primitive]:
     )
     primitives[qname(namespace, "fromLeft")] = prims.prim2(
         qname(namespace, "fromLeft"), eithers.from_left, [_x, _y],
-        x, prims.either(x, y), x
+        x, prims.either(x, y), x,
+        lazy_args=[0]
     )
     primitives[qname(namespace, "fromRight")] = prims.prim2(
         qname(namespace, "fromRight"), eithers.from_right, [_x, _y],
-        y, prims.either(x, y), y
+        y, prims.either(x, y), y,
+        lazy_args=[0]
     )
     primitives[qname(namespace, "isLeft")] = prims.prim1(
         qname(namespace, "isLeft"), eithers.is_left, [_x, _y],
@@ -407,7 +409,8 @@ def register_logic_primitives() -> dict[Name, Primitive]:
     )
     primitives[qname(namespace, "ifElse")] = prims.prim3(
         qname(namespace, "ifElse"), logic.if_else, [_a],
-        prims.boolean(), a, a, a
+        prims.boolean(), a, a, a,
+        lazy_args=[1, 2]
     )
     primitives[qname(namespace, "not")] = prims.prim1(
         qname(namespace, "not"), logic.not_, [], prims.boolean(), prims.boolean()
@@ -478,7 +481,8 @@ def register_maps_primitives() -> dict[Name, Primitive]:
     # prim3: findWithDefault :: Ord k => v -> k -> Map k v -> v
     primitives[qname(namespace, "findWithDefault")] = prims.prim3(
         qname(namespace, "findWithDefault"), maps.find_with_default, [_v, _kOrd],
-        v, k, map_kv, v
+        v, k, map_kv, v,
+        lazy_args=[0]
     )
     # prim1: fromList :: Ord k => [(k, v)] -> Map k v
     primitives[qname(namespace, "fromList")] = prims.prim1(
@@ -723,7 +727,8 @@ def register_maybes_primitives() -> dict[Name, Primitive]:
     # cases :: Maybe a -> b -> (a -> b) -> b
     primitives[qname(namespace, "cases")] = prims.prim3(
         qname(namespace, "cases"), maybes.cases, [_a, _b],
-        prims.optional(a), b, fun(a, b), b
+        prims.optional(a), b, fun(a, b), b,
+        lazy_args=[1]
     )
     # cat :: [Maybe a] -> [a]
     primitives[qname(namespace, "cat")] = prims.prim1(
@@ -738,7 +743,8 @@ def register_maybes_primitives() -> dict[Name, Primitive]:
     )
     primitives[qname(namespace, "fromMaybe")] = prims.prim2(
         qname(namespace, "fromMaybe"), maybes.from_maybe, [_a],
-        a, prims.optional(a), a
+        a, prims.optional(a), a,
+        lazy_args=[0]
     )
     primitives[qname(namespace, "isJust")] = prims.prim1(
         qname(namespace, "isJust"), maybes.is_just, [_a],
@@ -762,7 +768,8 @@ def register_maybes_primitives() -> dict[Name, Primitive]:
     # Note: type variables are ordered [b, a] to match Haskell's [_y, _x] order
     primitives[qname(namespace, "maybe")] = prims.prim3(
         qname(namespace, "maybe"), maybes.maybe, [_b, _a],
-        b, fun(a, b), prims.optional(a), b
+        b, fun(a, b), prims.optional(a), b,
+        lazy_args=[0]
     )
     primitives[qname(namespace, "pure")] = prims.prim1(
         qname(namespace, "pure"), maybes.pure, [_a],
