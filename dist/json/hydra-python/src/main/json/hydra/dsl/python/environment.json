@@ -90,7 +90,7 @@
                     "annotated": {
                       "annotation": [{"key": "description", "value": {"literal": {"string": "ModuleName mapping for imports"}}}],
                       "body": {
-                        "application": {"argument": {"variable": "hydra.python.syntax.DottedName"}, "function": {"variable": "hydra.util.Namespaces"}}}}},
+                        "application": {"argument": {"variable": "hydra.python.syntax.DottedName"}, "function": {"variable": "hydra.util.ModuleNames"}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
               "isLazy": false,
@@ -321,7 +321,7 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "ModuleName mapping for imports"}}}],
                         "body": {
-                          "application": {"argument": {"variable": "hydra.python.syntax.DottedName"}, "function": {"variable": "hydra.util.Namespaces"}}}}},
+                          "application": {"argument": {"variable": "hydra.python.syntax.DottedName"}, "function": {"variable": "hydra.util.ModuleNames"}}}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "namespaces"}}}}}},
     {
@@ -343,7 +343,7 @@
                   "annotated": {
                     "annotation": [{"key": "description", "value": {"literal": {"string": "ModuleName mapping for imports"}}}],
                     "body": {
-                      "application": {"argument": {"variable": "hydra.python.syntax.DottedName"}, "function": {"variable": "hydra.util.Namespaces"}}}}},
+                      "application": {"argument": {"variable": "hydra.python.syntax.DottedName"}, "function": {"variable": "hydra.util.ModuleNames"}}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []},
         "term": {
@@ -806,7 +806,7 @@
                     "annotated": {
                       "annotation": [{"key": "description", "value": {"literal": {"string": "ModuleName mapping for imports"}}}],
                       "body": {
-                        "application": {"argument": {"variable": "hydra.python.syntax.DottedName"}, "function": {"variable": "hydra.util.Namespaces"}}}}},
+                        "application": {"argument": {"variable": "hydra.python.syntax.DottedName"}, "function": {"variable": "hydra.util.ModuleNames"}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
@@ -1069,7 +1069,7 @@
                           "annotated": {
                             "annotation": [{"key": "description", "value": {"literal": {"string": "ModuleName mapping for imports"}}}],
                             "body": {
-                              "application": {"argument": {"variable": "hydra.python.syntax.DottedName"}, "function": {"variable": "hydra.util.Namespaces"}}}}},
+                              "application": {"argument": {"variable": "hydra.python.syntax.DottedName"}, "function": {"variable": "hydra.util.ModuleNames"}}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {
@@ -2837,7 +2837,7 @@
                     "annotated": {
                       "annotation": [{"key": "description", "value": {"literal": {"string": "ModuleName mapping for imports"}}}],
                       "body": {
-                        "application": {"argument": {"variable": "hydra.python.syntax.DottedName"}, "function": {"variable": "hydra.util.Namespaces"}}}}},
+                        "application": {"argument": {"variable": "hydra.python.syntax.DottedName"}, "function": {"variable": "hydra.util.ModuleNames"}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
               "isLazy": false,
@@ -3251,7 +3251,7 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "ModuleName mapping for imports"}}}],
                         "body": {
-                          "application": {"argument": {"variable": "hydra.python.syntax.DottedName"}, "function": {"variable": "hydra.util.Namespaces"}}}}},
+                          "application": {"argument": {"variable": "hydra.python.syntax.DottedName"}, "function": {"variable": "hydra.util.ModuleNames"}}}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "namespaces"}}}}}},
     {
@@ -3273,7 +3273,7 @@
                   "annotated": {
                     "annotation": [{"key": "description", "value": {"literal": {"string": "ModuleName mapping for imports"}}}],
                     "body": {
-                      "application": {"argument": {"variable": "hydra.python.syntax.DottedName"}, "function": {"variable": "hydra.util.Namespaces"}}}}},
+                      "application": {"argument": {"variable": "hydra.python.syntax.DottedName"}, "function": {"variable": "hydra.util.ModuleNames"}}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []},
         "term": {
@@ -4642,7 +4642,7 @@
                     "annotated": {
                       "annotation": [{"key": "description", "value": {"literal": {"string": "ModuleName mapping for imports"}}}],
                       "body": {
-                        "application": {"argument": {"variable": "hydra.python.syntax.DottedName"}, "function": {"variable": "hydra.util.Namespaces"}}}}},
+                        "application": {"argument": {"variable": "hydra.python.syntax.DottedName"}, "function": {"variable": "hydra.util.ModuleNames"}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
@@ -5482,7 +5482,7 @@
                           "annotated": {
                             "annotation": [{"key": "description", "value": {"literal": {"string": "ModuleName mapping for imports"}}}],
                             "body": {
-                              "application": {"argument": {"variable": "hydra.python.syntax.DottedName"}, "function": {"variable": "hydra.util.Namespaces"}}}}},
+                              "application": {"argument": {"variable": "hydra.python.syntax.DottedName"}, "function": {"variable": "hydra.util.ModuleNames"}}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {

@@ -79,7 +79,7 @@ object Generation:
       case other => other
 
   private def decodeBinaryInModule(mod: Module): Module =
-    Module(mod.description, mod.name, mod.dependencies, mod.definitions.map {
+    Module(mod.name, mod.description, mod.dependencies, mod.definitions.map {
       case Definition.term(td) =>
         Definition.term(hydra.packaging.TermDefinition(td.name, decodeBinaryLiterals(td.term), td.signature))
       case other => other
@@ -103,7 +103,7 @@ object Generation:
     val bsGraph = bootstrapGraph()
     namespaces.flatMap { ns =>
       val filePath = jsonDir + File.separator +
-        hydra.codegen.namespaceToPath(ns) + ".json"
+        hydra.codegen.moduleNameToPath(ns) + ".json"
       val file = new File(filePath)
       if !file.exists() then
         throw new RuntimeException(s"Missing module file: $filePath")

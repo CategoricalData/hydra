@@ -5934,7 +5934,7 @@
                             "argument": {
                               "application": {
                                 "argument": {
-                                  "application": {"argument": {"variable": "defs"}, "function": {"variable": "hydra.analysis.definitionDependencyNamespaces"}}},
+                                  "application": {"argument": {"variable": "defs"}, "function": {"variable": "hydra.analysis.definitionDependencyModuleNames"}}},
                                 "function": {
                                   "application": {
                                     "argument": {"variable": "focusNs"},

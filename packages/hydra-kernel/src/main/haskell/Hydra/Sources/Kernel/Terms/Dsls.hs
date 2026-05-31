@@ -56,7 +56,7 @@ module_ = Module {
       toDefinition dslBindingName,
       toDefinition dslDefinitionName,
       toDefinition dslModule,
-      toDefinition dslNamespace,
+      toDefinition dslModuleName,
       toDefinition dslTypeScheme,
       toDefinition filterTypeBindings,
       toDefinition generateBindingsForType,
@@ -84,7 +84,7 @@ collectForallVars = define "collectForallVars" $
 
 -- | Build the nominal result type for a type definition.
 -- For non-polymorphic types: TypeVariable typeName
--- For polymorphic types like (forall n. Namespaces n): TypeApplication (TypeVariable typeName) (TypeVariable n)
+-- For polymorphic types like (forall n. ModuleNames n): TypeApplication (TypeVariable typeName) (TypeVariable n)
 -- | Deduplicate bindings by giving duplicate names a numeric suffix.
 -- Later bindings get suffixes; earlier ones keep their name.
 -- Multiple duplicates get increasing numeric suffixes: name, name2, name3, etc.
@@ -247,10 +247,10 @@ dslModule = define "dslModule" $
           ("x" ~> var "x")
           (generateBindingsForType @@ var "cx" @@ var "graph" @@ var "b")) (var "typeBindings") $
         right (just (Packaging.module_
+          (dslModuleName @@ (Packaging.moduleName (var "mod")))
           (just (Strings.cat $ list [
             string "DSL functions for ",
             Packaging.unModuleName (Packaging.moduleName (var "mod"))]))
-          (dslNamespace @@ (Packaging.moduleName (var "mod")))
           -- DSL modules depend on:
           -- (1) the original module + its source dependencies + hydra.typed (for TypedTerm), and
           -- (2) DSL modules for the source's dependencies (to reference other types' DSL functions)
@@ -258,16 +258,16 @@ dslModule = define "dslModule" $
             (list [Packaging.moduleName (var "mod"), Packaging.moduleName2 (string "hydra.typed")])
             (Lists.concat2
               (Lists.map ("dep" ~> Packaging.moduleDependencyModule (var "dep")) (Packaging.moduleDependencies (var "mod")))
-              (primitive _lists_map @@ dslNamespace @@ (Lists.map ("dep" ~> Packaging.moduleDependencyModule (var "dep")) (Packaging.moduleDependencies (var "mod"))))))))
+              (primitive _lists_map @@ dslModuleName @@ (Lists.map ("dep" ~> Packaging.moduleDependencyModule (var "dep")) (Packaging.moduleDependencies (var "mod"))))))))
           (Lists.map ("b" ~> Packaging.definitionTerm (Packaging.termDefinition
             (Core.bindingName $ var "b") (Core.bindingTerm $ var "b")
             (Maybes.map Scoping.typeSchemeToTermSignature $ Core.bindingTypeScheme $ var "b")))
             (deduplicateBindings @@ Lists.concat (var "dslBindings"))))))
--- | Generate a DSL module namespace from a source module namespace
+-- | Generate a DSL module name from a source module name
 -- For example, "hydra.core" -> "hydra.dsl.core"
-dslNamespace :: TypedTermDefinition (ModuleName -> ModuleName)
-dslNamespace = define "dslNamespace" $
-  doc "Generate a DSL module namespace from a source module namespace" $
+dslModuleName :: TypedTermDefinition (ModuleName -> ModuleName)
+dslModuleName = define "dslModuleName" $
+  doc "Generate a DSL module name from a source module name" $
   "ns" ~>
   "parts" <~ (Strings.splitOn (string ".") (Packaging.unModuleName (var "ns"))) $
   "prefixFull" <~ (Packaging.moduleName2 (Strings.cat $ list [
@@ -612,7 +612,7 @@ isDslEligibleBinding :: TypedTermDefinition (InferenceContext -> Graph -> Bindin
 isDslEligibleBinding = define "isDslEligibleBinding" $
   doc "Check if a binding is eligible for DSL generation" $
   "cx" ~> "graph" ~> "b" ~>
-  "ns" <~ (Names.namespaceOf @@ Core.bindingName (var "b")) $
+  "ns" <~ (Names.moduleNameOf @@ Core.bindingName (var "b")) $
   Logic.ifElse (Equality.equal (Maybes.maybe (string "") (reify Packaging.unModuleName) (var "ns")) (string "hydra.typed"))
     (right nothing)
     (right (just (var "b")))
@@ -630,7 +630,7 @@ isUnitType_ = "t" ~> cases _Type (Strip.deannotateType @@ var "t") (Just Phantom
 -- Returns Nothing if the module has no eligible type definitions.
 -- | Build the nominal result type for a type definition.
 -- For non-polymorphic types: TypeVariable typeName
--- For polymorphic types like (forall n. Namespaces n): TypeApplication (TypeVariable typeName) (TypeVariable n)
+-- For polymorphic types like (forall n. ModuleNames n): TypeApplication (TypeVariable typeName) (TypeVariable n)
 nominalResultType :: TypedTermDefinition (Name -> Type -> Type)
 nominalResultType = define "nominalResultType" $
   doc "Build the nominal result type with type applications for forall variables" $

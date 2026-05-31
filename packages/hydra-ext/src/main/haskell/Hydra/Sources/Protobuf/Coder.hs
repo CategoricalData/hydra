@@ -218,7 +218,7 @@ constructModule = def "constructModule" $
       (var "checkFields" @@ var "emptyCheckType" @@ var "checkFieldType_empty" @@ var "types")
       (list [wrap P3._FileReference (string "google/protobuf/empty.proto")])
       emptyList] $
-    "schemaImports" <<~ (Analysis.moduleDependencyNamespaces @@ esContext (var "cx") @@ var "g" @@ true @@ false @@ false @@ false @@ var "mod") $
+    "schemaImports" <<~ (Analysis.moduleDependencyModuleNames @@ esContext (var "cx") @@ var "g" @@ true @@ false @@ false @@ false @@ var "mod") $
     "definitions" <<~ (Eithers.mapList (var "toDef") (var "typeDefs")) $ lets [
       "schemaImportList">: Lists.map (lambda "n" $ asTerm namespaceToFileReference @@ var "n") (Sets.toList (var "schemaImports"))] $
       "helperResult" <<~ (asTerm mapAccumResult @@

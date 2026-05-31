@@ -943,7 +943,7 @@ moduleToWasm mod defs cx g =
                         allFields])}
             code = Serialization.printExpr (Serialization.parenthesize (Serde.moduleToExpr wasmMod))
             filePath =
-                    Names.namespaceToFilePath Util.CaseConventionLowerSnake (Packaging.FileExtension "wat") (Packaging.moduleName mod)
+                    Names.moduleNameToFilePath Util.CaseConventionLowerSnake (Packaging.FileExtension "wat") (Packaging.moduleName mod)
         in (Right (Maps.singleton filePath code)))))
 
 peelLambdaApp :: Core.Term -> [t0] -> ([Core.Name], Core.Term)

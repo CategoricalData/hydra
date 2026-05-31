@@ -38,8 +38,8 @@ module_ = Module {
    definitions = [
      toDefinition testTermsDef,
      toDefinition testTypesDef,
-     toDefinition testNamespaceDef,
-     toDefinition testSchemaNamespaceDef]
+     toDefinition testModuleNameDef,
+     toDefinition testSchemaModuleNameDef]
 
 testTypesDef :: TypedTermDefinition (M.Map Name Type)
 testTypesDef = define "testTypes" $
@@ -404,7 +404,7 @@ let allModules = mainModules ++ testModules
 writeHaskell "../../dist/haskell/hydra-kernel/src/test/haskell" allModules baseTestModules
 ```
 
-This generates separate files for each test module based on their namespaces:
+This generates separate files for each test module based on their module names:
 
 ```
 dist/haskell/hydra-kernel/src/test/haskell/

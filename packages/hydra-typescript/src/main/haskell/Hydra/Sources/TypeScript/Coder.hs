@@ -445,7 +445,7 @@ encodeTerm = def "encodeTerm" $
        -- just the local identifier. Different namespace: emit `alias.local`
        -- as a member expression, matching the namespace-style import in
        -- the file header.
-       Maybes.cases (Names.namespaceOf @@ var "n")
+       Maybes.cases (Names.moduleNameOf @@ var "n")
          (tsExprIdent @@ var "local")
          (lambda "ns" $
            Logic.ifElse
@@ -1156,7 +1156,7 @@ filterNonLocalNames = def "filterNonLocalNames" $
   lambda "currentNs" $ lambda "names" $
     Sets.fromList $ Maybes.cat $ Lists.map
       (lambda "n" $
-        Maybes.cases (Names.namespaceOf @@ var "n")
+        Maybes.cases (Names.moduleNameOf @@ var "n")
           nothing
           (lambda "nameNs" $
             Logic.ifElse
@@ -1251,7 +1251,7 @@ importsToText = def "importsToText" $
     -- or whose namespace matches the current module.
     "pairs" <~ (Maybes.cat $ Lists.map
       (lambda "n" $
-        Maybes.cases (Names.namespaceOf @@ var "n")
+        Maybes.cases (Names.moduleNameOf @@ var "n")
           nothing
           (lambda "ns" $
             Logic.ifElse
@@ -1503,7 +1503,7 @@ moduleToTypeScript = def "moduleToTypeScript" $
           var "itemText"]))) $
     "body" <~ (Strings.intercalate (string "\n\n")
       (Lists.map (var "renderItem") (var "allItems"))) $
-    "filePath" <~ (Names.namespaceToFilePath
+    "filePath" <~ (Names.moduleNameToFilePath
       @@ Util.caseConventionCamel
       @@ wrap _FileExtension (string "ts")
       @@ (Packaging.moduleName (var "mod"))) $

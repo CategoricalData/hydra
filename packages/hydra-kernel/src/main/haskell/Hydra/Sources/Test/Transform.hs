@@ -210,8 +210,8 @@ transformModule = define "transformModule" $
   doc "Transform module with generation namespace" $
   lambda "m" $
     Packaging.module_
-      (project _Module _Module_description @@ var "m")
       (addGenerationPrefix @@ (project _Module _Module_name @@ var "m"))
+      (project _Module _Module_description @@ var "m")
       (project _Module _Module_dependencies @@ var "m")
       (project _Module _Module_definitions @@ var "m")
 
