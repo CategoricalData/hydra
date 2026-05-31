@@ -94,7 +94,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> ([Strip.ns] L.++ (TinkerpopFeatures.ns:KernelTypes.kernelTypesModuleNames)),
-            moduleDescription = Just "Language constraints based on TinkerPop Graph.Features"}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just "Language constraints based on TinkerPop Graph.Features")}
   where
     definitions = [
       toDefinition tinkerpopLanguage]

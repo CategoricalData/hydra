@@ -4,7 +4,7 @@ module Hydra.Sources.Test.Validate.Packaging where
 
 -- Standard imports for tests
 import Hydra.Kernel
-import           Hydra.Dsl.Bootstrap (unqualifiedDep)
+import           Hydra.Dsl.Bootstrap (unqualifiedDep, descriptionMetadata)
 import Hydra.Error.Packaging
 import Hydra.Dsl.Meta.Testing                 as Testing
 import Hydra.Dsl.Meta.Terms                   as Terms hiding ((@@))
@@ -32,7 +32,7 @@ module_ = Module {
             moduleDefinitions = definitions,
             moduleDependencies = unqualifiedDep <$> ([ModuleName "hydra.validate.packaging",
               ModuleName "hydra.show.error.packaging"] ++ kernelTypesModuleNames),
-            moduleDescription = (Just "Test cases for module and package validation")}
+            moduleMetadata = descriptionMetadata ((Just "Test cases for module and package validation"))}
   where
     definitions = [
       Phantoms.toDefinition allTests,
@@ -453,6 +453,7 @@ missingDocumentationRule = Name "hydra.error.packaging.InvalidModuleError.missin
 mkDocumentedTermDef :: String -> TypedTerm Definition
 mkDocumentedTermDef fullName = Packaging.definitionTerm $ Packaging.termDefinition
   (nm fullName)
+  Phantoms.nothing
   documentedPlaceholderTerm
   (Phantoms.nothing :: TypedTerm (Maybe TermSignature))
 
@@ -460,7 +461,9 @@ mkDocumentedTermDef fullName = Packaging.definitionTerm $ Packaging.termDefiniti
 mkModule :: String -> [TypedTerm Definition] -> TypedTerm Module
 mkModule nsStr defs = Packaging.module_
   (nsLit nsStr)
-  (Phantoms.just $ Phantoms.string ("Test module " <> nsStr))
+  (Phantoms.just (Packaging.entityMetadata
+    (Phantoms.just $ Phantoms.string ("Test module " <> nsStr))
+    (Phantoms.list ([] :: [TypedTerm String])) (Phantoms.list ([] :: [TypedTerm EntityReference])) Phantoms.nothing))
   (Phantoms.list ([] :: [TypedTerm ModuleDependency]))
   (Phantoms.list defs)
 
@@ -468,7 +471,9 @@ mkModule nsStr defs = Packaging.module_
 mkPackage :: String -> [TypedTerm Module] -> TypedTerm Package
 mkPackage nameStr mods = Packaging.package
   (pn nameStr)
-  (Phantoms.just $ Phantoms.string ("Test package " <> nameStr))
+  (Phantoms.just (Packaging.entityMetadata
+    (Phantoms.just $ Phantoms.string ("Test package " <> nameStr))
+    (Phantoms.list ([] :: [TypedTerm String])) (Phantoms.list ([] :: [TypedTerm EntityReference])) Phantoms.nothing))
   (Phantoms.list ([] :: [TypedTerm PackageDependency]))
   (Phantoms.list mods)
 
@@ -477,6 +482,7 @@ mkPackage nameStr mods = Packaging.package
 mkUndocumentedTermDef :: String -> TypedTerm Definition
 mkUndocumentedTermDef fullName = Packaging.definitionTerm $ Packaging.termDefinition
   (nm fullName)
+  Phantoms.nothing
   placeholderTerm
   (Phantoms.nothing :: TypedTerm (Maybe TermSignature))
 

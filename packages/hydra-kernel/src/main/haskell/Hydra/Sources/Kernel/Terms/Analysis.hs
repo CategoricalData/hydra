@@ -94,7 +94,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> ([Annotations.ns, Arity.ns, Checking.ns, Dependencies.ns, moduleName DecodeCore.module_, Lexical.ns, Names.ns, Predicates.ns, Rewriting.ns, Scoping.ns, Strip.ns, Variables.ns] L.++ kernelTypesModuleNames),
-            moduleDescription = Just ("Module dependency namespace analysis")}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just ("Module dependency namespace analysis"))}
   where
     definitions = [
       toDefinition addNamesToNamespaces,

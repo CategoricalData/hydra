@@ -23,7 +23,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> kernelTypesModuleNames,
-            moduleDescription = Just "Primitives in the hydra.lib.equality namespace."}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just "Primitives in the hydra.lib.equality namespace.")}
   where
     definitions = [
       primNoDef "compare" "Compare two values and return a Comparison." compareSig (Just

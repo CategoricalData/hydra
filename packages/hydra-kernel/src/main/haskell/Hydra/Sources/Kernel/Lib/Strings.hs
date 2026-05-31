@@ -18,7 +18,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> kernelTypesModuleNames,
-            moduleDescription = Just "Primitives in the hydra.lib.strings namespace."}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just "Primitives in the hydra.lib.strings namespace.")}
   where
     definitions = [
       primNoDef "cat"

@@ -5,7 +5,7 @@ module Hydra.Sources.Haskell.Testing where
 
 -- Standard imports for term-level sources outside of the kernel
 import Hydra.Kernel
-import           Hydra.Dsl.Bootstrap (unqualifiedDep)
+import           Hydra.Dsl.Bootstrap (unqualifiedDep, descriptionMetadata)
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Meta.Lib.Strings                as Strings
 import           Hydra.Dsl.Meta.Phantoms                   as Phantoms
@@ -56,7 +56,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = unqualifiedDep <$> ([HaskellUtilsSource.ns, Formatting.ns, Names.ns, Constants.ns, Dependencies.ns, Predicates.ns, Rewriting.ns, ShowError.ns, Lexical.ns, Strip.ns, ModuleName "hydra.decode.core"] L.++ (HaskellSyntax.ns:KernelTypes.kernelTypesModuleNames)),
-            moduleDescription = Just "Haskell test code generation for HSpec-based generation tests"}
+            moduleMetadata = descriptionMetadata (Just "Haskell test code generation for HSpec-based generation tests")}
   where
     definitions = [
       toDefinition addNamespacesToNamespaces,
@@ -104,10 +104,10 @@ buildNamespacesForTestGroup = define "buildNamespacesForTestGroup" $
       (var "testTerms"),
     "tempModule">: record _Module [
       _Module_name>>: Packaging.moduleName (var "mod"),
-      _Module_description>>: project _Module _Module_description @@ var "mod",
+      _Module_metadata>>: project _Module _Module_metadata @@ var "mod",
       _Module_dependencies>>: project _Module _Module_dependencies @@ var "mod",
       _Module_definitions>>: Lists.map ("b" ~> Packaging.definitionTerm (Packaging.termDefinition
-        (Core.bindingName $ var "b") (Core.bindingTerm $ var "b")
+        (Core.bindingName $ var "b") nothing (Core.bindingTerm $ var "b")
         (Maybes.map Scoping.typeSchemeToTermSignature $ Core.bindingTypeScheme $ var "b")))
         (var "testBindings")]] $
     Eithers.bind

@@ -22,11 +22,11 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = (DefinitionType <$> definitions),
             moduleDependencies = unqualifiedDep <$> [Core.ns],
-            moduleDescription = Just ("A basic YAML representation model. Based on:\n" ++
+            moduleMetadata = descriptionMetadata (Just ("A basic YAML representation model. Based on:\n" ++
       "  https://yaml.org/spec/1.2/spec.html\n" ++
       "The Serialization and Presentation properties of YAML,\n" ++
       "including directives, comments, anchors, style, formatting, and aliases, are not supported by this model.\n" ++
-      "In addition, tags are omitted from this model, and non-standard scalars are unsupported.")}
+      "In addition, tags are omitted from this model, and non-standard scalars are unsupported."))}
   where
     definitions = [
       node,

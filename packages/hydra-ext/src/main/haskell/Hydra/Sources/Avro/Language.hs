@@ -87,7 +87,7 @@ module_ = Module {
             moduleName = (ModuleName "hydra.avro.language"),
             moduleDefinitions = [toDefinition avroLanguage],
             moduleDependencies = Bootstrap.unqualifiedDep <$> ([Lexical.ns, Strip.ns] L.++ KernelTypes.kernelTypesModuleNames),
-            moduleDescription = Just "Language constraints for Apache Avro"}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just "Language constraints for Apache Avro")}
 avroLanguage :: TypedTermDefinition Language
 avroLanguage = define "avroLanguage" $
   doc "Language constraints for Apache Avro" $ lets [

@@ -64,7 +64,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> ([Constants.ns, moduleName DecodeCore.module_, ShowCore.ns] L.++ kernelTypesModuleNames),
-            moduleDescription = Just "A utility which instantiates a nonrecursive type with default values"}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just "A utility which instantiates a nonrecursive type with default values")}
   where
    definitions = [
      toDefinition graphToSchema,

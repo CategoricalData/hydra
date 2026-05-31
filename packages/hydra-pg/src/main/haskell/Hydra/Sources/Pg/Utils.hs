@@ -102,7 +102,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> ([ExtractCore.ns, PgCoder.ns] L.++ (PgModel.ns:PgMapping.ns:JsonModel.ns:KernelTypes.kernelTypesModuleNames)),
-            moduleDescription = Just "Utility functions for property graph operations"}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just "Utility functions for property graph operations")}
   where
     definitions = [
       toDefinition defaultTinkerpopAnnotations,

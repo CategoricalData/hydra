@@ -94,7 +94,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> ((PgModel.ns:KernelTypes.kernelTypesModuleNames)),
-            moduleDescription = Just "Printing functions for property graph elements"}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just "Printing functions for property graph elements")}
   where
     definitions = [
       toDefinition printEdge,

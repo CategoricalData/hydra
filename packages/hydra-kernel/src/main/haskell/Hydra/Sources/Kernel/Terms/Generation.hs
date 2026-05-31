@@ -95,7 +95,7 @@ module_ = Module {
      ModuleName "hydra.decoding", ModuleName "hydra.encoding",
      ModuleName "hydra.json.decode", ModuleName "hydra.json.encode", ModuleName "hydra.json.writer",
      moduleName DecodeCore.module_, moduleName DecodeModule.module_, moduleName EncodeModule.module_] L.++ kernelTypesModuleNames),
-            moduleDescription = Just "Pure code generation pipeline for bootstrapping Hydra across languages."}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just "Pure code generation pipeline for bootstrapping Hydra across languages.")}
   where
     definitions = [
       toDefinition buildSchemaMap,
@@ -350,7 +350,7 @@ generateSourceFiles = define "generateSourceFiles" $
       "refreshModule" <~ ("els" ~> "m" ~>
         Packaging.module_
           (Packaging.moduleName $ var "m")
-          (Packaging.moduleDescription $ var "m")
+          (Packaging.moduleMetadata $ var "m")
           (Packaging.moduleDependencies $ var "m")
           (Maybes.cat $ Lists.map
             ("d" ~> cases _Definition (var "d") Nothing [
@@ -358,6 +358,7 @@ generateSourceFiles = define "generateSourceFiles" $
               _Definition_term>>: "td" ~> Maybes.map
                 ("b" ~> Packaging.definitionTerm (Packaging.termDefinition
                   (Core.bindingName $ var "b")
+                  nothing
                   (Core.bindingTerm $ var "b")
                   (Maybes.map Scoping.typeSchemeToTermSignature $ Core.bindingTypeScheme $ var "b")))
                 (Lists.find ("b" ~> Equality.equal (Core.bindingName $ var "b") (Packaging.termDefinitionName $ var "td")) (var "els")),
@@ -558,6 +559,7 @@ lowerPrimitiveDefinitions = define "lowerPrimitiveDefinitions" $
         _Definition_primitive>>: "pd" ~>
           Packaging.definitionTerm (Packaging.termDefinition
             (Packaging.primitiveDefinitionName $ var "pd")
+            nothing
             (encoderFor _PrimitiveDefinition @@ var "pd")
             (just (var "primDefSig")))])
       (var "origDefs") $
@@ -579,7 +581,7 @@ lowerPrimitiveDefinitions = define "lowerPrimitiveDefinitions" $
         Packaging.moduleDependency (var "coreNs") nothing]) $
     Packaging.module_
       (Packaging.moduleName $ var "m")
-      (Packaging.moduleDescription $ var "m")
+      (Packaging.moduleMetadata $ var "m")
       (var "newDeps")
       (var "newDefs"))
 
@@ -668,6 +670,7 @@ moduleToSourceModule = define "moduleToSourceModule" $
   -- skip re-deriving the (large) term's type from scratch.
   "moduleDef" <~ Packaging.definitionTerm (Packaging.termDefinition
     (wrap _Name (Packaging.unModuleName (var "sourceNs") ++ (string ".module_")))
+    nothing
     (encoderFor _Module @@ var "m")
     (just (Scoping.typeSchemeToTermSignature @@ Core.typeScheme
       (list ([] :: [TypedTerm Name]))
@@ -675,7 +678,9 @@ moduleToSourceModule = define "moduleToSourceModule" $
       nothing))) $
   Packaging.module_
     (var "sourceNs")
-    (just $ (string "Source module for ") ++ Packaging.unModuleName (Packaging.moduleName $ var "m"))
+    (just (Packaging.entityMetadata
+      (just $ (string "Source module for ") ++ Packaging.unModuleName (Packaging.moduleName $ var "m"))
+      (list ([] :: [TypedTerm String])) (list ([] :: [TypedTerm EntityReference])) nothing))
     (list [Packaging.moduleDependency (var "modTypeNs") nothing])
     (list [var "moduleDef"])
 
@@ -762,7 +767,7 @@ refreshModule = define "refreshModule" $
     (var "m")
     (Packaging.module_
       (Packaging.moduleName $ var "m")
-      (Packaging.moduleDescription $ var "m")
+      (Packaging.moduleMetadata $ var "m")
       (Packaging.moduleDependencies $ var "m")
       (Maybes.cat $ Lists.map
         ("d" ~> cases _Definition (var "d") Nothing [
@@ -770,6 +775,7 @@ refreshModule = define "refreshModule" $
           _Definition_term>>: "td" ~> Maybes.map
             ("b" ~> Packaging.definitionTerm (Packaging.termDefinition
               (Core.bindingName $ var "b")
+              nothing
               (Core.bindingTerm $ var "b")
               (Maybes.map Scoping.typeSchemeToTermSignature $ Core.bindingTypeScheme $ var "b")))
             (Lists.find ("b" ~> Equality.equal (Core.bindingName $ var "b") (Packaging.termDefinitionName $ var "td"))
