@@ -22,7 +22,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> kernelTypesModuleNames,
-            moduleDescription = Just "Primitives in the hydra.lib.pairs namespace."}
+            moduleDescription = Just "Primitives in the hydra.lib.pairs module."}
   where
     definitions = [
       toPrimitive "Map over both elements of a pair." bimapSig (Just

@@ -1,5 +1,5 @@
 -- Note: this is an automatically generated file. Do not edit.
--- | Module dependency namespace analysis
+-- | Module dependency module name analysis
 
 module Hydra.Analysis where
 import qualified Hydra.Annotations as Annotations
@@ -49,15 +49,15 @@ import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 import qualified Data.Set as S
--- | Add names to existing namespaces mapping
-addNamesToNamespaces :: (Packaging.ModuleName -> t0) -> S.Set Core.Name -> Util.Namespaces t0 -> Util.Namespaces t0
-addNamesToNamespaces encodeNamespace names ns0 =
+-- | Add names to existing module names mapping
+addNamesToModuleNames :: (Packaging.ModuleName -> t0) -> S.Set Core.Name -> Util.ModuleNames t0 -> Util.ModuleNames t0
+addNamesToModuleNames encodeModuleName names ns0 =
 
-      let nss = Sets.fromList (Maybes.cat (Lists.map Names.namespaceOf (Sets.toList names)))
-          toPair = \ns -> (ns, (encodeNamespace ns))
-      in Util.Namespaces {
-        Util.namespacesFocus = (Util.namespacesFocus ns0),
-        Util.namespacesMapping = (Maps.union (Util.namespacesMapping ns0) (Maps.fromList (Lists.map toPair (Sets.toList nss))))}
+      let nss = Sets.fromList (Maybes.cat (Lists.map Names.moduleNameOf (Sets.toList names)))
+          toPair = \ns -> (ns, (encodeModuleName ns))
+      in Util.ModuleNames {
+        Util.moduleNamesFocus = (Util.moduleNamesFocus ns0),
+        Util.moduleNamesMapping = (Maps.union (Util.moduleNamesMapping ns0) (Maps.fromList (Lists.map toPair (Sets.toList nss))))}
 -- | Analyze a function term, collecting lambdas, type lambdas, lets, and type applications
 analyzeFunctionTerm :: Typing.InferenceContext -> (t0 -> Graph.Graph) -> (Graph.Graph -> t0 -> t0) -> t0 -> Core.Term -> Either t1 (Typing.FunctionStructure t0)
 analyzeFunctionTerm cx getTC setTC env term =
@@ -108,9 +108,9 @@ analyzeFunctionTermWithGather cx forBinding getTC setTC argMode gEnv tparams arg
             newEnv = setTC (Scoping.extendGraphForTypeLambda (getTC gEnv) v0) gEnv
         in (analyzeFunctionTermWithGather cx forBinding getTC setTC argMode newEnv (Lists.cons tvar tparams) args bindings doms tapps tlBody)
       _ -> analyzeFunctionTermWithFinish cx getTC gEnv tparams args bindings doms tapps t
--- | Get dependency namespaces from definitions
-definitionDependencyNamespaces :: [Packaging.Definition] -> S.Set Packaging.ModuleName
-definitionDependencyNamespaces defs =
+-- | Get dependency module names from definitions
+definitionDependencyModuleNames :: [Packaging.Definition] -> S.Set Packaging.ModuleName
+definitionDependencyModuleNames defs =
 
       let defNames =
               \def -> case def of
@@ -118,10 +118,10 @@ definitionDependencyNamespaces defs =
                 Packaging.DefinitionTerm v0 -> Dependencies.termDependencyNames True True True (Packaging.termDefinitionTerm v0)
                 Packaging.DefinitionPrimitive v0 -> Dependencies.typeDependencyNames True (Core.typeSchemeBody (Scoping.termSignatureToTypeScheme (Packaging.primitiveDefinitionSignature v0)))
           allNames = Sets.unions (Lists.map defNames defs)
-      in (Sets.fromList (Maybes.cat (Lists.map Names.namespaceOf (Sets.toList allNames))))
--- | Find dependency namespaces in all of a set of terms (Either version)
-dependencyNamespaces :: t0 -> Graph.Graph -> Bool -> Bool -> Bool -> Bool -> [Core.Binding] -> Either Errors.Error (S.Set Packaging.ModuleName)
-dependencyNamespaces cx graph binds withPrims withNoms withSchema els =
+      in (Sets.fromList (Maybes.cat (Lists.map Names.moduleNameOf (Sets.toList allNames))))
+-- | Find dependency module names in all of a set of terms (Either version)
+dependencyModuleNames :: t0 -> Graph.Graph -> Bool -> Bool -> Bool -> Bool -> [Core.Binding] -> Either Errors.Error (S.Set Packaging.ModuleName)
+dependencyModuleNames cx graph binds withPrims withNoms withSchema els =
 
       let depNames =
               \el ->
@@ -139,7 +139,7 @@ dependencyNamespaces cx graph binds withPrims withNoms withSchema els =
                   (Dependencies.termDependencyNames binds withPrims withNoms decodedTerm)]) (Eithers.bimap (\_e -> Errors.ErrorDecoding _e) (\_a -> _a) (DecodeCore.term graph term))) (Right (Sets.unions [
                   dataNames,
                   schemaNames]))))
-      in (Eithers.map (\namesList -> Sets.fromList (Maybes.cat (Lists.map Names.namespaceOf (Sets.toList (Sets.unions namesList))))) (Eithers.mapList depNames els))
+      in (Eithers.map (\namesList -> Sets.fromList (Maybes.cat (Lists.map Names.moduleNameOf (Sets.toList (Sets.unions namesList))))) (Eithers.mapList depNames els))
 -- | Gather applications from a term, returning (args, baseTerm)
 gatherApplications :: Core.Term -> ([Core.Term], Core.Term)
 gatherApplications term =
@@ -271,9 +271,9 @@ moduleContainsDecimalLiterals mod =
                     Packaging.DefinitionTerm v0 -> Just (Packaging.termDefinitionTerm v0)
                     _ -> Nothing) (Packaging.moduleDefinitions mod))
       in (Lists.foldl (\acc -> \t -> Logic.or acc (termContainsDecimal t)) False defTerms)
--- | Find dependency namespaces in all elements of a module, excluding the module's own namespace (Either version)
-moduleDependencyNamespaces :: t0 -> Graph.Graph -> Bool -> Bool -> Bool -> Bool -> Packaging.Module -> Either Errors.Error (S.Set Packaging.ModuleName)
-moduleDependencyNamespaces cx graph binds withPrims withNoms withSchema mod =
+-- | Find dependency module names in all elements of a module, excluding the module's own module name (Either version)
+moduleDependencyModuleNames :: t0 -> Graph.Graph -> Bool -> Bool -> Bool -> Bool -> Packaging.Module -> Either Errors.Error (S.Set Packaging.ModuleName)
+moduleDependencyModuleNames cx graph binds withPrims withNoms withSchema mod =
 
       let allBindings =
               Maybes.cat (Lists.map (\d -> case d of
@@ -296,13 +296,13 @@ moduleDependencyNamespaces cx graph binds withPrims withNoms withSchema mod =
                   Core.bindingTerm = (Packaging.termDefinitionTerm v0),
                   Core.bindingTypeScheme = (Maybes.map Scoping.termSignatureToTypeScheme (Packaging.termDefinitionSignature v0))})
                 _ -> Nothing) (Packaging.moduleDefinitions mod))
-      in (Eithers.map (\deps -> Sets.delete (Packaging.moduleName mod) deps) (dependencyNamespaces cx graph binds withPrims withNoms withSchema allBindings))
--- | Create namespaces mapping for definitions
-namespacesForDefinitions :: (Packaging.ModuleName -> t0) -> Packaging.ModuleName -> [Packaging.Definition] -> Util.Namespaces t0
-namespacesForDefinitions encodeNamespace focusNs defs =
+      in (Eithers.map (\deps -> Sets.delete (Packaging.moduleName mod) deps) (dependencyModuleNames cx graph binds withPrims withNoms withSchema allBindings))
+-- | Create module names mapping for definitions
+moduleNamesForDefinitions :: (Packaging.ModuleName -> t0) -> Packaging.ModuleName -> [Packaging.Definition] -> Util.ModuleNames t0
+moduleNamesForDefinitions encodeModuleName focusNs defs =
 
-      let nss = Sets.delete focusNs (definitionDependencyNamespaces defs)
-          toPair = \ns -> (ns, (encodeNamespace ns))
-      in Util.Namespaces {
-        Util.namespacesFocus = (toPair focusNs),
-        Util.namespacesMapping = (Maps.fromList (Lists.map toPair (Sets.toList nss)))}
+      let nss = Sets.delete focusNs (definitionDependencyModuleNames defs)
+          toPair = \ns -> (ns, (encodeModuleName ns))
+      in Util.ModuleNames {
+        Util.moduleNamesFocus = (toPair focusNs),
+        Util.moduleNamesMapping = (Maps.fromList (Lists.map toPair (Sets.toList nss)))}

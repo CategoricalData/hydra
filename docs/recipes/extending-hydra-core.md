@@ -204,7 +204,7 @@ Place in alphabetical order among the other `termVariantX` helpers.
 **File:** `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Types/Variants.hs`
 
 > **⚠️ CRITICAL:** You MUST add your new constructor to the TermVariant and TypeVariant enum definitions
-> in the Variants module (namespace `hydra.variants`). This is the source of the "No such field: X" error during code generation.
+> in the Variants module (module name `hydra.variants`). This is the source of the "No such field: X" error during code generation.
 
 Add to the `TermVariant` enum (around line 70-91):
 ```haskell

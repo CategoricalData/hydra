@@ -1,5 +1,5 @@
 -- Note: this is an automatically generated file. Do not edit.
--- | Primitives in the hydra.lib.math namespace.
+-- | Primitives in the hydra.lib.math module.
 
 module Hydra.Lib.Math where
 import qualified Hydra.Ast as Ast

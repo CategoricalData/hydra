@@ -547,5 +547,5 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "description": "Primitives in the hydra.lib.lists namespace.",
+  "description": "Primitives in the hydra.lib.lists module.",
   "name": "hydra.lib.lists"}

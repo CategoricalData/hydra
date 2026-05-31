@@ -95,7 +95,7 @@ module_ = Module {
       toDefinition decodeMapType,
       toDefinition decodeMaybeType,
       toDefinition decodeModule,
-      toDefinition decodeNamespace,
+      toDefinition decodeModuleName,
       toDefinition decodePairType,
       toDefinition decodeRecordType,
       toDefinition decodeRecordTypeImpl,
@@ -488,12 +488,12 @@ decodeModule = define "decodeModule" $
         -- 2. Decoded versions of source dependencies (e.g., hydra.core -> hydra.decode.core).
         --    If type A references type B, the decoder for A needs to call the decoder for B.
         -- 3. The original module's namespace (the schema being decoded) and hydra.util
-        "allDecodedDeps" <~ (primitive _lists_nub @@ (Lists.map decodeNamespace (Lists.map ("dep" ~> Packaging.moduleDependencyModule (var "dep")) (Packaging.moduleDependencies (var "mod"))))) $
+        "allDecodedDeps" <~ (primitive _lists_nub @@ (Lists.map decodeModuleName (Lists.map ("dep" ~> Packaging.moduleDependencyModule (var "dep")) (Packaging.moduleDependencies (var "mod"))))) $
         right (just (Packaging.module_
+          (decodeModuleName @@ (Packaging.moduleName (var "mod")))
           (just (Strings.cat $ list [
             string "Term decoders for ",
             Packaging.unModuleName (Packaging.moduleName (var "mod"))]))
-          (decodeNamespace @@ (Packaging.moduleName (var "mod")))
           (Lists.map ("ns" ~> Packaging.moduleDependency (var "ns") nothing) (Lists.concat2
             (list [
               (Packaging.moduleName2 $ string "hydra.extract.core"),
@@ -507,13 +507,11 @@ decodeModule = define "decodeModule" $
             (Maybes.map Scoping.typeSchemeToTermSignature $ Core.bindingTypeScheme $ var "b")))
             (var "decodedBindings")))))
 
--- | Generate a decoder module namespace from a source module namespace
+-- | Generate a decoder module name from a source module name
 -- For example, "hydra.util" -> "hydra.decode.util"
--- | Generate a decoder module namespace from a source module namespace
--- For example, "hydra.util" -> "hydra.decode.util"
-decodeNamespace :: TypedTermDefinition (ModuleName -> ModuleName)
-decodeNamespace = define "decodeNamespace" $
-  doc "Generate a decoder module namespace from a source module namespace" $
+decodeModuleName :: TypedTermDefinition (ModuleName -> ModuleName)
+decodeModuleName = define "decodeModuleName" $
+  doc "Generate a decoder module name from a source module name" $
   "ns" ~>
   "parts" <~ Strings.splitOn (string ".") (Packaging.unModuleName (var "ns")) $
   "fallback" <~ Packaging.moduleName2 (Packaging.unModuleName (var "ns")) $

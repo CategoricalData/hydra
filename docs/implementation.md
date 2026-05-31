@@ -125,13 +125,13 @@ the descriptions below cover the main ones:
 
 #### Core foundation
 
-**Core.hs** - `hydra.core` namespace (largest type module)
+**Core.hs** - `hydra.core` module name (largest type module)
 - Central hub defining fundamental types: `Term`, `Type`, `Literal`, `Function`, `Application`, `Lambda`, `Let`,
   `Record`, `Union`, etc.
 - All other modules depend on Core directly or transitively
 - Special property: imports itself as a dependency
 
-**Variants.hs** - `hydra.variants` namespace
+**Variants.hs** - `hydra.variants` module name
 - Supplements Core with metadata types NOT referenced by Core
 - Defines variant enums: `TermVariant`, `TypeVariant`, `LiteralVariant`, etc.
 - Provides introspection capabilities: `Precision`, `Comparison`
@@ -144,23 +144,23 @@ the descriptions below cover the main ones:
 
 #### Transformation framework
 
-**Coders.hs** - `hydra.coders` namespace
+**Coders.hs** - `hydra.coders` module name
 - Defines `Coder`, `Adapter`, `Bicoder`, `Language`, `LanguageConstraints`, `AdapterContext`, `TraversalOrder`
 - The framework is Either-based; the former `Flow` monad was removed in #245
 
 #### Graph and query
 
-**Graph.hs** - `hydra.graph` namespace
+**Graph.hs** - `hydra.graph` module name
 - Extends core with graph operations
 - Defines: `Graph`, `Primitive`, `TermCoder`
 
-**Query.hs** - `hydra.query` namespace
+**Query.hs** - `hydra.query` module name
 - Language-agnostic graph pattern queries
 - Triple patterns and path expressions
 
 #### Type system support
 
-**Typing.hs** - `hydra.typing` namespace
+**Typing.hs** - `hydra.typing` module name
 - Type inference and reconstruction
 - Type constraints and substitutions
 - `TypeClass` record (used by `hydra.classes` term bindings)
@@ -171,13 +171,13 @@ the descriptions below cover the main ones:
 
 #### Error model
 
-**Errors.hs** - `hydra.errors` namespace and the `Error/` subdirectory
+**Errors.hs** - `hydra.errors` module name and the `Error/` subdirectory
 - Structured error types used by inference, checking, and coders
 
 #### Parsing and path resolution
 
-**Parsing.hs** - `hydra.parsing` namespace
-**Paths.hs** - `hydra.paths` namespace
+**Parsing.hs** - `hydra.parsing` module name
+**Paths.hs** - `hydra.paths` module name
 
 #### Data model helpers
 
@@ -551,7 +551,7 @@ Primitive functions are the standard library of Hydra, providing built-in operat
 
 Primitives are organized into **13 library modules** by category. Each module
 lives in `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Lib/<Sub>.hs`
-and is **the** canonical registry for its namespace:
+and is **the** canonical registry for its module name:
 
 | Library | Count | Examples |
 |---------|-------|----------|
@@ -883,7 +883,7 @@ When `reduceTerm` encounters a `TermVariable`, it resolves the name in this orde
 
 This means module bindings shadow primitives, and primitives shadow lambda-bound variables.
 In practice, names don't collide: module definitions use qualified names like `hydra.core.Term`,
-while primitives use the `hydra.lib.*` namespace.
+while primitives use the `hydra.lib.*` module name.
 
 ### Construction-time shadowing
 
@@ -1090,7 +1090,7 @@ moduleToJava cx g mod = do
   classes <- traverse (typeToJavaClass cx g mod) types
 
   -- Generate package structure
-  let packagePath = namespaceToPath (moduleName mod)
+  let packagePath = moduleNameToPath (moduleName mod)
 
   -- Map file paths to source code
   pure $ M.fromList $ map (\cls ->
@@ -1401,7 +1401,7 @@ full payload* (which is what the original `[Module]` accumulator
 retained). A `TypeScheme` is typically 1-3 orders of magnitude smaller
 than the term body it types, so this is what keeps Phase 1 within the
 `-M6G` CI heap cap on a wholly dirty universe (e.g. after a kernel-wide
-rename invalidates every namespace's digest). See
+rename invalidates every module name's digest). See
 [#381](https://github.com/CategoricalData/hydra/issues/381) and
 [Phase 1's memory envelope](build-system.md#phase-1s-memory-envelope)
 in the build-system doc for the wall-time trade-off and the dead-end
@@ -1518,7 +1518,7 @@ packages/hydra-kernel/src/main/haskell/Hydra/
 └── Sources/                # Kernel DSL-based specifications (manual)
     ├── Kernel/Types/       # Type modules (data shapes)
     ├── Kernel/Terms/       # Term modules (kernel functions)
-    ├── Kernel/Lib/         # Primitive registry: PrimitiveDefinition per hydra.lib.<sub> namespace
+    ├── Kernel/Lib/         # Primitive registry: PrimitiveDefinition per hydra.lib.<sub> module name
     └── Test/               # Common test suite
 
 packages/hydra-<lang>/src/main/haskell/Hydra/
@@ -1604,7 +1604,7 @@ implementing native functions in `Lib/`, registering primitives, and creating DS
 
 ### Primitive functions
 
-[`packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Lib/`](https://github.com/CategoricalData/hydra/tree/main/packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Lib) — Canonical primitive registry (one `PrimitiveDefinition`-emitting module per `hydra.lib.<sub>` namespace)
+[`packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Lib/`](https://github.com/CategoricalData/hydra/tree/main/packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Lib) — Canonical primitive registry (one `PrimitiveDefinition`-emitting module per `hydra.lib.<sub>` module name)
 
 [`heads/haskell/src/main/haskell/Hydra/Lib/`](https://github.com/CategoricalData/hydra/tree/main/heads/haskell/src/main/haskell/Hydra/Lib) — Native Haskell implementations
 

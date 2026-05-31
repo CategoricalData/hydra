@@ -1,6 +1,6 @@
 # Refactoring the Hydra Kernel
 
-This recipe documents how to create, rename, move, or delete kernel elements (definitions) and modules (namespaces),
+This recipe documents how to create, rename, move, or delete kernel elements (definitions) and modules (module names),
 and propagate the changes across all implementations.
 
 ## Overview
@@ -356,11 +356,37 @@ change and must be updated.
 Java is the opposite: the local identifier (e.g., `keyClasses()`) reflects
 the new camelCase exactly, so dist/java is visibly affected.
 
+#### Multi-word renames: hand-written heads reference the symbol in several mangled forms
+
+When the rename *does* change the case-converted form (any multi-word rename, e.g.
+`namespaceOf` → `moduleNameOf` lower-snakes from `namespace_of` to `module_name_of`),
+a camelCase-only `grep` over the source will miss the hand-written head references,
+because each host spells the kernel symbol differently. A complete sweep must cover
+**all** of these surface forms, not just the camelCase one:
+
+- **Haskell sources**: camelCase, both bare and qualified (`Names.namespaceOf`); and
+  watch for the same type alias defined in *more than one* file (e.g. a per-module
+  `type HaskellNamespaces = Namespaces H.ModuleName` in both `Utils.hs` and `Coder.hs`)
+  — a unique-looking line can have duplicates.
+- **`heads/python/`**: snake_case imports and calls (`from hydra.names import namespace_to_file_path`).
+- **`heads/lisp/*/`**: the mangled `hydra_<module>_<snake_symbol>` form
+  (`hydra_codegen_namespace_to_path`, `hydra_names_namespace_to_file_path`).
+- **Native DSL sources** (`packages/hydra-{java,python}/src/main/<lang>/`): the generated
+  DSL *helper* is referenced in the host's native casing — Python uses **snake_case
+  attribute access** for the helper itself (`Util.module_names(...)`, not
+  `Util.moduleNames(...)`) but **camelCase inside `var("hydra.…")` qualified-name strings**.
+  Getting this wrong is invisible until the native self-host regen (sync Phase 5) runs.
+
+The compile gate (`stack build` of `heads/haskell`) catches the Haskell-side misses
+including duplicate aliases; the **target-language misses only surface during `/sync`**
+(Python/Lisp head import errors, and the Phase-5 native Python/Java JSON regen). Plan
+for `/sync` to flush out a second round of fixes after the source-and-`dist` patch.
+
 ---
 
 ## Moving or Renaming Modules (namespace refactoring)
 
-This is the most complex refactoring operation. A Hydra namespace like `hydra.foo` corresponds to:
+This is the most complex refactoring operation. A Hydra module name like `hydra.foo` corresponds to:
 - A Haskell source module (e.g., `Hydra/Sources/Kernel/Types/Foo.hs` or `Kernel/Terms/Foo.hs`)
 - Generated Haskell code (e.g., `Hydra/Foo.hs`)
 - Generated decoder/encoder source modules (e.g., `Hydra/Sources/Decode/Foo.hs`,
@@ -373,7 +399,7 @@ This is the most complex refactoring operation. A Hydra namespace like `hydra.fo
 ### When You Might Need This
 
 - Resolving module/package conflicts (e.g., Python can't have both `json.py` and `json/` directory)
-- Reorganizing the namespace hierarchy
+- Reorganizing the module-name hierarchy
 - Preparing for semantic versioning with a cleaner API surface
 
 ### Phase 1: Update the Source Module
@@ -386,7 +412,7 @@ This is the most complex refactoring operation. A Hydra namespace like `hydra.fo
       packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Types/Foo/Bar.hs
    ```
 
-2. **Update the namespace declaration**
+2. **Update the module-name declaration**
    ```haskell
    -- Change from:
    ns = ModuleName "hydra.foo"
@@ -416,7 +442,7 @@ This is the most complex refactoring operation. A Hydra namespace like `hydra.fo
      import qualified Hydra.Sources.Encode.Foo.Bar as EncodeFoo
      ```
 
-2. **Update files that reference the old namespace.** Use `grep` to find all references:
+2. **Update files that reference the old module name.** Use `grep` to find all references:
    ```bash
    grep -rn 'Hydra\.Foo[^.]' packages/hydra-haskell/src/main/haskell/
    grep -rn 'hydra\.foo[^.]' packages/hydra-haskell/src/main/haskell/
@@ -442,7 +468,7 @@ This is the most complex refactoring operation. A Hydra namespace like `hydra.fo
    ```
 
 5. **Move and update decoder/encoder modules.** The generated decoder and encoder modules need to be moved
-   to match the new namespace structure:
+   to match the new module-name structure:
    ```bash
    # Move source decoder/encoder modules
    mkdir -p dist/haskell/hydra-kernel/src/main/haskell/Hydra/Sources/Decode/Foo
@@ -473,7 +499,7 @@ This is the most complex refactoring operation. A Hydra namespace like `hydra.fo
      dist/haskell/hydra-kernel/src/main/haskell/Hydra/Encode/Foo/Bar.hs
    ```
 
-7. **Update namespace references in generated files.** The generated files contain namespace strings that
+7. **Update module-name references in generated files.** The generated files contain module-name strings that
    need updating:
    ```bash
    perl -i -pe 's/hydra\.foo\.Element/hydra.foo.bar.Element/g' \
@@ -493,7 +519,7 @@ This is the most complex refactoring operation. A Hydra namespace like `hydra.fo
    that should be updated:
    ```bash
    # Change "import qualified Hydra.Foo.Bar as Foo" to "import qualified Hydra.Foo.Bar as Model"
-   # in files that use the module for types (not the namespace DSL)
+   # in files that use the module for types (not the module-name DSL)
    perl -i -pe 's/import qualified Hydra\.Foo\.Bar as Foo/import qualified Hydra.Foo.Bar as Model/g' \
      dist/haskell/hydra-kernel/src/main/haskell/Hydra/Foo/Decode.hs \
      dist/haskell/hydra-kernel/src/main/haskell/Hydra/Foo/Encode.hs \
@@ -535,7 +561,7 @@ This is the most complex refactoring operation. A Hydra namespace like `hydra.fo
     writeEncoderSourceHaskell "../../dist/haskell/hydra-kernel/src/main/haskell" mainModules kernelTypesModules
     :quit
     ```
-    This regenerates the `Hydra.Sources.Decode.*` and `Hydra.Sources.Encode.*` modules with correct namespace
+    This regenerates the `Hydra.Sources.Decode.*` and `Hydra.Sources.Encode.*` modules with correct module-name
     references.
 
 12. **Clean up orphan files.** After regeneration, remove any orphan files left at the old locations:
@@ -565,7 +591,7 @@ This is the most complex refactoring operation. A Hydra namespace like `hydra.fo
      packages/hydra-ext/src/main/haskell/
    ```
 
-   Update each file to use the new namespace.
+   Update each file to use the new module name.
 
 2. **Update generated files**
    ```bash
@@ -645,7 +671,7 @@ This is the most complex refactoring operation. A Hydra namespace like `hydra.fo
 - [ ] Python tests pass (or at least don't regress)
 - [ ] Java regenerated (`./bin/sync-java.sh` in `heads/haskell`)
 
-### Files typically affected by a namespace rename
+### Files typically affected by a module-name rename
 
 For a rename from `hydra.foo` to `hydra.foo.bar`:
 
@@ -690,7 +716,7 @@ In **DSL source code** (e.g., `Hydra/Sources/Foo/Decode.hs`), you may keep a sho
 import qualified Hydra.Foo.Bar as Foo
 ```
 
-**Function reference updates.** Generated code contains function references that include the namespace, like
+**Function reference updates.** Generated code contains function references that include the module name, like
 `hydra.decode.foo.element`. When renaming, these become `hydra.decode.foo.bar.element`. Look for these
 patterns:
 - `hydra.decode.<namespace>.element` → `hydra.decode.<new-namespace>.element`

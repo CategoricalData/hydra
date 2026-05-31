@@ -1410,8 +1410,8 @@ public class Syntax {
     private static final List<ModuleDependency> DEPENDENCIES = unqualifiedDeps(CORE_NS);
 
     public static final Module module_ = new Module(
-        Maybe.just("A Java syntax module. Tracks the Oracle Java SE 21 BNF:\n  https://docs.oracle.com/javase/specs/jls/se21/html/jls-19.html\nNote: all *WithComments types were added manually, rather than derived from the BNF, which does not allow for comments."),
         NS,
+        Maybe.just("A Java syntax module. Tracks the Oracle Java SE 21 BNF:\n  https://docs.oracle.com/javase/specs/jls/se21/html/jls-19.html\nNote: all *WithComments types were added manually, rather than derived from the BNF, which does not allow for comments."),
         DEPENDENCIES,
         DEFINITIONS);
 }

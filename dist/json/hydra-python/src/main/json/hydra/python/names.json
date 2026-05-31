@@ -152,7 +152,7 @@
                                         "function": {"project": {"fieldName": "namespaces", "typeName": "hydra.python.environment.PythonEnvironment"}}}},
                                     "typeScheme": {
                                       "body": {
-                                        "application": {"argument": {"variable": "hydra.python.syntax.DottedName"}, "function": {"variable": "hydra.util.Namespaces"}}},
+                                        "application": {"argument": {"variable": "hydra.python.syntax.DottedName"}, "function": {"variable": "hydra.util.ModuleNames"}}},
                                       "variables": []}},
                                   {
                                     "name": "focusPair",
@@ -161,7 +161,7 @@
                                         "argument": {"variable": "namespaces"},
                                         "function": {
                                           "typeApplication": {
-                                            "body": {"project": {"fieldName": "focus", "typeName": "hydra.util.Namespaces"}},
+                                            "body": {"project": {"fieldName": "focus", "typeName": "hydra.util.ModuleNames"}},
                                             "type": {"variable": "hydra.python.syntax.DottedName"}}}}},
                                     "typeScheme": {
                                       "body": {
@@ -383,7 +383,7 @@
                                 "function": {"project": {"fieldName": "namespaces", "typeName": "hydra.python.environment.PythonEnvironment"}}}},
                             "typeScheme": {
                               "body": {
-                                "application": {"argument": {"variable": "hydra.python.syntax.DottedName"}, "function": {"variable": "hydra.util.Namespaces"}}},
+                                "application": {"argument": {"variable": "hydra.python.syntax.DottedName"}, "function": {"variable": "hydra.util.ModuleNames"}}},
                               "variables": []}},
                           {
                             "name": "focusPair",
@@ -392,7 +392,7 @@
                                 "argument": {"variable": "namespaces"},
                                 "function": {
                                   "typeApplication": {
-                                    "body": {"project": {"fieldName": "focus", "typeName": "hydra.util.Namespaces"}},
+                                    "body": {"project": {"fieldName": "focus", "typeName": "hydra.util.ModuleNames"}},
                                     "type": {"variable": "hydra.python.syntax.DottedName"}}}}},
                             "typeScheme": {
                               "body": {
@@ -848,7 +848,7 @@
                                         "function": {"project": {"fieldName": "namespaces", "typeName": "hydra.python.environment.PythonEnvironment"}}}},
                                     "typeScheme": {
                                       "body": {
-                                        "application": {"argument": {"variable": "hydra.python.syntax.DottedName"}, "function": {"variable": "hydra.util.Namespaces"}}},
+                                        "application": {"argument": {"variable": "hydra.python.syntax.DottedName"}, "function": {"variable": "hydra.util.ModuleNames"}}},
                                       "variables": []}},
                                   {
                                     "name": "focusPair",
@@ -857,7 +857,7 @@
                                         "argument": {"variable": "namespaces"},
                                         "function": {
                                           "typeApplication": {
-                                            "body": {"project": {"fieldName": "focus", "typeName": "hydra.util.Namespaces"}},
+                                            "body": {"project": {"fieldName": "focus", "typeName": "hydra.util.ModuleNames"}},
                                             "type": {"variable": "hydra.python.syntax.DottedName"}}}}},
                                     "typeScheme": {
                                       "body": {
@@ -875,7 +875,7 @@
                                     "typeScheme": {"body": {"variable": "hydra.packaging.ModuleName"}, "variables": []}},
                                   {
                                     "name": "mns",
-                                    "term": {"application": {"argument": {"variable": "name"}, "function": {"variable": "hydra.names.namespaceOf"}}},
+                                    "term": {"application": {"argument": {"variable": "name"}, "function": {"variable": "hydra.names.moduleNameOf"}}},
                                     "typeScheme": {"body": {"maybe": {"variable": "hydra.packaging.ModuleName"}}, "variables": []}},
                                   {
                                     "name": "sameNamespace",
