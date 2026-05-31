@@ -126,6 +126,18 @@ tv2 = Types.var "v2"
 sig :: TypeScheme -> TermSignature
 sig = typeSchemeToTermSignature
 
+-- Build a TermSignature, marking the value parameters at the given (0-based)
+-- positions as lazy (thunked by coders that distinguish strict from lazy
+-- evaluation).
+lazySig :: [Int] -> TypeScheme -> TermSignature
+lazySig idxs ts = markLazyParams idxs (sig ts)
+
+markLazyParams :: [Int] -> TermSignature -> TermSignature
+markLazyParams idxs ts = ts {
+  termSignatureParameters =
+    zipWith (\i p -> if i `elem` idxs then p {parameterIsLazy = True} else p)
+      [0..] (termSignatureParameters ts)}
+
 -- Signatures (k/v unconstrained except where ordering is required on key types).
 
 -- alter : forall v. forall k:Ord. (Maybe v -> Maybe v) -> k -> Map k v -> Map k v
@@ -158,8 +170,11 @@ filterWithKeySig :: TermSignature
 filterWithKeySig = sig $ Types.polyConstrained [("k", [Name "ordering"]), ("v", [])]
   ((tk Types.~> tv Types.~> Types.boolean) Types.~> mp tk tv Types.~> mp tk tv)
 
+-- findWithDefault : forall k v. v -> k -> Map k v -> v
+-- The default value (position 0) is lazy: it is only evaluated when the key
+-- is absent.
 findWithDefaultSig :: TermSignature
-findWithDefaultSig = sig $ Types.polyConstrained [("v", []), ("k", [Name "ordering"])]
+findWithDefaultSig = lazySig [0] $ Types.polyConstrained [("v", []), ("k", [Name "ordering"])]
   (tv Types.~> tk Types.~> mp tk tv Types.~> tv)
 
 fromListSig :: TermSignature

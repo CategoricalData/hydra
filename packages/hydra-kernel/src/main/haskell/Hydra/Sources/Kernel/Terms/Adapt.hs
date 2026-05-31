@@ -5,7 +5,7 @@ module Hydra.Sources.Kernel.Terms.Adapt where
 import Hydra.Kernel hiding (
   adaptFloatType, adaptDataGraph, adaptGraphSchema, adaptIntegerType, adaptLambdaDomains, adaptLiteral,
   adaptLiteralType, adaptLiteralTypesMap, adaptLiteralValue, adaptNestedTypes, adaptPrimitive,
-  adaptTerm, adaptTermForLanguage, adaptType, adaptTypeForLanguage, adaptTypeScheme,
+  adaptTerm, adaptTermForLanguage, adaptTermSignature, adaptType, adaptTypeForLanguage, adaptTypeScheme,
   composeCoders, dataGraphToDefinitions, literalTypeSupported,
   prepareFloatType, prepareIntegerType, prepareLiteralType, prepareType, prepareSame,
   pushTypeAppsInward, schemaGraphToDefinitions,
@@ -105,6 +105,7 @@ module_ = Module {
       toDefinition adaptPrimitive,
       toDefinition adaptTerm,
       toDefinition adaptTermForLanguage,
+      toDefinition adaptTermSignature,
       toDefinition adaptType,
       toDefinition adaptTypeForLanguage,
       toDefinition adaptTypeScheme,
@@ -375,11 +376,11 @@ adaptPrimitive = define "adaptPrimitive" $
   doc "Adapt a primitive to the given language constraints, prior to inference" $
   "constraints" ~> "litmap" ~> "prim0" ~>
   "def0" <~ Graph.primitiveDefinition (var "prim0") $
-  "ts0" <~ (Scoping.termSignatureToTypeScheme @@ Packaging.primitiveDefinitionSignature (var "def0")) $
-  "ts1" <<~ adaptTypeScheme @@ var "constraints" @@ var "litmap" @@ var "ts0" $
+  "sig1" <<~ adaptTermSignature @@ var "constraints" @@ var "litmap"
+    @@ Packaging.primitiveDefinitionSignature (var "def0") $
   "def1" <~ Packaging.primitiveDefinition
     (Packaging.primitiveDefinitionName (var "def0"))
-    (Scoping.typeSchemeToTermSignature @@ var "ts1")
+    (var "sig1")
     (Packaging.primitiveDefinitionDescription (var "def0"))
     (Packaging.primitiveDefinitionComments (var "def0"))
     (Packaging.primitiveDefinitionSeeAlso (var "def0"))
@@ -451,6 +452,31 @@ adaptTermForLanguage = define "adaptTermForLanguage" $
   "constraints" <~ Coders.languageConstraints (var "lang") $
   "litmap" <~ adaptLiteralTypesMap @@ var "constraints" $
   adaptTerm @@ var "constraints" @@ var "litmap" @@ var "cx" @@ var "g" @@ var "term"
+
+adaptTermSignature :: TypedTermDefinition (LanguageConstraints -> M.Map LiteralType LiteralType -> TermSignature -> Prelude.Either Error TermSignature)
+adaptTermSignature = define "adaptTermSignature" $
+  doc ("Adapt the types within a term signature to the given language constraints, in place."
+    <> " Parameter names, descriptions, and per-parameter isLazy flags, as well as type"
+    <> " parameters, are preserved; only the parameter and result types are adapted. Unlike"
+    <> " routing through TypeScheme (the type-only view), this retains the full TermSignature"
+    <> " metadata, including primitive laziness flags.") $
+  "constraints" ~> "litmap" ~> "sig0" ~>
+  "result0" <~ Typing.termSignatureResult (var "sig0") $
+  "resultType1" <<~ adaptType @@ var "constraints" @@ var "litmap" @@ Typing.resultType (var "result0") $
+  "params1" <<~ (Eithers.mapList
+    ("p" ~>
+      Eithers.map
+        ("ty1" ~> Typing.parameter
+          (Typing.parameterName (var "p"))
+          (Typing.parameterDescription (var "p"))
+          (var "ty1")
+          (Typing.parameterIsLazy (var "p")))
+        (adaptType @@ var "constraints" @@ var "litmap" @@ Typing.parameterType (var "p")))
+    (Typing.termSignatureParameters (var "sig0"))) $
+  right $ Typing.termSignature
+    (Typing.termSignatureTypeParameters (var "sig0"))
+    (var "params1")
+    (Typing.result (Typing.resultDescription (var "result0")) (var "resultType1"))
 
 adaptType :: TypedTermDefinition (LanguageConstraints -> M.Map LiteralType LiteralType -> Type -> Prelude.Either Error Type)
 adaptType = define "adaptType" $
