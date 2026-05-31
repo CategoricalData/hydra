@@ -185,6 +185,7 @@ module_ = Module {
       toDefinition isTypeVariableName,
       toDefinition isVariantUnitType,
       toDefinition lazyDotGet,
+      toDefinition lazyFlagsForPrimitive,
       toDefinition lruCacheDecorator,
       toDefinition makeCurriedLambda,
       toDefinition makeLazy,
@@ -699,7 +700,7 @@ encodeApplicationInner = def "encodeApplicationInner" $
             (Lexical.lookupBinding @@ var "g" @@ var "name"))
           -- Is a primitive: wrap lazy arguments and encode
           (lambda "_prim" $
-            "wrappedArgs" <~ (wrapLazyArguments @@ var "name" @@ var "hargs") $
+            "wrappedArgs" <~ (wrapLazyArguments @@ var "g" @@ var "name" @@ var "hargs") $
             "expr" <<~ (encodeVariable @@ var "cx" @@ var "env" @@ var "name" @@ var "wrappedArgs") $
             right $ pair (var "expr") (var "rargs"))]
 
@@ -4331,38 +4332,36 @@ wrapInNullaryLambda = def "wrapInNullaryLambda" $
   "expr" ~>
     PyDsl.expressionLambda $ PyDsl.lambda_ PyDsl.lambdaParametersEmpty (var "expr")
 
--- | Wrap specific arguments in nullary lambdas for primitives that require lazy evaluation
-wrapLazyArguments :: TypedTermDefinition (Name -> [Py.Expression] -> [Py.Expression])
+-- | Look up a primitive by name and return its per-parameter laziness flags
+-- (the isLazy flag of each signature parameter), in order. Empty if the name is
+-- not a registered primitive. The single source of truth for which arguments
+-- must be thunked, replacing the former hard-coded name table (issue #391).
+lazyFlagsForPrimitive :: TypedTermDefinition (Graph -> Name -> [Bool])
+lazyFlagsForPrimitive = def "lazyFlagsForPrimitive" $
+  "g" ~> "name" ~>
+    Maybes.cases (Maps.lookup (var "name") (Graph.graphPrimitives (var "g")))
+      (list ([] :: [TypedTerm Bool]))
+      ("prim" ~>
+        Lists.map ("p" ~> Typing.parameterIsLazy (var "p"))
+          (Typing.termSignatureParameters
+            (Packaging.primitiveDefinitionSignature
+              (Graph.primitiveDefinition (var "prim")))))
+
+-- | Wrap the lazy-flagged arguments of a primitive call in nullary lambdas
+-- (thunks). Which positions are lazy comes from the primitive's isLazy metadata
+-- (issue #391), not a hard-coded name table. A position is wrapped when its flag
+-- is true and the argument is present, so partially-applied calls thunk only the
+-- supplied lazy positions. The Python runtime accepts either a value or a thunk
+-- (callable() check), so unwrapped trailing args remain correct.
+wrapLazyArguments :: TypedTermDefinition (Graph -> Name -> [Py.Expression] -> [Py.Expression])
 wrapLazyArguments = def "wrapLazyArguments" $
-  doc "Wrap specific arguments in nullary lambdas for primitives that require lazy evaluation" $
-  "name" ~> "args" ~> lets [
-    "dummyExpr">: PyUtils.pyNameToPyExpression @@ (PyDsl.name $ string ""),
-    "argAt">: "i" ~> Maybes.fromMaybe (var "dummyExpr") (Lists.maybeAt (var "i") (var "args"))] $
-    Logic.ifElse
-      (Logic.and
-        (Equality.equal (var "name") (Core.name $ string "hydra.lib.logic.ifElse"))
-        (Equality.equal (Lists.length (var "args")) (int32 3)))
-      -- For if_else, wrap arguments 2 and 3 (the then/else branches)
-      (list [
-        var "argAt" @@ int32 0,
-        wrapInNullaryLambda @@ (var "argAt" @@ int32 1),
-        wrapInNullaryLambda @@ (var "argAt" @@ int32 2)])
-      (Logic.ifElse
-        (Logic.and
-          (Equality.equal (var "name") (Core.name $ string "hydra.lib.maybes.cases"))
-          (Equality.equal (Lists.length (var "args")) (int32 3)))
-        -- For cases, wrap argument 2 (the Nothing branch) for lazy evaluation
-        (list [
-          var "argAt" @@ int32 0,
-          wrapInNullaryLambda @@ (var "argAt" @@ int32 1),
-          var "argAt" @@ int32 2])
-        (Logic.ifElse
-          (Logic.and
-            (Logic.or
-              (Equality.equal (var "name") (Core.name $ string "hydra.lib.maybes.maybe"))
-              (Equality.equal (var "name") (Core.name $ string "hydra.lib.maybes.fromMaybe")))
-            (Equality.gte (Lists.length (var "args")) (int32 1)))
-          -- For maybe/fromMaybe, wrap argument 1 (the default value)
-          (Lists.cons (wrapInNullaryLambda @@ (var "argAt" @@ int32 0))
-                      (Lists.drop (int32 1) (var "args")))
-          (var "args")))
+  doc "Wrap lazy-flagged arguments of a primitive call in nullary lambdas, per isLazy metadata" $
+  "g" ~> "name" ~> "args" ~> lets [
+    "lazyFlags">: lazyFlagsForPrimitive @@ var "g" @@ var "name"] $
+    -- Zip args with flags (truncates to the shorter list, so partially-applied
+    -- calls only consider supplied positions), wrapping where the flag is true.
+    Lists.map
+      ("pair" ~> Logic.ifElse (Pairs.second (var "pair"))
+        (wrapInNullaryLambda @@ Pairs.first (var "pair"))
+        (Pairs.first (var "pair")))
+      (Lists.zip (var "args") (var "lazyFlags"))
