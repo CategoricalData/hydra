@@ -52,18 +52,18 @@ import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pur
 import qualified Data.Scientific as Sci
 import qualified Data.Set as S
 -- | Add namespaces from a set of names to existing namespaces
-addNamespacesToNamespaces :: Util.Namespaces Syntax.ModuleName -> S.Set Core.Name -> Util.Namespaces Syntax.ModuleName
+addNamespacesToNamespaces :: Util.ModuleNames Syntax.ModuleName -> S.Set Core.Name -> Util.ModuleNames Syntax.ModuleName
 addNamespacesToNamespaces ns0 names =
 
-      let newNamespaces = Sets.fromList (Maybes.cat (Lists.map Names.namespaceOf (Sets.toList names)))
+      let newNamespaces = Sets.fromList (Maybes.cat (Lists.map Names.moduleNameOf (Sets.toList names)))
           toModuleName =
                   \namespace -> Syntax.ModuleName (Formatting.capitalize (Maybes.fromMaybe (Packaging.unModuleName namespace) (Lists.maybeLast (Strings.splitOn "." (Packaging.unModuleName namespace)))))
           newMappings = Maps.fromList (Lists.map (\ns_ -> (ns_, (toModuleName ns_))) (Sets.toList newNamespaces))
-      in Util.Namespaces {
-        Util.namespacesFocus = (Util.namespacesFocus ns0),
-        Util.namespacesMapping = (Maps.union (Util.namespacesMapping ns0) newMappings)}
+      in Util.ModuleNames {
+        Util.moduleNamesFocus = (Util.moduleNamesFocus ns0),
+        Util.moduleNamesMapping = (Maps.union (Util.moduleNamesMapping ns0) newMappings)}
 -- | Build namespaces for a test group including encoded term references
-buildNamespacesForTestGroup :: Packaging.Module -> Testing.TestGroup -> Graph.Graph -> Either String (Util.Namespaces Syntax.ModuleName)
+buildNamespacesForTestGroup :: Packaging.Module -> Testing.TestGroup -> Graph.Graph -> Either String (Util.ModuleNames Syntax.ModuleName)
 buildNamespacesForTestGroup mod tgroup graph_ =
 
       let testCases_ = collectTestCases tgroup
@@ -75,8 +75,8 @@ buildNamespacesForTestGroup mod tgroup graph_ =
                     Core.bindingTypeScheme = Nothing}) testTerms
           tempModule =
                   Packaging.Module {
-                    Packaging.moduleDescription = (Packaging.moduleDescription mod),
                     Packaging.moduleName = (Packaging.moduleName mod),
+                    Packaging.moduleDescription = (Packaging.moduleDescription mod),
                     Packaging.moduleDependencies = (Packaging.moduleDependencies mod),
                     Packaging.moduleDefinitions = (Lists.map (\b -> Packaging.DefinitionTerm (Packaging.TermDefinition {
                       Packaging.termDefinitionName = (Core.bindingName b),
@@ -86,7 +86,7 @@ buildNamespacesForTestGroup mod tgroup graph_ =
         let encodedNames = Sets.unions (Lists.map (\t -> extractEncodedTermVariableNames graph_ t) testTerms)
         in (Right (addNamespacesToNamespaces baseNamespaces encodedNames))))
 -- | Build the complete test module for Haskell HSpec
-buildTestModule :: Packaging.Module -> Testing.TestGroup -> String -> Util.Namespaces Syntax.ModuleName -> String
+buildTestModule :: Packaging.Module -> Testing.TestGroup -> String -> Util.ModuleNames Syntax.ModuleName -> String
 buildTestModule testModule testGroup testBody namespaces =
 
       let ns_ = Packaging.moduleName testModule
@@ -144,10 +144,10 @@ extractEncodedTermVariableNames graf term =
 extractTestTerms :: t0 -> [t1]
 extractTestTerms tcm = []
 -- | Find necessary imports for Haskell based on referenced names
-findHaskellImports :: Util.Namespaces Syntax.ModuleName -> t0 -> [String]
+findHaskellImports :: Util.ModuleNames Syntax.ModuleName -> t0 -> [String]
 findHaskellImports namespaces names_ =
 
-      let mapping_ = Util.namespacesMapping namespaces
+      let mapping_ = Util.moduleNamesMapping namespaces
           filtered =
                   Maps.filterWithKey (\ns_ -> \_v -> Logic.not (Equality.equal (Maybes.fromMaybe "" (Lists.maybeHead (Strings.splitOn "hydra.test." (Packaging.unModuleName ns_)))) "")) mapping_
       in (Lists.map (\entry -> Strings.cat [
@@ -184,13 +184,13 @@ generateTestCase depth tcm =
           expected_,
           ")"])])
 -- | Generate a complete Haskell test file
-generateTestFile :: Packaging.Module -> Testing.TestGroup -> Util.Namespaces Syntax.ModuleName -> Either t0 (String, String)
+generateTestFile :: Packaging.Module -> Testing.TestGroup -> Util.ModuleNames Syntax.ModuleName -> Either t0 (String, String)
 generateTestFile testModule testGroup namespaces =
     Eithers.map (\testBody ->
       let testModuleContent = buildTestModule testModule testGroup testBody namespaces
           ns_ = Packaging.moduleName testModule
           specNs = Packaging.ModuleName (Strings.cat2 (Packaging.unModuleName ns_) "Spec")
-          filePath = Names.namespaceToFilePath Util.CaseConventionPascal (Packaging.FileExtension "hs") specNs
+          filePath = Names.moduleNameToFilePath Util.CaseConventionPascal (Packaging.FileExtension "hs") specNs
       in (filePath, testModuleContent)) (generateTestGroupHierarchy 1 testGroup)
 -- | Generate test hierarchy preserving the structure with H.describe blocks for subgroups
 generateTestGroupHierarchy :: Int -> Testing.TestGroup -> Either t0 String

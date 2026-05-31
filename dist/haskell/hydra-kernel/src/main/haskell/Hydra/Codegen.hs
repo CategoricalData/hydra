@@ -248,8 +248,8 @@ generateSourceFiles printDefinitions lang doInfer doExpand doHoistCaseStatements
                         Packaging.DefinitionPrimitive v0 -> Packaging.primitiveDefinitionName v0
               refreshModule =
                       \els -> \m -> Packaging.Module {
-                        Packaging.moduleDescription = (Packaging.moduleDescription m),
                         Packaging.moduleName = (Packaging.moduleName m),
+                        Packaging.moduleDescription = (Packaging.moduleDescription m),
                         Packaging.moduleDependencies = (Packaging.moduleDependencies m),
                         Packaging.moduleDefinitions = (Maybes.cat (Lists.map (\d -> case d of
                           Packaging.DefinitionType v0 -> Just (Packaging.DefinitionType v0)
@@ -380,8 +380,8 @@ lowerPrimitiveDefinitions m =
                         Packaging.moduleDependencyModule = coreNs,
                         Packaging.moduleDependencyPackage = Nothing}]
         in Packaging.Module {
-          Packaging.moduleDescription = (Packaging.moduleDescription m),
           Packaging.moduleName = (Packaging.moduleName m),
+          Packaging.moduleDescription = (Packaging.moduleDescription m),
           Packaging.moduleDependencies = newDeps,
           Packaging.moduleDefinitions = newDefs}))
 -- | Compute transitive closure of dependencies for a set of modules
@@ -391,6 +391,9 @@ moduleDepsTransitive nsMap modules =
       let closure =
               Sets.union (transitiveDeps (\m -> Lists.map (\dep -> Packaging.moduleDependencyModule dep) (Packaging.moduleDependencies m)) nsMap modules) (Sets.fromList (Lists.map (\m -> Packaging.moduleName m) modules))
       in (Maybes.cat (Lists.map (\n -> Maps.lookup n nsMap) (Sets.toList closure)))
+-- | Convert a module name to a file path (e.g., hydra.core -> hydra/core)
+moduleNameToPath :: Packaging.ModuleName -> String
+moduleNameToPath ns = Strings.intercalate "/" (Strings.splitOn "." (Packaging.unModuleName ns))
 -- | Convert a Module to a JSON string
 moduleToJson :: M.Map Core.Name Core.Type -> Packaging.Module -> Either Errors.Error String
 moduleToJson schemaMap m =
@@ -414,8 +417,8 @@ moduleToSourceModule m =
                       Core.typeSchemeBody = (Core.TypeVariable (Core.Name "hydra.packaging.Module")),
                       Core.typeSchemeConstraints = Nothing})))})
       in Packaging.Module {
-        Packaging.moduleDescription = (Just (Strings.cat2 "Source module for " (Packaging.unModuleName (Packaging.moduleName m)))),
         Packaging.moduleName = sourceNs,
+        Packaging.moduleDescription = (Just (Strings.cat2 "Source module for " (Packaging.unModuleName (Packaging.moduleName m)))),
         Packaging.moduleDependencies = [
           Packaging.ModuleDependency {
             Packaging.moduleDependencyModule = modTypeNs,
@@ -473,9 +476,6 @@ modulesToGraph bsGraph universeModules modules =
         Graph.graphPrimitives = (Graph.graphPrimitives baseGraph),
         Graph.graphSchemaTypes = (Graph.graphSchemaTypes baseGraph),
         Graph.graphTypeVariables = (Graph.graphTypeVariables baseGraph)}
--- | Convert a namespace to a file path (e.g., hydra.core -> hydra/core)
-namespaceToPath :: Packaging.ModuleName -> String
-namespaceToPath ns = Strings.intercalate "/" (Strings.splitOn "." (Packaging.unModuleName ns))
 -- | Rebuild a module's term definitions using freshly inferred bindings
 refreshModule :: [Core.Binding] -> Packaging.Module -> Packaging.Module
 refreshModule inferredElements m =
@@ -485,8 +485,8 @@ refreshModule inferredElements m =
         Core.bindingTerm = (Packaging.termDefinitionTerm v0),
         Core.bindingTypeScheme = (Maybes.map Scoping.termSignatureToTypeScheme (Packaging.termDefinitionSignature v0))})
       _ -> Nothing) (Packaging.moduleDefinitions m)))))) m (Packaging.Module {
-      Packaging.moduleDescription = (Packaging.moduleDescription m),
       Packaging.moduleName = (Packaging.moduleName m),
+      Packaging.moduleDescription = (Packaging.moduleDescription m),
       Packaging.moduleDependencies = (Packaging.moduleDependencies m),
       Packaging.moduleDefinitions = (Maybes.cat (Lists.map (\d -> case d of
         Packaging.DefinitionType v0 -> Just (Packaging.DefinitionType v0)

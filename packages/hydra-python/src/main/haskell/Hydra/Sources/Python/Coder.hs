@@ -551,7 +551,7 @@ eliminateUnitVar = def "eliminateUnitVar" $
     var "go" @@ var "term0"
 
 -- | Create an initial empty metadata record with given namespaces
-emptyMetadata :: TypedTermDefinition (Namespaces Py.DottedName -> PyHelpers.PythonModuleMetadata)
+emptyMetadata :: TypedTermDefinition (ModuleNames Py.DottedName -> PyHelpers.PythonModuleMetadata)
 emptyMetadata = def "emptyMetadata" $
   doc "Create an initial empty metadata record with given namespaces" $
   "ns" ~>
@@ -2468,7 +2468,7 @@ extendMetaForTypes = def "extendMetaForTypes" $
     "names" <~ Sets.unions (Lists.map ("t" ~> Dependencies.typeDependencyNames @@ false @@ var "t") (var "types")) $
     -- Update namespaces with the collected names
     "currentNs" <~ (project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_namespaces @@ var "meta") $
-    "updatedNs" <~ (Analysis.addNamesToNamespaces @@ PyNames.encodeNamespace @@ var "names" @@ var "currentNs") $
+    "updatedNs" <~ (Analysis.addNamesToModuleNames @@ PyNames.encodeNamespace @@ var "names" @@ var "currentNs") $
     -- Create meta1 with updated namespaces
     "meta1" <~ (setMetaNamespaces @@ var "updatedNs" @@ var "meta") $
     -- Now fold extendMetaForType over all types with isTypeDef=True, isTermAnnot=False
@@ -2557,7 +2557,7 @@ genericArg = def "genericArg" $
             (Lists.map ("n" ~> PyDsl.pyNameToPyExpression (PyNames.encodeTypeVariable @@ var "n")) (var "tparamList"))))
 
 -- | Create an initial Python environment for code generation
-initialEnvironment :: TypedTermDefinition (Namespaces Py.DottedName -> Graph -> PyHelpers.PythonEnvironment)
+initialEnvironment :: TypedTermDefinition (ModuleNames Py.DottedName -> Graph -> PyHelpers.PythonEnvironment)
 initialEnvironment = def "initialEnvironment" $
   doc "Create an initial Python environment for code generation" $
   "namespaces" ~> "tcontext" ~>
@@ -2576,7 +2576,7 @@ initialMetadata = def "initialMetadata" $
   doc "Create initial empty metadata for a Python module" $
   "ns" ~>
     "dottedNs" <~ (PyNames.encodeNamespace @@ var "ns") $
-    "emptyNs" <~ (Util.namespaces (pair (var "ns") (var "dottedNs")) Maps.empty) $
+    "emptyNs" <~ (Util.moduleNames (pair (var "ns") (var "dottedNs")) Maps.empty) $
     record PyHelpers._PythonModuleMetadata [
       PyHelpers._PythonModuleMetadata_namespaces>>: var "emptyNs",
       PyHelpers._PythonModuleMetadata_typeVariables>>: Sets.empty,
@@ -2756,11 +2756,11 @@ makeUncurriedLambda = def "makeUncurriedLambda" $
       (var "body")
 
 -- | Generate domain import statements from namespace mappings
-moduleDomainImports :: TypedTermDefinition (Namespaces Py.DottedName -> [Py.ImportStatement])
+moduleDomainImports :: TypedTermDefinition (ModuleNames Py.DottedName -> [Py.ImportStatement])
 moduleDomainImports = def "moduleDomainImports" $
   doc "Generate domain import statements from namespace mappings" $
   "namespaces" ~>
-    "names" <~ (Lists.sort $ Maps.elems $ Util.namespacesMapping (var "namespaces")) $
+    "names" <~ (Lists.sort $ Maps.elems $ Util.moduleNamesMapping (var "namespaces")) $
     Lists.map
       ("ns" ~>
         inject Py._ImportStatement Py._ImportStatement_name
@@ -2771,7 +2771,7 @@ moduleDomainImports = def "moduleDomainImports" $
       (var "names")
 
 -- | Generate all import statements (standard + domain) for a Python module
-moduleImports :: TypedTermDefinition (Namespaces Py.DottedName -> PyHelpers.PythonModuleMetadata -> [Py.Statement])
+moduleImports :: TypedTermDefinition (ModuleNames Py.DottedName -> PyHelpers.PythonModuleMetadata -> [Py.Statement])
 moduleImports = def "moduleImports" $
   doc "Generate all import statements for a Python module" $
   "namespaces" ~> "meta" ~>
@@ -2868,7 +2868,7 @@ moduleToPython = def "moduleToPython" $
   "mod" ~> "defs" ~> "cx" ~> "g" ~>
     "file" <<~ (encodePythonModule @@ var "cx" @@ var "g" @@ var "mod" @@ var "defs") $
     "s" <~ (Serialization.printExpr @@ (Serialization.parenthesize @@ (PySerde.moduleToExpr @@ var "file"))) $
-    "path" <~ (Names.namespaceToFilePath @@ Util.caseConventionLowerSnake @@ (wrap _FileExtension $ string "py") @@ (Packaging.moduleName $ var "mod")) $
+    "path" <~ (Names.moduleNameToFilePath @@ Util.caseConventionLowerSnake @@ (wrap _FileExtension $ string "py") @@ (Packaging.moduleName $ var "mod")) $
     right $ Maps.singleton (var "path") (var "s")
 
 -- | Accessor for the graph field of PyGraph
@@ -2924,7 +2924,7 @@ pythonEnvironmentSetGraph = def "pythonEnvironmentSetGraph" $
       PyHelpers._PythonEnvironment_inlineVariables>>: project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_inlineVariables @@ var "env"]
 
 -- | Set the namespaces in metadata
-setMetaNamespaces :: TypedTermDefinition (Namespaces Py.DottedName -> PyHelpers.PythonModuleMetadata -> PyHelpers.PythonModuleMetadata)
+setMetaNamespaces :: TypedTermDefinition (ModuleNames Py.DottedName -> PyHelpers.PythonModuleMetadata -> PyHelpers.PythonModuleMetadata)
 setMetaNamespaces = def "setMetaNamespaces" $
   "ns" ~> "m" ~>
     record PyHelpers._PythonModuleMetadata [

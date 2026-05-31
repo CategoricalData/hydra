@@ -3,12 +3,12 @@
 -- dist/haskell/hydra-{java,python} must cover the native-generator-owned
 -- hydra.<lang>.* modules (coder, environment, language, names, serde, syntax,
 -- testing, utils), whose canonical sources are authored natively in .java/.py
--- (#344). Before #400, 'discoverNamespaceFiles' scanned only the Haskell DSL
+-- (#344). Before #400, 'discoverModuleNameFiles' scanned only the Haskell DSL
 -- tree, so editing e.g. Coder.java never invalidated the digest and the
 -- freshness gate silently skipped regeneration.
 --
 -- These tests run from the Haskell head's working directory (heads/haskell),
--- which is where 'discoverNamespaceFiles' resolves its relative packagesRoot
+-- which is where 'discoverModuleNameFiles' resolves its relative packagesRoot
 -- (../../packages) — the same cwd stack uses for 'stack test'.
 
 module Hydra.DigestSpec where
@@ -24,14 +24,14 @@ import qualified Test.Hspec as H
 -- | A name-only Module. 'hashUniverse' reads only 'moduleName', so the other
 -- fields are irrelevant for digest computation.
 nameOnly :: String -> Module
-nameOnly ns = Module Nothing (ModuleName ns) [] []
+nameOnly ns = Module (ModuleName ns) Nothing [] []
 
 
 spec :: H.Spec
 spec = do
-  nsFiles <- H.runIO Digest.discoverNamespaceFiles
+  nsFiles <- H.runIO Digest.discoverModuleNameFiles
 
-  H.describe "discoverNamespaceFiles covers native (.java/.py) coder sources (#400)" $ do
+  H.describe "discoverModuleNameFiles covers native (.java/.py) coder sources (#400)" $ do
 
     -- The eight native-owned Java coder modules. All must be discovered, or
     -- a change to that module's .java source would not invalidate the

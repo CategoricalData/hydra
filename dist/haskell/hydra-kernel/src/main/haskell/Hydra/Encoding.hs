@@ -283,10 +283,10 @@ encodeModule cx graph mod =
             Core.typeSchemeBody = (Core.TypeVariable (Core.Name "hydra.core.Type")),
             Core.typeSchemeConstraints = Nothing}))}) (Packaging.typeDefinitionName v0) (Core.typeSchemeBody (Packaging.typeDefinitionTypeScheme v0)))
       _ -> Nothing) (Packaging.moduleDefinitions mod)))) (\typeBindings -> Logic.ifElse (Lists.null typeBindings) (Right Nothing) (Eithers.bind (Eithers.mapList (\b -> Eithers.bimap (\_e -> Errors.ErrorDecoding _e) (\x -> x) (encodeBinding cx graph b)) typeBindings) (\encodedBindings -> Right (Just (Packaging.Module {
+      Packaging.moduleName = (encodeNamespace (Packaging.moduleName mod)),
       Packaging.moduleDescription = (Just (Strings.cat [
         "Term encoders for ",
         (Packaging.unModuleName (Packaging.moduleName mod))])),
-      Packaging.moduleName = (encodeNamespace (Packaging.moduleName mod)),
       Packaging.moduleDependencies = (Lists.map (\ns -> Packaging.ModuleDependency {
         Packaging.moduleDependencyModule = ns,
         Packaging.moduleDependencyPackage = Nothing}) (Lists.nub (Lists.concat2 (Lists.map encodeNamespace (Lists.map (\dep -> Packaging.moduleDependencyModule dep) (Packaging.moduleDependencies mod))) [

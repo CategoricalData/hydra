@@ -519,7 +519,7 @@ moduleExports forms =
 moduleImports :: Packaging.ModuleName -> [Packaging.Definition] -> [Syntax.ImportDeclaration]
 moduleImports focusNs defs =
 
-      let depNss = Sets.toList (Sets.delete focusNs (Analysis.definitionDependencyNamespaces defs))
+      let depNss = Sets.toList (Sets.delete focusNs (Analysis.definitionDependencyModuleNames defs))
       in (Lists.map (\ns -> Syntax.ImportDeclaration {
         Syntax.importDeclarationModule = (Syntax.NamespaceName (Packaging.unModuleName ns)),
         Syntax.importDeclarationSpec = Syntax.ImportSpecAll}) depNss)

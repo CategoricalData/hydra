@@ -257,8 +257,8 @@ rule applied separately).
 ### Manifest array values
 
 `manifest.json` files (per package, under `dist/json/<pkg>/src/main/json/manifest.json`) list each module
-namespace owned by the package, grouped by category (`mainModules`, `dslModules`, `evalLibModules`, etc.).
-Each array's entries must be sorted **lexicographically by namespace string**.
+name owned by the package, grouped by category (`mainModules`, `dslModules`, `evalLibModules`, etc.).
+Each array's entries must be sorted **lexicographically by module name string**.
 This is independent of the source code's enumeration order — the wire-format requirement is
 sorted; the runtime code that drives the writer should sort before encoding.
 

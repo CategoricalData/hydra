@@ -371,7 +371,7 @@ moduleToRust mod defs cx g =
                   Syntax.crateItems = allItems}
             code = Serialization.printExpr (Serialization.parenthesize (Serde.crateToExpr crate))
             filePath =
-                    Names.namespaceToFilePath Util.CaseConventionLowerSnake (Packaging.FileExtension "rs") (Packaging.moduleName mod)
+                    Names.moduleNameToFilePath Util.CaseConventionLowerSnake (Packaging.FileExtension "rs") (Packaging.moduleName mod)
         in (Right (Maps.singleton filePath code)))))
 rustApply1 :: String -> Syntax.Type -> Syntax.Type
 rustApply1 name arg =

@@ -58,7 +58,7 @@ encodeName :: Bool -> Util.CaseConvention -> Environment.PythonEnvironment -> Co
 encodeName isQualified conv env name =
 
       let namespaces = Environment.pythonEnvironmentNamespaces env
-          focusPair = Util.namespacesFocus namespaces
+          focusPair = Util.moduleNamesFocus namespaces
           focusNs = Pairs.first focusPair
           boundVars = Pairs.second (Environment.pythonEnvironmentBoundTypeVariables env)
           qualName = Names.qualifyName name
@@ -73,7 +73,7 @@ encodeNameQualified :: Environment.PythonEnvironment -> Core.Name -> Syntax.Name
 encodeNameQualified env name =
 
       let namespaces = Environment.pythonEnvironmentNamespaces env
-          focusPair = Util.namespacesFocus namespaces
+          focusPair = Util.moduleNamesFocus namespaces
           focusNs = Pairs.first focusPair
           boundVars = Pairs.second (Environment.pythonEnvironmentBoundTypeVariables env)
           qualName = Names.qualifyName name
@@ -129,9 +129,9 @@ variableReference conv quoted env name =
                                       Syntax.powerRhs = Nothing}))}}}}}},
                         Syntax.comparisonRhs = []})]])
           namespaces = Environment.pythonEnvironmentNamespaces env
-          focusPair = Util.namespacesFocus namespaces
+          focusPair = Util.moduleNamesFocus namespaces
           focusNs = Pairs.first focusPair
-          mns = Names.namespaceOf name
+          mns = Names.moduleNameOf name
           sameNamespace = Maybes.maybe False (\ns -> Equality.equal ns focusNs) mns
       in (Logic.ifElse (Logic.and quoted sameNamespace) (Syntax.ExpressionSimple (Syntax.Disjunction [
         Syntax.Conjunction [

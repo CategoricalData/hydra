@@ -1,5 +1,5 @@
 -- Note: this is an automatically generated file. Do not edit.
--- | A model for Hydra namespaces, modules, and packages
+-- | A model for Hydra module names, modules, and packages
 
 module Hydra.Packaging where
 import qualified Hydra.Core as Core
@@ -25,21 +25,21 @@ newtype FileExtension =
     unFileExtension :: String}
   deriving (Eq, Ord, Read, Show)
 _FileExtension = Core.Name "hydra.packaging.FileExtension"
--- | A logical collection of elements in the same namespace, having dependencies on zero or more other modules
+-- | A logical collection of elements sharing a common module name, having dependencies on zero or more other modules
 data Module =
   Module {
-    -- | An optional human-readable description of the module
-    moduleDescription :: (Maybe String),
     -- | The name of the module, which is also the common prefix for all element names in the module
     moduleName :: ModuleName,
+    -- | An optional human-readable description of the module
+    moduleDescription :: (Maybe String),
     -- | Any modules which this module directly depends on
     moduleDependencies :: [ModuleDependency],
     -- | The definitions in this module
     moduleDefinitions :: [Definition]}
   deriving (Eq, Ord, Read, Show)
 _Module = Core.Name "hydra.packaging.Module"
-_Module_description = Core.Name "description"
 _Module_name = Core.Name "name"
+_Module_description = Core.Name "description"
 _Module_dependencies = Core.Name "dependencies"
 _Module_definitions = Core.Name "definitions"
 -- | A dependency on another module, identified by its name and (optionally) the package which provides it. When the package is omitted, the resolver searches all packages in scope; a duplicate module name across packages is a resolution error which can be disambiguated by naming the intended package explicitly.
@@ -64,18 +64,18 @@ data Package =
   Package {
     -- | The name of the package
     packageName :: PackageName,
-    -- | The modules in this package
-    packageModules :: [Module],
+    -- | An optional human-readable description of the package
+    packageDescription :: (Maybe String),
     -- | The packages which this package depends on
     packageDependencies :: [PackageDependency],
-    -- | An optional human-readable description of the package
-    packageDescription :: (Maybe String)}
+    -- | The modules in this package
+    packageModules :: [Module]}
   deriving (Eq, Ord, Read, Show)
 _Package = Core.Name "hydra.packaging.Package"
 _Package_name = Core.Name "name"
-_Package_modules = Core.Name "modules"
-_Package_dependencies = Core.Name "dependencies"
 _Package_description = Core.Name "description"
+_Package_dependencies = Core.Name "dependencies"
+_Package_modules = Core.Name "modules"
 -- | A dependency on another package, identified by name and constrained by an optional version specifier
 data PackageDependency =
   PackageDependency {

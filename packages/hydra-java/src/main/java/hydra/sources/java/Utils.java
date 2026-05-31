@@ -3417,8 +3417,8 @@ public class Utils {
         new ModuleName("hydra.variants"));
 
     public static final Module module_ = new Module(
-        Maybe.just("Java utilities for constructing Java syntax trees"),
         NS,
+        Maybe.just("Java utilities for constructing Java syntax trees"),
         DEPENDENCIES,
         DEFINITIONS);
 }

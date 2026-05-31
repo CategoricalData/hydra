@@ -820,8 +820,8 @@ _nonterminals = [
 # ----------------------------------------------------------------------
 
 module_ = Module(
-    Just(DESCRIPTION),
     NS,
+    Just(DESCRIPTION),
     DEPENDENCIES,
     tuple(_constructs + _terminals + _nonterminals),
 )

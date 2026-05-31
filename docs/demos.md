@@ -123,7 +123,7 @@ Because both pipelines derive from the same type definitions, the schema and dat
 structurally aligned, and a standard GraphQL engine can resolve queries against the JSON.
 
 The demo uses Haskell for schema generation and Python (with `graphql-core`) for query execution.
-Five example queries are included: listing modules, finding dependents of a namespace,
+Five example queries are included: listing modules, finding dependents of a module name,
 inspecting module details, searching by description, and ranking modules by element count.
 The architecture is naturally translingual -- the GraphQL coder is a generated function that
 could run in any Hydra target language.

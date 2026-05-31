@@ -75,21 +75,21 @@ module_ = Module {
 
 
 -- | Add namespaces from a set of names to existing namespaces
-addNamespacesToNamespaces :: TypedTermDefinition (Namespaces H.ModuleName -> S.Set Name -> Namespaces H.ModuleName)
+addNamespacesToNamespaces :: TypedTermDefinition (ModuleNames H.ModuleName -> S.Set Name -> ModuleNames H.ModuleName)
 addNamespacesToNamespaces = define "addNamespacesToNamespaces" $
   doc "Add namespaces from a set of names to existing namespaces" $
   lambda "ns0" $ lambda "names" $ lets [
-    "newNamespaces">: Sets.fromList (Maybes.cat (Lists.map Names.namespaceOf (Sets.toList (var "names")))),
+    "newNamespaces">: Sets.fromList (Maybes.cat (Lists.map Names.moduleNameOf (Sets.toList (var "names")))),
     "toModuleName">: lambda "namespace" $
       wrap H._ModuleName (Formatting.capitalize @@ (Maybes.fromMaybe (unwrap _ModuleName @@ var "namespace") (Lists.maybeLast (Strings.splitOn (string ".") (unwrap _ModuleName @@ var "namespace"))))),
     "newMappings">: Maps.fromList (Lists.map (lambda "ns_" $ pair (var "ns_") (var "toModuleName" @@ var "ns_")) (Sets.toList (var "newNamespaces")))] $
-    record _Namespaces [
-      _Namespaces_focus>>: project _Namespaces _Namespaces_focus @@ var "ns0",
-      _Namespaces_mapping>>: Maps.union (project _Namespaces _Namespaces_mapping @@ var "ns0") (var "newMappings")]
+    record _ModuleNames [
+      _ModuleNames_focus>>: project _ModuleNames _ModuleNames_focus @@ var "ns0",
+      _ModuleNames_mapping>>: Maps.union (project _ModuleNames _ModuleNames_mapping @@ var "ns0") (var "newMappings")]
 
 
 -- | Build namespaces for a test group including encoded term references
-buildNamespacesForTestGroup :: TypedTermDefinition (Module -> TestGroup -> Graph -> Either String (Namespaces H.ModuleName))
+buildNamespacesForTestGroup :: TypedTermDefinition (Module -> TestGroup -> Graph -> Either String (ModuleNames H.ModuleName))
 buildNamespacesForTestGroup = define "buildNamespacesForTestGroup" $
   doc "Build namespaces for a test group including encoded term references" $
   lambda "mod" $ lambda "tgroup" $ lambda "graph_" $ lets [
@@ -103,8 +103,8 @@ buildNamespacesForTestGroup = define "buildNamespacesForTestGroup" $
           _Binding_typeScheme>>: nothing])
       (var "testTerms"),
     "tempModule">: record _Module [
-      _Module_description>>: project _Module _Module_description @@ var "mod",
       _Module_name>>: Packaging.moduleName (var "mod"),
+      _Module_description>>: project _Module _Module_description @@ var "mod",
       _Module_dependencies>>: project _Module _Module_dependencies @@ var "mod",
       _Module_definitions>>: Lists.map ("b" ~> Packaging.definitionTerm (Packaging.termDefinition
         (Core.bindingName $ var "b") (Core.bindingTerm $ var "b")
@@ -121,7 +121,7 @@ buildNamespacesForTestGroup = define "buildNamespacesForTestGroup" $
 
 
 -- | Build the complete test module for Haskell HSpec
-buildTestModule :: TypedTermDefinition (Module -> TestGroup -> String -> Namespaces H.ModuleName -> String)
+buildTestModule :: TypedTermDefinition (Module -> TestGroup -> String -> ModuleNames H.ModuleName -> String)
 buildTestModule = define "buildTestModule" $
   doc "Build the complete test module for Haskell HSpec" $
   lambda "testModule" $ lambda "testGroup" $ lambda "testBody" $ lambda "namespaces" $ lets [
@@ -198,11 +198,11 @@ extractTestTerms = define "extractTestTerms" $
 
 
 -- | Find necessary imports for Haskell based on referenced names
-findHaskellImports :: TypedTermDefinition (Namespaces H.ModuleName -> S.Set Name -> [String])
+findHaskellImports :: TypedTermDefinition (ModuleNames H.ModuleName -> S.Set Name -> [String])
 findHaskellImports = define "findHaskellImports" $
   doc "Find necessary imports for Haskell based on referenced names" $
   lambda "namespaces" $ lambda "names_" $ lets [
-    "mapping_">: project _Namespaces _Namespaces_mapping @@ var "namespaces",
+    "mapping_">: project _ModuleNames _ModuleNames_mapping @@ var "namespaces",
     "filtered">: Maps.filterWithKey
       (lambda "ns_" $ lambda "_v" $
         Logic.not (Equality.equal
@@ -246,7 +246,7 @@ generateTestCase = define "generateTestCase" $
 
 
 -- | Generate a complete Haskell test file
-generateTestFile :: TypedTermDefinition (Module -> TestGroup -> Namespaces H.ModuleName -> Either String (String, String))
+generateTestFile :: TypedTermDefinition (Module -> TestGroup -> ModuleNames H.ModuleName -> Either String (String, String))
 generateTestFile = define "generateTestFile" $
   doc "Generate a complete Haskell test file" $
   lambda "testModule" $ lambda "testGroup" $ lambda "namespaces" $
@@ -255,7 +255,7 @@ generateTestFile = define "generateTestFile" $
         "testModuleContent">: buildTestModule @@ var "testModule" @@ var "testGroup" @@ var "testBody" @@ var "namespaces",
         "ns_">: Packaging.moduleName (var "testModule"),
         "specNs">: wrap _ModuleName (Strings.cat2 (unwrap _ModuleName @@ var "ns_") (string "Spec")),
-        "filePath">: Names.namespaceToFilePath @@ Util.caseConventionPascal @@ (wrap _FileExtension (string "hs")) @@ var "specNs"] $
+        "filePath">: Names.moduleNameToFilePath @@ Util.caseConventionPascal @@ (wrap _FileExtension (string "hs")) @@ var "specNs"] $
         pair (var "filePath") (var "testModuleContent"))
       (generateTestGroupHierarchy @@ int32 1 @@ var "testGroup")
 

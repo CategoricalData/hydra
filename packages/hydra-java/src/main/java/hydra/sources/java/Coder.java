@@ -14306,8 +14306,8 @@ public class Coder {
         new ModuleName("hydra.variants"));
 
     public static final Module module_ = new Module(
-        Maybe.just("Java code generator: converts Hydra modules to Java source code"),
         NS,
+        Maybe.just("Java code generator: converts Hydra modules to Java source code"),
         DEPENDENCIES,
         DEFINITIONS);
 }

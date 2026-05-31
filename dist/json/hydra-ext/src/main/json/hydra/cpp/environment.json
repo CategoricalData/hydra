@@ -14,7 +14,7 @@
                     "type": {
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "ModuleName mapping for code generation"}}}],
-                        "body": {"application": {"argument": {"literal": {"string": {}}}, "function": {"variable": "hydra.util.Namespaces"}}}}}},
+                        "body": {"application": {"argument": {"literal": {"string": {}}}, "function": {"variable": "hydra.util.ModuleNames"}}}}}},
                   {
                     "name": "boundTypeVariables",
                     "type": {

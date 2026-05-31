@@ -18,7 +18,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> kernelTypesModuleNames,
-            moduleDescription = Just "Primitives in the hydra.lib.chars namespace."}
+            moduleDescription = Just "Primitives in the hydra.lib.chars module."}
   where
     definitions = [
       primNoDef "isAlphaNum" "Check whether a character is alphanumeric." intToBoolSig (Just

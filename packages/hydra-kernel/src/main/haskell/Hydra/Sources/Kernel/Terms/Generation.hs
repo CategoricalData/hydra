@@ -12,8 +12,8 @@ import Hydra.Kernel hiding (
   generateCoderModules, generateLexicon, generateSourceFiles,
   inferAndGenerateLexicon, inferModules,
   moduleToJson, moduleToSourceModule, modulesToGraph,
-  moduleDepsTransitive,
-  namespaceToPath, transitiveDeps)
+  moduleDepsTransitive, moduleNameToPath,
+  transitiveDeps)
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Paths    as Paths
 import qualified Hydra.Dsl.Annotations       as Annotations
@@ -112,10 +112,10 @@ module_ = Module {
       toDefinition inferModulesGiven,
       toDefinition lowerPrimitiveDefinitions,
       toDefinition moduleDepsTransitive,
+      toDefinition moduleNameToPath,
       toDefinition moduleToJson,
       toDefinition moduleToSourceModule,
       toDefinition modulesToGraph,
-      toDefinition namespaceToPath,
       toDefinition refreshModule,
       toDefinition transitiveDeps]
 
@@ -349,8 +349,8 @@ generateSourceFiles = define "generateSourceFiles" $
         _Definition_primitive>>: "pd" ~> Packaging.primitiveDefinitionName (var "pd")]) $
       "refreshModule" <~ ("els" ~> "m" ~>
         Packaging.module_
-          (Packaging.moduleDescription $ var "m")
           (Packaging.moduleName $ var "m")
+          (Packaging.moduleDescription $ var "m")
           (Packaging.moduleDependencies $ var "m")
           (Maybes.cat $ Lists.map
             ("d" ~> cases _Definition (var "d") Nothing [
@@ -578,8 +578,8 @@ lowerPrimitiveDefinitions = define "lowerPrimitiveDefinitions" $
         Packaging.moduleDependency (var "pkgNs") nothing,
         Packaging.moduleDependency (var "coreNs") nothing]) $
     Packaging.module_
-      (Packaging.moduleDescription $ var "m")
       (Packaging.moduleName $ var "m")
+      (Packaging.moduleDescription $ var "m")
       (var "newDeps")
       (var "newDefs"))
 
@@ -674,8 +674,8 @@ moduleToSourceModule = define "moduleToSourceModule" $
       (Core.typeVariable (wrap _Name (string "hydra.packaging.Module")))
       nothing))) $
   Packaging.module_
-    (just $ (string "Source module for ") ++ Packaging.unModuleName (Packaging.moduleName $ var "m"))
     (var "sourceNs")
+    (just $ (string "Source module for ") ++ Packaging.unModuleName (Packaging.moduleName $ var "m"))
     (list [Packaging.moduleDependency (var "modTypeNs") nothing])
     (list [var "moduleDef"])
 
@@ -740,10 +740,10 @@ modulesToGraph = define "modulesToGraph" $
 -- | Pure core of code generation: given a coder, language, flags, bootstrap graph, universe,
 -- and modules to generate, produce a list of (filePath, content) pairs.
 -- This function contains no I/O and can be generated to other languages.
--- | Convert a namespace to a file path (e.g., "hydra.core" -> "hydra/core").
-namespaceToPath :: TypedTermDefinition (ModuleName -> String)
-namespaceToPath = define "namespaceToPath" $
-  doc "Convert a namespace to a file path (e.g., hydra.core -> hydra/core)" $
+-- | Convert a module name to a file path (e.g., "hydra.core" -> "hydra/core").
+moduleNameToPath :: TypedTermDefinition (ModuleName -> String)
+moduleNameToPath = define "moduleNameToPath" $
+  doc "Convert a module name to a file path (e.g., hydra.core -> hydra/core)" $
   "ns" ~>
   Strings.intercalate (string "/") (Strings.splitOn (string ".") (Packaging.unModuleName $ var "ns"))
 
@@ -761,8 +761,8 @@ refreshModule = define "refreshModule" $
   Logic.ifElse (Logic.not $ hasTermDefinitions (var "m"))
     (var "m")
     (Packaging.module_
-      (Packaging.moduleDescription $ var "m")
       (Packaging.moduleName $ var "m")
+      (Packaging.moduleDescription $ var "m")
       (Packaging.moduleDependencies $ var "m")
       (Maybes.cat $ Lists.map
         ("d" ~> cases _Definition (var "d") Nothing [

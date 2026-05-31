@@ -93,7 +93,7 @@ checkConflictingModuleNamesTests = define "checkConflictingModuleNamesTests" $
     pc "case-insensitive collision: hydra.fooBar vs hydra.foobar"
       checkConflictingModuleNamesRef
       (mkPackage "test-pkg" [mkModule "hydra.fooBar" [], mkModule "hydra.foobar" []])
-      (conflictingModuleNamespaceErr "hydra.fooBar" "hydra.foobar")]
+      (conflictingModuleNameErr "hydra.fooBar" "hydra.foobar")]
 
 checkConflictingVariantNamesTests :: TypedTermDefinition TestGroup
 checkConflictingVariantNamesTests = define "checkConflictingVariantNamesTests" $
@@ -138,7 +138,7 @@ checkDefinitionModuleNamesTests = define "checkDefinitionModuleNamesTests" $
     mc "definition outside namespace: error"
       checkDefinitionModuleNamesRef
       (mkModule "hydra.foo" [mkDocumentedTermDef "hydra.baz.qux"])
-      (definitionNotInModuleNamespaceErr "hydra.foo" "hydra.baz.qux")]
+      (definitionNotInModuleNameErr "hydra.foo" "hydra.baz.qux")]
 
 checkDefinitionNameConventionTests :: TypedTermDefinition TestGroup
 checkDefinitionNameConventionTests = define "checkDefinitionNameConventionTests" $
@@ -229,7 +229,7 @@ checkDuplicateModuleNamesTests = define "checkDuplicateModuleNamesTests" $
     pc "duplicate namespaces: error"
       checkDuplicateModuleNamesRef
       (mkPackage "test-pkg" [mkModule "hydra.foo" [], mkModule "hydra.foo" []])
-      (duplicateModuleNamespaceErr "hydra.foo")]
+      (duplicateModuleNameErr "hydra.foo")]
 
 checkModuleNameConventionTests :: TypedTermDefinition TestGroup
 checkModuleNameConventionTests = define "checkModuleNameConventionTests" $
@@ -249,11 +249,11 @@ checkModuleNameConventionTests = define "checkModuleNameConventionTests" $
     mc "uppercase first letter of segment: error"
       checkModuleNameConventionRef
       (mkModule "hydra.Foo" [])
-      (invalidNamespaceConventionErr "hydra.Foo"),
+      (invalidModuleNameConventionErr "hydra.Foo"),
     mc "underscore in segment: error"
       checkModuleNameConventionRef
       (mkModule "hydra.foo_bar" [])
-      (invalidNamespaceConventionErr "hydra.foo_bar")]
+      (invalidModuleNameConventionErr "hydra.foo_bar")]
 
 checkPackageNameConventionTests :: TypedTermDefinition TestGroup
 checkPackageNameConventionTests = define "checkPackageNameConventionTests" $
@@ -279,15 +279,15 @@ checkPackageNameConventionTests = define "checkPackageNameConventionTests" $
       (mkPackage "hydra.kernel" [])
       (invalidPackageNameErr "hydra.kernel")]
 
-conflictingModuleNamespaceErr :: String -> String -> TypedTerm (Maybe InvalidPackageError)
-conflictingModuleNamespaceErr firstNs secondNs = justPackageError $
+conflictingModuleNameErr :: String -> String -> TypedTerm (Maybe InvalidPackageError)
+conflictingModuleNameErr firstNs secondNs = justPackageError $
   Phantoms.inject _InvalidPackageError _InvalidPackageError_conflictingModuleName $
     Phantoms.record _ConflictingModuleNameError [
       unName _ConflictingModuleNameError_first Phantoms.>: nsLit firstNs,
       unName _ConflictingModuleNameError_second Phantoms.>: nsLit secondNs]
 
-definitionNotInModuleNamespaceErr :: String -> String -> TypedTerm (Maybe InvalidModuleError)
-definitionNotInModuleNamespaceErr nsStr nameStr = justModuleError $
+definitionNotInModuleNameErr :: String -> String -> TypedTerm (Maybe InvalidModuleError)
+definitionNotInModuleNameErr nsStr nameStr = justModuleError $
   Phantoms.inject _InvalidModuleError _InvalidModuleError_definitionNotInModuleName $
     Phantoms.record _DefinitionNotInModuleNameError [
       unName _DefinitionNotInModuleNameError_moduleName Phantoms.>: nsLit nsStr,
@@ -330,8 +330,8 @@ duplicateDefinitionNameErr nsStr nameStr = justModuleError $
 duplicateDefinitionNameRule :: Name
 duplicateDefinitionNameRule = Name "hydra.error.packaging.InvalidModuleError.duplicateDefinitionName"
 
-duplicateModuleNamespaceErr :: String -> TypedTerm (Maybe InvalidPackageError)
-duplicateModuleNamespaceErr nsStr = justPackageError $
+duplicateModuleNameErr :: String -> TypedTerm (Maybe InvalidPackageError)
+duplicateModuleNameErr nsStr = justPackageError $
   Phantoms.inject _InvalidPackageError _InvalidPackageError_duplicateModuleName $
     Phantoms.record _DuplicateModuleNameError [
       unName _DuplicateModuleNameError_moduleName Phantoms.>: nsLit nsStr]
@@ -351,8 +351,8 @@ invalidDefinitionNameErr nsStr nameStr expectedConv = justModuleError $
       unName _InvalidDefinitionNameError_name Phantoms.>: nm nameStr,
       unName _InvalidDefinitionNameError_expectedConvention Phantoms.>: expectedConv]
 
-invalidNamespaceConventionErr :: String -> TypedTerm (Maybe InvalidModuleError)
-invalidNamespaceConventionErr nsStr = justModuleError $
+invalidModuleNameConventionErr :: String -> TypedTerm (Maybe InvalidModuleError)
+invalidModuleNameConventionErr nsStr = justModuleError $
   Phantoms.inject _InvalidModuleError _InvalidModuleError_invalidModuleNameConvention $
     Phantoms.record _InvalidModuleNameConventionError [
       unName _InvalidModuleNameConventionError_moduleName Phantoms.>: nsLit nsStr]
@@ -409,7 +409,7 @@ kernelPackageTests = define "kernelPackageTests" $
     pc "conflicting module namespace surfaces"
       kernelPackageRef
       (mkPackage "test-pkg" [mkModule "hydra.foo" [], mkModule "hydra.foo" []])
-      (conflictingModuleNamespaceErr "hydra.foo" "hydra.foo")]
+      (conflictingModuleNameErr "hydra.foo" "hydra.foo")]
 
 -- ============================================================================
 -- Profile-aware behaviour tests
@@ -459,8 +459,8 @@ mkDocumentedTermDef fullName = Packaging.definitionTerm $ Packaging.termDefiniti
 -- | Build a Module with the given namespace and definitions and no dependencies.
 mkModule :: String -> [TypedTerm Definition] -> TypedTerm Module
 mkModule nsStr defs = Packaging.module_
-  (Phantoms.just $ Phantoms.string ("Test module " <> nsStr))
   (nsLit nsStr)
+  (Phantoms.just $ Phantoms.string ("Test module " <> nsStr))
   (Phantoms.list ([] :: [TypedTerm ModuleDependency]))
   (Phantoms.list defs)
 
@@ -468,9 +468,9 @@ mkModule nsStr defs = Packaging.module_
 mkPackage :: String -> [TypedTerm Module] -> TypedTerm Package
 mkPackage nameStr mods = Packaging.package
   (pn nameStr)
-  (Phantoms.list mods)
-  (Phantoms.list ([] :: [TypedTerm PackageDependency]))
   (Phantoms.just $ Phantoms.string ("Test package " <> nameStr))
+  (Phantoms.list ([] :: [TypedTerm PackageDependency]))
+  (Phantoms.list mods)
 
 -- | Build a TermDefinition without a doc annotation (top-level term is a bare
 -- literal). Used to drive checkDefinitionDocumentation failures.

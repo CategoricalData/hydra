@@ -262,7 +262,7 @@ eliminateUnitVar v term0 =
           go = \term -> rewrite go term
       in (go term0)
 -- | Create an initial empty metadata record with given namespaces
-emptyMetadata :: Util.Namespaces Syntax.DottedName -> PythonEnvironment.PythonModuleMetadata
+emptyMetadata :: Util.ModuleNames Syntax.DottedName -> PythonEnvironment.PythonModuleMetadata
 emptyMetadata ns =
     PythonEnvironment.PythonModuleMetadata {
       PythonEnvironment.pythonModuleMetadataNamespaces = ns,
@@ -1496,7 +1496,7 @@ extendMetaForTypes types meta =
 
       let names = Sets.unions (Lists.map (\t -> Dependencies.typeDependencyNames False t) types)
           currentNs = PythonEnvironment.pythonModuleMetadataNamespaces meta
-          updatedNs = Analysis.addNamesToNamespaces PythonNames.encodeNamespace names currentNs
+          updatedNs = Analysis.addNamesToModuleNames PythonNames.encodeNamespace names currentNs
           meta1 = setMetaNamespaces updatedNs meta
       in (Lists.foldl (\m -> \t -> extendMetaForType True False t m) meta1 types)
 -- | Extract CaseStatement from a case elimination term
@@ -1614,7 +1614,7 @@ genericArg tparamList =
                         Syntax.powerRhs = Nothing}))}}}}}},
           Syntax.comparisonRhs = []})]])) tparamList))))
 -- | Create an initial Python environment for code generation
-initialEnvironment :: Util.Namespaces Syntax.DottedName -> Graph.Graph -> PythonEnvironment.PythonEnvironment
+initialEnvironment :: Util.ModuleNames Syntax.DottedName -> Graph.Graph -> PythonEnvironment.PythonEnvironment
 initialEnvironment namespaces tcontext =
     PythonEnvironment.PythonEnvironment {
       PythonEnvironment.pythonEnvironmentNamespaces = namespaces,
@@ -1630,9 +1630,9 @@ initialMetadata ns =
 
       let dottedNs = PythonNames.encodeNamespace ns
           emptyNs =
-                  Util.Namespaces {
-                    Util.namespacesFocus = (ns, dottedNs),
-                    Util.namespacesMapping = Maps.empty}
+                  Util.ModuleNames {
+                    Util.moduleNamesFocus = (ns, dottedNs),
+                    Util.moduleNamesMapping = Maps.empty}
       in PythonEnvironment.PythonModuleMetadata {
         PythonEnvironment.pythonModuleMetadataNamespaces = emptyNs,
         PythonEnvironment.pythonModuleMetadataTypeVariables = Sets.empty,
@@ -1770,16 +1770,16 @@ makeUncurriedLambda params body =
         Syntax.lambdaParametersStarEtc = Nothing},
       Syntax.lambdaBody = body})
 -- | Generate domain import statements from namespace mappings
-moduleDomainImports :: Util.Namespaces Syntax.DottedName -> [Syntax.ImportStatement]
+moduleDomainImports :: Util.ModuleNames Syntax.DottedName -> [Syntax.ImportStatement]
 moduleDomainImports namespaces =
 
-      let names = Lists.sort (Maps.elems (Util.namespacesMapping namespaces))
+      let names = Lists.sort (Maps.elems (Util.moduleNamesMapping namespaces))
       in (Lists.map (\ns -> Syntax.ImportStatementName (Syntax.ImportName [
         Syntax.DottedAsName {
           Syntax.dottedAsNameName = ns,
           Syntax.dottedAsNameAs = Nothing}])) names)
 -- | Generate all import statements for a Python module
-moduleImports :: Util.Namespaces Syntax.DottedName -> PythonEnvironment.PythonModuleMetadata -> [Syntax.Statement]
+moduleImports :: Util.ModuleNames Syntax.DottedName -> PythonEnvironment.PythonModuleMetadata -> [Syntax.Statement]
 moduleImports namespaces meta =
     Lists.map (\imp -> Utils.pySimpleStatementToPyStatement (Syntax.SimpleStatementImport imp)) (Lists.concat [
       moduleStandardImports meta,
@@ -1843,7 +1843,7 @@ moduleToPython :: Packaging.Module -> [Packaging.Definition] -> Typing.Inference
 moduleToPython mod defs cx g =
     Eithers.bind (encodePythonModule cx g mod defs) (\file ->
       let s = Serialization.printExpr (Serialization.parenthesize (Serde.moduleToExpr file))
-          path = Names.namespaceToFilePath Util.CaseConventionLowerSnake (Packaging.FileExtension "py") (Packaging.moduleName mod)
+          path = Names.moduleNameToFilePath Util.CaseConventionLowerSnake (Packaging.FileExtension "py") (Packaging.moduleName mod)
       in (Right (Maps.singleton path s)))
 -- | Accessor for the graph field of PyGraph
 pyGraphGraph :: PythonEnvironment.PyGraph -> Graph.Graph
@@ -1872,7 +1872,7 @@ pythonEnvironmentSetGraph tc env =
       PythonEnvironment.pythonEnvironmentVersion = (PythonEnvironment.pythonEnvironmentVersion env),
       PythonEnvironment.pythonEnvironmentSkipCasts = (PythonEnvironment.pythonEnvironmentSkipCasts env),
       PythonEnvironment.pythonEnvironmentInlineVariables = (PythonEnvironment.pythonEnvironmentInlineVariables env)}
-setMetaNamespaces :: Util.Namespaces Syntax.DottedName -> PythonEnvironment.PythonModuleMetadata -> PythonEnvironment.PythonModuleMetadata
+setMetaNamespaces :: Util.ModuleNames Syntax.DottedName -> PythonEnvironment.PythonModuleMetadata -> PythonEnvironment.PythonModuleMetadata
 setMetaNamespaces ns m =
     PythonEnvironment.PythonModuleMetadata {
       PythonEnvironment.pythonModuleMetadataNamespaces = ns,

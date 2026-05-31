@@ -167,8 +167,8 @@ def _build_module() -> Module:
     # We need a placeholder module first because definition_in_module needs it.
     # Mirror Haskell pattern: define = definitionInModule module_; build defs; then module_ uses them.
     placeholder = Module(
-        Just("Language constraints and reserved words for Python 3"),
         _NS,
+        Just("Language constraints and reserved words for Python 3"),
         [unqualified_dep(LEXICAL_NS)] + KERNEL_TYPES_NAMESPACES,
         (),  # filled in below
     )
@@ -177,8 +177,8 @@ def _build_module() -> Module:
     python_reserved_words = definition_in_module(
         placeholder, "pythonReservedWords", _python_reserved_words_term())
     return Module(
-        placeholder.description,
         placeholder.name,
+        placeholder.description,
         placeholder.dependencies,
         (
             to_definition(python_language),

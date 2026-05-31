@@ -106,7 +106,7 @@ constructModule cx g mod typeDefs =
           emptyImport =
                   Logic.ifElse (checkFields emptyCheckType checkFieldType_empty types) [
                     Proto3.FileReference "google/protobuf/empty.proto"] []
-      in (Eithers.bind (Analysis.moduleDependencyNamespaces cx g True False False False mod) (\schemaImports -> Eithers.bind (Eithers.mapList toDef typeDefs) (\definitions ->
+      in (Eithers.bind (Analysis.moduleDependencyModuleNames cx g True False False False mod) (\schemaImports -> Eithers.bind (Eithers.mapList toDef typeDefs) (\definitions ->
         let schemaImportList = Lists.map (\n -> namespaceToFileReference n) (Sets.toList schemaImports)
         in (Eithers.bind (mapAccumResult (\cx0 -> \ref -> generateStructuralTypeMessage cx0 g ns_ ref) cx (Sets.toList structRefs)) (\helperResult ->
           let helperDefs = Pairs.first helperResult

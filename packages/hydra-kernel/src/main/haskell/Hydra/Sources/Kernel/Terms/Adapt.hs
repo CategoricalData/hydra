@@ -560,7 +560,7 @@ dataGraphToDefinitions = define "dataGraphToDefinitions" $
 
   "namespacesSet" <~ Sets.fromList (var "namespaces") $
 
-  "isParentBinding" <~ ("b" ~> optCases (Names.namespaceOf @@ (Core.bindingName $ var "b"))
+  "isParentBinding" <~ ("b" ~> optCases (Names.moduleNameOf @@ (Core.bindingName $ var "b"))
     false
     ("ns" ~> Sets.member (var "ns") (var "namespacesSet"))) $
 
@@ -710,14 +710,14 @@ dataGraphToDefinitions = define "dataGraphToDefinitions" $
       (Core.bindingTypeScheme $ var "el")) $
   -- Filter to elements in the requested namespaces
   "selectedElements" <~ Lists.filter
-    ("el" ~> optCases (Names.namespaceOf @@ (Core.bindingName $ var "el"))
+    ("el" ~> optCases (Names.moduleNameOf @@ (Core.bindingName $ var "el"))
       false
       ("ns" ~> Sets.member (var "ns") (var "namespacesSet")))
     (var "bins5") $
   -- Group elements by namespace
   "elementsByNamespace" <~ Lists.foldl
     ("acc" ~> "el" ~>
-      optCases (Names.namespaceOf @@ (Core.bindingName $ var "el"))
+      optCases (Names.moduleNameOf @@ (Core.bindingName $ var "el"))
         (var "acc")
         ("ns" ~>
           "existing" <~ Maybes.maybe (list ([] :: [TypedTerm Binding])) (reify Equality.identity) (Maps.lookup (var "ns") (var "acc")) $

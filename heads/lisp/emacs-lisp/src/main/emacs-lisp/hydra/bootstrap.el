@@ -181,7 +181,7 @@ Uses hash-tables for objects (from json-parse-string with object-type hash-table
 
 (defun bootstrap-namespace-to-path (ns)
   "Convert a namespace string to a file path."
-  (funcall (symbol-value 'hydra_codegen_namespace_to_path) ns))
+  (funcall (symbol-value 'hydra_codegen_module_name_to_path) ns))
 
 ;; ============================================================================
 ;; Module loading from JSON
@@ -392,7 +392,7 @@ Write output to OUT-DIR. UNIVERSE-MODS is the full set; MODS-TO-GENERATE is the 
                    ;; Filter skip-emit test namespaces (e.g.
                    ;; hydra.test.testEnv): these are type-only stubs whose
                    ;; hand-written per-language counterparts are the source
-                   ;; of truth. Mirrors testSkipEmitNamespaces in
+                   ;; of truth. Mirrors testSkipEmitModuleNames in
                    ;; Hydra.Sources.Test.All and the equivalent filter in
                    ;; heads/python/.../bootstrap.py.
                    (test-mods-to-emit

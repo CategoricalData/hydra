@@ -26,8 +26,8 @@ baseTestModules = [
   TestTypes.module_,
   TestSuite.module_]
 
--- | Namespaces that are in the test universe for type inference but whose
+-- | Module names that are in the test universe for type inference but whose
 -- source should NOT be emitted by bootstrap-from-json. The hand-written
 -- per-language counterparts are the source of truth.
-testSkipEmitNamespaces :: [ModuleName]
-testSkipEmitNamespaces = [TestEnv.ns]
+testSkipEmitModuleNames :: [ModuleName]
+testSkipEmitModuleNames = [TestEnv.ns]

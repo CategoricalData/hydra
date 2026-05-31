@@ -82,8 +82,8 @@ DEPENDENCIES = [
 
 
 _PLACEHOLDER = Module(
-    Just("Python code generator: converts Hydra modules to Python source code"),
     NS,
+    Just("Python code generator: converts Hydra modules to Python source code"),
     DEPENDENCIES,
     (),
 )
@@ -6147,7 +6147,7 @@ def _extend_meta_for_types():
                 ("currentNs", _meta_proj("namespaces", "meta")),
                 (
                     "updatedNs",
-                    _kref.analysis_add_names_to_namespaces(_kref.names_encode_namespace, var("names"), var("currentNs")),
+                    _kref.analysis_add_names_to_module_names(_kref.names_encode_namespace, var("names"), var("currentNs")),
                 ),
                 (
                     "meta1",
@@ -6628,7 +6628,7 @@ def _initial_metadata():
                 ("dottedNs", _kref.names_encode_namespace(var("ns"))),
                 (
                     "emptyNs",
-                    Util.namespaces(
+                    Util.module_names(
                         pair(var("ns"), var("dottedNs")),
                         Maps.empty(),
                     ),
@@ -7139,7 +7139,7 @@ def _module_domain_imports():
                 (
                     "names",
                     Lists.sort(
-                        Maps.elems(Util.namespaces_mapping(var("namespaces")))
+                        Maps.elems(Util.module_names_mapping(var("namespaces")))
                     ),
                 ),
             ],
@@ -7187,7 +7187,7 @@ def _module_to_python():
                         ),
                         (
                             "path",
-                            var("hydra.names.namespaceToFilePath")(_kref.util_case_convention_lower_snake, wrap("hydra.packaging.FileExtension",
+                            var("hydra.names.moduleNameToFilePath")(_kref.util_case_convention_lower_snake, wrap("hydra.packaging.FileExtension",
                                     string("py"),
                                 ), Pkg.module_name(var("mod"))),
                         ),
@@ -7972,8 +7972,8 @@ def _load_environment_reorder_defs():
 
 def _build_module() -> Module:
     return Module(
-        _PLACEHOLDER.description,
         _PLACEHOLDER.name,
+        _PLACEHOLDER.description,
         _PLACEHOLDER.dependencies,
         (
             _load_environment_reorder_defs(),

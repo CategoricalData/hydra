@@ -87,7 +87,7 @@ import qualified Hydra.Sources.Haskell.Language as HaskellLanguage
 import qualified Hydra.Sources.Kernel.Terms.Formatting as Formatting
 
 
-type HaskellNamespaces = Namespaces H.ModuleName
+type HaskellNamespaces = ModuleNames H.ModuleName
 
 ns :: ModuleName
 ns = ModuleName "hydra.haskell.utils"
@@ -131,10 +131,10 @@ elementReference :: TypedTermDefinition (HaskellNamespaces -> Name -> H.Name)
 elementReference = haskellUtilsDefinition "elementReference" $
   doc "Generate a Haskell name reference for a Hydra element" $
   "namespaces" ~> "name" ~> lets [
-    "namespacePair">: Util.namespacesFocus $ var "namespaces",
+    "namespacePair">: Util.moduleNamesFocus $ var "namespaces",
     "gname">: Pairs.first $ var "namespacePair",
     "gmod">: unwrap H._ModuleName @@ (Pairs.second $ var "namespacePair"),
-    "namespacesMap">: Util.namespacesMapping $ var "namespaces",
+    "namespacesMap">: Util.moduleNamesMapping $ var "namespaces",
     "qname">: Names.qualifyName @@ var "name",
     "local">: Packaging.qualifiedNameLocal $ var "qname",
     "escLocal">: sanitizeHaskellName @@ var "local",
@@ -202,9 +202,9 @@ namespacesForModule = haskellUtilsDefinition "namespacesForModule" $
     -- namespaces so that synthesized sources' phantom deps (e.g.,
     -- hydra.decode.graph in hydra.decode.coders) don't produce import
     -- lines for nonexistent modules.
-    "termNss" <<~ Analysis.moduleDependencyNamespaces @@ var "cx" @@ var "g" @@ true @@ true @@ true @@ true @@ var "mod" $
+    "termNss" <<~ Analysis.moduleDependencyModuleNames @@ var "cx" @@ var "g" @@ true @@ true @@ true @@ true @@ var "mod" $
     "knownNss" <~ Sets.fromList (Maybes.cat
-      (Lists.map Names.namespaceOf (Lists.concat2
+      (Lists.map Names.moduleNameOf (Lists.concat2
         (Maps.keys (Graph.graphSchemaTypes (var "g")))
         (Maps.keys (Graph.graphBoundTerms (var "g")))))) $
     "rawDeclaredNss" <~ Sets.fromList (Lists.map
@@ -330,7 +330,7 @@ namespacesForModule = haskellUtilsDefinition "namespacesForModule" $
       ("nm" ~> pair (var "nm")
         (var "aliasFromSuffix" @@ (var "segsFor" @@ var "nm") @@ (var "takenFor" @@ var "finalState" @@ var "nm"))) $
       (var "nssAsList")) $
-    right $ Util.namespaces (var "focusPair") (var "resultMap")
+    right $ Util.moduleNames (var "focusPair") (var "resultMap")
 
 newtypeAccessorName :: TypedTermDefinition (Name -> String)
 newtypeAccessorName = haskellUtilsDefinition "newtypeAccessorName" $

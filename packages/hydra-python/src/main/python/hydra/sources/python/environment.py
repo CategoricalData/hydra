@@ -88,7 +88,7 @@ def _python_environment():
                     "namespaces",
                     Annotations.doc(
                         "ModuleName mapping for imports",
-                        T.apply(_util("Namespaces"), _syntax("DottedName")),
+                        T.apply(_util("ModuleNames"), _syntax("DottedName")),
                     ),
                 ),
                 T.field(
@@ -133,7 +133,7 @@ def _python_module_metadata():
                     "namespaces",
                     Annotations.doc(
                         "ModuleName mapping for imports",
-                        T.apply(_util("Namespaces"), _syntax("DottedName")),
+                        T.apply(_util("ModuleNames"), _syntax("DottedName")),
                     ),
                 ),
                 T.field(
@@ -185,8 +185,8 @@ def _python_version():
 
 def _build_module() -> Module:
     return Module(
-        Just("Environment types for Python code generation"),
         NS,
+        Just("Environment types for Python code generation"),
         DEPENDENCIES,
         (
             _python_version(),

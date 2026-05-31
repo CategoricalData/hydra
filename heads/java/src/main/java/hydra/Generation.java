@@ -327,7 +327,7 @@ public class Generation {
         List<Module> modules = new ArrayList<>();
         for (ModuleName ns : namespaces) {
             String filePath = basePath + File.separator
-                    + Codegen.namespaceToPath(ns) + ".json";
+                    + Codegen.moduleNameToPath(ns) + ".json";
             Value jsonVal = parseJsonFile(filePath);
             Module mod = decodeModuleFromJson(bsGraph, schemaMap, jsonVal);
             System.out.println("  Loaded: " + ns.value);
@@ -360,7 +360,7 @@ public class Generation {
 
     /**
      * Read the manifest.json file from a JSON base directory and extract a named
-     * field (e.g. "kernelModules", "mainModules", "testModules") as a list of Namespaces.
+     * field (e.g. "kernelModules", "mainModules", "testModules") as a list of module names.
      */
     public static List<ModuleName> readManifestField(String basePath, String fieldName) throws IOException {
         String manifestPath = basePath + File.separator + "manifest.json";
@@ -505,7 +505,7 @@ public class Generation {
                     String code = hydra.Serialization.printExpr(
                             hydra.Serialization.parenthesize(
                                     hydra.lisp.Serde.programToExpr(program)));
-                    String filePath = hydra.Names.namespaceToFilePath(
+                    String filePath = hydra.Names.moduleNameToFilePath(
                             cc, new hydra.packaging.FileExtension(fileExt), mod.name);
                     Map<String, String> fileMap = new java.util.TreeMap<>();
                     fileMap.put(filePath, code);
@@ -517,10 +517,10 @@ public class Generation {
     }
 
     /**
-     * Convert a namespace to a file path.
+     * Convert a module name to a file path.
      */
-    public static String namespaceToPath(ModuleName ns) {
-        return Codegen.namespaceToPath(ns);
+    public static String moduleNameToPath(ModuleName ns) {
+        return Codegen.moduleNameToPath(ns);
     }
 
     /**
@@ -552,7 +552,7 @@ public class Generation {
                 }
             });
         }
-        return new Module(m.description, m.name, m.dependencies, stripped);
+        return new Module(m.name, m.description, m.dependencies, stripped);
     }
 
     /**
@@ -938,7 +938,7 @@ public class Generation {
                         + m.name.value + ": " + err);
                 }
                 String jsonStr = ((Either.Right<hydra.errors.Error_, String>) encoded).value;
-                Path filePath = pkgDir.resolve(namespaceToPath(m.name) + ".json");
+                Path filePath = pkgDir.resolve(moduleNameToPath(m.name) + ".json");
                 Files.createDirectories(filePath.getParent());
                 String newContent = jsonStr + "\n";
                 if (Files.exists(filePath)) {

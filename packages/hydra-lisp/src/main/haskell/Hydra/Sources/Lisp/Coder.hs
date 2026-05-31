@@ -1013,7 +1013,7 @@ moduleImports :: TypedTermDefinition (ModuleName -> [Definition] -> [L.ImportDec
 moduleImports = def "moduleImports" $
   "focusNs" ~> "defs" ~>
     "depNss" <~ Sets.toList (Sets.delete (var "focusNs")
-      (Analysis.definitionDependencyNamespaces @@ var "defs")) $
+      (Analysis.definitionDependencyModuleNames @@ var "defs")) $
     Lists.map ("ns" ~>
       record L._ImportDeclaration [
         L._ImportDeclaration_module>>: wrap L._NamespaceName (Packaging.unModuleName (var "ns")),

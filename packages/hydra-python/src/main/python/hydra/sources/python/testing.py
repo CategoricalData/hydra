@@ -51,8 +51,8 @@ DEPENDENCIES = [
 
 
 _PLACEHOLDER = Module(
-    Just("Python test code generation codec for pytest-based generation tests"),
     NS,
+    Just("Python test code generation codec for pytest-based generation tests"),
     DEPENDENCIES,
     (),
 )
@@ -370,8 +370,8 @@ def _generate_test_file_with_python_codec():
 
 def _build_module() -> Module:
     return Module(
-        _PLACEHOLDER.description,
         _PLACEHOLDER.name,
+        _PLACEHOLDER.description,
         _PLACEHOLDER.dependencies,
         (
             to_definition(_build_python_test_module()),
