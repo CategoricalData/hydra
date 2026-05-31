@@ -25,19 +25,18 @@ module_ = Module {
             moduleMetadata = Bootstrap.descriptionMetadata (Just "Primitives in the hydra.lib.pairs module.")}
   where
     definitions = [
-      toPrimitive "Map over both elements of a pair." bimapSig (Just
-        "bimap(f, g, p) returns a new pair (f(first(p)), g(second(p))). The bifunctor map for pairs.\
-        \ Total. Corresponds to Haskell's\
-        \ Data.Bifunctor.bimap :: (a -> c) -> (b -> d) -> (a, b) -> (c, d).") bimap_,
-      primNoDef "first" "Get the first element of a pair." firstSig (Just
-        "first(p) returns the first component of the pair p. Total. Corresponds to Haskell's\
-        \ fst :: (a, b) -> a."),
-      primNoDef "second" "Get the second element of a pair." secondSig (Just
-        "second(p) returns the second component of the pair p. Total. Corresponds to Haskell's\
-        \ snd :: (a, b) -> b.")]
+      toPrimitive "Map over both elements of a pair." bimapSig [
+        "bimap(f, g, p) returns a new pair (f(first(p)), g(second(p))). The bifunctor map for pairs.",
+        "Total. Corresponds to Haskell's Data.Bifunctor.bimap :: (a -> c) -> (b -> d) -> (a, b) -> (c, d)."] bimap_,
+      primNoDef "first" "Get the first element of a pair." firstSig [
+        "first(p) returns the first component of the pair p.",
+        "Total. Corresponds to Haskell's fst :: (a, b) -> a."],
+      primNoDef "second" "Get the second element of a pair." secondSig [
+        "second(p) returns the second component of the pair p.",
+        "Total. Corresponds to Haskell's snd :: (a, b) -> b."]]
 
 -- Local convenience: build a no-default primitive Definition from a local name.
-primNoDef :: String -> String -> TermSignature -> Maybe String -> Definition
+primNoDef :: String -> String -> TermSignature -> [String] -> Definition
 primNoDef localName description s comments =
   toPrimitiveNoDefault description s (unqualifyName (QualifiedName (Just ns) localName)) comments
 

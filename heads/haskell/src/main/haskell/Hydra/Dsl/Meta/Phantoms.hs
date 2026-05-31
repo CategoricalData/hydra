@@ -416,27 +416,29 @@ toDefinition (TypedTermDefinition name (TypedTerm term)) = DefinitionTerm $ Term
 -- | Convert a phantom-typed term definition to a primitive Definition, using the term body as the
 -- declarative default implementation. The TermSignature describes the primitive's logical type.
 -- isPure / isTotal default to True; use withImpurity / withPartiality to flag exceptions.
--- The 'comments' argument (second-to-last) is an optional prose paragraph elaborating the one-line description;
+-- The 'comments' argument (second-to-last) is a list of long-form prose notes elaborating the one-line
+-- description, one element per logical observation (e.g. semantics, edge cases, totality, host correspondence);
 -- the default-implementation argument stays last because its value is typically large.
--- Example: toPrimitive "logical AND" andSig Nothing and_
-toPrimitive :: String -> TermSignature -> Maybe String -> TypedTermDefinition a -> Definition
+-- Example: toPrimitive "logical AND" andSig [] and_
+toPrimitive :: String -> TermSignature -> [String] -> TypedTermDefinition a -> Definition
 toPrimitive description sig comments (TypedTermDefinition name (TypedTerm term)) =
   DefinitionPrimitive $ PrimitiveDefinition name sig (primitiveMetadata description comments) True True (Just term)
 
 -- | Convert a Name to a primitive Definition with no default implementation. Used for primitives
 -- whose meaning is host-native and not expressible as a Hydra term (e.g. currentUnixTimeSeconds).
--- The trailing 'comments' argument is an optional prose paragraph elaborating the one-line description.
--- Example: toPrimitiveNoDefault "Current UNIX time, in seconds" sig (Name "hydra.lib.math.currentUnixTimeSeconds") Nothing
-toPrimitiveNoDefault :: String -> TermSignature -> Name -> Maybe String -> Definition
+-- The trailing 'comments' argument is a list of long-form prose notes, one element per logical observation.
+-- Example: toPrimitiveNoDefault "Current UNIX time, in seconds" sig (Name "hydra.lib.math.currentUnixTimeSeconds") []
+toPrimitiveNoDefault :: String -> TermSignature -> Name -> [String] -> Definition
 toPrimitiveNoDefault description sig name comments =
   DefinitionPrimitive $ PrimitiveDefinition name sig (primitiveMetadata description comments) True True Nothing
 
 -- | Build the entity metadata for a primitive from its (always-present) one-line description and
--- optional long-form comments. Folds the former PrimitiveDefinition.description/comments fields into
+-- long-form comments. Folds the former PrimitiveDefinition.description/comments fields into
 -- EntityMetadata without data loss: description -> metadata.description, comments -> metadata.comments.
-primitiveMetadata :: String -> Maybe String -> Maybe EntityMetadata
+-- Each comments element is one logical observation, kept distinct rather than concatenated.
+primitiveMetadata :: String -> [String] -> Maybe EntityMetadata
 primitiveMetadata description comments =
-  Just (EntityMetadata (Just description) (maybe [] (: []) comments) [] Nothing)
+  Just (EntityMetadata (Just description) comments [] Nothing)
 
 
 

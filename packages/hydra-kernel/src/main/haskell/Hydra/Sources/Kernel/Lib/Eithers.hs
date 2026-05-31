@@ -26,66 +26,72 @@ module_ = Module {
             moduleMetadata = Bootstrap.descriptionMetadata (Just "Primitives in the hydra.lib.eithers module.")}
   where
     definitions = [
-      toPrimitive "Map over both sides of an either value." bimapSig (Just
+      toPrimitive "Map over both sides of an either value." bimapSig [
         "bimap(f, g, e) applies f to the contained value if e is a Left, or g if e is a Right; the result\
-        \ retains the same Left/Right variant. Total. Corresponds to Haskell's\
-        \ Data.Bifunctor.bimap :: (a -> c) -> (b -> d) -> Either a b -> Either c d.") bimap_,
-      toPrimitive "Bind (flatMap) for either: if Right, apply the function; if Left, return unchanged." bindSig (Just
+        \ retains the same Left/Right variant.",
+        "Total. Corresponds to Haskell's Data.Bifunctor.bimap :: (a -> c) -> (b -> d) -> Either a b ->\
+        \ Either c d."] bimap_,
+      toPrimitive "Bind (flatMap) for either: if Right, apply the function; if Left, return unchanged." bindSig [
         "bind(e, f) is the monadic bind for either with a fixed Left type: if e is Right v, the result is\
-        \ f(v); if e is Left x, the result is Left x with the Left type preserved. Total. Used to chain\
-        \ computations that may fail with a common error type. Corresponds to Haskell's\
-        \ (>>=) :: Either a b -> (b -> Either a c) -> Either a c.") bind_,
-      primNoDef "either" "Eliminate an either value by applying one of two functions." eitherSig (Just
-        "either(f, g, e) returns f(x) if e is Left x and g(y) if e is Right y. The fundamental eliminator\
-        \ for the either type; every other primitive in this namespace can be derived from it. Total.\
-        \ Corresponds to Haskell's either :: (a -> c) -> (b -> c) -> Either a b -> c."),
-      primNoDef "foldl" "Left-fold over a list with an Either-returning function, short-circuiting on Left." foldlSig (Just
+        \ f(v); if e is Left x, the result is Left x with the Left type preserved.",
+        "Used to chain computations that may fail with a common error type.",
+        "Total. Corresponds to Haskell's (>>=) :: Either a b -> (b -> Either a c) -> Either a c."] bind_,
+      primNoDef "either" "Eliminate an either value by applying one of two functions." eitherSig [
+        "either(f, g, e) returns f(x) if e is Left x and g(y) if e is Right y.",
+        "The fundamental eliminator for the either type; every other primitive in this namespace can be\
+        \ derived from it.",
+        "Total. Corresponds to Haskell's either :: (a -> c) -> (b -> c) -> Either a b -> c."],
+      primNoDef "foldl" "Left-fold over a list with an Either-returning function, short-circuiting on Left." foldlSig [
         "foldl(f, acc0, xs) folds f over xs from the left, threading an accumulator of type a, where each\
         \ application may fail with Left e: foldl iterates while f returns Right, propagates Left on the\
         \ first failure, and returns Right (final accumulator) if all elements were processed. Equivalent to\
-        \ chaining bind over the list. Total in the sense that it terminates on finite inputs; the result\
-        \ is a Left whenever any application of f returns one. Corresponds to a short-circuiting variant of\
-        \ Haskell's foldM specialised to Either."),
-      toPrimitive "Extract the Left value, or return a default." fromLeftSig (Just
-        "fromLeft(def, e) returns the contained Left value if e is a Left, or def if e is a Right. Total.\
-        \ Corresponds to Haskell's Data.Either.fromLeft :: a -> Either a b -> a.") fromLeft_,
-      toPrimitive "Extract the Right value, or return a default." fromRightSig (Just
-        "fromRight(def, e) returns the contained Right value if e is a Right, or def if e is a Left. Total.\
-        \ Corresponds to Haskell's Data.Either.fromRight :: b -> Either a b -> b.") fromRight_,
-      toPrimitive "Check whether an either is a Left value." isLeftSig (Just
-        "True if the argument is a Left variant, false if a Right. Total. Corresponds to Haskell's\
-        \ Data.Either.isLeft :: Either a b -> Bool.") isLeft_,
-      toPrimitive "Check whether an either is a Right value." isRightSig (Just
-        "True if the argument is a Right variant, false if a Left. Total. Corresponds to Haskell's\
-        \ Data.Either.isRight :: Either a b -> Bool.") isRight_,
-      primNoDef "lefts" "Extract all Left values from a list of either values." leftsSig (Just
+        \ chaining bind over the list.",
+        "Total in the sense that it terminates on finite inputs; the result is a Left whenever any\
+        \ application of f returns one.",
+        "Corresponds to a short-circuiting variant of Haskell's foldM specialised to Either."],
+      toPrimitive "Extract the Left value, or return a default." fromLeftSig [
+        "fromLeft(def, e) returns the contained Left value if e is a Left, or def if e is a Right.",
+        "Total. Corresponds to Haskell's Data.Either.fromLeft :: a -> Either a b -> a."] fromLeft_,
+      toPrimitive "Extract the Right value, or return a default." fromRightSig [
+        "fromRight(def, e) returns the contained Right value if e is a Right, or def if e is a Left.",
+        "Total. Corresponds to Haskell's Data.Either.fromRight :: b -> Either a b -> b."] fromRight_,
+      toPrimitive "Check whether an either is a Left value." isLeftSig [
+        "True if the argument is a Left variant, false if a Right.",
+        "Total. Corresponds to Haskell's Data.Either.isLeft :: Either a b -> Bool."] isLeft_,
+      toPrimitive "Check whether an either is a Right value." isRightSig [
+        "True if the argument is a Right variant, false if a Left.",
+        "Total. Corresponds to Haskell's Data.Either.isRight :: Either a b -> Bool."] isRight_,
+      primNoDef "lefts" "Extract all Left values from a list of either values." leftsSig [
         "lefts(xs) returns a list containing every Left value in xs, in original order, with Right values\
-        \ discarded. Total. Corresponds to Haskell's Data.Either.lefts :: [Either a b] -> [a]."),
-      toPrimitive "Map a function over the Right side of an either (standard functor map)." mapSig (Just
-        "map(f, e) returns Right (f y) if e is Right y, or Left x unchanged if e is Left x. The functor\
-        \ instance for either; treats the Right variant as the focus and leaves the Left variant alone.\
-        \ Total. Corresponds to Haskell's fmap :: (a -> b) -> Either e a -> Either e b.") map_,
-      primNoDef "mapList" "Map a function returning either over a list, collecting results or short-circuiting on Left." mapListSig (Just
+        \ discarded.",
+        "Total. Corresponds to Haskell's Data.Either.lefts :: [Either a b] -> [a]."],
+      toPrimitive "Map a function over the Right side of an either (standard functor map)." mapSig [
+        "map(f, e) returns Right (f y) if e is Right y, or Left x unchanged if e is Left x.",
+        "The functor instance for either; treats the Right variant as the focus and leaves the Left variant\
+        \ alone.",
+        "Total. Corresponds to Haskell's fmap :: (a -> b) -> Either e a -> Either e b."] map_,
+      primNoDef "mapList" "Map a function returning either over a list, collecting results or short-circuiting on Left." mapListSig [
         "mapList(f, xs) applies f to each element of xs. If every application returns Right, the result is\
         \ Right of the list of contained values, in original order. The first application that returns Left\
-        \ short-circuits the whole result to that Left. Total. Corresponds to Haskell's traverse :: (a ->\
-        \ Either e b) -> [a] -> Either e [b]."),
-      primNoDef "mapMaybe" "Map a function returning either over a maybe, or return Right Nothing if Nothing." mapMaybeSig (Just
+        \ short-circuits the whole result to that Left.",
+        "Total. Corresponds to Haskell's traverse :: (a -> Either e b) -> [a] -> Either e [b]."],
+      primNoDef "mapMaybe" "Map a function returning either over a maybe, or return Right Nothing if Nothing." mapMaybeSig [
         "mapMaybe(f, m) returns Right Nothing if m is Nothing; otherwise applies f to the contained value\
-        \ and returns the result with Right wrapped around Just. Total. Corresponds to Haskell's\
-        \ traverse :: (a -> Either e b) -> Maybe a -> Either e (Maybe b)."),
-      primNoDef "mapSet" "Map a function returning either over a set, collecting results or short-circuiting on Left." mapSetSig (Just
+        \ and returns the result with Right wrapped around Just.",
+        "Total. Corresponds to Haskell's traverse :: (a -> Either e b) -> Maybe a -> Either e (Maybe b)."],
+      primNoDef "mapSet" "Map a function returning either over a set, collecting results or short-circuiting on Left." mapSetSig [
         "mapSet(f, s) applies f to each element of s in unspecified order. If every application returns\
         \ Right, the result is Right of the set of contained values (deduplicated by the result type's\
-        \ ordering); the first application returning Left short-circuits the whole result to that Left.\
-        \ Total. Corresponds to Haskell's traverse-style operation specialised to Set."),
-      primNoDef "partitionEithers" "Partition a list of either values into lefts and rights." partitionEithersSig (Just
+        \ ordering); the first application returning Left short-circuits the whole result to that Left.",
+        "Total. Corresponds to Haskell's traverse-style operation specialised to Set."],
+      primNoDef "partitionEithers" "Partition a list of either values into lefts and rights." partitionEithersSig [
         "partitionEithers(xs) returns a pair (lefts, rights) where lefts contains every Left value from xs\
-        \ in original order and rights contains every Right value from xs in original order. Total.\
-        \ Corresponds to Haskell's Data.Either.partitionEithers :: [Either a b] -> ([a], [b])."),
-      primNoDef "rights" "Extract all Right values from a list of either values." rightsSig (Just
+        \ in original order and rights contains every Right value from xs in original order.",
+        "Total. Corresponds to Haskell's Data.Either.partitionEithers :: [Either a b] -> ([a], [b])."],
+      primNoDef "rights" "Extract all Right values from a list of either values." rightsSig [
         "rights(xs) returns a list containing every Right value in xs, in original order, with Left values\
-        \ discarded. Total. Corresponds to Haskell's Data.Either.rights :: [Either a b] -> [b].")]
+        \ discarded.",
+        "Total. Corresponds to Haskell's Data.Either.rights :: [Either a b] -> [b]."]]
 
 -- Shared type variables.
 tx, ty, tz, tw :: Type
@@ -97,7 +103,7 @@ tw = Types.var "w"
 ee :: Type -> Type -> Type
 ee = Types.either_
 
-primNoDef :: String -> String -> TermSignature -> Maybe String -> Definition
+primNoDef :: String -> String -> TermSignature -> [String] -> Definition
 primNoDef localName description s comments =
   toPrimitiveNoDefault description s (unqualifyName (QualifiedName (Just ns) localName)) comments
 
