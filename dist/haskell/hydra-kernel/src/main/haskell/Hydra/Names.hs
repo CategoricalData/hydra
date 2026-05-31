@@ -77,6 +77,15 @@ freshNames n cx =
 -- | Extract the local part of a name
 localNameOf :: Core.Name -> String
 localNameOf arg_ = Packaging.qualifiedNameLocal (qualifyName arg_)
+-- | Extract the module name of a name, if any
+moduleNameOf :: Core.Name -> Maybe Packaging.ModuleName
+moduleNameOf arg_ = Packaging.qualifiedNameModuleName (qualifyName arg_)
+-- | Convert a module name to a file path with the given case convention and file extension
+moduleNameToFilePath :: Util.CaseConvention -> Packaging.FileExtension -> Packaging.ModuleName -> String
+moduleNameToFilePath caseConv ext ns =
+
+      let parts = Lists.map (Formatting.convertCase Util.CaseConventionCamel caseConv) (Strings.splitOn "." (Packaging.unModuleName ns))
+      in (Strings.cat2 (Strings.cat2 (Strings.intercalate "/" parts) ".") (Packaging.unFileExtension ext))
 -- | Convert a name to file path, given case conventions for namespaces and local names, and assuming '/' as the file path separator
 nameToFilePath :: Util.CaseConvention -> Util.CaseConvention -> Packaging.FileExtension -> Core.Name -> String
 nameToFilePath nsConv localConv ext name =
@@ -93,15 +102,6 @@ nameToFilePath nsConv localConv ext name =
         suffix,
         ".",
         (Packaging.unFileExtension ext)])
--- | Extract the namespace of a name, if any
-namespaceOf :: Core.Name -> Maybe Packaging.ModuleName
-namespaceOf arg_ = Packaging.qualifiedNameModuleName (qualifyName arg_)
--- | Convert a namespace to a file path with the given case convention and file extension
-namespaceToFilePath :: Util.CaseConvention -> Packaging.FileExtension -> Packaging.ModuleName -> String
-namespaceToFilePath caseConv ext ns =
-
-      let parts = Lists.map (Formatting.convertCase Util.CaseConventionCamel caseConv) (Strings.splitOn "." (Packaging.unModuleName ns))
-      in (Strings.cat2 (Strings.cat2 (Strings.intercalate "/" parts) ".") (Packaging.unFileExtension ext))
 -- | Type variable naming convention follows Haskell: t0, t1, etc.
 normalTypeVariable :: Int -> Core.Name
 normalTypeVariable i = Core.Name (Strings.cat2 "t" (Literals.showInt32 i))

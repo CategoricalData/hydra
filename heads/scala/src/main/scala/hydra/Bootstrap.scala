@@ -178,7 +178,7 @@ import _root_.java.io.File
     // type-only stubs in the DSL whose hand-written per-language counterparts
     // are the source of truth. Emitting them would overwrite hand-written code
     // that registers primitives for the test graph. Mirrors
-    // testSkipEmitNamespaces in Hydra.Sources.Test.All and the equivalent
+    // testSkipEmitModuleNames in Hydra.Sources.Test.All and the equivalent
     // filter in heads/python/.../bootstrap.py.
     val testSkipEmit = Set("hydra.test.testEnv")
     val testModsToEmit = testMods.filter(m => !testSkipEmit.contains(m.name))

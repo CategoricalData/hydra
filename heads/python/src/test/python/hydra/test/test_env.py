@@ -12,7 +12,7 @@
 #   - test_graph(test_types, test_terms): a function returning a Graph
 #
 # The Python coder filters hydra.test.testEnv from emitted output (via
-# testSkipEmitNamespaces in Hydra.Sources.Test.All); this file is the
+# testSkipEmitModuleNames in Hydra.Sources.Test.All); this file is the
 # Python runtime counterpart that the generated test_graph.py resolves
 # against at import time.
 

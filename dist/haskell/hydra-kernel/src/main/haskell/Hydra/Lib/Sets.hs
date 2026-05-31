@@ -1,5 +1,5 @@
 -- Note: this is an automatically generated file. Do not edit.
--- | Primitives in the hydra.lib.sets namespace.
+-- | Primitives in the hydra.lib.sets module.
 
 module Hydra.Lib.Sets where
 import qualified Hydra.Ast as Ast

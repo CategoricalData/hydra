@@ -767,7 +767,7 @@
             {"isLazy": false, "name": "arg1", "type": {"list": {"variable": "hydra.packaging.Definition"}}}],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.python.syntax.DottedName"}, "function": {"variable": "hydra.util.Namespaces"}}}},
+              "application": {"argument": {"variable": "hydra.python.syntax.DottedName"}, "function": {"variable": "hydra.util.ModuleNames"}}}},
           "typeParameters": []},
         "term": {
           "annotated": {
@@ -799,11 +799,11 @@
                                         "argument": {"variable": "hydra.python.names.encodeNamespace"},
                                         "function": {
                                           "typeApplication": {
-                                            "body": {"variable": "hydra.analysis.namespacesForDefinitions"},
+                                            "body": {"variable": "hydra.analysis.moduleNamesForDefinitions"},
                                             "type": {"variable": "hydra.python.syntax.DottedName"}}}}}}}}},
                             "typeScheme": {
                               "body": {
-                                "application": {"argument": {"variable": "hydra.python.syntax.DottedName"}, "function": {"variable": "hydra.util.Namespaces"}}},
+                                "application": {"argument": {"variable": "hydra.python.syntax.DottedName"}, "function": {"variable": "hydra.util.ModuleNames"}}},
                               "variables": []}}],
                         "body": {
                           "application": {
@@ -819,7 +819,7 @@
                                             "argument": {"variable": "namespaces"},
                                             "function": {
                                               "typeApplication": {
-                                                "body": {"project": {"fieldName": "focus", "typeName": "hydra.util.Namespaces"}},
+                                                "body": {"project": {"fieldName": "focus", "typeName": "hydra.util.ModuleNames"}},
                                                 "type": {"variable": "hydra.python.syntax.DottedName"}}}}}},
                                       {
                                         "name": "mapping",
@@ -830,7 +830,7 @@
                                                 "argument": {"variable": "namespaces"},
                                                 "function": {
                                                   "typeApplication": {
-                                                    "body": {"project": {"fieldName": "mapping", "typeName": "hydra.util.Namespaces"}},
+                                                    "body": {"project": {"fieldName": "mapping", "typeName": "hydra.util.ModuleNames"}},
                                                     "type": {"variable": "hydra.python.syntax.DottedName"}}}}},
                                             "function": {
                                               "application": {
@@ -842,7 +842,7 @@
                                                       "typeApplication": {
                                                         "body": {"typeApplication": {"body": {"variable": "hydra.lib.maps.insert"}, "type": {"variable": "hydra.packaging.ModuleName"}}},
                                                         "type": {"variable": "hydra.python.syntax.DottedName"}}}}}}}}}}],
-                                    "typeName": "hydra.util.Namespaces"}},
+                                    "typeName": "hydra.util.ModuleNames"}},
                                 "type": {"variable": "hydra.python.syntax.DottedName"}}},
                             "function": {
                               "application": {
@@ -863,7 +863,7 @@
                                                         "argument": {"variable": "namespaces"},
                                                         "function": {
                                                           "typeApplication": {
-                                                            "body": {"project": {"fieldName": "focus", "typeName": "hydra.util.Namespaces"}},
+                                                            "body": {"project": {"fieldName": "focus", "typeName": "hydra.util.ModuleNames"}},
                                                             "type": {"variable": "hydra.python.syntax.DottedName"}}}}},
                                                     "function": {
                                                       "typeApplication": {
@@ -875,7 +875,7 @@
                                       "typeApplication": {
                                         "body": {"variable": "hydra.lib.logic.ifElse"},
                                         "type": {
-                                          "application": {"argument": {"variable": "hydra.python.syntax.DottedName"}, "function": {"variable": "hydra.util.Namespaces"}}}}}}}}}}}}},
+                                          "application": {"argument": {"variable": "hydra.python.syntax.DottedName"}, "function": {"variable": "hydra.util.ModuleNames"}}}}}}}}}}}}},
                     "domain": {"list": {"variable": "hydra.packaging.Definition"}},
                     "parameter": "defs"}},
                 "domain": {"variable": "hydra.packaging.ModuleName"},

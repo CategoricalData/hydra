@@ -26,7 +26,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> kernelTypesModuleNames,
-            moduleDescription = Just "Primitives in the hydra.lib.math namespace."}
+            moduleDescription = Just "Primitives in the hydra.lib.math module."}
   where
     definitions = [
       primNoDef "abs"       "The absolute value of an integer." int32To (Just

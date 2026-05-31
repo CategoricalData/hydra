@@ -1203,7 +1203,7 @@ def _encode_application_inner():
             [
                 (
                     "wrappedArgs",
-                    _local("wrapLazyArguments")(var("name"), var("hargs")),
+                    _local("wrapLazyArguments")(var("g"), var("name"), var("hargs")),
                 ),
             ],
             Eithers.bind(
@@ -6147,7 +6147,7 @@ def _extend_meta_for_types():
                 ("currentNs", _meta_proj("namespaces", "meta")),
                 (
                     "updatedNs",
-                    _kref.analysis_add_names_to_namespaces(_kref.names_encode_namespace, var("names"), var("currentNs")),
+                    _kref.analysis_add_names_to_module_names(_kref.names_encode_namespace, var("names"), var("currentNs")),
                 ),
                 (
                     "meta1",
@@ -6628,7 +6628,7 @@ def _initial_metadata():
                 ("dottedNs", _kref.names_encode_namespace(var("ns"))),
                 (
                     "emptyNs",
-                    Util.namespaces(
+                    Util.module_names(
                         pair(var("ns"), var("dottedNs")),
                         Maps.empty(),
                     ),
@@ -7139,7 +7139,7 @@ def _module_domain_imports():
                 (
                     "names",
                     Lists.sort(
-                        Maps.elems(Util.namespaces_mapping(var("namespaces")))
+                        Maps.elems(Util.module_names_mapping(var("namespaces")))
                     ),
                 ),
             ],
@@ -7187,7 +7187,7 @@ def _module_to_python():
                         ),
                         (
                             "path",
-                            var("hydra.names.namespaceToFilePath")(_kref.util_case_convention_lower_snake, wrap("hydra.packaging.FileExtension",
+                            var("hydra.names.moduleNameToFilePath")(_kref.util_case_convention_lower_snake, wrap("hydra.packaging.FileExtension",
                                     string("py"),
                                 ), Pkg.module_name(var("mod"))),
                         ),
@@ -7860,89 +7860,68 @@ def _with_type_lambda():
     )
 
 
-def _wrap_lazy_arguments():
-    arg_at = lam(
-        "i",
-        Maybes.from_maybe(
-            var("dummyExpr"),
-            Lists.maybe_at(var("i"), var("args")),
-        ),
-    )
+def _lazy_flags_for_primitive():
     body = lambdas(
-        ["name", "args"],
-        lets(
-            [
-                field("dummyExpr",
-                    _kref.utils_py_name_to_py_expression(_py_name("")),
-                ),
-                field("argAt", arg_at),
-            ],
-            Logic.if_else(
-                Logic.and_(
-                    Equality.equal(
-                        var("name"),
-                        Core.name(string("hydra.lib.logic.ifElse")),
-                    ),
-                    Equality.equal(
-                        Lists.length(var("args")), int32(3)
-                    ),
-                ),
-                list_(
+        ["g", "name"],
+        Maybes.cases(
+            Maps.lookup(var("name"), Graph_dsl.graph_primitives(var("g"))),
+            list_([]),
+            lam(
+                "prim",
+                lets(
                     [
-                        var("argAt")(int32(0)),
-                        _local("wrapInNullaryLambda")(var("argAt")(int32(1))),
-                        _local("wrapInNullaryLambda")(var("argAt")(int32(2))),
-                    ]
-                ),
-                Logic.if_else(
-                    Logic.and_(
-                        Equality.equal(
-                            var("name"),
-                            Core.name(string("hydra.lib.maybes.cases")),
-                        ),
-                        Equality.equal(
-                            Lists.length(var("args")), int32(3)
-                        ),
-                    ),
-                    list_(
+                        field("def0", _proj("hydra.graph.Primitive", "definition", "prim")),
+                    ],
+                    lets(
                         [
-                            var("argAt")(int32(0)),
-                            _local("wrapInNullaryLambda")(var("argAt")(int32(1))),
-                            var("argAt")(int32(2)),
-                        ]
-                    ),
-                    Logic.if_else(
-                        Logic.and_(
-                            Logic.or_(
-                                Equality.equal(
-                                    var("name"),
-                                    Core.name(string("hydra.lib.maybes.maybe")),
-                                ),
-                                Equality.equal(
-                                    var("name"),
-                                    Core.name(
-                                        string("hydra.lib.maybes.fromMaybe")
-                                    ),
-                                ),
-                            ),
-                            Equality.gte(
-                                Lists.length(var("args")), int32(1)
-                            ),
+                            field("sig", _proj("hydra.packaging.PrimitiveDefinition", "signature", "def0")),
+                        ],
+                        Lists.map(
+                            lam("p", _proj("hydra.typing.Parameter", "isLazy", "p")),
+                            _proj("hydra.typing.TermSignature", "parameters", "sig"),
                         ),
-                        Lists.cons(
-                            _local("wrapInNullaryLambda")(var("argAt")(int32(0))),
-                            Lists.drop(int32(1), var("args")),
-                        ),
-                        var("args"),
                     ),
                 ),
             ),
         ),
     )
     return _def(
+        "lazyFlagsForPrimitive",
+        doc(
+            "Per-parameter isLazy flags of a primitive (by name), or empty if not a primitive. "
+            "Single source of truth for which arguments coders thunk; replaces hard-coded name tables (issue #391).",
+            body,
+        ),
+    )
+
+
+def _wrap_lazy_arguments():
+    body = lambdas(
+        ["g", "name", "args"],
+        lets(
+            [
+                field("lazyFlags", _local("lazyFlagsForPrimitive")(var("g"), var("name"))),
+            ],
+            # Zip args with flags (truncates to the shorter list, so partially-applied
+            # calls only consider supplied positions), wrapping where the flag is true.
+            # The Python runtime accepts a value or thunk (callable() check).
+            Lists.map(
+                lam(
+                    "pair",
+                    Logic.if_else(
+                        Pairs.second(var("pair")),
+                        _local("wrapInNullaryLambda")(Pairs.first(var("pair"))),
+                        Pairs.first(var("pair")),
+                    ),
+                ),
+                Lists.zip(var("args"), var("lazyFlags")),
+            ),
+        ),
+    )
+    return _def(
         "wrapLazyArguments",
         doc(
-            "Wrap specific arguments in nullary lambdas for primitives that require lazy evaluation",
+            "Wrap lazy-flagged arguments of a primitive call in nullary lambdas, per isLazy metadata (issue #391)",
             body,
         ),
     )
@@ -8069,6 +8048,7 @@ def _build_module() -> Module:
             to_definition(_is_type_variable_name()),
             to_definition(_is_variant_unit_type()),
             to_definition(_lazy_dot_get()),
+            to_definition(_lazy_flags_for_primitive()),
             to_definition(_lru_cache_decorator()),
             to_definition(_make_curried_lambda()),
             to_definition(_make_lazy()),

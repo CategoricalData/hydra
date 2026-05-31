@@ -24,7 +24,7 @@ _PythonVersion_python312 = Core.Name "python312"
 data PythonEnvironment =
   PythonEnvironment {
     -- | ModuleName mapping for imports
-    pythonEnvironmentNamespaces :: (Util.Namespaces Syntax.DottedName),
+    pythonEnvironmentNamespaces :: (Util.ModuleNames Syntax.DottedName),
     -- | Type variables in scope, with their Python names
     pythonEnvironmentBoundTypeVariables :: ([Core.Name], (M.Map Core.Name Syntax.Name)),
     -- | Graph context for type inference
@@ -49,7 +49,7 @@ _PythonEnvironment_inlineVariables = Core.Name "inlineVariables"
 data PythonModuleMetadata =
   PythonModuleMetadata {
     -- | ModuleName mapping for imports
-    pythonModuleMetadataNamespaces :: (Util.Namespaces Syntax.DottedName),
+    pythonModuleMetadataNamespaces :: (Util.ModuleNames Syntax.DottedName),
     -- | Type variables used in the module
     pythonModuleMetadataTypeVariables :: (S.Set Core.Name),
     pythonModuleMetadataUsesAnnotated :: Bool,

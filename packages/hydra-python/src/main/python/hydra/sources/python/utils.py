@@ -69,7 +69,7 @@ from hydra.sources.python._source_dsl import py_name as _py_name, py_helper_name
 
 # Kernel-side serialization / analysis refs (PyDsl uses no-prefix Hydra functions)
 _serialization_print_expr = var("hydra.serialization.printExpr")
-_analysis_namespaces_for_definitions = var("hydra.analysis.namespacesForDefinitions")
+_analysis_module_names_for_definitions = var("hydra.analysis.moduleNamesForDefinitions")
 _pyserde_expression_to_expr = var("hydra.python.serde.expressionToExpr")
 _pynames_encode_namespace = var("hydra.python.names.encodeNamespace")
 
@@ -406,23 +406,23 @@ def _find_namespaces():
                 Packaging.module_name2(string("hydra.core")),
             ),
             field("namespaces",
-                _analysis_namespaces_for_definitions(_pynames_encode_namespace, var("focusNs"), var("defs")),
+                _analysis_module_names_for_definitions(_pynames_encode_namespace, var("focusNs"), var("defs")),
             ),
         ],
         Logic.if_else(
             Equality.equal(
                 Packaging.un_module_name(
-                    Pairs.first(Util.namespaces_focus(var("namespaces"))),
+                    Pairs.first(Util.module_names_focus(var("namespaces"))),
                 ),
                 Packaging.un_module_name(var("coreNs")),
             ),
             var("namespaces"),
-            Util.namespaces(
-                Util.namespaces_focus(var("namespaces")),
+            Util.module_names(
+                Util.module_names_focus(var("namespaces")),
                 Maps.insert(
                     var("coreNs"),
                     _pynames_encode_namespace(var("coreNs")),
-                    Util.namespaces_mapping(var("namespaces")),
+                    Util.module_names_mapping(var("namespaces")),
                 ),
             ),
         ),
