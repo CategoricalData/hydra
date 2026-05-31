@@ -107,12 +107,18 @@ modules under your output directory:
 
 ```bash
 cd heads/haskell
+stack build hydra:exe:bootstrap-from-json   # stack exec never rebuilds; build current source first
 stack exec -- bootstrap-from-json \
   --target python \
   --output /abs/path/to/out/python \
   --package <your-pkg> \
   --synthesize-sources
 ```
+
+The `stack build` matters: `stack exec` runs whatever binary is already in
+`.stack-work` and never rebuilds, so without it you may silently run a stale
+executable. The sync scripts (`bin/sync-python.sh` and friends) build first
+automatically.
 
 This is the same path the kernel itself uses to bootstrap; see
 [`heads/haskell/src/exec/bootstrap-from-json/Main.hs`](../../heads/haskell/src/exec/bootstrap-from-json/Main.hs)

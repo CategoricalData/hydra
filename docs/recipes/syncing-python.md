@@ -100,7 +100,11 @@ For faster iteration during development, skip tests:
 
 ## Manual Sync (Step by Step)
 
-If you prefer to run steps individually, or need to regenerate only specific parts:
+Prefer `./bin/sync-python.sh` (above) for routine work — it builds the
+executable from current source before running it. The manual steps below are
+for when you need to regenerate only specific parts; note that Step 1's
+`stack build` is not optional, because `stack exec` (Step 2) never rebuilds on
+its own and would otherwise run a stale binary.
 
 ### Step 1: Build the bootstrap executable
 

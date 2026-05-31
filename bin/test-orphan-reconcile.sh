@@ -38,6 +38,15 @@ fail() { echo "  FAIL: $*"; FAIL=$((FAIL + 1)); }
 # depending on the real generator sources.
 export HYDRA_GENERATOR_STAMP="test-orphan-reconcile-stamp"
 
+# Build digest-check from current source before any `stack exec`. `stack exec`
+# runs whatever binary is already in .stack-work and never rebuilds, so a stale
+# executable predating the #393 orphan-reconcile path silently takes the old
+# "cache hit; skipping work" branch and the orphan survives — a false failure
+# against good source. The real pipeline builds the exe in sync-haskell.sh
+# before exec; mirror that here.
+echo "Building digest-check from current source..."
+( cd "$HYDRA_ROOT_DIR/heads/haskell" && stack build hydra:exe:digest-check )
+
 WORK="$(mktemp -d -t hydra-orphan-reconcile.XXXXXX)"
 trap 'rm -rf "$WORK"' EXIT
 

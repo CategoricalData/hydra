@@ -475,6 +475,11 @@ stack exec bootstrap-from-json -- --target java --all-packages \
     --dist-json-root /other/path/dist/json --output /tmp/out
 ```
 
+These reuse the `stack build hydra:exe:bootstrap-from-json` from the
+[Phase 2 generation](#phase-2-batch-generation) section above — `stack exec`
+never rebuilds on its own, so build first if you've changed the generator
+source. The `assemble-all.sh` / `sync-<lang>.sh` scripts handle this for you.
+
 ### Generated files don't compile
 
 Ensure the universe is complete. If generating hydra-ext modules, the

@@ -27,6 +27,15 @@ fi
 PASS=0
 FAIL=0
 
+# Build bootstrap-from-json from current source before any `stack exec`.
+# `stack exec` runs whatever binary is already in .stack-work and never
+# rebuilds, so a stale executable predating the --prune-stale flag (#357)
+# makes this test fail with "Unknown argument: --prune-stale" against
+# perfectly good source. The real sync pipeline avoids this by building
+# the exe in sync-haskell.sh before exec; mirror that here.
+echo "Building bootstrap-from-json from current source..."
+( cd "$HYDRA_ROOT_DIR/heads/haskell" && stack build hydra:exe:bootstrap-from-json )
+
 run_one_target() {
     local target="$1"
     local pkg="hydra-kernel"
