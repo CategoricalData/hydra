@@ -177,7 +177,7 @@ public class BenchInference {
                 String local = td.name.value.substring(td.name.value.lastIndexOf('.') + 1);
                 Name newName = new Name(targetNs.value + "." + local);
                 renamed.add(new Definition.Term(
-                        new TermDefinition(newName, td.term, td.signature)));
+                        new TermDefinition(newName, hydra.util.Maybe.nothing(), td.term, td.signature)));
             } else {
                 renamed.add(d);
             }
@@ -187,7 +187,7 @@ public class BenchInference {
         List<ModuleDependency> deps = new ArrayList<>();
         deps.add(new ModuleDependency(benchMod.name, hydra.util.Maybe.<hydra.packaging.PackageName>nothing()));
         deps.addAll(benchMod.dependencies);
-        return new Module(targetNs, benchMod.description, deps, renamed);
+        return new Module(targetNs, benchMod.metadata, deps, renamed);
     }
 
     private static BenchResult timeInference(List<Module> universe, Module target, int n, String benchNs) {

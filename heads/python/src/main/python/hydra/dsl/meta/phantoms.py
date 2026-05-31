@@ -235,7 +235,7 @@ def to_definition(tb: TypedBinding[A]):
     Mirrors Haskell's Hydra.Dsl.Meta.Phantoms.toDefinition.
     """
     from hydra.packaging import DefinitionTerm, TermDefinition
-    return DefinitionTerm(TermDefinition(tb.name, tb.term.value, Nothing()))
+    return DefinitionTerm(TermDefinition(tb.name, Nothing(), tb.term.value, Nothing()))
 
 
 def to_term_definition(tb: TypedBinding[A]):
