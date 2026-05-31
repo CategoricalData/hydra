@@ -324,6 +324,93 @@
                 "parameter": "arg_"}}}}}},
     {
       "term": {
+        "name": "hydra.names.moduleNameOf",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.core.Name"}}],
+          "result": {"type": {"maybe": {"variable": "hydra.packaging.ModuleName"}}},
+          "typeParameters": []},
+        "term": {
+          "annotated": {
+            "annotation": [{"key": "description", "value": {"literal": {"string": "Extract the module name of a name, if any"}}}],
+            "body": {
+              "lambda": {
+                "body": {
+                  "application": {
+                    "argument": {"application": {"argument": {"variable": "arg_"}, "function": {"variable": "hydra.names.qualifyName"}}},
+                    "function": {"project": {"fieldName": "moduleName", "typeName": "hydra.packaging.QualifiedName"}}}},
+                "domain": {"variable": "hydra.core.Name"},
+                "parameter": "arg_"}}}}}},
+    {
+      "term": {
+        "name": "hydra.names.moduleNameToFilePath",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.util.CaseConvention"}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.packaging.FileExtension"}},
+            {"isLazy": false, "name": "arg2", "type": {"variable": "hydra.packaging.ModuleName"}}],
+          "result": {"type": {"literal": {"string": {}}}},
+          "typeParameters": []},
+        "term": {
+          "annotated": {
+            "annotation": [
+              {
+                "key": "description",
+                "value": {"literal": {"string": "Convert a module name to a file path with the given case convention and file extension"}}}],
+            "body": {
+              "lambda": {
+                "body": {
+                  "lambda": {
+                    "body": {
+                      "lambda": {
+                        "body": {
+                          "let": {
+                            "bindings": [
+                              {
+                                "name": "parts",
+                                "term": {
+                                  "application": {
+                                    "argument": {
+                                      "application": {
+                                        "argument": {"application": {"argument": {"variable": "ns"}, "function": {"unwrap": "hydra.packaging.ModuleName"}}},
+                                        "function": {"application": {"argument": {"literal": {"string": "."}}, "function": {"variable": "hydra.lib.strings.splitOn"}}}}},
+                                    "function": {
+                                      "application": {
+                                        "argument": {
+                                          "application": {
+                                            "argument": {"variable": "caseConv"},
+                                            "function": {
+                                              "application": {
+                                                "argument": {"inject": {"field": {"name": "camel", "term": {"unit": {}}}, "typeName": "hydra.util.CaseConvention"}},
+                                                "function": {"variable": "hydra.formatting.convertCase"}}}}},
+                                        "function": {
+                                          "typeApplication": {
+                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"literal": {"string": {}}}}},
+                                            "type": {"literal": {"string": {}}}}}}}}},
+                                "typeScheme": {"body": {"list": {"literal": {"string": {}}}}, "variables": []}}],
+                            "body": {
+                              "application": {
+                                "argument": {"application": {"argument": {"variable": "ext"}, "function": {"unwrap": "hydra.packaging.FileExtension"}}},
+                                "function": {
+                                  "application": {
+                                    "argument": {
+                                      "application": {
+                                        "argument": {"literal": {"string": "."}},
+                                        "function": {
+                                          "application": {
+                                            "argument": {
+                                              "application": {
+                                                "argument": {"variable": "parts"},
+                                                "function": {"application": {"argument": {"literal": {"string": "/"}}, "function": {"variable": "hydra.lib.strings.intercalate"}}}}},
+                                            "function": {"variable": "hydra.lib.strings.cat2"}}}}},
+                                    "function": {"variable": "hydra.lib.strings.cat2"}}}}}}},
+                        "domain": {"variable": "hydra.packaging.ModuleName"},
+                        "parameter": "ns"}},
+                    "domain": {"variable": "hydra.packaging.FileExtension"},
+                    "parameter": "ext"}},
+                "domain": {"variable": "hydra.util.CaseConvention"},
+                "parameter": "caseConv"}}}}}},
+    {
+      "term": {
         "name": "hydra.names.nameToFilePath",
         "signature": {
           "parameters": [
@@ -479,93 +566,6 @@
                     "parameter": "localConv"}},
                 "domain": {"variable": "hydra.util.CaseConvention"},
                 "parameter": "nsConv"}}}}}},
-    {
-      "term": {
-        "name": "hydra.names.namespaceOf",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.core.Name"}}],
-          "result": {"type": {"maybe": {"variable": "hydra.packaging.ModuleName"}}},
-          "typeParameters": []},
-        "term": {
-          "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Extract the namespace of a name, if any"}}}],
-            "body": {
-              "lambda": {
-                "body": {
-                  "application": {
-                    "argument": {"application": {"argument": {"variable": "arg_"}, "function": {"variable": "hydra.names.qualifyName"}}},
-                    "function": {"project": {"fieldName": "moduleName", "typeName": "hydra.packaging.QualifiedName"}}}},
-                "domain": {"variable": "hydra.core.Name"},
-                "parameter": "arg_"}}}}}},
-    {
-      "term": {
-        "name": "hydra.names.namespaceToFilePath",
-        "signature": {
-          "parameters": [
-            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.util.CaseConvention"}},
-            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.packaging.FileExtension"}},
-            {"isLazy": false, "name": "arg2", "type": {"variable": "hydra.packaging.ModuleName"}}],
-          "result": {"type": {"literal": {"string": {}}}},
-          "typeParameters": []},
-        "term": {
-          "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Convert a namespace to a file path with the given case convention and file extension"}}}],
-            "body": {
-              "lambda": {
-                "body": {
-                  "lambda": {
-                    "body": {
-                      "lambda": {
-                        "body": {
-                          "let": {
-                            "bindings": [
-                              {
-                                "name": "parts",
-                                "term": {
-                                  "application": {
-                                    "argument": {
-                                      "application": {
-                                        "argument": {"application": {"argument": {"variable": "ns"}, "function": {"unwrap": "hydra.packaging.ModuleName"}}},
-                                        "function": {"application": {"argument": {"literal": {"string": "."}}, "function": {"variable": "hydra.lib.strings.splitOn"}}}}},
-                                    "function": {
-                                      "application": {
-                                        "argument": {
-                                          "application": {
-                                            "argument": {"variable": "caseConv"},
-                                            "function": {
-                                              "application": {
-                                                "argument": {"inject": {"field": {"name": "camel", "term": {"unit": {}}}, "typeName": "hydra.util.CaseConvention"}},
-                                                "function": {"variable": "hydra.formatting.convertCase"}}}}},
-                                        "function": {
-                                          "typeApplication": {
-                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"literal": {"string": {}}}}},
-                                            "type": {"literal": {"string": {}}}}}}}}},
-                                "typeScheme": {"body": {"list": {"literal": {"string": {}}}}, "variables": []}}],
-                            "body": {
-                              "application": {
-                                "argument": {"application": {"argument": {"variable": "ext"}, "function": {"unwrap": "hydra.packaging.FileExtension"}}},
-                                "function": {
-                                  "application": {
-                                    "argument": {
-                                      "application": {
-                                        "argument": {"literal": {"string": "."}},
-                                        "function": {
-                                          "application": {
-                                            "argument": {
-                                              "application": {
-                                                "argument": {"variable": "parts"},
-                                                "function": {"application": {"argument": {"literal": {"string": "/"}}, "function": {"variable": "hydra.lib.strings.intercalate"}}}}},
-                                            "function": {"variable": "hydra.lib.strings.cat2"}}}}},
-                                    "function": {"variable": "hydra.lib.strings.cat2"}}}}}}},
-                        "domain": {"variable": "hydra.packaging.ModuleName"},
-                        "parameter": "ns"}},
-                    "domain": {"variable": "hydra.packaging.FileExtension"},
-                    "parameter": "ext"}},
-                "domain": {"variable": "hydra.util.CaseConvention"},
-                "parameter": "caseConv"}}}}}},
     {
       "term": {
         "name": "hydra.names.normalTypeVariable",

@@ -1,5 +1,5 @@
 -- Note: this is an automatically generated file. Do not edit.
--- | Primitives in the hydra.lib.eithers namespace.
+-- | Primitives in the hydra.lib.eithers module.
 
 module Hydra.Lib.Eithers where
 import qualified Hydra.Ast as Ast
@@ -288,7 +288,7 @@ fromLeft =
             Typing.parameterName = (Core.Name "arg0"),
             Typing.parameterDescription = Nothing,
             Typing.parameterType = (Core.TypeVariable (Core.Name "x")),
-            Typing.parameterIsLazy = False},
+            Typing.parameterIsLazy = True},
           Typing.Parameter {
             Typing.parameterName = (Core.Name "arg1"),
             Typing.parameterDescription = Nothing,
@@ -347,7 +347,7 @@ fromRight =
             Typing.parameterName = (Core.Name "arg0"),
             Typing.parameterDescription = Nothing,
             Typing.parameterType = (Core.TypeVariable (Core.Name "y")),
-            Typing.parameterIsLazy = False},
+            Typing.parameterIsLazy = True},
           Typing.Parameter {
             Typing.parameterName = (Core.Name "arg1"),
             Typing.parameterDescription = Nothing,

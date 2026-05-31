@@ -840,7 +840,7 @@ findDomain cx g meta =
 -- | Find import statements for the module
 findImports :: t0 -> Graph.Graph -> Packaging.Module -> Either Errors.Error [Syntax.Stat]
 findImports cx g mod =
-    Eithers.bind (Analysis.moduleDependencyNamespaces cx g False False True False mod) (\elImps -> Eithers.bind (Analysis.moduleDependencyNamespaces cx g False True False False mod) (\primImps -> Right (Lists.concat [
+    Eithers.bind (Analysis.moduleDependencyModuleNames cx g False False True False mod) (\elImps -> Eithers.bind (Analysis.moduleDependencyModuleNames cx g False True False False mod) (\primImps -> Right (Lists.concat [
       Lists.map toElImport (Sets.toList elImps),
       (Lists.map toPrimImport (Sets.toList primImps))])))
 -- | Find the Scala domain type for a function from annotations
@@ -861,7 +861,7 @@ moduleToScala :: Packaging.Module -> [Packaging.Definition] -> t0 -> Graph.Graph
 moduleToScala mod defs cx g =
     Eithers.bind (constructModule cx g mod defs) (\pkg ->
       let s = Serialization.printExpr (Serialization.parenthesize (Serde.pkgToExpr pkg))
-      in (Right (Maps.singleton (Names.namespaceToFilePath Util.CaseConventionCamel (Packaging.FileExtension "scala") (Packaging.moduleName mod)) s)))
+      in (Right (Maps.singleton (Names.moduleNameToFilePath Util.CaseConventionCamel (Packaging.FileExtension "scala") (Packaging.moduleName mod)) s)))
 -- | Strip wrap eliminations from terms (newtypes are erased in Scala)
 stripWrapEliminations :: Core.Term -> Core.Term
 stripWrapEliminations t =

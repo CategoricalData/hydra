@@ -1685,7 +1685,7 @@ moduleToWasm = def "moduleToWasm" $
         var "funcExports",
         var "allFields"])]) $
     "code" <~ (SerializationSource.printExpr @@ (SerializationSource.parenthesize @@ (WasmSerdeSource.moduleToExpr @@ var "wasmMod"))) $
-    "filePath" <~ (Names.namespaceToFilePath @@ Util.caseConventionLowerSnake @@ wrap _FileExtension (string "wat") @@ (Packaging.moduleName (var "mod"))) $
+    "filePath" <~ (Names.moduleNameToFilePath @@ Util.caseConventionLowerSnake @@ wrap _FileExtension (string "wat") @@ (Packaging.moduleName (var "mod"))) $
       right (Maps.singleton (var "filePath") (var "code"))
 
 -- | Peel up to N outer lambdas from `term`, where N = length of `args`. Returns

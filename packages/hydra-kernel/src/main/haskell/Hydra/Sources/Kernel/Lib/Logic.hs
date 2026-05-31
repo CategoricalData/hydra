@@ -23,7 +23,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> kernelTypesModuleNames,
-            moduleDescription = Just "Primitives in the hydra.lib.logic namespace."}
+            moduleDescription = Just "Primitives in the hydra.lib.logic module."}
   where
     definitions = [
       toPrimitive "Compute the logical AND of two boolean values." andSig (Just
@@ -50,13 +50,27 @@ primNoDef localName description s comments =
 sig :: TypeScheme -> TermSignature
 sig = typeSchemeToTermSignature
 
+-- Local convenience: build a TermSignature from a TypeScheme, marking the
+-- value parameters at the given (0-based) positions as lazy. Coders that
+-- distinguish strict from lazy evaluation thunk exactly these arguments.
+lazySig :: [Int] -> TypeScheme -> TermSignature
+lazySig idxs ts = markLazyParams idxs (sig ts)
+
+markLazyParams :: [Int] -> TermSignature -> TermSignature
+markLazyParams idxs ts = ts {
+  termSignatureParameters =
+    zipWith (\i p -> if i `elem` idxs then p {parameterIsLazy = True} else p)
+      [0..] (termSignatureParameters ts)}
+
 -- Signatures
 
 andSig :: TermSignature
 andSig = sig $ TypeScheme [] (Types.boolean Types.~> Types.boolean Types.~> Types.boolean) Nothing
 
+-- ifElse is lazy in its then/else branches (positions 1, 2): only the
+-- selected branch is evaluated. The condition (position 0) is strict.
 ifElseSig :: TermSignature
-ifElseSig = sig $ TypeScheme [Name "x"]
+ifElseSig = lazySig [1, 2] $ TypeScheme [Name "x"]
   (Types.boolean Types.~> Types.var "x" Types.~> Types.var "x" Types.~> Types.var "x")
   Nothing
 

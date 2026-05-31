@@ -262,12 +262,12 @@
                 "type": {"variable": "hydra.core.Type"}}}}}}},
     {
       "term": {
-        "name": "hydra.test.testGraph.testNamespace",
+        "name": "hydra.test.testGraph.testModuleName",
         "signature": {"parameters": [], "result": {"type": {"variable": "hydra.packaging.ModuleName"}}, "typeParameters": []},
         "term": {"wrap": {"body": {"literal": {"string": "testGraph"}}, "typeName": "hydra.packaging.ModuleName"}}}},
     {
       "term": {
-        "name": "hydra.test.testGraph.testSchemaNamespace",
+        "name": "hydra.test.testGraph.testSchemaModuleName",
         "signature": {"parameters": [], "result": {"type": {"variable": "hydra.packaging.ModuleName"}}, "typeParameters": []},
         "term": {"wrap": {"body": {"literal": {"string": "testSchemaGraph"}}, "typeName": "hydra.packaging.ModuleName"}}}},
     {

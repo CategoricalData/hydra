@@ -36,10 +36,10 @@ testContext :: Typing.InferenceContext
 testContext = TestEnv.testContext
 testGraph :: Graph.Graph
 testGraph = TestEnv.testGraph testTypes testTerms
-testNamespace :: Packaging.ModuleName
-testNamespace = Packaging.ModuleName "testGraph"
-testSchemaNamespace :: Packaging.ModuleName
-testSchemaNamespace = Packaging.ModuleName "testSchemaGraph"
+testModuleName :: Packaging.ModuleName
+testModuleName = Packaging.ModuleName "testGraph"
+testSchemaModuleName :: Packaging.ModuleName
+testSchemaModuleName = Packaging.ModuleName "testSchemaGraph"
 testTerms :: M.Map Core.Name Core.Term
 testTerms = Maps.fromList [
   (Core.Name "testDataArthur", TestTerms.testDataArthur)]
