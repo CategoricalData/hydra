@@ -466,6 +466,22 @@ positions in the host's thunk form. Because the flags come from kernel metadata,
 on the lazy set automatically, and adding a lazy parameter to a primitive requires no coder change
 (this replaced the prior per-coder hard-coded name tables; see issue #391).
 
+**Self-host trap — your host's own primitive registry must carry the flags too.** The flag-reading
+above works only if the primitive in `Graph.graphPrimitives` actually has `isLazy` set on its
+signature. When Haskell is the host this is guaranteed by the kernel registry (see
+[Per-parameter signature metadata](adding-primitives.md#per-parameter-signature-metadata-eg-laziness)).
+But when *your* language hosts code generation (self-hosting), the primitives come from *your*
+hand-written registry, and the same trap applies one level deeper: if you derive a primitive's
+`TermSignature` from its type scheme alone (e.g. `typeSchemeToTermSignature(type())`), every
+parameter's `isLazy` defaults to false and the coder emits zero thunks — even though the call-site
+logic is correct. Each host registry must therefore stamp the lazy positions onto the signature it
+registers (Java does this in `PrimitiveFunction.signatureWithLaziness()` driven by a per-class
+`lazyParams()` override; Python threads a `lazy_args` list through `prims.default_primitive_definition`).
+Separately, the **runtime implementation** of each lazy primitive must *force* the thunk it may
+receive — e.g. `findWithDefault` returns `def() if callable(def) else def` on a miss — because the
+coder now passes a thunk where it used to pass a value. Forgetting either half passes Haskell-hosted
+generation but fails self-host (the symptom that motivated the #391 self-host fix).
+
 When auto-detecting type variables from the type schemes of primitives, be aware that type variable names
 containing dots (e.g. `hydra.util.Comparison`) are nominal type references, not universally
 quantified type parameters. Exclude qualified names to avoid incorrect generalization.

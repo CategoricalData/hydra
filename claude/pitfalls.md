@@ -967,3 +967,31 @@ own (now-stale) view of the schema.
 Issue #402 tracks the proper sequencing: (1) reorder existing fields,
 (2) add `comments`, (3) populate. Do not attempt this as a sidecar to
 unrelated work; the regen pipeline needs investigation/fix in tandem.
+
+### The full-matrix `/bootstrap all` has expected-fail cells — don't read them as regressions
+
+`bin/run-bootstrapping-demo.sh --hosts all --targets all` is a **4 hosts × 9 targets = 36** matrix
+(hosts: haskell, java, scala, python; targets add typescript + the four Lisp dialects). There are no
+Lisp-host or TypeScript-host rows — those languages are targets only, so e.g. "clojure-to-clojure"
+is not a cell. As of 2026-05, roughly a third of the cells fail **by design**, for reasons unrelated
+to whatever change you are verifying:
+
+- **Common-Lisp column (every host → common-lisp):** the `validate.packaging` cluster (~32 fails, all
+  `validate.packaging` + one `inferModulesGiven`), tracked separately (was `bug_407`). Stale
+  `struct-compat.lisp`-style packaging state, not your change.
+- **`java-to-{scala,clojure,scheme,common-lisp,emacs-lisp}`:** the Java host coder either bails with
+  `Unknown target: <lang>` (no emitter for that target) or crashes in `writeLispDialect`
+  (`Generation.java`, a `ClassCastException`). Pre-existing Java-host emitter gaps.
+- **`scala-to-{everything but scala}`:** the Scala host's cross-target emitters are immature —
+  `Unknown target`, GHC "Could not find module" (emits coder DSL modules outside the kernel universe),
+  or wholesale broken Java/Python (1000+ fails via a corrupt generated `TestSuiteRunner`). Scala
+  self-hosts fine (`scala-to-scala` is green); only its *cross-emission* is broken.
+- **`{haskell,java,python}-to-typescript`:** ~45 `common inference` type-class/collection failures —
+  the TypeScript head-bud inference gap (#126). Zero primitive-level failures.
+
+The reliable signal is the **diagonal-ish core**: every host → haskell/java/python/scala is green, and
+haskell+python → the Lisp targets are green. When verifying a kernel/coder change, compare a failing
+cell's *failure set* against this list; only a **new** failure category — or a failure in a green cell —
+is a real regression. To attribute a suspicious cell, confirm it consumes `dist/json` via the named
+host coder (so source edits to a *different* host's runtime cannot reach it), and grep the path's log
+for the specific test families your change touches rather than the raw red/green status.
