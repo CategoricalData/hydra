@@ -39,7 +39,7 @@ moduleFilePaths target m = case target of
   where
     ns = moduleName m
     oneFilePerNamespace conv ext =
-      [Names.namespaceToFilePath conv (FileExtension ext) ns]
+      [Names.moduleNameToFilePath conv (FileExtension ext) ns]
 
 -- | Mirror of Hydra.Go.Coder.goNamespaceToFilePath (not exported there).
 goNamespaceToFilePath :: ModuleName -> FilePath

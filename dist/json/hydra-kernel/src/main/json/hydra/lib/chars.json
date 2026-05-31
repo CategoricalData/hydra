@@ -95,5 +95,5 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "description": "Primitives in the hydra.lib.chars namespace.",
+  "description": "Primitives in the hydra.lib.chars module.",
   "name": "hydra.lib.chars"}

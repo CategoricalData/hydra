@@ -2674,7 +2674,7 @@
                                                                                       "application": {
                                                                                         "argument": {"variable": "td"},
                                                                                         "function": {"project": {"fieldName": "name", "typeName": "hydra.packaging.TypeDefinition"}}}},
-                                                                                    "function": {"variable": "hydra.names.namespaceOf"}}},
+                                                                                    "function": {"variable": "hydra.names.moduleNameOf"}}},
                                                                                 "domain": {"variable": "hydra.packaging.TypeDefinition"},
                                                                                 "parameter": "td"}},
                                                                             "function": {
@@ -2762,7 +2762,7 @@
                                             "function": {
                                               "application": {
                                                 "argument": {"inject": {"field": {"name": "camel", "term": {"unit": {}}}, "typeName": "hydra.util.CaseConvention"}},
-                                                "function": {"variable": "hydra.names.namespaceToFilePath"}}}}}}},
+                                                "function": {"variable": "hydra.names.moduleNameToFilePath"}}}}}}},
                                     "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}}],
                                 "body": {
                                   "application": {

@@ -1,5 +1,5 @@
 -- Note: this is an automatically generated file. Do not edit.
--- | Primitives in the hydra.lib.equality namespace.
+-- | Primitives in the hydra.lib.equality module.
 
 module Hydra.Lib.Equality where
 import qualified Hydra.Ast as Ast

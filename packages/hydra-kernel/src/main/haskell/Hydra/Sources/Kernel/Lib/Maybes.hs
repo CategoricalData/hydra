@@ -23,7 +23,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> kernelTypesModuleNames,
-            moduleDescription = Just "Primitives in the hydra.lib.maybes namespace."}
+            moduleDescription = Just "Primitives in the hydra.lib.maybes module."}
   where
     definitions = [
       toPrimitive "Applicative apply for maybes: combine a maybe function and a maybe argument." applySig (Just
@@ -81,6 +81,18 @@ primNoDef localName description s comments =
 sig :: TypeScheme -> TermSignature
 sig = typeSchemeToTermSignature
 
+-- Build a TermSignature, marking the value parameters at the given (0-based)
+-- positions as lazy (thunked by coders that distinguish strict from lazy
+-- evaluation).
+lazySig :: [Int] -> TypeScheme -> TermSignature
+lazySig idxs ts = markLazyParams idxs (sig ts)
+
+markLazyParams :: [Int] -> TermSignature -> TermSignature
+markLazyParams idxs ts = ts {
+  termSignatureParameters =
+    zipWith (\i p -> if i `elem` idxs then p {parameterIsLazy = True} else p)
+      [0..] (termSignatureParameters ts)}
+
 -- Signatures.
 
 -- apply : forall a b. Maybe (a -> b) -> Maybe a -> Maybe b
@@ -100,8 +112,10 @@ bindSig = sig $ TypeScheme [Name "x", Name "y"]
   Nothing
 
 -- cases : forall a b. Maybe a -> b -> (a -> b) -> b
+-- The nothing-case value (position 1) is lazy: it is only evaluated when the
+-- optional is empty.
 casesSig :: TermSignature
-casesSig = sig $ TypeScheme [Name "x", Name "y"]
+casesSig = lazySig [1] $ TypeScheme [Name "x", Name "y"]
   (Types.optional (Types.var "x") Types.~>
    Types.var "y" Types.~>
    (Types.var "x" Types.~> Types.var "y") Types.~>
@@ -124,8 +138,10 @@ composeSig = sig $ TypeScheme [Name "x", Name "y", Name "z"]
   Nothing
 
 -- fromMaybe : forall a. a -> Maybe a -> a
+-- The default value (position 0) is lazy: it is only evaluated when the
+-- optional is empty.
 fromMaybeSig :: TermSignature
-fromMaybeSig = sig $ TypeScheme [Name "x"]
+fromMaybeSig = lazySig [0] $ TypeScheme [Name "x"]
   (Types.var "x" Types.~> Types.optional (Types.var "x") Types.~> Types.var "x")
   Nothing
 
@@ -155,8 +171,10 @@ mapSig = sig $ TypeScheme [Name "x", Name "y"]
   Nothing
 
 -- maybe : forall a b. b -> (a -> b) -> Maybe a -> b
+-- The default value (position 0) is lazy: it is only evaluated when the
+-- optional is empty.
 maybeSig :: TermSignature
-maybeSig = sig $ TypeScheme [Name "y", Name "x"]
+maybeSig = lazySig [0] $ TypeScheme [Name "y", Name "x"]
   (Types.var "y" Types.~>
    (Types.var "x" Types.~> Types.var "y") Types.~>
    Types.optional (Types.var "x") Types.~>

@@ -67,11 +67,11 @@ comparisonLessThan =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "lessThan"),
         Core.fieldTerm = Core.TermUnit}}))
--- | DSL constructor for hydra.util.Namespaces
-namespaces :: Typed.TypedTerm (Packaging.ModuleName, n) -> Typed.TypedTerm (M.Map Packaging.ModuleName n) -> Typed.TypedTerm (Util.Namespaces n)
-namespaces focus mapping =
+-- | DSL constructor for hydra.util.ModuleNames
+moduleNames :: Typed.TypedTerm (Packaging.ModuleName, n) -> Typed.TypedTerm (M.Map Packaging.ModuleName n) -> Typed.TypedTerm (Util.ModuleNames n)
+moduleNames focus mapping =
     Typed.TypedTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.util.Namespaces"),
+      Core.recordTypeName = (Core.Name "hydra.util.ModuleNames"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "focus"),
@@ -79,27 +79,27 @@ namespaces focus mapping =
         Core.Field {
           Core.fieldName = (Core.Name "mapping"),
           Core.fieldTerm = (Typed.unTypedTerm mapping)}]}))
--- | DSL accessor for the focus field of hydra.util.Namespaces
-namespacesFocus :: Typed.TypedTerm (Util.Namespaces n) -> Typed.TypedTerm (Packaging.ModuleName, n)
-namespacesFocus x =
+-- | DSL accessor for the focus field of hydra.util.ModuleNames
+moduleNamesFocus :: Typed.TypedTerm (Util.ModuleNames n) -> Typed.TypedTerm (Packaging.ModuleName, n)
+moduleNamesFocus x =
     Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.util.Namespaces"),
+        Core.projectionTypeName = (Core.Name "hydra.util.ModuleNames"),
         Core.projectionFieldName = (Core.Name "focus")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
--- | DSL accessor for the mapping field of hydra.util.Namespaces
-namespacesMapping :: Typed.TypedTerm (Util.Namespaces n) -> Typed.TypedTerm (M.Map Packaging.ModuleName n)
-namespacesMapping x =
+-- | DSL accessor for the mapping field of hydra.util.ModuleNames
+moduleNamesMapping :: Typed.TypedTerm (Util.ModuleNames n) -> Typed.TypedTerm (M.Map Packaging.ModuleName n)
+moduleNamesMapping x =
     Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.util.Namespaces"),
+        Core.projectionTypeName = (Core.Name "hydra.util.ModuleNames"),
         Core.projectionFieldName = (Core.Name "mapping")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
--- | DSL updater for the focus field of hydra.util.Namespaces
-namespacesWithFocus :: Typed.TypedTerm (Util.Namespaces n) -> Typed.TypedTerm (Packaging.ModuleName, n) -> Typed.TypedTerm (Util.Namespaces n)
-namespacesWithFocus original newVal =
+-- | DSL updater for the focus field of hydra.util.ModuleNames
+moduleNamesWithFocus :: Typed.TypedTerm (Util.ModuleNames n) -> Typed.TypedTerm (Packaging.ModuleName, n) -> Typed.TypedTerm (Util.ModuleNames n)
+moduleNamesWithFocus original newVal =
     Typed.TypedTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.util.Namespaces"),
+      Core.recordTypeName = (Core.Name "hydra.util.ModuleNames"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "focus"),
@@ -108,20 +108,20 @@ namespacesWithFocus original newVal =
           Core.fieldName = (Core.Name "mapping"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.util.Namespaces"),
+              Core.projectionTypeName = (Core.Name "hydra.util.ModuleNames"),
               Core.projectionFieldName = (Core.Name "mapping")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
--- | DSL updater for the mapping field of hydra.util.Namespaces
-namespacesWithMapping :: Typed.TypedTerm (Util.Namespaces n) -> Typed.TypedTerm (M.Map Packaging.ModuleName n) -> Typed.TypedTerm (Util.Namespaces n)
-namespacesWithMapping original newVal =
+-- | DSL updater for the mapping field of hydra.util.ModuleNames
+moduleNamesWithMapping :: Typed.TypedTerm (Util.ModuleNames n) -> Typed.TypedTerm (M.Map Packaging.ModuleName n) -> Typed.TypedTerm (Util.ModuleNames n)
+moduleNamesWithMapping original newVal =
     Typed.TypedTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.util.Namespaces"),
+      Core.recordTypeName = (Core.Name "hydra.util.ModuleNames"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "focus"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.util.Namespaces"),
+              Core.projectionTypeName = (Core.Name "hydra.util.ModuleNames"),
               Core.projectionFieldName = (Core.Name "focus")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {

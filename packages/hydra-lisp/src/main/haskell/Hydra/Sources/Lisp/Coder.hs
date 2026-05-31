@@ -25,7 +25,9 @@ import qualified Hydra.Dsl.Meta.Lib.Sets                   as Sets
 import qualified Hydra.Dsl.Coders                          as Coders
 import qualified Hydra.Dsl.Meta.Core                       as Core
 import qualified Hydra.Dsl.Errors                           as Error
+import qualified Hydra.Dsl.Meta.Graph                      as Graph
 import qualified Hydra.Dsl.Packaging                          as Packaging
+import qualified Hydra.Dsl.Typing                          as Typing
 import qualified Hydra.Dsl.Util                            as Util
 import qualified Hydra.Sources.Kernel.Terms.Formatting     as Formatting
 import qualified Hydra.Sources.Kernel.Terms.Names          as Names
@@ -82,10 +84,8 @@ module_ = Module {
       toDefinition encodeTypeDefinition,
       toDefinition encodeUnionElim,
       toDefinition encodeUnwrapElim,
-      toDefinition isCasesPrimitive,
-      toDefinition isLazy2ArgPrimitive,
-      toDefinition isLazy3ArgPrimitive,
       toDefinition isPrimitiveRef,
+      toDefinition lazyFlagsForPrimitiveTerm,
       toDefinition lispApp,
       toDefinition lispKeyword,
       toDefinition lispLambdaExpr,
@@ -100,6 +100,8 @@ module_ = Module {
       toDefinition moduleExports,
       toDefinition moduleImports,
       toDefinition moduleToLisp,
+      toDefinition primHeadName,
+      toDefinition primIsLazyAt,
       toDefinition qualifiedSnakeName,
       toDefinition qualifiedTypeName,
       toDefinition wrapInThunk]
@@ -165,11 +167,11 @@ encodeApplication = def "encodeApplication" $
        "midFun" <~ Core.applicationFunction (var "app2") $
        "midArg" <~ Core.applicationArgument (var "app2") $
        "dMidFun" <~ (Strip.deannotateTerm @@ var "midFun") $
-       -- 2-deep: dFun = App(midFun, midArg), applied to rawArg
-       -- Check if midFun is a 2-arg lazy primitive
-       "isLazy2" <~ Logic.or (isPrimitiveRef @@ string "hydra.lib.eithers.fromLeft" @@ var "dMidFun")
-                      (Logic.or (isPrimitiveRef @@ string "hydra.lib.eithers.fromRight" @@ var "dMidFun")
-                                (isPrimitiveRef @@ string "hydra.lib.maybes.fromMaybe" @@ var "dMidFun")) $
+       -- 2-deep: dFun = App(midFun, midArg), applied to rawArg.
+       -- midFun is the head; midArg is its first (position 0) argument. If the
+       -- primitive is lazy in parameter 0 (e.g. fromLeft/fromRight/fromMaybe),
+       -- thunk midArg. Decision comes from isLazy metadata, not a name table (#391).
+       "isLazy2" <~ (primIsLazyAt @@ var "g" @@ var "dMidFun" @@ int32 0) $
        Logic.ifElse (var "isLazy2")
          -- 2-arg lazy primitive: ((prim defVal) arg2) — wrap defVal in thunk
          ("ePrim" <<~ (var "enc" @@ var "midFun") $
@@ -194,8 +196,9 @@ encodeApplication = def "encodeApplication" $
                     L._IfExpression_condition>>: var "eC",
                     L._IfExpression_then>>: var "eT",
                     L._IfExpression_else>>: just (var "eE")]))
-              (Logic.ifElse (isPrimitiveRef @@ string "hydra.lib.maybes.maybe" @@ var "dInnerFun")
-                -- maybe: (((maybe defVal) f) m) — wrap defVal in thunk
+              -- maybe: (((maybe defVal) f) m) — defVal is innerFun's position-0
+              -- argument; thunk it when the primitive is lazy there (#391).
+              (Logic.ifElse (primIsLazyAt @@ var "g" @@ var "dInnerFun" @@ int32 0)
                 ("eP" <<~ (var "enc" @@ var "innerFun") $
                 "eDef" <<~ (var "enc" @@ var "innerArg") $
                 "eF" <<~ (var "enc" @@ var "midArg") $
@@ -203,8 +206,9 @@ encodeApplication = def "encodeApplication" $
                   right (lispApp @@ (lispApp @@ (lispApp @@ var "eP" @@ list [wrapInThunk @@ var "eDef"])
                                              @@ list [var "eF"])
                                  @@ list [var "eM"]))
-                (Logic.ifElse (isPrimitiveRef @@ string "hydra.lib.maybes.cases" @@ var "dInnerFun")
-                  -- cases: (((cases m) nothingVal) justFn) — wrap nothingVal in thunk
+                -- cases: (((cases m) nothingVal) justFn) — nothingVal is the
+                -- primitive's position-1 argument (midArg); thunk it when lazy there.
+                (Logic.ifElse (primIsLazyAt @@ var "g" @@ var "dInnerFun" @@ int32 1)
                   ("eP" <<~ (var "enc" @@ var "innerFun") $
                   "eM" <<~ (var "enc" @@ var "innerArg") $
                   "eN" <<~ (var "enc" @@ var "midArg") $
@@ -824,28 +828,43 @@ encodeUnwrapElim = def "encodeUnwrapElim" $
           (lambda "arg" $
             encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ var "arg")
 
--- | Check if a name is maybes.cases (3 args, arg 2 is lazy).
-isCasesPrimitive :: TypedTermDefinition (Name -> Bool)
-isCasesPrimitive = def "isCasesPrimitive" $
-  "name" ~>
-    Equality.equal (var "name") (Core.name $ string "hydra.lib.maybes.cases")
+-- | Extract the primitive/variable name a head term refers to (stripping
+-- annotations, type applications, and type lambdas), or nothing if the head is
+-- not a plain reference.
+primHeadName :: TypedTermDefinition (Term -> Maybe Name)
+primHeadName = def "primHeadName" $
+  lambda "term" $
+    cases _Term (var "term") (Just (nothing :: TypedTerm (Maybe Name))) [
+      _Term_variable>>: lambda "name" $ just (var "name"),
+      _Term_annotated>>: lambda "at" $
+        primHeadName @@ Core.annotatedTermBody (var "at"),
+      _Term_typeApplication>>: lambda "ta" $
+        primHeadName @@ Core.typeApplicationTermBody (var "ta"),
+      _Term_typeLambda>>: lambda "tl" $
+        primHeadName @@ Core.typeLambdaBody (var "tl")]
 
--- | Check if a name is a 2-arg lazy primitive (default value is arg 1, i.e. the first applied arg).
--- These primitives take a default value that should only be evaluated when needed.
-isLazy2ArgPrimitive :: TypedTermDefinition (Name -> Bool)
-isLazy2ArgPrimitive = def "isLazy2ArgPrimitive" $
-  "name" ~>
-    Logic.or
-      (Equality.equal (var "name") (Core.name $ string "hydra.lib.eithers.fromLeft"))
-      (Logic.or
-        (Equality.equal (var "name") (Core.name $ string "hydra.lib.eithers.fromRight"))
-        (Equality.equal (var "name") (Core.name $ string "hydra.lib.maybes.fromMaybe")))
+-- | The per-parameter isLazy flags of the primitive a head term refers to, in
+-- order; empty if the head is not a registered primitive. Single source of
+-- truth for which arguments to thunk, replacing hard-coded name checks (#391).
+lazyFlagsForPrimitiveTerm :: TypedTermDefinition (Graph -> Term -> [Bool])
+lazyFlagsForPrimitiveTerm = def "lazyFlagsForPrimitiveTerm" $
+  "g" ~> "headTerm" ~>
+    Maybes.cases (primHeadName @@ var "headTerm")
+      (list ([] :: [TypedTerm Bool]))
+      ("name" ~> Maybes.cases (Maps.lookup (var "name") (Graph.graphPrimitives (var "g")))
+        (list ([] :: [TypedTerm Bool]))
+        ("prim" ~>
+          Lists.map ("p" ~> Typing.parameterIsLazy (var "p"))
+            (Typing.termSignatureParameters
+              (Packaging.primitiveDefinitionSignature
+                (Graph.primitiveDefinition (var "prim"))))))
 
--- | Check if a name is a 3-arg lazy primitive where arg 1 (the first applied arg) should be thunked.
-isLazy3ArgPrimitive :: TypedTermDefinition (Name -> Bool)
-isLazy3ArgPrimitive = def "isLazy3ArgPrimitive" $
-  "name" ~>
-    Equality.equal (var "name") (Core.name $ string "hydra.lib.maybes.maybe")
+-- | Whether the primitive referenced by a head term is lazy in the parameter at
+-- the given (0-based) position.
+primIsLazyAt :: TypedTermDefinition (Graph -> Term -> Int -> Bool)
+primIsLazyAt = def "primIsLazyAt" $
+  "g" ~> "headTerm" ~> "i" ~>
+    Maybes.fromMaybe false (Lists.maybeAt (var "i") (lazyFlagsForPrimitiveTerm @@ var "g" @@ var "headTerm"))
 
 -- | Check if a term is a reference to a specific primitive, stripping type
 -- applications, type lambdas, and annotations to find the underlying primitive.
@@ -994,7 +1013,7 @@ moduleImports :: TypedTermDefinition (ModuleName -> [Definition] -> [L.ImportDec
 moduleImports = def "moduleImports" $
   "focusNs" ~> "defs" ~>
     "depNss" <~ Sets.toList (Sets.delete (var "focusNs")
-      (Analysis.definitionDependencyNamespaces @@ var "defs")) $
+      (Analysis.definitionDependencyModuleNames @@ var "defs")) $
     Lists.map ("ns" ~>
       record L._ImportDeclaration [
         L._ImportDeclaration_module>>: wrap L._NamespaceName (Packaging.unModuleName (var "ns")),

@@ -11,11 +11,6 @@ import qualified Data.Scientific as Sci
 import qualified Data.Text as T
 import qualified Data.Text.Encoding as TE
 
--- Note: These binary conversion functions have two versions:
--- 1. String -> String versions for backward compatibility with current generated code
--- 2. ByteString versions will be used after regenerating Core.hs
-
-
 -- | Convert a bigint (Integer) to a decimal (Scientific).
 bigintToDecimal :: Integer -> Scientific
 bigintToDecimal n = Sci.scientific n 0
@@ -73,10 +68,6 @@ decimalToFloat64 = toRealFloat
 -- | Convert binary to string by base64 encoding.
 binaryToString :: B.ByteString -> String
 binaryToString = T.unpack . TE.decodeUtf8 . B64.encode
-
--- | Alias for binaryToString (for compatibility during transition).
-binaryToStringBS :: B.ByteString -> String
-binaryToStringBS = binaryToString
 
 -- | Convert a float32 (Float) to a decimal (Scientific).
 float32ToDecimal :: Float -> Scientific

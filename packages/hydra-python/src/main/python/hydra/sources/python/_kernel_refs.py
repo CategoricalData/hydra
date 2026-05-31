@@ -20,7 +20,7 @@ formatting_sanitize_with_underscores = var("hydra.formatting.sanitizeWithUndersc
 
 # hydra.names
 names_qualify_name = var("hydra.names.qualifyName")
-names_namespace_of = var("hydra.names.namespaceOf")
+names_module_name_of = var("hydra.names.moduleNameOf")
 
 # hydra.python.utils (used by coder.py)
 utils_assignment_statement = var("hydra.python.utils.assignmentStatement")
@@ -94,7 +94,7 @@ variables_is_free_variable_in_term = var("hydra.variables.isFreeVariableInTerm")
 rewriting_subtypes = var("hydra.rewriting.subtypes")
 annotations_has_type_description = var("hydra.annotations.hasTypeDescription")
 dependencies_type_dependency_names = var("hydra.dependencies.typeDependencyNames")
-analysis_add_names_to_namespaces = var("hydra.analysis.addNamesToNamespaces")
+analysis_add_names_to_module_names = var("hydra.analysis.addNamesToModuleNames")
 analysis_is_simple_assignment = var("hydra.analysis.isSimpleAssignment")
 analysis_is_self_tail_recursive = var("hydra.analysis.isSelfTailRecursive")
 rewriting_fold_over_term = var("hydra.rewriting.foldOverTerm")
@@ -173,12 +173,12 @@ from hydra.dsl.packaging import (
     un_module_name as packaging_un_module_name,
 )
 from hydra.dsl.util import (
-    namespaces_focus as packaging_namespaces_focus,
+    module_names_focus as packaging_namespaces_focus,
 )
 
 # hydra.util — namespaces_focus moved from hydra.packaging to hydra.util (#369 A2).
 from hydra.dsl.util import (
-    namespaces_focus as packaging_namespaces_focus,
+    module_names_focus as packaging_namespaces_focus,
 )
 
 # hydra.util CaseConvention enum constants are TTerms (injects), already

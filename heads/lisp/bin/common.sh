@@ -125,7 +125,7 @@ lisp_assemble_main() {
     # Step 3: For hydra-kernel, copy the hand-written test_env file into
     # the dist tree so the generated test_graph.<ext>'s import resolves.
     # The kernel filters hydra.test.testEnv from emitted output via
-    # testSkipEmitNamespaces. Common Lisp doesn't need the copy here —
+    # testSkipEmitModuleNames. Common Lisp doesn't need the copy here —
     # its run-tests.lisp loads test_env.lisp from heads/ directly before
     # test_graph.lisp.
     if [ "$PACKAGE" = "hydra-kernel" ] && [ -n "$LISP_TEST_ENV" ]; then

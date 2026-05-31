@@ -190,7 +190,7 @@ encodeTerm cx g currentNs term =
       Core.TermLiteral v0 -> encodeLiteral v0
       Core.TermVariable v0 ->
         let local = Formatting.sanitizeWithUnderscores Language.typeScriptReservedWords (Names.localNameOf v0)
-        in (Maybes.cases (Names.namespaceOf v0) (tsExprIdent local) (\ns -> Logic.ifElse (Equality.equal (Packaging.unModuleName currentNs) (Packaging.unModuleName ns)) (tsExprIdent local) (
+        in (Maybes.cases (Names.moduleNameOf v0) (tsExprIdent local) (\ns -> Logic.ifElse (Equality.equal (Packaging.unModuleName currentNs) (Packaging.unModuleName ns)) (tsExprIdent local) (
           let nsSegs = Lists.drop 1 (Strings.splitOn "." (Packaging.unModuleName ns))
               alias = Strings.cat2 "$mod_" (Strings.intercalate "_" nsSegs)
           in (tsMember (tsExprIdent alias) local))))
@@ -236,24 +236,9 @@ encodeTerm cx g currentNs term =
             argc = Lists.length args
             lazyMaybe =
                     Maybes.cases mName Nothing (\n ->
-                      let qn = Core.unName n
-                      in (Logic.ifElse (Logic.and (Equality.equal qn "hydra.lib.logic.ifElse") (Equality.equal argc 3)) (Just (encodeLazyCall cx g currentNs headTerm args [
-                        False,
-                        True,
-                        True])) (Logic.ifElse (Logic.and (Equality.equal qn "hydra.lib.maybes.cases") (Equality.equal argc 3)) (Just (encodeLazyCall cx g currentNs headTerm args [
-                        False,
-                        True,
-                        False])) (Logic.ifElse (Logic.and (Equality.equal qn "hydra.lib.maybes.maybe") (Equality.equal argc 3)) (Just (encodeLazyCall cx g currentNs headTerm args [
-                        True,
-                        False,
-                        False])) (Logic.ifElse (Logic.and (Equality.equal qn "hydra.lib.maybes.fromMaybe") (Equality.equal argc 2)) (Just (encodeLazyCall cx g currentNs headTerm args [
-                        True,
-                        False])) (Logic.ifElse (Logic.and (Logic.or (Equality.equal qn "hydra.lib.eithers.fromLeft") (Equality.equal qn "hydra.lib.eithers.fromRight")) (Equality.equal argc 2)) (Just (encodeLazyCall cx g currentNs headTerm args [
-                        True,
-                        False])) (Logic.ifElse (Logic.and (Equality.equal qn "hydra.lib.maps.findWithDefault") (Equality.equal argc 3)) (Just (encodeLazyCall cx g currentNs headTerm args [
-                        True,
-                        False,
-                        False])) Nothing)))))))
+                      let lazyFlags = lazyFlagsForPrimitive g n
+                          anyLazy = Lists.foldl (\b -> \f -> Logic.or b f) False lazyFlags
+                      in (Logic.ifElse (Logic.and anyLazy (Equality.equal argc (Lists.length lazyFlags))) (Just (encodeLazyCall cx g currentNs headTerm args lazyFlags)) Nothing))
         in (Maybes.cases lazyMaybe (
           let dHead = Strip.deannotateAndDetypeTerm headTerm
               encArgs = Lists.map (encodeTerm cx g currentNs) args
@@ -540,7 +525,7 @@ encodeTypeOrAny :: t0 -> t1 -> Core.Type -> Syntax.TypeExpression
 encodeTypeOrAny cx g typ = Eithers.either (\_e -> Syntax.TypeExpressionAny) (\te -> te) (encodeType cx g typ)
 filterNonLocalNames :: Packaging.ModuleName -> S.Set Core.Name -> S.Set Core.Name
 filterNonLocalNames currentNs names =
-    Sets.fromList (Maybes.cat (Lists.map (\n -> Maybes.cases (Names.namespaceOf n) Nothing (\nameNs -> Logic.ifElse (Equality.equal (Packaging.unModuleName currentNs) (Packaging.unModuleName nameNs)) Nothing (Just n))) (Sets.toList names)))
+    Sets.fromList (Maybes.cat (Lists.map (\n -> Maybes.cases (Names.moduleNameOf n) Nothing (\nameNs -> Logic.ifElse (Equality.equal (Packaging.unModuleName currentNs) (Packaging.unModuleName nameNs)) Nothing (Just n))) (Sets.toList names)))
 flattenApplication :: Core.Term -> (Core.Term, [Core.Term])
 flattenApplication t =
 
@@ -590,7 +575,7 @@ importsToText :: String -> Packaging.ModuleName -> S.Set Core.Name -> String
 importsToText kind currentNs names =
 
       let pairs =
-              Maybes.cat (Lists.map (\n -> Maybes.cases (Names.namespaceOf n) Nothing (\ns -> Logic.ifElse (Equality.equal (Packaging.unModuleName currentNs) (Packaging.unModuleName ns)) Nothing (Just (ns, n)))) (Sets.toList names))
+              Maybes.cat (Lists.map (\n -> Maybes.cases (Names.moduleNameOf n) Nothing (\ns -> Logic.ifElse (Equality.equal (Packaging.unModuleName currentNs) (Packaging.unModuleName ns)) Nothing (Just (ns, n)))) (Sets.toList names))
           transformLocal =
                   \s -> Logic.ifElse (Equality.equal kind "type") (Formatting.capitalize s) (Formatting.sanitizeWithUnderscores Language.typeScriptReservedWords s)
           importKeyword = Logic.ifElse (Equality.equal kind "type") "import type" "import"
@@ -632,6 +617,9 @@ importsToText kind currentNs names =
                       targetPath,
                       ".js\";\n"]))) (Maps.toList grouped)
       in (Strings.cat lines)
+lazyFlagsForPrimitive :: Graph.Graph -> Core.Name -> [Bool]
+lazyFlagsForPrimitive g name =
+    Maybes.cases (Maps.lookup name (Graph.graphPrimitives g)) [] (\prim -> Lists.map (\p -> Typing.parameterIsLazy p) (Typing.termSignatureParameters (Packaging.primitiveDefinitionSignature (Graph.primitiveDefinition prim))))
 mkDocComment :: Maybe String -> Maybe Syntax.DocumentationComment
 mkDocComment mdesc =
     Maybes.cases mdesc Nothing (\d -> Logic.ifElse (Equality.equal d "") Nothing (Just (Syntax.DocumentationComment {
@@ -673,7 +661,7 @@ moduleToTypeScript mod defs cx g =
                         "\n",
                         itemText]))
             body = Strings.intercalate "\n\n" (Lists.map renderItem allItems)
-            filePath = Names.namespaceToFilePath Util.CaseConventionCamel (Packaging.FileExtension "ts") (Packaging.moduleName mod)
+            filePath = Names.moduleNameToFilePath Util.CaseConventionCamel (Packaging.FileExtension "ts") (Packaging.moduleName mod)
         in (Right (Maps.singleton filePath (Strings.cat [
           header,
           importsBlock,

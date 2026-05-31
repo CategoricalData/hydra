@@ -14,7 +14,7 @@
 //   - testGraph(testTypes)(testTerms): a curried function returning a Graph
 //
 // The TypeScript coder filters hydra.test.testEnv from emitted output (via
-// `testSkipEmitNamespaces` in Hydra.Sources.Test.All); this file is the
+// `testSkipEmitModuleNames` in Hydra.Sources.Test.All); this file is the
 // TypeScript runtime counterpart that the generated test_graph.ts resolves
 // against at import time.
 

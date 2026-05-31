@@ -279,7 +279,7 @@ public class Bootstrap {
             // type-only stubs in the DSL whose hand-written per-language counterparts
             // are the source of truth. Emitting them would overwrite hand-written code
             // that registers primitives for the test graph.
-            // Mirrors testSkipEmitNamespaces in Hydra.Sources.Test.All.
+            // Mirrors testSkipEmitModuleNames in Hydra.Sources.Test.All.
             java.util.Set<String> testSkipEmit = new java.util.HashSet<>();
             testSkipEmit.add("hydra.test.testEnv");
             List<Module> testModsFiltered = new ArrayList<>();

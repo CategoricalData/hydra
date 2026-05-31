@@ -23,7 +23,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> kernelTypesModuleNames,
-            moduleDescription = Just "Primitives in the hydra.lib.eithers namespace."}
+            moduleDescription = Just "Primitives in the hydra.lib.eithers module."}
   where
     definitions = [
       toPrimitive "Map over both sides of an either value." bimapSig (Just
@@ -104,6 +104,18 @@ primNoDef localName description s comments =
 sig :: TypeScheme -> TermSignature
 sig = typeSchemeToTermSignature
 
+-- Build a TermSignature, marking the value parameters at the given (0-based)
+-- positions as lazy (thunked by coders that distinguish strict from lazy
+-- evaluation).
+lazySig :: [Int] -> TypeScheme -> TermSignature
+lazySig idxs ts = markLazyParams idxs (sig ts)
+
+markLazyParams :: [Int] -> TermSignature -> TermSignature
+markLazyParams idxs ts = ts {
+  termSignatureParameters =
+    zipWith (\i p -> if i `elem` idxs then p {parameterIsLazy = True} else p)
+      [0..] (termSignatureParameters ts)}
+
 -- Signatures.
 
 -- bimap : forall a b c d. (a -> c) -> (b -> d) -> Either a b -> Either c d
@@ -129,13 +141,17 @@ foldlSig = sig $ TypeScheme [Name "x", Name "y", Name "z"]
   ((tx Types.~> ty Types.~> ee tz tx) Types.~> tx Types.~> Types.list ty Types.~> ee tz tx) Nothing
 
 -- fromLeft : forall a b. a -> Either a b -> a
+-- The default value (position 0) is lazy: it is only evaluated when the
+-- Either is a Right.
 fromLeftSig :: TermSignature
-fromLeftSig = sig $ TypeScheme [Name "x", Name "y"]
+fromLeftSig = lazySig [0] $ TypeScheme [Name "x", Name "y"]
   (tx Types.~> ee tx ty Types.~> tx) Nothing
 
 -- fromRight : forall a b. b -> Either a b -> b
+-- The default value (position 0) is lazy: it is only evaluated when the
+-- Either is a Left.
 fromRightSig :: TermSignature
-fromRightSig = sig $ TypeScheme [Name "x", Name "y"]
+fromRightSig = lazySig [0] $ TypeScheme [Name "x", Name "y"]
   (ty Types.~> ee tx ty Types.~> ty) Nothing
 
 -- isLeft / isRight : forall a b. Either a b -> Boolean

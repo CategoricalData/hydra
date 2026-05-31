@@ -8,7 +8,7 @@
 module Hydra.Digest (
     -- v1 API (backwards-compatible namespace → hash map)
     DigestMap,
-    discoverNamespaceFiles,
+    discoverModuleNameFiles,
     hashFile,
     hashUniverse,
     readDigest,
@@ -71,8 +71,8 @@ packagesRoot = ".." FP.</> ".." FP.</> "packages"
 -- freshness gate would skip regeneration even though the coder changed (#400).
 --
 -- Files without a recognizable namespace declaration are silently skipped.
-discoverNamespaceFiles :: IO (M.Map ModuleName FilePath)
-discoverNamespaceFiles = do
+discoverModuleNameFiles :: IO (M.Map ModuleName FilePath)
+discoverModuleNameFiles = do
     exists <- SD.doesDirectoryExist packagesRoot
     if not exists then return M.empty else do
       pkgs <- SD.listDirectory packagesRoot

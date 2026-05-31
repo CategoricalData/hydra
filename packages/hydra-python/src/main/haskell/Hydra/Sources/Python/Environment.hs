@@ -68,7 +68,7 @@ pythonEnvironment = def "PythonEnvironment" $
   T.record [
     "namespaces">:
       doc "ModuleName mapping for imports" $
-      util "Namespaces" @@ syntax "DottedName",
+      util "ModuleNames" @@ syntax "DottedName",
     "boundTypeVariables">:
       doc "Type variables in scope, with their Python names" $
       T.pair (T.list (core "Name")) (T.map (core "Name") (syntax "Name")),
@@ -95,7 +95,7 @@ pythonModuleMetadata = def "PythonModuleMetadata" $
   T.record [
     "namespaces">:
       doc "ModuleName mapping for imports" $
-      util "Namespaces" @@ syntax "DottedName",
+      util "ModuleNames" @@ syntax "DottedName",
     "typeVariables">:
       doc "Type variables used in the module" $
       T.set (core "Name"),

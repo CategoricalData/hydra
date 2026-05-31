@@ -185,6 +185,7 @@ module_ = Module {
       toDefinition isTypeVariableName,
       toDefinition isVariantUnitType,
       toDefinition lazyDotGet,
+      toDefinition lazyFlagsForPrimitive,
       toDefinition lruCacheDecorator,
       toDefinition makeCurriedLambda,
       toDefinition makeLazy,
@@ -550,7 +551,7 @@ eliminateUnitVar = def "eliminateUnitVar" $
     var "go" @@ var "term0"
 
 -- | Create an initial empty metadata record with given namespaces
-emptyMetadata :: TypedTermDefinition (Namespaces Py.DottedName -> PyHelpers.PythonModuleMetadata)
+emptyMetadata :: TypedTermDefinition (ModuleNames Py.DottedName -> PyHelpers.PythonModuleMetadata)
 emptyMetadata = def "emptyMetadata" $
   doc "Create an initial empty metadata record with given namespaces" $
   "ns" ~>
@@ -699,7 +700,7 @@ encodeApplicationInner = def "encodeApplicationInner" $
             (Lexical.lookupBinding @@ var "g" @@ var "name"))
           -- Is a primitive: wrap lazy arguments and encode
           (lambda "_prim" $
-            "wrappedArgs" <~ (wrapLazyArguments @@ var "name" @@ var "hargs") $
+            "wrappedArgs" <~ (wrapLazyArguments @@ var "g" @@ var "name" @@ var "hargs") $
             "expr" <<~ (encodeVariable @@ var "cx" @@ var "env" @@ var "name" @@ var "wrappedArgs") $
             right $ pair (var "expr") (var "rargs"))]
 
@@ -2467,7 +2468,7 @@ extendMetaForTypes = def "extendMetaForTypes" $
     "names" <~ Sets.unions (Lists.map ("t" ~> Dependencies.typeDependencyNames @@ false @@ var "t") (var "types")) $
     -- Update namespaces with the collected names
     "currentNs" <~ (project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_namespaces @@ var "meta") $
-    "updatedNs" <~ (Analysis.addNamesToNamespaces @@ PyNames.encodeNamespace @@ var "names" @@ var "currentNs") $
+    "updatedNs" <~ (Analysis.addNamesToModuleNames @@ PyNames.encodeNamespace @@ var "names" @@ var "currentNs") $
     -- Create meta1 with updated namespaces
     "meta1" <~ (setMetaNamespaces @@ var "updatedNs" @@ var "meta") $
     -- Now fold extendMetaForType over all types with isTypeDef=True, isTermAnnot=False
@@ -2556,7 +2557,7 @@ genericArg = def "genericArg" $
             (Lists.map ("n" ~> PyDsl.pyNameToPyExpression (PyNames.encodeTypeVariable @@ var "n")) (var "tparamList"))))
 
 -- | Create an initial Python environment for code generation
-initialEnvironment :: TypedTermDefinition (Namespaces Py.DottedName -> Graph -> PyHelpers.PythonEnvironment)
+initialEnvironment :: TypedTermDefinition (ModuleNames Py.DottedName -> Graph -> PyHelpers.PythonEnvironment)
 initialEnvironment = def "initialEnvironment" $
   doc "Create an initial Python environment for code generation" $
   "namespaces" ~> "tcontext" ~>
@@ -2575,7 +2576,7 @@ initialMetadata = def "initialMetadata" $
   doc "Create initial empty metadata for a Python module" $
   "ns" ~>
     "dottedNs" <~ (PyNames.encodeNamespace @@ var "ns") $
-    "emptyNs" <~ (Util.namespaces (pair (var "ns") (var "dottedNs")) Maps.empty) $
+    "emptyNs" <~ (Util.moduleNames (pair (var "ns") (var "dottedNs")) Maps.empty) $
     record PyHelpers._PythonModuleMetadata [
       PyHelpers._PythonModuleMetadata_namespaces>>: var "emptyNs",
       PyHelpers._PythonModuleMetadata_typeVariables>>: Sets.empty,
@@ -2755,11 +2756,11 @@ makeUncurriedLambda = def "makeUncurriedLambda" $
       (var "body")
 
 -- | Generate domain import statements from namespace mappings
-moduleDomainImports :: TypedTermDefinition (Namespaces Py.DottedName -> [Py.ImportStatement])
+moduleDomainImports :: TypedTermDefinition (ModuleNames Py.DottedName -> [Py.ImportStatement])
 moduleDomainImports = def "moduleDomainImports" $
   doc "Generate domain import statements from namespace mappings" $
   "namespaces" ~>
-    "names" <~ (Lists.sort $ Maps.elems $ Util.namespacesMapping (var "namespaces")) $
+    "names" <~ (Lists.sort $ Maps.elems $ Util.moduleNamesMapping (var "namespaces")) $
     Lists.map
       ("ns" ~>
         inject Py._ImportStatement Py._ImportStatement_name
@@ -2770,7 +2771,7 @@ moduleDomainImports = def "moduleDomainImports" $
       (var "names")
 
 -- | Generate all import statements (standard + domain) for a Python module
-moduleImports :: TypedTermDefinition (Namespaces Py.DottedName -> PyHelpers.PythonModuleMetadata -> [Py.Statement])
+moduleImports :: TypedTermDefinition (ModuleNames Py.DottedName -> PyHelpers.PythonModuleMetadata -> [Py.Statement])
 moduleImports = def "moduleImports" $
   doc "Generate all import statements for a Python module" $
   "namespaces" ~> "meta" ~>
@@ -2867,7 +2868,7 @@ moduleToPython = def "moduleToPython" $
   "mod" ~> "defs" ~> "cx" ~> "g" ~>
     "file" <<~ (encodePythonModule @@ var "cx" @@ var "g" @@ var "mod" @@ var "defs") $
     "s" <~ (Serialization.printExpr @@ (Serialization.parenthesize @@ (PySerde.moduleToExpr @@ var "file"))) $
-    "path" <~ (Names.namespaceToFilePath @@ Util.caseConventionLowerSnake @@ (wrap _FileExtension $ string "py") @@ (Packaging.moduleName $ var "mod")) $
+    "path" <~ (Names.moduleNameToFilePath @@ Util.caseConventionLowerSnake @@ (wrap _FileExtension $ string "py") @@ (Packaging.moduleName $ var "mod")) $
     right $ Maps.singleton (var "path") (var "s")
 
 -- | Accessor for the graph field of PyGraph
@@ -2923,7 +2924,7 @@ pythonEnvironmentSetGraph = def "pythonEnvironmentSetGraph" $
       PyHelpers._PythonEnvironment_inlineVariables>>: project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_inlineVariables @@ var "env"]
 
 -- | Set the namespaces in metadata
-setMetaNamespaces :: TypedTermDefinition (Namespaces Py.DottedName -> PyHelpers.PythonModuleMetadata -> PyHelpers.PythonModuleMetadata)
+setMetaNamespaces :: TypedTermDefinition (ModuleNames Py.DottedName -> PyHelpers.PythonModuleMetadata -> PyHelpers.PythonModuleMetadata)
 setMetaNamespaces = def "setMetaNamespaces" $
   "ns" ~> "m" ~>
     record PyHelpers._PythonModuleMetadata [
@@ -4331,38 +4332,36 @@ wrapInNullaryLambda = def "wrapInNullaryLambda" $
   "expr" ~>
     PyDsl.expressionLambda $ PyDsl.lambda_ PyDsl.lambdaParametersEmpty (var "expr")
 
--- | Wrap specific arguments in nullary lambdas for primitives that require lazy evaluation
-wrapLazyArguments :: TypedTermDefinition (Name -> [Py.Expression] -> [Py.Expression])
+-- | Look up a primitive by name and return its per-parameter laziness flags
+-- (the isLazy flag of each signature parameter), in order. Empty if the name is
+-- not a registered primitive. The single source of truth for which arguments
+-- must be thunked, replacing the former hard-coded name table (issue #391).
+lazyFlagsForPrimitive :: TypedTermDefinition (Graph -> Name -> [Bool])
+lazyFlagsForPrimitive = def "lazyFlagsForPrimitive" $
+  "g" ~> "name" ~>
+    Maybes.cases (Maps.lookup (var "name") (Graph.graphPrimitives (var "g")))
+      (list ([] :: [TypedTerm Bool]))
+      ("prim" ~>
+        Lists.map ("p" ~> Typing.parameterIsLazy (var "p"))
+          (Typing.termSignatureParameters
+            (Packaging.primitiveDefinitionSignature
+              (Graph.primitiveDefinition (var "prim")))))
+
+-- | Wrap the lazy-flagged arguments of a primitive call in nullary lambdas
+-- (thunks). Which positions are lazy comes from the primitive's isLazy metadata
+-- (issue #391), not a hard-coded name table. A position is wrapped when its flag
+-- is true and the argument is present, so partially-applied calls thunk only the
+-- supplied lazy positions. The Python runtime accepts either a value or a thunk
+-- (callable() check), so unwrapped trailing args remain correct.
+wrapLazyArguments :: TypedTermDefinition (Graph -> Name -> [Py.Expression] -> [Py.Expression])
 wrapLazyArguments = def "wrapLazyArguments" $
-  doc "Wrap specific arguments in nullary lambdas for primitives that require lazy evaluation" $
-  "name" ~> "args" ~> lets [
-    "dummyExpr">: PyUtils.pyNameToPyExpression @@ (PyDsl.name $ string ""),
-    "argAt">: "i" ~> Maybes.fromMaybe (var "dummyExpr") (Lists.maybeAt (var "i") (var "args"))] $
-    Logic.ifElse
-      (Logic.and
-        (Equality.equal (var "name") (Core.name $ string "hydra.lib.logic.ifElse"))
-        (Equality.equal (Lists.length (var "args")) (int32 3)))
-      -- For if_else, wrap arguments 2 and 3 (the then/else branches)
-      (list [
-        var "argAt" @@ int32 0,
-        wrapInNullaryLambda @@ (var "argAt" @@ int32 1),
-        wrapInNullaryLambda @@ (var "argAt" @@ int32 2)])
-      (Logic.ifElse
-        (Logic.and
-          (Equality.equal (var "name") (Core.name $ string "hydra.lib.maybes.cases"))
-          (Equality.equal (Lists.length (var "args")) (int32 3)))
-        -- For cases, wrap argument 2 (the Nothing branch) for lazy evaluation
-        (list [
-          var "argAt" @@ int32 0,
-          wrapInNullaryLambda @@ (var "argAt" @@ int32 1),
-          var "argAt" @@ int32 2])
-        (Logic.ifElse
-          (Logic.and
-            (Logic.or
-              (Equality.equal (var "name") (Core.name $ string "hydra.lib.maybes.maybe"))
-              (Equality.equal (var "name") (Core.name $ string "hydra.lib.maybes.fromMaybe")))
-            (Equality.gte (Lists.length (var "args")) (int32 1)))
-          -- For maybe/fromMaybe, wrap argument 1 (the default value)
-          (Lists.cons (wrapInNullaryLambda @@ (var "argAt" @@ int32 0))
-                      (Lists.drop (int32 1) (var "args")))
-          (var "args")))
+  doc "Wrap lazy-flagged arguments of a primitive call in nullary lambdas, per isLazy metadata" $
+  "g" ~> "name" ~> "args" ~> lets [
+    "lazyFlags">: lazyFlagsForPrimitive @@ var "g" @@ var "name"] $
+    -- Zip args with flags (truncates to the shorter list, so partially-applied
+    -- calls only consider supplied positions), wrapping where the flag is true.
+    Lists.map
+      ("pair" ~> Logic.ifElse (Pairs.second (var "pair"))
+        (wrapInNullaryLambda @@ Pairs.first (var "pair"))
+        (Pairs.first (var "pair")))
+      (Lists.zip (var "args") (var "lazyFlags"))

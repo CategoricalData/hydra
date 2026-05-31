@@ -505,7 +505,7 @@ writeModuleJson schemaMap basePath mod = do
     case CodeGeneration.moduleToJson schemaMap mod of
       Left err -> fail $ "Failed to convert module to JSON: " ++ unModuleName (moduleName mod) ++ ": " ++ showError err
       Right jsonStr -> do
-        let filePath = basePath FP.</> CodeGeneration.namespaceToPath (moduleName mod) ++ ".json"
+        let filePath = basePath FP.</> CodeGeneration.moduleNameToPath (moduleName mod) ++ ".json"
             newContent = jsonStr ++ "\n"
         SD.createDirectoryIfMissing True $ FP.takeDirectory filePath
         -- Skip the write (and the putStrLn spam) when the on-disk content
@@ -690,7 +690,7 @@ writeTestModulesJson distJsonRoot mainMods testMods = do
   let universeMods = mainMods ++ testMods
       digestFile   = testDigestAnchor distJsonRoot testMods
       testPaths    = [ distJsonRoot FP.</> pkg FP.</> "src" FP.</> "test" FP.</> "json"
-                                     FP.</> CodeGeneration.namespaceToPath (moduleName m) ++ ".json"
+                                     FP.</> CodeGeneration.moduleNameToPath (moduleName m) ++ ".json"
                      | (pkg, pkgMods) <- groupByPackage testMods, m <- pkgMods ]
   hit <- checkCacheHit digestFile universeMods testPaths
   case hit of
@@ -900,7 +900,7 @@ discoverPackagesWithDigests distJsonRoot = do
 -- downstream generation. Hashing only the write set is exactly the bug
 -- behind #400 — a native coder change never invalidated the digest, so
 -- the freshness gate silently skipped regeneration. Discovery
--- ('discoverNamespaceFiles') now finds the native .java/.py sources, and
+-- ('discoverModuleNameFiles') now finds the native .java/.py sources, and
 -- hashing the universe folds them into the right package's digest (routing
 -- already maps hydra.<lang>.* → hydra-<lang>).
 --
@@ -908,7 +908,7 @@ discoverPackagesWithDigests distJsonRoot = do
 -- for call-site symmetry but is no longer used for digest computation.
 refreshPerPackageDigests :: FilePath -> [Module] -> [Module] -> IO ()
 refreshPerPackageDigests distJsonRoot universeMods _targetMods = do
-  nsFiles <- Digest.discoverNamespaceFiles
+  nsFiles <- Digest.discoverModuleNameFiles
   let groups = groupByPackage universeMods
   CM.forM_ groups $ \(pkg, pkgMods) -> do
     pkgDigest <- Digest.hashUniverse nsFiles pkgMods
@@ -938,7 +938,7 @@ refreshPerPackageDigests distJsonRoot universeMods _targetMods = do
 -- 'refreshPerPackageDigests'.
 ensurePerPackageDigests :: FilePath -> [Module] -> IO ()
 ensurePerPackageDigests distJsonRoot universeMods = do
-  nsFiles <- Digest.discoverNamespaceFiles
+  nsFiles <- Digest.discoverModuleNameFiles
   let groups = groupByPackage universeMods
   CM.forM_ groups $ \(pkg, pkgMods) -> do
     pkgDigest <- Digest.hashUniverse nsFiles pkgMods
@@ -1012,7 +1012,7 @@ tryIncrementalInference distJsonRoot universeMods targetMods = do
       -- previously fingerprinted by encoderId are namespaces in
       -- 'hashUniverse' below, so any change to them invalidates the
       -- cache through the standard per-namespace path.)
-      nsFiles <- Digest.discoverNamespaceFiles
+      nsFiles <- Digest.discoverModuleNameFiles
       currentDigest <- Digest.hashUniverse nsFiles universeMods
       if M.null currentDigest
         then return Nothing
@@ -1129,7 +1129,7 @@ loadCleanFromJson distJsonRoot universeModules namespaces =
   CM.forM namespaces $ \ns -> do
     let pkg = namespaceToPackage ns
         pkgDir = distJsonRoot FP.</> pkg FP.</> "src" FP.</> "main" FP.</> "json"
-        filePath = pkgDir FP.</> CodeGeneration.namespaceToPath ns ++ ".json"
+        filePath = pkgDir FP.</> CodeGeneration.moduleNameToPath ns ++ ".json"
     parseResult <- parseJsonFile filePath
     case parseResult of
       Left err -> fail $ "Incremental: JSON parse error for "
@@ -1146,14 +1146,14 @@ loadCleanFromJson distJsonRoot universeModules namespaces =
 tryCacheHit :: FilePath -> [Module] -> [Module] -> IO (Maybe Digest.DigestMap)
 tryCacheHit basePath universeMods targetMods = do
   let digestFile = Digest.digestPath basePath
-      targetPaths = [basePath FP.</> CodeGeneration.namespaceToPath (moduleName m) ++ ".json" | m <- targetMods]
+      targetPaths = [basePath FP.</> CodeGeneration.moduleNameToPath (moduleName m) ++ ".json" | m <- targetMods]
   checkCacheHit digestFile universeMods targetPaths
 
 tryCacheHitSplit :: FilePath -> [Module] -> [Module] -> IO (Maybe Digest.DigestMap)
 tryCacheHitSplit distJsonRoot universeMods targetMods = do
   let digestFile = packageSplitDigestAnchor distJsonRoot
       targetPaths = [ distJsonRoot FP.</> pkg FP.</> "src" FP.</> "main" FP.</> "json"
-                                    FP.</> CodeGeneration.namespaceToPath (moduleName m) ++ ".json"
+                                    FP.</> CodeGeneration.moduleNameToPath (moduleName m) ++ ".json"
                     | (pkg, pkgMods) <- groupByPackage targetMods, m <- pkgMods]
   checkCacheHit digestFile universeMods targetPaths
 
@@ -1173,7 +1173,7 @@ tryCacheHitSplit distJsonRoot universeMods targetMods = do
 -- below, so changes propagate through the standard per-namespace path.)
 checkCacheHit :: FilePath -> [Module] -> [FilePath] -> IO (Maybe Digest.DigestMap)
 checkCacheHit digestFile universeMods targetPaths = do
-  nsFiles <- Digest.discoverNamespaceFiles
+  nsFiles <- Digest.discoverModuleNameFiles
   currentDigest <- Digest.hashUniverse nsFiles universeMods
   if M.null currentDigest
     then return Nothing  -- nothing to verify against; always recompute
@@ -1191,7 +1191,7 @@ refreshDigest basePath universeMods = refreshDigestAt (Digest.digestPath basePat
 
 refreshDigestAt :: FilePath -> [Module] -> IO ()
 refreshDigestAt digestFile universeMods = do
-  nsFiles <- Digest.discoverNamespaceFiles
+  nsFiles <- Digest.discoverModuleNameFiles
   current <- Digest.hashUniverse nsFiles universeMods
   Digest.writeDigest digestFile current
   putStrLn $ "  Digest refreshed: " ++ digestFile ++ " (" ++ show (M.size current) ++ " entries)"
@@ -1233,7 +1233,7 @@ writeDslJsonPackageSplit distJsonRoot universeModules typeModules = do
 -- preserved — this is purely additive.
 --
 -- The JSON file path is derived the same way 'writeModuleJson' derives it:
--- <distJsonRoot>/<pkg>/src/main/json/<namespaceToPath ns>.json.
+-- <distJsonRoot>/<pkg>/src/main/json/<moduleNameToPath ns>.json.
 mergeDslJsonIntoPerPackageDigests :: FilePath -> [Module] -> IO ()
 mergeDslJsonIntoPerPackageDigests distJsonRoot dslMods = do
     let groups = groupByPackage dslMods
@@ -1241,7 +1241,7 @@ mergeDslJsonIntoPerPackageDigests distJsonRoot dslMods = do
       let pkgJsonDir = distJsonRoot FP.</> pkg FP.</> "src" FP.</> "main" FP.</> "json"
       newEntries <- fmap (M.fromList . Y.catMaybes) $ CM.forM pkgMods $ \m -> do
         let ns      = moduleName m
-            jsonFp  = pkgJsonDir FP.</> CodeGeneration.namespaceToPath ns ++ ".json"
+            jsonFp  = pkgJsonDir FP.</> CodeGeneration.moduleNameToPath ns ++ ".json"
         exists <- SD.doesFileExist jsonFp
         if not exists
           then return Nothing
@@ -1375,7 +1375,7 @@ escapeControlCharsInJson :: BS.ByteString -> BS.ByteString
 escapeControlCharsInJson input =
   BS.pack $ fmap fromIntegral $ CodeGeneration.escapeControlCharsInJson $ fmap fromIntegral $ BS.unpack input
 
--- | Read a field from manifest.json as a list of Namespaces.
+-- | Read a field from manifest.json as a list of module names.
 readManifestField :: FilePath -> String -> IO [ModuleName]
 readManifestField basePath fieldName = do
     let manifestPath = basePath FP.</> "manifest.json"
@@ -1438,7 +1438,7 @@ readManifestFieldWithFallback basePath primaryField fallbackField = do
 loadModulesFromJson :: FilePath -> [Module] -> [ModuleName] -> IO [Module]
 loadModulesFromJson basePath universeModules namespaces = do
     CM.forM namespaces $ \ns -> do
-      let filePath = basePath FP.</> CodeGeneration.namespaceToPath ns ++ ".json"
+      let filePath = basePath FP.</> CodeGeneration.moduleNameToPath ns ++ ".json"
       parseResult <- parseJsonFile filePath
       case parseResult of
         Left err -> fail $ "JSON parse error for " ++ unModuleName ns ++ ": " ++ err

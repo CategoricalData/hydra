@@ -21,7 +21,7 @@ import hydra.util.Either;
 import hydra.util.PersistentMap;
 
 /**
- * Adds an element to a set.
+ * Insert a key-value pair into a map.
  */
 public class Insert extends PrimitiveFunction {
     /**
