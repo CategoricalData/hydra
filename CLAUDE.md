@@ -247,6 +247,7 @@ Primary entry point — the doc most likely to answer the question by task:
 | Coding style + import conventions | [Coding style wiki](https://github.com/CategoricalData/hydra/wiki/Coding-style) |
 | Build/test commands per language | per-package READMEs under `packages/hydra-<lang>/README.md` |
 | Concepts (System F, design) | [Concepts wiki](https://github.com/CategoricalData/hydra/wiki/Concepts) |
+| Packaging model (packages, modules, definitions, entity metadata) | [Packaging wiki](https://github.com/CategoricalData/hydra/wiki/Packaging) |
 | Property graphs | [Property graphs wiki](https://github.com/CategoricalData/hydra/wiki/Property-graphs) / [hydra-pg README](packages/hydra-pg/README.md) |
 | RDF / SHACL | [RDF wiki](https://github.com/CategoricalData/hydra/wiki/RDF) / [hydra-rdf README](packages/hydra-rdf/README.md) |
 | Inference benchmarks | [hydra-bench README](packages/hydra-bench/README.md) — synthetic workloads + `bin/run-inference-bench.sh` |
