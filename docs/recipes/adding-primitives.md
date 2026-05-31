@@ -319,6 +319,27 @@ implementation. They reference the canonical metadata in the kernel by name
 (via the `_chars_isAlphaNum` constant) — the type information passed to them is
 a sanity-check repetition, not the source of truth.
 
+#### Per-parameter signature metadata (e.g. laziness)
+
+Beyond types, a primitive's `TermSignature` carries per-parameter metadata such as
+`isLazy` (whether coders must thunk that argument; see
+[Lazy evaluation and thunking](new-implementation.md#lazy-evaluation-and-thunking)).
+Such metadata lives in **three** places that must agree, because the in-memory graph
+the coders consult at generation time (`bootstrapGraph`) is built from the hand-written
+registry, **not** from the DSL sources or JSON:
+
+1. the kernel DSL signature in `Hydra.Sources.Kernel.Lib.*` (e.g. via `lazySig [positions]`);
+2. the regenerated `dist/json/hydra-kernel/.../lib/*.json` (produced from 1);
+3. the `prim*` call site in `Hydra.Sources.Libraries` — wrap it to attach the metadata
+   (e.g. `Prims.lazyArgs [0,1] $ prim3 ...`). This is what reaches `bootstrapGraph`.
+
+One further subtlety: the kernel adapts each primitive's signature to the target language
+before code generation. Adaptation must preserve this per-parameter metadata — it does so
+via `adaptTermSignature`, which rewrites parameter/result *types* in place. Do **not**
+route a signature through `TypeScheme` (`termSignatureToTypeScheme` / `typeSchemeToTermSignature`)
+to transform it: `TypeScheme` is the type-only view and that round-trip silently erases
+parameter names, descriptions, and `isLazy`.
+
 #### Default term-level implementations (`Defaults/<Sub>.hs`)
 
 The "default implementation" recorded on every `PrimitiveDefinition` is a
