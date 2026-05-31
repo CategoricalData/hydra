@@ -283,33 +283,33 @@ encodeModule cx graph mod =
             Core.typeSchemeBody = (Core.TypeVariable (Core.Name "hydra.core.Type")),
             Core.typeSchemeConstraints = Nothing}))}) (Packaging.typeDefinitionName v0) (Core.typeSchemeBody (Packaging.typeDefinitionTypeScheme v0)))
       _ -> Nothing) (Packaging.moduleDefinitions mod)))) (\typeBindings -> Logic.ifElse (Lists.null typeBindings) (Right Nothing) (Eithers.bind (Eithers.mapList (\b -> Eithers.bimap (\_e -> Errors.ErrorDecoding _e) (\x -> x) (encodeBinding cx graph b)) typeBindings) (\encodedBindings -> Right (Just (Packaging.Module {
-      Packaging.moduleName = (encodeNamespace (Packaging.moduleName mod)),
+      Packaging.moduleName = (encodeModuleName (Packaging.moduleName mod)),
       Packaging.moduleDescription = (Just (Strings.cat [
         "Term encoders for ",
         (Packaging.unModuleName (Packaging.moduleName mod))])),
       Packaging.moduleDependencies = (Lists.map (\ns -> Packaging.ModuleDependency {
         Packaging.moduleDependencyModule = ns,
-        Packaging.moduleDependencyPackage = Nothing}) (Lists.nub (Lists.concat2 (Lists.map encodeNamespace (Lists.map (\dep -> Packaging.moduleDependencyModule dep) (Packaging.moduleDependencies mod))) [
+        Packaging.moduleDependencyPackage = Nothing}) (Lists.nub (Lists.concat2 (Lists.map encodeModuleName (Lists.map (\dep -> Packaging.moduleDependencyModule dep) (Packaging.moduleDependencies mod))) [
         Packaging.moduleName mod]))),
       Packaging.moduleDefinitions = (Lists.map (\b -> Packaging.DefinitionTerm (Packaging.TermDefinition {
         Packaging.termDefinitionName = (Core.bindingName b),
         Packaging.termDefinitionTerm = (Core.bindingTerm b),
         Packaging.termDefinitionSignature = (Maybes.map Scoping.typeSchemeToTermSignature (Core.bindingTypeScheme b))})) encodedBindings)})))))
--- | Encode a Name as a term
-encodeName :: Core.Name -> Core.Term
-encodeName n =
-    Core.TermWrap (Core.WrappedTerm {
-      Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
-      Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString (Core.unName n)))})
--- | Generate an encoder module namespace from a source module namespace
-encodeNamespace :: Packaging.ModuleName -> Packaging.ModuleName
-encodeNamespace ns =
+-- | Generate an encoder module name from a source module name
+encodeModuleName :: Packaging.ModuleName -> Packaging.ModuleName
+encodeModuleName ns =
 
       let parts = Strings.splitOn "." (Packaging.unModuleName ns)
           fallback = Packaging.ModuleName (Packaging.unModuleName ns)
       in (Maybes.maybe fallback (\uc -> Packaging.ModuleName (Strings.cat [
         "hydra.encode.",
         (Strings.intercalate "." (Pairs.second uc))])) (Lists.uncons parts))
+-- | Encode a Name as a term
+encodeName :: Core.Name -> Core.Term
+encodeName n =
+    Core.TermWrap (Core.WrappedTerm {
+      Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
+      Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString (Core.unName n)))})
 -- | Generate an encoder for a Maybe type
 encodeOptionalType :: Core.Type -> Core.Term
 encodeOptionalType elemType =

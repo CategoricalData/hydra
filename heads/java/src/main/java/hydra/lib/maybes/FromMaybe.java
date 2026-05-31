@@ -31,6 +31,11 @@ public class FromMaybe extends PrimitiveFunction {
         return new Name("hydra.lib.maybes.fromMaybe");
     }
 
+    @Override
+    protected List<Integer> lazyParams() {
+        return List.of(0);
+    }
+
     /**
      * Returns the type scheme of this primitive function.
      * @return the type scheme for extracting a value from an optional with a default
