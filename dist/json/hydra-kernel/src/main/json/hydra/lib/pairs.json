@@ -31,7 +31,8 @@
         "isTotal": true,
         "metadata": {
           "comments": [
-            "bimap(f, g, p) returns a new pair (f(first(p)), g(second(p))). The bifunctor map for pairs. Total. Corresponds to Haskell's Data.Bifunctor.bimap :: (a -> c) -> (b -> d) -> (a, b) -> (c, d)."],
+            "bimap(f, g, p) returns a new pair (f(first(p)), g(second(p))). The bifunctor map for pairs.",
+            "Total. Corresponds to Haskell's Data.Bifunctor.bimap :: (a -> c) -> (b -> d) -> (a, b) -> (c, d)."],
           "description": "Map over both elements of a pair.",
           "seeAlso": []},
         "name": "hydra.lib.pairs.bimap",
@@ -51,7 +52,7 @@
         "isPure": true,
         "isTotal": true,
         "metadata": {
-          "comments": ["first(p) returns the first component of the pair p. Total. Corresponds to Haskell's fst :: (a, b) -> a."],
+          "comments": ["first(p) returns the first component of the pair p.", "Total. Corresponds to Haskell's fst :: (a, b) -> a."],
           "description": "Get the first element of a pair.",
           "seeAlso": []},
         "name": "hydra.lib.pairs.first",
@@ -64,7 +65,7 @@
         "isPure": true,
         "isTotal": true,
         "metadata": {
-          "comments": ["second(p) returns the second component of the pair p. Total. Corresponds to Haskell's snd :: (a, b) -> b."],
+          "comments": ["second(p) returns the second component of the pair p.", "Total. Corresponds to Haskell's snd :: (a, b) -> b."],
           "description": "Get the second element of a pair.",
           "seeAlso": []},
         "name": "hydra.lib.pairs.second",

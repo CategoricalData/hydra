@@ -44,7 +44,10 @@ isAlphaNum =
       Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
         Packaging.entityMetadataDescription = (Just "Check whether a character is alphanumeric."),
         Packaging.entityMetadataComments = [
-          "True if the argument is a Unicode letter or digit, false otherwise. The argument is interpreted as a Unicode code point: arguments outside the valid code-point range [0, 0x10FFFF] yield an implementation-defined result (typically false). The classification is based on Unicode general categories (any of L*, Nd, Nl, No). Total. Corresponds to Haskell's Data.Char.isAlphaNum :: Char -> Bool."],
+          "True if the argument is a Unicode letter or digit, false otherwise.",
+          "The argument is interpreted as a Unicode code point: arguments outside the valid code-point range [0, 0x10FFFF] yield an implementation-defined result (typically false).",
+          "The classification is based on Unicode general categories (any of L*, Nd, Nl, No).",
+          "Total. Corresponds to Haskell's Data.Char.isAlphaNum :: Char -> Bool."],
         Packaging.entityMetadataSeeAlso = [],
         Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
@@ -68,7 +71,10 @@ isLower =
       Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
         Packaging.entityMetadataDescription = (Just "Check whether a character is lowercase."),
         Packaging.entityMetadataComments = [
-          "True if the argument is a Unicode lowercase letter (general category Ll), false otherwise. The argument is interpreted as a Unicode code point: arguments outside [0, 0x10FFFF] yield an implementation-defined result (typically false). Note that not every letter is classified as uppercase or lowercase (e.g. titlecase letters, modifier letters, and letters in scripts without a case distinction are neither). Total. Corresponds to Haskell's Data.Char.isLower :: Char -> Bool."],
+          "True if the argument is a Unicode lowercase letter (general category Ll), false otherwise.",
+          "The argument is interpreted as a Unicode code point: arguments outside [0, 0x10FFFF] yield an implementation-defined result (typically false).",
+          "Note that not every letter is classified as uppercase or lowercase (e.g. titlecase letters, modifier letters, and letters in scripts without a case distinction are neither).",
+          "Total. Corresponds to Haskell's Data.Char.isLower :: Char -> Bool."],
         Packaging.entityMetadataSeeAlso = [],
         Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
@@ -92,7 +98,9 @@ isSpace =
       Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
         Packaging.entityMetadataDescription = (Just "Check whether a character is a whitespace character."),
         Packaging.entityMetadataComments = [
-          "True if the argument is a Unicode whitespace character, false otherwise. The whitespace set follows Haskell's Data.Char.isSpace, which recognises U+0020 (space), U+0009 (tab), U+000A (line feed), U+000B (vertical tab), U+000C (form feed), U+000D (carriage return), U+00A0 (no-break space), and other Unicode characters with general category Zs, Zl, or Zp. Total. Corresponds to Haskell's Data.Char.isSpace :: Char -> Bool."],
+          "True if the argument is a Unicode whitespace character, false otherwise.",
+          "The whitespace set follows Haskell's Data.Char.isSpace, which recognises U+0020 (space), U+0009 (tab), U+000A (line feed), U+000B (vertical tab), U+000C (form feed), U+000D (carriage return), U+00A0 (no-break space), and other Unicode characters with general category Zs, Zl, or Zp.",
+          "Total. Corresponds to Haskell's Data.Char.isSpace :: Char -> Bool."],
         Packaging.entityMetadataSeeAlso = [],
         Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
@@ -116,7 +124,10 @@ isUpper =
       Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
         Packaging.entityMetadataDescription = (Just "Check whether a character is uppercase."),
         Packaging.entityMetadataComments = [
-          "True if the argument is a Unicode uppercase letter (general category Lu), false otherwise. The argument is interpreted as a Unicode code point: arguments outside [0, 0x10FFFF] yield an implementation-defined result (typically false). Note that titlecase letters (Lt) are not classified as uppercase by this predicate. Total. Corresponds to Haskell's Data.Char.isUpper :: Char -> Bool."],
+          "True if the argument is a Unicode uppercase letter (general category Lu), false otherwise.",
+          "The argument is interpreted as a Unicode code point: arguments outside [0, 0x10FFFF] yield an implementation-defined result (typically false).",
+          "Note that titlecase letters (Lt) are not classified as uppercase by this predicate.",
+          "Total. Corresponds to Haskell's Data.Char.isUpper :: Char -> Bool."],
         Packaging.entityMetadataSeeAlso = [],
         Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
@@ -140,7 +151,10 @@ toLower =
       Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
         Packaging.entityMetadataDescription = (Just "Convert a character to lowercase."),
         Packaging.entityMetadataComments = [
-          "Return the simple (one-to-one) Unicode lowercase mapping of the argument, or the argument itself if it has no lowercase mapping. This is a code-point-to-code-point mapping, so it does not handle the string-changing cases of full Unicode case folding (e.g. U+00DF \"\223\" does not lowercase to \"ss\"; it returns itself). The argument is interpreted as a Unicode code point. Total. Corresponds to Haskell's Data.Char.toLower :: Char -> Char."],
+          "Return the simple (one-to-one) Unicode lowercase mapping of the argument, or the argument itself if it has no lowercase mapping.",
+          "This is a code-point-to-code-point mapping, so it does not handle the string-changing cases of full Unicode case folding (e.g. U+00DF \"\223\" does not lowercase to \"ss\"; it returns itself).",
+          "The argument is interpreted as a Unicode code point.",
+          "Total. Corresponds to Haskell's Data.Char.toLower :: Char -> Char."],
         Packaging.entityMetadataSeeAlso = [],
         Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
@@ -164,7 +178,10 @@ toUpper =
       Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
         Packaging.entityMetadataDescription = (Just "Convert a character to uppercase."),
         Packaging.entityMetadataComments = [
-          "Return the simple (one-to-one) Unicode uppercase mapping of the argument, or the argument itself if it has no uppercase mapping. This is a code-point-to-code-point mapping, so it does not handle the string-changing cases of full Unicode case folding (e.g. U+00DF \"\223\" does not uppercase to \"SS\"; it returns itself). The argument is interpreted as a Unicode code point. Total. Corresponds to Haskell's Data.Char.toUpper :: Char -> Char."],
+          "Return the simple (one-to-one) Unicode uppercase mapping of the argument, or the argument itself if it has no uppercase mapping.",
+          "This is a code-point-to-code-point mapping, so it does not handle the string-changing cases of full Unicode case folding (e.g. U+00DF \"\223\" does not uppercase to \"SS\"; it returns itself).",
+          "The argument is interpreted as a Unicode code point.",
+          "Total. Corresponds to Haskell's Data.Char.toUpper :: Char -> Char."],
         Packaging.entityMetadataSeeAlso = [],
         Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
