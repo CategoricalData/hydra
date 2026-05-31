@@ -89,8 +89,8 @@ module_ = Module {
       toDefinition encodeLiteralType,
       toDefinition encodeMapType,
       toDefinition encodeModule,
+      toDefinition encodeModuleName,
       toDefinition encodeName,
-      toDefinition encodeNamespace,
       toDefinition encodeOptionalType,
       toDefinition encodePairType,
       toDefinition encodeRecordType,
@@ -359,12 +359,12 @@ encodeModule = define "encodeModule" $
           (encodeBinding @@ var "cx" @@ var "graph" @@ var "b")) (var "typeBindings") $
         -- The encoder module depends on encoder modules of the source's dependencies, plus the original module
         right (just (Packaging.module_
-          (encodeNamespace @@ (Packaging.moduleName (var "mod")))
+          (encodeModuleName @@ (Packaging.moduleName (var "mod")))
           (just (Strings.cat $ list [
             string "Term encoders for ",
             Packaging.unModuleName (Packaging.moduleName (var "mod"))]))
           (Lists.map ("ns" ~> Packaging.moduleDependency (var "ns") nothing) (Lists.nub (Lists.concat2
-            (primitive _lists_map @@ encodeNamespace @@ (Lists.map ("dep" ~> Packaging.moduleDependencyModule (var "dep")) (Packaging.moduleDependencies (var "mod"))))
+            (primitive _lists_map @@ encodeModuleName @@ (Lists.map ("dep" ~> Packaging.moduleDependencyModule (var "dep")) (Packaging.moduleDependencies (var "mod"))))
             (list [Packaging.moduleName (var "mod")]))))
           (Lists.map ("b" ~> Packaging.definitionTerm (Packaging.termDefinition
             (Core.bindingName $ var "b") (Core.bindingTerm $ var "b")
@@ -378,13 +378,11 @@ encodeName = define "encodeName" $
   doc "Encode a Name as a term" $
   "n" ~> DeepCore.wrap _Name (DeepCore.string (Core.unName (var "n")))
 
--- | Generate an encoder module namespace from a source module namespace
+-- | Generate an encoder module name from a source module name
 -- For example, "hydra.util" -> "hydra.encode.util"
--- | Generate an encoder module namespace from a source module namespace
--- For example, "hydra.util" -> "hydra.encode.util"
-encodeNamespace :: TypedTermDefinition (ModuleName -> ModuleName)
-encodeNamespace = define "encodeNamespace" $
-  doc "Generate an encoder module namespace from a source module namespace" $
+encodeModuleName :: TypedTermDefinition (ModuleName -> ModuleName)
+encodeModuleName = define "encodeModuleName" $
+  doc "Generate an encoder module name from a source module name" $
   "ns" ~>
   "parts" <~ Strings.splitOn (string ".") (Packaging.unModuleName (var "ns")) $
   "fallback" <~ Packaging.moduleName2 (Packaging.unModuleName (var "ns")) $

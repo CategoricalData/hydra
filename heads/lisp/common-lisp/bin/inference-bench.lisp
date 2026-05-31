@@ -122,7 +122,7 @@
     (nreverse result)))
 
 (defun namespace-to-path (ns)
-  (funcall (symbol-value 'hydra_codegen_namespace_to_path) ns))
+  (funcall (symbol-value 'hydra_codegen_module_name_to_path) ns))
 
 (defun load-module-from-json (bs-graph schema-map ns-str json-dir)
   (let* ((file-path (format nil "~A/~A.json" json-dir (namespace-to-path ns-str)))

@@ -360,5 +360,5 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "description": "Primitives in the hydra.lib.sets namespace.",
+  "description": "Primitives in the hydra.lib.sets module.",
   "name": "hydra.lib.sets"}

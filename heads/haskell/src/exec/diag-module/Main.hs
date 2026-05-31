@@ -61,7 +61,7 @@ loadModuleFromJson :: FilePath -> [Module] -> ModuleName -> IO Module
 loadModuleFromJson distJsonRoot universe ns = do
   let pkg = PackageRouting.namespaceToPackage ns
       pkgDir = distJsonRoot FP.</> pkg FP.</> "src" FP.</> "main" FP.</> "json"
-      filePath = pkgDir FP.</> CodeGeneration.namespaceToPath ns ++ ".json"
+      filePath = pkgDir FP.</> CodeGeneration.moduleNameToPath ns ++ ".json"
   parseResult <- parseJsonFile filePath
   case parseResult of
     Left err -> fail $ "JSON parse error for " ++ unModuleName ns ++ " at " ++ filePath ++ ": " ++ err

@@ -39,7 +39,7 @@ encodeFieldName env fname = encodeName False Util.CaseConventionLowerSnake env f
 encodeName :: Bool -> Util.CaseConvention -> Environment.CppEnvironment -> Core.Name -> String
 encodeName isQualified conv env name =
 
-      let focusNs = Pairs.first (Util.namespacesFocus (Environment.cppEnvironmentNamespaces env))
+      let focusNs = Pairs.first (Util.moduleNamesFocus (Environment.cppEnvironmentNamespaces env))
           boundVars = Pairs.second (Environment.cppEnvironmentBoundTypeVariables env)
           qualName = Names.qualifyName name
           mns = Packaging.qualifiedNameModuleName qualName
@@ -53,7 +53,7 @@ encodeNameQualified :: Environment.CppEnvironment -> Core.Name -> String
 encodeNameQualified env name =
 
       let boundVars = Pairs.second (Environment.cppEnvironmentBoundTypeVariables env)
-          focusNs = Pairs.first (Util.namespacesFocus (Environment.cppEnvironmentNamespaces env))
+          focusNs = Pairs.first (Util.moduleNamesFocus (Environment.cppEnvironmentNamespaces env))
           qualName = Names.qualifyName name
           mns = Packaging.qualifiedNameModuleName qualName
           local = Packaging.qualifiedNameLocal qualName

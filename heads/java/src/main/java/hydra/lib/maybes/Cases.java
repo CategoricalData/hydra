@@ -32,6 +32,11 @@ public class Cases extends PrimitiveFunction {
         return new Name("hydra.lib.maybes.cases");
     }
 
+    @Override
+    protected List<Integer> lazyParams() {
+        return List.of(1);
+    }
+
     /**
      * Returns the type scheme of this primitive function.
      * @return the type scheme for pattern matching on optional values
