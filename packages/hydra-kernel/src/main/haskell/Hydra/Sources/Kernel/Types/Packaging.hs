@@ -21,7 +21,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = (DefinitionType <$> definitions),
             moduleDependencies = unqualifiedDep <$> [Core.ns, Typing.ns],
-            moduleDescription = Just "A model for Hydra namespaces, modules, and packages"}
+            moduleDescription = Just "A model for Hydra module names, modules, and packages"}
   where
     definitions = [
       definition,
@@ -60,7 +60,7 @@ fileExtension = define "FileExtension" $
 
 module' :: TypeDefinition
 module' = define "Module" $
-  doc "A logical collection of elements in the same namespace, having dependencies on zero or more other modules" $
+  doc "A logical collection of elements sharing a common module name, having dependencies on zero or more other modules" $
   T.record [
     "name">:
       doc "The name of the module, which is also the common prefix for all element names in the module"

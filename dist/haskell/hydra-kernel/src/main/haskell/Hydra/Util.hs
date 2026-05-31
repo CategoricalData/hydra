@@ -29,17 +29,17 @@ _Comparison = Core.Name "hydra.util.Comparison"
 _Comparison_lessThan = Core.Name "lessThan"
 _Comparison_equalTo = Core.Name "equalTo"
 _Comparison_greaterThan = Core.Name "greaterThan"
--- | A mapping from namespaces to values of type n, with a focus on one namespace
-data Namespaces n =
-  Namespaces {
-    -- | The namespace in focus, together with its associated value
-    namespacesFocus :: (Packaging.ModuleName, n),
-    -- | A mapping of namespaces to values
-    namespacesMapping :: (M.Map Packaging.ModuleName n)}
+-- | A mapping from module names to values of type n, with a focus on one module name
+data ModuleNames n =
+  ModuleNames {
+    -- | The module name in focus, together with its associated value
+    moduleNamesFocus :: (Packaging.ModuleName, n),
+    -- | A mapping of module names to values
+    moduleNamesMapping :: (M.Map Packaging.ModuleName n)}
   deriving (Eq, Ord, Read, Show)
-_Namespaces = Core.Name "hydra.util.Namespaces"
-_Namespaces_focus = Core.Name "focus"
-_Namespaces_mapping = Core.Name "mapping"
+_ModuleNames = Core.Name "hydra.util.ModuleNames"
+_ModuleNames_focus = Core.Name "focus"
+_ModuleNames_mapping = Core.Name "mapping"
 -- | Numeric precision: arbitrary precision, or precision to a specified number of bits
 data Precision =
   -- | Arbitrary precision

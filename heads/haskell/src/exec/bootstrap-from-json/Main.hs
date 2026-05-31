@@ -49,7 +49,7 @@ import Hydra.TypeScript.Language (typeScriptLanguage)
 import Hydra.Lisp.Language (lispLanguage)
 import qualified Hydra.Lisp.Syntax as LispSyntax
 import qualified Hydra.Sources.Test.TestSuite as TestSuite
-import Hydra.Sources.Test.All (testSkipEmitNamespaces)
+import Hydra.Sources.Test.All (testSkipEmitModuleNames)
 
 import Control.Exception (catch, IOException)
 import Control.Monad (when, forM)
@@ -680,7 +680,7 @@ main = do
       -- These are type-only stubs whose hand-written per-language
       -- counterparts are the source of truth; emitting them would
       -- overwrite hand-written code.
-      let notSkipEmit m = moduleName m `notElem` testSkipEmitNamespaces
+      let notSkipEmit m = moduleName m `notElem` testSkipEmitModuleNames
       -- Package-scoped test modules including skip-emit ones — used to
       -- populate the prune keep-set (skip-emit files are hand-written and
       -- must survive prune). Generation itself filters skip-emit out via
@@ -873,7 +873,7 @@ filterByTargetDigest outBase pkg sourceSet mods = do
           return mods
         else do
           -- Compute current DSL source hashes.
-          nsFiles <- Digest.discoverNamespaceFiles
+          nsFiles <- Digest.discoverModuleNameFiles
           currentDigest <- Digest.hashUniverse nsFiles mods
           let isFresh m =
                 let nsStr = unModuleName (moduleName m)

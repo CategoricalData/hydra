@@ -351,6 +351,11 @@ These are non-negotiable and tend to be violated under pressure.
    Scope by CWD or absolute path; prefer killing only background tasks you spawned
    in this session, tracked by their task ID.
    When in doubt, ask first.
+6. **Never file a GitHub issue (or PR, comment, label, close) without showing the
+   draft and getting explicit approval first.** Write the full draft, show it in the
+   reply, and wait. "Draft the issue" or "write it up" means *show me*, not *file it* —
+   filing is a separate, explicit go-ahead. This applies to any action touching shared
+   project state. See `feedback_no_unauthorized_github_actions.md`.
 
 ## Mental models
 

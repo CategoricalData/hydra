@@ -30,6 +30,11 @@ public class FromLeft extends PrimitiveFunction {
     }
 
     @Override
+    protected List<Integer> lazyParams() {
+        return List.of(0);
+    }
+
+    @Override
     public TypeScheme type() {
         return scheme("a", "b",
             function(var("a"), either(var("a"), var("b")), var("a")));

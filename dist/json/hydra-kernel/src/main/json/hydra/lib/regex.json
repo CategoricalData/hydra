@@ -109,5 +109,5 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "description": "Primitives in the hydra.lib.regex namespace.",
+  "description": "Primitives in the hydra.lib.regex module.",
   "name": "hydra.lib.regex"}

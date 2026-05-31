@@ -175,7 +175,7 @@ Two separate things used to make this worse; both are fixed:
 - **The input digest was incomplete (#400, now fixed).** It hashed only the
   `hydra.dsl.<lang>.*` modules, not the native-owned `hydra.<lang>.*` ones (including
   `hydra.<lang>.coder`), so the freshness gate couldn't even see a native coder change.
-  `Hydra.Digest.discoverNamespaceFiles` now also scans the native `.java`/`.py` sources,
+  `Hydra.Digest.discoverModuleNameFiles` now also scans the native `.java`/`.py` sources,
   and the per-package input digest hashes the unfiltered universe, so a native edit
   correctly invalidates `dist/json/hydra-<lang>/build/main/digest.json`. (Regression test:
   `heads/haskell/src/test/haskell/Hydra/DigestSpec.hs`.)
@@ -187,6 +187,21 @@ Two separate things used to make this worse; both are fixed:
 
 `dist/<target>/` (e.g. `dist/java`) is gitignored and regenerated downstream, so it is not
 part of the consistency gate and lagging it one pass is harmless.
+
+**Kernel renames trip the same ordering from the other side.** Rename a kernel *element*
+(e.g. the type `hydra.util.Namespaces` → `hydra.util.ModuleNames`) and the *committed*
+`dist/json/hydra-python/*.json` still references the old name — but that native-owned JSON is
+only refreshed in Phase 5, so **Phase 2 fails first** with
+`bootstrap-from-json: ... resolution error: no such element: hydra.util.Namespaces` while
+assembling `dist/haskell/hydra-python`. The native regen can't run to fix it because Phase 2
+aborts the sync before Phase 5. Break the deadlock by getting correct JSON in place *before*
+Phase 2 reads it: regenerate the native package's JSON out-of-band
+(`bin/generate-hydra-python-from-python.sh`, which first builds the Python host), or — if that
+cascades through not-yet-built self-host runtime layers — apply a targeted JSON patch renaming
+only the stale *kernel* element refs in the 3–4 affected files (leave the package's own
+`hydra.python.*` symbols alone), then re-run `/sync` (Phase 5 overwrites the patch identically).
+Only `hydra-python` is usually affected; `hydra-java`'s JSON happened not to reference the
+renamed kernel symbol — check with `grep -rl '<old.qualified.name>' dist/json`.
 
 **Post-0.16 cleanup:** once the legacy Haskell DSL copies for hydra-java/hydra-python are
 deleted, the native generators become the sole writers of `dist/json/hydra-<lang>/`. The
@@ -510,7 +525,7 @@ Three categories of files coexist under `dist/<lang>/<pkg>/src/{main,test}/<lang
    (Java + Python only): `hydra/Adapters.java`, `hydra/util/...`,
    `hydra/dsl/...`, etc.
 3. Hand-written skip-emit stubs whose namespace appears in
-   `testSkipEmitNamespaces` (currently `hydra.test.testEnv`):
+   `testSkipEmitModuleNames` (currently `hydra.test.testEnv`):
    `dist/haskell/.../Hydra/Test/TestEnv.hs` and per-Lisp-dialect
    `test_env.<ext>`. The generator deliberately does NOT write these;
    they're committed in git as hand-written bridge modules that the
@@ -526,7 +541,7 @@ the mechanism for (3) is to include skip-emit namespaces in the keep set
 
 `Hydra.TargetFilePaths.moduleFilePaths target m` returns the paths a coder
 would write for module `m`. Most targets (haskell, python, scala, go, all
-lisp dialects) emit one file per namespace via `Names.namespaceToFilePath`
+lisp dialects) emit one file per module name via `Names.moduleNameToFilePath`
 with a target-specific case convention. **Java is the outlier:** it emits
 one file per top-level definition that passes `Predicates.isNominalType`
 (filtering out type-only aliases) plus an `<Module>Elements` interface file
@@ -952,3 +967,31 @@ own (now-stale) view of the schema.
 Issue #402 tracks the proper sequencing: (1) reorder existing fields,
 (2) add `comments`, (3) populate. Do not attempt this as a sidecar to
 unrelated work; the regen pipeline needs investigation/fix in tandem.
+
+### The full-matrix `/bootstrap all` has expected-fail cells — don't read them as regressions
+
+`bin/run-bootstrapping-demo.sh --hosts all --targets all` is a **4 hosts × 9 targets = 36** matrix
+(hosts: haskell, java, scala, python; targets add typescript + the four Lisp dialects). There are no
+Lisp-host or TypeScript-host rows — those languages are targets only, so e.g. "clojure-to-clojure"
+is not a cell. As of 2026-05, roughly a third of the cells fail **by design**, for reasons unrelated
+to whatever change you are verifying:
+
+- **Common-Lisp column (every host → common-lisp):** the `validate.packaging` cluster (~32 fails, all
+  `validate.packaging` + one `inferModulesGiven`), tracked separately (was `bug_407`). Stale
+  `struct-compat.lisp`-style packaging state, not your change.
+- **`java-to-{scala,clojure,scheme,common-lisp,emacs-lisp}`:** the Java host coder either bails with
+  `Unknown target: <lang>` (no emitter for that target) or crashes in `writeLispDialect`
+  (`Generation.java`, a `ClassCastException`). Pre-existing Java-host emitter gaps.
+- **`scala-to-{everything but scala}`:** the Scala host's cross-target emitters are immature —
+  `Unknown target`, GHC "Could not find module" (emits coder DSL modules outside the kernel universe),
+  or wholesale broken Java/Python (1000+ fails via a corrupt generated `TestSuiteRunner`). Scala
+  self-hosts fine (`scala-to-scala` is green); only its *cross-emission* is broken.
+- **`{haskell,java,python}-to-typescript`:** ~45 `common inference` type-class/collection failures —
+  the TypeScript head-bud inference gap (#126). Zero primitive-level failures.
+
+The reliable signal is the **diagonal-ish core**: every host → haskell/java/python/scala is green, and
+haskell+python → the Lisp targets are green. When verifying a kernel/coder change, compare a failing
+cell's *failure set* against this list; only a **new** failure category — or a failure in a green cell —
+is a real regression. To attribute a suspicious cell, confirm it consumes `dist/json` via the named
+host coder (so source edits to a *different* host's runtime cannot reach it), and grep the path's log
+for the specific test families your change touches rather than the raw red/green status.

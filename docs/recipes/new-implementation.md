@@ -386,10 +386,15 @@ Without thunking, both branches of a conditional are evaluated before the condit
 turning O(1) short-circuit operations into O(n) full traversals — or worse, causing non-termination
 for recursive code that relies on short-circuiting.
 
-The following primitives require thunking in eager languages:
+Which arguments are lazy is recorded directly in each primitive's metadata: every value parameter
+of a primitive's signature carries an `isLazy` flag (`Typing.Parameter.isLazy`). Coders read these
+flags rather than hard-coding primitive names, so the set of lazy positions has a single source of
+truth — the kernel signatures in `Hydra.Sources.Kernel.Lib.{Logic,Maybes,Eithers,Maps}` (set via
+the `lazySig [positions]` helper). The primitives that are lazy today, and the positions the flags
+mark, are:
 
-| Primitive | Which arguments are lazy | Why |
-|-----------|--------------------------|-----|
+| Primitive | Lazy parameter(s) | Why |
+|-----------|-------------------|-----|
 | `hydra.lib.logic.ifElse` | both `then` and `else` branches | Only the chosen branch should be evaluated |
 | `hydra.lib.maybes.cases` | the `nothing`-case default value | Only evaluated when the Maybe is Nothing |
 | `hydra.lib.maybes.maybe` | the `nothing`-case default value | Only evaluated when the Maybe is Nothing |
@@ -398,22 +403,25 @@ The following primitives require thunking in eager languages:
 | `hydra.lib.eithers.fromRight` | the default value | Only evaluated when the Either is Left |
 | `hydra.lib.maps.findWithDefault` | the default value | Only evaluated when the key is absent |
 
-The implementation strategy varies by language:
+To make a new primitive lazy, set the flag on the relevant parameters in its kernel signature; no
+coder change is needed, because every coder already consults the metadata (see
+[Coder-side thunk wrapping](#coder-side-thunk-wrapping) below).
+
+The host-side mechanism for *honoring* a thunk varies by language; the *decision* of which
+arguments to thunk is the same metadata everywhere:
 
 - **Java**: Provides `Supplier<T>` overloads (e.g. `IfElse.lazy(boolean, Supplier<X>, Supplier<X>)`)
-  alongside the eager versions. The generated Java coder wraps lazy arguments in `() -> expr`.
-- **Python**: Uses `callable()` checks at runtime — if an argument is a zero-argument callable,
-  it is called only when needed; otherwise it is used as-is. The generated Python coder wraps lazy
-  arguments in `lambda: expr`.
-- **Scala**: By-name parameters (`def ifElse[A](cond)(t: => A)(e: => A): A`) give you laziness
-  for free — the compiler inserts the thunk at every call site. No coder-side wrapping needed.
-- **Clojure**: Clojure's `if` special form is already lazy, so `ifElse` can map to native `if`.
-  For other primitives, the implementation should check `(fn? x)` and call the thunk when needed,
-  similar to Python's approach.
+  alongside the eager versions. The coder wraps lazy arguments in `() -> expr` and dispatches to the
+  `lazy`/`applyLazy` method variant.
+- **Python**: Uses `callable()` checks at runtime — a zero-argument callable is invoked only when
+  needed; otherwise the value is used as-is. The coder wraps lazy arguments in `lambda: expr`.
 - **TypeScript**: Same shape as Python — `typeof x === "function"` checks at runtime; the coder
-  wraps lazy positions in `() => expr`. See
-  [`packages/hydra-typescript/src/main/haskell/Hydra/Sources/TypeScript/Coder.hs`](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-typescript/src/main/haskell/Hydra/Sources/TypeScript/Coder.hs)
-  (the `_Term_application` arm and the `flattenApplication` / `termHeadVariable` / `encodeLazyCall` helpers).
+  wraps lazy positions in `() => expr`.
+- **Lisp dialects**: The coder rewrites `ifElse` to the dialect's native lazy `if`, and wraps other
+  lazy positions in nullary lambdas (`(lambda () expr)`); the runtime forces them on demand.
+- **Scala**: By-name parameters (`def ifElse[A](cond)(t: => A)(e: => A): A`) give laziness for free —
+  the compiler inserts the thunk at every call site, so the Scala coder needs no per-argument
+  wrapping and does not consult the flags.
 
 If your host language is eager by default (which includes most languages other than Haskell),
 you **must** implement this thunking strategy. Omitting it will cause severe performance degradation
@@ -446,9 +454,33 @@ from 55 seconds to 5 seconds.
 Making primitives thunk-aware (step 7) is necessary but not sufficient. The **coder** must also
 generate thunk wrappers at call sites — wrapping the lazy argument in a zero-argument function
 before passing it to the primitive. Without this, the argument is still evaluated eagerly before
-being passed. See `wrapLazyArguments` in the Python coder and `wrapInThunk`/`encodeApplication`
-in the Lisp coder for examples. The coder must detect specific primitive names (e.g.
-`hydra.lib.maybes.fromMaybe`) in application chains and wrap the appropriate positional argument.
+being passed.
+
+The coder decides *which* arguments to wrap by reading the applied primitive's per-parameter
+`isLazy` flags, not by matching primitive names. Each coder has a small helper
+(`lazyFlagsForPrimitive` in the Java/Python/TypeScript coders; `lazyFlagsForPrimitiveTerm` /
+`primIsLazyAt` in the Lisp coder) that looks the primitive up in `Graph.graphPrimitives`, reads
+`parameterIsLazy` for each parameter of its signature, and returns the flags in order. At a
+fully-applied call site the coder zips the arguments against these flags and wraps the `true`
+positions in the host's thunk form. Because the flags come from kernel metadata, all coders agree
+on the lazy set automatically, and adding a lazy parameter to a primitive requires no coder change
+(this replaced the prior per-coder hard-coded name tables; see issue #391).
+
+**Self-host trap — your host's own primitive registry must carry the flags too.** The flag-reading
+above works only if the primitive in `Graph.graphPrimitives` actually has `isLazy` set on its
+signature. When Haskell is the host this is guaranteed by the kernel registry (see
+[Per-parameter signature metadata](adding-primitives.md#per-parameter-signature-metadata-eg-laziness)).
+But when *your* language hosts code generation (self-hosting), the primitives come from *your*
+hand-written registry, and the same trap applies one level deeper: if you derive a primitive's
+`TermSignature` from its type scheme alone (e.g. `typeSchemeToTermSignature(type())`), every
+parameter's `isLazy` defaults to false and the coder emits zero thunks — even though the call-site
+logic is correct. Each host registry must therefore stamp the lazy positions onto the signature it
+registers (Java does this in `PrimitiveFunction.signatureWithLaziness()` driven by a per-class
+`lazyParams()` override; Python threads a `lazy_args` list through `prims.default_primitive_definition`).
+Separately, the **runtime implementation** of each lazy primitive must *force* the thunk it may
+receive — e.g. `findWithDefault` returns `def() if callable(def) else def` on a miss — because the
+coder now passes a thunk where it used to pass a value. Forgetting either half passes Haskell-hosted
+generation but fails self-host (the symptom that motivated the #391 self-host fix).
 
 When auto-detecting type variables from the type schemes of primitives, be aware that type variable names
 containing dots (e.g. `hydra.util.Comparison`) are nominal type references, not universally

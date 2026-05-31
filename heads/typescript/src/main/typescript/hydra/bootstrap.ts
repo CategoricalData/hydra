@@ -285,14 +285,14 @@ const main = async (): Promise<void> => {
       : { tag: "lowerSnake" };
     const lispSerde = await import("../../../../../hydra-lisp/src/main/typescript/hydra/lisp/serde.js") as { programToExpr: (p: unknown) => unknown };
     const serialization = await import("./serialization.js") as { parenthesize: (e: unknown) => unknown; printExpr: (e: unknown) => string };
-    const namesMod = await import("./names.js") as { namespaceToFilePath: (cc: unknown, ext: unknown, ns: unknown) => string };
+    const namesMod = await import("./names.js") as { moduleNameToFilePath: (cc: unknown, ext: unknown, ns: unknown) => string };
     moduleTo = (mod, defs, cx, g) => {
       const result = rawModuleTo(dialectArg, mod, defs, cx, g);
       if (result.tag === "left") return result;
       const program = result.value;
       const exprStr = serialization.printExpr(serialization.parenthesize(lispSerde.programToExpr(program)));
       const modName = (mod as { name?: { value?: string } } | null)?.name;
-      const filePath = namesMod.namespaceToFilePath(caseConvention, { value: fileExt }, modName);
+      const filePath = namesMod.moduleNameToFilePath(caseConvention, { value: fileExt }, modName);
       const out = new Map<string, string>();
       out.set(filePath, exprStr);
       return { tag: "right" as const, value: out };

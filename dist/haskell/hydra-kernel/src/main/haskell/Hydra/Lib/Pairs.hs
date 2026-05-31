@@ -1,5 +1,5 @@
 -- Note: this is an automatically generated file. Do not edit.
--- | Primitives in the hydra.lib.pairs namespace.
+-- | Primitives in the hydra.lib.pairs module.
 
 module Hydra.Lib.Pairs where
 import qualified Hydra.Ast as Ast

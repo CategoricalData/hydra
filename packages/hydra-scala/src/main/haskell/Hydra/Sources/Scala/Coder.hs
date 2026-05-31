@@ -1228,10 +1228,10 @@ findImports = def "findImports" $
   doc "Find import statements for the module" $
   lambda "cx" $ lambda "g" $ lambda "mod" $
     Eithers.bind
-      (Analysis.moduleDependencyNamespaces @@ var "cx" @@ var "g" @@ false @@ false @@ true @@ false @@ var "mod")
+      (Analysis.moduleDependencyModuleNames @@ var "cx" @@ var "g" @@ false @@ false @@ true @@ false @@ var "mod")
       ("elImps" ~>
         Eithers.bind
-          (Analysis.moduleDependencyNamespaces @@ var "cx" @@ var "g" @@ false @@ true @@ false @@ false @@ var "mod")
+          (Analysis.moduleDependencyModuleNames @@ var "cx" @@ var "g" @@ false @@ true @@ false @@ false @@ var "mod")
           ("primImps" ~>
             right (Lists.concat (list [
               Lists.map (asTerm toElImport) (Sets.toList (var "elImps")),
@@ -1303,7 +1303,7 @@ moduleToScala = def "moduleToScala" $
       ("pkg" ~> lets [
         "s">: SerializationSource.printExpr @@ (SerializationSource.parenthesize @@ (TypedTerm (TermVariable (Name "hydra.scala.serde.pkgToExpr")) @@ var "pkg"))] $
         right (Maps.singleton
-          (Names.namespaceToFilePath @@ Util.caseConventionCamel @@ wrap _FileExtension (string "scala") @@ Packaging.moduleName (var "mod"))
+          (Names.moduleNameToFilePath @@ Util.caseConventionCamel @@ wrap _FileExtension (string "scala") @@ Packaging.moduleName (var "mod"))
           (var "s")))
 
 -- | Strip wrap eliminations from a term (newtypes are erased in Scala)

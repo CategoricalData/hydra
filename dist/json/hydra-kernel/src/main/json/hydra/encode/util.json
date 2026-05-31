@@ -275,7 +275,7 @@
                 "typeName": "hydra.util.Comparison"}}}}}},
     {
       "term": {
-        "name": "hydra.encode.util.namespaces",
+        "name": "hydra.encode.util.moduleNames",
         "signature": {
           "parameters": [
             {
@@ -285,14 +285,14 @@
             {
               "isLazy": false,
               "name": "arg1",
-              "type": {"application": {"argument": {"variable": "t0"}, "function": {"variable": "hydra.util.Namespaces"}}}}],
+              "type": {"application": {"argument": {"variable": "t0"}, "function": {"variable": "hydra.util.ModuleNames"}}}}],
           "result": {"type": {"variable": "hydra.core.Term"}},
           "typeParameters": [{"constraints": [], "name": "t0"}]},
         "term": {
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Encoder for hydra.util.Namespaces"}}}],
+                "annotation": [{"key": "description", "value": {"literal": {"string": "Encoder for hydra.util.ModuleNames"}}}],
                 "body": {
                   "lambda": {
                     "body": {
@@ -306,7 +306,7 @@
                                   "fields": [
                                     {
                                       "name": "typeName",
-                                      "term": {"wrap": {"body": {"literal": {"string": "hydra.util.Namespaces"}}, "typeName": "hydra.core.Name"}}},
+                                      "term": {"wrap": {"body": {"literal": {"string": "hydra.util.ModuleNames"}}, "typeName": "hydra.core.Name"}}},
                                     {
                                       "name": "fields",
                                       "term": {
@@ -323,7 +323,7 @@
                                                         "application": {
                                                           "argument": {"variable": "x"},
                                                           "function": {
-                                                            "typeApplication": {"body": {"project": {"fieldName": "focus", "typeName": "hydra.util.Namespaces"}}, "type": {"variable": "t0"}}}}},
+                                                            "typeApplication": {"body": {"project": {"fieldName": "focus", "typeName": "hydra.util.ModuleNames"}}, "type": {"variable": "t0"}}}}},
                                                       "function": {
                                                         "lambda": {
                                                           "body": {
@@ -365,7 +365,7 @@
                                                         "application": {
                                                           "argument": {"variable": "x"},
                                                           "function": {
-                                                            "typeApplication": {"body": {"project": {"fieldName": "mapping", "typeName": "hydra.util.Namespaces"}}, "type": {"variable": "t0"}}}}},
+                                                            "typeApplication": {"body": {"project": {"fieldName": "mapping", "typeName": "hydra.util.ModuleNames"}}, "type": {"variable": "t0"}}}}},
                                                       "function": {
                                                         "lambda": {
                                                           "body": {
@@ -397,7 +397,7 @@
                                               "typeName": "hydra.core.Field"}}]}}],
                                   "typeName": "hydra.core.Record"}}},
                             "typeName": "hydra.core.Term"}},
-                        "domain": {"application": {"argument": {"variable": "t0"}, "function": {"variable": "hydra.util.Namespaces"}}},
+                        "domain": {"application": {"argument": {"variable": "t0"}, "function": {"variable": "hydra.util.ModuleNames"}}},
                         "parameter": "x"}},
                     "domain": {"function": {"codomain": {"variable": "hydra.core.Term"}, "domain": {"variable": "t0"}}},
                     "parameter": "n"}}}},

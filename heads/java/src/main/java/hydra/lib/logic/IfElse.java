@@ -30,6 +30,11 @@ public class IfElse extends PrimitiveFunction {
         return new Name("hydra.lib.logic.ifElse");
     }
 
+    @Override
+    protected List<Integer> lazyParams() {
+        return List.of(1, 2);
+    }
+
     /**
      * Returns the type scheme for this function.
      * @return a polymorphic type scheme representing a function that takes two values of type 'a',

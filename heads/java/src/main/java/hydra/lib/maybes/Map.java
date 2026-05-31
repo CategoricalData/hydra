@@ -20,7 +20,7 @@ import hydra.util.Either;
 
 
 /**
- * Maps a function over a flow.
+ * Map a function over an optional value.
  */
 public class Map extends PrimitiveFunction {
     /**

@@ -2000,7 +2000,7 @@ functionCall env isPrim name args typeApps cx g =
       let aliases = JavaEnvironment.javaEnvironmentAliases env
           isLambdaBound = isLambdaBoundIn name (JavaEnvironment.aliasesLambdaVars aliases)
       in (Eithers.bind (Eithers.mapList (\arg -> encodeTerm env arg cx g) args) (\jargs0 ->
-        let wrapResult = wrapLazyArguments name jargs0
+        let wrapResult = wrapLazyArguments g name jargs0
             jargs = Pairs.first wrapResult
             mMethodOverride = Pairs.second wrapResult
         in (Logic.ifElse (Logic.or (isLocalVariable name) isLambdaBound) (Eithers.bind (encodeVariable env name cx g) (\baseExpr -> Right (Lists.foldl (\acc -> \jarg -> applyJavaArg acc jarg) baseExpr jargs))) (
@@ -2243,6 +2243,9 @@ javaTypeParametersForType_bvars t =
     case t of
       Core.TypeForall v0 -> Lists.cons (Core.forallTypeParameter v0) (javaTypeParametersForType_bvars (Core.forallTypeBody v0))
       _ -> []
+lazyFlagsForPrimitive :: Graph.Graph -> Core.Name -> [Bool]
+lazyFlagsForPrimitive g name =
+    Maybes.cases (Maps.lookup name (Graph.graphPrimitives g)) [] (\prim -> Lists.map (\p -> Typing.parameterIsLazy p) (Typing.termSignatureParameters (Packaging.primitiveDefinitionSignature (Graph.primitiveDefinition prim))))
 moduleToJava :: Packaging.Module -> [Packaging.Definition] -> Typing.InferenceContext -> Graph.Graph -> Either Errors.Error (M.Map String String)
 moduleToJava mod defs cx g =
     Eithers.bind (encodeDefinitions mod defs cx g) (\units -> Right (Maps.fromList (Lists.map (\entry ->
@@ -2915,33 +2918,11 @@ wrapInSupplierLambda expr =
     Syntax.ExpressionLambda (Syntax.LambdaExpression {
       Syntax.lambdaExpressionParameters = (Syntax.LambdaParametersTuple []),
       Syntax.lambdaExpressionBody = (Syntax.LambdaBodyExpression expr)})
-wrapLazyArguments :: Core.Name -> [Syntax.Expression] -> ([Syntax.Expression], (Maybe String))
-wrapLazyArguments name args =
+wrapLazyArguments :: Graph.Graph -> Core.Name -> [Syntax.Expression] -> ([Syntax.Expression], (Maybe String))
+wrapLazyArguments g name args =
 
-      let dummyExpr = Utils.javaIntExpression 0
-          argAt = \i -> Maybes.fromMaybe dummyExpr (Lists.maybeAt i args)
-      in (Logic.ifElse (Logic.and (Equality.equal name (Core.Name "hydra.lib.logic.ifElse")) (Equality.equal (Lists.length args) 3)) (
-        [
-          argAt 0,
-          (wrapInSupplierLambda (argAt 1)),
-          (wrapInSupplierLambda (argAt 2))],
-        (Just "lazy")) (Logic.ifElse (Logic.and (Equality.equal name (Core.Name "hydra.lib.maybes.maybe")) (Equality.equal (Lists.length args) 3)) (
-        [
-          wrapInSupplierLambda (argAt 0),
-          (argAt 1),
-          (argAt 2)],
-        (Just "applyLazy")) (Logic.ifElse (Logic.and (Equality.equal name (Core.Name "hydra.lib.maybes.cases")) (Equality.equal (Lists.length args) 3)) (
-        [
-          argAt 0,
-          (wrapInSupplierLambda (argAt 1)),
-          (argAt 2)],
-        (Just "applyLazy")) (Logic.ifElse (Logic.and (Equality.equal name (Core.Name "hydra.lib.maps.findWithDefault")) (Equality.equal (Lists.length args) 3)) (
-        [
-          wrapInSupplierLambda (argAt 0),
-          (argAt 1),
-          (argAt 2)],
-        (Just "applyLazy")) (Logic.ifElse (Logic.and (Logic.or (Equality.equal name (Core.Name "hydra.lib.maybes.fromMaybe")) (Logic.or (Equality.equal name (Core.Name "hydra.lib.eithers.fromLeft")) (Equality.equal name (Core.Name "hydra.lib.eithers.fromRight")))) (Equality.equal (Lists.length args) 2)) (
-        [
-          wrapInSupplierLambda (argAt 0),
-          (argAt 1)],
-        (Just "applyLazy")) (args, Nothing))))))
+      let lazyFlags = lazyFlagsForPrimitive g name
+          anyLazy = Lists.foldl (\b -> \f -> Logic.or b f) False lazyFlags
+      in (Logic.ifElse (Logic.and anyLazy (Equality.equal (Lists.length args) (Lists.length lazyFlags))) (
+        Lists.map (\pair -> Logic.ifElse (Pairs.second pair) (wrapInSupplierLambda (Pairs.first pair)) (Pairs.first pair)) (Lists.zip args lazyFlags),
+        (Just (Logic.ifElse (Equality.equal name (Core.Name "hydra.lib.logic.ifElse")) "lazy" "applyLazy"))) (args, Nothing))

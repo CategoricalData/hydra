@@ -186,12 +186,13 @@
                         vlist-null vh)))))
 
     ;; find_with_default :: v -> k -> Map k v -> v
+    ;; Thunk-aware: the default is lazy (#391); if def is a zero-arg procedure, only call it on a miss.
     (define hydra_lib_maps_find_with_default
       (lambda (def)
         (lambda (k)
           (lambda (m)
             (let ((entry (vhash-assoc k (ensure-vhash m))))
-              (if entry (cdr entry) def))))))
+              (if entry (cdr entry) (if (procedure? def) (def) def)))))))
 
     ;; from_list :: [Pair k v] -> Map k v
     ;; Input is list of (list k v) pairs.

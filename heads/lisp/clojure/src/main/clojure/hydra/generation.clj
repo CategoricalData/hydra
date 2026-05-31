@@ -94,7 +94,7 @@
         schema-map (bootstrap-schema-map)]
     (mapv (fn [ns]
             (let [ns-str (if (string? ns) ns (:value ns))
-                  file-path (str base-path "/" ((r 'hydra_codegen_namespace_to_path) ns-str) ".json")
+                  file-path (str base-path "/" ((r 'hydra_codegen_module_name_to_path) ns-str) ".json")
                   json-val (parse-json-file file-path)
                   mod (decode-module bs-graph schema-map json-val)]
               (println (str "  Loaded: " ns-str))

@@ -181,13 +181,14 @@
         result))))
 
 ;; find_with_default :: v -> k -> Map k v -> v
+;; Thunk-aware: the default is lazy (#391); if def is a zero-arg function, only call it on a miss.
 (defvar hydra_lib_maps_find_with_default
   (lambda (def)
     "Lookup a value with a default."
     (lambda (k)
       (lambda (m)
         (let ((entry (hydra-map-lookup k m)))
-          (if entry (cdr entry) def))))))
+          (if entry (cdr entry) (if (functionp def) (funcall def) def)))))))
 
 ;; from_list :: [Pair k v] -> Map k v
 ;; Input is list of (list k v) pairs

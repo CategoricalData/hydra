@@ -9815,7 +9815,7 @@
                                                                     "function": {
                                                                       "application": {
                                                                         "argument": {"variable": "cx"},
-                                                                        "function": {"typeApplication": {"body": {"variable": "hydra.analysis.moduleDependencyNamespaces"}, "type": {"variable": "t0"}}}}}}}}}}}}}}}}},
+                                                                        "function": {"typeApplication": {"body": {"variable": "hydra.analysis.moduleDependencyModuleNames"}, "type": {"variable": "t0"}}}}}}}}}}}}}}}}},
                                             "function": {
                                               "typeApplication": {
                                                 "body": {
@@ -9848,7 +9848,7 @@
                                                             "function": {
                                                               "application": {
                                                                 "argument": {"variable": "cx"},
-                                                                "function": {"typeApplication": {"body": {"variable": "hydra.analysis.moduleDependencyNamespaces"}, "type": {"variable": "t0"}}}}}}}}}}}}}}}}},
+                                                                "function": {"typeApplication": {"body": {"variable": "hydra.analysis.moduleDependencyModuleNames"}, "type": {"variable": "t0"}}}}}}}}}}}}}}}}},
                                     "function": {
                                       "typeApplication": {
                                         "body": {
@@ -10198,7 +10198,7 @@
                                                                         "function": {
                                                                           "application": {
                                                                             "argument": {"inject": {"field": {"name": "camel", "term": {"unit": {}}}, "typeName": "hydra.util.CaseConvention"}},
-                                                                            "function": {"variable": "hydra.names.namespaceToFilePath"}}}}}}},
+                                                                            "function": {"variable": "hydra.names.moduleNameToFilePath"}}}}}}},
                                                                 "function": {
                                                                   "typeApplication": {
                                                                     "body": {"typeApplication": {"body": {"variable": "hydra.lib.maps.singleton"}, "type": {"literal": {"string": {}}}}},

@@ -391,6 +391,9 @@ moduleDepsTransitive nsMap modules =
       let closure =
               Sets.union (transitiveDeps (\m -> Lists.map (\dep -> Packaging.moduleDependencyModule dep) (Packaging.moduleDependencies m)) nsMap modules) (Sets.fromList (Lists.map (\m -> Packaging.moduleName m) modules))
       in (Maybes.cat (Lists.map (\n -> Maps.lookup n nsMap) (Sets.toList closure)))
+-- | Convert a module name to a file path (e.g., hydra.core -> hydra/core)
+moduleNameToPath :: Packaging.ModuleName -> String
+moduleNameToPath ns = Strings.intercalate "/" (Strings.splitOn "." (Packaging.unModuleName ns))
 -- | Convert a Module to a JSON string
 moduleToJson :: M.Map Core.Name Core.Type -> Packaging.Module -> Either Errors.Error String
 moduleToJson schemaMap m =
@@ -473,9 +476,6 @@ modulesToGraph bsGraph universeModules modules =
         Graph.graphPrimitives = (Graph.graphPrimitives baseGraph),
         Graph.graphSchemaTypes = (Graph.graphSchemaTypes baseGraph),
         Graph.graphTypeVariables = (Graph.graphTypeVariables baseGraph)}
--- | Convert a namespace to a file path (e.g., hydra.core -> hydra/core)
-namespaceToPath :: Packaging.ModuleName -> String
-namespaceToPath ns = Strings.intercalate "/" (Strings.splitOn "." (Packaging.unModuleName ns))
 -- | Rebuild a module's term definitions using freshly inferred bindings
 refreshModule :: [Core.Binding] -> Packaging.Module -> Packaging.Module
 refreshModule inferredElements m =

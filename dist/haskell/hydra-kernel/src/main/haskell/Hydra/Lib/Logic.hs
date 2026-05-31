@@ -1,5 +1,5 @@
 -- Note: this is an automatically generated file. Do not edit.
--- | Primitives in the hydra.lib.logic namespace.
+-- | Primitives in the hydra.lib.logic module.
 
 module Hydra.Lib.Logic where
 import qualified Hydra.Ast as Ast
@@ -89,12 +89,12 @@ ifElse =
             Typing.parameterName = (Core.Name "arg1"),
             Typing.parameterDescription = Nothing,
             Typing.parameterType = (Core.TypeVariable (Core.Name "x")),
-            Typing.parameterIsLazy = False},
+            Typing.parameterIsLazy = True},
           Typing.Parameter {
             Typing.parameterName = (Core.Name "arg2"),
             Typing.parameterDescription = Nothing,
             Typing.parameterType = (Core.TypeVariable (Core.Name "x")),
-            Typing.parameterIsLazy = False}],
+            Typing.parameterIsLazy = True}],
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeVariable (Core.Name "x"))}},

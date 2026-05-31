@@ -4524,6 +4524,30 @@
                 "parameter": "nsMap"}}}}}},
     {
       "term": {
+        "name": "hydra.codegen.moduleNameToPath",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.packaging.ModuleName"}}],
+          "result": {"type": {"literal": {"string": {}}}},
+          "typeParameters": []},
+        "term": {
+          "annotated": {
+            "annotation": [
+              {
+                "key": "description",
+                "value": {"literal": {"string": "Convert a module name to a file path (e.g., hydra.core -> hydra/core)"}}}],
+            "body": {
+              "lambda": {
+                "body": {
+                  "application": {
+                    "argument": {
+                      "application": {
+                        "argument": {"application": {"argument": {"variable": "ns"}, "function": {"unwrap": "hydra.packaging.ModuleName"}}},
+                        "function": {"application": {"argument": {"literal": {"string": "."}}, "function": {"variable": "hydra.lib.strings.splitOn"}}}}},
+                    "function": {"application": {"argument": {"literal": {"string": "/"}}, "function": {"variable": "hydra.lib.strings.intercalate"}}}}},
+                "domain": {"variable": "hydra.packaging.ModuleName"},
+                "parameter": "ns"}}}}}},
+    {
+      "term": {
         "name": "hydra.codegen.moduleToJson",
         "signature": {
           "parameters": [
@@ -5335,30 +5359,6 @@
                     "parameter": "universeModules"}},
                 "domain": {"variable": "hydra.graph.Graph"},
                 "parameter": "bsGraph"}}}}}},
-    {
-      "term": {
-        "name": "hydra.codegen.namespaceToPath",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.packaging.ModuleName"}}],
-          "result": {"type": {"literal": {"string": {}}}},
-          "typeParameters": []},
-        "term": {
-          "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Convert a namespace to a file path (e.g., hydra.core -> hydra/core)"}}}],
-            "body": {
-              "lambda": {
-                "body": {
-                  "application": {
-                    "argument": {
-                      "application": {
-                        "argument": {"application": {"argument": {"variable": "ns"}, "function": {"unwrap": "hydra.packaging.ModuleName"}}},
-                        "function": {"application": {"argument": {"literal": {"string": "."}}, "function": {"variable": "hydra.lib.strings.splitOn"}}}}},
-                    "function": {"application": {"argument": {"literal": {"string": "/"}}, "function": {"variable": "hydra.lib.strings.intercalate"}}}}},
-                "domain": {"variable": "hydra.packaging.ModuleName"},
-                "parameter": "ns"}}}}}},
     {
       "term": {
         "name": "hydra.codegen.refreshModule",

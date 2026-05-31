@@ -172,7 +172,7 @@ getAnns cx g typ = Eithers.bind (Annotations.getTypeDescription cx g typ) (\r ->
 -- | Compute import aliases for a module's dependencies
 importAliasesForModule :: t0 -> Graph.Graph -> Packaging.Module -> Either Errors.Error (M.Map Packaging.ModuleName String)
 importAliasesForModule cx g mod =
-    Eithers.bind (Analysis.moduleDependencyNamespaces cx g False True True False mod) (\nss -> Right (Maps.fromList (Lists.map (\ns_ -> (ns_, (slashesToDots (Packaging.unModuleName ns_)))) (Sets.toList nss))))
+    Eithers.bind (Analysis.moduleDependencyModuleNames cx g False True True False mod) (\nss -> Right (Maps.fromList (Lists.map (\ns_ -> (ns_, (slashesToDots (Packaging.unModuleName ns_)))) (Sets.toList nss))))
 -- | Convert a Hydra module to a map of file paths to PDL schema strings
 moduleToPdl :: Packaging.Module -> [Packaging.Definition] -> t0 -> Graph.Graph -> Either Errors.Error (M.Map String String)
 moduleToPdl mod defs cx g =
@@ -222,7 +222,7 @@ toPair mod aliases schemaPair =
           ns_ = pdlNameForModule mod
           local = Pdl.unName (Pdl.qualifiedNameName (Pdl.namedSchemaQualifiedName schema))
           path =
-                  Names.namespaceToFilePath Util.CaseConventionCamel (Packaging.FileExtension "pdl") (Packaging.ModuleName (Strings.cat2 (Packaging.unModuleName (Packaging.moduleName mod)) (Strings.cat2 "/" local)))
+                  Names.moduleNameToFilePath Util.CaseConventionCamel (Packaging.FileExtension "pdl") (Packaging.ModuleName (Strings.cat2 (Packaging.unModuleName (Packaging.moduleName mod)) (Strings.cat2 "/" local)))
       in (
         path,
         Pdl.SchemaFile {

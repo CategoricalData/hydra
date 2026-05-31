@@ -372,7 +372,7 @@
 
 (define (namespace-to-path ns)
   ;; Convert "hydra.foo.bar" to "hydra/foo/bar" for the filesystem path.
-  ;; The kernel function hydra_names_namespace_to_file_path requires a
+  ;; The kernel function hydra_names_module_name_to_file_path requires a
   ;; case_conv + ext argument bundle; for our use (locating the JSON file
   ;; on disk, where path mirrors namespace exactly), we only need '.' -> '/'.
   (let ((len (string-length ns)))
@@ -473,7 +473,7 @@
                                   (case-conv (if (equal? target "clojure")
                                                   (list 'camel '())
                                                   (list 'lower_snake '())))
-                                  (fp (((hydra_names_namespace_to_file_path case-conv) ext) ns-val)))
+                                  (fp (((hydra_names_module_name_to_file_path case-conv) ext) ns-val)))
                              (list 'right (list (cons fp code))))))))))
              hydra_lisp_language_lisp_language
              (list #f #f #f #f)
@@ -643,7 +643,7 @@
                      ;; Filter skip-emit test namespaces (e.g.
                      ;; hydra.test.testEnv): these are type-only stubs whose
                      ;; hand-written per-language counterparts are the source
-                     ;; of truth. Mirrors testSkipEmitNamespaces in
+                     ;; of truth. Mirrors testSkipEmitModuleNames in
                      ;; Hydra.Sources.Test.All and the equivalent filter in
                      ;; heads/python/.../bootstrap.py.
                      (test-mods-to-emit
