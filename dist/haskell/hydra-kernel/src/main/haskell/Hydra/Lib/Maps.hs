@@ -327,7 +327,7 @@ findWithDefault =
             Typing.parameterName = (Core.Name "arg0"),
             Typing.parameterDescription = Nothing,
             Typing.parameterType = (Core.TypeVariable (Core.Name "v")),
-            Typing.parameterIsLazy = False},
+            Typing.parameterIsLazy = True},
           Typing.Parameter {
             Typing.parameterName = (Core.Name "arg1"),
             Typing.parameterDescription = Nothing,

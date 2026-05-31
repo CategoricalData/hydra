@@ -122,7 +122,7 @@
         "seeAlso": [],
         "signature": {
           "parameters": [
-            {"isLazy": false, "name": "arg0", "type": {"variable": "v"}},
+            {"isLazy": true, "name": "arg0", "type": {"variable": "v"}},
             {"isLazy": false, "name": "arg1", "type": {"variable": "k"}},
             {"isLazy": false, "name": "arg2", "type": {"map": {"keys": {"variable": "k"}, "values": {"variable": "v"}}}}],
           "result": {"type": {"variable": "v"}},
