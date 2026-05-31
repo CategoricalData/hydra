@@ -117,7 +117,7 @@
     (nreverse result)))
 
 (defun namespace-to-path (ns)
-  (funcall (symbol-value 'hydra_codegen_namespace_to_path) ns))
+  (funcall (symbol-value 'hydra_codegen_module_name_to_path) ns))
 
 ;; --- Module loading from JSON ---
 
@@ -200,7 +200,7 @@
                                                  (list :camel nil)
                                                  (list :lower_snake nil)))
                                   (fp (funcall (funcall (funcall
-                                        (symbol-value 'hydra_names_namespace_to_file_path)
+                                        (symbol-value 'hydra_names_module_name_to_file_path)
                                         case-conv)
                                         (subseq ext 1))  ; ".lisp" -> "lisp"
                                         ns-val)))
@@ -335,7 +335,7 @@
                        ;; Filter skip-emit test namespaces (e.g.
                        ;; hydra.test.testEnv): these are type-only stubs whose
                        ;; hand-written per-language counterparts are the
-                       ;; source of truth. Mirrors testSkipEmitNamespaces in
+                       ;; source of truth. Mirrors testSkipEmitModuleNames in
                        ;; Hydra.Sources.Test.All and the equivalent filter in
                        ;; heads/python/.../bootstrap.py.
                        (test-mods-to-emit

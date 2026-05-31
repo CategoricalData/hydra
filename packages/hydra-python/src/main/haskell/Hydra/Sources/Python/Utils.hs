@@ -329,21 +329,21 @@ doubleQuotedString = def "doubleQuotedString" $
     stringToPyExpression @@ PyDsl.quoteStyleDouble @@ var "s"
 
 -- | Find all namespaces referenced by a list of definitions, plus the core namespace
-findNamespaces :: TypedTermDefinition (ModuleName -> [Definition] -> Namespaces Py.DottedName)
+findNamespaces :: TypedTermDefinition (ModuleName -> [Definition] -> ModuleNames Py.DottedName)
 findNamespaces = def "findNamespaces" $
   doc "Find all namespaces referenced by a list of definitions, plus the core namespace" $
   lambdas ["focusNs", "defs"] $ lets [
     "coreNs">: Packaging.moduleName2 $ string "hydra.core",
-    "namespaces">: Analysis.namespacesForDefinitions @@ PyNames.encodeNamespace @@ var "focusNs" @@ var "defs"] $
+    "namespaces">: Analysis.moduleNamesForDefinitions @@ PyNames.encodeNamespace @@ var "focusNs" @@ var "defs"] $
     Logic.ifElse (Equality.equal
-      (Packaging.unModuleName $ Pairs.first $ Util.namespacesFocus $ var "namespaces")
+      (Packaging.unModuleName $ Pairs.first $ Util.moduleNamesFocus $ var "namespaces")
       (Packaging.unModuleName $ var "coreNs"))
       (var "namespaces")
-      (Util.namespaces
-        (Util.namespacesFocus $ var "namespaces")
+      (Util.moduleNames
+        (Util.moduleNamesFocus $ var "namespaces")
         (Maps.insert (var "coreNs")
           (PyNames.encodeNamespace @@ var "coreNs")
-          (Util.namespacesMapping $ var "namespaces")))
+          (Util.moduleNamesMapping $ var "namespaces")))
 
 -- | Create a function call expression
 functionCall :: TypedTermDefinition (Py.Primary -> [Py.Expression] -> Py.Expression)

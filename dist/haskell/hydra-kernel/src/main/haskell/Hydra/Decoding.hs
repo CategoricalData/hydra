@@ -1080,9 +1080,9 @@ decodeModule cx graph mod =
             Core.typeSchemeConstraints = Nothing}))}) (Packaging.typeDefinitionName v0) (Core.typeSchemeBody (Packaging.typeDefinitionTypeScheme v0)))
       _ -> Nothing) (Packaging.moduleDefinitions mod)))) (\typeBindings -> Logic.ifElse (Lists.null typeBindings) (Right Nothing) (Eithers.bind (Eithers.mapList (\b -> Eithers.bimap (\_e -> Errors.ErrorDecoding _e) (\x -> x) (decodeBinding cx graph b)) typeBindings) (\decodedBindings ->
       let allDecodedDeps =
-              Lists.nub (Lists.map decodeNamespace (Lists.map (\dep -> Packaging.moduleDependencyModule dep) (Packaging.moduleDependencies mod)))
+              Lists.nub (Lists.map decodeModuleName (Lists.map (\dep -> Packaging.moduleDependencyModule dep) (Packaging.moduleDependencies mod)))
       in (Right (Just (Packaging.Module {
-        Packaging.moduleName = (decodeNamespace (Packaging.moduleName mod)),
+        Packaging.moduleName = (decodeModuleName (Packaging.moduleName mod)),
         Packaging.moduleMetadata = (Just (Packaging.EntityMetadata {
           Packaging.entityMetadataDescription = (Just (Strings.cat [
             "Term decoders for ",
@@ -1103,9 +1103,9 @@ decodeModule cx graph mod =
           Packaging.termDefinitionMetadata = Nothing,
           Packaging.termDefinitionTerm = (Core.bindingTerm b),
           Packaging.termDefinitionSignature = (Maybes.map Scoping.typeSchemeToTermSignature (Core.bindingTypeScheme b))})) decodedBindings)}))))))
--- | Generate a decoder module namespace from a source module namespace
-decodeNamespace :: Packaging.ModuleName -> Packaging.ModuleName
-decodeNamespace ns =
+-- | Generate a decoder module name from a source module name
+decodeModuleName :: Packaging.ModuleName -> Packaging.ModuleName
+decodeModuleName ns =
 
       let parts = Strings.splitOn "." (Packaging.unModuleName ns)
           fallback = Packaging.ModuleName (Packaging.unModuleName ns)

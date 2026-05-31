@@ -218,5 +218,5 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "metadata": {"comments": [], "description": "Primitives in the hydra.lib.equality namespace.", "seeAlso": []},
+  "metadata": {"comments": [], "description": "Primitives in the hydra.lib.equality module.", "seeAlso": []},
   "name": "hydra.lib.equality"}

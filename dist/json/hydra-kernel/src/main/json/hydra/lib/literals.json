@@ -778,5 +778,5 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "metadata": {"comments": [], "description": "Primitives in the hydra.lib.literals namespace.", "seeAlso": []},
+  "metadata": {"comments": [], "description": "Primitives in the hydra.lib.literals module.", "seeAlso": []},
   "name": "hydra.lib.literals"}

@@ -344,7 +344,7 @@ module_ =
               Typing.resultDescription = Nothing,
               Typing.resultType = (Core.TypeVariable (Core.Name "hydra.core.Term"))}}))})),
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
-          Packaging.termDefinitionName = (Core.Name "hydra.encode.util.namespaces"),
+          Packaging.termDefinitionName = (Core.Name "hydra.encode.util.moduleNames"),
           Packaging.termDefinitionMetadata = Nothing,
           Packaging.termDefinitionTerm = (Core.TermAnnotated (Core.AnnotatedTerm {
             Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
@@ -364,7 +364,7 @@ module_ =
                           Core.fieldName = (Core.Name "typeName"),
                           Core.fieldTerm = (Core.TermWrap (Core.WrappedTerm {
                             Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
-                            Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "hydra.util.Namespaces"))}))},
+                            Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "hydra.util.ModuleNames"))}))},
                         Core.Field {
                           Core.fieldName = (Core.Name "fields"),
                           Core.fieldTerm = (Core.TermList [
@@ -395,7 +395,7 @@ module_ =
                                             Core.applicationArgument = (Core.TermVariable (Core.Name "p"))}))}}))})),
                                     Core.applicationArgument = (Core.TermApplication (Core.Application {
                                       Core.applicationFunction = (Core.TermProject (Core.Projection {
-                                        Core.projectionTypeName = (Core.Name "hydra.util.Namespaces"),
+                                        Core.projectionTypeName = (Core.Name "hydra.util.ModuleNames"),
                                         Core.projectionFieldName = (Core.Name "focus")})),
                                       Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}),
                             (Core.TermRecord (Core.Record {
@@ -425,11 +425,11 @@ module_ =
                                             Core.applicationArgument = (Core.TermVariable (Core.Name "m"))}))}}))})),
                                     Core.applicationArgument = (Core.TermApplication (Core.Application {
                                       Core.applicationFunction = (Core.TermProject (Core.Projection {
-                                        Core.projectionTypeName = (Core.Name "hydra.util.Namespaces"),
+                                        Core.projectionTypeName = (Core.Name "hydra.util.ModuleNames"),
                                         Core.projectionFieldName = (Core.Name "mapping")})),
                                       Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))}))})),
             Core.annotatedTermAnnotation = (M.fromList [
-              (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Encoder for hydra.util.Namespaces")))])})),
+              (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Encoder for hydra.util.ModuleNames")))])})),
           Packaging.termDefinitionSignature = (Just (Typing.TermSignature {
             Typing.termSignatureTypeParameters = [
               Typing.TypeParameter {
@@ -447,7 +447,7 @@ module_ =
                 Typing.parameterName = (Core.Name "arg1"),
                 Typing.parameterDescription = Nothing,
                 Typing.parameterType = (Core.TypeApplication (Core.ApplicationType {
-                  Core.applicationTypeFunction = (Core.TypeVariable (Core.Name "hydra.util.Namespaces")),
+                  Core.applicationTypeFunction = (Core.TypeVariable (Core.Name "hydra.util.ModuleNames")),
                   Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "n"))})),
                 Typing.parameterIsLazy = False}],
             Typing.termSignatureResult = Typing.Result {

@@ -138,7 +138,7 @@
         "name": "hydra.lib.maps.findWithDefault",
         "signature": {
           "parameters": [
-            {"isLazy": false, "name": "arg0", "type": {"variable": "v"}},
+            {"isLazy": true, "name": "arg0", "type": {"variable": "v"}},
             {"isLazy": false, "name": "arg1", "type": {"variable": "k"}},
             {"isLazy": false, "name": "arg2", "type": {"map": {"keys": {"variable": "k"}, "values": {"variable": "v"}}}}],
           "result": {"type": {"variable": "v"}},
@@ -356,5 +356,5 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "metadata": {"comments": [], "description": "Primitives in the hydra.lib.maps namespace.", "seeAlso": []},
+  "metadata": {"comments": [], "description": "Primitives in the hydra.lib.maps module.", "seeAlso": []},
   "name": "hydra.lib.maps"}

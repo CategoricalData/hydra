@@ -731,5 +731,5 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "metadata": {"comments": [], "description": "Primitives in the hydra.lib.math namespace.", "seeAlso": []},
+  "metadata": {"comments": [], "description": "Primitives in the hydra.lib.math module.", "seeAlso": []},
   "name": "hydra.lib.math"}

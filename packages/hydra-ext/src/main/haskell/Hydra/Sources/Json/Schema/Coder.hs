@@ -300,7 +300,7 @@ nameToPath = define "nameToPath" $
     "nsPart">: Maybes.maybe (string "")
       ("ns" ~> Strings.cat2 (Packaging.unModuleName (var "ns")) (string "."))
       (var "mns")] $
-    Names.namespaceToFilePath
+    Names.moduleNameToFilePath
       @@ Util.caseConventionCamel
       @@ wrap _FileExtension (string "json")
       @@ wrap _ModuleName (Strings.cat2 (var "nsPart") (var "local"))

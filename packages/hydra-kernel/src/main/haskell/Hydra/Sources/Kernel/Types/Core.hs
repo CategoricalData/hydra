@@ -467,58 +467,6 @@ term = define "Term" $
       doc "A wrapped term; an instance of a wrapper type (newtype)"
       wrappedTerm]
 
-typeApplicationTerm :: TypeDefinition
-typeApplicationTerm = define "TypeApplicationTerm" $
-  doc "A term applied to a type; a type application" $
-  T.record [
-    "body">:
-      doc "The term being applied to a type"
-      term,
-    "type">:
-      doc "The type argument"
-      type_]
-
-typeClassConstraint :: TypeDefinition
-typeClassConstraint = define "TypeClassConstraint" $
-  doc "A type class constraint on a type variable. Currently has only one variant, but designed to be forward-compatible with multi-parameter type classes and constraints on type expressions." $
-  T.union [
-    "simple">:
-      doc "A simple type class constraint, naming a single type class"
-      name]
-
-typeLambda :: TypeDefinition
-typeLambda = define "TypeLambda" $
-  doc "A System F type abstraction term" $
-  T.record [
-    "parameter">:
-      doc "The type variable introduced by the abstraction"
-      name,
-    "body">:
-      doc "The body of the abstraction"
-      term]
-
-typeScheme :: TypeDefinition
-typeScheme = define "TypeScheme" $
-  doc "A type expression together with free type variables occurring in the expression" $
-  T.record [
-    "variables">:
-      doc "The free type variables" $
-      T.list name,
-    "body">:
-      doc "The type expression"
-      type_,
-    "constraints">:
-      doc "Optional metadata for type variables, including typeclass constraints. The map keys are type variable names." $
-      T.maybe $ T.map name typeVariableMetadata]
-
-typeVariableMetadata :: TypeDefinition
-typeVariableMetadata = define "TypeVariableMetadata" $
-  doc "Metadata associated with a type variable, including typeclass constraints" $
-  T.record [
-    "classes">:
-      doc "The typeclass constraints on this type variable" $
-      T.list typeClassConstraint]
-
 type_ :: TypeDefinition
 type_ = define "Type" $
   doc "A data type" $
@@ -576,6 +524,58 @@ type_ = define "Type" $
         ++ " level: wrap is the introduction form, and a wrapper type's underlying body type"
         ++ " is given by the `wrap` variant's argument.")
       type_]
+
+typeApplicationTerm :: TypeDefinition
+typeApplicationTerm = define "TypeApplicationTerm" $
+  doc "A term applied to a type; a type application" $
+  T.record [
+    "body">:
+      doc "The term being applied to a type"
+      term,
+    "type">:
+      doc "The type argument"
+      type_]
+
+typeClassConstraint :: TypeDefinition
+typeClassConstraint = define "TypeClassConstraint" $
+  doc "A type class constraint on a type variable. Currently has only one variant, but designed to be forward-compatible with multi-parameter type classes and constraints on type expressions." $
+  T.union [
+    "simple">:
+      doc "A simple type class constraint, naming a single type class"
+      name]
+
+typeLambda :: TypeDefinition
+typeLambda = define "TypeLambda" $
+  doc "A System F type abstraction term" $
+  T.record [
+    "parameter">:
+      doc "The type variable introduced by the abstraction"
+      name,
+    "body">:
+      doc "The body of the abstraction"
+      term]
+
+typeScheme :: TypeDefinition
+typeScheme = define "TypeScheme" $
+  doc "A type expression together with free type variables occurring in the expression" $
+  T.record [
+    "variables">:
+      doc "The free type variables" $
+      T.list name,
+    "body">:
+      doc "The type expression"
+      type_,
+    "constraints">:
+      doc "Optional metadata for type variables, including typeclass constraints. The map keys are type variable names." $
+      T.maybe $ T.map name typeVariableMetadata]
+
+typeVariableMetadata :: TypeDefinition
+typeVariableMetadata = define "TypeVariableMetadata" $
+  doc "Metadata associated with a type variable, including typeclass constraints" $
+  T.record [
+    "classes">:
+      doc "The typeclass constraints on this type variable" $
+      T.list typeClassConstraint]
 
 wrappedTerm :: TypeDefinition
 wrappedTerm = define "WrappedTerm" $

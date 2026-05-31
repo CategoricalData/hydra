@@ -131,7 +131,7 @@
                                 case-conv (if (= target "clojure")
                                            (list :camel nil)
                                            (list :lower_snake nil))
-                                file-path (((@(rc 'hydra_names_namespace_to_file_path)
+                                file-path (((@(rc 'hydra_names_module_name_to_file_path)
                                               case-conv) ext) ns-val)]
                             (list :right {file-path code}))))))))]
           {:coder coder
@@ -255,7 +255,7 @@
                               ;; hydra.test.testEnv): these are type-only stubs
                               ;; whose hand-written per-language counterparts
                               ;; are the source of truth. Mirrors
-                              ;; testSkipEmitNamespaces in
+                              ;; testSkipEmitModuleNames in
                               ;; Hydra.Sources.Test.All and the equivalent
                               ;; filter in heads/python/.../bootstrap.py.
                               ns-of (fn [m] (let [n (:namespace m)] (if (string? n) n (:value n))))

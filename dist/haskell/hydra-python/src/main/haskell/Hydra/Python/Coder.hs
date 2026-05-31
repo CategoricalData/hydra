@@ -7,7 +7,6 @@ import qualified Hydra.Annotations as Annotations
 import qualified Hydra.Arity as Arity
 import qualified Hydra.Ast as Ast
 import qualified Hydra.Checking as Checking
-import qualified Hydra.Classes as Classes
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
 import qualified Hydra.Dependencies as Dependencies
@@ -262,7 +261,7 @@ eliminateUnitVar v term0 =
           go = \term -> rewrite go term
       in (go term0)
 -- | Create an initial empty metadata record with given namespaces
-emptyMetadata :: Util.Namespaces Syntax.DottedName -> PythonEnvironment.PythonModuleMetadata
+emptyMetadata :: Util.ModuleNames Syntax.DottedName -> PythonEnvironment.PythonModuleMetadata
 emptyMetadata ns =
     PythonEnvironment.PythonModuleMetadata {
       PythonEnvironment.pythonModuleMetadataNamespaces = ns,
@@ -342,7 +341,7 @@ encodeApplicationInner cx env fun hargs rargs =
               remainingArgs)) (Right (
               Utils.functionCall (Utils.pyNameToPyPrimary (PythonNames.encodeName True Util.CaseConventionLowerSnake env v0)) consumedArgs,
               remainingArgs))))) (Core.bindingTypeScheme el)) (Lexical.lookupBinding g v0)) (\_prim ->
-            let wrappedArgs = wrapLazyArguments v0 hargs
+            let wrappedArgs = wrapLazyArguments g v0 hargs
             in (Eithers.bind (encodeVariable cx env v0 wrappedArgs) (\expr -> Right (expr, rargs)))))
         _ -> defaultCase
 -- | Encode an application type to Python expression
@@ -575,7 +574,7 @@ encodeDefinition cx env def_ =
                     Maybes.maybe (Core.TypeScheme {
                       Core.typeSchemeVariables = [],
                       Core.typeSchemeBody = (Core.TypeVariable (Core.Name "hydra.core.Unit")),
-                      Core.typeSchemeConstraints = Nothing}) (\sig -> Scoping.termSignatureToTypeScheme sig) (Packaging.termDefinitionSignature v0)
+                      Core.typeSchemeConstraints = Nothing}) (\x -> x) (Maybes.map Scoping.termSignatureToTypeScheme (Packaging.termDefinitionSignature v0))
         in (Eithers.bind (Annotations.getTermDescription cx (pythonEnvironmentGetGraph env) term) (\comment ->
           let normComment = Maybes.map Formatting.normalizeComment comment
           in (Eithers.bind (encodeTermAssignment cx env True name term typ normComment) (\stmt -> Right [
@@ -1496,7 +1495,7 @@ extendMetaForTypes types meta =
 
       let names = Sets.unions (Lists.map (\t -> Dependencies.typeDependencyNames False t) types)
           currentNs = PythonEnvironment.pythonModuleMetadataNamespaces meta
-          updatedNs = Analysis.addNamesToNamespaces PythonNames.encodeNamespace names currentNs
+          updatedNs = Analysis.addNamesToModuleNames PythonNames.encodeNamespace names currentNs
           meta1 = setMetaNamespaces updatedNs meta
       in (Lists.foldl (\m -> \t -> extendMetaForType True False t m) meta1 types)
 -- | Extract CaseStatement from a case elimination term
@@ -1578,7 +1577,7 @@ gatherMetadata focusNs defs =
                     Packaging.DefinitionTerm v0 ->
                       let term = Packaging.termDefinitionTerm v0
                           typ =
-                                  Maybes.maybe (Core.TypeVariable (Core.Name "hydra.core.Unit")) (\sig -> Core.typeSchemeBody (Scoping.termSignatureToTypeScheme sig)) (Packaging.termDefinitionSignature v0)
+                                  Maybes.maybe (Core.TypeVariable (Core.Name "hydra.core.Unit")) Core.typeSchemeBody (Maybes.map Scoping.termSignatureToTypeScheme (Packaging.termDefinitionSignature v0))
                           meta2 = extendMetaForType True True typ meta
                       in (extendMetaForTerm True meta2 term)
                     Packaging.DefinitionType v0 ->
@@ -1614,7 +1613,7 @@ genericArg tparamList =
                         Syntax.powerRhs = Nothing}))}}}}}},
           Syntax.comparisonRhs = []})]])) tparamList))))
 -- | Create an initial Python environment for code generation
-initialEnvironment :: Util.Namespaces Syntax.DottedName -> Graph.Graph -> PythonEnvironment.PythonEnvironment
+initialEnvironment :: Util.ModuleNames Syntax.DottedName -> Graph.Graph -> PythonEnvironment.PythonEnvironment
 initialEnvironment namespaces tcontext =
     PythonEnvironment.PythonEnvironment {
       PythonEnvironment.pythonEnvironmentNamespaces = namespaces,
@@ -1630,9 +1629,9 @@ initialMetadata ns =
 
       let dottedNs = PythonNames.encodeNamespace ns
           emptyNs =
-                  Util.Namespaces {
-                    Util.namespacesFocus = (ns, dottedNs),
-                    Util.namespacesMapping = Maps.empty}
+                  Util.ModuleNames {
+                    Util.moduleNamesFocus = (ns, dottedNs),
+                    Util.moduleNamesMapping = Maps.empty}
       in PythonEnvironment.PythonModuleMetadata {
         PythonEnvironment.pythonModuleMetadataNamespaces = emptyNs,
         PythonEnvironment.pythonModuleMetadataTypeVariables = Sets.empty,
@@ -1694,6 +1693,9 @@ isVariantUnitType rowType fieldName =
 -- | Wrap an expression in a .get() method call (for Lazy unwrap at use sites)
 lazyDotGet :: Syntax.Expression -> Syntax.Expression
 lazyDotGet expr = Utils.functionCall (Utils.pyExpressionToPyPrimary (Utils.projectFromExpression expr (Syntax.Name "get"))) []
+lazyFlagsForPrimitive :: Graph.Graph -> Core.Name -> [Bool]
+lazyFlagsForPrimitive g name =
+    Maybes.cases (Maps.lookup name (Graph.graphPrimitives g)) [] (\prim -> Lists.map (\p -> Typing.parameterIsLazy p) (Typing.termSignatureParameters (Packaging.primitiveDefinitionSignature (Graph.primitiveDefinition prim))))
 -- | Decorator for @lru_cache(1) to memoize zero-argument function results
 lruCacheDecorator :: Syntax.NamedExpression
 lruCacheDecorator =
@@ -1770,16 +1772,16 @@ makeUncurriedLambda params body =
         Syntax.lambdaParametersStarEtc = Nothing},
       Syntax.lambdaBody = body})
 -- | Generate domain import statements from namespace mappings
-moduleDomainImports :: Util.Namespaces Syntax.DottedName -> [Syntax.ImportStatement]
+moduleDomainImports :: Util.ModuleNames Syntax.DottedName -> [Syntax.ImportStatement]
 moduleDomainImports namespaces =
 
-      let names = Lists.sort (Maps.elems (Util.namespacesMapping namespaces))
+      let names = Lists.sort (Maps.elems (Util.moduleNamesMapping namespaces))
       in (Lists.map (\ns -> Syntax.ImportStatementName (Syntax.ImportName [
         Syntax.DottedAsName {
           Syntax.dottedAsNameName = ns,
           Syntax.dottedAsNameAs = Nothing}])) names)
 -- | Generate all import statements for a Python module
-moduleImports :: Util.Namespaces Syntax.DottedName -> PythonEnvironment.PythonModuleMetadata -> [Syntax.Statement]
+moduleImports :: Util.ModuleNames Syntax.DottedName -> PythonEnvironment.PythonModuleMetadata -> [Syntax.Statement]
 moduleImports namespaces meta =
     Lists.map (\imp -> Utils.pySimpleStatementToPyStatement (Syntax.SimpleStatementImport imp)) (Lists.concat [
       moduleStandardImports meta,
@@ -1843,7 +1845,7 @@ moduleToPython :: Packaging.Module -> [Packaging.Definition] -> Typing.Inference
 moduleToPython mod defs cx g =
     Eithers.bind (encodePythonModule cx g mod defs) (\file ->
       let s = Serialization.printExpr (Serialization.parenthesize (Serde.moduleToExpr file))
-          path = Names.namespaceToFilePath Util.CaseConventionLowerSnake (Packaging.FileExtension "py") (Packaging.moduleName mod)
+          path = Names.moduleNameToFilePath Util.CaseConventionLowerSnake (Packaging.FileExtension "py") (Packaging.moduleName mod)
       in (Right (Maps.singleton path s)))
 -- | Accessor for the graph field of PyGraph
 pyGraphGraph :: PythonEnvironment.PyGraph -> Graph.Graph
@@ -1872,7 +1874,7 @@ pythonEnvironmentSetGraph tc env =
       PythonEnvironment.pythonEnvironmentVersion = (PythonEnvironment.pythonEnvironmentVersion env),
       PythonEnvironment.pythonEnvironmentSkipCasts = (PythonEnvironment.pythonEnvironmentSkipCasts env),
       PythonEnvironment.pythonEnvironmentInlineVariables = (PythonEnvironment.pythonEnvironmentInlineVariables env)}
-setMetaNamespaces :: Util.Namespaces Syntax.DottedName -> PythonEnvironment.PythonModuleMetadata -> PythonEnvironment.PythonModuleMetadata
+setMetaNamespaces :: Util.ModuleNames Syntax.DottedName -> PythonEnvironment.PythonModuleMetadata -> PythonEnvironment.PythonModuleMetadata
 setMetaNamespaces ns m =
     PythonEnvironment.PythonModuleMetadata {
       PythonEnvironment.pythonModuleMetadataNamespaces = ns,
@@ -2571,7 +2573,7 @@ withDefinitions env defs body =
                 Packaging.DefinitionTerm v0 -> Just (Core.Binding {
                   Core.bindingName = (Packaging.termDefinitionName v0),
                   Core.bindingTerm = (Packaging.termDefinitionTerm v0),
-                  Core.bindingTypeScheme = (Maybes.map (\sig -> Scoping.termSignatureToTypeScheme sig) (Packaging.termDefinitionSignature v0))})
+                  Core.bindingTypeScheme = (Maybes.map Scoping.termSignatureToTypeScheme (Packaging.termDefinitionSignature v0))})
                 Packaging.DefinitionType _ -> Nothing
                 _ -> Nothing) defs)
           dummyLet =
@@ -2616,16 +2618,9 @@ wrapInNullaryLambda expr =
         Syntax.lambdaParametersParamWithDefault = [],
         Syntax.lambdaParametersStarEtc = Nothing},
       Syntax.lambdaBody = expr})
--- | Wrap specific arguments in nullary lambdas for primitives that require lazy evaluation
-wrapLazyArguments :: Core.Name -> [Syntax.Expression] -> [Syntax.Expression]
-wrapLazyArguments name args =
+-- | Wrap lazy-flagged arguments of a primitive call in nullary lambdas, per isLazy metadata
+wrapLazyArguments :: Graph.Graph -> Core.Name -> [Syntax.Expression] -> [Syntax.Expression]
+wrapLazyArguments g name args =
 
-      let dummyExpr = Utils.pyNameToPyExpression (Syntax.Name "")
-          argAt = \i -> Maybes.fromMaybe dummyExpr (Lists.maybeAt i args)
-      in (Logic.ifElse (Logic.and (Equality.equal name (Core.Name "hydra.lib.logic.ifElse")) (Equality.equal (Lists.length args) 3)) [
-        argAt 0,
-        (wrapInNullaryLambda (argAt 1)),
-        (wrapInNullaryLambda (argAt 2))] (Logic.ifElse (Logic.and (Equality.equal name (Core.Name "hydra.lib.maybes.cases")) (Equality.equal (Lists.length args) 3)) [
-        argAt 0,
-        (wrapInNullaryLambda (argAt 1)),
-        (argAt 2)] (Logic.ifElse (Logic.and (Logic.or (Equality.equal name (Core.Name "hydra.lib.maybes.maybe")) (Equality.equal name (Core.Name "hydra.lib.maybes.fromMaybe"))) (Equality.gte (Lists.length args) 1)) (Lists.cons (wrapInNullaryLambda (argAt 0)) (Lists.drop 1 args)) args)))
+      let lazyFlags = lazyFlagsForPrimitive g name
+      in (Lists.map (\pair -> Logic.ifElse (Pairs.second pair) (wrapInNullaryLambda (Pairs.first pair)) (Pairs.first pair)) (Lists.zip args lazyFlags))

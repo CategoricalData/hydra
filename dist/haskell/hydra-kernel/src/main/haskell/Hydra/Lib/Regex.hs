@@ -1,5 +1,5 @@
 -- Note: this is an automatically generated file. Do not edit.
--- | Primitives in the hydra.lib.regex namespace.
+-- | Primitives in the hydra.lib.regex module.
 
 module Hydra.Lib.Regex where
 import qualified Hydra.Ast as Ast

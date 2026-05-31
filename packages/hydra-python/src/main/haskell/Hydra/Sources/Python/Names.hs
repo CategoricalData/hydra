@@ -152,7 +152,7 @@ encodeName = def "encodeName" $
     -- Get the namespaces from the environment
     "namespaces">: project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_namespaces @@ var "env",
     -- Get the focus namespace (first element of the focus tuple)
-    "focusPair">: Util.namespacesFocus (var "namespaces"),
+    "focusPair">: Util.moduleNamesFocus (var "namespaces"),
     "focusNs">: Pairs.first $ var "focusPair",
     -- Get the bound type variables map from the environment
     "boundVars">: Pairs.second $ project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_boundTypeVariables @@ var "env",
@@ -195,7 +195,7 @@ encodeNameQualified = def "encodeNameQualified" $
     -- Get the namespaces from the environment
     "namespaces">: project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_namespaces @@ var "env",
     -- Get the focus namespace (first element of the focus tuple)
-    "focusPair">: Util.namespacesFocus (var "namespaces"),
+    "focusPair">: Util.moduleNamesFocus (var "namespaces"),
     "focusNs">: Pairs.first $ var "focusPair",
     -- Get the bound type variables map from the environment
     "boundVars">: Pairs.second $ project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_boundTypeVariables @@ var "env",
@@ -276,9 +276,9 @@ variableReference = def "variableReference" $
     "unquoted">: PyDsl.pyNameToPyExpression (var "pyName"),
     -- Check if name is in the same namespace (for quoting)
     "namespaces">: project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_namespaces @@ var "env",
-    "focusPair">: Util.namespacesFocus (var "namespaces"),
+    "focusPair">: Util.moduleNamesFocus (var "namespaces"),
     "focusNs">: Pairs.first $ var "focusPair",
-    "mns">: Names.namespaceOf @@ var "name",
+    "mns">: Names.moduleNameOf @@ var "name",
     "sameNamespace">: Maybes.maybe false (lambda "ns" $ Equality.equal (var "ns") (var "focusNs")) (var "mns")] $
     Logic.ifElse (Logic.and (var "quoted") (var "sameNamespace"))
       (PyDsl.pyStringToPyExpression $ PyDsl.doubleQuotedString (unwrap Py._Name @@ var "pyName"))
