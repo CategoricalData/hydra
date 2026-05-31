@@ -793,5 +793,5 @@
     {"module": "hydra.packaging"},
     {"module": "hydra.dsl.core"},
     {"module": "hydra.dsl.packaging"}],
-  "description": "DSL functions for hydra.util",
+  "metadata": {"comments": [], "description": "DSL functions for hydra.util", "seeAlso": []},
   "name": "hydra.dsl.util"}

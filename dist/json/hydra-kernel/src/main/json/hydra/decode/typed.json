@@ -501,5 +501,5 @@
     {"module": "hydra.typed"},
     {"module": "hydra.util"},
     {"module": "hydra.decode.core"}],
-  "description": "Term decoders for hydra.typed",
+  "metadata": {"comments": [], "description": "Term decoders for hydra.typed", "seeAlso": []},
   "name": "hydra.decode.typed"}

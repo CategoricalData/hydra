@@ -1202,5 +1202,8 @@
                         "body": {"unit": {}}}}}]}}},
           "variables": []}}}],
   "dependencies": [],
-  "description": "All IANA Link Relation Types, as of 2022-10-11. See https://www.iana.org/assignments/link-relations/link-relations.xhtml",
+  "metadata": {
+    "comments": [],
+    "description": "All IANA Link Relation Types, as of 2022-10-11. See https://www.iana.org/assignments/link-relations/link-relations.xhtml",
+    "seeAlso": []},
   "name": "hydra.iana.linkrelations"}

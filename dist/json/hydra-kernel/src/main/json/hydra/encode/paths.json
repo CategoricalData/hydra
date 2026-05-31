@@ -1966,5 +1966,5 @@
                         "parameter": "y"}}}],
                 "typeName": "hydra.paths.SubtypeStep"}}}}}}],
   "dependencies": [{"module": "hydra.encode.core"}, {"module": "hydra.paths"}],
-  "description": "Term encoders for hydra.paths",
+  "metadata": {"comments": [], "description": "Term encoders for hydra.paths", "seeAlso": []},
   "name": "hydra.encode.paths"}

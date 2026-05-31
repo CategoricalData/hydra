@@ -607,5 +607,5 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "description": "Language constraints based on TinkerPop Graph.Features",
+  "metadata": {"comments": [], "description": "Language constraints based on TinkerPop Graph.Features", "seeAlso": []},
   "name": "hydra.tinkerpop.language"}

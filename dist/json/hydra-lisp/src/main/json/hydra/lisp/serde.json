@@ -6814,5 +6814,8 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "description": "Lisp serializer: converts Lisp AST to concrete syntax for Clojure, Emacs Lisp, Common Lisp, or Scheme",
+  "metadata": {
+    "comments": [],
+    "description": "Lisp serializer: converts Lisp AST to concrete syntax for Clojure, Emacs Lisp, Common Lisp, or Scheme",
+    "seeAlso": []},
   "name": "hydra.lisp.serde"}

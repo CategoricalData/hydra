@@ -96,5 +96,8 @@
                   "parameter": "e"}}}},
           "variables": []}}}],
   "dependencies": [{"module": "hydra.core"}, {"module": "hydra.error.core"}],
-  "description": "Framework types for configurable validation: profiles classify checks as errors or warnings, and results accumulate findings up to caller-specified bounds.",
+  "metadata": {
+    "comments": [],
+    "description": "Framework types for configurable validation: profiles classify checks as errors or warnings, and results accumulate findings up to caller-specified bounds.",
+    "seeAlso": []},
   "name": "hydra.validation"}

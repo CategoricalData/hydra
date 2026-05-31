@@ -10664,5 +10664,5 @@
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "original"}}}}}}],
   "dependencies": [{"module": "hydra.pg.model"}, {"module": "hydra.typed"}, {"module": "hydra.core"}, {"module": "hydra.dsl.core"}],
-  "description": "DSL functions for hydra.pg.model",
+  "metadata": {"comments": [], "description": "DSL functions for hydra.pg.model", "seeAlso": []},
   "name": "hydra.dsl.pg.model"}

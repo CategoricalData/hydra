@@ -1270,5 +1270,5 @@
     {"module": "hydra.util"},
     {"module": "hydra.decode.core"},
     {"module": "hydra.decode.packaging"}],
-  "description": "Term decoders for hydra.util",
+  "metadata": {"comments": [], "description": "Term decoders for hydra.util", "seeAlso": []},
   "name": "hydra.decode.util"}
