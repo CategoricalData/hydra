@@ -81,7 +81,7 @@ pyGraphWithMetadata original newVal =
           Core.fieldName = (Core.Name "metadata"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
 -- | DSL constructor for hydra.python.environment.PythonEnvironment
-pythonEnvironment :: Typed.TypedTerm (Util.Namespaces Syntax.DottedName) -> Typed.TypedTerm ([Core.Name], (M.Map Core.Name Syntax.Name)) -> Typed.TypedTerm Graph.Graph -> Typed.TypedTerm (S.Set Core.Name) -> Typed.TypedTerm Environment.PythonVersion -> Typed.TypedTerm Bool -> Typed.TypedTerm (S.Set Core.Name) -> Typed.TypedTerm Environment.PythonEnvironment
+pythonEnvironment :: Typed.TypedTerm (Util.ModuleNames Syntax.DottedName) -> Typed.TypedTerm ([Core.Name], (M.Map Core.Name Syntax.Name)) -> Typed.TypedTerm Graph.Graph -> Typed.TypedTerm (S.Set Core.Name) -> Typed.TypedTerm Environment.PythonVersion -> Typed.TypedTerm Bool -> Typed.TypedTerm (S.Set Core.Name) -> Typed.TypedTerm Environment.PythonEnvironment
 pythonEnvironment namespaces boundTypeVariables graph nullaryBindings version skipCasts inlineVariables =
     Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.python.environment.PythonEnvironment"),
@@ -132,7 +132,7 @@ pythonEnvironmentInlineVariables x =
         Core.projectionFieldName = (Core.Name "inlineVariables")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL accessor for the namespaces field of hydra.python.environment.PythonEnvironment
-pythonEnvironmentNamespaces :: Typed.TypedTerm Environment.PythonEnvironment -> Typed.TypedTerm (Util.Namespaces Syntax.DottedName)
+pythonEnvironmentNamespaces :: Typed.TypedTerm Environment.PythonEnvironment -> Typed.TypedTerm (Util.ModuleNames Syntax.DottedName)
 pythonEnvironmentNamespaces x =
     Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -317,7 +317,7 @@ pythonEnvironmentWithInlineVariables original newVal =
           Core.fieldName = (Core.Name "inlineVariables"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
 -- | DSL updater for the namespaces field of hydra.python.environment.PythonEnvironment
-pythonEnvironmentWithNamespaces :: Typed.TypedTerm Environment.PythonEnvironment -> Typed.TypedTerm (Util.Namespaces Syntax.DottedName) -> Typed.TypedTerm Environment.PythonEnvironment
+pythonEnvironmentWithNamespaces :: Typed.TypedTerm Environment.PythonEnvironment -> Typed.TypedTerm (Util.ModuleNames Syntax.DottedName) -> Typed.TypedTerm Environment.PythonEnvironment
 pythonEnvironmentWithNamespaces original newVal =
     Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.python.environment.PythonEnvironment"),
@@ -521,7 +521,7 @@ pythonEnvironmentWithVersion original newVal =
               Core.projectionFieldName = (Core.Name "inlineVariables")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
 -- | DSL constructor for hydra.python.environment.PythonModuleMetadata
-pythonModuleMetadata :: Typed.TypedTerm (Util.Namespaces Syntax.DottedName) -> Typed.TypedTerm (S.Set Core.Name) -> Typed.TypedTerm Bool -> Typed.TypedTerm Bool -> Typed.TypedTerm Bool -> Typed.TypedTerm Bool -> Typed.TypedTerm Bool -> Typed.TypedTerm Bool -> Typed.TypedTerm Bool -> Typed.TypedTerm Bool -> Typed.TypedTerm Bool -> Typed.TypedTerm Bool -> Typed.TypedTerm Bool -> Typed.TypedTerm Bool -> Typed.TypedTerm Bool -> Typed.TypedTerm Bool -> Typed.TypedTerm Bool -> Typed.TypedTerm Bool -> Typed.TypedTerm Bool -> Typed.TypedTerm Bool -> Typed.TypedTerm Bool -> Typed.TypedTerm Bool -> Typed.TypedTerm Bool -> Typed.TypedTerm Environment.PythonModuleMetadata
+pythonModuleMetadata :: Typed.TypedTerm (Util.ModuleNames Syntax.DottedName) -> Typed.TypedTerm (S.Set Core.Name) -> Typed.TypedTerm Bool -> Typed.TypedTerm Bool -> Typed.TypedTerm Bool -> Typed.TypedTerm Bool -> Typed.TypedTerm Bool -> Typed.TypedTerm Bool -> Typed.TypedTerm Bool -> Typed.TypedTerm Bool -> Typed.TypedTerm Bool -> Typed.TypedTerm Bool -> Typed.TypedTerm Bool -> Typed.TypedTerm Bool -> Typed.TypedTerm Bool -> Typed.TypedTerm Bool -> Typed.TypedTerm Bool -> Typed.TypedTerm Bool -> Typed.TypedTerm Bool -> Typed.TypedTerm Bool -> Typed.TypedTerm Bool -> Typed.TypedTerm Bool -> Typed.TypedTerm Bool -> Typed.TypedTerm Environment.PythonModuleMetadata
 pythonModuleMetadata namespaces typeVariables usesAnnotated usesCallable usesCast usesLruCache usesTypeAlias usesDataclass usesDecimal usesEither usesEnum usesFrozenDict usesFrozenList usesFrozenSet usesGeneric usesJust usesLeft usesMaybe usesName usesNode usesNothing usesRight usesTypeVar =
     Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
@@ -596,7 +596,7 @@ pythonModuleMetadata namespaces typeVariables usesAnnotated usesCallable usesCas
           Core.fieldName = (Core.Name "usesTypeVar"),
           Core.fieldTerm = (Typed.unTypedTerm usesTypeVar)}]}))
 -- | DSL accessor for the namespaces field of hydra.python.environment.PythonModuleMetadata
-pythonModuleMetadataNamespaces :: Typed.TypedTerm Environment.PythonModuleMetadata -> Typed.TypedTerm (Util.Namespaces Syntax.DottedName)
+pythonModuleMetadataNamespaces :: Typed.TypedTerm Environment.PythonModuleMetadata -> Typed.TypedTerm (Util.ModuleNames Syntax.DottedName)
 pythonModuleMetadataNamespaces x =
     Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -780,7 +780,7 @@ pythonModuleMetadataUsesTypeVar x =
         Core.projectionFieldName = (Core.Name "usesTypeVar")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL updater for the namespaces field of hydra.python.environment.PythonModuleMetadata
-pythonModuleMetadataWithNamespaces :: Typed.TypedTerm Environment.PythonModuleMetadata -> Typed.TypedTerm (Util.Namespaces Syntax.DottedName) -> Typed.TypedTerm Environment.PythonModuleMetadata
+pythonModuleMetadataWithNamespaces :: Typed.TypedTerm Environment.PythonModuleMetadata -> Typed.TypedTerm (Util.ModuleNames Syntax.DottedName) -> Typed.TypedTerm Environment.PythonModuleMetadata
 pythonModuleMetadataWithNamespaces original newVal =
     Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),

@@ -859,7 +859,7 @@ encodeTermInner cx g term st = case term of
         -- Build variant type name: BaseType + VariantName
         variantLocalName = localNameOf tname ++ "." ++ unName fname
         goBaseName = toGoExported (localNameOf tname)
-        variantQName = case namespaceOf tname of
+        variantQName = case moduleNameOf tname of
           Just (ModuleName ns) -> Core.Name (ns ++ "." ++ goBaseName ++ goFieldName)
           Nothing -> Core.Name (goBaseName ++ goFieldName)
         -- Resolve type arguments from the current substitution context
@@ -1185,7 +1185,7 @@ encodeCaseArms cx g baseName (cf:cfs) st = do
   let cfname = toGoExported (unName $ Core.fieldName cf)
       cfterm = Core.fieldTerm cf
       -- Build variant type name using the same logic as TermUnion
-      variantQName = case namespaceOf baseName of
+      variantQName = case moduleNameOf baseName of
         Just (ModuleName ns) -> Core.Name (ns ++ "." ++ toGoExported (localNameOf baseName) ++ cfname)
         Nothing -> Core.Name (toGoExported (localNameOf baseName) ++ cfname)
       resolvedArgs = resolveTypeArgs g baseName st

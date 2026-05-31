@@ -1,5 +1,5 @@
 -- Note: this is an automatically generated file. Do not edit.
--- | Primitives in the hydra.lib.maybes namespace.
+-- | Primitives in the hydra.lib.maybes module.
 
 module Hydra.Lib.Maybes where
 import qualified Hydra.Ast as Ast
@@ -163,7 +163,7 @@ cases =
             Typing.parameterName = (Core.Name "arg1"),
             Typing.parameterDescription = Nothing,
             Typing.parameterType = (Core.TypeVariable (Core.Name "y")),
-            Typing.parameterIsLazy = False},
+            Typing.parameterIsLazy = True},
           Typing.Parameter {
             Typing.parameterName = (Core.Name "arg2"),
             Typing.parameterDescription = Nothing,
@@ -321,7 +321,7 @@ fromMaybe =
             Typing.parameterName = (Core.Name "arg0"),
             Typing.parameterDescription = Nothing,
             Typing.parameterType = (Core.TypeVariable (Core.Name "x")),
-            Typing.parameterIsLazy = False},
+            Typing.parameterIsLazy = True},
           Typing.Parameter {
             Typing.parameterName = (Core.Name "arg1"),
             Typing.parameterDescription = Nothing,
@@ -568,7 +568,7 @@ maybe =
             Typing.parameterName = (Core.Name "arg0"),
             Typing.parameterDescription = Nothing,
             Typing.parameterType = (Core.TypeVariable (Core.Name "y")),
-            Typing.parameterIsLazy = False},
+            Typing.parameterIsLazy = True},
           Typing.Parameter {
             Typing.parameterName = (Core.Name "arg1"),
             Typing.parameterDescription = Nothing,

@@ -30,7 +30,7 @@ module_ = Module {
     definitions = [
       caseConvention,
       comparison,
-      namespaces,
+      moduleNames,
       precision]
 
 caseConvention :: TypeDefinition
@@ -57,15 +57,15 @@ either_ = define "Either" $
       doc "The right alternative"
       (T.var "b")]
 
-namespaces :: TypeDefinition
-namespaces = define "Namespaces" $
-  doc "A mapping from namespaces to values of type n, with a focus on one namespace" $
+moduleNames :: TypeDefinition
+moduleNames = define "ModuleNames" $
+  doc "A mapping from module names to values of type n, with a focus on one module name" $
   T.forAll "n" $ T.record [
     "focus">:
-      doc "The namespace in focus, together with its associated value" $
+      doc "The module name in focus, together with its associated value" $
       T.pair Packaging.moduleNameDef "n",
     "mapping">:
-      doc "A mapping of namespaces to values" $
+      doc "A mapping of module names to values" $
       T.map Packaging.moduleNameDef "n"]
 
 pair :: TypeDefinition

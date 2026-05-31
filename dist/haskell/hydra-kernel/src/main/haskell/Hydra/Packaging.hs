@@ -1,5 +1,5 @@
 -- Note: this is an automatically generated file. Do not edit.
--- | A model for Hydra namespaces, modules, and packages
+-- | A model for Hydra module names, modules, and packages
 
 module Hydra.Packaging where
 import qualified Hydra.Core as Core
@@ -25,7 +25,7 @@ newtype FileExtension =
     unFileExtension :: String}
   deriving (Eq, Ord, Read, Show)
 _FileExtension = Core.Name "hydra.packaging.FileExtension"
--- | A logical collection of elements in the same namespace, having dependencies on zero or more other modules
+-- | A logical collection of elements sharing a common module name, having dependencies on zero or more other modules
 data Module =
   Module {
     -- | The name of the module, which is also the common prefix for all element names in the module

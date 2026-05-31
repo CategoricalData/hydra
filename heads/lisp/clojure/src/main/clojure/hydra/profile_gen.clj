@@ -56,7 +56,7 @@
   (let [bs-graph (bootstrap-graph)
         schema-map (bootstrap-schema-map)]
     (mapv (fn [ns-str]
-            (let [file-path (str base-path "/" ((r 'hydra_codegen_namespace_to_path) ns-str) ".json")
+            (let [file-path (str base-path "/" ((r 'hydra_codegen_module_name_to_path) ns-str) ".json")
                   obj (json/read-str (slurp file-path))
                   json-val (clojure-to-hydra-json obj)
                   mod-type (list :variable "hydra.packaging.Module")
@@ -145,7 +145,7 @@
                                                      (pte program)))
                                             ns-val (let [ns (:namespace mod)]
                                                      (if (string? ns) ns (:value ns)))
-                                            fp (str (@(rc 'hydra_codegen_namespace_to_path) ns-val) ".clj")]
+                                            fp (str (@(rc 'hydra_codegen_module_name_to_path) ns-val) ".clj")]
                                         (list :right {fp code}))))))))))
             language (case target
                        "python" @(rc 'hydra_ext_python_language_python_language)
