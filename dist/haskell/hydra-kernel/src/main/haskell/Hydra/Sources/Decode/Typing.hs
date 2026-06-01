@@ -43,7 +43,7 @@ module_ =
         Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.decode.typing.functionStructure"),
           Packaging.termDefinitionMetadata = Nothing,
-          Packaging.termDefinitionTerm = (Core.TermAnnotated (Core.AnnotatedTerm {
+          Packaging.termDefinitionBody = (Core.TermAnnotated (Core.AnnotatedTerm {
             Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
               Core.lambdaParameter = (Core.Name "env"),
               Core.lambdaDomain = Nothing,
@@ -71,9 +71,9 @@ module_ =
                               Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
                               Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected record"))}))))),
                             Core.caseStatementCases = [
-                              Core.Field {
-                                Core.fieldName = (Core.Name "record"),
-                                Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                              Core.CaseAlternative {
+                                Core.caseAlternativeName = (Core.Name "record"),
+                                Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                                   Core.lambdaParameter = (Core.Name "record"),
                                   Core.lambdaDomain = Nothing,
                                   Core.lambdaBody = (Core.TermLet (Core.Let {
@@ -268,7 +268,7 @@ module_ =
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.decode.typing.inferenceContext"),
           Packaging.termDefinitionMetadata = Nothing,
-          Packaging.termDefinitionTerm = (Core.TermAnnotated (Core.AnnotatedTerm {
+          Packaging.termDefinitionBody = (Core.TermAnnotated (Core.AnnotatedTerm {
             Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
               Core.lambdaParameter = (Core.Name "cx"),
               Core.lambdaDomain = Nothing,
@@ -293,9 +293,9 @@ module_ =
                             Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
                             Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected record"))}))))),
                           Core.caseStatementCases = [
-                            Core.Field {
-                              Core.fieldName = (Core.Name "record"),
-                              Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                            Core.CaseAlternative {
+                              Core.caseAlternativeName = (Core.Name "record"),
+                              Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                                 Core.lambdaParameter = (Core.Name "record"),
                                 Core.lambdaDomain = Nothing,
                                 Core.lambdaBody = (Core.TermLet (Core.Let {
@@ -339,9 +339,9 @@ module_ =
                                                             Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
                                                             Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected literal"))}))))),
                                                           Core.caseStatementCases = [
-                                                            Core.Field {
-                                                              Core.fieldName = (Core.Name "literal"),
-                                                              Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                                                            Core.CaseAlternative {
+                                                              Core.caseAlternativeName = (Core.Name "literal"),
+                                                              Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                                                                 Core.lambdaParameter = (Core.Name "v"),
                                                                 Core.lambdaDomain = Nothing,
                                                                 Core.lambdaBody = (Core.TermApplication (Core.Application {
@@ -351,17 +351,17 @@ module_ =
                                                                       Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
                                                                       Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected int32 literal"))}))))),
                                                                     Core.caseStatementCases = [
-                                                                      Core.Field {
-                                                                        Core.fieldName = (Core.Name "integer"),
-                                                                        Core.fieldTerm = (Core.TermCases (Core.CaseStatement {
+                                                                      Core.CaseAlternative {
+                                                                        Core.caseAlternativeName = (Core.Name "integer"),
+                                                                        Core.caseAlternativeHandler = (Core.TermCases (Core.CaseStatement {
                                                                           Core.caseStatementTypeName = (Core.Name "hydra.core.IntegerValue"),
                                                                           Core.caseStatementDefault = (Just (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
                                                                             Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
                                                                             Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected int32 value"))}))))),
                                                                           Core.caseStatementCases = [
-                                                                            Core.Field {
-                                                                              Core.fieldName = (Core.Name "int32"),
-                                                                              Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                                                                            Core.CaseAlternative {
+                                                                              Core.caseAlternativeName = (Core.Name "int32"),
+                                                                              Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                                                                                 Core.lambdaParameter = (Core.Name "i"),
                                                                                 Core.lambdaDomain = Nothing,
                                                                                 Core.lambdaBody = (Core.TermEither (Right (Core.TermVariable (Core.Name "i"))))}))}]}))}]})),
@@ -432,7 +432,7 @@ module_ =
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.decode.typing.inferenceResult"),
           Packaging.termDefinitionMetadata = Nothing,
-          Packaging.termDefinitionTerm = (Core.TermAnnotated (Core.AnnotatedTerm {
+          Packaging.termDefinitionBody = (Core.TermAnnotated (Core.AnnotatedTerm {
             Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
               Core.lambdaParameter = (Core.Name "cx"),
               Core.lambdaDomain = Nothing,
@@ -457,9 +457,9 @@ module_ =
                             Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
                             Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected record"))}))))),
                           Core.caseStatementCases = [
-                            Core.Field {
-                              Core.fieldName = (Core.Name "record"),
-                              Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                            Core.CaseAlternative {
+                              Core.caseAlternativeName = (Core.Name "record"),
+                              Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                                 Core.lambdaParameter = (Core.Name "record"),
                                 Core.lambdaDomain = Nothing,
                                 Core.lambdaBody = (Core.TermLet (Core.Let {
@@ -528,7 +528,7 @@ module_ =
                                                           Core.applicationFunction = (Core.TermApplication (Core.Application {
                                                             Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.core.decodeMap")),
                                                             Core.applicationArgument = (Core.TermVariable (Core.Name "hydra.decode.core.name"))})),
-                                                          Core.applicationArgument = (Core.TermVariable (Core.Name "hydra.decode.core.typeVariableMetadata"))}))})),
+                                                          Core.applicationArgument = (Core.TermVariable (Core.Name "hydra.decode.core.typeVariableConstraints"))}))})),
                                                       Core.applicationArgument = (Core.TermVariable (Core.Name "fieldMap"))})),
                                                     Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))}))})),
                                                 Core.applicationArgument = (Core.TermLambda (Core.Lambda {
@@ -596,7 +596,7 @@ module_ =
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.decode.typing.parameter"),
           Packaging.termDefinitionMetadata = Nothing,
-          Packaging.termDefinitionTerm = (Core.TermAnnotated (Core.AnnotatedTerm {
+          Packaging.termDefinitionBody = (Core.TermAnnotated (Core.AnnotatedTerm {
             Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
               Core.lambdaParameter = (Core.Name "cx"),
               Core.lambdaDomain = Nothing,
@@ -621,9 +621,9 @@ module_ =
                             Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
                             Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected record"))}))))),
                           Core.caseStatementCases = [
-                            Core.Field {
-                              Core.fieldName = (Core.Name "record"),
-                              Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                            Core.CaseAlternative {
+                              Core.caseAlternativeName = (Core.Name "record"),
+                              Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                                 Core.lambdaParameter = (Core.Name "record"),
                                 Core.lambdaDomain = Nothing,
                                 Core.lambdaBody = (Core.TermLet (Core.Let {
@@ -684,9 +684,9 @@ module_ =
                                                                   Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
                                                                   Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected literal"))}))))),
                                                                 Core.caseStatementCases = [
-                                                                  Core.Field {
-                                                                    Core.fieldName = (Core.Name "literal"),
-                                                                    Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                                                                  Core.CaseAlternative {
+                                                                    Core.caseAlternativeName = (Core.Name "literal"),
+                                                                    Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                                                                       Core.lambdaParameter = (Core.Name "v"),
                                                                       Core.lambdaDomain = Nothing,
                                                                       Core.lambdaBody = (Core.TermApplication (Core.Application {
@@ -696,9 +696,9 @@ module_ =
                                                                             Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
                                                                             Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected string literal"))}))))),
                                                                           Core.caseStatementCases = [
-                                                                            Core.Field {
-                                                                              Core.fieldName = (Core.Name "string"),
-                                                                              Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                                                                            Core.CaseAlternative {
+                                                                              Core.caseAlternativeName = (Core.Name "string"),
+                                                                              Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                                                                                 Core.lambdaParameter = (Core.Name "s"),
                                                                                 Core.lambdaDomain = Nothing,
                                                                                 Core.lambdaBody = (Core.TermEither (Right (Core.TermVariable (Core.Name "s"))))}))}]})),
@@ -762,9 +762,9 @@ module_ =
                                                                         Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
                                                                         Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected literal"))}))))),
                                                                       Core.caseStatementCases = [
-                                                                        Core.Field {
-                                                                          Core.fieldName = (Core.Name "literal"),
-                                                                          Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                                                                        Core.CaseAlternative {
+                                                                          Core.caseAlternativeName = (Core.Name "literal"),
+                                                                          Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                                                                             Core.lambdaParameter = (Core.Name "v"),
                                                                             Core.lambdaDomain = Nothing,
                                                                             Core.lambdaBody = (Core.TermApplication (Core.Application {
@@ -774,9 +774,9 @@ module_ =
                                                                                   Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
                                                                                   Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected boolean literal"))}))))),
                                                                                 Core.caseStatementCases = [
-                                                                                  Core.Field {
-                                                                                    Core.fieldName = (Core.Name "boolean"),
-                                                                                    Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                                                                                  Core.CaseAlternative {
+                                                                                    Core.caseAlternativeName = (Core.Name "boolean"),
+                                                                                    Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                                                                                       Core.lambdaParameter = (Core.Name "b"),
                                                                                       Core.lambdaDomain = Nothing,
                                                                                       Core.lambdaBody = (Core.TermEither (Right (Core.TermVariable (Core.Name "b"))))}))}]})),
@@ -836,7 +836,7 @@ module_ =
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.decode.typing.result"),
           Packaging.termDefinitionMetadata = Nothing,
-          Packaging.termDefinitionTerm = (Core.TermAnnotated (Core.AnnotatedTerm {
+          Packaging.termDefinitionBody = (Core.TermAnnotated (Core.AnnotatedTerm {
             Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
               Core.lambdaParameter = (Core.Name "cx"),
               Core.lambdaDomain = Nothing,
@@ -861,9 +861,9 @@ module_ =
                             Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
                             Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected record"))}))))),
                           Core.caseStatementCases = [
-                            Core.Field {
-                              Core.fieldName = (Core.Name "record"),
-                              Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                            Core.CaseAlternative {
+                              Core.caseAlternativeName = (Core.Name "record"),
+                              Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                                 Core.lambdaParameter = (Core.Name "record"),
                                 Core.lambdaDomain = Nothing,
                                 Core.lambdaBody = (Core.TermLet (Core.Let {
@@ -909,9 +909,9 @@ module_ =
                                                               Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
                                                               Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected literal"))}))))),
                                                             Core.caseStatementCases = [
-                                                              Core.Field {
-                                                                Core.fieldName = (Core.Name "literal"),
-                                                                Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                                                              Core.CaseAlternative {
+                                                                Core.caseAlternativeName = (Core.Name "literal"),
+                                                                Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                                                                   Core.lambdaParameter = (Core.Name "v"),
                                                                   Core.lambdaDomain = Nothing,
                                                                   Core.lambdaBody = (Core.TermApplication (Core.Application {
@@ -921,9 +921,9 @@ module_ =
                                                                         Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
                                                                         Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected string literal"))}))))),
                                                                       Core.caseStatementCases = [
-                                                                        Core.Field {
-                                                                          Core.fieldName = (Core.Name "string"),
-                                                                          Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                                                                        Core.CaseAlternative {
+                                                                          Core.caseAlternativeName = (Core.Name "string"),
+                                                                          Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                                                                             Core.lambdaParameter = (Core.Name "s"),
                                                                             Core.lambdaDomain = Nothing,
                                                                             Core.lambdaBody = (Core.TermEither (Right (Core.TermVariable (Core.Name "s"))))}))}]})),
@@ -992,7 +992,7 @@ module_ =
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.decode.typing.termSignature"),
           Packaging.termDefinitionMetadata = Nothing,
-          Packaging.termDefinitionTerm = (Core.TermAnnotated (Core.AnnotatedTerm {
+          Packaging.termDefinitionBody = (Core.TermAnnotated (Core.AnnotatedTerm {
             Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
               Core.lambdaParameter = (Core.Name "cx"),
               Core.lambdaDomain = Nothing,
@@ -1017,9 +1017,9 @@ module_ =
                             Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
                             Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected record"))}))))),
                           Core.caseStatementCases = [
-                            Core.Field {
-                              Core.fieldName = (Core.Name "record"),
-                              Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                            Core.CaseAlternative {
+                              Core.caseAlternativeName = (Core.Name "record"),
+                              Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                                 Core.lambdaParameter = (Core.Name "record"),
                                 Core.lambdaDomain = Nothing,
                                 Core.lambdaBody = (Core.TermLet (Core.Let {
@@ -1120,7 +1120,7 @@ module_ =
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.decode.typing.termSubst"),
           Packaging.termDefinitionMetadata = Nothing,
-          Packaging.termDefinitionTerm = (Core.TermAnnotated (Core.AnnotatedTerm {
+          Packaging.termDefinitionBody = (Core.TermAnnotated (Core.AnnotatedTerm {
             Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
               Core.lambdaParameter = (Core.Name "cx"),
               Core.lambdaDomain = Nothing,
@@ -1145,9 +1145,9 @@ module_ =
                             Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
                             Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected wrapped type"))}))))),
                           Core.caseStatementCases = [
-                            Core.Field {
-                              Core.fieldName = (Core.Name "wrap"),
-                              Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                            Core.CaseAlternative {
+                              Core.caseAlternativeName = (Core.Name "wrap"),
+                              Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                                 Core.lambdaParameter = (Core.Name "wrappedTerm"),
                                 Core.lambdaDomain = Nothing,
                                 Core.lambdaBody = (Core.TermApplication (Core.Application {
@@ -1201,7 +1201,7 @@ module_ =
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.decode.typing.typeClass"),
           Packaging.termDefinitionMetadata = Nothing,
-          Packaging.termDefinitionTerm = (Core.TermAnnotated (Core.AnnotatedTerm {
+          Packaging.termDefinitionBody = (Core.TermAnnotated (Core.AnnotatedTerm {
             Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
               Core.lambdaParameter = (Core.Name "cx"),
               Core.lambdaDomain = Nothing,
@@ -1226,9 +1226,9 @@ module_ =
                             Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
                             Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected record"))}))))),
                           Core.caseStatementCases = [
-                            Core.Field {
-                              Core.fieldName = (Core.Name "record"),
-                              Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                            Core.CaseAlternative {
+                              Core.caseAlternativeName = (Core.Name "record"),
+                              Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                                 Core.lambdaParameter = (Core.Name "record"),
                                 Core.lambdaDomain = Nothing,
                                 Core.lambdaBody = (Core.TermLet (Core.Let {
@@ -1272,9 +1272,9 @@ module_ =
                                                             Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
                                                             Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected literal"))}))))),
                                                           Core.caseStatementCases = [
-                                                            Core.Field {
-                                                              Core.fieldName = (Core.Name "literal"),
-                                                              Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                                                            Core.CaseAlternative {
+                                                              Core.caseAlternativeName = (Core.Name "literal"),
+                                                              Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                                                                 Core.lambdaParameter = (Core.Name "v"),
                                                                 Core.lambdaDomain = Nothing,
                                                                 Core.lambdaBody = (Core.TermApplication (Core.Application {
@@ -1284,9 +1284,9 @@ module_ =
                                                                       Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
                                                                       Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected string literal"))}))))),
                                                                     Core.caseStatementCases = [
-                                                                      Core.Field {
-                                                                        Core.fieldName = (Core.Name "string"),
-                                                                        Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                                                                      Core.CaseAlternative {
+                                                                        Core.caseAlternativeName = (Core.Name "string"),
+                                                                        Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                                                                           Core.lambdaParameter = (Core.Name "s"),
                                                                           Core.lambdaDomain = Nothing,
                                                                           Core.lambdaBody = (Core.TermEither (Right (Core.TermVariable (Core.Name "s"))))}))}]})),
@@ -1337,7 +1337,7 @@ module_ =
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.decode.typing.typeConstraint"),
           Packaging.termDefinitionMetadata = Nothing,
-          Packaging.termDefinitionTerm = (Core.TermAnnotated (Core.AnnotatedTerm {
+          Packaging.termDefinitionBody = (Core.TermAnnotated (Core.AnnotatedTerm {
             Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
               Core.lambdaParameter = (Core.Name "cx"),
               Core.lambdaDomain = Nothing,
@@ -1362,9 +1362,9 @@ module_ =
                             Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
                             Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected record"))}))))),
                           Core.caseStatementCases = [
-                            Core.Field {
-                              Core.fieldName = (Core.Name "record"),
-                              Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                            Core.CaseAlternative {
+                              Core.caseAlternativeName = (Core.Name "record"),
+                              Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                                 Core.lambdaParameter = (Core.Name "record"),
                                 Core.lambdaDomain = Nothing,
                                 Core.lambdaBody = (Core.TermLet (Core.Let {
@@ -1438,9 +1438,9 @@ module_ =
                                                                     Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
                                                                     Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected literal"))}))))),
                                                                   Core.caseStatementCases = [
-                                                                    Core.Field {
-                                                                      Core.fieldName = (Core.Name "literal"),
-                                                                      Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                                                                    Core.CaseAlternative {
+                                                                      Core.caseAlternativeName = (Core.Name "literal"),
+                                                                      Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                                                                         Core.lambdaParameter = (Core.Name "v"),
                                                                         Core.lambdaDomain = Nothing,
                                                                         Core.lambdaBody = (Core.TermApplication (Core.Application {
@@ -1450,9 +1450,9 @@ module_ =
                                                                               Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
                                                                               Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected string literal"))}))))),
                                                                             Core.caseStatementCases = [
-                                                                              Core.Field {
-                                                                                Core.fieldName = (Core.Name "string"),
-                                                                                Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                                                                              Core.CaseAlternative {
+                                                                                Core.caseAlternativeName = (Core.Name "string"),
+                                                                                Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                                                                                   Core.lambdaParameter = (Core.Name "s"),
                                                                                   Core.lambdaDomain = Nothing,
                                                                                   Core.lambdaBody = (Core.TermEither (Right (Core.TermVariable (Core.Name "s"))))}))}]})),
@@ -1509,7 +1509,7 @@ module_ =
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.decode.typing.typeParameter"),
           Packaging.termDefinitionMetadata = Nothing,
-          Packaging.termDefinitionTerm = (Core.TermAnnotated (Core.AnnotatedTerm {
+          Packaging.termDefinitionBody = (Core.TermAnnotated (Core.AnnotatedTerm {
             Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
               Core.lambdaParameter = (Core.Name "cx"),
               Core.lambdaDomain = Nothing,
@@ -1534,9 +1534,9 @@ module_ =
                             Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
                             Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected record"))}))))),
                           Core.caseStatementCases = [
-                            Core.Field {
-                              Core.fieldName = (Core.Name "record"),
-                              Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                            Core.CaseAlternative {
+                              Core.caseAlternativeName = (Core.Name "record"),
+                              Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                                 Core.lambdaParameter = (Core.Name "record"),
                                 Core.lambdaDomain = Nothing,
                                 Core.lambdaBody = (Core.TermLet (Core.Let {
@@ -1617,7 +1617,7 @@ module_ =
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.decode.typing.typeSubst"),
           Packaging.termDefinitionMetadata = Nothing,
-          Packaging.termDefinitionTerm = (Core.TermAnnotated (Core.AnnotatedTerm {
+          Packaging.termDefinitionBody = (Core.TermAnnotated (Core.AnnotatedTerm {
             Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
               Core.lambdaParameter = (Core.Name "cx"),
               Core.lambdaDomain = Nothing,
@@ -1642,9 +1642,9 @@ module_ =
                             Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
                             Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected wrapped type"))}))))),
                           Core.caseStatementCases = [
-                            Core.Field {
-                              Core.fieldName = (Core.Name "wrap"),
-                              Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                            Core.CaseAlternative {
+                              Core.caseAlternativeName = (Core.Name "wrap"),
+                              Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                                 Core.lambdaParameter = (Core.Name "wrappedTerm"),
                                 Core.lambdaDomain = Nothing,
                                 Core.lambdaBody = (Core.TermApplication (Core.Application {

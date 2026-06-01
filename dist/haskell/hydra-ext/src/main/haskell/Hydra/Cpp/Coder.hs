@@ -32,7 +32,7 @@ import qualified Data.Scientific as Sci
 import qualified Data.Map as M
 bindingNameToFilePath :: Core.Name -> String
 bindingNameToFilePath name =
-    Names.nameToFilePath Util.CaseConventionLowerSnake Util.CaseConventionLowerSnake (Packaging.FileExtension "h") name
+    Names.nameToFilePath Util.CaseConventionLowerSnake Util.CaseConventionLowerSnake (Util.FileExtension "h") name
 className :: Core.Name -> String
 className name = sanitizeCppName (Names.localNameOf name)
 constParameter :: String -> Syntax.TypeExpression -> Syntax.Parameter
@@ -490,12 +490,12 @@ findIncludes withFwd ns defs =
           Syntax.includeDirectiveIsSystem = False}] [])]
 findTypeDependencies :: Packaging.ModuleName -> [Packaging.TypeDefinition] -> [Core.Name]
 findTypeDependencies ns defs =
-    Lists.filter (\n -> Logic.not (Equality.equal (Maybes.map Packaging.unModuleName (Names.moduleNameOf n)) (Just (Packaging.unModuleName ns)))) (Sets.toList (Lists.foldl (\acc -> \d -> Sets.union acc (Dependencies.typeDependencyNames True (Core.typeSchemeBody (Packaging.typeDefinitionTypeScheme d)))) Sets.empty defs))
+    Lists.filter (\n -> Logic.not (Equality.equal (Maybes.map Packaging.unModuleName (Names.moduleNameOf n)) (Just (Packaging.unModuleName ns)))) (Sets.toList (Lists.foldl (\acc -> \d -> Sets.union acc (Dependencies.typeDependencyNames True (Core.typeSchemeBody (Packaging.typeDefinitionBody d)))) Sets.empty defs))
 fwdHeaderName :: Packaging.ModuleName -> Core.Name
 fwdHeaderName ns =
-    Names.unqualifyName (Packaging.QualifiedName {
-      Packaging.qualifiedNameModuleName = (Just ns),
-      Packaging.qualifiedNameLocal = "Fwd"})
+    Names.unqualifyName (Util.QualifiedName {
+      Util.qualifiedNameModuleName = (Just ns),
+      Util.qualifiedNameLocal = "Fwd"})
 gatherMetadata :: t0 -> Bool
 gatherMetadata defs = True
 generateForwardDeclarations :: Core.Name -> [Core.FieldType] -> [Syntax.Declaration]
@@ -505,7 +505,7 @@ generateTypeFile :: Packaging.ModuleName -> Packaging.TypeDefinition -> t0 -> t1
 generateTypeFile ns def_ cx g =
 
       let name = Packaging.typeDefinitionName def_
-          typ = Core.typeSchemeBody (Packaging.typeDefinitionTypeScheme def_)
+          typ = Core.typeSchemeBody (Packaging.typeDefinitionBody def_)
       in (Eithers.bind (encodeTypeDefinition cx g name typ) (\decls ->
         let includes = findIncludes True ns [
               def_]
