@@ -224,6 +224,6 @@ unqualifyName = define "unqualifyName" $
   lambda "qname" $ lets [
     "prefix">: Maybes.maybe
       (string "")
-      (lambda "n" $ (unwrap _ModuleName @@ var "n") ++ string ".")
-      (project _QualifiedName _QualifiedName_moduleName @@ var "qname")]
-    $ wrap _Name $ var "prefix" ++ (project _QualifiedName _QualifiedName_local @@ var "qname")
+      (lambda "n" $ (Packaging.unModuleName $ var "n") ++ string ".")
+      (Packaging.qualifiedNameModuleName $ var "qname")]
+    $ wrap _Name $ var "prefix" ++ (Packaging.qualifiedNameLocal $ var "qname")
