@@ -3442,5 +3442,5 @@
     {"module": "hydra.encode.core"},
     {"module": "hydra.encode.variants"},
     {"module": "hydra.error.core"}],
-  "description": "Term encoders for hydra.error.core",
+  "metadata": {"comments": [], "description": "Term encoders for hydra.error.core", "seeAlso": []},
   "name": "hydra.encode.error.core"}

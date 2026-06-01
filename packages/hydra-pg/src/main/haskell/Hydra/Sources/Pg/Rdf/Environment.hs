@@ -30,7 +30,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = (DefinitionType <$> definitions),
             moduleDependencies = unqualifiedDep <$> [RdfSyntax.ns, PgModel.ns, Core.ns],
-            moduleDescription = Just "Environment types for property graph to RDF mapping"}
+            moduleMetadata = descriptionMetadata (Just "Environment types for property graph to RDF mapping")}
   where
     definitions = [
       pgRdfEnvironment]

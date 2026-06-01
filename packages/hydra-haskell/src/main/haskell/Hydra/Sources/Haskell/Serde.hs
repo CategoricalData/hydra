@@ -94,11 +94,11 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> ([Constants.ns, Serialization.ns, HaskellOperators.ns] L.++ (HaskellSyntax.ns:KernelTypes.kernelTypesModuleNames)),
-            moduleDescription = Just ("Haskell operator precendence and associativity are drawn from:\n"
+            moduleMetadata = Bootstrap.descriptionMetadata (Just ("Haskell operator precendence and associativity are drawn from:\n"
       <> "https://self-learning-java-tutorial.blogspot.com/2016/04/haskell-operator-precedence.html\n"
       <> "Other operators were investigated using GHCi, e.g. \":info (->)\"\n"
       <> "Operator names are drawn (loosely) from:\n"
-      <> "https://stackoverflow.com/questions/7746894/are-there-pronounceable-names-for-common-haskell-operators")}
+      <> "https://stackoverflow.com/questions/7746894/are-there-pronounceable-names-for-common-haskell-operators"))}
   where
     definitions = [
       toDefinition alternativeToExpr,

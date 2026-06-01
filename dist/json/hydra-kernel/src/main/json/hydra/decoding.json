@@ -7321,19 +7321,33 @@
                                                                                 "application": {"argument": {"variable": "mod"}, "function": {"project": {"fieldName": "name", "typeName": "hydra.packaging.Module"}}}},
                                                                               "function": {"variable": "hydra.decoding.decodeModuleName"}}}},
                                                                         {
-                                                                          "name": "description",
+                                                                          "name": "metadata",
                                                                           "term": {
                                                                             "maybe": {
-                                                                              "application": {
-                                                                                "argument": {
-                                                                                  "list": [
-                                                                                    {"literal": {"string": "Term decoders for "}},
-                                                                                    {
-                                                                                      "application": {
-                                                                                        "argument": {
-                                                                                          "application": {"argument": {"variable": "mod"}, "function": {"project": {"fieldName": "name", "typeName": "hydra.packaging.Module"}}}},
-                                                                                        "function": {"unwrap": "hydra.packaging.ModuleName"}}}]},
-                                                                                "function": {"variable": "hydra.lib.strings.cat"}}}}},
+                                                                              "record": {
+                                                                                "fields": [
+                                                                                  {
+                                                                                    "name": "description",
+                                                                                    "term": {
+                                                                                      "maybe": {
+                                                                                        "application": {
+                                                                                          "argument": {
+                                                                                            "list": [
+                                                                                              {"literal": {"string": "Term decoders for "}},
+                                                                                              {
+                                                                                                "application": {
+                                                                                                  "argument": {
+                                                                                                    "application": {"argument": {"variable": "mod"}, "function": {"project": {"fieldName": "name", "typeName": "hydra.packaging.Module"}}}},
+                                                                                                  "function": {"unwrap": "hydra.packaging.ModuleName"}}}]},
+                                                                                          "function": {"variable": "hydra.lib.strings.cat"}}}}},
+                                                                                  {"name": "comments", "term": {"typeApplication": {"body": {"list": []}, "type": {"literal": {"string": {}}}}}},
+                                                                                  {
+                                                                                    "name": "seeAlso",
+                                                                                    "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.EntityReference"}}}},
+                                                                                  {
+                                                                                    "name": "lifecycle",
+                                                                                    "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.packaging.EntityLifecycle"}}}}],
+                                                                                "typeName": "hydra.packaging.EntityMetadata"}}}},
                                                                         {
                                                                           "name": "dependencies",
                                                                           "term": {
@@ -7391,6 +7405,9 @@
                                                                                                     "name": "name",
                                                                                                     "term": {
                                                                                                       "application": {"argument": {"variable": "b"}, "function": {"project": {"fieldName": "name", "typeName": "hydra.core.Binding"}}}}},
+                                                                                                  {
+                                                                                                    "name": "metadata",
+                                                                                                    "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.packaging.EntityMetadata"}}}},
                                                                                                   {
                                                                                                     "name": "term",
                                                                                                     "term": {
@@ -11724,5 +11741,5 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "description": "Functions for generating term decoders from type modules",
+  "metadata": {"comments": [], "description": "Functions for generating term decoders from type modules", "seeAlso": []},
   "name": "hydra.decoding"}

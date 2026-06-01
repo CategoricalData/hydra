@@ -4329,5 +4329,5 @@
                 "domain": {"variable": "hydra.core.WrappedTerm"},
                 "parameter": "x"}}}}}}],
   "dependencies": [{"module": "hydra.encode.core"}, {"module": "hydra.core"}],
-  "description": "Term encoders for hydra.core",
+  "metadata": {"comments": [], "description": "Term encoders for hydra.core", "seeAlso": []},
   "name": "hydra.encode.core"}

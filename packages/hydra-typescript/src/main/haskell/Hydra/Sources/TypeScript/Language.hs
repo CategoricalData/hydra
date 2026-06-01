@@ -89,7 +89,7 @@ module_ = Module {
             moduleName = (ModuleName "hydra.typeScript.language"),
             moduleDefinitions = [toDefinition typeScriptLanguage, toDefinition typeScriptReservedWords],
             moduleDependencies = Bootstrap.unqualifiedDep <$> ([Lexical.ns] L.++ KernelTypes.kernelTypesModuleNames),
-            moduleDescription = Just "Language constraints and reserved words for TypeScript 5.x (ECMAScript 2024 base)"}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just "Language constraints and reserved words for TypeScript 5.x (ECMAScript 2024 base)")}
 typeScriptLanguage :: TypedTermDefinition Language
 typeScriptLanguage = define "typeScriptLanguage" $
     doc "Language constraints for TypeScript 5.x" $ lets [

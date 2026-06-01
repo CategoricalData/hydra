@@ -1361,5 +1361,5 @@
     {"module": "hydra.relational"},
     {"module": "hydra.dsl.core"},
     {"module": "hydra.dsl.relational"}],
-  "description": "DSL functions for hydra.tabular",
+  "metadata": {"comments": [], "description": "DSL functions for hydra.tabular", "seeAlso": []},
   "name": "hydra.dsl.tabular"}

@@ -2,7 +2,7 @@ module Hydra.Sources.Test.TestTerms where
 
 -- Standard imports for kernel test fixtures
 import Hydra.Kernel
-import           Hydra.Dsl.Bootstrap (unqualifiedDep)
+import           Hydra.Dsl.Bootstrap (unqualifiedDep, descriptionMetadata)
 import Hydra.Dsl.Meta.Testing                 as Testing
 import Hydra.Dsl.Meta.Terms                   as Terms
 import Hydra.Sources.Kernel.Types.All
@@ -28,7 +28,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = unqualifiedDep <$> [TestTypes.ns, ModuleName "hydra.core"],
-            moduleDescription = (Just "Term definitions for the test suite")}
+            moduleMetadata = descriptionMetadata ((Just "Term definitions for the test suite"))}
   where
     definitions = [
       Phantoms.toDefinition latlonRecord,

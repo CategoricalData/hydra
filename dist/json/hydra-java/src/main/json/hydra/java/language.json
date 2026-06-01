@@ -370,5 +370,5 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "description": "Language constraints and reserved words for Java",
+  "metadata": {"comments": [], "description": "Language constraints and reserved words for Java", "seeAlso": []},
   "name": "hydra.java.language"}

@@ -191,5 +191,5 @@
     {"module": "hydra.testing"},
     {"module": "hydra.util"},
     {"module": "hydra.decode.core"}],
-  "description": "Term decoders for hydra.testing",
+  "metadata": {"comments": [], "description": "Term decoders for hydra.testing", "seeAlso": []},
   "name": "hydra.decode.testing"}

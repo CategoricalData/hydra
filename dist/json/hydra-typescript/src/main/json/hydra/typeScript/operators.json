@@ -536,5 +536,5 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "description": "AST operators for TypeScript with precedence and associativity",
+  "metadata": {"comments": [], "description": "AST operators for TypeScript with precedence and associativity", "seeAlso": []},
   "name": "hydra.typeScript.operators"}

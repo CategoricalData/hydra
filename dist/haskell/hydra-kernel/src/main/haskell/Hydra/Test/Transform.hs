@@ -97,7 +97,7 @@ transformModule :: Packaging.Module -> Packaging.Module
 transformModule m =
     Packaging.Module {
       Packaging.moduleName = (addGenerationPrefix (Packaging.moduleName m)),
-      Packaging.moduleDescription = (Packaging.moduleDescription m),
+      Packaging.moduleMetadata = (Packaging.moduleMetadata m),
       Packaging.moduleDependencies = (Packaging.moduleDependencies m),
       Packaging.moduleDefinitions = (Packaging.moduleDefinitions m)}
 -- | Pass through test cases unchanged

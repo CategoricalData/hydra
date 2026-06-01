@@ -86,7 +86,7 @@ module_ = Module {
             moduleName = (ModuleName "hydra.java.language"),
             moduleDefinitions = [toDefinition javaMaxTupleLength, toDefinition javaLanguage, toDefinition reservedWords],
             moduleDependencies = Bootstrap.unqualifiedDep <$> ([Lexical.ns] L.++ KernelTypes.kernelTypesModuleNames),
-            moduleDescription = Just "Language constraints and reserved words for Java"}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just "Language constraints and reserved words for Java")}
 javaLanguage :: TypedTermDefinition Language
 javaLanguage = define "javaLanguage" $
   doc "Language constraints for Java" $ lets [

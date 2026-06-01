@@ -8,7 +8,7 @@
 module Hydra.Sources.Test.Generation where
 
 import Hydra.Kernel hiding (inferModules)
-import           Hydra.Dsl.Bootstrap (unqualifiedDep)
+import           Hydra.Dsl.Bootstrap (unqualifiedDep, descriptionMetadata)
 import Hydra.Dsl.Meta.Testing                 as Testing
 import qualified Hydra.Dsl.Meta.Terms         as Terms
 import Hydra.Sources.Kernel.Types.All
@@ -42,7 +42,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = unqualifiedDep <$> ([Generation.ns, ShowCore.ns, TestGraph.ns] ++ kernelTypesModuleNames),
-            moduleDescription = (Just "Test cases for code generation operations such as inferModules and inferModulesGiven")}
+            moduleMetadata = descriptionMetadata ((Just "Test cases for code generation operations such as inferModules and inferModulesGiven"))}
   where
     definitions = [Phantoms.toDefinition allTests]
 
@@ -103,7 +103,7 @@ nsB = Packaging.moduleName2 (Phantoms.string "hydra.testInput.b")
 -- universe.
 typedTermDef :: TypedTerm Name -> TypedTerm Term -> TypedTerm TypeScheme -> TypedTerm Definition
 typedTermDef nm tm ts = Packaging.definitionTerm
-  (Packaging.termDefinition nm tm (Phantoms.just (Scoping.typeSchemeToTermSignature @@ ts)))
+  (Packaging.termDefinition nm Phantoms.nothing tm (Phantoms.just (Scoping.typeSchemeToTermSignature @@ ts)))
 
 universeMods :: TypedTerm [Module]
 universeMods = Phantoms.list [modA, modB]
@@ -112,7 +112,7 @@ universeMods = Phantoms.list [modA, modB]
 -- assign a fresh scheme.
 untypedTermDef :: TypedTerm Name -> TypedTerm Term -> TypedTerm Definition
 untypedTermDef nm tm = Packaging.definitionTerm
-  (Packaging.termDefinition nm tm Phantoms.nothing)
+  (Packaging.termDefinition nm Phantoms.nothing tm Phantoms.nothing)
 
 ----------------------------------------
 -- Second toy universe: a "clean" module carrying a scheme with vacuous

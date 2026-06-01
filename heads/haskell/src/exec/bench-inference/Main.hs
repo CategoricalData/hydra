@@ -72,7 +72,7 @@ makeSyntheticModule benchMod n =
         moduleName = targetNs,
         moduleDefinitions = renamed,
         moduleDependencies = unqualifiedDep (moduleName benchMod) : moduleDependencies benchMod,
-        moduleDescription = moduleDescription benchMod
+        moduleMetadata = moduleMetadata benchMod
       }
   where
     targetNs = ModuleName "z.bench.scaling"

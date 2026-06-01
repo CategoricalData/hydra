@@ -96,7 +96,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> ([Names.ns, Formatting.ns, cppLanguageNs, CppUtils.ns] L.++ (CppEnvironment.ns:CppSyntax.ns:KernelTypes.kernelTypesModuleNames)),
-            moduleDescription = Just "C++ naming utilities: encoding Hydra names as C++ names"}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just "C++ naming utilities: encoding Hydra names as C++ names")}
   where
     definitions = [
       toDefinition className,

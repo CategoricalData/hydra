@@ -3877,5 +3877,5 @@
     {"module": "hydra.validation"},
     {"module": "hydra.variants"},
     {"module": "hydra.yaml.model"}],
-  "description": "YAML encoding and decoding for Hydra terms",
+  "metadata": {"comments": [], "description": "YAML encoding and decoding for Hydra terms", "seeAlso": []},
   "name": "hydra.yaml.coder"}

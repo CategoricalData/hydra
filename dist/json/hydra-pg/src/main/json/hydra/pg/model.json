@@ -538,5 +538,8 @@
                   "parameter": "v"}}}},
           "variables": []}}}],
   "dependencies": [{"module": "hydra.core"}],
-  "description": "A typed property graph data model. Property graphs are parameterized a type for property and id values, while property graph schemas are parameterized by a type for property and id types",
+  "metadata": {
+    "comments": [],
+    "description": "A typed property graph data model. Property graphs are parameterized a type for property and id values, while property graph schemas are parameterized by a type for property and id types",
+    "seeAlso": []},
   "name": "hydra.pg.model"}

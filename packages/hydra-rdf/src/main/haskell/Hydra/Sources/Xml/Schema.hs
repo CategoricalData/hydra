@@ -24,11 +24,11 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = (DefinitionType <$> definitions),
             moduleDependencies = unqualifiedDep <$> [Core.ns],
-            moduleDescription = Just ("A partial XML Schema model, focusing on datatypes. All simple datatypes (i.e. xsd:anySimpleType and below) are included.\n" ++
+            moduleMetadata = descriptionMetadata (Just ("A partial XML Schema model, focusing on datatypes. All simple datatypes (i.e. xsd:anySimpleType and below) are included.\n" ++
       "See: https://www.w3.org/TR/xmlschema-2\n" ++
       "Note: for most of the XML Schema datatype definitions included here, the associated Hydra type is simply\n" ++
       "      the string type. Exceptions are made for xsd:boolean and most of the numeric types, where there is a clearly\n" ++
-      "      corresponding Hydra literal type.")}
+      "      corresponding Hydra literal type."))}
   where
     definitions = datatypes ++ others
     datatypes = [

@@ -6661,8 +6661,25 @@
                                                       "application": {
                                                         "argument": {
                                                           "application": {
-                                                            "argument": {"variable": "mod_"},
-                                                            "function": {"project": {"fieldName": "description", "typeName": "hydra.packaging.Module"}}}},
+                                                            "argument": {
+                                                              "lambda": {
+                                                                "body": {
+                                                                  "application": {
+                                                                    "argument": {"variable": "em"},
+                                                                    "function": {"project": {"fieldName": "description", "typeName": "hydra.packaging.EntityMetadata"}}}},
+                                                                "domain": {"variable": "hydra.packaging.EntityMetadata"},
+                                                                "parameter": "em"}},
+                                                            "function": {
+                                                              "application": {
+                                                                "argument": {
+                                                                  "application": {
+                                                                    "argument": {"variable": "mod_"},
+                                                                    "function": {"project": {"fieldName": "metadata", "typeName": "hydra.packaging.Module"}}}},
+                                                                "function": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "typeApplication": {"body": {"variable": "hydra.lib.maybes.bind"}, "type": {"variable": "hydra.packaging.EntityMetadata"}}},
+                                                                    "type": {"literal": {"string": {}}}}}}}}},
                                                         "function": {
                                                           "application": {
                                                             "argument": {
@@ -7348,5 +7365,8 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "description": "Coq code generation driver — pre-passes, sentence producers, and per-module pipeline",
+  "metadata": {
+    "comments": [],
+    "description": "Coq code generation driver — pre-passes, sentence producers, and per-module pipeline",
+    "seeAlso": []},
   "name": "hydra.coq.generate"}

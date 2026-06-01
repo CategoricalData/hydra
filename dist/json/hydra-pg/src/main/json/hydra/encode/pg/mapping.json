@@ -799,5 +799,5 @@
     {"module": "hydra.encode.coders"},
     {"module": "hydra.encode.core"},
     {"module": "hydra.pg.mapping"}],
-  "description": "Term encoders for hydra.pg.mapping",
+  "metadata": {"comments": [], "description": "Term encoders for hydra.pg.mapping", "seeAlso": []},
   "name": "hydra.encode.pg.mapping"}

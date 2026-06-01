@@ -16,7 +16,7 @@
 module Hydra.Sources.Bench.PolymorphicChain where
 
 import Hydra.Kernel
-import           Hydra.Dsl.Bootstrap (unqualifiedDep)
+import           Hydra.Dsl.Bootstrap (unqualifiedDep, descriptionMetadata)
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Meta.Lib.Maybes   as Maybes
 import           Hydra.Dsl.Meta.Phantoms     as Phantoms
@@ -36,7 +36,7 @@ module_ = Module {
   moduleName = ns,
   moduleDefinitions = definitions,
   moduleDependencies = unqualifiedDep <$> (kernelTypesModuleNames),
-  moduleDescription = Just "Polymorphic-chain inference benchmark. polyWalker_K :: Maybe a -> Maybe a; chains via Maybes.bind, instantiating forall a at each cross-def call site."
+  moduleMetadata = descriptionMetadata (Just "Polymorphic-chain inference benchmark. polyWalker_K :: Maybe a -> Maybe a; chains via Maybes.bind, instantiating forall a at each cross-def call site.")
   }
   where
     definitions = [toDefinition (mkPolyWalker k) | k <- [0 .. numPolyWalkers - 1]]

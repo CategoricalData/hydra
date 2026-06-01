@@ -430,5 +430,5 @@
               "body": {"wrap": {"literal": {"string": {}}}}}},
           "variables": []}}}],
   "dependencies": [{"module": "hydra.core"}],
-  "description": "A model for language-agnostic graph pattern queries",
+  "metadata": {"comments": [], "description": "A model for language-agnostic graph pattern queries", "seeAlso": []},
   "name": "hydra.query"}

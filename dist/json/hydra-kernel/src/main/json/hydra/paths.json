@@ -440,5 +440,5 @@
                         "body": {"unit": {}}}}}]}}},
           "variables": []}}}],
   "dependencies": [{"module": "hydra.core"}],
-  "description": "A model for subterm and subtype access patterns",
+  "metadata": {"comments": [], "description": "A model for subterm and subtype access patterns", "seeAlso": []},
   "name": "hydra.paths"}
