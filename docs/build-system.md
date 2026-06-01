@@ -98,10 +98,26 @@ strictly in order, but any phase can short-circuit independently.
 |-------|--------|--------|
 | 0. Stack build | `stack build` of every Haskell exec | Bootstraps `update-json-main`, `update-json-test`, `update-json-manifest`, `update-json-kernel`, `verify-json-kernel`, `bootstrap-from-json`, `digest-check` |
 | 1. DSL → JSON + Haskell kernel | `heads/haskell/bin/sync-haskell.sh` | `dist/json/**` and `dist/haskell/{hydra-kernel,hydra-haskell}/` |
+| 1.5. Java/Python coder-JSON auto-heal | `bin/lib/check-java-python-json-fresh.py` | On a staleness miss, re-exports `dist/json/hydra-{java,python}/` via `update-json-main --include-java-python` before Phase 2 reads it |
 | 2. Coder Haskell dists | per-language assemblers | `dist/haskell/hydra-<lang>/` for every L in (hosts ∪ targets) |
 | 3. Kernel/pg/rdf into each target | per-target assemblers | `dist/<lang>/{hydra-kernel,hydra-pg,hydra-rdf}/` |
 | 4. Cross-host coders | per-host assemblers | `dist/<host>/hydra-<target>/` for every (host, target) with host ≠ haskell |
 | 5. Native DSL → JSON for hydra-java and hydra-python | `bin/generate-hydra-<lang>-from-<lang>.sh` | Overwrites `dist/json/hydra-{java,python}/` from host-native sources |
+
+Phase 1.5 closes a warm/cold asymmetry from #344 that
+[#406](https://github.com/CategoricalData/hydra/issues/406) made deterministic. Phase 1
+re-exports the `hydra.java.*` / `hydra.python.*` coder JSON only on cold-start (when the
+sentinel JSON is missing); on a warm tree it skips them, since Phase 5 owns those paths.
+But `dist/json/hydra-{java,python}/coder.json` feeds Phase 2's
+`dist/haskell/hydra-{java,python}/Coder.hs`, which compiles into the core `hydra` library.
+A kernel rename that ripples into the coders therefore leaves that JSON stale against the
+freshly regenerated kernel, and Phase 2 emits a `Coder.hs` referencing a renamed-away field
+— breaking the next `stack build`, before Phase 5 (which would refresh the JSON) ever runs.
+Reordering Phase 5 ahead of Phase 2 cannot fix this today: the native generator needs the
+host built (Phase 4 output), which needs this very library. So Phase 1.5 heals in place —
+it keys on the just-regenerated kernel JSON (the rename signal, which survives the eventual
+deletion of the legacy Haskell coder DSL) and, on a miss, re-exports the coder JSON via
+`update-json-main --include-java-python` so Phase 2 reads fresh input.
 
 Phase 5 is the migration path for [#344](https://github.com/CategoricalData/hydra/issues/344):
 `hydra-java` and `hydra-python` are now authored in their own host languages, with the
