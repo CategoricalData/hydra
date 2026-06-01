@@ -581,7 +581,7 @@ library namespace prefix primitives =
       Core.recordTypeName = (Core.Name "hydra.graph.Library"),
       Core.recordFields = [
         Core.Field {
-          Core.fieldName = (Core.Name "namespace"),
+          Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Typed.unTypedTerm namespace)},
         Core.Field {
           Core.fieldName = (Core.Name "prefix"),
@@ -590,12 +590,12 @@ library namespace prefix primitives =
           Core.fieldName = (Core.Name "primitives"),
           Core.fieldTerm = (Typed.unTypedTerm primitives)}]}))
 -- | DSL accessor for the namespace field of hydra.graph.Library
-libraryNamespace :: Typed.TypedTerm Graph.Library -> Typed.TypedTerm Packaging.ModuleName
-libraryNamespace x =
+libraryName :: Typed.TypedTerm Graph.Library -> Typed.TypedTerm Packaging.ModuleName
+libraryName x =
     Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.graph.Library"),
-        Core.projectionFieldName = (Core.Name "namespace")})),
+        Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL accessor for the prefix field of hydra.graph.Library
 libraryPrefix :: Typed.TypedTerm Graph.Library -> Typed.TypedTerm String
@@ -620,7 +620,7 @@ libraryWithNamespace original newVal =
       Core.recordTypeName = (Core.Name "hydra.graph.Library"),
       Core.recordFields = [
         Core.Field {
-          Core.fieldName = (Core.Name "namespace"),
+          Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "prefix"),
@@ -643,11 +643,11 @@ libraryWithPrefix original newVal =
       Core.recordTypeName = (Core.Name "hydra.graph.Library"),
       Core.recordFields = [
         Core.Field {
-          Core.fieldName = (Core.Name "namespace"),
+          Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.graph.Library"),
-              Core.projectionFieldName = (Core.Name "namespace")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "prefix"),
@@ -666,11 +666,11 @@ libraryWithPrimitives original newVal =
       Core.recordTypeName = (Core.Name "hydra.graph.Library"),
       Core.recordFields = [
         Core.Field {
-          Core.fieldName = (Core.Name "namespace"),
+          Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.graph.Library"),
-              Core.projectionFieldName = (Core.Name "namespace")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "prefix"),

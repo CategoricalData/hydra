@@ -42,13 +42,13 @@ _Graph_typeVariables = Core.Name "typeVariables"
 data Library =
   Library {
     -- | A common prefix for all primitive function names in the library
-    libraryNamespace :: Packaging.ModuleName,
+    libraryName :: Packaging.ModuleName,
     -- | A preferred namespace prefix for function names in the library
     libraryPrefix :: String,
     -- | The primitives defined in this library
     libraryPrimitives :: [Primitive]}
 _Library = Core.Name "hydra.graph.Library"
-_Library_namespace = Core.Name "namespace"
+_Library_name = Core.Name "name"
 _Library_prefix = Core.Name "prefix"
 _Library_primitives = Core.Name "primitives"
 -- | A built-in function or constant, consisting of the host-independent PrimitiveDefinition (name, signature, metadata) plus a host-specific implementation.
