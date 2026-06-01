@@ -206,7 +206,7 @@ inferGraphTypes fcx0 bindings0 g0 =
 inferInGraphContext :: Typing.InferenceContext -> Graph.Graph -> Core.Term -> Either Errors.Error Typing.InferenceResult
 inferInGraphContext fcx cx term = inferTypeOfTerm fcx cx term "single term"
 -- | Infer types for multiple terms, propagating class constraints from sub-expressions
-inferMany :: Typing.InferenceContext -> Graph.Graph -> [(Core.Term, String)] -> Either Errors.Error (([Core.Term], ([Core.Type], (Typing.TypeSubst, (M.Map Core.Name Core.TypeVariableMetadata)))), Typing.InferenceContext)
+inferMany :: Typing.InferenceContext -> Graph.Graph -> [(Core.Term, String)] -> Either Errors.Error (([Core.Term], ([Core.Type], (Typing.TypeSubst, (M.Map Core.Name Core.TypeVariableConstraints)))), Typing.InferenceContext)
 inferMany fcx cx pairs =
 
       let emptyResult = Right (([], ([], (Substitution.idTypeSubst, Maps.empty))), fcx)
@@ -337,7 +337,7 @@ inferTypeOfCaseStatement fcx cx caseStmt =
       let tname = Core.caseStatementTypeName caseStmt
           dflt = Core.caseStatementDefault caseStmt
           cases = Core.caseStatementCases caseStmt
-          fnames = Lists.map Core.fieldName cases
+          fnames = Lists.map Core.caseAlternativeName cases
       in (Eithers.bind (Resolution.requireSchemaType fcx (Graph.graphSchemaTypes cx) tname) (\stRp ->
         let schemaType = Pairs.first stRp
             fcx2 = Pairs.second stRp
@@ -352,12 +352,12 @@ inferTypeOfCaseStatement fcx cx caseStmt =
             let dfltResult = dfltRp
                 fcx3 = Maybes.fromMaybe fcx2 (Maybes.map (\_r -> Names.restoreTrace fcx2 (Typing.inferenceResultContext _r)) dfltRp)
             in (Eithers.bind (inferMany fcx3 cx (Lists.map (\f -> (
-              Core.fieldTerm f,
+              Core.caseAlternativeHandler f,
               (Strings.cat [
                 "case ",
                 (Core.unName tname),
                 ".",
-                (Core.unName (Core.fieldName f))]))) cases)) (\caseRp ->
+                (Core.unName (Core.caseAlternativeName f))]))) cases)) (\caseRp ->
               let caseResults = Pairs.first caseRp
                   fcx4 = Pairs.second caseRp
                   iterms = Pairs.first caseResults
@@ -386,9 +386,9 @@ inferTypeOfCaseStatement fcx cx caseStmt =
               in (Eithers.bind (mapConstraints fcx5 cx (\subst -> yieldWithConstraints fcx5 (buildTypeApplicationTerm svars (Core.TermCases (Core.CaseStatement {
                 Core.caseStatementTypeName = tname,
                 Core.caseStatementDefault = (Maybes.map Typing.inferenceResultTerm dfltResult),
-                Core.caseStatementCases = (Lists.zipWith (\n -> \t -> Core.Field {
-                  Core.fieldName = n,
-                  Core.fieldTerm = t}) fnames iterms)}))) (Core.TypeFunction (Core.FunctionType {
+                Core.caseStatementCases = (Lists.zipWith (\n -> \t -> Core.CaseAlternative {
+                  Core.caseAlternativeName = n,
+                  Core.caseAlternativeHandler = t}) fnames iterms)}))) (Core.TypeFunction (Core.FunctionType {
                 Core.functionTypeDomain = (Resolution.nominalApplication tname (Lists.map (\x -> Core.TypeVariable x) svars)),
                 Core.functionTypeCodomain = cod})) (Substitution.composeTypeSubstList (Lists.concat [
                 Maybes.toList (Maybes.map Typing.inferenceResultSubst dfltResult),
@@ -405,8 +405,8 @@ inferTypeOfCollection fcx cx typCons trmCons desc classNames els =
           var = Pairs.first varResult
           fcx2 = Pairs.second varResult
           classConstraints =
-                  Logic.ifElse (Sets.null classNames) Maps.empty (Maps.singleton var (Core.TypeVariableMetadata {
-                    Core.typeVariableMetadataClasses = (Lists.map (\n -> Core.TypeClassConstraintSimple n) (Sets.toList classNames))}))
+                  Logic.ifElse (Sets.null classNames) Maps.empty (Maps.singleton var (Core.TypeVariableConstraints {
+                    Core.typeVariableConstraintsClasses = (Lists.map (\n -> Core.TypeClassConstraintSimple n) (Sets.toList classNames))}))
       in (Logic.ifElse (Lists.null els) (Right (yieldWithConstraints fcx2 (buildTypeApplicationTerm [
         var] (trmCons [])) (typCons (Core.TypeVariable var)) Substitution.idTypeSubst classConstraints)) (Eithers.bind (inferMany fcx2 cx (Lists.zip els (Lists.map (\i -> Strings.cat [
         "#",
@@ -722,8 +722,8 @@ inferTypeOfMap fcx cx m =
           vvar = Pairs.first vvarResult
           fcx3 = Pairs.second vvarResult
           keyConstraints =
-                  Maps.singleton kvar (Core.TypeVariableMetadata {
-                    Core.typeVariableMetadataClasses = [
+                  Maps.singleton kvar (Core.TypeVariableConstraints {
+                    Core.typeVariableConstraintsClasses = [
                       Core.TypeClassConstraintSimple (Core.Name "ordering")]})
       in (Logic.ifElse (Maps.null m) (Right (yieldWithConstraints fcx3 (buildTypeApplicationTerm [
         kvar,
@@ -972,7 +972,7 @@ inferTypeOfWrappedTerm fcx cx wt =
               Typing.typeConstraintRight = ityp,
               Typing.typeConstraintComment = "schema type of wrapper"}]) (\mcResult -> Right mcResult))))))
 -- | Infer types for temporary let bindings (Either version)
-inferTypesOfTemporaryBindings :: Typing.InferenceContext -> Graph.Graph -> [Core.Binding] -> Either Errors.Error (([Core.Term], ([Core.Type], (Typing.TypeSubst, (M.Map Core.Name Core.TypeVariableMetadata)))), Typing.InferenceContext)
+inferTypesOfTemporaryBindings :: Typing.InferenceContext -> Graph.Graph -> [Core.Binding] -> Either Errors.Error (([Core.Term], ([Core.Type], (Typing.TypeSubst, (M.Map Core.Name Core.TypeVariableConstraints)))), Typing.InferenceContext)
 inferTypesOfTemporaryBindings fcx cx bins =
 
       let emptyResult = Right (([], ([], (Substitution.idTypeSubst, Maps.empty))), fcx)
@@ -1025,15 +1025,15 @@ mapConstraints flowCx cx f constraints =
       Errors.unificationInferenceErrorPath = (Paths.SubtermPath (Lists.reverse (Typing.inferenceContextTrace flowCx))),
       Errors.unificationInferenceErrorCause = _e}))) (\_a -> _a) (Unification.unifyTypeConstraints flowCx (Graph.graphSchemaTypes cx) constraints)) (\s -> Eithers.bind (Checking.checkTypeSubst flowCx cx s) (\_ -> Right (f s)))
 -- | Merge two maps of class constraints. When both maps have constraints for the same variable, union the class sets.
-mergeClassConstraints :: Ord t0 => (M.Map t0 Core.TypeVariableMetadata -> M.Map t0 Core.TypeVariableMetadata -> M.Map t0 Core.TypeVariableMetadata)
+mergeClassConstraints :: Ord t0 => (M.Map t0 Core.TypeVariableConstraints -> M.Map t0 Core.TypeVariableConstraints -> M.Map t0 Core.TypeVariableConstraints)
 mergeClassConstraints m1 m2 =
     Lists.foldl (\acc -> \pair ->
       let k = Pairs.first pair
           v = Pairs.second pair
       in (Maybes.maybe (Maps.insert k v acc) (\existing ->
         let merged =
-                Core.TypeVariableMetadata {
-                  Core.typeVariableMetadataClasses = (Lists.nub (Lists.concat2 (Core.typeVariableMetadataClasses existing) (Core.typeVariableMetadataClasses v)))}
+                Core.TypeVariableConstraints {
+                  Core.typeVariableConstraintsClasses = (Lists.nub (Lists.concat2 (Core.typeVariableConstraintsClasses existing) (Core.typeVariableConstraintsClasses v)))}
         in (Maps.insert k merged acc)) (Maps.lookup k acc))) m1 (Maps.toList m2)
 -- | Show an inference result for debugging
 showInferenceResult :: Typing.InferenceResult -> String
@@ -1072,7 +1072,7 @@ yieldChecked fcx term typ subst =
         Typing.inferenceResultClassConstraints = Maps.empty,
         Typing.inferenceResultContext = fcx}
 -- | Create a checked inference result with class constraints
-yieldCheckedWithConstraints :: Typing.InferenceContext -> Core.Term -> Core.Type -> Typing.TypeSubst -> M.Map Core.Name Core.TypeVariableMetadata -> Typing.InferenceResult
+yieldCheckedWithConstraints :: Typing.InferenceContext -> Core.Term -> Core.Type -> Typing.TypeSubst -> M.Map Core.Name Core.TypeVariableConstraints -> Typing.InferenceResult
 yieldCheckedWithConstraints fcx term typ subst constraints =
 
       let iterm = Substitution.substTypesInTerm subst term
@@ -1085,7 +1085,7 @@ yieldCheckedWithConstraints fcx term typ subst constraints =
         Typing.inferenceResultClassConstraints = iconstraints,
         Typing.inferenceResultContext = fcx}
 -- | Create an inference result with class constraints
-yieldWithConstraints :: Typing.InferenceContext -> Core.Term -> Core.Type -> Typing.TypeSubst -> M.Map Core.Name Core.TypeVariableMetadata -> Typing.InferenceResult
+yieldWithConstraints :: Typing.InferenceContext -> Core.Term -> Core.Type -> Typing.TypeSubst -> M.Map Core.Name Core.TypeVariableConstraints -> Typing.InferenceResult
 yieldWithConstraints fcx term typ subst constraints =
     Typing.InferenceResult {
       Typing.inferenceResultTerm = (Substitution.substTypesInTerm subst term),
