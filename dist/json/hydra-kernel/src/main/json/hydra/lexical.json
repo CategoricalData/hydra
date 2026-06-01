@@ -2603,5 +2603,5 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "description": "A module for lexical operations over graphs.",
+  "metadata": {"comments": [], "description": "A module for lexical operations over graphs.", "seeAlso": []},
   "name": "hydra.lexical"}

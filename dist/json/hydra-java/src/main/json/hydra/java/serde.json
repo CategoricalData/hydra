@@ -8851,5 +8851,5 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "description": "Java serializer: converts Java AST to concrete syntax",
+  "metadata": {"comments": [], "description": "Java serializer: converts Java AST to concrete syntax", "seeAlso": []},
   "name": "hydra.java.serde"}

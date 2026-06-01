@@ -100,7 +100,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> ([ExtractCore.ns, Strip.ns] L.++ (avroEnvironmentNs:AvroSchema.ns:jsonModelNs:KernelTypes.kernelTypesModuleNames)),
-            moduleDescription = Just "Avro-to-Hydra adapter for converting Avro schemas and data to Hydra types and terms"}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just "Avro-to-Hydra adapter for converting Avro schemas and data to Hydra types and terms")}
   where
     definitions = [
       toDefinition annotateAdapter,

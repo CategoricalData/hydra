@@ -46,13 +46,16 @@ find =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeMaybe (Core.TypeLiteral Core.LiteralTypeString))}},
-      Packaging.primitiveDefinitionDescription = "Find the first regex match within a string, returning the matched substring if any.",
-      Packaging.primitiveDefinitionComments = (Just "find(pat, s) returns Just(t) where t is the leftmost substring of s matching pat, or Nothing if pat does not match anywhere in s. Regex syntax is host-defined; behavior tends to converge on the intersection of ECMA-262 and POSIX-ERE features (literal characters, character classes, alternation, anchors ^ and $, repetition with ?/*/+/{n,m}, grouping with parentheses), but extension features (lookaround, backreferences, Unicode property classes, named groups, engine-specific flags) vary widely. For portable code, restrict patterns to the common subset. Total in the sense that no error is raised at the kernel level; behavior on an ill-formed pattern is host-defined."),
-      Packaging.primitiveDefinitionSeeAlso = [],
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "Find the first regex match within a string, returning the matched substring if any."),
+        Packaging.entityMetadataComments = [
+          "find(pat, s) returns Just(t) where t is the leftmost substring of s matching pat, or Nothing if pat does not match anywhere in s.",
+          "Regex syntax is host-defined; behavior tends to converge on the intersection of ECMA-262 and POSIX-ERE features (literal characters, character classes, alternation, anchors ^ and $, repetition with ?/*/+/{n,m}, grouping with parentheses), but extension features (lookaround, backreferences, Unicode property classes, named groups, engine-specific flags) vary widely. For portable code, restrict patterns to the common subset.",
+          "Total in the sense that no error is raised at the kernel level; behavior on an ill-formed pattern is host-defined."],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
-      Packaging.primitiveDefinitionAvailableSince = Nothing,
-      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 findAll :: Packaging.PrimitiveDefinition
 findAll =
@@ -74,13 +77,16 @@ findAll =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeList (Core.TypeLiteral Core.LiteralTypeString))}},
-      Packaging.primitiveDefinitionDescription = "Find all non-overlapping regex matches within a string.",
-      Packaging.primitiveDefinitionComments = (Just "findAll(pat, s) returns the list of all leftmost, non-overlapping matches of pat in s, in the order they appear. Returns the empty list if pat does not match anywhere. Regex syntax is host-defined; see find for the common-subset caveat. Total; ill-formed patterns are host-defined."),
-      Packaging.primitiveDefinitionSeeAlso = [],
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "Find all non-overlapping regex matches within a string."),
+        Packaging.entityMetadataComments = [
+          "findAll(pat, s) returns the list of all leftmost, non-overlapping matches of pat in s, in the order they appear. Returns the empty list if pat does not match anywhere.",
+          "Regex syntax is host-defined; see find for the common-subset caveat.",
+          "Total; ill-formed patterns are host-defined."],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
-      Packaging.primitiveDefinitionAvailableSince = Nothing,
-      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 matches :: Packaging.PrimitiveDefinition
 matches =
@@ -102,13 +108,16 @@ matches =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeLiteral Core.LiteralTypeBoolean)}},
-      Packaging.primitiveDefinitionDescription = "Test whether a regex matches anywhere in a string.",
-      Packaging.primitiveDefinitionComments = (Just "matches(pat, s) returns true iff pat matches somewhere in s (not anchored to the start or end; for whole-string matching, anchor the pattern explicitly with ^ and $). Regex syntax is host-defined; see find for the common-subset caveat. Total; ill-formed patterns are host-defined."),
-      Packaging.primitiveDefinitionSeeAlso = [],
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "Test whether a regex matches anywhere in a string."),
+        Packaging.entityMetadataComments = [
+          "matches(pat, s) returns true iff pat matches somewhere in s (not anchored to the start or end; for whole-string matching, anchor the pattern explicitly with ^ and $).",
+          "Regex syntax is host-defined; see find for the common-subset caveat.",
+          "Total; ill-formed patterns are host-defined."],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
-      Packaging.primitiveDefinitionAvailableSince = Nothing,
-      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 replace :: Packaging.PrimitiveDefinition
 replace =
@@ -135,13 +144,17 @@ replace =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeLiteral Core.LiteralTypeString)}},
-      Packaging.primitiveDefinitionDescription = "Replace the first regex match in a string with a replacement string.",
-      Packaging.primitiveDefinitionComments = (Just "replace(pat, repl, s) returns s with the first leftmost match of pat replaced by repl. If pat does not match, s is returned unchanged. Replacement-string syntax (capture-group references such as $1 or \\\\1, literal escapes) is host-defined. Regex syntax is host-defined; see find for the common-subset caveat. Total; ill-formed patterns and replacement strings are host-defined."),
-      Packaging.primitiveDefinitionSeeAlso = [],
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "Replace the first regex match in a string with a replacement string."),
+        Packaging.entityMetadataComments = [
+          "replace(pat, repl, s) returns s with the first leftmost match of pat replaced by repl. If pat does not match, s is returned unchanged.",
+          "Replacement-string syntax (capture-group references such as $1 or \\\\1, literal escapes) is host-defined.",
+          "Regex syntax is host-defined; see find for the common-subset caveat.",
+          "Total; ill-formed patterns and replacement strings are host-defined."],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
-      Packaging.primitiveDefinitionAvailableSince = Nothing,
-      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 replaceAll :: Packaging.PrimitiveDefinition
 replaceAll =
@@ -168,13 +181,16 @@ replaceAll =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeLiteral Core.LiteralTypeString)}},
-      Packaging.primitiveDefinitionDescription = "Replace all non-overlapping regex matches in a string with a replacement string.",
-      Packaging.primitiveDefinitionComments = (Just "replaceAll(pat, repl, s) returns s with every leftmost, non-overlapping match of pat replaced by repl. If pat does not match anywhere, s is returned unchanged. Replacement-string syntax is host-defined; see replace and find for the common-subset caveats. Total; ill-formed patterns and replacement strings are host-defined."),
-      Packaging.primitiveDefinitionSeeAlso = [],
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "Replace all non-overlapping regex matches in a string with a replacement string."),
+        Packaging.entityMetadataComments = [
+          "replaceAll(pat, repl, s) returns s with every leftmost, non-overlapping match of pat replaced by repl. If pat does not match anywhere, s is returned unchanged.",
+          "Replacement-string syntax is host-defined; see replace and find for the common-subset caveats.",
+          "Total; ill-formed patterns and replacement strings are host-defined."],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
-      Packaging.primitiveDefinitionAvailableSince = Nothing,
-      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 split :: Packaging.PrimitiveDefinition
 split =
@@ -196,11 +212,15 @@ split =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeList (Core.TypeLiteral Core.LiteralTypeString))}},
-      Packaging.primitiveDefinitionDescription = "Split a string by occurrences of a regex pattern.",
-      Packaging.primitiveDefinitionComments = (Just "split(pat, s) returns the list of substrings of s obtained by splitting on every leftmost, non-overlapping match of pat. Trailing empty splits are host-defined (some engines retain them, some discard them; for portable code, do not rely on the trailing-empty behavior). Regex syntax is host-defined; see find for the common-subset caveat. Total; ill-formed patterns are host-defined."),
-      Packaging.primitiveDefinitionSeeAlso = [],
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "Split a string by occurrences of a regex pattern."),
+        Packaging.entityMetadataComments = [
+          "split(pat, s) returns the list of substrings of s obtained by splitting on every leftmost, non-overlapping match of pat.",
+          "Trailing empty splits are host-defined (some engines retain them, some discard them; for portable code, do not rely on the trailing-empty behavior).",
+          "Regex syntax is host-defined; see find for the common-subset caveat.",
+          "Total; ill-formed patterns are host-defined."],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
-      Packaging.primitiveDefinitionAvailableSince = Nothing,
-      Packaging.primitiveDefinitionDeprecatedSince = Nothing,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}

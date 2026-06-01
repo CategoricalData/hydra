@@ -1715,5 +1715,5 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "description": "Type definitions for the test suite",
+  "metadata": {"comments": [], "description": "Type definitions for the test suite", "seeAlso": []},
   "name": "hydra.test.testTypes"}

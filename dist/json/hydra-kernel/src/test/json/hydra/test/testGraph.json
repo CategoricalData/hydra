@@ -319,5 +319,5 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "description": "A module defining the graph used in the test suite.",
+  "metadata": {"comments": [], "description": "A module defining the graph used in the test suite.", "seeAlso": []},
   "name": "hydra.test.testGraph"}

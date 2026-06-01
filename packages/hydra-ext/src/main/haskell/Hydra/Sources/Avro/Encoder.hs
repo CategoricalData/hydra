@@ -102,7 +102,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> ([ExtractCore.ns, Strip.ns] L.++ (avroEnvironmentNs:AvroSchema.ns:jsonModelNs:KernelTypes.kernelTypesModuleNames)),
-            moduleDescription = Just "Hydra-to-Avro encoder: converts Hydra types and terms to Avro schemas and JSON values"}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just "Hydra-to-Avro encoder: converts Hydra types and terms to Avro schemas and JSON values")}
   where
     definitions = [
       toDefinition buildAvroField,

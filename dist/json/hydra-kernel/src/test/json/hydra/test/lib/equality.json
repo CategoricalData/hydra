@@ -6605,5 +6605,5 @@
     {"module": "hydra.test.testGraph"},
     {"module": "hydra.testing"},
     {"module": "hydra.util"}],
-  "description": "Test cases for hydra.lib.equality primitives",
+  "metadata": {"comments": [], "description": "Test cases for hydra.lib.equality primitives", "seeAlso": []},
   "name": "hydra.test.lib.equality"}

@@ -94,7 +94,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> ([Formatting.ns, Serialization.ns] L.++ (PdlSyntax.ns:KernelTypes.kernelTypesModuleNames)),
-            moduleDescription = Just "Serialization functions for converting Pegasus PDL AST to abstract expressions"}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just "Serialization functions for converting Pegasus PDL AST to abstract expressions")}
   where
     definitions = [
       toDefinition annotationsToExpr,

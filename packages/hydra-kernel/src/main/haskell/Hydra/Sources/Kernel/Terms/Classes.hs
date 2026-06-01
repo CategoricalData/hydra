@@ -29,7 +29,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> kernelTypesModuleNames,
-            moduleDescription = Just "Registry of Hydra's built-in type classes."}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just "Registry of Hydra's built-in type classes.")}
   where
     definitions = [
       toDefinition equality,

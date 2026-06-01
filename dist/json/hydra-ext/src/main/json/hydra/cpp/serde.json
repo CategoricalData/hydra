@@ -6526,5 +6526,5 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "description": "Serialization functions for converting C++ AST to abstract expressions",
+  "metadata": {"comments": [], "description": "Serialization functions for converting C++ AST to abstract expressions", "seeAlso": []},
   "name": "hydra.cpp.serde"}

@@ -75,5 +75,8 @@
                   {"name": "wrap", "type": {"unit": {}}}]}}},
           "variables": []}}}],
   "dependencies": [{"module": "hydra.core"}],
-  "description": "Variant types which describe the structure of Hydra core types and terms.",
+  "metadata": {
+    "comments": [],
+    "description": "Variant types which describe the structure of Hydra core types and terms.",
+    "seeAlso": []},
   "name": "hydra.variants"}

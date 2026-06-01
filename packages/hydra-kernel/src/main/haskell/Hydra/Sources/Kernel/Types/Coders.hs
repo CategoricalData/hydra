@@ -24,7 +24,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = (DefinitionType <$> definitions),
             moduleDependencies = unqualifiedDep <$> [Error.ns, Graph.ns, Variants.ns, Core.ns, Typing.ns],
-            moduleDescription = Just "Abstractions for paired transformations between languages"}
+            moduleMetadata = descriptionMetadata (Just "Abstractions for paired transformations between languages")}
   where
     definitions = [
       adapter,

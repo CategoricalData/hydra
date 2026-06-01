@@ -19892,5 +19892,8 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "description": "Fundamental type checking test cases: literals, variables, lambdas, applications, let terms, and primitives",
+  "metadata": {
+    "comments": [],
+    "description": "Fundamental type checking test cases: literals, variables, lambdas, applications, let terms, and primitives",
+    "seeAlso": []},
   "name": "hydra.test.checking.fundamentals"}

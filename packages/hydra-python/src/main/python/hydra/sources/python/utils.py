@@ -5,7 +5,7 @@ Mirror of packages/hydra-python/src/main/haskell/Hydra/Sources/Python/Utils.hs.
 
 from hydra.core import Name
 from hydra.dsl.python import Just, Nothing
-from hydra.packaging import Module, ModuleName
+from hydra.packaging import EntityMetadata, Module, ModuleName
 
 import hydra.dsl.meta.lib.equality as Equality
 import hydra.dsl.meta.lib.lists as Lists
@@ -51,7 +51,11 @@ DEPENDENCIES = [
 
 _PLACEHOLDER = Module(
     NS,
-    Just("Python utilities for constructing Python syntax trees"),
+    Just(EntityMetadata(
+        Just("Python utilities for constructing Python syntax trees"),
+        (),
+        (),
+        Nothing())),
     DEPENDENCIES,
     (),
 )
@@ -1369,7 +1373,7 @@ def _unit_variant_methods():
 def _build_module() -> Module:
     return Module(
         _PLACEHOLDER.name,
-        _PLACEHOLDER.description,
+        _PLACEHOLDER.metadata,
         _PLACEHOLDER.dependencies,
         (
             to_definition(_annotated_expression()),

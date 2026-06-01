@@ -24,8 +24,8 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = (DefinitionType <$> definitions),
             moduleDependencies = unqualifiedDep <$> [Core.ns],
-            moduleDescription = Just ("A Gremlin model, based on the Gremlin ANTLR grammar "
-      ++ "(master branch, as of 2024-06-30).")}
+            moduleMetadata = descriptionMetadata (Just ("A Gremlin model, based on the Gremlin ANTLR grammar "
+      ++ "(master branch, as of 2024-06-30)."))}
   where
     definitions = [
       queryList,

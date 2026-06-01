@@ -350,5 +350,5 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "description": "Language constraints and reserved words for Rust",
+  "metadata": {"comments": [], "description": "Language constraints and reserved words for Rust", "seeAlso": []},
   "name": "hydra.rust.language"}

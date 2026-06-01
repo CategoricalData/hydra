@@ -41,13 +41,9 @@ mkPrim name arity impl = Primitive {
   primitiveDefinition = PrimitiveDefinition {
     primitiveDefinitionName = name,
     primitiveDefinitionSignature = typeSchemeToTermSignature (dummyType arity),
-    primitiveDefinitionDescription = "",
-    primitiveDefinitionComments = Nothing,
-    primitiveDefinitionSeeAlso = [],
+    primitiveDefinitionMetadata = Nothing,
     primitiveDefinitionIsPure = True,
     primitiveDefinitionIsTotal = True,
-    primitiveDefinitionAvailableSince = Nothing,
-    primitiveDefinitionDeprecatedSince = Nothing,
     primitiveDefinitionDefaultImplementation = Nothing},
   primitiveImplementation = impl}
 

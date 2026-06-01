@@ -68,7 +68,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> ([Formatting.ns, Sorting.ns] L.++ KernelTypes.kernelTypesModuleNames),
-            moduleDescription = Just "Transform test cases for code generation, filtering to tests that can be compiled to target languages"}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just "Transform test cases for code generation, filtering to tests that can be compiled to target languages")}
   where
     definitions = [
       toDefinition addGenerationPrefix,
@@ -211,7 +211,7 @@ transformModule = define "transformModule" $
   lambda "m" $
     Packaging.module_
       (addGenerationPrefix @@ (project _Module _Module_name @@ var "m"))
-      (project _Module _Module_description @@ var "m")
+      (project _Module _Module_metadata @@ var "m")
       (project _Module _Module_dependencies @@ var "m")
       (project _Module _Module_definitions @@ var "m")
 

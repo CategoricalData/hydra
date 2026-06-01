@@ -24,9 +24,9 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = (DefinitionType <$> definitions),
             moduleDependencies = unqualifiedDep <$> [Core.ns],
-            moduleDescription = Just ("A model for Protocol Buffers v3 enum and message types, designed as a target for transformations."
+            moduleMetadata = descriptionMetadata (Just ("A model for Protocol Buffers v3 enum and message types, designed as a target for transformations."
       ++ "This model is loosely based on https://github.com/protocolbuffers/protobuf/blob/main/src/google/protobuf/type.proto,"
-      ++ " as well as the proto3 reference documentation")}
+      ++ " as well as the proto3 reference documentation"))}
   where
     definitions = [
       definition,

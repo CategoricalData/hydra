@@ -21,7 +21,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = (DefinitionType <$> definitions),
             moduleDependencies = unqualifiedDep <$> [Core.ns, Relational.ns],
-            moduleDescription = Just "A simple, untyped tabular data model, suitable for CSVs and TSVs"}
+            moduleMetadata = descriptionMetadata (Just "A simple, untyped tabular data model, suitable for CSVs and TSVs")}
   where
     definitions = [
       columnType,
