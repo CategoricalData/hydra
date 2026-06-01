@@ -5040,5 +5040,5 @@
     {"module": "hydra.dsl.paths"},
     {"module": "hydra.dsl.typing"},
     {"module": "hydra.dsl.variants"}],
-  "description": "DSL functions for hydra.errors",
+  "metadata": {"comments": [], "description": "DSL functions for hydra.errors", "seeAlso": []},
   "name": "hydra.dsl.errors"}

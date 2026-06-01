@@ -9769,8 +9769,25 @@
                                                                                           "application": {
                                                                                             "argument": {
                                                                                               "application": {
-                                                                                                "argument": {"variable": "mod"},
-                                                                                                "function": {"project": {"fieldName": "description", "typeName": "hydra.packaging.Module"}}}},
+                                                                                                "argument": {
+                                                                                                  "lambda": {
+                                                                                                    "body": {
+                                                                                                      "application": {
+                                                                                                        "argument": {"variable": "em"},
+                                                                                                        "function": {"project": {"fieldName": "description", "typeName": "hydra.packaging.EntityMetadata"}}}},
+                                                                                                    "domain": {"variable": "hydra.packaging.EntityMetadata"},
+                                                                                                    "parameter": "em"}},
+                                                                                                "function": {
+                                                                                                  "application": {
+                                                                                                    "argument": {
+                                                                                                      "application": {
+                                                                                                        "argument": {"variable": "mod"},
+                                                                                                        "function": {"project": {"fieldName": "metadata", "typeName": "hydra.packaging.Module"}}}},
+                                                                                                    "function": {
+                                                                                                      "typeApplication": {
+                                                                                                        "body": {
+                                                                                                          "typeApplication": {"body": {"variable": "hydra.lib.maybes.bind"}, "type": {"variable": "hydra.packaging.EntityMetadata"}}},
+                                                                                                        "type": {"literal": {"string": {}}}}}}}}},
                                                                                             "function": {
                                                                                               "application": {
                                                                                                 "argument": {"variable": "hydra.formatting.normalizeComment"},
@@ -26903,5 +26920,5 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "description": "Python code generator: converts Hydra modules to Python source code",
+  "metadata": {"comments": [], "description": "Python code generator: converts Hydra modules to Python source code", "seeAlso": []},
   "name": "hydra.python.coder"}

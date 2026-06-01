@@ -19,8 +19,8 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = (DefinitionType <$> definitions),
             moduleDependencies = unqualifiedDep <$> [],
-            moduleDescription = Just ("A GraphQL model. Based on the (extended) BNF at:\n" ++
-      "  https://spec.graphql.org/draft/#sec-Appendix-Grammar-Summary")}
+            moduleMetadata = descriptionMetadata (Just ("A GraphQL model. Based on the (extended) BNF at:\n" ++
+      "  https://spec.graphql.org/draft/#sec-Appendix-Grammar-Summary"))}
   where
     definitions = [
       name_,

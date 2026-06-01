@@ -1583,5 +1583,5 @@
                         "parameter": "y"}}}],
                 "typeName": "hydra.variants.TypeVariant"}}}}}}],
   "dependencies": [{"module": "hydra.encode.core"}, {"module": "hydra.variants"}],
-  "description": "Term encoders for hydra.variants",
+  "metadata": {"comments": [], "description": "Term encoders for hydra.variants", "seeAlso": []},
   "name": "hydra.encode.variants"}

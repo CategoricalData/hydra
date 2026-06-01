@@ -57,5 +57,5 @@
                         "body": {"pair": {"first": {"variable": "hydra.core.Type"}, "second": {"variable": "hydra.core.Type"}}}}}}]}}},
           "variables": []}}}],
   "dependencies": [{"module": "hydra.core"}, {"module": "hydra.typing"}],
-  "description": "Type definitions for the Protobuf code generation environment",
+  "metadata": {"comments": [], "description": "Type definitions for the Protobuf code generation environment", "seeAlso": []},
   "name": "hydra.protobuf.environment"}

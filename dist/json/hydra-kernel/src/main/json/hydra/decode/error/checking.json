@@ -3162,5 +3162,5 @@
     {"module": "hydra.decode.paths"},
     {"module": "hydra.decode.typing"},
     {"module": "hydra.decode.variants"}],
-  "description": "Term decoders for hydra.error.checking",
+  "metadata": {"comments": [], "description": "Term decoders for hydra.error.checking", "seeAlso": []},
   "name": "hydra.decode.error.checking"}

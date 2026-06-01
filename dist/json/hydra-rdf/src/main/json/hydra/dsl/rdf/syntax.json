@@ -4309,5 +4309,5 @@
                   "application": {"argument": {"variable": "hydra.rdf.syntax.Triple"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "original"}}}}}}],
   "dependencies": [{"module": "hydra.rdf.syntax"}, {"module": "hydra.typed"}, {"module": "hydra.core"}, {"module": "hydra.dsl.core"}],
-  "description": "DSL functions for hydra.rdf.syntax",
+  "metadata": {"comments": [], "description": "DSL functions for hydra.rdf.syntax", "seeAlso": []},
   "name": "hydra.dsl.rdf.syntax"}

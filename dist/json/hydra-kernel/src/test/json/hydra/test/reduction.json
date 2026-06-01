@@ -9289,5 +9289,5 @@
     {"module": "hydra.errors"},
     {"module": "hydra.test.testGraph"},
     {"module": "hydra.testing"}],
-  "description": "Test cases for term reduction/evaluation mechanics",
+  "metadata": {"comments": [], "description": "Test cases for term reduction/evaluation mechanics", "seeAlso": []},
   "name": "hydra.test.reduction"}

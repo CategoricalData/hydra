@@ -94,7 +94,7 @@
   "Build a PrimitiveDefinition (#156 shape) from name + signature."
   (let* ((ts (build-type-scheme variables inputs output constraints))
          (sig (funcall hydra_scoping_type_scheme_to_term_signature ts)))
-    (make-hydra_packaging_primitive_definition pname sig "" (list :nothing) (list) t t (list :nothing) (list :nothing) (list :nothing))))
+    (make-hydra_packaging_primitive_definition pname sig (list :nothing) t t (list :nothing))))
 
 ;; ============================================================================
 ;; Error helpers

@@ -1625,5 +1625,5 @@
                 "domain": {"variable": "hydra.query.Variable"},
                 "parameter": "x"}}}}}}],
   "dependencies": [{"module": "hydra.encode.core"}, {"module": "hydra.query"}],
-  "description": "Term encoders for hydra.query",
+  "metadata": {"comments": [], "description": "Term encoders for hydra.query", "seeAlso": []},
   "name": "hydra.encode.query"}

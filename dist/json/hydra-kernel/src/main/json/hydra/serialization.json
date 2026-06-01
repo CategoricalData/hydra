@@ -4188,5 +4188,8 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "description": "Utilities for constructing generic program code ASTs, used for the serialization phase of source code generation.",
+  "metadata": {
+    "comments": [],
+    "description": "Utilities for constructing generic program code ASTs, used for the serialization phase of source code generation.",
+    "seeAlso": []},
   "name": "hydra.serialization"}

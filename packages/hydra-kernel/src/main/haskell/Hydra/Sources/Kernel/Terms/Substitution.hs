@@ -66,7 +66,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> ([Rewriting.ns, Variables.ns] L.++ kernelTypesModuleNames),
-            moduleDescription = Just ("Variable substitution in type and term expressions.")}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just ("Variable substitution in type and term expressions."))}
   where
    definitions = [
      toDefinition composeTypeSubst,

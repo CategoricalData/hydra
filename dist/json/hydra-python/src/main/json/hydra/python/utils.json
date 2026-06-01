@@ -4158,5 +4158,5 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "description": "Python utilities for constructing Python syntax trees",
+  "metadata": {"comments": [], "description": "Python utilities for constructing Python syntax trees", "seeAlso": []},
   "name": "hydra.python.utils"}

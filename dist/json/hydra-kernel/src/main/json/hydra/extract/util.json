@@ -179,5 +179,5 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "description": "Extraction and validation for hydra.util types",
+  "metadata": {"comments": [], "description": "Extraction and validation for hydra.util types", "seeAlso": []},
   "name": "hydra.extract.util"}

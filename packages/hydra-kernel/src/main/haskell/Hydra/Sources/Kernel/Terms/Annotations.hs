@@ -79,7 +79,7 @@ module_ = Module {
             moduleDefinitions = definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> ([Constants.ns, moduleName DecodeCore.module_, moduleName EncodeCore.module_, ExtractCore.ns, Lexical.ns,
       Strip.ns, ShowCore.ns, ShowError.ns] L.++ kernelTypesModuleNames),
-            moduleDescription = Just "Utilities for reading and writing type and term annotations"}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just "Utilities for reading and writing type and term annotations")}
   where
    definitions = [
      toDefinition aggregateAnnotations,

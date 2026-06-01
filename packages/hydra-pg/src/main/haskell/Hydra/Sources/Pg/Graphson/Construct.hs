@@ -101,7 +101,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> (([GraphsonCoder.ns] L.++ (kernelTypesModuleNames L.++ [GraphsonSyntax.ns, PgModel.ns, JsonModel.ns]))),
-            moduleDescription = Just "Functions for constructing GraphSON vertices from property graph vertices."}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just "Functions for constructing GraphSON vertices from property graph vertices.")}
   where
     definitions = [
       toDefinition adjacentEdgeToGraphson,
