@@ -1678,5 +1678,5 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "description": "Variable substitution in type and term expressions.",
+  "metadata": {"comments": [], "description": "Variable substitution in type and term expressions.", "seeAlso": []},
   "name": "hydra.substitution"}

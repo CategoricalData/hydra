@@ -78,7 +78,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> ([Rewriting.ns] L.++ kernelTypesModuleNames),
-            moduleDescription = Just ("Annotation and type stripping and normalization")}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just ("Annotation and type stripping and normalization"))}
   where
    definitions = [
      toDefinition deannotateAndDetypeTerm,

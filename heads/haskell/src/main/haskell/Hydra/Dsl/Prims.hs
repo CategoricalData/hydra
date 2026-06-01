@@ -78,13 +78,9 @@ defaultPrimitiveDefinition :: Name -> TypeScheme -> PrimitiveDefinition
 defaultPrimitiveDefinition name typ = PrimitiveDefinition {
   primitiveDefinitionName = name,
   primitiveDefinitionSignature = typeSchemeToTermSignature typ,
-  primitiveDefinitionDescription = "",
-  primitiveDefinitionComments = Nothing,
-  primitiveDefinitionSeeAlso = [],
+  primitiveDefinitionMetadata = Nothing,
   primitiveDefinitionIsPure = True,
   primitiveDefinitionIsTotal = True,
-  primitiveDefinitionAvailableSince = Nothing,
-  primitiveDefinitionDeprecatedSince = Nothing,
   primitiveDefinitionDefaultImplementation = Nothing}
 
 -- | Mark the value parameters at the given (0-based) positions of a primitive's

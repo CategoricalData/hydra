@@ -2141,5 +2141,5 @@
     {"module": "hydra.errors"},
     {"module": "hydra.test.testGraph"},
     {"module": "hydra.testing"}],
-  "description": "Test cases for hydra.lib.chars primitives",
+  "metadata": {"comments": [], "description": "Test cases for hydra.lib.chars primitives", "seeAlso": []},
   "name": "hydra.test.lib.chars"}

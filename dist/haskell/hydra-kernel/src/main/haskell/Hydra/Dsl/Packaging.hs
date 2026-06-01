@@ -18,6 +18,30 @@ definitionPrimitive x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "primitive"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+-- | DSL injection for the primitive variant of hydra.packaging.DefinitionReference
+definitionReferencePrimitive :: Typed.TypedTerm Core.Name -> Typed.TypedTerm Packaging.DefinitionReference
+definitionReferencePrimitive x =
+    Typed.TypedTerm (Core.TermInject (Core.Injection {
+      Core.injectionTypeName = (Core.Name "hydra.packaging.DefinitionReference"),
+      Core.injectionField = Core.Field {
+        Core.fieldName = (Core.Name "primitive"),
+        Core.fieldTerm = (Typed.unTypedTerm x)}}))
+-- | DSL injection for the term variant of hydra.packaging.DefinitionReference
+definitionReferenceTerm :: Typed.TypedTerm Core.Name -> Typed.TypedTerm Packaging.DefinitionReference
+definitionReferenceTerm x =
+    Typed.TypedTerm (Core.TermInject (Core.Injection {
+      Core.injectionTypeName = (Core.Name "hydra.packaging.DefinitionReference"),
+      Core.injectionField = Core.Field {
+        Core.fieldName = (Core.Name "term"),
+        Core.fieldTerm = (Typed.unTypedTerm x)}}))
+-- | DSL injection for the type variant of hydra.packaging.DefinitionReference
+definitionReferenceType :: Typed.TypedTerm Core.Name -> Typed.TypedTerm Packaging.DefinitionReference
+definitionReferenceType x =
+    Typed.TypedTerm (Core.TermInject (Core.Injection {
+      Core.injectionTypeName = (Core.Name "hydra.packaging.DefinitionReference"),
+      Core.injectionField = Core.Field {
+        Core.fieldName = (Core.Name "type"),
+        Core.fieldTerm = (Typed.unTypedTerm x)}}))
 -- | DSL injection for the term variant of hydra.packaging.Definition
 definitionTerm :: Typed.TypedTerm Packaging.TermDefinition -> Typed.TypedTerm Packaging.Definition
 definitionTerm x =
@@ -34,6 +58,260 @@ definitionType x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "type"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+-- | DSL constructor for hydra.packaging.EntityLifecycle
+entityLifecycle :: Typed.TypedTerm (Maybe Packaging.Version) -> Typed.TypedTerm (Maybe Packaging.Version) -> Typed.TypedTerm Packaging.EntityLifecycle
+entityLifecycle availableSince deprecatedSince =
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.packaging.EntityLifecycle"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "availableSince"),
+          Core.fieldTerm = (Typed.unTypedTerm availableSince)},
+        Core.Field {
+          Core.fieldName = (Core.Name "deprecatedSince"),
+          Core.fieldTerm = (Typed.unTypedTerm deprecatedSince)}]}))
+-- | DSL accessor for the availableSince field of hydra.packaging.EntityLifecycle
+entityLifecycleAvailableSince :: Typed.TypedTerm Packaging.EntityLifecycle -> Typed.TypedTerm (Maybe Packaging.Version)
+entityLifecycleAvailableSince x =
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.packaging.EntityLifecycle"),
+        Core.projectionFieldName = (Core.Name "availableSince")})),
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
+-- | DSL accessor for the deprecatedSince field of hydra.packaging.EntityLifecycle
+entityLifecycleDeprecatedSince :: Typed.TypedTerm Packaging.EntityLifecycle -> Typed.TypedTerm (Maybe Packaging.Version)
+entityLifecycleDeprecatedSince x =
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.packaging.EntityLifecycle"),
+        Core.projectionFieldName = (Core.Name "deprecatedSince")})),
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
+-- | DSL updater for the availableSince field of hydra.packaging.EntityLifecycle
+entityLifecycleWithAvailableSince :: Typed.TypedTerm Packaging.EntityLifecycle -> Typed.TypedTerm (Maybe Packaging.Version) -> Typed.TypedTerm Packaging.EntityLifecycle
+entityLifecycleWithAvailableSince original newVal =
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.packaging.EntityLifecycle"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "availableSince"),
+          Core.fieldTerm = (Typed.unTypedTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "deprecatedSince"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.packaging.EntityLifecycle"),
+              Core.projectionFieldName = (Core.Name "deprecatedSince")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+-- | DSL updater for the deprecatedSince field of hydra.packaging.EntityLifecycle
+entityLifecycleWithDeprecatedSince :: Typed.TypedTerm Packaging.EntityLifecycle -> Typed.TypedTerm (Maybe Packaging.Version) -> Typed.TypedTerm Packaging.EntityLifecycle
+entityLifecycleWithDeprecatedSince original newVal =
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.packaging.EntityLifecycle"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "availableSince"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.packaging.EntityLifecycle"),
+              Core.projectionFieldName = (Core.Name "availableSince")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "deprecatedSince"),
+          Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
+-- | DSL constructor for hydra.packaging.EntityMetadata
+entityMetadata :: Typed.TypedTerm (Maybe String) -> Typed.TypedTerm [String] -> Typed.TypedTerm [Packaging.EntityReference] -> Typed.TypedTerm (Maybe Packaging.EntityLifecycle) -> Typed.TypedTerm Packaging.EntityMetadata
+entityMetadata description comments seeAlso lifecycle =
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.packaging.EntityMetadata"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "description"),
+          Core.fieldTerm = (Typed.unTypedTerm description)},
+        Core.Field {
+          Core.fieldName = (Core.Name "comments"),
+          Core.fieldTerm = (Typed.unTypedTerm comments)},
+        Core.Field {
+          Core.fieldName = (Core.Name "seeAlso"),
+          Core.fieldTerm = (Typed.unTypedTerm seeAlso)},
+        Core.Field {
+          Core.fieldName = (Core.Name "lifecycle"),
+          Core.fieldTerm = (Typed.unTypedTerm lifecycle)}]}))
+-- | DSL accessor for the comments field of hydra.packaging.EntityMetadata
+entityMetadataComments :: Typed.TypedTerm Packaging.EntityMetadata -> Typed.TypedTerm [String]
+entityMetadataComments x =
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.packaging.EntityMetadata"),
+        Core.projectionFieldName = (Core.Name "comments")})),
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
+-- | DSL accessor for the description field of hydra.packaging.EntityMetadata
+entityMetadataDescription :: Typed.TypedTerm Packaging.EntityMetadata -> Typed.TypedTerm (Maybe String)
+entityMetadataDescription x =
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.packaging.EntityMetadata"),
+        Core.projectionFieldName = (Core.Name "description")})),
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
+-- | DSL accessor for the lifecycle field of hydra.packaging.EntityMetadata
+entityMetadataLifecycle :: Typed.TypedTerm Packaging.EntityMetadata -> Typed.TypedTerm (Maybe Packaging.EntityLifecycle)
+entityMetadataLifecycle x =
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.packaging.EntityMetadata"),
+        Core.projectionFieldName = (Core.Name "lifecycle")})),
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
+-- | DSL accessor for the seeAlso field of hydra.packaging.EntityMetadata
+entityMetadataSeeAlso :: Typed.TypedTerm Packaging.EntityMetadata -> Typed.TypedTerm [Packaging.EntityReference]
+entityMetadataSeeAlso x =
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.packaging.EntityMetadata"),
+        Core.projectionFieldName = (Core.Name "seeAlso")})),
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
+-- | DSL updater for the comments field of hydra.packaging.EntityMetadata
+entityMetadataWithComments :: Typed.TypedTerm Packaging.EntityMetadata -> Typed.TypedTerm [String] -> Typed.TypedTerm Packaging.EntityMetadata
+entityMetadataWithComments original newVal =
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.packaging.EntityMetadata"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "description"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.packaging.EntityMetadata"),
+              Core.projectionFieldName = (Core.Name "description")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "comments"),
+          Core.fieldTerm = (Typed.unTypedTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "seeAlso"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.packaging.EntityMetadata"),
+              Core.projectionFieldName = (Core.Name "seeAlso")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "lifecycle"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.packaging.EntityMetadata"),
+              Core.projectionFieldName = (Core.Name "lifecycle")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+-- | DSL updater for the description field of hydra.packaging.EntityMetadata
+entityMetadataWithDescription :: Typed.TypedTerm Packaging.EntityMetadata -> Typed.TypedTerm (Maybe String) -> Typed.TypedTerm Packaging.EntityMetadata
+entityMetadataWithDescription original newVal =
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.packaging.EntityMetadata"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "description"),
+          Core.fieldTerm = (Typed.unTypedTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "comments"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.packaging.EntityMetadata"),
+              Core.projectionFieldName = (Core.Name "comments")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "seeAlso"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.packaging.EntityMetadata"),
+              Core.projectionFieldName = (Core.Name "seeAlso")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "lifecycle"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.packaging.EntityMetadata"),
+              Core.projectionFieldName = (Core.Name "lifecycle")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+-- | DSL updater for the lifecycle field of hydra.packaging.EntityMetadata
+entityMetadataWithLifecycle :: Typed.TypedTerm Packaging.EntityMetadata -> Typed.TypedTerm (Maybe Packaging.EntityLifecycle) -> Typed.TypedTerm Packaging.EntityMetadata
+entityMetadataWithLifecycle original newVal =
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.packaging.EntityMetadata"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "description"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.packaging.EntityMetadata"),
+              Core.projectionFieldName = (Core.Name "description")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "comments"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.packaging.EntityMetadata"),
+              Core.projectionFieldName = (Core.Name "comments")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "seeAlso"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.packaging.EntityMetadata"),
+              Core.projectionFieldName = (Core.Name "seeAlso")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "lifecycle"),
+          Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
+-- | DSL updater for the seeAlso field of hydra.packaging.EntityMetadata
+entityMetadataWithSeeAlso :: Typed.TypedTerm Packaging.EntityMetadata -> Typed.TypedTerm [Packaging.EntityReference] -> Typed.TypedTerm Packaging.EntityMetadata
+entityMetadataWithSeeAlso original newVal =
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.packaging.EntityMetadata"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "description"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.packaging.EntityMetadata"),
+              Core.projectionFieldName = (Core.Name "description")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "comments"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.packaging.EntityMetadata"),
+              Core.projectionFieldName = (Core.Name "comments")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "seeAlso"),
+          Core.fieldTerm = (Typed.unTypedTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "lifecycle"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.packaging.EntityMetadata"),
+              Core.projectionFieldName = (Core.Name "lifecycle")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+-- | DSL injection for the definition variant of hydra.packaging.EntityReference
+entityReferenceDefinition :: Typed.TypedTerm Packaging.DefinitionReference -> Typed.TypedTerm Packaging.EntityReference
+entityReferenceDefinition x =
+    Typed.TypedTerm (Core.TermInject (Core.Injection {
+      Core.injectionTypeName = (Core.Name "hydra.packaging.EntityReference"),
+      Core.injectionField = Core.Field {
+        Core.fieldName = (Core.Name "definition"),
+        Core.fieldTerm = (Typed.unTypedTerm x)}}))
+-- | DSL injection for the module variant of hydra.packaging.EntityReference
+entityReferenceModule :: Typed.TypedTerm Packaging.ModuleName -> Typed.TypedTerm Packaging.EntityReference
+entityReferenceModule x =
+    Typed.TypedTerm (Core.TermInject (Core.Injection {
+      Core.injectionTypeName = (Core.Name "hydra.packaging.EntityReference"),
+      Core.injectionField = Core.Field {
+        Core.fieldName = (Core.Name "module"),
+        Core.fieldTerm = (Typed.unTypedTerm x)}}))
+-- | DSL injection for the package variant of hydra.packaging.EntityReference
+entityReferencePackage :: Typed.TypedTerm Packaging.PackageName -> Typed.TypedTerm Packaging.EntityReference
+entityReferencePackage x =
+    Typed.TypedTerm (Core.TermInject (Core.Injection {
+      Core.injectionTypeName = (Core.Name "hydra.packaging.EntityReference"),
+      Core.injectionField = Core.Field {
+        Core.fieldName = (Core.Name "package"),
+        Core.fieldTerm = (Typed.unTypedTerm x)}}))
 -- | DSL constructor for the hydra.packaging.FileExtension wrapper
 fileExtension :: Typed.TypedTerm String -> Typed.TypedTerm Packaging.FileExtension
 fileExtension x =
@@ -41,8 +319,8 @@ fileExtension x =
       Core.wrappedTermTypeName = (Core.Name "hydra.packaging.FileExtension"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
 -- | DSL constructor for hydra.packaging.Module
-module_ :: Typed.TypedTerm Packaging.ModuleName -> Typed.TypedTerm (Maybe String) -> Typed.TypedTerm [Packaging.ModuleDependency] -> Typed.TypedTerm [Packaging.Definition] -> Typed.TypedTerm Packaging.Module
-module_ name description dependencies definitions =
+module_ :: Typed.TypedTerm Packaging.ModuleName -> Typed.TypedTerm (Maybe Packaging.EntityMetadata) -> Typed.TypedTerm [Packaging.ModuleDependency] -> Typed.TypedTerm [Packaging.Definition] -> Typed.TypedTerm Packaging.Module
+module_ name metadata dependencies definitions =
     Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.packaging.Module"),
       Core.recordFields = [
@@ -50,8 +328,8 @@ module_ name description dependencies definitions =
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Typed.unTypedTerm name)},
         Core.Field {
-          Core.fieldName = (Core.Name "description"),
-          Core.fieldTerm = (Typed.unTypedTerm description)},
+          Core.fieldName = (Core.Name "metadata"),
+          Core.fieldTerm = (Typed.unTypedTerm metadata)},
         Core.Field {
           Core.fieldName = (Core.Name "dependencies"),
           Core.fieldTerm = (Typed.unTypedTerm dependencies)},
@@ -134,13 +412,13 @@ moduleDependencyWithPackage original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "package"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
--- | DSL accessor for the description field of hydra.packaging.Module
-moduleDescription :: Typed.TypedTerm Packaging.Module -> Typed.TypedTerm (Maybe String)
-moduleDescription x =
+-- | DSL accessor for the metadata field of hydra.packaging.Module
+moduleMetadata :: Typed.TypedTerm Packaging.Module -> Typed.TypedTerm (Maybe Packaging.EntityMetadata)
+moduleMetadata x =
     Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.packaging.Module"),
-        Core.projectionFieldName = (Core.Name "description")})),
+        Core.projectionFieldName = (Core.Name "metadata")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL accessor for the name field of hydra.packaging.Module
 moduleName :: Typed.TypedTerm Packaging.Module -> Typed.TypedTerm Packaging.ModuleName
@@ -170,11 +448,11 @@ moduleWithDefinitions original newVal =
               Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
-          Core.fieldName = (Core.Name "description"),
+          Core.fieldName = (Core.Name "metadata"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.packaging.Module"),
-              Core.projectionFieldName = (Core.Name "description")})),
+              Core.projectionFieldName = (Core.Name "metadata")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "dependencies"),
@@ -200,11 +478,11 @@ moduleWithDependencies original newVal =
               Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
-          Core.fieldName = (Core.Name "description"),
+          Core.fieldName = (Core.Name "metadata"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.packaging.Module"),
-              Core.projectionFieldName = (Core.Name "description")})),
+              Core.projectionFieldName = (Core.Name "metadata")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "dependencies"),
@@ -216,9 +494,9 @@ moduleWithDependencies original newVal =
               Core.projectionTypeName = (Core.Name "hydra.packaging.Module"),
               Core.projectionFieldName = (Core.Name "definitions")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
--- | DSL updater for the description field of hydra.packaging.Module
-moduleWithDescription :: Typed.TypedTerm Packaging.Module -> Typed.TypedTerm (Maybe String) -> Typed.TypedTerm Packaging.Module
-moduleWithDescription original newVal =
+-- | DSL updater for the metadata field of hydra.packaging.Module
+moduleWithMetadata :: Typed.TypedTerm Packaging.Module -> Typed.TypedTerm (Maybe Packaging.EntityMetadata) -> Typed.TypedTerm Packaging.Module
+moduleWithMetadata original newVal =
     Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.packaging.Module"),
       Core.recordFields = [
@@ -230,7 +508,7 @@ moduleWithDescription original newVal =
               Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
-          Core.fieldName = (Core.Name "description"),
+          Core.fieldName = (Core.Name "metadata"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "dependencies"),
@@ -256,11 +534,11 @@ moduleWithName original newVal =
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)},
         Core.Field {
-          Core.fieldName = (Core.Name "description"),
+          Core.fieldName = (Core.Name "metadata"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.packaging.Module"),
-              Core.projectionFieldName = (Core.Name "description")})),
+              Core.projectionFieldName = (Core.Name "metadata")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "dependencies"),
@@ -277,8 +555,8 @@ moduleWithName original newVal =
               Core.projectionFieldName = (Core.Name "definitions")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
 -- | DSL constructor for hydra.packaging.Package
-package :: Typed.TypedTerm Packaging.PackageName -> Typed.TypedTerm (Maybe String) -> Typed.TypedTerm [Packaging.PackageDependency] -> Typed.TypedTerm [Packaging.Module] -> Typed.TypedTerm Packaging.Package
-package name description dependencies modules =
+package :: Typed.TypedTerm Packaging.PackageName -> Typed.TypedTerm (Maybe Packaging.EntityMetadata) -> Typed.TypedTerm [Packaging.PackageDependency] -> Typed.TypedTerm [Packaging.Module] -> Typed.TypedTerm Packaging.Package
+package name metadata dependencies modules =
     Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.packaging.Package"),
       Core.recordFields = [
@@ -286,8 +564,8 @@ package name description dependencies modules =
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Typed.unTypedTerm name)},
         Core.Field {
-          Core.fieldName = (Core.Name "description"),
-          Core.fieldTerm = (Typed.unTypedTerm description)},
+          Core.fieldName = (Core.Name "metadata"),
+          Core.fieldTerm = (Typed.unTypedTerm metadata)},
         Core.Field {
           Core.fieldName = (Core.Name "dependencies"),
           Core.fieldTerm = (Typed.unTypedTerm dependencies)},
@@ -362,13 +640,13 @@ packageDependencyWithVersion original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "version"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
--- | DSL accessor for the description field of hydra.packaging.Package
-packageDescription :: Typed.TypedTerm Packaging.Package -> Typed.TypedTerm (Maybe String)
-packageDescription x =
+-- | DSL accessor for the metadata field of hydra.packaging.Package
+packageMetadata :: Typed.TypedTerm Packaging.Package -> Typed.TypedTerm (Maybe Packaging.EntityMetadata)
+packageMetadata x =
     Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.packaging.Package"),
-        Core.projectionFieldName = (Core.Name "description")})),
+        Core.projectionFieldName = (Core.Name "metadata")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL accessor for the modules field of hydra.packaging.Package
 packageModules :: Typed.TypedTerm Packaging.Package -> Typed.TypedTerm [Packaging.Module]
@@ -414,11 +692,11 @@ packageWithDependencies original newVal =
               Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
-          Core.fieldName = (Core.Name "description"),
+          Core.fieldName = (Core.Name "metadata"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.packaging.Package"),
-              Core.projectionFieldName = (Core.Name "description")})),
+              Core.projectionFieldName = (Core.Name "metadata")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "dependencies"),
@@ -430,9 +708,9 @@ packageWithDependencies original newVal =
               Core.projectionTypeName = (Core.Name "hydra.packaging.Package"),
               Core.projectionFieldName = (Core.Name "modules")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
--- | DSL updater for the description field of hydra.packaging.Package
-packageWithDescription :: Typed.TypedTerm Packaging.Package -> Typed.TypedTerm (Maybe String) -> Typed.TypedTerm Packaging.Package
-packageWithDescription original newVal =
+-- | DSL updater for the metadata field of hydra.packaging.Package
+packageWithMetadata :: Typed.TypedTerm Packaging.Package -> Typed.TypedTerm (Maybe Packaging.EntityMetadata) -> Typed.TypedTerm Packaging.Package
+packageWithMetadata original newVal =
     Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.packaging.Package"),
       Core.recordFields = [
@@ -444,7 +722,7 @@ packageWithDescription original newVal =
               Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
-          Core.fieldName = (Core.Name "description"),
+          Core.fieldName = (Core.Name "metadata"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "dependencies"),
@@ -474,11 +752,11 @@ packageWithModules original newVal =
               Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
-          Core.fieldName = (Core.Name "description"),
+          Core.fieldName = (Core.Name "metadata"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.packaging.Package"),
-              Core.projectionFieldName = (Core.Name "description")})),
+              Core.projectionFieldName = (Core.Name "metadata")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "dependencies"),
@@ -500,11 +778,11 @@ packageWithName original newVal =
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)},
         Core.Field {
-          Core.fieldName = (Core.Name "description"),
+          Core.fieldName = (Core.Name "metadata"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.packaging.Package"),
-              Core.projectionFieldName = (Core.Name "description")})),
+              Core.projectionFieldName = (Core.Name "metadata")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "dependencies"),
@@ -521,8 +799,8 @@ packageWithName original newVal =
               Core.projectionFieldName = (Core.Name "modules")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
 -- | DSL constructor for hydra.packaging.PrimitiveDefinition
-primitiveDefinition :: Typed.TypedTerm Core.Name -> Typed.TypedTerm Typing.TermSignature -> Typed.TypedTerm String -> Typed.TypedTerm (Maybe String) -> Typed.TypedTerm [Core.Name] -> Typed.TypedTerm Bool -> Typed.TypedTerm Bool -> Typed.TypedTerm (Maybe Packaging.Version) -> Typed.TypedTerm (Maybe Packaging.Version) -> Typed.TypedTerm (Maybe Core.Term) -> Typed.TypedTerm Packaging.PrimitiveDefinition
-primitiveDefinition name signature description comments seeAlso isPure isTotal availableSince deprecatedSince defaultImplementation =
+primitiveDefinition :: Typed.TypedTerm Core.Name -> Typed.TypedTerm Typing.TermSignature -> Typed.TypedTerm (Maybe Packaging.EntityMetadata) -> Typed.TypedTerm Bool -> Typed.TypedTerm Bool -> Typed.TypedTerm (Maybe Core.Term) -> Typed.TypedTerm Packaging.PrimitiveDefinition
+primitiveDefinition name signature metadata isPure isTotal defaultImplementation =
     Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.packaging.PrimitiveDefinition"),
       Core.recordFields = [
@@ -533,14 +811,8 @@ primitiveDefinition name signature description comments seeAlso isPure isTotal a
           Core.fieldName = (Core.Name "signature"),
           Core.fieldTerm = (Typed.unTypedTerm signature)},
         Core.Field {
-          Core.fieldName = (Core.Name "description"),
-          Core.fieldTerm = (Typed.unTypedTerm description)},
-        Core.Field {
-          Core.fieldName = (Core.Name "comments"),
-          Core.fieldTerm = (Typed.unTypedTerm comments)},
-        Core.Field {
-          Core.fieldName = (Core.Name "seeAlso"),
-          Core.fieldTerm = (Typed.unTypedTerm seeAlso)},
+          Core.fieldName = (Core.Name "metadata"),
+          Core.fieldTerm = (Typed.unTypedTerm metadata)},
         Core.Field {
           Core.fieldName = (Core.Name "isPure"),
           Core.fieldTerm = (Typed.unTypedTerm isPure)},
@@ -548,30 +820,8 @@ primitiveDefinition name signature description comments seeAlso isPure isTotal a
           Core.fieldName = (Core.Name "isTotal"),
           Core.fieldTerm = (Typed.unTypedTerm isTotal)},
         Core.Field {
-          Core.fieldName = (Core.Name "availableSince"),
-          Core.fieldTerm = (Typed.unTypedTerm availableSince)},
-        Core.Field {
-          Core.fieldName = (Core.Name "deprecatedSince"),
-          Core.fieldTerm = (Typed.unTypedTerm deprecatedSince)},
-        Core.Field {
           Core.fieldName = (Core.Name "defaultImplementation"),
           Core.fieldTerm = (Typed.unTypedTerm defaultImplementation)}]}))
--- | DSL accessor for the availableSince field of hydra.packaging.PrimitiveDefinition
-primitiveDefinitionAvailableSince :: Typed.TypedTerm Packaging.PrimitiveDefinition -> Typed.TypedTerm (Maybe Packaging.Version)
-primitiveDefinitionAvailableSince x =
-    Typed.TypedTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermProject (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.packaging.PrimitiveDefinition"),
-        Core.projectionFieldName = (Core.Name "availableSince")})),
-      Core.applicationArgument = (Typed.unTypedTerm x)}))
--- | DSL accessor for the comments field of hydra.packaging.PrimitiveDefinition
-primitiveDefinitionComments :: Typed.TypedTerm Packaging.PrimitiveDefinition -> Typed.TypedTerm (Maybe String)
-primitiveDefinitionComments x =
-    Typed.TypedTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermProject (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.packaging.PrimitiveDefinition"),
-        Core.projectionFieldName = (Core.Name "comments")})),
-      Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL accessor for the defaultImplementation field of hydra.packaging.PrimitiveDefinition
 primitiveDefinitionDefaultImplementation :: Typed.TypedTerm Packaging.PrimitiveDefinition -> Typed.TypedTerm (Maybe Core.Term)
 primitiveDefinitionDefaultImplementation x =
@@ -579,22 +829,6 @@ primitiveDefinitionDefaultImplementation x =
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.packaging.PrimitiveDefinition"),
         Core.projectionFieldName = (Core.Name "defaultImplementation")})),
-      Core.applicationArgument = (Typed.unTypedTerm x)}))
--- | DSL accessor for the deprecatedSince field of hydra.packaging.PrimitiveDefinition
-primitiveDefinitionDeprecatedSince :: Typed.TypedTerm Packaging.PrimitiveDefinition -> Typed.TypedTerm (Maybe Packaging.Version)
-primitiveDefinitionDeprecatedSince x =
-    Typed.TypedTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermProject (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.packaging.PrimitiveDefinition"),
-        Core.projectionFieldName = (Core.Name "deprecatedSince")})),
-      Core.applicationArgument = (Typed.unTypedTerm x)}))
--- | DSL accessor for the description field of hydra.packaging.PrimitiveDefinition
-primitiveDefinitionDescription :: Typed.TypedTerm Packaging.PrimitiveDefinition -> Typed.TypedTerm String
-primitiveDefinitionDescription x =
-    Typed.TypedTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermProject (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.packaging.PrimitiveDefinition"),
-        Core.projectionFieldName = (Core.Name "description")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL accessor for the isPure field of hydra.packaging.PrimitiveDefinition
 primitiveDefinitionIsPure :: Typed.TypedTerm Packaging.PrimitiveDefinition -> Typed.TypedTerm Bool
@@ -612,6 +846,14 @@ primitiveDefinitionIsTotal x =
         Core.projectionTypeName = (Core.Name "hydra.packaging.PrimitiveDefinition"),
         Core.projectionFieldName = (Core.Name "isTotal")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+-- | DSL accessor for the metadata field of hydra.packaging.PrimitiveDefinition
+primitiveDefinitionMetadata :: Typed.TypedTerm Packaging.PrimitiveDefinition -> Typed.TypedTerm (Maybe Packaging.EntityMetadata)
+primitiveDefinitionMetadata x =
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.packaging.PrimitiveDefinition"),
+        Core.projectionFieldName = (Core.Name "metadata")})),
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL accessor for the name field of hydra.packaging.PrimitiveDefinition
 primitiveDefinitionName :: Typed.TypedTerm Packaging.PrimitiveDefinition -> Typed.TypedTerm Core.Name
 primitiveDefinitionName x =
@@ -619,14 +861,6 @@ primitiveDefinitionName x =
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.packaging.PrimitiveDefinition"),
         Core.projectionFieldName = (Core.Name "name")})),
-      Core.applicationArgument = (Typed.unTypedTerm x)}))
--- | DSL accessor for the seeAlso field of hydra.packaging.PrimitiveDefinition
-primitiveDefinitionSeeAlso :: Typed.TypedTerm Packaging.PrimitiveDefinition -> Typed.TypedTerm [Core.Name]
-primitiveDefinitionSeeAlso x =
-    Typed.TypedTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermProject (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.packaging.PrimitiveDefinition"),
-        Core.projectionFieldName = (Core.Name "seeAlso")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL accessor for the signature field of hydra.packaging.PrimitiveDefinition
 primitiveDefinitionSignature :: Typed.TypedTerm Packaging.PrimitiveDefinition -> Typed.TypedTerm Typing.TermSignature
@@ -636,150 +870,6 @@ primitiveDefinitionSignature x =
         Core.projectionTypeName = (Core.Name "hydra.packaging.PrimitiveDefinition"),
         Core.projectionFieldName = (Core.Name "signature")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
--- | DSL updater for the availableSince field of hydra.packaging.PrimitiveDefinition
-primitiveDefinitionWithAvailableSince :: Typed.TypedTerm Packaging.PrimitiveDefinition -> Typed.TypedTerm (Maybe Packaging.Version) -> Typed.TypedTerm Packaging.PrimitiveDefinition
-primitiveDefinitionWithAvailableSince original newVal =
-    Typed.TypedTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.packaging.PrimitiveDefinition"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "name"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.packaging.PrimitiveDefinition"),
-              Core.projectionFieldName = (Core.Name "name")})),
-            Core.applicationArgument = (Typed.unTypedTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "signature"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.packaging.PrimitiveDefinition"),
-              Core.projectionFieldName = (Core.Name "signature")})),
-            Core.applicationArgument = (Typed.unTypedTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "description"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.packaging.PrimitiveDefinition"),
-              Core.projectionFieldName = (Core.Name "description")})),
-            Core.applicationArgument = (Typed.unTypedTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "comments"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.packaging.PrimitiveDefinition"),
-              Core.projectionFieldName = (Core.Name "comments")})),
-            Core.applicationArgument = (Typed.unTypedTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "seeAlso"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.packaging.PrimitiveDefinition"),
-              Core.projectionFieldName = (Core.Name "seeAlso")})),
-            Core.applicationArgument = (Typed.unTypedTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "isPure"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.packaging.PrimitiveDefinition"),
-              Core.projectionFieldName = (Core.Name "isPure")})),
-            Core.applicationArgument = (Typed.unTypedTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "isTotal"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.packaging.PrimitiveDefinition"),
-              Core.projectionFieldName = (Core.Name "isTotal")})),
-            Core.applicationArgument = (Typed.unTypedTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "availableSince"),
-          Core.fieldTerm = (Typed.unTypedTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "deprecatedSince"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.packaging.PrimitiveDefinition"),
-              Core.projectionFieldName = (Core.Name "deprecatedSince")})),
-            Core.applicationArgument = (Typed.unTypedTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "defaultImplementation"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.packaging.PrimitiveDefinition"),
-              Core.projectionFieldName = (Core.Name "defaultImplementation")})),
-            Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
--- | DSL updater for the comments field of hydra.packaging.PrimitiveDefinition
-primitiveDefinitionWithComments :: Typed.TypedTerm Packaging.PrimitiveDefinition -> Typed.TypedTerm (Maybe String) -> Typed.TypedTerm Packaging.PrimitiveDefinition
-primitiveDefinitionWithComments original newVal =
-    Typed.TypedTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.packaging.PrimitiveDefinition"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "name"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.packaging.PrimitiveDefinition"),
-              Core.projectionFieldName = (Core.Name "name")})),
-            Core.applicationArgument = (Typed.unTypedTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "signature"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.packaging.PrimitiveDefinition"),
-              Core.projectionFieldName = (Core.Name "signature")})),
-            Core.applicationArgument = (Typed.unTypedTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "description"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.packaging.PrimitiveDefinition"),
-              Core.projectionFieldName = (Core.Name "description")})),
-            Core.applicationArgument = (Typed.unTypedTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "comments"),
-          Core.fieldTerm = (Typed.unTypedTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "seeAlso"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.packaging.PrimitiveDefinition"),
-              Core.projectionFieldName = (Core.Name "seeAlso")})),
-            Core.applicationArgument = (Typed.unTypedTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "isPure"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.packaging.PrimitiveDefinition"),
-              Core.projectionFieldName = (Core.Name "isPure")})),
-            Core.applicationArgument = (Typed.unTypedTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "isTotal"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.packaging.PrimitiveDefinition"),
-              Core.projectionFieldName = (Core.Name "isTotal")})),
-            Core.applicationArgument = (Typed.unTypedTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "availableSince"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.packaging.PrimitiveDefinition"),
-              Core.projectionFieldName = (Core.Name "availableSince")})),
-            Core.applicationArgument = (Typed.unTypedTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "deprecatedSince"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.packaging.PrimitiveDefinition"),
-              Core.projectionFieldName = (Core.Name "deprecatedSince")})),
-            Core.applicationArgument = (Typed.unTypedTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "defaultImplementation"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.packaging.PrimitiveDefinition"),
-              Core.projectionFieldName = (Core.Name "defaultImplementation")})),
-            Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
 -- | DSL updater for the defaultImplementation field of hydra.packaging.PrimitiveDefinition
 primitiveDefinitionWithDefaultImplementation :: Typed.TypedTerm Packaging.PrimitiveDefinition -> Typed.TypedTerm (Maybe Core.Term) -> Typed.TypedTerm Packaging.PrimitiveDefinition
 primitiveDefinitionWithDefaultImplementation original newVal =
@@ -801,25 +891,11 @@ primitiveDefinitionWithDefaultImplementation original newVal =
               Core.projectionFieldName = (Core.Name "signature")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
-          Core.fieldName = (Core.Name "description"),
+          Core.fieldName = (Core.Name "metadata"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.packaging.PrimitiveDefinition"),
-              Core.projectionFieldName = (Core.Name "description")})),
-            Core.applicationArgument = (Typed.unTypedTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "comments"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.packaging.PrimitiveDefinition"),
-              Core.projectionFieldName = (Core.Name "comments")})),
-            Core.applicationArgument = (Typed.unTypedTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "seeAlso"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.packaging.PrimitiveDefinition"),
-              Core.projectionFieldName = (Core.Name "seeAlso")})),
+              Core.projectionFieldName = (Core.Name "metadata")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "isPure"),
@@ -834,168 +910,10 @@ primitiveDefinitionWithDefaultImplementation original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.packaging.PrimitiveDefinition"),
               Core.projectionFieldName = (Core.Name "isTotal")})),
-            Core.applicationArgument = (Typed.unTypedTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "availableSince"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.packaging.PrimitiveDefinition"),
-              Core.projectionFieldName = (Core.Name "availableSince")})),
-            Core.applicationArgument = (Typed.unTypedTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "deprecatedSince"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.packaging.PrimitiveDefinition"),
-              Core.projectionFieldName = (Core.Name "deprecatedSince")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "defaultImplementation"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
--- | DSL updater for the deprecatedSince field of hydra.packaging.PrimitiveDefinition
-primitiveDefinitionWithDeprecatedSince :: Typed.TypedTerm Packaging.PrimitiveDefinition -> Typed.TypedTerm (Maybe Packaging.Version) -> Typed.TypedTerm Packaging.PrimitiveDefinition
-primitiveDefinitionWithDeprecatedSince original newVal =
-    Typed.TypedTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.packaging.PrimitiveDefinition"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "name"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.packaging.PrimitiveDefinition"),
-              Core.projectionFieldName = (Core.Name "name")})),
-            Core.applicationArgument = (Typed.unTypedTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "signature"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.packaging.PrimitiveDefinition"),
-              Core.projectionFieldName = (Core.Name "signature")})),
-            Core.applicationArgument = (Typed.unTypedTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "description"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.packaging.PrimitiveDefinition"),
-              Core.projectionFieldName = (Core.Name "description")})),
-            Core.applicationArgument = (Typed.unTypedTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "comments"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.packaging.PrimitiveDefinition"),
-              Core.projectionFieldName = (Core.Name "comments")})),
-            Core.applicationArgument = (Typed.unTypedTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "seeAlso"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.packaging.PrimitiveDefinition"),
-              Core.projectionFieldName = (Core.Name "seeAlso")})),
-            Core.applicationArgument = (Typed.unTypedTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "isPure"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.packaging.PrimitiveDefinition"),
-              Core.projectionFieldName = (Core.Name "isPure")})),
-            Core.applicationArgument = (Typed.unTypedTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "isTotal"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.packaging.PrimitiveDefinition"),
-              Core.projectionFieldName = (Core.Name "isTotal")})),
-            Core.applicationArgument = (Typed.unTypedTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "availableSince"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.packaging.PrimitiveDefinition"),
-              Core.projectionFieldName = (Core.Name "availableSince")})),
-            Core.applicationArgument = (Typed.unTypedTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "deprecatedSince"),
-          Core.fieldTerm = (Typed.unTypedTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "defaultImplementation"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.packaging.PrimitiveDefinition"),
-              Core.projectionFieldName = (Core.Name "defaultImplementation")})),
-            Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
--- | DSL updater for the description field of hydra.packaging.PrimitiveDefinition
-primitiveDefinitionWithDescription :: Typed.TypedTerm Packaging.PrimitiveDefinition -> Typed.TypedTerm String -> Typed.TypedTerm Packaging.PrimitiveDefinition
-primitiveDefinitionWithDescription original newVal =
-    Typed.TypedTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.packaging.PrimitiveDefinition"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "name"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.packaging.PrimitiveDefinition"),
-              Core.projectionFieldName = (Core.Name "name")})),
-            Core.applicationArgument = (Typed.unTypedTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "signature"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.packaging.PrimitiveDefinition"),
-              Core.projectionFieldName = (Core.Name "signature")})),
-            Core.applicationArgument = (Typed.unTypedTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "description"),
-          Core.fieldTerm = (Typed.unTypedTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "comments"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.packaging.PrimitiveDefinition"),
-              Core.projectionFieldName = (Core.Name "comments")})),
-            Core.applicationArgument = (Typed.unTypedTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "seeAlso"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.packaging.PrimitiveDefinition"),
-              Core.projectionFieldName = (Core.Name "seeAlso")})),
-            Core.applicationArgument = (Typed.unTypedTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "isPure"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.packaging.PrimitiveDefinition"),
-              Core.projectionFieldName = (Core.Name "isPure")})),
-            Core.applicationArgument = (Typed.unTypedTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "isTotal"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.packaging.PrimitiveDefinition"),
-              Core.projectionFieldName = (Core.Name "isTotal")})),
-            Core.applicationArgument = (Typed.unTypedTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "availableSince"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.packaging.PrimitiveDefinition"),
-              Core.projectionFieldName = (Core.Name "availableSince")})),
-            Core.applicationArgument = (Typed.unTypedTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "deprecatedSince"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.packaging.PrimitiveDefinition"),
-              Core.projectionFieldName = (Core.Name "deprecatedSince")})),
-            Core.applicationArgument = (Typed.unTypedTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "defaultImplementation"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.packaging.PrimitiveDefinition"),
-              Core.projectionFieldName = (Core.Name "defaultImplementation")})),
-            Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
 -- | DSL updater for the isPure field of hydra.packaging.PrimitiveDefinition
 primitiveDefinitionWithIsPure :: Typed.TypedTerm Packaging.PrimitiveDefinition -> Typed.TypedTerm Bool -> Typed.TypedTerm Packaging.PrimitiveDefinition
 primitiveDefinitionWithIsPure original newVal =
@@ -1017,25 +935,11 @@ primitiveDefinitionWithIsPure original newVal =
               Core.projectionFieldName = (Core.Name "signature")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
-          Core.fieldName = (Core.Name "description"),
+          Core.fieldName = (Core.Name "metadata"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.packaging.PrimitiveDefinition"),
-              Core.projectionFieldName = (Core.Name "description")})),
-            Core.applicationArgument = (Typed.unTypedTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "comments"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.packaging.PrimitiveDefinition"),
-              Core.projectionFieldName = (Core.Name "comments")})),
-            Core.applicationArgument = (Typed.unTypedTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "seeAlso"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.packaging.PrimitiveDefinition"),
-              Core.projectionFieldName = (Core.Name "seeAlso")})),
+              Core.projectionFieldName = (Core.Name "metadata")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "isPure"),
@@ -1046,20 +950,6 @@ primitiveDefinitionWithIsPure original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.packaging.PrimitiveDefinition"),
               Core.projectionFieldName = (Core.Name "isTotal")})),
-            Core.applicationArgument = (Typed.unTypedTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "availableSince"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.packaging.PrimitiveDefinition"),
-              Core.projectionFieldName = (Core.Name "availableSince")})),
-            Core.applicationArgument = (Typed.unTypedTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "deprecatedSince"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.packaging.PrimitiveDefinition"),
-              Core.projectionFieldName = (Core.Name "deprecatedSince")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "defaultImplementation"),
@@ -1089,25 +979,11 @@ primitiveDefinitionWithIsTotal original newVal =
               Core.projectionFieldName = (Core.Name "signature")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
-          Core.fieldName = (Core.Name "description"),
+          Core.fieldName = (Core.Name "metadata"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.packaging.PrimitiveDefinition"),
-              Core.projectionFieldName = (Core.Name "description")})),
-            Core.applicationArgument = (Typed.unTypedTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "comments"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.packaging.PrimitiveDefinition"),
-              Core.projectionFieldName = (Core.Name "comments")})),
-            Core.applicationArgument = (Typed.unTypedTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "seeAlso"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.packaging.PrimitiveDefinition"),
-              Core.projectionFieldName = (Core.Name "seeAlso")})),
+              Core.projectionFieldName = (Core.Name "metadata")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "isPure"),
@@ -1120,18 +996,48 @@ primitiveDefinitionWithIsTotal original newVal =
           Core.fieldName = (Core.Name "isTotal"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)},
         Core.Field {
-          Core.fieldName = (Core.Name "availableSince"),
+          Core.fieldName = (Core.Name "defaultImplementation"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.packaging.PrimitiveDefinition"),
-              Core.projectionFieldName = (Core.Name "availableSince")})),
+              Core.projectionFieldName = (Core.Name "defaultImplementation")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+-- | DSL updater for the metadata field of hydra.packaging.PrimitiveDefinition
+primitiveDefinitionWithMetadata :: Typed.TypedTerm Packaging.PrimitiveDefinition -> Typed.TypedTerm (Maybe Packaging.EntityMetadata) -> Typed.TypedTerm Packaging.PrimitiveDefinition
+primitiveDefinitionWithMetadata original newVal =
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.packaging.PrimitiveDefinition"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "name"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.packaging.PrimitiveDefinition"),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
-          Core.fieldName = (Core.Name "deprecatedSince"),
+          Core.fieldName = (Core.Name "signature"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.packaging.PrimitiveDefinition"),
-              Core.projectionFieldName = (Core.Name "deprecatedSince")})),
+              Core.projectionFieldName = (Core.Name "signature")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "metadata"),
+          Core.fieldTerm = (Typed.unTypedTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "isPure"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.packaging.PrimitiveDefinition"),
+              Core.projectionFieldName = (Core.Name "isPure")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "isTotal"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.packaging.PrimitiveDefinition"),
+              Core.projectionFieldName = (Core.Name "isTotal")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "defaultImplementation"),
@@ -1157,25 +1063,11 @@ primitiveDefinitionWithName original newVal =
               Core.projectionFieldName = (Core.Name "signature")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
-          Core.fieldName = (Core.Name "description"),
+          Core.fieldName = (Core.Name "metadata"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.packaging.PrimitiveDefinition"),
-              Core.projectionFieldName = (Core.Name "description")})),
-            Core.applicationArgument = (Typed.unTypedTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "comments"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.packaging.PrimitiveDefinition"),
-              Core.projectionFieldName = (Core.Name "comments")})),
-            Core.applicationArgument = (Typed.unTypedTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "seeAlso"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.packaging.PrimitiveDefinition"),
-              Core.projectionFieldName = (Core.Name "seeAlso")})),
+              Core.projectionFieldName = (Core.Name "metadata")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "isPure"),
@@ -1190,92 +1082,6 @@ primitiveDefinitionWithName original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.packaging.PrimitiveDefinition"),
               Core.projectionFieldName = (Core.Name "isTotal")})),
-            Core.applicationArgument = (Typed.unTypedTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "availableSince"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.packaging.PrimitiveDefinition"),
-              Core.projectionFieldName = (Core.Name "availableSince")})),
-            Core.applicationArgument = (Typed.unTypedTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "deprecatedSince"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.packaging.PrimitiveDefinition"),
-              Core.projectionFieldName = (Core.Name "deprecatedSince")})),
-            Core.applicationArgument = (Typed.unTypedTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "defaultImplementation"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.packaging.PrimitiveDefinition"),
-              Core.projectionFieldName = (Core.Name "defaultImplementation")})),
-            Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
--- | DSL updater for the seeAlso field of hydra.packaging.PrimitiveDefinition
-primitiveDefinitionWithSeeAlso :: Typed.TypedTerm Packaging.PrimitiveDefinition -> Typed.TypedTerm [Core.Name] -> Typed.TypedTerm Packaging.PrimitiveDefinition
-primitiveDefinitionWithSeeAlso original newVal =
-    Typed.TypedTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.packaging.PrimitiveDefinition"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "name"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.packaging.PrimitiveDefinition"),
-              Core.projectionFieldName = (Core.Name "name")})),
-            Core.applicationArgument = (Typed.unTypedTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "signature"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.packaging.PrimitiveDefinition"),
-              Core.projectionFieldName = (Core.Name "signature")})),
-            Core.applicationArgument = (Typed.unTypedTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "description"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.packaging.PrimitiveDefinition"),
-              Core.projectionFieldName = (Core.Name "description")})),
-            Core.applicationArgument = (Typed.unTypedTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "comments"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.packaging.PrimitiveDefinition"),
-              Core.projectionFieldName = (Core.Name "comments")})),
-            Core.applicationArgument = (Typed.unTypedTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "seeAlso"),
-          Core.fieldTerm = (Typed.unTypedTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "isPure"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.packaging.PrimitiveDefinition"),
-              Core.projectionFieldName = (Core.Name "isPure")})),
-            Core.applicationArgument = (Typed.unTypedTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "isTotal"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.packaging.PrimitiveDefinition"),
-              Core.projectionFieldName = (Core.Name "isTotal")})),
-            Core.applicationArgument = (Typed.unTypedTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "availableSince"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.packaging.PrimitiveDefinition"),
-              Core.projectionFieldName = (Core.Name "availableSince")})),
-            Core.applicationArgument = (Typed.unTypedTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "deprecatedSince"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.packaging.PrimitiveDefinition"),
-              Core.projectionFieldName = (Core.Name "deprecatedSince")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "defaultImplementation"),
@@ -1301,25 +1107,11 @@ primitiveDefinitionWithSignature original newVal =
           Core.fieldName = (Core.Name "signature"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)},
         Core.Field {
-          Core.fieldName = (Core.Name "description"),
+          Core.fieldName = (Core.Name "metadata"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.packaging.PrimitiveDefinition"),
-              Core.projectionFieldName = (Core.Name "description")})),
-            Core.applicationArgument = (Typed.unTypedTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "comments"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.packaging.PrimitiveDefinition"),
-              Core.projectionFieldName = (Core.Name "comments")})),
-            Core.applicationArgument = (Typed.unTypedTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "seeAlso"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.packaging.PrimitiveDefinition"),
-              Core.projectionFieldName = (Core.Name "seeAlso")})),
+              Core.projectionFieldName = (Core.Name "metadata")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "isPure"),
@@ -1334,20 +1126,6 @@ primitiveDefinitionWithSignature original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.packaging.PrimitiveDefinition"),
               Core.projectionFieldName = (Core.Name "isTotal")})),
-            Core.applicationArgument = (Typed.unTypedTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "availableSince"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.packaging.PrimitiveDefinition"),
-              Core.projectionFieldName = (Core.Name "availableSince")})),
-            Core.applicationArgument = (Typed.unTypedTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "deprecatedSince"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.packaging.PrimitiveDefinition"),
-              Core.projectionFieldName = (Core.Name "deprecatedSince")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "defaultImplementation"),
@@ -1417,8 +1195,8 @@ qualifiedNameWithModuleName original newVal =
               Core.projectionFieldName = (Core.Name "local")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
 -- | DSL constructor for hydra.packaging.TermDefinition
-termDefinition :: Typed.TypedTerm Core.Name -> Typed.TypedTerm Core.Term -> Typed.TypedTerm (Maybe Typing.TermSignature) -> Typed.TypedTerm Packaging.TermDefinition
-termDefinition name term signature =
+termDefinition :: Typed.TypedTerm Core.Name -> Typed.TypedTerm (Maybe Packaging.EntityMetadata) -> Typed.TypedTerm Core.Term -> Typed.TypedTerm (Maybe Typing.TermSignature) -> Typed.TypedTerm Packaging.TermDefinition
+termDefinition name metadata term signature =
     Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.packaging.TermDefinition"),
       Core.recordFields = [
@@ -1426,11 +1204,22 @@ termDefinition name term signature =
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Typed.unTypedTerm name)},
         Core.Field {
+          Core.fieldName = (Core.Name "metadata"),
+          Core.fieldTerm = (Typed.unTypedTerm metadata)},
+        Core.Field {
           Core.fieldName = (Core.Name "term"),
           Core.fieldTerm = (Typed.unTypedTerm term)},
         Core.Field {
           Core.fieldName = (Core.Name "signature"),
           Core.fieldTerm = (Typed.unTypedTerm signature)}]}))
+-- | DSL accessor for the metadata field of hydra.packaging.TermDefinition
+termDefinitionMetadata :: Typed.TypedTerm Packaging.TermDefinition -> Typed.TypedTerm (Maybe Packaging.EntityMetadata)
+termDefinitionMetadata x =
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.packaging.TermDefinition"),
+        Core.projectionFieldName = (Core.Name "metadata")})),
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL accessor for the name field of hydra.packaging.TermDefinition
 termDefinitionName :: Typed.TypedTerm Packaging.TermDefinition -> Typed.TypedTerm Core.Name
 termDefinitionName x =
@@ -1455,6 +1244,36 @@ termDefinitionTerm x =
         Core.projectionTypeName = (Core.Name "hydra.packaging.TermDefinition"),
         Core.projectionFieldName = (Core.Name "term")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+-- | DSL updater for the metadata field of hydra.packaging.TermDefinition
+termDefinitionWithMetadata :: Typed.TypedTerm Packaging.TermDefinition -> Typed.TypedTerm (Maybe Packaging.EntityMetadata) -> Typed.TypedTerm Packaging.TermDefinition
+termDefinitionWithMetadata original newVal =
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.packaging.TermDefinition"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "name"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.packaging.TermDefinition"),
+              Core.projectionFieldName = (Core.Name "name")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "metadata"),
+          Core.fieldTerm = (Typed.unTypedTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "term"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.packaging.TermDefinition"),
+              Core.projectionFieldName = (Core.Name "term")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "signature"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.packaging.TermDefinition"),
+              Core.projectionFieldName = (Core.Name "signature")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
 -- | DSL updater for the name field of hydra.packaging.TermDefinition
 termDefinitionWithName :: Typed.TypedTerm Packaging.TermDefinition -> Typed.TypedTerm Core.Name -> Typed.TypedTerm Packaging.TermDefinition
 termDefinitionWithName original newVal =
@@ -1464,6 +1283,13 @@ termDefinitionWithName original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "metadata"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.packaging.TermDefinition"),
+              Core.projectionFieldName = (Core.Name "metadata")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "term"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
@@ -1492,6 +1318,13 @@ termDefinitionWithSignature original newVal =
               Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
+          Core.fieldName = (Core.Name "metadata"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.packaging.TermDefinition"),
+              Core.projectionFieldName = (Core.Name "metadata")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
+        Core.Field {
           Core.fieldName = (Core.Name "term"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -1515,6 +1348,13 @@ termDefinitionWithTerm original newVal =
               Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
+          Core.fieldName = (Core.Name "metadata"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.packaging.TermDefinition"),
+              Core.projectionFieldName = (Core.Name "metadata")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
+        Core.Field {
           Core.fieldName = (Core.Name "term"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)},
         Core.Field {
@@ -1525,8 +1365,8 @@ termDefinitionWithTerm original newVal =
               Core.projectionFieldName = (Core.Name "signature")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
 -- | DSL constructor for hydra.packaging.TypeDefinition
-typeDefinition :: Typed.TypedTerm Core.Name -> Typed.TypedTerm Core.TypeScheme -> Typed.TypedTerm Packaging.TypeDefinition
-typeDefinition name typeScheme =
+typeDefinition :: Typed.TypedTerm Core.Name -> Typed.TypedTerm (Maybe Packaging.EntityMetadata) -> Typed.TypedTerm Core.TypeScheme -> Typed.TypedTerm Packaging.TypeDefinition
+typeDefinition name metadata typeScheme =
     Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.packaging.TypeDefinition"),
       Core.recordFields = [
@@ -1534,8 +1374,19 @@ typeDefinition name typeScheme =
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Typed.unTypedTerm name)},
         Core.Field {
+          Core.fieldName = (Core.Name "metadata"),
+          Core.fieldTerm = (Typed.unTypedTerm metadata)},
+        Core.Field {
           Core.fieldName = (Core.Name "typeScheme"),
           Core.fieldTerm = (Typed.unTypedTerm typeScheme)}]}))
+-- | DSL accessor for the metadata field of hydra.packaging.TypeDefinition
+typeDefinitionMetadata :: Typed.TypedTerm Packaging.TypeDefinition -> Typed.TypedTerm (Maybe Packaging.EntityMetadata)
+typeDefinitionMetadata x =
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.packaging.TypeDefinition"),
+        Core.projectionFieldName = (Core.Name "metadata")})),
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL accessor for the name field of hydra.packaging.TypeDefinition
 typeDefinitionName :: Typed.TypedTerm Packaging.TypeDefinition -> Typed.TypedTerm Core.Name
 typeDefinitionName x =
@@ -1552,6 +1403,29 @@ typeDefinitionTypeScheme x =
         Core.projectionTypeName = (Core.Name "hydra.packaging.TypeDefinition"),
         Core.projectionFieldName = (Core.Name "typeScheme")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+-- | DSL updater for the metadata field of hydra.packaging.TypeDefinition
+typeDefinitionWithMetadata :: Typed.TypedTerm Packaging.TypeDefinition -> Typed.TypedTerm (Maybe Packaging.EntityMetadata) -> Typed.TypedTerm Packaging.TypeDefinition
+typeDefinitionWithMetadata original newVal =
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.packaging.TypeDefinition"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "name"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.packaging.TypeDefinition"),
+              Core.projectionFieldName = (Core.Name "name")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "metadata"),
+          Core.fieldTerm = (Typed.unTypedTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "typeScheme"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.packaging.TypeDefinition"),
+              Core.projectionFieldName = (Core.Name "typeScheme")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
 -- | DSL updater for the name field of hydra.packaging.TypeDefinition
 typeDefinitionWithName :: Typed.TypedTerm Packaging.TypeDefinition -> Typed.TypedTerm Core.Name -> Typed.TypedTerm Packaging.TypeDefinition
 typeDefinitionWithName original newVal =
@@ -1561,6 +1435,13 @@ typeDefinitionWithName original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "metadata"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.packaging.TypeDefinition"),
+              Core.projectionFieldName = (Core.Name "metadata")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "typeScheme"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
@@ -1580,6 +1461,13 @@ typeDefinitionWithTypeScheme original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.packaging.TypeDefinition"),
               Core.projectionFieldName = (Core.Name "name")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "metadata"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.packaging.TypeDefinition"),
+              Core.projectionFieldName = (Core.Name "metadata")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "typeScheme"),

@@ -672,7 +672,7 @@ constructElementsInterface mod members =
           decl =
                   Syntax.TopLevelClassOrInterfaceDeclarationWithComments {
                     Syntax.topLevelClassOrInterfaceDeclarationWithCommentsValue = itf,
-                    Syntax.topLevelClassOrInterfaceDeclarationWithCommentsComments = (Packaging.moduleDescription mod)}
+                    Syntax.topLevelClassOrInterfaceDeclarationWithCommentsComments = (Maybes.bind (Packaging.moduleMetadata mod) (\em -> Packaging.entityMetadataDescription em))}
       in (
         elName,
         (Syntax.CompilationUnitOrdinary (Syntax.OrdinaryCompilationUnit {

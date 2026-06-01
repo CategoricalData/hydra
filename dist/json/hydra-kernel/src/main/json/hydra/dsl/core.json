@@ -14172,5 +14172,5 @@
                 "domain": {"application": {"argument": {"variable": "hydra.core.WrappedTerm"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "original"}}}}}}],
   "dependencies": [{"module": "hydra.core"}, {"module": "hydra.typed"}, {"module": "hydra.dsl.core"}],
-  "description": "DSL functions for hydra.core",
+  "metadata": {"comments": [], "description": "DSL functions for hydra.core", "seeAlso": []},
   "name": "hydra.dsl.core"}

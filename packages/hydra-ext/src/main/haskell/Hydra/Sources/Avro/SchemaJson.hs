@@ -99,7 +99,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> ([jsonWriterNs, jsonParserNs] L.++ (AvroSchema.ns:jsonModelNs:ModuleName "hydra.parsing":KernelTypes.kernelTypesModuleNames)),
-            moduleDescription = Just "JSON serialization and deserialization for Avro schemas"}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just "JSON serialization and deserialization for Avro schemas")}
   where
     definitions = [
       -- String constants

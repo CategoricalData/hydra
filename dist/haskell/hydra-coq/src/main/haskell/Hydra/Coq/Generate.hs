@@ -684,7 +684,7 @@ moduleToCoq fieldMap constrCounts ambiguousNames globalSanitizedAcc mod_ defs =
                   Maybes.maybe "" (\d -> Strings.cat [
                     "(* ",
                     d,
-                    " *)\n\n"]) (Packaging.moduleDescription mod_)
+                    " *)\n\n"]) ((Maybes.bind (Packaging.moduleMetadata mod_) Packaging.entityMetadataDescription))
           axiomOnlyModules =
                   [
                     "hydra.hoisting",

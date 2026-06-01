@@ -5588,5 +5588,5 @@
                     "typeName": "hydra.core.Term"}},
                 "typeName": "hydra.typed.TypedTerm"}}}}}}],
   "dependencies": [{"module": "hydra.ast"}, {"module": "hydra.typed"}, {"module": "hydra.core"}, {"module": "hydra.dsl.core"}],
-  "description": "DSL functions for hydra.ast",
+  "metadata": {"comments": [], "description": "DSL functions for hydra.ast", "seeAlso": []},
   "name": "hydra.dsl.ast"}

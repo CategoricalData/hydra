@@ -87,7 +87,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = [toDefinition haskellLanguage, toDefinition reservedWords],
             moduleDependencies = Bootstrap.unqualifiedDep <$> (KernelTypes.kernelTypesModuleNames),
-            moduleDescription = Just "Language constraints and reserved words for Haskell"}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just "Language constraints and reserved words for Haskell")}
 haskellLanguage :: TypedTermDefinition Language
 haskellLanguage = haskellLanguageDefinition "haskellLanguage" $
   doc "Language constraints for Haskell" $ lets [

@@ -29,7 +29,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = (DefinitionType <$> definitions),
             moduleDependencies = unqualifiedDep <$> [PgModel.ns, Coders.ns, Core.ns],
-            moduleDescription = Just "A model for property graph mapping specifications. See https://github.com/CategoricalData/hydra/wiki/Property-graphs"}
+            moduleMetadata = descriptionMetadata (Just "A model for property graph mapping specifications. See https://github.com/CategoricalData/hydra/wiki/Property-graphs")}
   where
     definitions = [
       annotationSchema,

@@ -6,7 +6,7 @@ module Hydra.Sources.Rust.Coder where
 
 -- Standard imports for term-level sources outside of the kernel
 import Hydra.Kernel
-import           Hydra.Dsl.Bootstrap (unqualifiedDep)
+import           Hydra.Dsl.Bootstrap (unqualifiedDep, descriptionMetadata)
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Meta.Lib.Strings                as Strings
 import           Hydra.Dsl.Meta.Phantoms                   as Phantoms
@@ -56,7 +56,7 @@ module_ = Module {
             moduleDefinitions = definitions,
             moduleDependencies = unqualifiedDep <$> ([moduleName RustSerdeSource.module_, moduleName RustLanguageSource.module_,
       Formatting.ns, Names.ns, Strip.ns, Variables.ns, Environment.ns, Lexical.ns, SerializationSource.ns] L.++ (RustSyntax.ns:KernelTypes.kernelTypesModuleNames)),
-            moduleDescription = Just "Rust code generator: converts Hydra type and term modules to Rust source code"}
+            moduleMetadata = descriptionMetadata (Just "Rust code generator: converts Hydra type and term modules to Rust source code")}
   where
     definitions = [
       toDefinition encodeEnumVariant,

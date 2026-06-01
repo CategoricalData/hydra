@@ -65,7 +65,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> ([ShowCore.ns, ShowVariants.ns] L.++ kernelTypesModuleNames),
-            moduleDescription = Just "String representations of hydra.error.core types"}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just "String representations of hydra.error.core types")}
   where
    definitions = [
      toDefinition constantConditionError,

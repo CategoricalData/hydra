@@ -221,13 +221,9 @@ adaptPrimitive constraints litmap prim0 =
                 Packaging.PrimitiveDefinition {
                   Packaging.primitiveDefinitionName = (Packaging.primitiveDefinitionName def0),
                   Packaging.primitiveDefinitionSignature = sig1,
-                  Packaging.primitiveDefinitionDescription = (Packaging.primitiveDefinitionDescription def0),
-                  Packaging.primitiveDefinitionComments = (Packaging.primitiveDefinitionComments def0),
-                  Packaging.primitiveDefinitionSeeAlso = (Packaging.primitiveDefinitionSeeAlso def0),
+                  Packaging.primitiveDefinitionMetadata = (Packaging.primitiveDefinitionMetadata def0),
                   Packaging.primitiveDefinitionIsPure = (Packaging.primitiveDefinitionIsPure def0),
                   Packaging.primitiveDefinitionIsTotal = (Packaging.primitiveDefinitionIsTotal def0),
-                  Packaging.primitiveDefinitionAvailableSince = (Packaging.primitiveDefinitionAvailableSince def0),
-                  Packaging.primitiveDefinitionDeprecatedSince = (Packaging.primitiveDefinitionDeprecatedSince def0),
                   Packaging.primitiveDefinitionDefaultImplementation = (Packaging.primitiveDefinitionDefaultImplementation def0)}
         in (Right (Graph.Primitive {
           Graph.primitiveDefinition = def1,
@@ -425,6 +421,7 @@ dataGraphToDefinitions constraints doInfer doExpand doHoistCaseStatements doHois
               toDef =
                       \el -> Maybes.map (\ts -> Packaging.TermDefinition {
                         Packaging.termDefinitionName = (Core.bindingName el),
+                        Packaging.termDefinitionMetadata = Nothing,
                         Packaging.termDefinitionTerm = (Core.bindingTerm el),
                         Packaging.termDefinitionSignature = (Just (Scoping.typeSchemeToTermSignature ts))}) (Core.bindingTypeScheme el)
               selectedElements =
@@ -680,6 +677,7 @@ schemaGraphToDefinitions constraints graph nameLists cx =
         let toDef =
                 \pair -> Packaging.TypeDefinition {
                   Packaging.typeDefinitionName = (Pairs.first pair),
+                  Packaging.typeDefinitionMetadata = Nothing,
                   Packaging.typeDefinitionTypeScheme = Core.TypeScheme {
                     Core.typeSchemeVariables = [],
                     Core.typeSchemeBody = (Pairs.second pair),

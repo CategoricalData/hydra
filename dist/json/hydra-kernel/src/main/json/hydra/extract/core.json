@@ -6549,5 +6549,5 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "description": "Extraction and validation for hydra.core types",
+  "metadata": {"comments": [], "description": "Extraction and validation for hydra.core types", "seeAlso": []},
   "name": "hydra.extract.core"}

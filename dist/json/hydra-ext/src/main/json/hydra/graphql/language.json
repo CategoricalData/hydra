@@ -164,5 +164,5 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "description": "Language constraints and reserved words for GraphQL",
+  "metadata": {"comments": [], "description": "Language constraints and reserved words for GraphQL", "seeAlso": []},
   "name": "hydra.graphql.language"}

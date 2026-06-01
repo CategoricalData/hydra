@@ -734,5 +734,5 @@
     {"module": "hydra.decode.variants"},
     {"module": "hydra.decode.core"},
     {"module": "hydra.decode.typing"}],
-  "description": "Term decoders for hydra.coders",
+  "metadata": {"comments": [], "description": "Term decoders for hydra.coders", "seeAlso": []},
   "name": "hydra.decode.coders"}

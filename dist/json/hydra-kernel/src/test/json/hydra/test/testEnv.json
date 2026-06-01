@@ -49,5 +49,8 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "description": "Type-level declarations for the hand-written Hydra.Test.TestEnv module.",
+  "metadata": {
+    "comments": [],
+    "description": "Type-level declarations for the hand-written Hydra.Test.TestEnv module.",
+    "seeAlso": []},
   "name": "hydra.test.testEnv"}

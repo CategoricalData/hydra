@@ -409,5 +409,8 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "description": "Language constraints and reserved words for Lisp (covering Clojure, Emacs Lisp, Common Lisp, and Scheme)",
+  "metadata": {
+    "comments": [],
+    "description": "Language constraints and reserved words for Lisp (covering Clojure, Emacs Lisp, Common Lisp, and Scheme)",
+    "seeAlso": []},
   "name": "hydra.lisp.language"}

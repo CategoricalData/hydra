@@ -512,5 +512,5 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "description": "AST operators for Haskell",
+  "metadata": {"comments": [], "description": "AST operators for Haskell", "seeAlso": []},
   "name": "hydra.haskell.operators"}

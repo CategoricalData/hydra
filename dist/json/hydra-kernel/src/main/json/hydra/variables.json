@@ -2915,5 +2915,5 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "description": "Free variable analysis, term-level substitution, and unshadowing",
+  "metadata": {"comments": [], "description": "Free variable analysis, term-level substitution, and unshadowing", "seeAlso": []},
   "name": "hydra.variables"}

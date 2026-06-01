@@ -86,7 +86,7 @@ module_ = Module {
             moduleName = (ModuleName "hydra.pegasus.language"),
             moduleDefinitions = [toDefinition pdlLanguage],
             moduleDependencies = Bootstrap.unqualifiedDep <$> ([Lexical.ns] L.++ KernelTypes.kernelTypesModuleNames),
-            moduleDescription = Just "Language constraints for LinkedIn Pegasus (PDL)"}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just "Language constraints for LinkedIn Pegasus (PDL)")}
 pdlLanguage :: TypedTermDefinition Language
 pdlLanguage = define "pdlLanguage" $
   doc "Language constraints for LinkedIn Pegasus (PDL)" $ lets [

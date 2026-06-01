@@ -19,7 +19,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = (DefinitionType <$> definitions),
             moduleDependencies = unqualifiedDep <$> [],
-            moduleDescription = Just "A basic Datalog model"}
+            moduleMetadata = descriptionMetadata (Just "A basic Datalog model")}
   where
     definitions = [
       constant,

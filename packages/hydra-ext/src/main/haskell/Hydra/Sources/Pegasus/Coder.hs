@@ -97,7 +97,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> ([PegasusSerdeSource.ns, moduleName PegasusLanguageSource.module_, Formatting.ns, Names.ns, Analysis.ns, Environment.ns, Sorting.ns, Strip.ns, Annotations.ns, Serialization.ns, ShowCore.ns] L.++ (PdlSyntax.ns:KernelTypes.kernelTypesModuleNames)),
-            moduleDescription = Just "Pegasus PDL code generator: converts Hydra modules to PDL schema files"}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just "Pegasus PDL code generator: converts Hydra modules to PDL schema files")}
   where
     definitions = [
       toDefinition constructModule,
