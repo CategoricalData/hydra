@@ -241,21 +241,21 @@ higherOrderUnionEliminationsTests =
                   Core.caseStatementTypeName = TestTypes.testTypeComparisonName,
                   Core.caseStatementDefault = Nothing,
                   Core.caseStatementCases = [
-                    Core.Field {
-                      Core.fieldName = (Core.Name "lessThan"),
-                      Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                    Core.CaseAlternative {
+                      Core.caseAlternativeName = (Core.Name "lessThan"),
+                      Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                         Core.lambdaParameter = (Core.Name "x"),
                         Core.lambdaDomain = Nothing,
                         Core.lambdaBody = (Core.TermLiteral (Core.LiteralString "less"))}))},
-                    Core.Field {
-                      Core.fieldName = (Core.Name "equalTo"),
-                      Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                    Core.CaseAlternative {
+                      Core.caseAlternativeName = (Core.Name "equalTo"),
+                      Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                         Core.lambdaParameter = (Core.Name "x"),
                         Core.lambdaDomain = Nothing,
                         Core.lambdaBody = (Core.TermLiteral (Core.LiteralString "equal"))}))},
-                    Core.Field {
-                      Core.fieldName = (Core.Name "greaterThan"),
-                      Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                    Core.CaseAlternative {
+                      Core.caseAlternativeName = (Core.Name "greaterThan"),
+                      Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                         Core.lambdaParameter = (Core.Name "x"),
                         Core.lambdaDomain = Nothing,
                         Core.lambdaBody = (Core.TermLiteral (Core.LiteralString "greater"))}))}]}))})),
@@ -286,21 +286,21 @@ higherOrderUnionEliminationsTests =
                     Core.caseStatementTypeName = TestTypes.testTypeComparisonName,
                     Core.caseStatementDefault = Nothing,
                     Core.caseStatementCases = [
-                      Core.Field {
-                        Core.fieldName = (Core.Name "lessThan"),
-                        Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                      Core.CaseAlternative {
+                        Core.caseAlternativeName = (Core.Name "lessThan"),
+                        Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                           Core.lambdaParameter = (Core.Name "x"),
                           Core.lambdaDomain = Nothing,
                           Core.lambdaBody = (Core.TermLiteral (Core.LiteralString "less"))}))},
-                      Core.Field {
-                        Core.fieldName = (Core.Name "equalTo"),
-                        Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                      Core.CaseAlternative {
+                        Core.caseAlternativeName = (Core.Name "equalTo"),
+                        Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                           Core.lambdaParameter = (Core.Name "x"),
                           Core.lambdaDomain = Nothing,
                           Core.lambdaBody = (Core.TermLiteral (Core.LiteralString "equal"))}))},
-                      Core.Field {
-                        Core.fieldName = (Core.Name "greaterThan"),
-                        Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                      Core.CaseAlternative {
+                        Core.caseAlternativeName = (Core.Name "greaterThan"),
+                        Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                           Core.lambdaParameter = (Core.Name "x"),
                           Core.lambdaDomain = Nothing,
                           Core.lambdaBody = (Core.TermLiteral (Core.LiteralString "greater"))}))}]})),
@@ -321,9 +321,9 @@ higherOrderUnionEliminationsTests =
                   Core.caseStatementTypeName = TestTypes.testTypeNumberName,
                   Core.caseStatementDefault = Nothing,
                   Core.caseStatementCases = [
-                    Core.Field {
-                      Core.fieldName = (Core.Name "int"),
-                      Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                    Core.CaseAlternative {
+                      Core.caseAlternativeName = (Core.Name "int"),
+                      Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                         Core.lambdaParameter = (Core.Name "i"),
                         Core.lambdaDomain = Nothing,
                         Core.lambdaBody = (Core.TermApplication (Core.Application {
@@ -331,9 +331,9 @@ higherOrderUnionEliminationsTests =
                             Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.math.add")),
                             Core.applicationArgument = (Core.TermVariable (Core.Name "i"))})),
                           Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)))}))}))},
-                    Core.Field {
-                      Core.fieldName = (Core.Name "float"),
-                      Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                    Core.CaseAlternative {
+                      Core.caseAlternativeName = (Core.Name "float"),
+                      Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                         Core.lambdaParameter = (Core.Name "f"),
                         Core.lambdaDomain = Nothing,
                         Core.lambdaBody = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}))}]})),
@@ -508,17 +508,17 @@ multiParameterPolymorphicCaseStatementsTests =
               Core.caseStatementTypeName = TestTypes.testTypeEitherName,
               Core.caseStatementDefault = Nothing,
               Core.caseStatementCases = [
-                Core.Field {
-                  Core.fieldName = (Core.Name "left"),
-                  Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                Core.CaseAlternative {
+                  Core.caseAlternativeName = (Core.Name "left"),
+                  Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "x"),
                     Core.lambdaDomain = Nothing,
                     Core.lambdaBody = (Core.TermApplication (Core.Application {
                       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.literals.showInt32")),
                       Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))},
-                Core.Field {
-                  Core.fieldName = (Core.Name "right"),
-                  Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                Core.CaseAlternative {
+                  Core.caseAlternativeName = (Core.Name "right"),
+                  Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "y"),
                     Core.lambdaDomain = Nothing,
                     Core.lambdaBody = (Core.TermApplication (Core.Application {
@@ -541,9 +541,9 @@ multiParameterPolymorphicCaseStatementsTests =
                 Core.caseStatementTypeName = TestTypes.testTypeEitherName,
                 Core.caseStatementDefault = Nothing,
                 Core.caseStatementCases = [
-                  Core.Field {
-                    Core.fieldName = (Core.Name "left"),
-                    Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                  Core.CaseAlternative {
+                    Core.caseAlternativeName = (Core.Name "left"),
+                    Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                       Core.lambdaParameter = (Core.Name "n"),
                       Core.lambdaDomain = Nothing,
                       Core.lambdaBody = (Core.TermApplication (Core.Application {
@@ -551,9 +551,9 @@ multiParameterPolymorphicCaseStatementsTests =
                           Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.math.add")),
                           Core.applicationArgument = (Core.TermVariable (Core.Name "n"))})),
                         Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)))}))}))},
-                  Core.Field {
-                    Core.fieldName = (Core.Name "right"),
-                    Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                  Core.CaseAlternative {
+                    Core.caseAlternativeName = (Core.Name "right"),
+                    Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                       Core.lambdaParameter = (Core.Name "s"),
                       Core.lambdaDomain = Nothing,
                       Core.lambdaBody = (Core.TermApplication (Core.Application {
@@ -578,9 +578,9 @@ multiParameterPolymorphicCaseStatementsTests =
                   Core.caseStatementTypeName = TestTypes.testTypeEitherName,
                   Core.caseStatementDefault = Nothing,
                   Core.caseStatementCases = [
-                    Core.Field {
-                      Core.fieldName = (Core.Name "left"),
-                      Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                    Core.CaseAlternative {
+                      Core.caseAlternativeName = (Core.Name "left"),
+                      Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                         Core.lambdaParameter = (Core.Name "coords"),
                         Core.lambdaDomain = Nothing,
                         Core.lambdaBody = (Core.TermApplication (Core.Application {
@@ -588,9 +588,9 @@ multiParameterPolymorphicCaseStatementsTests =
                             Core.projectionTypeName = TestTypes.testTypeLatLonPolyName,
                             Core.projectionFieldName = (Core.Name "lat")})),
                           Core.applicationArgument = (Core.TermVariable (Core.Name "coords"))}))}))},
-                    Core.Field {
-                      Core.fieldName = (Core.Name "right"),
-                      Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                    Core.CaseAlternative {
+                      Core.caseAlternativeName = (Core.Name "right"),
+                      Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                         Core.lambdaParameter = (Core.Name "t"),
                         Core.lambdaDomain = Nothing,
                         Core.lambdaBody = (Core.TermApplication (Core.Application {
@@ -671,9 +671,9 @@ multiParameterPolymorphicCaseStatementsTests =
                     Core.caseStatementTypeName = TestTypes.testTypeEitherName,
                     Core.caseStatementDefault = Nothing,
                     Core.caseStatementCases = [
-                      Core.Field {
-                        Core.fieldName = (Core.Name "left"),
-                        Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                      Core.CaseAlternative {
+                        Core.caseAlternativeName = (Core.Name "left"),
+                        Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                           Core.lambdaParameter = (Core.Name "n"),
                           Core.lambdaDomain = Nothing,
                           Core.lambdaBody = (Core.TermApplication (Core.Application {
@@ -683,9 +683,9 @@ multiParameterPolymorphicCaseStatementsTests =
                                 Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.math.add")),
                                 Core.applicationArgument = (Core.TermVariable (Core.Name "n"))})),
                               Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 10)))}))}))}))},
-                      Core.Field {
-                        Core.fieldName = (Core.Name "right"),
-                        Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                      Core.CaseAlternative {
+                        Core.caseAlternativeName = (Core.Name "right"),
+                        Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                           Core.lambdaParameter = (Core.Name "s"),
                           Core.lambdaDomain = Nothing,
                           Core.lambdaBody = (Core.TermApplication (Core.Application {
@@ -922,15 +922,15 @@ multiParameterPolymorphicProjectionsTests =
                     Core.caseStatementTypeName = TestTypes.testTypePersonOrSomethingName,
                     Core.caseStatementDefault = Nothing,
                     Core.caseStatementCases = [
-                      Core.Field {
-                        Core.fieldName = (Core.Name "person"),
-                        Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                      Core.CaseAlternative {
+                        Core.caseAlternativeName = (Core.Name "person"),
+                        Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                           Core.lambdaParameter = (Core.Name "p"),
                           Core.lambdaDomain = Nothing,
                           Core.lambdaBody = (Core.TermMaybe Nothing)}))},
-                      Core.Field {
-                        Core.fieldName = (Core.Name "other"),
-                        Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                      Core.CaseAlternative {
+                        Core.caseAlternativeName = (Core.Name "other"),
+                        Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                           Core.lambdaParameter = (Core.Name "m"),
                           Core.lambdaDomain = Nothing,
                           Core.lambdaBody = (Core.TermApplication (Core.Application {
@@ -1385,9 +1385,9 @@ nestedUnionEliminationsTests =
               Core.caseStatementTypeName = TestTypes.testTypePersonOrSomethingName,
               Core.caseStatementDefault = Nothing,
               Core.caseStatementCases = [
-                Core.Field {
-                  Core.fieldName = (Core.Name "person"),
-                  Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                Core.CaseAlternative {
+                  Core.caseAlternativeName = (Core.Name "person"),
+                  Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "p"),
                     Core.lambdaDomain = Nothing,
                     Core.lambdaBody = (Core.TermApplication (Core.Application {
@@ -1395,9 +1395,9 @@ nestedUnionEliminationsTests =
                         Core.projectionTypeName = TestTypes.testTypePersonName,
                         Core.projectionFieldName = (Core.Name "firstName")})),
                       Core.applicationArgument = (Core.TermVariable (Core.Name "p"))}))}))},
-                Core.Field {
-                  Core.fieldName = (Core.Name "other"),
-                  Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                Core.CaseAlternative {
+                  Core.caseAlternativeName = (Core.Name "other"),
+                  Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "x"),
                     Core.lambdaDomain = Nothing,
                     Core.lambdaBody = (Core.TermApplication (Core.Application {
@@ -1405,17 +1405,17 @@ nestedUnionEliminationsTests =
                         Core.caseStatementTypeName = TestTypes.testTypeNumberName,
                         Core.caseStatementDefault = Nothing,
                         Core.caseStatementCases = [
-                          Core.Field {
-                            Core.fieldName = (Core.Name "int"),
-                            Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                          Core.CaseAlternative {
+                            Core.caseAlternativeName = (Core.Name "int"),
+                            Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                               Core.lambdaParameter = (Core.Name "i"),
                               Core.lambdaDomain = Nothing,
                               Core.lambdaBody = (Core.TermApplication (Core.Application {
                                 Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.literals.showInt32")),
                                 Core.applicationArgument = (Core.TermVariable (Core.Name "i"))}))}))},
-                          Core.Field {
-                            Core.fieldName = (Core.Name "float"),
-                            Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                          Core.CaseAlternative {
+                            Core.caseAlternativeName = (Core.Name "float"),
+                            Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                               Core.lambdaParameter = (Core.Name "f"),
                               Core.lambdaDomain = Nothing,
                               Core.lambdaBody = (Core.TermApplication (Core.Application {
@@ -1437,21 +1437,21 @@ nestedUnionEliminationsTests =
                 Core.caseStatementTypeName = TestTypes.testTypeComparisonName,
                 Core.caseStatementDefault = Nothing,
                 Core.caseStatementCases = [
-                  Core.Field {
-                    Core.fieldName = (Core.Name "lessThan"),
-                    Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                  Core.CaseAlternative {
+                    Core.caseAlternativeName = (Core.Name "lessThan"),
+                    Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                       Core.lambdaParameter = (Core.Name "x"),
                       Core.lambdaDomain = Nothing,
                       Core.lambdaBody = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)))}))},
-                  Core.Field {
-                    Core.fieldName = (Core.Name "equalTo"),
-                    Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                  Core.CaseAlternative {
+                    Core.caseAlternativeName = (Core.Name "equalTo"),
+                    Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                       Core.lambdaParameter = (Core.Name "x"),
                       Core.lambdaDomain = Nothing,
                       Core.lambdaBody = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}))},
-                  Core.Field {
-                    Core.fieldName = (Core.Name "greaterThan"),
-                    Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                  Core.CaseAlternative {
+                    Core.caseAlternativeName = (Core.Name "greaterThan"),
+                    Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                       Core.lambdaParameter = (Core.Name "x"),
                       Core.lambdaDomain = Nothing,
                       Core.lambdaBody = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 (-1))))}))}]}),
@@ -2510,9 +2510,9 @@ recursiveUnionEliminationsTests =
               Core.caseStatementTypeName = TestTypes.testTypeHydraTypeName,
               Core.caseStatementDefault = Nothing,
               Core.caseStatementCases = [
-                Core.Field {
-                  Core.fieldName = (Core.Name "literal"),
-                  Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                Core.CaseAlternative {
+                  Core.caseAlternativeName = (Core.Name "literal"),
+                  Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "lit"),
                     Core.lambdaDomain = Nothing,
                     Core.lambdaBody = (Core.TermApplication (Core.Application {
@@ -2520,24 +2520,24 @@ recursiveUnionEliminationsTests =
                         Core.caseStatementTypeName = TestTypes.testTypeHydraLiteralTypeName,
                         Core.caseStatementDefault = Nothing,
                         Core.caseStatementCases = [
-                          Core.Field {
-                            Core.fieldName = (Core.Name "boolean"),
-                            Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                          Core.CaseAlternative {
+                            Core.caseAlternativeName = (Core.Name "boolean"),
+                            Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                               Core.lambdaParameter = (Core.Name "b"),
                               Core.lambdaDomain = Nothing,
                               Core.lambdaBody = (Core.TermApplication (Core.Application {
                                 Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.literals.showBoolean")),
                                 Core.applicationArgument = (Core.TermVariable (Core.Name "b"))}))}))},
-                          Core.Field {
-                            Core.fieldName = (Core.Name "string"),
-                            Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                          Core.CaseAlternative {
+                            Core.caseAlternativeName = (Core.Name "string"),
+                            Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                               Core.lambdaParameter = (Core.Name "s"),
                               Core.lambdaDomain = Nothing,
                               Core.lambdaBody = (Core.TermVariable (Core.Name "s"))}))}]})),
                       Core.applicationArgument = (Core.TermVariable (Core.Name "lit"))}))}))},
-                Core.Field {
-                  Core.fieldName = (Core.Name "list"),
-                  Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                Core.CaseAlternative {
+                  Core.caseAlternativeName = (Core.Name "list"),
+                  Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "nested"),
                     Core.lambdaDomain = Nothing,
                     Core.lambdaBody = (Core.TermLiteral (Core.LiteralString "list"))}))}]})))),
@@ -2560,9 +2560,9 @@ simplePolymorphicUnionTests =
               Core.caseStatementTypeName = TestTypes.testTypePersonOrSomethingName,
               Core.caseStatementDefault = Nothing,
               Core.caseStatementCases = [
-                Core.Field {
-                  Core.fieldName = (Core.Name "person"),
-                  Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                Core.CaseAlternative {
+                  Core.caseAlternativeName = (Core.Name "person"),
+                  Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "p"),
                     Core.lambdaDomain = Nothing,
                     Core.lambdaBody = (Core.TermApplication (Core.Application {
@@ -2570,9 +2570,9 @@ simplePolymorphicUnionTests =
                         Core.projectionTypeName = TestTypes.testTypePersonName,
                         Core.projectionFieldName = (Core.Name "firstName")})),
                       Core.applicationArgument = (Core.TermVariable (Core.Name "p"))}))}))},
-                Core.Field {
-                  Core.fieldName = (Core.Name "other"),
-                  Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                Core.CaseAlternative {
+                  Core.caseAlternativeName = (Core.Name "other"),
+                  Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "x"),
                     Core.lambdaDomain = Nothing,
                     Core.lambdaBody = (Core.TermVariable (Core.Name "x"))}))}]})))),
@@ -2591,9 +2591,9 @@ simplePolymorphicUnionTests =
                 Core.caseStatementTypeName = TestTypes.testTypePersonOrSomethingName,
                 Core.caseStatementDefault = Nothing,
                 Core.caseStatementCases = [
-                  Core.Field {
-                    Core.fieldName = (Core.Name "person"),
-                    Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                  Core.CaseAlternative {
+                    Core.caseAlternativeName = (Core.Name "person"),
+                    Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                       Core.lambdaParameter = (Core.Name "p"),
                       Core.lambdaDomain = Nothing,
                       Core.lambdaBody = (Core.TermApplication (Core.Application {
@@ -2601,9 +2601,9 @@ simplePolymorphicUnionTests =
                           Core.projectionTypeName = TestTypes.testTypePersonName,
                           Core.projectionFieldName = (Core.Name "firstName")})),
                         Core.applicationArgument = (Core.TermVariable (Core.Name "p"))}))}))},
-                  Core.Field {
-                    Core.fieldName = (Core.Name "other"),
-                    Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                  Core.CaseAlternative {
+                    Core.caseAlternativeName = (Core.Name "other"),
+                    Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                       Core.lambdaParameter = (Core.Name "x"),
                       Core.lambdaDomain = Nothing,
                       Core.lambdaBody = (Core.TermVariable (Core.Name "x"))}))}]})),
@@ -2731,21 +2731,21 @@ simpleUnitVariantEliminationsTests =
               Core.caseStatementTypeName = TestTypes.testTypeComparisonName,
               Core.caseStatementDefault = Nothing,
               Core.caseStatementCases = [
-                Core.Field {
-                  Core.fieldName = (Core.Name "lessThan"),
-                  Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                Core.CaseAlternative {
+                  Core.caseAlternativeName = (Core.Name "lessThan"),
+                  Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "x"),
                     Core.lambdaDomain = Nothing,
                     Core.lambdaBody = (Core.TermLiteral (Core.LiteralString "less"))}))},
-                Core.Field {
-                  Core.fieldName = (Core.Name "equalTo"),
-                  Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                Core.CaseAlternative {
+                  Core.caseAlternativeName = (Core.Name "equalTo"),
+                  Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "x"),
                     Core.lambdaDomain = Nothing,
                     Core.lambdaBody = (Core.TermLiteral (Core.LiteralString "equal"))}))},
-                Core.Field {
-                  Core.fieldName = (Core.Name "greaterThan"),
-                  Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                Core.CaseAlternative {
+                  Core.caseAlternativeName = (Core.Name "greaterThan"),
+                  Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "x"),
                     Core.lambdaDomain = Nothing,
                     Core.lambdaBody = (Core.TermLiteral (Core.LiteralString "greater"))}))}]})))),
@@ -2761,21 +2761,21 @@ simpleUnitVariantEliminationsTests =
               Core.caseStatementTypeName = TestTypes.testTypeComparisonName,
               Core.caseStatementDefault = Nothing,
               Core.caseStatementCases = [
-                Core.Field {
-                  Core.fieldName = (Core.Name "lessThan"),
-                  Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                Core.CaseAlternative {
+                  Core.caseAlternativeName = (Core.Name "lessThan"),
+                  Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "x"),
                     Core.lambdaDomain = Nothing,
                     Core.lambdaBody = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 (-1))))}))},
-                Core.Field {
-                  Core.fieldName = (Core.Name "equalTo"),
-                  Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                Core.CaseAlternative {
+                  Core.caseAlternativeName = (Core.Name "equalTo"),
+                  Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "x"),
                     Core.lambdaDomain = Nothing,
                     Core.lambdaBody = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}))},
-                Core.Field {
-                  Core.fieldName = (Core.Name "greaterThan"),
-                  Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                Core.CaseAlternative {
+                  Core.caseAlternativeName = (Core.Name "greaterThan"),
+                  Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "x"),
                     Core.lambdaDomain = Nothing,
                     Core.lambdaBody = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)))}))}]})))),
@@ -2792,21 +2792,21 @@ simpleUnitVariantEliminationsTests =
                 Core.caseStatementTypeName = TestTypes.testTypeComparisonName,
                 Core.caseStatementDefault = Nothing,
                 Core.caseStatementCases = [
-                  Core.Field {
-                    Core.fieldName = (Core.Name "lessThan"),
-                    Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                  Core.CaseAlternative {
+                    Core.caseAlternativeName = (Core.Name "lessThan"),
+                    Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                       Core.lambdaParameter = (Core.Name "x"),
                       Core.lambdaDomain = Nothing,
                       Core.lambdaBody = (Core.TermLiteral (Core.LiteralString "less"))}))},
-                  Core.Field {
-                    Core.fieldName = (Core.Name "equalTo"),
-                    Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                  Core.CaseAlternative {
+                    Core.caseAlternativeName = (Core.Name "equalTo"),
+                    Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                       Core.lambdaParameter = (Core.Name "x"),
                       Core.lambdaDomain = Nothing,
                       Core.lambdaBody = (Core.TermLiteral (Core.LiteralString "equal"))}))},
-                  Core.Field {
-                    Core.fieldName = (Core.Name "greaterThan"),
-                    Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                  Core.CaseAlternative {
+                    Core.caseAlternativeName = (Core.Name "greaterThan"),
+                    Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                       Core.lambdaParameter = (Core.Name "x"),
                       Core.lambdaDomain = Nothing,
                       Core.lambdaBody = (Core.TermLiteral (Core.LiteralString "greater"))}))}]})),
@@ -2836,21 +2836,21 @@ unionEliminationsInComplexContextsTests =
                     Core.caseStatementTypeName = TestTypes.testTypeComparisonName,
                     Core.caseStatementDefault = Nothing,
                     Core.caseStatementCases = [
-                      Core.Field {
-                        Core.fieldName = (Core.Name "lessThan"),
-                        Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                      Core.CaseAlternative {
+                        Core.caseAlternativeName = (Core.Name "lessThan"),
+                        Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                           Core.lambdaParameter = (Core.Name "x"),
                           Core.lambdaDomain = Nothing,
                           Core.lambdaBody = (Core.TermLiteral (Core.LiteralString "less"))}))},
-                      Core.Field {
-                        Core.fieldName = (Core.Name "equalTo"),
-                        Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                      Core.CaseAlternative {
+                        Core.caseAlternativeName = (Core.Name "equalTo"),
+                        Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                           Core.lambdaParameter = (Core.Name "x"),
                           Core.lambdaDomain = Nothing,
                           Core.lambdaBody = (Core.TermLiteral (Core.LiteralString "equal"))}))},
-                      Core.Field {
-                        Core.fieldName = (Core.Name "greaterThan"),
-                        Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                      Core.CaseAlternative {
+                        Core.caseAlternativeName = (Core.Name "greaterThan"),
+                        Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                           Core.lambdaParameter = (Core.Name "x"),
                           Core.lambdaDomain = Nothing,
                           Core.lambdaBody = (Core.TermLiteral (Core.LiteralString "greater"))}))}]})),
@@ -2874,9 +2874,9 @@ unionEliminationsInComplexContextsTests =
                       Core.caseStatementTypeName = TestTypes.testTypePersonOrSomethingName,
                       Core.caseStatementDefault = Nothing,
                       Core.caseStatementCases = [
-                        Core.Field {
-                          Core.fieldName = (Core.Name "person"),
-                          Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                        Core.CaseAlternative {
+                          Core.caseAlternativeName = (Core.Name "person"),
+                          Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                             Core.lambdaParameter = (Core.Name "p"),
                             Core.lambdaDomain = Nothing,
                             Core.lambdaBody = (Core.TermApplication (Core.Application {
@@ -2884,9 +2884,9 @@ unionEliminationsInComplexContextsTests =
                                 Core.projectionTypeName = TestTypes.testTypePersonName,
                                 Core.projectionFieldName = (Core.Name "firstName")})),
                               Core.applicationArgument = (Core.TermVariable (Core.Name "p"))}))}))},
-                        Core.Field {
-                          Core.fieldName = (Core.Name "other"),
-                          Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                        Core.CaseAlternative {
+                          Core.caseAlternativeName = (Core.Name "other"),
+                          Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                             Core.lambdaParameter = (Core.Name "x"),
                             Core.lambdaDomain = Nothing,
                             Core.lambdaBody = (Core.TermVariable (Core.Name "x"))}))}]})),
@@ -2913,9 +2913,9 @@ unionEliminationsInComplexContextsTests =
                   Core.caseStatementTypeName = TestTypes.testTypePersonOrSomethingName,
                   Core.caseStatementDefault = Nothing,
                   Core.caseStatementCases = [
-                    Core.Field {
-                      Core.fieldName = (Core.Name "person"),
-                      Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                    Core.CaseAlternative {
+                      Core.caseAlternativeName = (Core.Name "person"),
+                      Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                         Core.lambdaParameter = (Core.Name "p"),
                         Core.lambdaDomain = Nothing,
                         Core.lambdaBody = (Core.TermApplication (Core.Application {
@@ -2923,9 +2923,9 @@ unionEliminationsInComplexContextsTests =
                             Core.projectionTypeName = TestTypes.testTypePersonName,
                             Core.projectionFieldName = (Core.Name "age")})),
                           Core.applicationArgument = (Core.TermVariable (Core.Name "p"))}))}))},
-                    Core.Field {
-                      Core.fieldName = (Core.Name "other"),
-                      Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                    Core.CaseAlternative {
+                      Core.caseAlternativeName = (Core.Name "other"),
+                      Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                         Core.lambdaParameter = (Core.Name "x"),
                         Core.lambdaDomain = Nothing,
                         Core.lambdaBody = (Core.TermVariable (Core.Name "x"))}))}]})),
@@ -2968,15 +2968,15 @@ unionEliminationsWithDataTests =
               Core.caseStatementTypeName = TestTypes.testTypeNumberName,
               Core.caseStatementDefault = Nothing,
               Core.caseStatementCases = [
-                Core.Field {
-                  Core.fieldName = (Core.Name "int"),
-                  Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                Core.CaseAlternative {
+                  Core.caseAlternativeName = (Core.Name "int"),
+                  Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "i"),
                     Core.lambdaDomain = Nothing,
                     Core.lambdaBody = (Core.TermVariable (Core.Name "i"))}))},
-                Core.Field {
-                  Core.fieldName = (Core.Name "float"),
-                  Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                Core.CaseAlternative {
+                  Core.caseAlternativeName = (Core.Name "float"),
+                  Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "f"),
                     Core.lambdaDomain = Nothing,
                     Core.lambdaBody = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}))}]})))),
@@ -2992,17 +2992,17 @@ unionEliminationsWithDataTests =
               Core.caseStatementTypeName = TestTypes.testTypeNumberName,
               Core.caseStatementDefault = Nothing,
               Core.caseStatementCases = [
-                Core.Field {
-                  Core.fieldName = (Core.Name "int"),
-                  Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                Core.CaseAlternative {
+                  Core.caseAlternativeName = (Core.Name "int"),
+                  Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "i"),
                     Core.lambdaDomain = Nothing,
                     Core.lambdaBody = (Core.TermApplication (Core.Application {
                       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.literals.showInt32")),
                       Core.applicationArgument = (Core.TermVariable (Core.Name "i"))}))}))},
-                Core.Field {
-                  Core.fieldName = (Core.Name "float"),
-                  Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                Core.CaseAlternative {
+                  Core.caseAlternativeName = (Core.Name "float"),
+                  Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "f"),
                     Core.lambdaDomain = Nothing,
                     Core.lambdaBody = (Core.TermApplication (Core.Application {
@@ -3021,9 +3021,9 @@ unionEliminationsWithDataTests =
                 Core.caseStatementTypeName = TestTypes.testTypeNumberName,
                 Core.caseStatementDefault = Nothing,
                 Core.caseStatementCases = [
-                  Core.Field {
-                    Core.fieldName = (Core.Name "int"),
-                    Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                  Core.CaseAlternative {
+                    Core.caseAlternativeName = (Core.Name "int"),
+                    Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                       Core.lambdaParameter = (Core.Name "i"),
                       Core.lambdaDomain = Nothing,
                       Core.lambdaBody = (Core.TermApplication (Core.Application {
@@ -3031,9 +3031,9 @@ unionEliminationsWithDataTests =
                           Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.math.add")),
                           Core.applicationArgument = (Core.TermVariable (Core.Name "i"))})),
                         Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 10)))}))}))},
-                  Core.Field {
-                    Core.fieldName = (Core.Name "float"),
-                    Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                  Core.CaseAlternative {
+                    Core.caseAlternativeName = (Core.Name "float"),
+                    Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                       Core.lambdaParameter = (Core.Name "f"),
                       Core.lambdaDomain = Nothing,
                       Core.lambdaBody = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}))}]})),
@@ -3052,17 +3052,17 @@ unionEliminationsWithDataTests =
               Core.caseStatementTypeName = TestTypes.testTypeTimestampName,
               Core.caseStatementDefault = Nothing,
               Core.caseStatementCases = [
-                Core.Field {
-                  Core.fieldName = (Core.Name "unixTimeMillis"),
-                  Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                Core.CaseAlternative {
+                  Core.caseAlternativeName = (Core.Name "unixTimeMillis"),
+                  Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "millis"),
                     Core.lambdaDomain = Nothing,
                     Core.lambdaBody = (Core.TermApplication (Core.Application {
                       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.literals.showUint64")),
                       Core.applicationArgument = (Core.TermVariable (Core.Name "millis"))}))}))},
-                Core.Field {
-                  Core.fieldName = (Core.Name "date"),
-                  Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                Core.CaseAlternative {
+                  Core.caseAlternativeName = (Core.Name "date"),
+                  Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "dateStr"),
                     Core.lambdaDomain = Nothing,
                     Core.lambdaBody = (Core.TermVariable (Core.Name "dateStr"))}))}]})))),
@@ -3085,15 +3085,15 @@ unionEliminationsWithDefaultsTests =
               Core.caseStatementTypeName = TestTypes.testTypeComparisonName,
               Core.caseStatementDefault = (Just (Core.TermLiteral (Core.LiteralString "unknown"))),
               Core.caseStatementCases = [
-                Core.Field {
-                  Core.fieldName = (Core.Name "lessThan"),
-                  Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                Core.CaseAlternative {
+                  Core.caseAlternativeName = (Core.Name "lessThan"),
+                  Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "x"),
                     Core.lambdaDomain = Nothing,
                     Core.lambdaBody = (Core.TermLiteral (Core.LiteralString "less"))}))},
-                Core.Field {
-                  Core.fieldName = (Core.Name "equalTo"),
-                  Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                Core.CaseAlternative {
+                  Core.caseAlternativeName = (Core.Name "equalTo"),
+                  Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "x"),
                     Core.lambdaDomain = Nothing,
                     Core.lambdaBody = (Core.TermLiteral (Core.LiteralString "equal"))}))}]})))),
@@ -3109,9 +3109,9 @@ unionEliminationsWithDefaultsTests =
               Core.caseStatementTypeName = TestTypes.testTypeNumberName,
               Core.caseStatementDefault = (Just (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 (-1))))),
               Core.caseStatementCases = [
-                Core.Field {
-                  Core.fieldName = (Core.Name "int"),
-                  Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                Core.CaseAlternative {
+                  Core.caseAlternativeName = (Core.Name "int"),
+                  Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "i"),
                     Core.lambdaDomain = Nothing,
                     Core.lambdaBody = (Core.TermVariable (Core.Name "i"))}))}]})))),
@@ -3127,17 +3127,17 @@ unionEliminationsWithDefaultsTests =
               Core.caseStatementTypeName = TestTypes.testTypeUnionMonomorphicName,
               Core.caseStatementDefault = (Just (Core.TermLiteral (Core.LiteralString "fallback"))),
               Core.caseStatementCases = [
-                Core.Field {
-                  Core.fieldName = (Core.Name "bool"),
-                  Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                Core.CaseAlternative {
+                  Core.caseAlternativeName = (Core.Name "bool"),
+                  Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "b"),
                     Core.lambdaDomain = Nothing,
                     Core.lambdaBody = (Core.TermApplication (Core.Application {
                       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.literals.showBoolean")),
                       Core.applicationArgument = (Core.TermVariable (Core.Name "b"))}))}))},
-                Core.Field {
-                  Core.fieldName = (Core.Name "string"),
-                  Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                Core.CaseAlternative {
+                  Core.caseAlternativeName = (Core.Name "string"),
+                  Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "s"),
                     Core.lambdaDomain = Nothing,
                     Core.lambdaBody = (Core.TermVariable (Core.Name "s"))}))}]})))),
@@ -3374,9 +3374,9 @@ usingKernelTypesTests =
                     Core.caseStatementTypeName = (Core.Name "hydra.coders.CoderDirection"),
                     Core.caseStatementDefault = Nothing,
                     Core.caseStatementCases = [
-                      Core.Field {
-                        Core.fieldName = (Core.Name "encode"),
-                        Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                      Core.CaseAlternative {
+                        Core.caseAlternativeName = (Core.Name "encode"),
+                        Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                           Core.lambdaParameter = (Core.Name "_"),
                           Core.lambdaDomain = Nothing,
                           Core.lambdaBody = (Core.TermLambda (Core.Lambda {
@@ -3389,9 +3389,9 @@ usingKernelTypesTests =
                                   Core.projectionFieldName = (Core.Name "encode")})),
                                 Core.applicationArgument = (Core.TermVariable (Core.Name "coder"))})),
                               Core.applicationArgument = (Core.TermVariable (Core.Name "v12"))}))}))}))},
-                      Core.Field {
-                        Core.fieldName = (Core.Name "decode"),
-                        Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                      Core.CaseAlternative {
+                        Core.caseAlternativeName = (Core.Name "decode"),
+                        Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                           Core.lambdaParameter = (Core.Name "_"),
                           Core.lambdaDomain = Nothing,
                           Core.lambdaBody = (Core.TermLambda (Core.Lambda {
@@ -3443,9 +3443,9 @@ usingUnionPolymorphicRecursiveTests =
                     Core.caseStatementTypeName = TestTypes.testTypeUnionPolymorphicRecursiveName,
                     Core.caseStatementDefault = (Just (Core.TermLiteral (Core.LiteralString "other"))),
                     Core.caseStatementCases = [
-                      Core.Field {
-                        Core.fieldName = (Core.Name "value"),
-                        Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                      Core.CaseAlternative {
+                        Core.caseAlternativeName = (Core.Name "value"),
+                        Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                           Core.lambdaParameter = (Core.Name "i"),
                           Core.lambdaDomain = Nothing,
                           Core.lambdaBody = (Core.TermApplication (Core.Application {
@@ -3472,9 +3472,9 @@ usingUnionPolymorphicRecursiveTests =
                       Core.caseStatementTypeName = TestTypes.testTypeUnionPolymorphicRecursiveName,
                       Core.caseStatementDefault = (Just (Core.TermLiteral (Core.LiteralString "other"))),
                       Core.caseStatementCases = [
-                        Core.Field {
-                          Core.fieldName = (Core.Name "value"),
-                          Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                        Core.CaseAlternative {
+                          Core.caseAlternativeName = (Core.Name "value"),
+                          Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                             Core.lambdaParameter = (Core.Name "i"),
                             Core.lambdaDomain = Nothing,
                             Core.lambdaBody = (Core.TermApplication (Core.Application {
@@ -3505,9 +3505,9 @@ usingUnionPolymorphicRecursiveTests =
                         Core.caseStatementTypeName = TestTypes.testTypeUnionPolymorphicRecursiveName,
                         Core.caseStatementDefault = (Just (Core.TermLiteral (Core.LiteralString "other"))),
                         Core.caseStatementCases = [
-                          Core.Field {
-                            Core.fieldName = (Core.Name "value"),
-                            Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                          Core.CaseAlternative {
+                            Core.caseAlternativeName = (Core.Name "value"),
+                            Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                               Core.lambdaParameter = (Core.Name "i"),
                               Core.lambdaDomain = Nothing,
                               Core.lambdaBody = (Core.TermApplication (Core.Application {
@@ -3538,9 +3538,9 @@ usingUnionPolymorphicRecursiveTests =
                         Core.caseStatementTypeName = TestTypes.testTypeUnionPolymorphicRecursiveName,
                         Core.caseStatementDefault = (Just (Core.TermLiteral (Core.LiteralString "other"))),
                         Core.caseStatementCases = [
-                          Core.Field {
-                            Core.fieldName = (Core.Name "value"),
-                            Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                          Core.CaseAlternative {
+                            Core.caseAlternativeName = (Core.Name "value"),
+                            Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                               Core.lambdaParameter = (Core.Name "ignored"),
                               Core.lambdaDomain = Nothing,
                               Core.lambdaBody = (Core.TermLiteral (Core.LiteralString "foo"))}))}]})),

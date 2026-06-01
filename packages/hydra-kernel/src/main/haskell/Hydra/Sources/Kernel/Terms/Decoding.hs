@@ -134,7 +134,7 @@ formatDecodingError = "e" ~> unwrap _DecodingError @@ var "e"
 -- The result is: \cx -> \raw -> either (\err -> Left (DecodingError err)) (\stripped -> case stripped of ...) (stripAndDereferenceTermEither cx raw)
 -- Note: We use the original inline style - the Python coder should handle this pattern by recognizing
 -- when a lambda body is a case application and generating a proper function with match statement.
-deannotateAndMatch :: TypedTerm (Maybe Term) -> [TypedTerm Field] -> TypedTerm Term
+deannotateAndMatch :: TypedTerm (Maybe Term) -> [TypedTerm CaseAlternative] -> TypedTerm Term
 deannotateAndMatch dflt cses = DeepCore.lambda "cx" $ DeepCore.lambda "raw" $
   DeepCore.primitive _eithers_either
     -- If Left (decoding error), propagate it
@@ -390,22 +390,22 @@ decodeLiteralType = define "decodeLiteralType" $
     -- Helper to wrap a Literal handler with Term.literal matching
     decodeLiteral handleLiteral = deannotateAndMatch
       (just $ leftError (string "expected literal")) [
-      DeepCore.field _Term_literal $ DeepCore.lambda "v" $ handleLiteral @@@ DeepCore.var "v"]
+      DeepCore.caseAlternative _Term_literal $ DeepCore.lambda "v" $ handleLiteral @@@ DeepCore.var "v"]
 
     -- Decode binary: Term -> Either DecodingError Binary
     decodeBinary = decodeLiteral $ DeepCore.match _Literal
       (just $ leftError (string "expected binary literal")) [
-      DeepCore.field _Literal_binary $ DeepCore.lambda "b" $ DeepCore.right $ DeepCore.var "b"]
+      DeepCore.caseAlternative _Literal_binary $ DeepCore.lambda "b" $ DeepCore.right $ DeepCore.var "b"]
 
     -- Decode boolean: Term -> Either DecodingError Bool
     decodeBoolean = decodeLiteral $ DeepCore.match _Literal
       (just $ leftError (string "expected boolean literal")) [
-      DeepCore.field _Literal_boolean $ DeepCore.lambda "b" $ DeepCore.right $ DeepCore.var "b"]
+      DeepCore.caseAlternative _Literal_boolean $ DeepCore.lambda "b" $ DeepCore.right $ DeepCore.var "b"]
 
     -- Decode decimal: Term -> Either DecodingError Scientific
     decodeDecimal = decodeLiteral $ DeepCore.match _Literal
       (just $ leftError (string "expected decimal literal")) [
-      DeepCore.field _Literal_decimal $ DeepCore.lambda "d" $ DeepCore.right $ DeepCore.var "d"]
+      DeepCore.caseAlternative _Literal_decimal $ DeepCore.lambda "d" $ DeepCore.right $ DeepCore.var "d"]
 
     -- Decode float: Term -> Either DecodingError <specific float type>
     decodeFloat ft = cases _FloatType ft Nothing [
@@ -415,9 +415,9 @@ decodeLiteralType = define "decodeLiteralType" $
     -- Helper to decode a specific float variant
     decodeFloatVariant floatVariant floatName = decodeLiteral $ DeepCore.match _Literal
       (just $ leftError (Strings.cat $ list [string "expected ", floatName, string " literal"])) [
-      DeepCore.field _Literal_float $ DeepCore.match _FloatValue
+      DeepCore.caseAlternative _Literal_float $ DeepCore.match _FloatValue
         (just $ leftError (Strings.cat $ list [string "expected ", floatName, string " value"])) [
-        DeepCore.field floatVariant $ DeepCore.lambda "f" $ DeepCore.right $ DeepCore.var "f"]]
+        DeepCore.caseAlternative floatVariant $ DeepCore.lambda "f" $ DeepCore.right $ DeepCore.var "f"]]
 
     -- Decode integer: Term -> Either DecodingError <specific integer type>
     decodeInteger it = cases _IntegerType it Nothing [
@@ -434,14 +434,14 @@ decodeLiteralType = define "decodeLiteralType" $
     -- Helper to decode a specific integer variant
     decodeIntegerVariant intVariant intName = decodeLiteral $ DeepCore.match _Literal
       (just $ leftError (Strings.cat $ list [string "expected ", intName, string " literal"])) [
-      DeepCore.field _Literal_integer $ DeepCore.match _IntegerValue
+      DeepCore.caseAlternative _Literal_integer $ DeepCore.match _IntegerValue
         (just $ leftError (Strings.cat $ list [string "expected ", intName, string " value"])) [
-        DeepCore.field intVariant $ DeepCore.lambda "i" $ DeepCore.right $ DeepCore.var "i"]]
+        DeepCore.caseAlternative intVariant $ DeepCore.lambda "i" $ DeepCore.right $ DeepCore.var "i"]]
 
     -- Decode string: Term -> Either DecodingError String
     decodeString = decodeLiteral $ DeepCore.match _Literal
       (just $ leftError (string "expected string literal")) [
-      DeepCore.field _Literal_string $ DeepCore.lambda "s" $ DeepCore.right $ DeepCore.var "s"]
+      DeepCore.caseAlternative _Literal_string $ DeepCore.lambda "s" $ DeepCore.right $ DeepCore.var "s"]
 
 -- | Transform a type module into a decoder module
 -- Returns Nothing if the module has no decodable type definitions
@@ -474,7 +474,7 @@ decodeModule = define "decodeModule" $
       (Maybes.cat $ Lists.map
         ("d" ~> cases _Definition (var "d") (Just nothing) [
           _Definition_type>>: "td" ~>
-            just (Annotations.typeBinding @@ (Packaging.typeDefinitionName $ var "td") @@ (Core.typeSchemeBody $ Packaging.typeDefinitionTypeScheme $ var "td"))])
+            just (Annotations.typeBinding @@ (Packaging.typeDefinitionName $ var "td") @@ (Core.typeSchemeBody $ Packaging.typeDefinitionBody $ var "td"))])
         (Packaging.moduleDefinitions (var "mod")))) $
     Logic.ifElse (Lists.null (var "typeBindings"))
       (right nothing)
@@ -505,8 +505,9 @@ decodeModule = define "decodeModule" $
               Packaging.moduleName2 $ string "hydra.util"])
             (var "allDecodedDeps")))
           (Lists.map ("b" ~> Packaging.definitionTerm (Packaging.termDefinition
-            (Core.bindingName $ var "b") nothing (Core.bindingTerm $ var "b")
-            (Maybes.map Scoping.typeSchemeToTermSignature $ Core.bindingTypeScheme $ var "b")))
+            (Core.bindingName $ var "b") nothing
+            (Maybes.map Scoping.typeSchemeToTermSignature $ Core.bindingTypeScheme $ var "b")
+            (Core.bindingTerm $ var "b")))
             (var "decodedBindings")))))
 
 -- | Generate a decoder module name from a source module name
@@ -577,7 +578,7 @@ decodeRecordTypeImpl = define "decodeRecordTypeImpl" $
       (Lists.reverse $ var "rt")) $
   deannotateAndMatch
     (just $ leftError (string "expected record")) [
-    DeepCore.field _Term_record $ DeepCore.lambda "record" $
+    DeepCore.caseAlternative _Term_record $ DeepCore.lambda "record" $
       DeepCore.lets [
         -- Build Map Name Term from the record's fields using toFieldMap helper
         ("fieldMap", DeepCore.ref ExtractCore.toFieldMap @@@ DeepCore.var "record")] $
@@ -678,7 +679,7 @@ decodeUnionTypeNamed = define "decodeUnionTypeNamed" $
         @@@ ((decodeType @@ (Core.fieldTypeType $ var "ft")) @@@ DeepCore.var "cx" @@@ DeepCore.var "input"))) $
   deannotateAndMatch
     (just $ leftError $ string "expected union") [
-    DeepCore.field _Term_inject $ DeepCore.lambda "inj" $ DeepCore.lets [
+    DeepCore.caseAlternative _Term_inject $ DeepCore.lambda "inj" $ DeepCore.lets [
       ("field", DeepCore.project _Injection _Injection_field @@@ DeepCore.var "inj"),
       ("fname", DeepCore.project _Field _Field_name @@@ DeepCore.var "field"),
       ("fterm", DeepCore.project _Field _Field_term @@@ DeepCore.var "field"),
@@ -718,7 +719,7 @@ decodeWrappedTypeNamed = define "decodeWrappedTypeNamed" $
   "bodyDecoder" <~ decodeType @@ var "wt" $
   deannotateAndMatch
     (just $ leftError (string "expected wrapped type")) [
-    DeepCore.field _Term_wrap $ DeepCore.lambda "wrappedTerm" $
+    DeepCore.caseAlternative _Term_wrap $ DeepCore.lambda "wrappedTerm" $
       DeepCore.primitive _eithers_map
         @@@ (DeepCore.lambda "b" $ DeepCore.wrapDynamic (var "ename") (DeepCore.var "b"))
         @@@ (var "bodyDecoder" @@@ DeepCore.var "cx"
@@ -912,7 +913,7 @@ decoderTypeScheme = define "decoderTypeScheme" $
       Logic.ifElse (Lists.null (var "ordVars"))
         Phantoms.nothing
         (just $ Maps.fromList $ Lists.map
-          ("v" ~> pair (var "v") (Core.typeVariableMetadata $ list [Core.typeClassConstraintSimple $ Core.name (string "ordering")]))
+          ("v" ~> pair (var "v") (Core.typeVariableConstraints $ list [Core.typeClassConstraintSimple $ Core.name (string "ordering")]))
           (var "ordVars"))) $
     Core.typeScheme
       (var "typeVars")
@@ -934,7 +935,7 @@ decoderTypeSchemeNamed = define "decoderTypeSchemeNamed" $
       Logic.ifElse (Lists.null (var "ordVars"))
         Phantoms.nothing
         (just $ Maps.fromList $ Lists.map
-          ("v" ~> pair (var "v") (Core.typeVariableMetadata $ list [Core.typeClassConstraintSimple $ Core.name (string "ordering")]))
+          ("v" ~> pair (var "v") (Core.typeVariableConstraints $ list [Core.typeClassConstraintSimple $ Core.name (string "ordering")]))
           (var "ordVars"))) $
     Core.typeScheme
       (var "typeVars")

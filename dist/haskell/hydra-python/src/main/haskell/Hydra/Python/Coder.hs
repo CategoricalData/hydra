@@ -70,11 +70,11 @@ analyzePythonFunction :: Typing.InferenceContext -> PythonEnvironment.PythonEnvi
 analyzePythonFunction cx env term =
     Analysis.analyzeFunctionTermWith cx pythonBindingMetadata pythonEnvironmentGetGraph pythonEnvironmentSetGraph env term
 -- | Encode a single case (Field) into a CaseBlock for a match statement
-caseBlockToExpr :: t0 -> PythonEnvironment.PythonEnvironment -> Core.Name -> [Core.FieldType] -> Bool -> (PythonEnvironment.PythonEnvironment -> Core.Term -> Either t1 [Syntax.Statement]) -> Core.Field -> Either t1 Syntax.CaseBlock
+caseBlockToExpr :: t0 -> PythonEnvironment.PythonEnvironment -> Core.Name -> [Core.FieldType] -> Bool -> (PythonEnvironment.PythonEnvironment -> Core.Term -> Either t1 [Syntax.Statement]) -> Core.CaseAlternative -> Either t1 Syntax.CaseBlock
 caseBlockToExpr cx env tname rowType isEnum encodeBody field =
 
-      let fname = Core.fieldName field
-          fterm = Core.fieldTerm field
+      let fname = Core.caseAlternativeName field
+          fterm = Core.caseAlternativeHandler field
           stripped = Strip.deannotateAndDetypeTerm fterm
           effectiveLambda =
                   case stripped of
@@ -165,15 +165,15 @@ deconflictVariantName isQualified env unionName fname g =
           collision = Logic.or termCollision typeCollision
       in (Logic.ifElse collision (Syntax.Name (Strings.cat2 (Syntax.unName (PythonNames.variantName isQualified env unionName fname)) "_")) (PythonNames.variantName isQualified env unionName fname))
 -- | Rewrite case statements to avoid variable name collisions
-deduplicateCaseVariables :: [Core.Field] -> [Core.Field]
+deduplicateCaseVariables :: [Core.CaseAlternative] -> [Core.CaseAlternative]
 deduplicateCaseVariables cases_ =
 
       let rewriteCase =
               \state -> \field ->
                 let countByName = Pairs.first state
                     done = Pairs.second state
-                    fname = Core.fieldName field
-                    fterm = Core.fieldTerm field
+                    fname = Core.caseAlternativeName field
+                    fterm = Core.caseAlternativeHandler field
                 in case (Strip.deannotateAndDetypeTerm fterm) of
                   Core.TermLambda v0 ->
                     let v = Core.lambdaParameter v0
@@ -190,9 +190,9 @@ deduplicateCaseVariables cases_ =
                                     Core.lambdaBody = newBody}
                           newTerm = Core.TermLambda newLam
                           newField =
-                                  Core.Field {
-                                    Core.fieldName = fname,
-                                    Core.fieldTerm = newTerm}
+                                  Core.CaseAlternative {
+                                    Core.caseAlternativeName = fname,
+                                    Core.caseAlternativeHandler = newTerm}
                       in (Maps.insert v count2 countByName, (Lists.cons newField done))) (Maps.lookup v countByName))
                   _ -> (countByName, (Lists.cons field done))
           result = Lists.foldl rewriteCase (Maps.empty, []) cases_
@@ -212,6 +212,10 @@ eliminateUnitVar v term0 =
               \rewrite -> \fld -> Core.Field {
                 Core.fieldName = (Core.fieldName fld),
                 Core.fieldTerm = (rewrite (Core.fieldTerm fld))}
+          rewriteCaseAlternative =
+              \rewrite -> \alt -> Core.CaseAlternative {
+                Core.caseAlternativeName = (Core.caseAlternativeName alt),
+                Core.caseAlternativeHandler = (rewrite (Core.caseAlternativeHandler alt))}
           rewriteBinding =
                   \rewrite -> \bnd -> Core.Binding {
                     Core.bindingName = (Core.bindingName bnd),
@@ -233,7 +237,7 @@ eliminateUnitVar v term0 =
                     Core.TermCases v0 -> Core.TermCases (Core.CaseStatement {
                       Core.caseStatementTypeName = (Core.caseStatementTypeName v0),
                       Core.caseStatementDefault = (Maybes.map recurse (Core.caseStatementDefault v0)),
-                      Core.caseStatementCases = (Lists.map (rewriteField recurse) (Core.caseStatementCases v0))})
+                      Core.caseStatementCases = (Lists.map (rewriteCaseAlternative recurse) (Core.caseStatementCases v0))})
                     Core.TermLet v0 -> Core.TermLet (Core.Let {
                       Core.letBindings = (Lists.map (rewriteBinding recurse) (Core.letBindings v0)),
                       Core.letBody = (recurse (Core.letBody v0))})
@@ -570,7 +574,7 @@ encodeDefinition cx env def_ =
     case def_ of
       Packaging.DefinitionTerm v0 ->
         let name = Packaging.termDefinitionName v0
-            term = Packaging.termDefinitionTerm v0
+            term = Packaging.termDefinitionBody v0
             typ =
                     Maybes.maybe (Core.TypeScheme {
                       Core.typeSchemeVariables = [],
@@ -583,7 +587,7 @@ encodeDefinition cx env def_ =
               stmt]]))))
       Packaging.DefinitionType v0 ->
         let name = Packaging.typeDefinitionName v0
-            typ = Core.typeSchemeBody (Packaging.typeDefinitionTypeScheme v0)
+            typ = Core.typeSchemeBody (Packaging.typeDefinitionBody v0)
         in (Eithers.bind (Annotations.getTypeDescription cx (pythonEnvironmentGetGraph env) typ) (\comment ->
           let normComment = Maybes.map Formatting.normalizeComment comment
           in (encodeTypeAssignment cx env name typ normComment)))
@@ -1198,8 +1202,8 @@ encodeUnionEliminationInline cx env cs pyArg =
         in (Eithers.bind (Maybes.maybe (Right (unsupportedExpression "no matching case in inline union elimination")) (\dflt -> encodeTermInline cx env False dflt) mdefault) (\pyDefault ->
           let encodeBranch =
                   \field ->
-                    let fname = Core.fieldName field
-                        fterm = Core.fieldTerm field
+                    let fname = Core.caseAlternativeName field
+                        fterm = Core.caseAlternativeHandler field
                         isUnitVariant = isVariantUnitType rt fname
                         pyVariantName = deconflictVariantName True env tname fname (PythonEnvironment.pythonEnvironmentGraph env)
                         pyTypeName = PythonNames.encodeName True Util.CaseConventionPascal env tname
@@ -1576,13 +1580,13 @@ gatherMetadata focusNs defs =
           addDef =
                   \meta -> \def -> case def of
                     Packaging.DefinitionTerm v0 ->
-                      let term = Packaging.termDefinitionTerm v0
+                      let term = Packaging.termDefinitionBody v0
                           typ =
                                   Maybes.maybe (Core.TypeVariable (Core.Name "hydra.core.Unit")) (\sig -> Core.typeSchemeBody (Scoping.termSignatureToTypeScheme sig)) (Packaging.termDefinitionSignature v0)
                           meta2 = extendMetaForType True True typ meta
                       in (extendMetaForTerm True meta2 term)
                     Packaging.DefinitionType v0 ->
-                      let typ = Core.typeSchemeBody (Packaging.typeDefinitionTypeScheme v0)
+                      let typ = Core.typeSchemeBody (Packaging.typeDefinitionBody v0)
                           meta2 = setMetaUsesName meta True
                       in (Rewriting.foldOverType Coders.TraversalOrderPre (\m -> \t -> extendMetaForType True False t m) meta2 typ)
           result = Lists.foldl addDef start defs
@@ -1658,7 +1662,7 @@ initialMetadata ns =
         PythonEnvironment.pythonModuleMetadataUsesRight = False,
         PythonEnvironment.pythonModuleMetadataUsesTypeVar = False}
 -- | Check if a term is a case statement applied to exactly one argument
-isCaseStatementApplication :: Core.Term -> Maybe (Core.Name, (Maybe Core.Term, ([Core.Field], Core.Term)))
+isCaseStatementApplication :: Core.Term -> Maybe (Core.Name, (Maybe Core.Term, ([Core.CaseAlternative], Core.Term)))
 isCaseStatementApplication term =
 
       let gathered = Analysis.gatherApplications term
@@ -1850,7 +1854,7 @@ moduleToPython :: Packaging.Module -> [Packaging.Definition] -> Typing.Inference
 moduleToPython mod defs cx g =
     Eithers.bind (encodePythonModule cx g mod defs) (\file ->
       let s = Serialization.printExpr (Serialization.parenthesize (Serde.moduleToExpr file))
-          path = Names.moduleNameToFilePath Util.CaseConventionLowerSnake (Packaging.FileExtension "py") (Packaging.moduleName mod)
+          path = Names.moduleNameToFilePath Util.CaseConventionLowerSnake (Util.FileExtension "py") (Packaging.moduleName mod)
       in (Right (Maps.singleton path s)))
 -- | Accessor for the graph field of PyGraph
 pyGraphGraph :: PythonEnvironment.PyGraph -> Graph.Graph
@@ -2577,8 +2581,8 @@ withDefinitions env defs body =
               Maybes.cat (Lists.map (\def_ -> case def_ of
                 Packaging.DefinitionTerm v0 -> Just (Core.Binding {
                   Core.bindingName = (Packaging.termDefinitionName v0),
-                  Core.bindingTerm = (Packaging.termDefinitionTerm v0),
-                  Core.bindingTypeScheme = (Maybes.map (\sig -> Scoping.termSignatureToTypeScheme sig) (Packaging.termDefinitionSignature v0))})
+                  Core.bindingTerm = (Packaging.termDefinitionBody v0),
+                  Core.bindingTypeScheme = (Maybes.map Scoping.termSignatureToTypeScheme (Packaging.termDefinitionSignature v0))})
                 Packaging.DefinitionType _ -> Nothing
                 _ -> Nothing) defs)
           dummyLet =
