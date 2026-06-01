@@ -1805,7 +1805,7 @@ typesByName =
         (Core.TypeAnnotated (Core.AnnotatedType {
           Core.annotatedTypeBody = (Core.TypeRecord [
             Core.FieldType {
-              Core.fieldTypeName = (Core.Name "namespace"),
+              Core.fieldTypeName = (Core.Name "name"),
               Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
                 Core.annotatedTypeBody = (Core.TypeVariable (Core.Name "hydra.packaging.ModuleName")),
                 Core.annotatedTypeAnnotation = (M.fromList [
