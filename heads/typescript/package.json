@@ -1,6 +1,6 @@
 {
   "name": "@hydra/typescript-head",
-  "version": "0.15.0",
+  "version": "0.16.0",
   "description": "TypeScript runtime for the Hydra kernel: AST types, primitives, code generation, and the common-test runner.",
   "type": "module",
   "private": true,

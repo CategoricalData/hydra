@@ -906,7 +906,134 @@ public class Generation {
             acc.addAll(inferred);
             inferredAll.addAll(inferred);
         }
+        // #405: prune orphaned JSON for the packages this generator wrote.
+        // The native Java generator owns hydra.java.* (this package's mods are
+        // its keep-set); reconcile deletes stale .json under the owned
+        // namespace dirs. Prefix-scoped so the Haskell-written hydra/dsl/java/
+        // wrappers and the separately-written manifest.json are never touched
+        // (they live outside the hydra/java/ owned dirs). See #405.
+        reconcilePackageJsonOrphans(distJsonRoot, pkgToMods);
         return inferredAll;
+    }
+
+    /**
+     * Delete orphaned {@code .json} files left behind when a module is dropped
+     * from this generator's emission set, mirroring the Haskell-side #405
+     * reconcile ({@code Hydra.Generation.reconcilePackageJsonOrphans} +
+     * {@code Hydra.Digest.reconcileOrphans}).
+     *
+     * <p>For each package the native generator wrote, the keep-set is the set
+     * of {@code <moduleNameToPath ns>.json} paths for its written modules. The
+     * prune is PREFIX-SCOPED to the second-level namespace directories those
+     * files occupy (e.g. {@code hydra/java/}); any {@code .json} under those
+     * dirs not in the keep-set is an orphan and is deleted. Files outside the
+     * owned dirs — the Haskell-written {@code hydra/dsl/java/} DSL wrappers and
+     * the top-level {@code manifest.json} — are out of scope and survive,
+     * which is required during the transition where both the native generator
+     * and the Haskell DSL pass write into one package dir (#344). Best-effort:
+     * I/O failures on individual files are swallowed.</p>
+     */
+    private static void reconcilePackageJsonOrphans(
+            String distJsonRoot,
+            Map<String, List<Module>> pkgToMods) throws IOException {
+        for (Map.Entry<String, List<Module>> e : pkgToMods.entrySet()) {
+            String pkg = e.getKey();
+            List<Module> pkgMods = e.getValue();
+            if (pkgMods.isEmpty()) continue;
+            Path pkgDir = Paths.get(distJsonRoot, pkg, "src", "main", "json");
+            if (!Files.isDirectory(pkgDir)) continue;
+
+            // Keep-set: relative paths of the .json files we wrote.
+            HashSet<String> keepRel = new HashSet<>();
+            // Owned prefixes: the second-level namespace dirs (e.g. "hydra/java")
+            // those files occupy, scoping the prune to what this generator owns.
+            HashSet<String> ownedPrefixes = new HashSet<>();
+            for (Module m : pkgMods) {
+                String rel = moduleNameToPath(m.name) + ".json";
+                keepRel.add(rel);
+                String prefix = secondLevelDir(rel);
+                if (prefix != null) ownedPrefixes.add(prefix);
+            }
+            if (ownedPrefixes.isEmpty()) continue;
+
+            List<Path> onDisk = listJsonFilesRecursive(pkgDir);
+            int pruned = 0;
+            for (Path p : onDisk) {
+                String rel = pkgDir.relativize(p).toString();
+                String relForward = rel.replace(File.separatorChar, '/');
+                // Only consider files under an owned prefix.
+                boolean owned = false;
+                for (String pre : ownedPrefixes) {
+                    if (relForward.equals(pre) || relForward.startsWith(pre + "/")) {
+                        owned = true;
+                        break;
+                    }
+                }
+                if (!owned) continue;
+                if (keepRel.contains(relForward)) continue;
+                try {
+                    Files.delete(p);
+                    System.err.println("    pruned orphan JSON (#405): " + p);
+                    pruned++;
+                } catch (IOException ignored) {
+                    // best-effort
+                }
+            }
+            if (pruned > 0) {
+                System.err.println("  " + pkg + ": pruned " + pruned
+                    + " orphaned JSON file(s) under " + String.join(", ", ownedPrefixes)
+                    + " (#405)");
+                pruneEmptyDirs(pkgDir);
+            }
+        }
+    }
+
+    /** The first two path segments of a forward-slash or platform path, as
+     *  "seg1/seg2" (e.g. "hydra/java/coder.json" -> "hydra/java"), or null if
+     *  the path has fewer than two segments. */
+    private static String secondLevelDir(String rel) {
+        String forward = rel.replace(File.separatorChar, '/');
+        String[] parts = forward.split("/");
+        if (parts.length < 2) return null;
+        return parts[0] + "/" + parts[1];
+    }
+
+    /** Recursively collect every regular {@code .json} file under {@code root},
+     *  skipping dotfiles/dot-directories. */
+    private static List<Path> listJsonFilesRecursive(Path root) throws IOException {
+        List<Path> out = new ArrayList<>();
+        if (!Files.isDirectory(root)) return out;
+        try (java.util.stream.Stream<Path> walk = Files.walk(root)) {
+            walk.filter(Files::isRegularFile)
+                .filter(p -> p.getFileName().toString().endsWith(".json"))
+                .filter(p -> {
+                    for (Path seg : root.relativize(p)) {
+                        if (seg.toString().startsWith(".")) return false;
+                    }
+                    return true;
+                })
+                .forEach(out::add);
+        }
+        return out;
+    }
+
+    /** Remove empty subdirectories under {@code dir} (depth-first); {@code dir}
+     *  itself is left alone. Best-effort. */
+    private static void pruneEmptyDirs(Path dir) {
+        try (java.util.stream.Stream<Path> walk = Files.walk(dir)) {
+            walk.sorted(java.util.Comparator.reverseOrder())
+                .filter(p -> !p.equals(dir))
+                .filter(Files::isDirectory)
+                .forEach(p -> {
+                    try (java.util.stream.Stream<Path> kids = Files.list(p)) {
+                        if (kids.findAny().isEmpty()) Files.delete(p);
+                    } catch (IOException ignored) {
+                        // best-effort
+                    }
+                });
+        } catch (IOException ignored) {
+            // best-effort
+        }
     }
 
     /**
