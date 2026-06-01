@@ -823,7 +823,14 @@ assemble the Haskell dist for hydra-java / hydra-python. If the JSON
 references the OLD type name but the kernel has the new one, Phase 2
 fails with `bootstrap-from-json: ... no such element:
 hydra.packaging.Namespace` before Phase 5 ever runs to refresh the JSON.
-Recovery:
+
+As of [#406](https://github.com/CategoricalData/hydra/issues/406) `bin/sync.sh`
+**auto-heals** this: a Phase 1.5 gate (`bin/lib/check-java-python-json-fresh.py`,
+keyed on the just-regenerated `dist/json/hydra-kernel/**.json`) runs between
+Phase 1 and Phase 2, and on a staleness miss re-exports the coder JSON via
+`update-json-main --include-java-python` before Phase 2 consumes it. So the
+manual recovery below should rarely be needed now; keep it as a fallback (e.g.
+if the gate's cache was hand-deleted or the executable is unbuilt):
 
 1. Delete the cold-start sentinels:
    `rm dist/json/hydra-{java,python}/src/main/json/hydra/{java,python}/*.json`
