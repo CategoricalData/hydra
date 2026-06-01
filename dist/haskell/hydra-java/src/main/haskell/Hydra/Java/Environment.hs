@@ -41,9 +41,9 @@ _JavaFeatures_supportsDiamondOperator = Core.Name "supportsDiamondOperator"
 -- | Aliases and context for Java code generation
 data Aliases =
   Aliases {
-    -- | Current module namespace context
+    -- | Current module name context
     aliasesCurrentNamespace :: Packaging.ModuleName,
-    -- | Maps namespaces to Java package names
+    -- | Maps module names to Java package names
     aliasesPackages :: (M.Map Packaging.ModuleName Syntax.PackageName),
     -- | Variables bound in pattern matching branches
     aliasesBranchVars :: (S.Set Core.Name),
