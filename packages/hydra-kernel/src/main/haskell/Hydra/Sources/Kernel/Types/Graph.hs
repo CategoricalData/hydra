@@ -44,7 +44,7 @@ graph = define "Graph" $
     "classConstraints">:
       doc ("A mutable map from type variable names to their accumulated class constraints."
         ++ " This is populated during type inference when operations requiring Eq or Ord are encountered.") $
-      T.map Core.name Core.typeVariableMetadata,
+      T.map Core.name Core.typeVariableConstraints,
     "lambdaVariables">:
       doc "The set of term variables introduced by specifically by lambdas" $
       T.set Core.name,
@@ -65,7 +65,7 @@ library :: TypeDefinition
 library = define "Library" $
   doc "A library of primitive functions" $
   T.record [
-    "namespace">:
+    "name">:
       doc "A common prefix for all primitive function names in the library"
       Packaging.moduleNameDef,
     "prefix">:

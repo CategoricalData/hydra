@@ -30,8 +30,10 @@ module_ = Module {
     definitions = [
       caseConvention,
       comparison,
+      fileExtension,
       moduleNames,
-      precision]
+      precision,
+      qualifiedName]
 
 caseConvention :: TypeDefinition
 caseConvention = define "CaseConvention" $
@@ -56,6 +58,11 @@ either_ = define "Either" $
     "right">:
       doc "The right alternative"
       (T.var "b")]
+
+fileExtension :: TypeDefinition
+fileExtension = define "FileExtension" $
+  doc "A file extension (without the dot), e.g. \"json\" or \"py\"" $
+  T.wrap T.string
 
 moduleNames :: TypeDefinition
 moduleNames = define "ModuleNames" $
@@ -89,3 +96,14 @@ precision = define "Precision" $
     "bits">:
       doc "Precision to a specified number of bits" $
       T.int32]
+
+qualifiedName :: TypeDefinition
+qualifiedName = define "QualifiedName" $
+  doc "A qualified name consisting of an optional module name together with a mandatory local name" $
+  T.record [
+    "moduleName">:
+      doc "The optional module name" $
+      T.maybe Packaging.moduleNameDef,
+    "local">:
+      doc "The local name"
+      T.string]
