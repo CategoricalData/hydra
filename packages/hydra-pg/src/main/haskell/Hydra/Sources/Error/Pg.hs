@@ -20,7 +20,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = (DefinitionType <$> definitions),
             moduleDependencies = unqualifiedDep <$> [PgModel.ns],
-            moduleDescription = Just "Error types for property graph validation"}
+            moduleMetadata = descriptionMetadata (Just "Error types for property graph validation")}
   where
     definitions = [
       invalidEdgeError,

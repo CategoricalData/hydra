@@ -41,7 +41,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = (DefinitionType <$> definitions),
             moduleDependencies = unqualifiedDep <$> [Core.ns],
-            moduleDescription = Just "A TypeScript 5.x syntax model for Hydra code generation"}
+            moduleMetadata = descriptionMetadata (Just "A TypeScript 5.x syntax model for Hydra code generation")}
   where
     definitions = [
       -- Identifiers and names

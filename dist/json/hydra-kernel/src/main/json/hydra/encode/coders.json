@@ -216,5 +216,5 @@
     {"module": "hydra.encode.core"},
     {"module": "hydra.encode.typing"},
     {"module": "hydra.coders"}],
-  "description": "Term encoders for hydra.coders",
+  "metadata": {"comments": [], "description": "Term encoders for hydra.coders", "seeAlso": []},
   "name": "hydra.encode.coders"}

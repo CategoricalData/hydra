@@ -60,7 +60,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> (kernelTypesModuleNames),
-            moduleDescription = Just "Conversion functions for literal values."}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just "Conversion functions for literal values.")}
   where
    definitions = [
      toDefinition bigintToIntegerValue,

@@ -65,7 +65,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> ([Rewriting.ns, ShowCore.ns, Strip.ns, Substitution.ns] L.++ kernelTypesModuleNames),
-            moduleDescription = Just ("Utilities for type unification.")}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just ("Utilities for type unification."))}
   where
    definitions = [
      toDefinition joinTypes,

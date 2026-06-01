@@ -7972,5 +7972,5 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "description": "Test cases for automatic differentiation",
+  "metadata": {"comments": [], "description": "Test cases for automatic differentiation", "seeAlso": []},
   "name": "hydra.test.differentiation"}

@@ -2,6 +2,7 @@ package hydra.sources.java;
 import hydra.dsl.Types;
 import static hydra.dsl.meta.Defs.unqualifiedDeps;
 import hydra.packaging.Definition;
+import hydra.packaging.EntityMetadata;
 import hydra.packaging.Module;
 import hydra.packaging.ModuleName;
 import hydra.packaging.ModuleDependency;
@@ -110,7 +111,11 @@ public class Environment {
 
     public static final Module module_ = new Module(
         NS,
-        Maybe.just("Environment types for Java code generation"),
+        Maybe.just(new EntityMetadata(
+            Maybe.just("Environment types for Java code generation"),
+            java.util.List.of(),
+            java.util.List.of(),
+            Maybe.nothing())),
         DEPENDENCIES,
         DEFINITIONS);
 }

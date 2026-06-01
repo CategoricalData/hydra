@@ -10693,5 +10693,5 @@
     {"module": "hydra.core"},
     {"module": "hydra.dsl.rdf.syntax"},
     {"module": "hydra.dsl.core"}],
-  "description": "DSL functions for hydra.shacl.model",
+  "metadata": {"comments": [], "description": "DSL functions for hydra.shacl.model", "seeAlso": []},
   "name": "hydra.dsl.shacl.model"}

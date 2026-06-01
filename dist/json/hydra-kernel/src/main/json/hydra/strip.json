@@ -903,5 +903,5 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "description": "Annotation and type stripping and normalization",
+  "metadata": {"comments": [], "description": "Annotation and type stripping and normalization", "seeAlso": []},
   "name": "hydra.strip"}

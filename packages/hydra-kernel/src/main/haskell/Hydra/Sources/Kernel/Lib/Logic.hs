@@ -23,26 +23,29 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> kernelTypesModuleNames,
-            moduleDescription = Just "Primitives in the hydra.lib.logic module."}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just "Primitives in the hydra.lib.logic module.")}
   where
     definitions = [
-      toPrimitive "Compute the logical AND of two boolean values." andSig (Just
-        "and(p, q) returns true iff both p and q are true. Evaluation is strict in both arguments at the\
-        \ primitive level; for short-circuiting behavior, use ifElse. Total. Corresponds to Haskell's\
-        \ (&&) :: Bool -> Bool -> Bool (but without short-circuit evaluation).") and_,
-      primNoDef "ifElse" "Compute a conditional expression." ifElseSig (Just
-        "ifElse(p, t, f) returns t if p is true, or f if p is false. The unselected branch is not\
-        \ necessarily evaluated; ifElse is the standard way to express short-circuiting boolean logic and\
-        \ branching in Hydra. Total. Corresponds to Haskell's if/then/else."),
-      toPrimitive "Compute the logical NOT of a boolean value." notSig (Just
-        "not(p) returns false if p is true, or true if p is false. Total. Corresponds to Haskell's\
-        \ not :: Bool -> Bool.") not_,
-      toPrimitive "Compute the logical OR of two boolean values." orSig (Just
-        "or(p, q) returns true iff at least one of p and q is true. Evaluation is strict in both\
-        \ arguments at the primitive level; for short-circuiting behavior, use ifElse. Total. Corresponds\
-        \ to Haskell's (||) :: Bool -> Bool -> Bool (but without short-circuit evaluation).") or_]
+      toPrimitive "Compute the logical AND of two boolean values." andSig [
+        "and(p, q) returns true iff both p and q are true.",
+        "Evaluation is strict in both arguments at the primitive level; for short-circuiting behavior, use\
+        \ ifElse.",
+        "Total. Corresponds to Haskell's (&&) :: Bool -> Bool -> Bool (but without short-circuit evaluation)."] and_,
+      primNoDef "ifElse" "Compute a conditional expression." ifElseSig [
+        "ifElse(p, t, f) returns t if p is true, or f if p is false.",
+        "The unselected branch is not necessarily evaluated; ifElse is the standard way to express\
+        \ short-circuiting boolean logic and branching in Hydra.",
+        "Total. Corresponds to Haskell's if/then/else."],
+      toPrimitive "Compute the logical NOT of a boolean value." notSig [
+        "not(p) returns false if p is true, or true if p is false.",
+        "Total. Corresponds to Haskell's not :: Bool -> Bool."] not_,
+      toPrimitive "Compute the logical OR of two boolean values." orSig [
+        "or(p, q) returns true iff at least one of p and q is true.",
+        "Evaluation is strict in both arguments at the primitive level; for short-circuiting behavior, use\
+        \ ifElse.",
+        "Total. Corresponds to Haskell's (||) :: Bool -> Bool -> Bool (but without short-circuit evaluation)."] or_]
 -- Local convenience: build a no-default primitive Definition from a local name.
-primNoDef :: String -> String -> TermSignature -> Maybe String -> Definition
+primNoDef :: String -> String -> TermSignature -> [String] -> Definition
 primNoDef localName description s comments =
   toPrimitiveNoDefault description s (unqualifyName (QualifiedName (Just ns) localName)) comments
 

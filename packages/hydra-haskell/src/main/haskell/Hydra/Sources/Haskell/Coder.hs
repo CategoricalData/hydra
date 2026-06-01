@@ -104,7 +104,7 @@ module_ = Module {
             moduleDefinitions = definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> ([HaskellSerde.ns, HaskellUtilsSource.ns,
       Adapt.ns, Analysis.ns, Dependencies.ns, Predicates.ns, Resolution.ns, Rewriting.ns, Serialization.ns, ShowError.ns, Strip.ns, Variables.ns] L.++ (HaskellEnvironment.ns:HaskellSyntax.ns:KernelTypes.kernelTypesModuleNames)),
-            moduleDescription = Just "Functions for encoding Hydra modules as Haskell modules"}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just "Functions for encoding Hydra modules as Haskell modules")}
   where
     ns = ModuleName "hydra.haskell.coder"
     definitions = [
@@ -271,7 +271,7 @@ constructModule = haskellCoderDefinition "constructModule" $
           (list ([] :: [TypedTerm ((String, Maybe String), [String])]))]] $
     "declLists" <<~ Eithers.mapList (var "createDeclarations") (var "defs") $ lets [
     "decls">: Lists.concat $ var "declLists",
-    "mc">: Packaging.moduleDescription $ var "mod"] $
+    "mc">: (Maybes.bind (Packaging.moduleMetadata (var "mod")) ("em" ~> Packaging.entityMetadataDescription (var "em")))] $
     right $ record H._Module [
       H._Module_head>>: just $ record H._ModuleHead [
         H._ModuleHead_comments>>: var "mc",

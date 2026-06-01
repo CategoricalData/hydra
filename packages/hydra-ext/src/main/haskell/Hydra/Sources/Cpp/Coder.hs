@@ -5,7 +5,7 @@ module Hydra.Sources.Cpp.Coder where
 
 -- Standard imports for term-level sources outside of the kernel
 import Hydra.Kernel
-import           Hydra.Dsl.Bootstrap (unqualifiedDep)
+import           Hydra.Dsl.Bootstrap (unqualifiedDep, descriptionMetadata)
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Meta.Lib.Strings                as Strings
 import           Hydra.Dsl.Meta.Phantoms                   as Phantoms
@@ -64,7 +64,7 @@ module_ = Module {
       Formatting.ns, Names.ns, Dependencies.ns, Strip.ns, Environment.ns, Predicates.ns, Resolution.ns, Lexical.ns,
       ShowCore.ns, Annotations.ns, Sorting.ns, SerializationSource.ns,
       moduleName DecodeCore.module_, moduleName EncodeCore.module_] L.++ (CppSyntax.ns:KernelTypes.kernelTypesModuleNames)),
-            moduleDescription = Just "C++ code generator: converts Hydra modules to C++ header files"}
+            moduleMetadata = descriptionMetadata (Just "C++ code generator: converts Hydra modules to C++ header files")}
   where
     definitions = [
       -- Cpp AST helper functions

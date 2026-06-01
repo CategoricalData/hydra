@@ -5990,5 +5990,5 @@
     {"module": "hydra.dsl.core"},
     {"module": "hydra.dsl.packaging"},
     {"module": "hydra.dsl.util"}],
-  "description": "DSL functions for hydra.error.packaging",
+  "metadata": {"comments": [], "description": "DSL functions for hydra.error.packaging", "seeAlso": []},
   "name": "hydra.dsl.error.packaging"}

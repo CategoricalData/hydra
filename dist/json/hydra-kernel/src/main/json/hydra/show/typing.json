@@ -169,5 +169,5 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "description": "String representations of hydra.typing types",
+  "metadata": {"comments": [], "description": "String representations of hydra.typing types", "seeAlso": []},
   "name": "hydra.show.typing"}

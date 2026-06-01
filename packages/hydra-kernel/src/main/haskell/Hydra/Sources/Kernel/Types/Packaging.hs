@@ -21,10 +21,14 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = (DefinitionType <$> definitions),
             moduleDependencies = unqualifiedDep <$> [Core.ns, Typing.ns],
-            moduleDescription = Just "A model for Hydra module names, modules, and packages"}
+            moduleMetadata = descriptionMetadata (Just "A model for Hydra module names, modules, and packages")}
   where
     definitions = [
       definition,
+      definitionReference,
+      entityLifecycle,
+      entityMetadata,
+      entityReference,
       fileExtension,
       module',
       moduleDependency,
@@ -53,6 +57,66 @@ definition = define "Definition" $
       doc "A primitive definition"
       primitiveDefinition]
 
+definitionReference :: TypeDefinition
+definitionReference = define "DefinitionReference" $
+  doc "A typed reference to a definition: a type, a term, or a primitive, identified by name" $
+  T.union [
+    "type">:
+      doc "A reference to a type definition, by name"
+      Core.name,
+    "term">:
+      doc "A reference to a term definition, by name"
+      Core.name,
+    "primitive">:
+      doc "A reference to a primitive definition, by name"
+      Core.name]
+
+entityLifecycle :: TypeDefinition
+entityLifecycle = define "EntityLifecycle" $
+  doc ("Version-lifecycle milestones for a packaging entity. Each milestone is independently optional;"
+    ++ " further milestones (e.g. stableSince, removedSince) may be added without changing dependent types.") $
+  T.record [
+    "availableSince">:
+      doc "The version in which the entity was introduced, if known." $
+      T.maybe version,
+    "deprecatedSince">:
+      doc "The version in which the entity was deprecated, if applicable." $
+      T.maybe version]
+
+entityMetadata :: TypeDefinition
+entityMetadata = define "EntityMetadata" $
+  doc ("Documentation and lifecycle metadata attachable to a packaging entity (package, module, or definition)."
+    ++ " Bundling these fields in one type lets future metadata be added without changing the field shape of"
+    ++ " the entities that carry it.") $
+  T.record [
+    "description">:
+      doc "An optional, concise one-line human-readable summary of the entity." $
+      T.maybe T.string,
+    "comments">:
+      doc ("Zero or more long-form prose paragraphs: cross-cutting semantic conventions, caveats, and"
+        ++ " references that would otherwise be repeated across the entity's constituents.") $
+      T.list T.string,
+    "seeAlso">:
+      doc "Typed cross-references to related entities, for navigation and documentation." $
+      T.list entityReference,
+    "lifecycle">:
+      doc "Optional version-lifecycle milestones for the entity." $
+      T.maybe entityLifecycle]
+
+entityReference :: TypeDefinition
+entityReference = define "EntityReference" $
+  doc "A typed reference to a packaging entity: a package, a module, or a definition" $
+  T.union [
+    "package">:
+      doc "A reference to a package, by name"
+      packageName,
+    "module">:
+      doc "A reference to a module, by name"
+      moduleNameDef,
+    "definition">:
+      doc "A reference to a definition (type, term, or primitive)"
+      definitionReference]
+
 fileExtension :: TypeDefinition
 fileExtension = define "FileExtension" $
   doc "A file extension (without the dot), e.g. \"json\" or \"py\"" $
@@ -65,9 +129,9 @@ module' = define "Module" $
     "name">:
       doc "The name of the module, which is also the common prefix for all element names in the module"
       moduleNameDef,
-    "description">:
-      doc "An optional human-readable description of the module" $
-      T.maybe T.string,
+    "metadata">:
+      doc "Optional documentation and lifecycle metadata for the module" $
+      T.maybe entityMetadata,
     "dependencies">:
       doc "Any modules which this module directly depends on" $
       T.list moduleDependency,
@@ -102,9 +166,9 @@ package = define "Package" $
     "name">:
       doc "The name of the package"
       packageName,
-    "description">:
-      doc "An optional human-readable description of the package" $
-      T.maybe T.string,
+    "metadata">:
+      doc "Optional documentation and lifecycle metadata for the package" $
+      T.maybe entityMetadata,
     "dependencies">:
       doc "The packages which this package depends on" $
       T.list packageDependency,
@@ -141,7 +205,7 @@ packageVersionSpecifier = define "PackageVersionSpecifier" $
 
 primitiveDefinition :: TypeDefinition
 primitiveDefinition = define "PrimitiveDefinition" $
-  doc "A primitive definition: the universal, host-independent declarative metadata for a primitive, including name, signature, description, long-form specification, cross-references, totality and purity flags, version metadata, and an optional default implementation expressed as a Hydra term." $
+  doc "A primitive definition: the universal, host-independent declarative metadata for a primitive, including name, signature, documentation and lifecycle metadata, totality and purity flags, and an optional default implementation expressed as a Hydra term." $
   T.record [
     "name">:
       doc "The name of the primitive"
@@ -149,27 +213,15 @@ primitiveDefinition = define "PrimitiveDefinition" $
     "signature">:
       doc "The signature of the primitive (always explicit, never inferred)"
       Typing.termSignature,
-    "description">:
-      doc "A concise, one-sentence human-readable description of the primitive"
-      T.string,
-    "comments">:
-      doc "A detailed, host-independent specification of the primitive's behavior. Used to capture constraints, edge cases, and semantic choices (e.g. floating-point sentinel behavior, numeric narrowing arithmetic, complexity expectations) that are not yet promoted to structured fields." $
-      T.maybe T.string,
-    "seeAlso">:
-      doc "Names of related primitives, for navigation and documentation purposes." $
-      T.list Core.name,
+    "metadata">:
+      doc "Optional documentation and lifecycle metadata for the primitive (description, long-form comments, cross-references, version milestones)." $
+      T.maybe entityMetadata,
     "isPure">:
       doc "Whether the primitive is pure (referentially transparent, no observable side effects). Defaults to true."
       T.boolean,
     "isTotal">:
       doc "Whether the primitive is total (terminates on every input of its declared type). Defaults to true."
       T.boolean,
-    "availableSince">:
-      doc "The version in which the primitive was introduced, if known." $
-      T.maybe version,
-    "deprecatedSince">:
-      doc "The version in which the primitive was deprecated, if applicable." $
-      T.maybe version,
     "defaultImplementation">:
       doc "An optional cross-compilable reference implementation of the primitive, expressed as a Hydra term. Used by interpreters lacking a native implementation and as a proof-friendly reference. Distinct from the per-host Primitive.implementation." $
       T.maybe Core.term]
@@ -192,6 +244,9 @@ termDefinition = define "TermDefinition" $
     "name">:
       doc "The name of the term"
       Core.name,
+    "metadata">:
+      doc "Optional documentation and lifecycle metadata for the term definition" $
+      T.maybe entityMetadata,
     "term">:
       doc "The term being defined"
       Core.term,
@@ -206,6 +261,9 @@ typeDefinition = define "TypeDefinition" $
     "name">:
       doc "The name of the type"
       Core.name,
+    "metadata">:
+      doc "Optional documentation and lifecycle metadata for the type definition" $
+      T.maybe entityMetadata,
     "typeScheme">:
       doc "The type scheme being defined"
       Core.typeScheme]

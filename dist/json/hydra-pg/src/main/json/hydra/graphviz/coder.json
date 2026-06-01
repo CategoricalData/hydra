@@ -2160,5 +2160,5 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "description": "Functions for converting Hydra terms to Graphviz DOT graphs",
+  "metadata": {"comments": [], "description": "Functions for converting Hydra terms to Graphviz DOT graphs", "seeAlso": []},
   "name": "hydra.graphviz.coder"}

@@ -384,5 +384,5 @@
                         "body": {"variable": "hydra.core.Name"}}}}]}}},
           "variables": []}}}],
   "dependencies": [{"module": "hydra.core"}, {"module": "hydra.paths"}, {"module": "hydra.typing"}, {"module": "hydra.variants"}],
-  "description": "Error types for type checking",
+  "metadata": {"comments": [], "description": "Error types for type checking", "seeAlso": []},
   "name": "hydra.error.checking"}

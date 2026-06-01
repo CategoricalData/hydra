@@ -86,7 +86,7 @@ module_ = Module {
             moduleName = (ModuleName "hydra.scala.language"),
             moduleDefinitions = [toDefinition scalaLanguage, toDefinition scalaReservedWords],
             moduleDependencies = Bootstrap.unqualifiedDep <$> ([Lexical.ns] L.++ KernelTypes.kernelTypesModuleNames),
-            moduleDescription = Just "Language constraints and reserved words for Scala"}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just "Language constraints and reserved words for Scala")}
 scalaLanguage :: TypedTermDefinition Language
 scalaLanguage = define "scalaLanguage" $
   doc "Language constraints for Scala" $ lets [

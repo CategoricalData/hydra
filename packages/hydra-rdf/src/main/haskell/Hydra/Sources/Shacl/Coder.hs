@@ -98,7 +98,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> ([Names.ns, Strip.ns, Annotations.ns, moduleName DecodeCore.module_, ExtractCore.ns, Formatting.ns, Lexical.ns, RdfUtils.ns] L.++ (ShaclModel.ns:RdfSyntax.ns:KernelTypes.kernelTypesModuleNames)),
-            moduleDescription = Just "SHACL coder: converts Hydra types and terms to SHACL shapes and RDF descriptions"}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just "SHACL coder: converts Hydra types and terms to SHACL shapes and RDF descriptions")}
   where
     definitions = [
       toDefinition common,

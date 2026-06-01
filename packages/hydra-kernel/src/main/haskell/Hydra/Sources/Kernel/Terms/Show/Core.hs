@@ -62,7 +62,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> (kernelTypesModuleNames),
-            moduleDescription = Just "String representations of hydra.core types"}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just "String representations of hydra.core types")}
   where
    definitions = [
      toDefinition binding,

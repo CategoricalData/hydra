@@ -3057,5 +3057,8 @@
                         "body": {"variable": "hydra.rust.syntax.Expression"}}}}]}}},
           "variables": []}}}],
   "dependencies": [{"module": "hydra.core"}],
-  "description": "A Rust syntax model, based on the Rust Reference grammar (https://doc.rust-lang.org/reference/), retrieved 2025-01-29",
+  "metadata": {
+    "comments": [],
+    "description": "A Rust syntax model, based on the Rust Reference grammar (https://doc.rust-lang.org/reference/), retrieved 2025-01-29",
+    "seeAlso": []},
   "name": "hydra.rust.syntax"}

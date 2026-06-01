@@ -374,5 +374,8 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "description": "Language constraints and reserved words for TypeScript 5.x (ECMAScript 2024 base)",
+  "metadata": {
+    "comments": [],
+    "description": "Language constraints and reserved words for TypeScript 5.x (ECMAScript 2024 base)",
+    "seeAlso": []},
   "name": "hydra.typeScript.language"}

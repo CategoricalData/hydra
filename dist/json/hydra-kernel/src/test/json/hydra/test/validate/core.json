@@ -4508,5 +4508,5 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "description": "Test cases for core term and type validation",
+  "metadata": {"comments": [], "description": "Test cases for core term and type validation", "seeAlso": []},
   "name": "hydra.test.validate.core"}

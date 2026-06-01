@@ -145,5 +145,5 @@
     {"module": "hydra.graph"},
     {"module": "hydra.packaging"},
     {"module": "hydra.typing"}],
-  "description": "Environment types for Python code generation",
+  "metadata": {"comments": [], "description": "Environment types for Python code generation", "seeAlso": []},
   "name": "hydra.python.environment"}

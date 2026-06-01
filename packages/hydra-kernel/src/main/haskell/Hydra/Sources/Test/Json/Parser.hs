@@ -2,7 +2,7 @@ module Hydra.Sources.Test.Json.Parser where
 
 -- Standard imports for tests
 import Hydra.Kernel
-import           Hydra.Dsl.Bootstrap (unqualifiedDep)
+import           Hydra.Dsl.Bootstrap (unqualifiedDep, descriptionMetadata)
 import Hydra.Dsl.Meta.Testing                 as Testing
 import Hydra.Dsl.Meta.Terms                   as Terms hiding ((@@))
 import Hydra.Sources.Kernel.Types.All
@@ -39,7 +39,7 @@ module_ = Module {
             moduleDefinitions = definitions,
             moduleDependencies = unqualifiedDep <$> ([ModuleName "hydra.parsers", ModuleName "hydra.json.parser", ModuleName "hydra.json.writer",
      ModuleName "hydra.lib.strings", ModuleName "hydra.parsing"] ++ kernelTypesModuleNames),
-            moduleDescription = (Just "Test cases for JSON parsing")}
+            moduleMetadata = descriptionMetadata ((Just "Test cases for JSON parsing"))}
   where
     definitions = [
         Phantoms.toDefinition allTests]
