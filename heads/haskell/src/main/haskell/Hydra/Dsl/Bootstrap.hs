@@ -44,7 +44,7 @@ datatype :: ModuleName -> String -> Type -> TypeDefinition
 datatype gname lname typ = TypeDefinition {
     typeDefinitionName = qualify gname (Name lname),
     typeDefinitionMetadata = Nothing,
-    typeDefinitionTypeScheme = TypeScheme {
+    typeDefinitionBody = TypeScheme {
       typeSchemeVariables = [],
       typeSchemeBody = typ,
       typeSchemeConstraints = Nothing}}

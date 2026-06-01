@@ -342,15 +342,15 @@ encodeTypeDefinition = define "encodeTypeDefinition" $
   "cx" ~> "g" ~> lambda "prefixes" $ lambda "tdef" $
     encodeNamedType @@ var "cx" @@ var "g" @@ var "prefixes"
       @@ (Packaging.typeDefinitionName $ var "tdef")
-      @@ (Core.typeSchemeBody $ Packaging.typeDefinitionTypeScheme $ var "tdef")
+      @@ (Core.typeSchemeBody $ Packaging.typeDefinitionBody $ var "tdef")
 
 -- | Encode a Hydra Name as a GraphQL Name with namespace prefix
 encodeTypeName :: TypedTermDefinition (M.Map ModuleName String -> Name -> G.Name)
 encodeTypeName = define "encodeTypeName" $
   lambda "prefixes" $ lambda "name" $ lets [
     "qualName">: Names.qualifyName @@ var "name",
-    "local">: Packaging.qualifiedNameLocal (var "qualName"),
-    "mns">: Packaging.qualifiedNameModuleName (var "qualName"),
+    "local">: Util.qualifiedNameLocal (var "qualName"),
+    "mns">: Util.qualifiedNameModuleName (var "qualName"),
     "prefix">: Maybes.maybe (string "")
       (lambda "ns_" $ Maybes.maybe (string "") ("p" ~> var "p") (Maps.lookup (var "ns_") (var "prefixes")))
       (var "mns")] $

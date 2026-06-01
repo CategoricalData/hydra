@@ -103,7 +103,7 @@ nsB = Packaging.moduleName2 (Phantoms.string "hydra.testInput.b")
 -- universe.
 typedTermDef :: TypedTerm Name -> TypedTerm Term -> TypedTerm TypeScheme -> TypedTerm Definition
 typedTermDef nm tm ts = Packaging.definitionTerm
-  (Packaging.termDefinition nm Phantoms.nothing tm (Phantoms.just (Scoping.typeSchemeToTermSignature @@ ts)))
+  (Packaging.termDefinition nm Phantoms.nothing (Phantoms.just (Scoping.typeSchemeToTermSignature @@ ts)) tm)
 
 universeMods :: TypedTerm [Module]
 universeMods = Phantoms.list [modA, modB]
@@ -112,7 +112,7 @@ universeMods = Phantoms.list [modA, modB]
 -- assign a fresh scheme.
 untypedTermDef :: TypedTerm Name -> TypedTerm Term -> TypedTerm Definition
 untypedTermDef nm tm = Packaging.definitionTerm
-  (Packaging.termDefinition nm Phantoms.nothing tm Phantoms.nothing)
+  (Packaging.termDefinition nm Phantoms.nothing Phantoms.nothing tm)
 
 ----------------------------------------
 -- Second toy universe: a "clean" module carrying a scheme with vacuous
@@ -201,7 +201,7 @@ showDef d = Phantoms.cases _Definition d Nothing [
           ("ts" ~> ShowCore.typeScheme # var "ts")
           (Maybes.map Scoping.termSignatureToTypeScheme (Packaging.termDefinitionSignature (var "td"))),
         Phantoms.string " = ",
-        ShowCore.term # (Packaging.termDefinitionTerm (var "td")),
+        ShowCore.term # (Packaging.termDefinitionBody (var "td")),
         Phantoms.string "\n"],
     _Definition_primitive>>: "pd" ~>
       Strings.concat [

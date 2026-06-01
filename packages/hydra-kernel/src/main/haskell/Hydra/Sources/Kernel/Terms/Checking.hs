@@ -443,7 +443,7 @@ typeOfCaseStatement = define "typeOfCaseStatement" $
   "tname" <~ Core.caseStatementTypeName (var "cs") $
   "dflt" <~ Core.caseStatementDefault (var "cs") $
   "cases" <~ Core.caseStatementCases (var "cs") $
-  "cterms" <~ Lists.map (reify Core.fieldTerm) (var "cases") $
+  "cterms" <~ Lists.map (reify Core.caseAlternativeHandler) (var "cases") $
   -- Type the default case if present
   "dfltResult" <<~ Eithers.mapMaybe ("e" ~> typeOf @@ var "cx" @@ var "tx" @@ noTypeArgs @@ var "e") (var "dflt") $
   -- dfltResult :: Maybe (Type, InferenceContext)

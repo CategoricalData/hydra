@@ -50,7 +50,7 @@
 (register-make 'hydra.core "TypeApplicationTerm" 'make-typeApplicationTerm)
 (register-make 'hydra.core "TypeLambda" 'make-typeLambda)
 (register-make 'hydra.core "TypeScheme" 'make-typeScheme)
-(register-make 'hydra.core "TypeVariableMetadata" 'make-typeVariableMetadata)
+(register-make 'hydra.core "TypeVariableConstraints" 'make-typeVariableConstraints)
 (register-make 'hydra.core "WrappedTerm" 'make-wrappedTerm)
 (register-make 'hydra.core "WrappedType" 'make-wrappedType)
 

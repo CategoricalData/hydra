@@ -45,8 +45,8 @@ compactName :: M.Map Packaging.ModuleName String -> Core.Name -> String
 compactName namespaces name =
 
       let qualName = qualifyName name
-          mns = Packaging.qualifiedNameModuleName qualName
-          local = Packaging.qualifiedNameLocal qualName
+          mns = Util.qualifiedNameModuleName qualName
+          local = Util.qualifiedNameLocal qualName
       in (Maybes.maybe (Core.unName name) (\ns -> Maybes.maybe local (\pre -> Strings.cat [
         pre,
         ":",
@@ -76,23 +76,23 @@ freshNames n cx =
       in (Lists.foldl go ([], cx) (Lists.replicate n ()))
 -- | Extract the local part of a name
 localNameOf :: Core.Name -> String
-localNameOf arg_ = Packaging.qualifiedNameLocal (qualifyName arg_)
+localNameOf arg_ = Util.qualifiedNameLocal (qualifyName arg_)
 -- | Extract the module name of a name, if any
 moduleNameOf :: Core.Name -> Maybe Packaging.ModuleName
-moduleNameOf arg_ = Packaging.qualifiedNameModuleName (qualifyName arg_)
+moduleNameOf arg_ = Util.qualifiedNameModuleName (qualifyName arg_)
 -- | Convert a module name to a file path with the given case convention and file extension
-moduleNameToFilePath :: Util.CaseConvention -> Packaging.FileExtension -> Packaging.ModuleName -> String
+moduleNameToFilePath :: Util.CaseConvention -> Util.FileExtension -> Packaging.ModuleName -> String
 moduleNameToFilePath caseConv ext ns =
 
       let parts = Lists.map (Formatting.convertCase Util.CaseConventionCamel caseConv) (Strings.splitOn "." (Packaging.unModuleName ns))
-      in (Strings.cat2 (Strings.cat2 (Strings.intercalate "/" parts) ".") (Packaging.unFileExtension ext))
+      in (Strings.cat2 (Strings.cat2 (Strings.intercalate "/" parts) ".") (Util.unFileExtension ext))
 -- | Convert a name to file path, given case conventions for namespaces and local names, and assuming '/' as the file path separator
-nameToFilePath :: Util.CaseConvention -> Util.CaseConvention -> Packaging.FileExtension -> Core.Name -> String
+nameToFilePath :: Util.CaseConvention -> Util.CaseConvention -> Util.FileExtension -> Core.Name -> String
 nameToFilePath nsConv localConv ext name =
 
       let qualName = qualifyName name
-          ns = Packaging.qualifiedNameModuleName qualName
-          local = Packaging.qualifiedNameLocal qualName
+          ns = Util.qualifiedNameModuleName qualName
+          local = Util.qualifiedNameLocal qualName
           nsToFilePath =
                   \nsArg -> Strings.intercalate "/" (Lists.map (\part -> Formatting.convertCase Util.CaseConventionCamel nsConv part) (Strings.splitOn "." (Packaging.unModuleName nsArg)))
           prefix = Maybes.maybe "" (\n -> Strings.cat2 (nsToFilePath n) "/") ns
@@ -101,7 +101,7 @@ nameToFilePath nsConv localConv ext name =
         prefix,
         suffix,
         ".",
-        (Packaging.unFileExtension ext)])
+        (Util.unFileExtension ext)])
 -- | Type variable naming convention follows Haskell: t0, t1, etc.
 normalTypeVariable :: Int -> Core.Name
 normalTypeVariable i = Core.Name (Strings.cat2 "t" (Literals.showInt32 i))
@@ -119,20 +119,20 @@ qname ns name =
       ".",
       name])
 -- | Split a dot-separated name into a namespace and local name
-qualifyName :: Core.Name -> Packaging.QualifiedName
+qualifyName :: Core.Name -> Util.QualifiedName
 qualifyName name =
 
       let parts = Lists.reverse (Strings.splitOn "." (Core.unName name))
-      in (Maybes.maybe (Packaging.QualifiedName {
-        Packaging.qualifiedNameModuleName = Nothing,
-        Packaging.qualifiedNameLocal = (Core.unName name)}) (\uc ->
+      in (Maybes.maybe (Util.QualifiedName {
+        Util.qualifiedNameModuleName = Nothing,
+        Util.qualifiedNameLocal = (Core.unName name)}) (\uc ->
         let localName = Pairs.first uc
             restReversed = Pairs.second uc
-        in (Logic.ifElse (Lists.null restReversed) (Packaging.QualifiedName {
-          Packaging.qualifiedNameModuleName = Nothing,
-          Packaging.qualifiedNameLocal = (Core.unName name)}) (Packaging.QualifiedName {
-          Packaging.qualifiedNameModuleName = (Just (Packaging.ModuleName (Strings.intercalate "." (Lists.reverse restReversed)))),
-          Packaging.qualifiedNameLocal = localName}))) (Lists.uncons parts))
+        in (Logic.ifElse (Lists.null restReversed) (Util.QualifiedName {
+          Util.qualifiedNameModuleName = Nothing,
+          Util.qualifiedNameLocal = (Core.unName name)}) (Util.QualifiedName {
+          Util.qualifiedNameModuleName = (Just (Packaging.ModuleName (Strings.intercalate "." (Lists.reverse restReversed)))),
+          Util.qualifiedNameLocal = localName}))) (Lists.uncons parts))
 -- | Restore the original trace from baseCx, while keeping the freshTypeVariableCount from newCx. Used between sibling sub-inferences (e.g. application LHS vs RHS) so that an error in the second sibling doesn't include the first sibling's trace path. Returns a new InferenceContext.
 restoreTrace :: Typing.InferenceContext -> Typing.InferenceContext -> Typing.InferenceContext
 restoreTrace baseCx newCx =
@@ -143,8 +143,8 @@ restoreTrace baseCx newCx =
 uniqueLabel :: S.Set String -> String -> String
 uniqueLabel visited l = Logic.ifElse (Sets.member l visited) (uniqueLabel visited (Strings.cat2 l "'")) l
 -- | Convert a qualified name to a dot-separated name
-unqualifyName :: Packaging.QualifiedName -> Core.Name
+unqualifyName :: Util.QualifiedName -> Core.Name
 unqualifyName qname =
 
-      let prefix = Maybes.maybe "" (\n -> Strings.cat2 (Packaging.unModuleName n) ".") (Packaging.qualifiedNameModuleName qname)
-      in (Core.Name (Strings.cat2 prefix (Packaging.qualifiedNameLocal qname)))
+      let prefix = Maybes.maybe "" (\n -> Strings.cat2 (Packaging.unModuleName n) ".") (Util.qualifiedNameModuleName qname)
+      in (Core.Name (Strings.cat2 prefix (Util.qualifiedNameLocal qname)))

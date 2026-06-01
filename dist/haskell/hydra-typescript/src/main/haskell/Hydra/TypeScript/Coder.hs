@@ -325,8 +325,8 @@ encodeTerm cx g currentNs term =
             uValue = tsMember uExpr "value"
             armCases =
                     Lists.map (\f ->
-                      let fname = Core.unName (Core.fieldName f)
-                          armExpr = encodeTerm cx g currentNs (Core.fieldTerm f)
+                      let fname = Core.unName (Core.caseAlternativeName f)
+                          armExpr = encodeTerm cx g currentNs (Core.caseAlternativeHandler f)
                           callExpr = tsCall armExpr [
                                 uValue]
                       in Syntax.SwitchCase {
@@ -366,7 +366,7 @@ encodeTermDefinition cx g currentNs td =
 
       let name = Packaging.termDefinitionName td
           lname = Formatting.sanitizeWithUnderscores Language.typeScriptReservedWords (Names.localNameOf name)
-          rawTerm = Packaging.termDefinitionTerm td
+          rawTerm = Packaging.termDefinitionBody td
           mdoc = Eithers.either (\_ -> Nothing) (\x_ -> x_) (Annotations.getTermDescription cx g rawTerm)
           asExport = \stmt -> Syntax.ModuleItemExport (Syntax.ExportDeclarationDeclaration stmt)
           mScheme =
@@ -469,7 +469,7 @@ encodeTypeDefinition :: t0 -> Graph.Graph -> Packaging.TypeDefinition -> Either 
 encodeTypeDefinition cx g tdef =
 
       let name = Packaging.typeDefinitionName tdef
-          typScheme = Packaging.typeDefinitionTypeScheme tdef
+          typScheme = Packaging.typeDefinitionBody tdef
           rawTyp = Core.typeSchemeBody typScheme
           lname = Formatting.capitalize (Names.localNameOf name)
       in (Eithers.bind (Annotations.getTypeDescription cx g rawTyp) (\mdoc ->
@@ -634,14 +634,14 @@ moduleToTypeScript mod defs cx g =
           rawTermDefs = Pairs.second partitioned
           termDefs = sortTermDefsTopologically currentNs rawTermDefs
           typeImportsFromTypes =
-                  Lists.foldl (\acc -> \td -> Sets.union acc (collectImports currentNs (Core.typeSchemeBody (Packaging.typeDefinitionTypeScheme td)))) Sets.empty typeDefs
+                  Lists.foldl (\acc -> \td -> Sets.union acc (collectImports currentNs (Core.typeSchemeBody (Packaging.typeDefinitionBody td)))) Sets.empty typeDefs
           typeImportsFromTerms =
                   Lists.foldl (\acc -> \td -> Maybes.cases (Packaging.termDefinitionSignature td) acc (\sig -> Sets.union acc (collectImports currentNs (Core.typeSchemeBody (Scoping.termSignatureToTypeScheme sig))))) Sets.empty termDefs
           typeImportsFromInner =
-                  Lists.foldl (\acc -> \td -> Sets.union acc (collectInnerTypeImports currentNs (Packaging.termDefinitionTerm td))) Sets.empty termDefs
+                  Lists.foldl (\acc -> \td -> Sets.union acc (collectInnerTypeImports currentNs (Packaging.termDefinitionBody td))) Sets.empty termDefs
           typeImports = Sets.union (Sets.union typeImportsFromTypes typeImportsFromTerms) typeImportsFromInner
           termImports =
-                  Lists.foldl (\acc -> \td -> Sets.union acc (collectTermImports currentNs (Packaging.termDefinitionTerm td))) Sets.empty termDefs
+                  Lists.foldl (\acc -> \td -> Sets.union acc (collectTermImports currentNs (Packaging.termDefinitionBody td))) Sets.empty termDefs
           typeImportsBlock = importsToText "type" currentNs typeImports
           termImportsBlock = importsToText "value" currentNs termImports
           importsBlock = Strings.cat2 typeImportsBlock termImportsBlock
@@ -661,7 +661,7 @@ moduleToTypeScript mod defs cx g =
                         "\n",
                         itemText]))
             body = Strings.intercalate "\n\n" (Lists.map renderItem allItems)
-            filePath = Names.moduleNameToFilePath Util.CaseConventionCamel (Packaging.FileExtension "ts") (Packaging.moduleName mod)
+            filePath = Names.moduleNameToFilePath Util.CaseConventionCamel (Util.FileExtension "ts") (Packaging.moduleName mod)
         in (Right (Maps.singleton filePath (Strings.cat [
           header,
           importsBlock,
@@ -807,7 +807,7 @@ sortTermDefsTopologically currentNs tdefs =
           adjacency =
                   Lists.map (\td ->
                     let tname = Packaging.termDefinitionName td
-                        tterm = Packaging.termDefinitionTerm td
+                        tterm = Packaging.termDefinitionBody td
                         freeVars = Variables.freeVariablesInTerm tterm
                         deps = Lists.filter (\n -> Maps.member n byName) (Sets.toList freeVars)
                     in (tname, deps)) tdefs

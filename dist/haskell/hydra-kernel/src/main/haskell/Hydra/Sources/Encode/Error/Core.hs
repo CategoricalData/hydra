@@ -34,7 +34,7 @@ module_ =
         Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.encode.error.core.constantConditionError"),
           Packaging.termDefinitionMetadata = Nothing,
-          Packaging.termDefinitionTerm = (Core.TermAnnotated (Core.AnnotatedTerm {
+          Packaging.termDefinitionBody = (Core.TermAnnotated (Core.AnnotatedTerm {
             Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
               Core.lambdaParameter = (Core.Name "x"),
               Core.lambdaDomain = Nothing,
@@ -114,7 +114,7 @@ module_ =
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.encode.error.core.duplicateBindingError"),
           Packaging.termDefinitionMetadata = Nothing,
-          Packaging.termDefinitionTerm = (Core.TermAnnotated (Core.AnnotatedTerm {
+          Packaging.termDefinitionBody = (Core.TermAnnotated (Core.AnnotatedTerm {
             Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
               Core.lambdaParameter = (Core.Name "x"),
               Core.lambdaDomain = Nothing,
@@ -183,7 +183,7 @@ module_ =
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.encode.error.core.duplicateFieldError"),
           Packaging.termDefinitionMetadata = Nothing,
-          Packaging.termDefinitionTerm = (Core.TermAnnotated (Core.AnnotatedTerm {
+          Packaging.termDefinitionBody = (Core.TermAnnotated (Core.AnnotatedTerm {
             Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
               Core.lambdaParameter = (Core.Name "x"),
               Core.lambdaDomain = Nothing,
@@ -252,7 +252,7 @@ module_ =
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.encode.error.core.duplicateRecordTypeFieldNamesError"),
           Packaging.termDefinitionMetadata = Nothing,
-          Packaging.termDefinitionTerm = (Core.TermAnnotated (Core.AnnotatedTerm {
+          Packaging.termDefinitionBody = (Core.TermAnnotated (Core.AnnotatedTerm {
             Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
               Core.lambdaParameter = (Core.Name "x"),
               Core.lambdaDomain = Nothing,
@@ -323,7 +323,7 @@ module_ =
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.encode.error.core.duplicateUnionTypeFieldNamesError"),
           Packaging.termDefinitionMetadata = Nothing,
-          Packaging.termDefinitionTerm = (Core.TermAnnotated (Core.AnnotatedTerm {
+          Packaging.termDefinitionBody = (Core.TermAnnotated (Core.AnnotatedTerm {
             Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
               Core.lambdaParameter = (Core.Name "x"),
               Core.lambdaDomain = Nothing,
@@ -394,7 +394,7 @@ module_ =
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.encode.error.core.emptyCaseStatementError"),
           Packaging.termDefinitionMetadata = Nothing,
-          Packaging.termDefinitionTerm = (Core.TermAnnotated (Core.AnnotatedTerm {
+          Packaging.termDefinitionBody = (Core.TermAnnotated (Core.AnnotatedTerm {
             Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
               Core.lambdaParameter = (Core.Name "x"),
               Core.lambdaDomain = Nothing,
@@ -463,7 +463,7 @@ module_ =
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.encode.error.core.emptyLetBindingsError"),
           Packaging.termDefinitionMetadata = Nothing,
-          Packaging.termDefinitionTerm = (Core.TermAnnotated (Core.AnnotatedTerm {
+          Packaging.termDefinitionBody = (Core.TermAnnotated (Core.AnnotatedTerm {
             Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
               Core.lambdaParameter = (Core.Name "x"),
               Core.lambdaDomain = Nothing,
@@ -515,7 +515,7 @@ module_ =
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.encode.error.core.emptyRecordTypeError"),
           Packaging.termDefinitionMetadata = Nothing,
-          Packaging.termDefinitionTerm = (Core.TermAnnotated (Core.AnnotatedTerm {
+          Packaging.termDefinitionBody = (Core.TermAnnotated (Core.AnnotatedTerm {
             Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
               Core.lambdaParameter = (Core.Name "x"),
               Core.lambdaDomain = Nothing,
@@ -567,7 +567,7 @@ module_ =
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.encode.error.core.emptyTermAnnotationError"),
           Packaging.termDefinitionMetadata = Nothing,
-          Packaging.termDefinitionTerm = (Core.TermAnnotated (Core.AnnotatedTerm {
+          Packaging.termDefinitionBody = (Core.TermAnnotated (Core.AnnotatedTerm {
             Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
               Core.lambdaParameter = (Core.Name "x"),
               Core.lambdaDomain = Nothing,
@@ -619,7 +619,7 @@ module_ =
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.encode.error.core.emptyTypeAnnotationError"),
           Packaging.termDefinitionMetadata = Nothing,
-          Packaging.termDefinitionTerm = (Core.TermAnnotated (Core.AnnotatedTerm {
+          Packaging.termDefinitionBody = (Core.TermAnnotated (Core.AnnotatedTerm {
             Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
               Core.lambdaParameter = (Core.Name "x"),
               Core.lambdaDomain = Nothing,
@@ -671,7 +671,7 @@ module_ =
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.encode.error.core.emptyTypeNameInTermError"),
           Packaging.termDefinitionMetadata = Nothing,
-          Packaging.termDefinitionTerm = (Core.TermAnnotated (Core.AnnotatedTerm {
+          Packaging.termDefinitionBody = (Core.TermAnnotated (Core.AnnotatedTerm {
             Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
               Core.lambdaParameter = (Core.Name "x"),
               Core.lambdaDomain = Nothing,
@@ -723,7 +723,7 @@ module_ =
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.encode.error.core.emptyUnionTypeError"),
           Packaging.termDefinitionMetadata = Nothing,
-          Packaging.termDefinitionTerm = (Core.TermAnnotated (Core.AnnotatedTerm {
+          Packaging.termDefinitionBody = (Core.TermAnnotated (Core.AnnotatedTerm {
             Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
               Core.lambdaParameter = (Core.Name "x"),
               Core.lambdaDomain = Nothing,
@@ -775,7 +775,7 @@ module_ =
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.encode.error.core.invalidForallParameterNameError"),
           Packaging.termDefinitionMetadata = Nothing,
-          Packaging.termDefinitionTerm = (Core.TermAnnotated (Core.AnnotatedTerm {
+          Packaging.termDefinitionBody = (Core.TermAnnotated (Core.AnnotatedTerm {
             Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
               Core.lambdaParameter = (Core.Name "x"),
               Core.lambdaDomain = Nothing,
@@ -846,7 +846,7 @@ module_ =
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.encode.error.core.invalidLambdaParameterNameError"),
           Packaging.termDefinitionMetadata = Nothing,
-          Packaging.termDefinitionTerm = (Core.TermAnnotated (Core.AnnotatedTerm {
+          Packaging.termDefinitionBody = (Core.TermAnnotated (Core.AnnotatedTerm {
             Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
               Core.lambdaParameter = (Core.Name "x"),
               Core.lambdaDomain = Nothing,
@@ -917,7 +917,7 @@ module_ =
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.encode.error.core.invalidLetBindingNameError"),
           Packaging.termDefinitionMetadata = Nothing,
-          Packaging.termDefinitionTerm = (Core.TermAnnotated (Core.AnnotatedTerm {
+          Packaging.termDefinitionBody = (Core.TermAnnotated (Core.AnnotatedTerm {
             Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
               Core.lambdaParameter = (Core.Name "x"),
               Core.lambdaDomain = Nothing,
@@ -986,14 +986,14 @@ module_ =
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.encode.error.core.invalidLiteralError"),
           Packaging.termDefinitionMetadata = Nothing,
-          Packaging.termDefinitionTerm = (Core.TermAnnotated (Core.AnnotatedTerm {
+          Packaging.termDefinitionBody = (Core.TermAnnotated (Core.AnnotatedTerm {
             Core.annotatedTermBody = (Core.TermCases (Core.CaseStatement {
               Core.caseStatementTypeName = (Core.Name "hydra.error.core.InvalidLiteralError"),
               Core.caseStatementDefault = Nothing,
               Core.caseStatementCases = [
-                Core.Field {
-                  Core.fieldName = (Core.Name "typeMismatch"),
-                  Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                Core.CaseAlternative {
+                  Core.caseAlternativeName = (Core.Name "typeMismatch"),
+                  Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "y"),
                     Core.lambdaDomain = Nothing,
                     Core.lambdaBody = (Core.TermInject (Core.Injection {
@@ -1039,14 +1039,14 @@ module_ =
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.encode.error.core.invalidTermError"),
           Packaging.termDefinitionMetadata = Nothing,
-          Packaging.termDefinitionTerm = (Core.TermAnnotated (Core.AnnotatedTerm {
+          Packaging.termDefinitionBody = (Core.TermAnnotated (Core.AnnotatedTerm {
             Core.annotatedTermBody = (Core.TermCases (Core.CaseStatement {
               Core.caseStatementTypeName = (Core.Name "hydra.error.core.InvalidTermError"),
               Core.caseStatementDefault = Nothing,
               Core.caseStatementCases = [
-                Core.Field {
-                  Core.fieldName = (Core.Name "constantCondition"),
-                  Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                Core.CaseAlternative {
+                  Core.caseAlternativeName = (Core.Name "constantCondition"),
+                  Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "y"),
                     Core.lambdaDomain = Nothing,
                     Core.lambdaBody = (Core.TermInject (Core.Injection {
@@ -1076,9 +1076,9 @@ module_ =
                                     Core.fieldTerm = (Core.TermApplication (Core.Application {
                                       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.error.core.constantConditionError")),
                                       Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}]}))}]}))}}))}))},
-                Core.Field {
-                  Core.fieldName = (Core.Name "duplicateBinding"),
-                  Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                Core.CaseAlternative {
+                  Core.caseAlternativeName = (Core.Name "duplicateBinding"),
+                  Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "y"),
                     Core.lambdaDomain = Nothing,
                     Core.lambdaBody = (Core.TermInject (Core.Injection {
@@ -1108,9 +1108,9 @@ module_ =
                                     Core.fieldTerm = (Core.TermApplication (Core.Application {
                                       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.error.core.duplicateBindingError")),
                                       Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}]}))}]}))}}))}))},
-                Core.Field {
-                  Core.fieldName = (Core.Name "duplicateField"),
-                  Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                Core.CaseAlternative {
+                  Core.caseAlternativeName = (Core.Name "duplicateField"),
+                  Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "y"),
                     Core.lambdaDomain = Nothing,
                     Core.lambdaBody = (Core.TermInject (Core.Injection {
@@ -1140,9 +1140,9 @@ module_ =
                                     Core.fieldTerm = (Core.TermApplication (Core.Application {
                                       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.error.core.duplicateFieldError")),
                                       Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}]}))}]}))}}))}))},
-                Core.Field {
-                  Core.fieldName = (Core.Name "emptyCaseStatement"),
-                  Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                Core.CaseAlternative {
+                  Core.caseAlternativeName = (Core.Name "emptyCaseStatement"),
+                  Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "y"),
                     Core.lambdaDomain = Nothing,
                     Core.lambdaBody = (Core.TermInject (Core.Injection {
@@ -1172,9 +1172,9 @@ module_ =
                                     Core.fieldTerm = (Core.TermApplication (Core.Application {
                                       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.error.core.emptyCaseStatementError")),
                                       Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}]}))}]}))}}))}))},
-                Core.Field {
-                  Core.fieldName = (Core.Name "emptyLetBindings"),
-                  Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                Core.CaseAlternative {
+                  Core.caseAlternativeName = (Core.Name "emptyLetBindings"),
+                  Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "y"),
                     Core.lambdaDomain = Nothing,
                     Core.lambdaBody = (Core.TermInject (Core.Injection {
@@ -1204,9 +1204,9 @@ module_ =
                                     Core.fieldTerm = (Core.TermApplication (Core.Application {
                                       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.error.core.emptyLetBindingsError")),
                                       Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}]}))}]}))}}))}))},
-                Core.Field {
-                  Core.fieldName = (Core.Name "emptyTermAnnotation"),
-                  Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                Core.CaseAlternative {
+                  Core.caseAlternativeName = (Core.Name "emptyTermAnnotation"),
+                  Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "y"),
                     Core.lambdaDomain = Nothing,
                     Core.lambdaBody = (Core.TermInject (Core.Injection {
@@ -1236,9 +1236,9 @@ module_ =
                                     Core.fieldTerm = (Core.TermApplication (Core.Application {
                                       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.error.core.emptyTermAnnotationError")),
                                       Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}]}))}]}))}}))}))},
-                Core.Field {
-                  Core.fieldName = (Core.Name "emptyTypeNameInTerm"),
-                  Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                Core.CaseAlternative {
+                  Core.caseAlternativeName = (Core.Name "emptyTypeNameInTerm"),
+                  Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "y"),
                     Core.lambdaDomain = Nothing,
                     Core.lambdaBody = (Core.TermInject (Core.Injection {
@@ -1268,9 +1268,9 @@ module_ =
                                     Core.fieldTerm = (Core.TermApplication (Core.Application {
                                       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.error.core.emptyTypeNameInTermError")),
                                       Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}]}))}]}))}}))}))},
-                Core.Field {
-                  Core.fieldName = (Core.Name "invalidLambdaParameterName"),
-                  Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                Core.CaseAlternative {
+                  Core.caseAlternativeName = (Core.Name "invalidLambdaParameterName"),
+                  Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "y"),
                     Core.lambdaDomain = Nothing,
                     Core.lambdaBody = (Core.TermInject (Core.Injection {
@@ -1300,9 +1300,9 @@ module_ =
                                     Core.fieldTerm = (Core.TermApplication (Core.Application {
                                       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.error.core.invalidLambdaParameterNameError")),
                                       Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}]}))}]}))}}))}))},
-                Core.Field {
-                  Core.fieldName = (Core.Name "invalidLetBindingName"),
-                  Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                Core.CaseAlternative {
+                  Core.caseAlternativeName = (Core.Name "invalidLetBindingName"),
+                  Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "y"),
                     Core.lambdaDomain = Nothing,
                     Core.lambdaBody = (Core.TermInject (Core.Injection {
@@ -1332,9 +1332,9 @@ module_ =
                                     Core.fieldTerm = (Core.TermApplication (Core.Application {
                                       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.error.core.invalidLetBindingNameError")),
                                       Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}]}))}]}))}}))}))},
-                Core.Field {
-                  Core.fieldName = (Core.Name "invalidTypeLambdaParameterName"),
-                  Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                Core.CaseAlternative {
+                  Core.caseAlternativeName = (Core.Name "invalidTypeLambdaParameterName"),
+                  Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "y"),
                     Core.lambdaDomain = Nothing,
                     Core.lambdaBody = (Core.TermInject (Core.Injection {
@@ -1364,9 +1364,9 @@ module_ =
                                     Core.fieldTerm = (Core.TermApplication (Core.Application {
                                       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.error.core.invalidTypeLambdaParameterNameError")),
                                       Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}]}))}]}))}}))}))},
-                Core.Field {
-                  Core.fieldName = (Core.Name "nestedTermAnnotation"),
-                  Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                Core.CaseAlternative {
+                  Core.caseAlternativeName = (Core.Name "nestedTermAnnotation"),
+                  Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "y"),
                     Core.lambdaDomain = Nothing,
                     Core.lambdaBody = (Core.TermInject (Core.Injection {
@@ -1396,9 +1396,9 @@ module_ =
                                     Core.fieldTerm = (Core.TermApplication (Core.Application {
                                       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.error.core.nestedTermAnnotationError")),
                                       Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}]}))}]}))}}))}))},
-                Core.Field {
-                  Core.fieldName = (Core.Name "redundantWrapUnwrap"),
-                  Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                Core.CaseAlternative {
+                  Core.caseAlternativeName = (Core.Name "redundantWrapUnwrap"),
+                  Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "y"),
                     Core.lambdaDomain = Nothing,
                     Core.lambdaBody = (Core.TermInject (Core.Injection {
@@ -1428,9 +1428,9 @@ module_ =
                                     Core.fieldTerm = (Core.TermApplication (Core.Application {
                                       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.error.core.redundantWrapUnwrapError")),
                                       Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}]}))}]}))}}))}))},
-                Core.Field {
-                  Core.fieldName = (Core.Name "selfApplication"),
-                  Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                Core.CaseAlternative {
+                  Core.caseAlternativeName = (Core.Name "selfApplication"),
+                  Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "y"),
                     Core.lambdaDomain = Nothing,
                     Core.lambdaBody = (Core.TermInject (Core.Injection {
@@ -1460,9 +1460,9 @@ module_ =
                                     Core.fieldTerm = (Core.TermApplication (Core.Application {
                                       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.error.core.selfApplicationError")),
                                       Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}]}))}]}))}}))}))},
-                Core.Field {
-                  Core.fieldName = (Core.Name "termVariableShadowing"),
-                  Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                Core.CaseAlternative {
+                  Core.caseAlternativeName = (Core.Name "termVariableShadowing"),
+                  Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "y"),
                     Core.lambdaDomain = Nothing,
                     Core.lambdaBody = (Core.TermInject (Core.Injection {
@@ -1492,9 +1492,9 @@ module_ =
                                     Core.fieldTerm = (Core.TermApplication (Core.Application {
                                       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.error.core.termVariableShadowingError")),
                                       Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}]}))}]}))}}))}))},
-                Core.Field {
-                  Core.fieldName = (Core.Name "typeVariableShadowingInTypeLambda"),
-                  Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                Core.CaseAlternative {
+                  Core.caseAlternativeName = (Core.Name "typeVariableShadowingInTypeLambda"),
+                  Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "y"),
                     Core.lambdaDomain = Nothing,
                     Core.lambdaBody = (Core.TermInject (Core.Injection {
@@ -1524,9 +1524,9 @@ module_ =
                                     Core.fieldTerm = (Core.TermApplication (Core.Application {
                                       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.error.core.typeVariableShadowingInTypeLambdaError")),
                                       Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}]}))}]}))}}))}))},
-                Core.Field {
-                  Core.fieldName = (Core.Name "undefinedTermVariable"),
-                  Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                Core.CaseAlternative {
+                  Core.caseAlternativeName = (Core.Name "undefinedTermVariable"),
+                  Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "y"),
                     Core.lambdaDomain = Nothing,
                     Core.lambdaBody = (Core.TermInject (Core.Injection {
@@ -1556,9 +1556,9 @@ module_ =
                                     Core.fieldTerm = (Core.TermApplication (Core.Application {
                                       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.error.core.undefinedTermVariableError")),
                                       Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}]}))}]}))}}))}))},
-                Core.Field {
-                  Core.fieldName = (Core.Name "undefinedTypeVariableInBindingType"),
-                  Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                Core.CaseAlternative {
+                  Core.caseAlternativeName = (Core.Name "undefinedTypeVariableInBindingType"),
+                  Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "y"),
                     Core.lambdaDomain = Nothing,
                     Core.lambdaBody = (Core.TermInject (Core.Injection {
@@ -1588,9 +1588,9 @@ module_ =
                                     Core.fieldTerm = (Core.TermApplication (Core.Application {
                                       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.error.core.undefinedTypeVariableInBindingTypeError")),
                                       Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}]}))}]}))}}))}))},
-                Core.Field {
-                  Core.fieldName = (Core.Name "undefinedTypeVariableInLambdaDomain"),
-                  Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                Core.CaseAlternative {
+                  Core.caseAlternativeName = (Core.Name "undefinedTypeVariableInLambdaDomain"),
+                  Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "y"),
                     Core.lambdaDomain = Nothing,
                     Core.lambdaBody = (Core.TermInject (Core.Injection {
@@ -1620,9 +1620,9 @@ module_ =
                                     Core.fieldTerm = (Core.TermApplication (Core.Application {
                                       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.error.core.undefinedTypeVariableInLambdaDomainError")),
                                       Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}]}))}]}))}}))}))},
-                Core.Field {
-                  Core.fieldName = (Core.Name "undefinedTypeVariableInTypeApplication"),
-                  Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                Core.CaseAlternative {
+                  Core.caseAlternativeName = (Core.Name "undefinedTypeVariableInTypeApplication"),
+                  Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "y"),
                     Core.lambdaDomain = Nothing,
                     Core.lambdaBody = (Core.TermInject (Core.Injection {
@@ -1652,9 +1652,9 @@ module_ =
                                     Core.fieldTerm = (Core.TermApplication (Core.Application {
                                       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.error.core.undefinedTypeVariableInTypeApplicationError")),
                                       Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}]}))}]}))}}))}))},
-                Core.Field {
-                  Core.fieldName = (Core.Name "unknownPrimitiveName"),
-                  Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                Core.CaseAlternative {
+                  Core.caseAlternativeName = (Core.Name "unknownPrimitiveName"),
+                  Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "y"),
                     Core.lambdaDomain = Nothing,
                     Core.lambdaBody = (Core.TermInject (Core.Injection {
@@ -1684,9 +1684,9 @@ module_ =
                                     Core.fieldTerm = (Core.TermApplication (Core.Application {
                                       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.error.core.unknownPrimitiveNameError")),
                                       Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}]}))}]}))}}))}))},
-                Core.Field {
-                  Core.fieldName = (Core.Name "unnecessaryIdentityApplication"),
-                  Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                Core.CaseAlternative {
+                  Core.caseAlternativeName = (Core.Name "unnecessaryIdentityApplication"),
+                  Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "y"),
                     Core.lambdaDomain = Nothing,
                     Core.lambdaBody = (Core.TermInject (Core.Injection {
@@ -1716,9 +1716,9 @@ module_ =
                                     Core.fieldTerm = (Core.TermApplication (Core.Application {
                                       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.error.core.unnecessaryIdentityApplicationError")),
                                       Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}]}))}]}))}}))}))},
-                Core.Field {
-                  Core.fieldName = (Core.Name "untypedTermVariable"),
-                  Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                Core.CaseAlternative {
+                  Core.caseAlternativeName = (Core.Name "untypedTermVariable"),
+                  Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "y"),
                     Core.lambdaDomain = Nothing,
                     Core.lambdaBody = (Core.TermInject (Core.Injection {
@@ -1764,14 +1764,14 @@ module_ =
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.encode.error.core.invalidTypeError"),
           Packaging.termDefinitionMetadata = Nothing,
-          Packaging.termDefinitionTerm = (Core.TermAnnotated (Core.AnnotatedTerm {
+          Packaging.termDefinitionBody = (Core.TermAnnotated (Core.AnnotatedTerm {
             Core.annotatedTermBody = (Core.TermCases (Core.CaseStatement {
               Core.caseStatementTypeName = (Core.Name "hydra.error.core.InvalidTypeError"),
               Core.caseStatementDefault = Nothing,
               Core.caseStatementCases = [
-                Core.Field {
-                  Core.fieldName = (Core.Name "duplicateRecordTypeFieldNames"),
-                  Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                Core.CaseAlternative {
+                  Core.caseAlternativeName = (Core.Name "duplicateRecordTypeFieldNames"),
+                  Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "y"),
                     Core.lambdaDomain = Nothing,
                     Core.lambdaBody = (Core.TermInject (Core.Injection {
@@ -1801,9 +1801,9 @@ module_ =
                                     Core.fieldTerm = (Core.TermApplication (Core.Application {
                                       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.error.core.duplicateRecordTypeFieldNamesError")),
                                       Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}]}))}]}))}}))}))},
-                Core.Field {
-                  Core.fieldName = (Core.Name "duplicateUnionTypeFieldNames"),
-                  Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                Core.CaseAlternative {
+                  Core.caseAlternativeName = (Core.Name "duplicateUnionTypeFieldNames"),
+                  Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "y"),
                     Core.lambdaDomain = Nothing,
                     Core.lambdaBody = (Core.TermInject (Core.Injection {
@@ -1833,9 +1833,9 @@ module_ =
                                     Core.fieldTerm = (Core.TermApplication (Core.Application {
                                       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.error.core.duplicateUnionTypeFieldNamesError")),
                                       Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}]}))}]}))}}))}))},
-                Core.Field {
-                  Core.fieldName = (Core.Name "emptyRecordType"),
-                  Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                Core.CaseAlternative {
+                  Core.caseAlternativeName = (Core.Name "emptyRecordType"),
+                  Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "y"),
                     Core.lambdaDomain = Nothing,
                     Core.lambdaBody = (Core.TermInject (Core.Injection {
@@ -1865,9 +1865,9 @@ module_ =
                                     Core.fieldTerm = (Core.TermApplication (Core.Application {
                                       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.error.core.emptyRecordTypeError")),
                                       Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}]}))}]}))}}))}))},
-                Core.Field {
-                  Core.fieldName = (Core.Name "emptyTypeAnnotation"),
-                  Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                Core.CaseAlternative {
+                  Core.caseAlternativeName = (Core.Name "emptyTypeAnnotation"),
+                  Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "y"),
                     Core.lambdaDomain = Nothing,
                     Core.lambdaBody = (Core.TermInject (Core.Injection {
@@ -1897,9 +1897,9 @@ module_ =
                                     Core.fieldTerm = (Core.TermApplication (Core.Application {
                                       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.error.core.emptyTypeAnnotationError")),
                                       Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}]}))}]}))}}))}))},
-                Core.Field {
-                  Core.fieldName = (Core.Name "emptyUnionType"),
-                  Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                Core.CaseAlternative {
+                  Core.caseAlternativeName = (Core.Name "emptyUnionType"),
+                  Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "y"),
                     Core.lambdaDomain = Nothing,
                     Core.lambdaBody = (Core.TermInject (Core.Injection {
@@ -1929,9 +1929,9 @@ module_ =
                                     Core.fieldTerm = (Core.TermApplication (Core.Application {
                                       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.error.core.emptyUnionTypeError")),
                                       Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}]}))}]}))}}))}))},
-                Core.Field {
-                  Core.fieldName = (Core.Name "invalidForallParameterName"),
-                  Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                Core.CaseAlternative {
+                  Core.caseAlternativeName = (Core.Name "invalidForallParameterName"),
+                  Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "y"),
                     Core.lambdaDomain = Nothing,
                     Core.lambdaBody = (Core.TermInject (Core.Injection {
@@ -1961,9 +1961,9 @@ module_ =
                                     Core.fieldTerm = (Core.TermApplication (Core.Application {
                                       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.error.core.invalidForallParameterNameError")),
                                       Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}]}))}]}))}}))}))},
-                Core.Field {
-                  Core.fieldName = (Core.Name "invalidTypeSchemeVariableName"),
-                  Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                Core.CaseAlternative {
+                  Core.caseAlternativeName = (Core.Name "invalidTypeSchemeVariableName"),
+                  Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "y"),
                     Core.lambdaDomain = Nothing,
                     Core.lambdaBody = (Core.TermInject (Core.Injection {
@@ -1993,9 +1993,9 @@ module_ =
                                     Core.fieldTerm = (Core.TermApplication (Core.Application {
                                       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.error.core.invalidTypeSchemeVariableNameError")),
                                       Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}]}))}]}))}}))}))},
-                Core.Field {
-                  Core.fieldName = (Core.Name "nestedTypeAnnotation"),
-                  Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                Core.CaseAlternative {
+                  Core.caseAlternativeName = (Core.Name "nestedTypeAnnotation"),
+                  Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "y"),
                     Core.lambdaDomain = Nothing,
                     Core.lambdaBody = (Core.TermInject (Core.Injection {
@@ -2025,9 +2025,9 @@ module_ =
                                     Core.fieldTerm = (Core.TermApplication (Core.Application {
                                       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.error.core.nestedTypeAnnotationError")),
                                       Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}]}))}]}))}}))}))},
-                Core.Field {
-                  Core.fieldName = (Core.Name "nonComparableMapKeyType"),
-                  Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                Core.CaseAlternative {
+                  Core.caseAlternativeName = (Core.Name "nonComparableMapKeyType"),
+                  Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "y"),
                     Core.lambdaDomain = Nothing,
                     Core.lambdaBody = (Core.TermInject (Core.Injection {
@@ -2057,9 +2057,9 @@ module_ =
                                     Core.fieldTerm = (Core.TermApplication (Core.Application {
                                       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.error.core.nonComparableMapKeyTypeError")),
                                       Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}]}))}]}))}}))}))},
-                Core.Field {
-                  Core.fieldName = (Core.Name "nonComparableSetElementType"),
-                  Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                Core.CaseAlternative {
+                  Core.caseAlternativeName = (Core.Name "nonComparableSetElementType"),
+                  Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "y"),
                     Core.lambdaDomain = Nothing,
                     Core.lambdaBody = (Core.TermInject (Core.Injection {
@@ -2089,9 +2089,9 @@ module_ =
                                     Core.fieldTerm = (Core.TermApplication (Core.Application {
                                       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.error.core.nonComparableSetElementTypeError")),
                                       Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}]}))}]}))}}))}))},
-                Core.Field {
-                  Core.fieldName = (Core.Name "singleVariantUnion"),
-                  Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                Core.CaseAlternative {
+                  Core.caseAlternativeName = (Core.Name "singleVariantUnion"),
+                  Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "y"),
                     Core.lambdaDomain = Nothing,
                     Core.lambdaBody = (Core.TermInject (Core.Injection {
@@ -2121,9 +2121,9 @@ module_ =
                                     Core.fieldTerm = (Core.TermApplication (Core.Application {
                                       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.error.core.singleVariantUnionError")),
                                       Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}]}))}]}))}}))}))},
-                Core.Field {
-                  Core.fieldName = (Core.Name "typeVariableShadowingInForall"),
-                  Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                Core.CaseAlternative {
+                  Core.caseAlternativeName = (Core.Name "typeVariableShadowingInForall"),
+                  Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "y"),
                     Core.lambdaDomain = Nothing,
                     Core.lambdaBody = (Core.TermInject (Core.Injection {
@@ -2153,9 +2153,9 @@ module_ =
                                     Core.fieldTerm = (Core.TermApplication (Core.Application {
                                       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.error.core.typeVariableShadowingInForallError")),
                                       Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}]}))}]}))}}))}))},
-                Core.Field {
-                  Core.fieldName = (Core.Name "undefinedTypeVariable"),
-                  Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                Core.CaseAlternative {
+                  Core.caseAlternativeName = (Core.Name "undefinedTypeVariable"),
+                  Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "y"),
                     Core.lambdaDomain = Nothing,
                     Core.lambdaBody = (Core.TermInject (Core.Injection {
@@ -2185,9 +2185,9 @@ module_ =
                                     Core.fieldTerm = (Core.TermApplication (Core.Application {
                                       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.error.core.undefinedTypeVariableError")),
                                       Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}]}))}]}))}}))}))},
-                Core.Field {
-                  Core.fieldName = (Core.Name "voidInNonBottomPosition"),
-                  Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                Core.CaseAlternative {
+                  Core.caseAlternativeName = (Core.Name "voidInNonBottomPosition"),
+                  Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "y"),
                     Core.lambdaDomain = Nothing,
                     Core.lambdaBody = (Core.TermInject (Core.Injection {
@@ -2233,7 +2233,7 @@ module_ =
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.encode.error.core.invalidTypeLambdaParameterNameError"),
           Packaging.termDefinitionMetadata = Nothing,
-          Packaging.termDefinitionTerm = (Core.TermAnnotated (Core.AnnotatedTerm {
+          Packaging.termDefinitionBody = (Core.TermAnnotated (Core.AnnotatedTerm {
             Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
               Core.lambdaParameter = (Core.Name "x"),
               Core.lambdaDomain = Nothing,
@@ -2304,7 +2304,7 @@ module_ =
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.encode.error.core.invalidTypeSchemeVariableNameError"),
           Packaging.termDefinitionMetadata = Nothing,
-          Packaging.termDefinitionTerm = (Core.TermAnnotated (Core.AnnotatedTerm {
+          Packaging.termDefinitionBody = (Core.TermAnnotated (Core.AnnotatedTerm {
             Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
               Core.lambdaParameter = (Core.Name "x"),
               Core.lambdaDomain = Nothing,
@@ -2375,7 +2375,7 @@ module_ =
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.encode.error.core.literalTypeMismatchError"),
           Packaging.termDefinitionMetadata = Nothing,
-          Packaging.termDefinitionTerm = (Core.TermAnnotated (Core.AnnotatedTerm {
+          Packaging.termDefinitionBody = (Core.TermAnnotated (Core.AnnotatedTerm {
             Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
               Core.lambdaParameter = (Core.Name "x"),
               Core.lambdaDomain = Nothing,
@@ -2444,7 +2444,7 @@ module_ =
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.encode.error.core.nestedTermAnnotationError"),
           Packaging.termDefinitionMetadata = Nothing,
-          Packaging.termDefinitionTerm = (Core.TermAnnotated (Core.AnnotatedTerm {
+          Packaging.termDefinitionBody = (Core.TermAnnotated (Core.AnnotatedTerm {
             Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
               Core.lambdaParameter = (Core.Name "x"),
               Core.lambdaDomain = Nothing,
@@ -2496,7 +2496,7 @@ module_ =
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.encode.error.core.nestedTypeAnnotationError"),
           Packaging.termDefinitionMetadata = Nothing,
-          Packaging.termDefinitionTerm = (Core.TermAnnotated (Core.AnnotatedTerm {
+          Packaging.termDefinitionBody = (Core.TermAnnotated (Core.AnnotatedTerm {
             Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
               Core.lambdaParameter = (Core.Name "x"),
               Core.lambdaDomain = Nothing,
@@ -2548,7 +2548,7 @@ module_ =
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.encode.error.core.nonComparableMapKeyTypeError"),
           Packaging.termDefinitionMetadata = Nothing,
-          Packaging.termDefinitionTerm = (Core.TermAnnotated (Core.AnnotatedTerm {
+          Packaging.termDefinitionBody = (Core.TermAnnotated (Core.AnnotatedTerm {
             Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
               Core.lambdaParameter = (Core.Name "x"),
               Core.lambdaDomain = Nothing,
@@ -2619,7 +2619,7 @@ module_ =
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.encode.error.core.nonComparableSetElementTypeError"),
           Packaging.termDefinitionMetadata = Nothing,
-          Packaging.termDefinitionTerm = (Core.TermAnnotated (Core.AnnotatedTerm {
+          Packaging.termDefinitionBody = (Core.TermAnnotated (Core.AnnotatedTerm {
             Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
               Core.lambdaParameter = (Core.Name "x"),
               Core.lambdaDomain = Nothing,
@@ -2690,7 +2690,7 @@ module_ =
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.encode.error.core.redundantWrapUnwrapError"),
           Packaging.termDefinitionMetadata = Nothing,
-          Packaging.termDefinitionTerm = (Core.TermAnnotated (Core.AnnotatedTerm {
+          Packaging.termDefinitionBody = (Core.TermAnnotated (Core.AnnotatedTerm {
             Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
               Core.lambdaParameter = (Core.Name "x"),
               Core.lambdaDomain = Nothing,
@@ -2759,7 +2759,7 @@ module_ =
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.encode.error.core.selfApplicationError"),
           Packaging.termDefinitionMetadata = Nothing,
-          Packaging.termDefinitionTerm = (Core.TermAnnotated (Core.AnnotatedTerm {
+          Packaging.termDefinitionBody = (Core.TermAnnotated (Core.AnnotatedTerm {
             Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
               Core.lambdaParameter = (Core.Name "x"),
               Core.lambdaDomain = Nothing,
@@ -2828,7 +2828,7 @@ module_ =
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.encode.error.core.singleVariantUnionError"),
           Packaging.termDefinitionMetadata = Nothing,
-          Packaging.termDefinitionTerm = (Core.TermAnnotated (Core.AnnotatedTerm {
+          Packaging.termDefinitionBody = (Core.TermAnnotated (Core.AnnotatedTerm {
             Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
               Core.lambdaParameter = (Core.Name "x"),
               Core.lambdaDomain = Nothing,
@@ -2897,7 +2897,7 @@ module_ =
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.encode.error.core.termVariableShadowingError"),
           Packaging.termDefinitionMetadata = Nothing,
-          Packaging.termDefinitionTerm = (Core.TermAnnotated (Core.AnnotatedTerm {
+          Packaging.termDefinitionBody = (Core.TermAnnotated (Core.AnnotatedTerm {
             Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
               Core.lambdaParameter = (Core.Name "x"),
               Core.lambdaDomain = Nothing,
@@ -2966,7 +2966,7 @@ module_ =
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.encode.error.core.typeVariableShadowingInForallError"),
           Packaging.termDefinitionMetadata = Nothing,
-          Packaging.termDefinitionTerm = (Core.TermAnnotated (Core.AnnotatedTerm {
+          Packaging.termDefinitionBody = (Core.TermAnnotated (Core.AnnotatedTerm {
             Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
               Core.lambdaParameter = (Core.Name "x"),
               Core.lambdaDomain = Nothing,
@@ -3037,7 +3037,7 @@ module_ =
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.encode.error.core.typeVariableShadowingInTypeLambdaError"),
           Packaging.termDefinitionMetadata = Nothing,
-          Packaging.termDefinitionTerm = (Core.TermAnnotated (Core.AnnotatedTerm {
+          Packaging.termDefinitionBody = (Core.TermAnnotated (Core.AnnotatedTerm {
             Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
               Core.lambdaParameter = (Core.Name "x"),
               Core.lambdaDomain = Nothing,
@@ -3108,7 +3108,7 @@ module_ =
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.encode.error.core.undefinedFieldError"),
           Packaging.termDefinitionMetadata = Nothing,
-          Packaging.termDefinitionTerm = (Core.TermAnnotated (Core.AnnotatedTerm {
+          Packaging.termDefinitionBody = (Core.TermAnnotated (Core.AnnotatedTerm {
             Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
               Core.lambdaParameter = (Core.Name "x"),
               Core.lambdaDomain = Nothing,
@@ -3177,7 +3177,7 @@ module_ =
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.encode.error.core.undefinedTermVariableError"),
           Packaging.termDefinitionMetadata = Nothing,
-          Packaging.termDefinitionTerm = (Core.TermAnnotated (Core.AnnotatedTerm {
+          Packaging.termDefinitionBody = (Core.TermAnnotated (Core.AnnotatedTerm {
             Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
               Core.lambdaParameter = (Core.Name "x"),
               Core.lambdaDomain = Nothing,
@@ -3246,7 +3246,7 @@ module_ =
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.encode.error.core.undefinedTypeVariableError"),
           Packaging.termDefinitionMetadata = Nothing,
-          Packaging.termDefinitionTerm = (Core.TermAnnotated (Core.AnnotatedTerm {
+          Packaging.termDefinitionBody = (Core.TermAnnotated (Core.AnnotatedTerm {
             Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
               Core.lambdaParameter = (Core.Name "x"),
               Core.lambdaDomain = Nothing,
@@ -3315,7 +3315,7 @@ module_ =
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.encode.error.core.undefinedTypeVariableInBindingTypeError"),
           Packaging.termDefinitionMetadata = Nothing,
-          Packaging.termDefinitionTerm = (Core.TermAnnotated (Core.AnnotatedTerm {
+          Packaging.termDefinitionBody = (Core.TermAnnotated (Core.AnnotatedTerm {
             Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
               Core.lambdaParameter = (Core.Name "x"),
               Core.lambdaDomain = Nothing,
@@ -3386,7 +3386,7 @@ module_ =
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.encode.error.core.undefinedTypeVariableInLambdaDomainError"),
           Packaging.termDefinitionMetadata = Nothing,
-          Packaging.termDefinitionTerm = (Core.TermAnnotated (Core.AnnotatedTerm {
+          Packaging.termDefinitionBody = (Core.TermAnnotated (Core.AnnotatedTerm {
             Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
               Core.lambdaParameter = (Core.Name "x"),
               Core.lambdaDomain = Nothing,
@@ -3457,7 +3457,7 @@ module_ =
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.encode.error.core.undefinedTypeVariableInTypeApplicationError"),
           Packaging.termDefinitionMetadata = Nothing,
-          Packaging.termDefinitionTerm = (Core.TermAnnotated (Core.AnnotatedTerm {
+          Packaging.termDefinitionBody = (Core.TermAnnotated (Core.AnnotatedTerm {
             Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
               Core.lambdaParameter = (Core.Name "x"),
               Core.lambdaDomain = Nothing,
@@ -3528,7 +3528,7 @@ module_ =
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.encode.error.core.unexpectedTermVariantError"),
           Packaging.termDefinitionMetadata = Nothing,
-          Packaging.termDefinitionTerm = (Core.TermAnnotated (Core.AnnotatedTerm {
+          Packaging.termDefinitionBody = (Core.TermAnnotated (Core.AnnotatedTerm {
             Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
               Core.lambdaParameter = (Core.Name "x"),
               Core.lambdaDomain = Nothing,
@@ -3597,7 +3597,7 @@ module_ =
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.encode.error.core.unexpectedTypeVariantError"),
           Packaging.termDefinitionMetadata = Nothing,
-          Packaging.termDefinitionTerm = (Core.TermAnnotated (Core.AnnotatedTerm {
+          Packaging.termDefinitionBody = (Core.TermAnnotated (Core.AnnotatedTerm {
             Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
               Core.lambdaParameter = (Core.Name "x"),
               Core.lambdaDomain = Nothing,
@@ -3666,7 +3666,7 @@ module_ =
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.encode.error.core.unknownPrimitiveNameError"),
           Packaging.termDefinitionMetadata = Nothing,
-          Packaging.termDefinitionTerm = (Core.TermAnnotated (Core.AnnotatedTerm {
+          Packaging.termDefinitionBody = (Core.TermAnnotated (Core.AnnotatedTerm {
             Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
               Core.lambdaParameter = (Core.Name "x"),
               Core.lambdaDomain = Nothing,
@@ -3735,7 +3735,7 @@ module_ =
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.encode.error.core.unnecessaryIdentityApplicationError"),
           Packaging.termDefinitionMetadata = Nothing,
-          Packaging.termDefinitionTerm = (Core.TermAnnotated (Core.AnnotatedTerm {
+          Packaging.termDefinitionBody = (Core.TermAnnotated (Core.AnnotatedTerm {
             Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
               Core.lambdaParameter = (Core.Name "x"),
               Core.lambdaDomain = Nothing,
@@ -3789,7 +3789,7 @@ module_ =
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.encode.error.core.untypedTermVariableError"),
           Packaging.termDefinitionMetadata = Nothing,
-          Packaging.termDefinitionTerm = (Core.TermAnnotated (Core.AnnotatedTerm {
+          Packaging.termDefinitionBody = (Core.TermAnnotated (Core.AnnotatedTerm {
             Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
               Core.lambdaParameter = (Core.Name "x"),
               Core.lambdaDomain = Nothing,
@@ -3858,7 +3858,7 @@ module_ =
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.encode.error.core.voidInNonBottomPositionError"),
           Packaging.termDefinitionMetadata = Nothing,
-          Packaging.termDefinitionTerm = (Core.TermAnnotated (Core.AnnotatedTerm {
+          Packaging.termDefinitionBody = (Core.TermAnnotated (Core.AnnotatedTerm {
             Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
               Core.lambdaParameter = (Core.Name "x"),
               Core.lambdaDomain = Nothing,

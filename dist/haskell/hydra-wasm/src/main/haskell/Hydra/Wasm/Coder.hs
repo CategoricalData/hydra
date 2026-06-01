@@ -167,7 +167,7 @@ collectStrings termDefs =
                   _ -> acc
                 _ -> acc
           allStrings =
-                  Lists.foldl (\acc -> \td -> Rewriting.foldOverTerm Coders.TraversalOrderPre collectOne acc (Packaging.termDefinitionTerm td)) Sets.empty termDefs
+                  Lists.foldl (\acc -> \td -> Rewriting.foldOverTerm Coders.TraversalOrderPre collectOne acc (Packaging.termDefinitionBody td)) Sets.empty termDefs
       in (Sets.toList allStrings)
 
 encodeApplication :: t0 -> t1 -> M.Map String Int -> M.Map Core.Name [(Core.Name, Int)] -> M.Map Core.Name [(Core.Name, Int)] -> M.Map String ([t2], t3) -> Core.Term -> Either Errors.Error [Syntax.Instruction]
@@ -281,8 +281,8 @@ encodeCases cx g stringOffsets fieldOffsets variantIndexes funcSigs cs scrutinee
                           Syntax.memArgOffset = 0,
                           Syntax.memArgAlign = 2}}))]]
       in (Eithers.bind (Eithers.mapList (\cf ->
-        let cfname = Formatting.convertCaseCamelToLowerSnake (Core.unName (Core.fieldName cf))
-            cfterm = Core.fieldTerm cf
+        let cfname = Formatting.convertCaseCamelToLowerSnake (Core.unName (Core.caseAlternativeName cf))
+            cfterm = Core.caseAlternativeHandler cf
         in (Eithers.bind (encodeTerm cx g stringOffsets fieldOffsets variantIndexes funcSigs (Core.TermApplication (Core.Application {
           Core.applicationFunction = cfterm,
           Core.applicationArgument = (Core.TermVariable (Core.Name "v"))}))) (\armBody -> Right (cfname, armBody)))) caseFields) (\explicitArms ->
@@ -671,7 +671,7 @@ encodeTermDefinition :: t0 -> t1 -> M.Map String Int -> M.Map Core.Name [(Core.N
 encodeTermDefinition cx g stringOffsets fieldOffsets variantIndexes funcSigs tdef =
 
       let name = Packaging.termDefinitionName tdef
-          term = Packaging.termDefinitionTerm tdef
+          term = Packaging.termDefinitionBody tdef
           lname = Formatting.convertCaseCamelToLowerSnake (Core.unName name)
           typ = Maybes.maybe Core.TypeUnit Core.typeSchemeBody (Maybes.map Scoping.termSignatureToTypeScheme (Packaging.termDefinitionSignature tdef))
           extracted = extractLambdaParams term
@@ -739,7 +739,7 @@ encodeTypeDefinition cx g tdef =
 
       let name = Packaging.typeDefinitionName tdef
           lname = Formatting.convertCaseCamelToLowerSnake (Names.localNameOf name)
-          typ = Core.typeSchemeBody (Packaging.typeDefinitionTypeScheme tdef)
+          typ = Core.typeSchemeBody (Packaging.typeDefinitionBody tdef)
           dtyp = Strip.deannotateType typ
       in case dtyp of
         Core.TypeFunction _ -> Eithers.bind (extractParamTypes cx g typ) (\paramTypes -> Eithers.bind (encodeType cx g typ) (\resultTypes -> Right [
@@ -943,7 +943,7 @@ moduleToWasm mod defs cx g =
                         allFields])}
             code = Serialization.printExpr (Serialization.parenthesize (Serde.moduleToExpr wasmMod))
             filePath =
-                    Names.moduleNameToFilePath Util.CaseConventionLowerSnake (Packaging.FileExtension "wat") (Packaging.moduleName mod)
+                    Names.moduleNameToFilePath Util.CaseConventionLowerSnake (Util.FileExtension "wat") (Packaging.moduleName mod)
         in (Right (Maps.singleton filePath code)))))
 
 peelLambdaApp :: Core.Term -> [t0] -> ([Core.Name], Core.Term)

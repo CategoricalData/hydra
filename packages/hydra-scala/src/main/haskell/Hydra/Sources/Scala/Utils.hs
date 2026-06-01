@@ -245,8 +245,8 @@ sprim = def "sprim" $
   doc "Create a Scala primitive reference from a Hydra name" $
   lambda "name" $ lets [
     "qname">: Names.qualifyName @@ var "name",
-    "prefix">: Packaging.unModuleName (Maybes.fromMaybe (wrap _ModuleName (string "")) (Packaging.qualifiedNameModuleName $ var "qname")),
-    "local">: scalaEscapeName @@ (Packaging.qualifiedNameLocal $ var "qname")] $
+    "prefix">: Packaging.unModuleName (Maybes.fromMaybe (wrap _ModuleName (string "")) (Util.qualifiedNameModuleName $ var "qname")),
+    "local">: scalaEscapeName @@ (Util.qualifiedNameLocal $ var "qname")] $
     sname @@ (var "prefix" ++ string "." ++ var "local")
 
 stapply :: TypedTermDefinition (Scala.Type -> [Scala.Type] -> Scala.Type)

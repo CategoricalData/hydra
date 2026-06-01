@@ -62,8 +62,8 @@ encodeName isQualified conv env name =
           focusNs = Pairs.first focusPair
           boundVars = Pairs.second (Environment.pythonEnvironmentBoundTypeVariables env)
           qualName = Names.qualifyName name
-          mns = Packaging.qualifiedNameModuleName qualName
-          local = Packaging.qualifiedNameLocal qualName
+          mns = Util.qualifiedNameModuleName qualName
+          local = Util.qualifiedNameLocal qualName
           pyLocal = sanitizePythonName (Formatting.convertCase Util.CaseConventionCamel conv local)
           pyNs =
                   \nsVal -> Strings.intercalate "." (Lists.map (Formatting.convertCase Util.CaseConventionCamel Util.CaseConventionLowerSnake) (Strings.splitOn "." (Packaging.unModuleName nsVal)))
@@ -77,8 +77,8 @@ encodeNameQualified env name =
           focusNs = Pairs.first focusPair
           boundVars = Pairs.second (Environment.pythonEnvironmentBoundTypeVariables env)
           qualName = Names.qualifyName name
-          mns = Packaging.qualifiedNameModuleName qualName
-          local = Packaging.qualifiedNameLocal qualName
+          mns = Util.qualifiedNameModuleName qualName
+          local = Util.qualifiedNameLocal qualName
           pyNs =
                   \nsVal -> Strings.intercalate "." (Lists.map (Formatting.convertCase Util.CaseConventionCamel Util.CaseConventionLowerSnake) (Strings.splitOn "." (Packaging.unModuleName nsVal)))
       in (Maybes.maybe (Logic.ifElse (Equality.equal mns (Just focusNs)) (Syntax.Name (Logic.ifElse useFutureAnnotations local (Serde.escapePythonString True local))) (Maybes.maybe (Syntax.Name (sanitizePythonName local)) (\nsVal -> Syntax.Name (Strings.cat2 (pyNs nsVal) (Strings.cat2 "." (sanitizePythonName local)))) mns)) (\n -> n) (Maps.lookup name boundVars))

@@ -117,11 +117,14 @@ caseStatement = define "caseStatement" $
   "tname" <~ unwrap _Name @@ (Core.caseStatementTypeName $ var "cs") $
   "mdef" <~ Core.caseStatementDefault (var "cs") $
   "csCases" <~ Core.caseStatementCases (var "cs") $
+  "caseFields" <~ Lists.map
+    ("alt" ~> Core.field (Core.caseAlternativeName $ var "alt") (Core.caseAlternativeHandler $ var "alt"))
+    (var "csCases") $
   "defaultField" <~ Maybes.maybe
     (list ([] :: [TypedTerm Field]))
     ("d" ~> list [Core.field (Core.name $ string "[default]") (var "d")])
     (var "mdef") $
-  "allFields" <~ Lists.concat (list [var "csCases", var "defaultField"]) $
+  "allFields" <~ Lists.concat (list [var "caseFields", var "defaultField"]) $
   Strings.cat $ list [
     string "case(",
     var "tname",
@@ -469,7 +472,7 @@ typeScheme = define "typeScheme" $
     Core.unName (var "v")]) $
   "toConstraintPairs" <~ ("p" ~> Lists.map
     (var "toConstraintPair" @@ (Pairs.first $ var "p")) $
-    Core.typeVariableMetadataClasses $ Pairs.second $ var "p") $
+    Core.typeVariableConstraintsClasses $ Pairs.second $ var "p") $
   "tc" <~ optCases (Core.typeSchemeConstraints (var "ts"))
     (list ([] :: [TypedTerm String]))
     ("m" ~> Lists.concat $ Lists.map (var "toConstraintPairs") $ Maps.toList $ var "m") $

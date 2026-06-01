@@ -67,12 +67,22 @@ binding cx raw =
           Core.bindingTypeScheme = field_typeScheme})))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.core.CaseStatement
+caseAlternative :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.CaseAlternative
+caseAlternative cx raw =
+    Eithers.either (\err -> Left err) (\stripped -> case stripped of
+      Core.TermRecord v0 ->
+        let fieldMap = ExtractCore.toFieldMap v0
+        in (Eithers.bind (ExtractCore.requireField "name" name fieldMap cx) (\field_name -> Eithers.bind (ExtractCore.requireField "handler" term fieldMap cx) (\field_handler -> Right (Core.CaseAlternative {
+          Core.caseAlternativeName = field_name,
+          Core.caseAlternativeHandler = field_handler}))))
+      _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+-- | Decoder for hydra.core.CaseStatement
 caseStatement :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.CaseStatement
 caseStatement cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
       Core.TermRecord v0 ->
         let fieldMap = ExtractCore.toFieldMap v0
-        in (Eithers.bind (ExtractCore.requireField "typeName" name fieldMap cx) (\field_typeName -> Eithers.bind (ExtractCore.requireField "default" (ExtractCore.decodeMaybe term) fieldMap cx) (\field_default -> Eithers.bind (ExtractCore.requireField "cases" (ExtractCore.decodeList field) fieldMap cx) (\field_cases -> Right (Core.CaseStatement {
+        in (Eithers.bind (ExtractCore.requireField "typeName" name fieldMap cx) (\field_typeName -> Eithers.bind (ExtractCore.requireField "default" (ExtractCore.decodeMaybe term) fieldMap cx) (\field_default -> Eithers.bind (ExtractCore.requireField "cases" (ExtractCore.decodeList caseAlternative) fieldMap cx) (\field_cases -> Right (Core.CaseStatement {
           Core.caseStatementTypeName = field_typeName,
           Core.caseStatementDefault = field_default,
           Core.caseStatementCases = field_cases})))))
@@ -554,19 +564,19 @@ typeScheme cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
       Core.TermRecord v0 ->
         let fieldMap = ExtractCore.toFieldMap v0
-        in (Eithers.bind (ExtractCore.requireField "variables" (ExtractCore.decodeList name) fieldMap cx) (\field_variables -> Eithers.bind (ExtractCore.requireField "body" type_ fieldMap cx) (\field_body -> Eithers.bind (ExtractCore.requireField "constraints" (ExtractCore.decodeMaybe (ExtractCore.decodeMap name typeVariableMetadata)) fieldMap cx) (\field_constraints -> Right (Core.TypeScheme {
+        in (Eithers.bind (ExtractCore.requireField "variables" (ExtractCore.decodeList name) fieldMap cx) (\field_variables -> Eithers.bind (ExtractCore.requireField "body" type_ fieldMap cx) (\field_body -> Eithers.bind (ExtractCore.requireField "constraints" (ExtractCore.decodeMaybe (ExtractCore.decodeMap name typeVariableConstraints)) fieldMap cx) (\field_constraints -> Right (Core.TypeScheme {
           Core.typeSchemeVariables = field_variables,
           Core.typeSchemeBody = field_body,
           Core.typeSchemeConstraints = field_constraints})))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
--- | Decoder for hydra.core.TypeVariableMetadata
-typeVariableMetadata :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.TypeVariableMetadata
-typeVariableMetadata cx raw =
+-- | Decoder for hydra.core.TypeVariableConstraints
+typeVariableConstraints :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.TypeVariableConstraints
+typeVariableConstraints cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
       Core.TermRecord v0 ->
         let fieldMap = ExtractCore.toFieldMap v0
-        in (Eithers.bind (ExtractCore.requireField "classes" (ExtractCore.decodeList typeClassConstraint) fieldMap cx) (\field_classes -> Right (Core.TypeVariableMetadata {
-          Core.typeVariableMetadataClasses = field_classes})))
+        in (Eithers.bind (ExtractCore.requireField "classes" (ExtractCore.decodeList typeClassConstraint) fieldMap cx) (\field_classes -> Right (Core.TypeVariableConstraints {
+          Core.typeVariableConstraintsClasses = field_classes})))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.core.WrappedTerm
 wrappedTerm :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.WrappedTerm

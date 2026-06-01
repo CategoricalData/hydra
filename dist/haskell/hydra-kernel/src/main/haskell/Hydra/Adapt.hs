@@ -422,7 +422,7 @@ dataGraphToDefinitions constraints doInfer doExpand doHoistCaseStatements doHois
                       \el -> Maybes.map (\ts -> Packaging.TermDefinition {
                         Packaging.termDefinitionName = (Core.bindingName el),
                         Packaging.termDefinitionMetadata = Nothing,
-                        Packaging.termDefinitionTerm = (Core.bindingTerm el),
+                        Packaging.termDefinitionBody = (Core.bindingTerm el),
                         Packaging.termDefinitionSignature = (Just (Scoping.typeSchemeToTermSignature ts))}) (Core.bindingTypeScheme el)
               selectedElements =
                       Lists.filter (\el -> Maybes.maybe False (\ns -> Sets.member ns namespacesSet) (Names.moduleNameOf (Core.bindingName el))) bins5
@@ -635,7 +635,7 @@ pushTypeAppsInward term =
                       Core.TermCases v0 -> Core.TermCases (Core.CaseStatement {
                         Core.caseStatementTypeName = (Core.caseStatementTypeName v0),
                         Core.caseStatementDefault = (Maybes.map go (Core.caseStatementDefault v0)),
-                        Core.caseStatementCases = (Lists.map forField (Core.caseStatementCases v0))})
+                        Core.caseStatementCases = (Lists.map (\alt -> Core.CaseAlternative {Core.caseAlternativeName = (Core.caseAlternativeName alt), Core.caseAlternativeHandler = (go (Core.caseAlternativeHandler alt))}) (Core.caseStatementCases v0))})
                       Core.TermEither v0 -> Core.TermEither (Eithers.either (\l -> Left (go l)) (\r -> Right (go r)) v0)
                       Core.TermLambda v0 -> Core.TermLambda (Core.Lambda {
                         Core.lambdaParameter = (Core.lambdaParameter v0),
@@ -678,7 +678,7 @@ schemaGraphToDefinitions constraints graph nameLists cx =
                 \pair -> Packaging.TypeDefinition {
                   Packaging.typeDefinitionName = (Pairs.first pair),
                   Packaging.typeDefinitionMetadata = Nothing,
-                  Packaging.typeDefinitionTypeScheme = Core.TypeScheme {
+                  Packaging.typeDefinitionBody = Core.TypeScheme {
                     Core.typeSchemeVariables = [],
                     Core.typeSchemeBody = (Pairs.second pair),
                     Core.typeSchemeConstraints = Nothing}}

@@ -75,6 +75,19 @@ binding x =
           Core.fieldName = (Core.Name "typeScheme"),
           Core.fieldTerm = ((\opt -> Core.TermMaybe (Maybes.map typeScheme opt)) (Core.bindingTypeScheme x))}]})
 -- | Encoder for hydra.core.CaseStatement
+caseAlternative :: Core.CaseAlternative -> Core.Term
+caseAlternative x =
+    Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.core.CaseAlternative"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "name"),
+          Core.fieldTerm = (name (Core.caseAlternativeName x))},
+        Core.Field {
+          Core.fieldName = (Core.Name "handler"),
+          Core.fieldTerm = (term (Core.caseAlternativeHandler x))}]})
+
+-- | Encoder for hydra.core.CaseStatement
 caseStatement :: Core.CaseStatement -> Core.Term
 caseStatement x =
     Core.TermRecord (Core.Record {
@@ -88,7 +101,7 @@ caseStatement x =
           Core.fieldTerm = ((\opt -> Core.TermMaybe (Maybes.map term opt)) (Core.caseStatementDefault x))},
         Core.Field {
           Core.fieldName = (Core.Name "cases"),
-          Core.fieldTerm = ((\xs -> Core.TermList (Lists.map field xs)) (Core.caseStatementCases x))}]})
+          Core.fieldTerm = ((\xs -> Core.TermList (Lists.map caseAlternative xs)) (Core.caseStatementCases x))}]})
 -- | Encoder for hydra.core.EitherType
 eitherType :: Core.EitherType -> Core.Term
 eitherType x =
@@ -681,16 +694,16 @@ typeScheme x =
           Core.fieldTerm = (type_ (Core.typeSchemeBody x))},
         Core.Field {
           Core.fieldName = (Core.Name "constraints"),
-          Core.fieldTerm = ((\opt -> Core.TermMaybe (Maybes.map (\m -> Core.TermMap (Maps.bimap name typeVariableMetadata m)) opt)) (Core.typeSchemeConstraints x))}]})
--- | Encoder for hydra.core.TypeVariableMetadata
-typeVariableMetadata :: Core.TypeVariableMetadata -> Core.Term
-typeVariableMetadata x =
+          Core.fieldTerm = ((\opt -> Core.TermMaybe (Maybes.map (\m -> Core.TermMap (Maps.bimap name typeVariableConstraints m)) opt)) (Core.typeSchemeConstraints x))}]})
+-- | Encoder for hydra.core.TypeVariableConstraints
+typeVariableConstraints :: Core.TypeVariableConstraints -> Core.Term
+typeVariableConstraints x =
     Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.core.TypeVariableMetadata"),
+      Core.recordTypeName = (Core.Name "hydra.core.TypeVariableConstraints"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "classes"),
-          Core.fieldTerm = ((\xs -> Core.TermList (Lists.map typeClassConstraint xs)) (Core.typeVariableMetadataClasses x))}]})
+          Core.fieldTerm = ((\xs -> Core.TermList (Lists.map typeClassConstraint xs)) (Core.typeVariableConstraintsClasses x))}]})
 -- | Encoder for hydra.core.WrappedTerm
 wrappedTerm :: Core.WrappedTerm -> Core.Term
 wrappedTerm x =

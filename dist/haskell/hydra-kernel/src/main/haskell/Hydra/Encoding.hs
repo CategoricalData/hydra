@@ -281,7 +281,7 @@ encodeModule cx graph mod =
           Core.bindingTypeScheme = (Just (Core.TypeScheme {
             Core.typeSchemeVariables = [],
             Core.typeSchemeBody = (Core.TypeVariable (Core.Name "hydra.core.Type")),
-            Core.typeSchemeConstraints = Nothing}))}) (Packaging.typeDefinitionName v0) (Core.typeSchemeBody (Packaging.typeDefinitionTypeScheme v0)))
+            Core.typeSchemeConstraints = Nothing}))}) (Packaging.typeDefinitionName v0) (Core.typeSchemeBody (Packaging.typeDefinitionBody v0)))
       _ -> Nothing) (Packaging.moduleDefinitions mod)))) (\typeBindings -> Logic.ifElse (Lists.null typeBindings) (Right Nothing) (Eithers.bind (Eithers.mapList (\b -> Eithers.bimap (\_e -> Errors.ErrorDecoding _e) (\x -> x) (encodeBinding cx graph b)) typeBindings) (\encodedBindings -> Right (Just (Packaging.Module {
       Packaging.moduleName = (encodeModuleName (Packaging.moduleName mod)),
       Packaging.moduleMetadata = (Just (Packaging.EntityMetadata {
@@ -298,7 +298,7 @@ encodeModule cx graph mod =
       Packaging.moduleDefinitions = (Lists.map (\b -> Packaging.DefinitionTerm (Packaging.TermDefinition {
         Packaging.termDefinitionName = (Core.bindingName b),
         Packaging.termDefinitionMetadata = Nothing,
-        Packaging.termDefinitionTerm = (Core.bindingTerm b),
+        Packaging.termDefinitionBody = (Core.bindingTerm b),
         Packaging.termDefinitionSignature = (Maybes.map Scoping.typeSchemeToTermSignature (Core.bindingTypeScheme b))})) encodedBindings)})))))
 -- | Generate an encoder module name from a source module name
 encodeModuleName :: Packaging.ModuleName -> Packaging.ModuleName
@@ -498,9 +498,9 @@ encodeUnionTypeNamed ename rt =
     Core.TermCases (Core.CaseStatement {
       Core.caseStatementTypeName = ename,
       Core.caseStatementDefault = Nothing,
-      Core.caseStatementCases = (Lists.map (\ft -> Core.Field {
-        Core.fieldName = (Core.fieldTypeName ft),
-        Core.fieldTerm = (encodeFieldValue ename (Core.fieldTypeName ft) (Core.fieldTypeType ft))}) rt)})
+      Core.caseStatementCases = (Lists.map (\ft -> Core.CaseAlternative {
+        Core.caseAlternativeName = (Core.fieldTypeName ft),
+        Core.caseAlternativeHandler = (encodeFieldValue ename (Core.fieldTypeName ft) (Core.fieldTypeType ft))}) rt)})
 -- | Generate an encoder for a wrapped type (placeholder name)
 encodeWrappedType :: Core.Type -> Core.Term
 encodeWrappedType wt = encodeWrappedTypeNamed (Core.Name "unknown") wt
@@ -665,8 +665,8 @@ encoderTypeScheme typ =
           constraints =
                   Logic.ifElse (Lists.null ordVars) Nothing (Just (Maps.fromList (Lists.map (\v -> (
                     v,
-                    Core.TypeVariableMetadata {
-                      Core.typeVariableMetadataClasses = [
+                    Core.TypeVariableConstraints {
+                      Core.typeVariableConstraintsClasses = [
                         Core.TypeClassConstraintSimple (Core.Name "ordering")]})) ordVars)))
       in Core.TypeScheme {
         Core.typeSchemeVariables = typeVars,
@@ -683,8 +683,8 @@ encoderTypeSchemeNamed ename typ =
           constraints =
                   Logic.ifElse (Lists.null ordVars) Nothing (Just (Maps.fromList (Lists.map (\v -> (
                     v,
-                    Core.TypeVariableMetadata {
-                      Core.typeVariableMetadataClasses = [
+                    Core.TypeVariableConstraints {
+                      Core.typeVariableConstraintsClasses = [
                         Core.TypeClassConstraintSimple (Core.Name "ordering")]})) ordVars)))
       in Core.TypeScheme {
         Core.typeSchemeVariables = typeVars,

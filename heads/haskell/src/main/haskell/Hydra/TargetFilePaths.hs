@@ -60,7 +60,7 @@ javaModulePaths m =
   let typeDefs = [td | DefinitionType td <- moduleDefinitions m]
       termDefs = [td | DefinitionTerm td <- moduleDefinitions m]
       keepType td =
-        let typ = typeSchemeBody (typeDefinitionTypeScheme td)
+        let typ = typeSchemeBody (typeDefinitionBody td)
         in Predicates.isNominalType typ
       typeFiles =
         [ JavaCoder.bindingNameToFilePath (typeDefinitionName td)

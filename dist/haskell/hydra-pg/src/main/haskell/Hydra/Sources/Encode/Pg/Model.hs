@@ -21,7 +21,7 @@ module_ =
         Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.encode.pg.model.adjacentEdge"),
           Packaging.termDefinitionMetadata = Nothing,
-          Packaging.termDefinitionTerm = (Core.TermAnnotated (Core.AnnotatedTerm {
+          Packaging.termDefinitionBody = (Core.TermAnnotated (Core.AnnotatedTerm {
             Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
               Core.lambdaParameter = (Core.Name "v"),
               Core.lambdaDomain = Nothing,
@@ -142,14 +142,14 @@ module_ =
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.encode.pg.model.direction"),
           Packaging.termDefinitionMetadata = Nothing,
-          Packaging.termDefinitionTerm = (Core.TermAnnotated (Core.AnnotatedTerm {
+          Packaging.termDefinitionBody = (Core.TermAnnotated (Core.AnnotatedTerm {
             Core.annotatedTermBody = (Core.TermCases (Core.CaseStatement {
               Core.caseStatementTypeName = (Core.Name "hydra.pg.model.Direction"),
               Core.caseStatementDefault = Nothing,
               Core.caseStatementCases = [
-                Core.Field {
-                  Core.fieldName = (Core.Name "out"),
-                  Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                Core.CaseAlternative {
+                  Core.caseAlternativeName = (Core.Name "out"),
+                  Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "y"),
                     Core.lambdaDomain = Nothing,
                     Core.lambdaBody = (Core.TermInject (Core.Injection {
@@ -186,9 +186,9 @@ module_ =
                                             Core.fieldName = (Core.Name "unit"),
                                             Core.fieldTerm = Core.TermUnit}}))})),
                                       Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}]}))}]}))}}))}))},
-                Core.Field {
-                  Core.fieldName = (Core.Name "in"),
-                  Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                Core.CaseAlternative {
+                  Core.caseAlternativeName = (Core.Name "in"),
+                  Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "y"),
                     Core.lambdaDomain = Nothing,
                     Core.lambdaBody = (Core.TermInject (Core.Injection {
@@ -225,9 +225,9 @@ module_ =
                                             Core.fieldName = (Core.Name "unit"),
                                             Core.fieldTerm = Core.TermUnit}}))})),
                                       Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}]}))}]}))}}))}))},
-                Core.Field {
-                  Core.fieldName = (Core.Name "both"),
-                  Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                Core.CaseAlternative {
+                  Core.caseAlternativeName = (Core.Name "both"),
+                  Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "y"),
                     Core.lambdaDomain = Nothing,
                     Core.lambdaBody = (Core.TermInject (Core.Injection {
@@ -264,9 +264,9 @@ module_ =
                                             Core.fieldName = (Core.Name "unit"),
                                             Core.fieldTerm = Core.TermUnit}}))})),
                                       Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}]}))}]}))}}))}))},
-                Core.Field {
-                  Core.fieldName = (Core.Name "undirected"),
-                  Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                Core.CaseAlternative {
+                  Core.caseAlternativeName = (Core.Name "undirected"),
+                  Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "y"),
                     Core.lambdaDomain = Nothing,
                     Core.lambdaBody = (Core.TermInject (Core.Injection {
@@ -314,7 +314,7 @@ module_ =
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.encode.pg.model.edge"),
           Packaging.termDefinitionMetadata = Nothing,
-          Packaging.termDefinitionTerm = (Core.TermAnnotated (Core.AnnotatedTerm {
+          Packaging.termDefinitionBody = (Core.TermAnnotated (Core.AnnotatedTerm {
             Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
               Core.lambdaParameter = (Core.Name "v"),
               Core.lambdaDomain = Nothing,
@@ -452,7 +452,7 @@ module_ =
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.encode.pg.model.edgeLabel"),
           Packaging.termDefinitionMetadata = Nothing,
-          Packaging.termDefinitionTerm = (Core.TermAnnotated (Core.AnnotatedTerm {
+          Packaging.termDefinitionBody = (Core.TermAnnotated (Core.AnnotatedTerm {
             Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
               Core.lambdaParameter = (Core.Name "x"),
               Core.lambdaDomain = Nothing,
@@ -497,7 +497,7 @@ module_ =
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.encode.pg.model.edgeType"),
           Packaging.termDefinitionMetadata = Nothing,
-          Packaging.termDefinitionTerm = (Core.TermAnnotated (Core.AnnotatedTerm {
+          Packaging.termDefinitionBody = (Core.TermAnnotated (Core.AnnotatedTerm {
             Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
               Core.lambdaParameter = (Core.Name "t"),
               Core.lambdaDomain = Nothing,
@@ -635,7 +635,7 @@ module_ =
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.encode.pg.model.element"),
           Packaging.termDefinitionMetadata = Nothing,
-          Packaging.termDefinitionTerm = (Core.TermAnnotated (Core.AnnotatedTerm {
+          Packaging.termDefinitionBody = (Core.TermAnnotated (Core.AnnotatedTerm {
             Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
               Core.lambdaParameter = (Core.Name "v"),
               Core.lambdaDomain = Nothing,
@@ -643,9 +643,9 @@ module_ =
                 Core.caseStatementTypeName = (Core.Name "hydra.pg.model.Element"),
                 Core.caseStatementDefault = Nothing,
                 Core.caseStatementCases = [
-                  Core.Field {
-                    Core.fieldName = (Core.Name "vertex"),
-                    Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                  Core.CaseAlternative {
+                    Core.caseAlternativeName = (Core.Name "vertex"),
+                    Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                       Core.lambdaParameter = (Core.Name "y"),
                       Core.lambdaDomain = Nothing,
                       Core.lambdaBody = (Core.TermInject (Core.Injection {
@@ -677,9 +677,9 @@ module_ =
                                           Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.pg.model.vertex")),
                                           Core.applicationArgument = (Core.TermVariable (Core.Name "v"))})),
                                         Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}]}))}]}))}}))}))},
-                  Core.Field {
-                    Core.fieldName = (Core.Name "edge"),
-                    Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                  Core.CaseAlternative {
+                    Core.caseAlternativeName = (Core.Name "edge"),
+                    Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                       Core.lambdaParameter = (Core.Name "y"),
                       Core.lambdaDomain = Nothing,
                       Core.lambdaBody = (Core.TermInject (Core.Injection {
@@ -729,14 +729,14 @@ module_ =
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.encode.pg.model.elementKind"),
           Packaging.termDefinitionMetadata = Nothing,
-          Packaging.termDefinitionTerm = (Core.TermAnnotated (Core.AnnotatedTerm {
+          Packaging.termDefinitionBody = (Core.TermAnnotated (Core.AnnotatedTerm {
             Core.annotatedTermBody = (Core.TermCases (Core.CaseStatement {
               Core.caseStatementTypeName = (Core.Name "hydra.pg.model.ElementKind"),
               Core.caseStatementDefault = Nothing,
               Core.caseStatementCases = [
-                Core.Field {
-                  Core.fieldName = (Core.Name "vertex"),
-                  Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                Core.CaseAlternative {
+                  Core.caseAlternativeName = (Core.Name "vertex"),
+                  Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "y"),
                     Core.lambdaDomain = Nothing,
                     Core.lambdaBody = (Core.TermInject (Core.Injection {
@@ -773,9 +773,9 @@ module_ =
                                             Core.fieldName = (Core.Name "unit"),
                                             Core.fieldTerm = Core.TermUnit}}))})),
                                       Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}]}))}]}))}}))}))},
-                Core.Field {
-                  Core.fieldName = (Core.Name "edge"),
-                  Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                Core.CaseAlternative {
+                  Core.caseAlternativeName = (Core.Name "edge"),
+                  Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "y"),
                     Core.lambdaDomain = Nothing,
                     Core.lambdaBody = (Core.TermInject (Core.Injection {
@@ -823,7 +823,7 @@ module_ =
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.encode.pg.model.elementTree"),
           Packaging.termDefinitionMetadata = Nothing,
-          Packaging.termDefinitionTerm = (Core.TermAnnotated (Core.AnnotatedTerm {
+          Packaging.termDefinitionBody = (Core.TermAnnotated (Core.AnnotatedTerm {
             Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
               Core.lambdaParameter = (Core.Name "v"),
               Core.lambdaDomain = Nothing,
@@ -912,7 +912,7 @@ module_ =
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.encode.pg.model.elementType"),
           Packaging.termDefinitionMetadata = Nothing,
-          Packaging.termDefinitionTerm = (Core.TermAnnotated (Core.AnnotatedTerm {
+          Packaging.termDefinitionBody = (Core.TermAnnotated (Core.AnnotatedTerm {
             Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
               Core.lambdaParameter = (Core.Name "t"),
               Core.lambdaDomain = Nothing,
@@ -920,9 +920,9 @@ module_ =
                 Core.caseStatementTypeName = (Core.Name "hydra.pg.model.ElementType"),
                 Core.caseStatementDefault = Nothing,
                 Core.caseStatementCases = [
-                  Core.Field {
-                    Core.fieldName = (Core.Name "vertex"),
-                    Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                  Core.CaseAlternative {
+                    Core.caseAlternativeName = (Core.Name "vertex"),
+                    Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                       Core.lambdaParameter = (Core.Name "y"),
                       Core.lambdaDomain = Nothing,
                       Core.lambdaBody = (Core.TermInject (Core.Injection {
@@ -954,9 +954,9 @@ module_ =
                                           Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.pg.model.vertexType")),
                                           Core.applicationArgument = (Core.TermVariable (Core.Name "t"))})),
                                         Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}]}))}]}))}}))}))},
-                  Core.Field {
-                    Core.fieldName = (Core.Name "edge"),
-                    Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                  Core.CaseAlternative {
+                    Core.caseAlternativeName = (Core.Name "edge"),
+                    Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                       Core.lambdaParameter = (Core.Name "y"),
                       Core.lambdaDomain = Nothing,
                       Core.lambdaBody = (Core.TermInject (Core.Injection {
@@ -1006,7 +1006,7 @@ module_ =
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.encode.pg.model.elementTypeTree"),
           Packaging.termDefinitionMetadata = Nothing,
-          Packaging.termDefinitionTerm = (Core.TermAnnotated (Core.AnnotatedTerm {
+          Packaging.termDefinitionBody = (Core.TermAnnotated (Core.AnnotatedTerm {
             Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
               Core.lambdaParameter = (Core.Name "t"),
               Core.lambdaDomain = Nothing,
@@ -1095,7 +1095,7 @@ module_ =
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.encode.pg.model.graph"),
           Packaging.termDefinitionMetadata = Nothing,
-          Packaging.termDefinitionTerm = (Core.TermAnnotated (Core.AnnotatedTerm {
+          Packaging.termDefinitionBody = (Core.TermAnnotated (Core.AnnotatedTerm {
             Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
               Core.lambdaParameter = (Core.Name "v"),
               Core.lambdaDomain = Nothing,
@@ -1196,13 +1196,13 @@ module_ =
                   Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "v"))})),
                 Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "hydra.core.Term"))}))})),
             Core.typeSchemeConstraints = (Just (M.fromList [
-              (Core.Name "v", Core.TypeVariableMetadata {
-                Core.typeVariableMetadataClasses = [
+              (Core.Name "v", Core.TypeVariableConstraints {
+                Core.typeVariableConstraintsClasses = [
                   Core.TypeClassConstraintSimple (Core.Name "ordering")]})]))})))})),
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.encode.pg.model.graphSchema"),
           Packaging.termDefinitionMetadata = Nothing,
-          Packaging.termDefinitionTerm = (Core.TermAnnotated (Core.AnnotatedTerm {
+          Packaging.termDefinitionBody = (Core.TermAnnotated (Core.AnnotatedTerm {
             Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
               Core.lambdaParameter = (Core.Name "t"),
               Core.lambdaDomain = Nothing,
@@ -1306,14 +1306,14 @@ module_ =
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.encode.pg.model.label"),
           Packaging.termDefinitionMetadata = Nothing,
-          Packaging.termDefinitionTerm = (Core.TermAnnotated (Core.AnnotatedTerm {
+          Packaging.termDefinitionBody = (Core.TermAnnotated (Core.AnnotatedTerm {
             Core.annotatedTermBody = (Core.TermCases (Core.CaseStatement {
               Core.caseStatementTypeName = (Core.Name "hydra.pg.model.Label"),
               Core.caseStatementDefault = Nothing,
               Core.caseStatementCases = [
-                Core.Field {
-                  Core.fieldName = (Core.Name "vertex"),
-                  Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                Core.CaseAlternative {
+                  Core.caseAlternativeName = (Core.Name "vertex"),
+                  Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "y"),
                     Core.lambdaDomain = Nothing,
                     Core.lambdaBody = (Core.TermInject (Core.Injection {
@@ -1343,9 +1343,9 @@ module_ =
                                     Core.fieldTerm = (Core.TermApplication (Core.Application {
                                       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.pg.model.vertexLabel")),
                                       Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}]}))}]}))}}))}))},
-                Core.Field {
-                  Core.fieldName = (Core.Name "edge"),
-                  Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                Core.CaseAlternative {
+                  Core.caseAlternativeName = (Core.Name "edge"),
+                  Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "y"),
                     Core.lambdaDomain = Nothing,
                     Core.lambdaBody = (Core.TermInject (Core.Injection {
@@ -1386,7 +1386,7 @@ module_ =
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.encode.pg.model.lazyGraph"),
           Packaging.termDefinitionMetadata = Nothing,
-          Packaging.termDefinitionTerm = (Core.TermAnnotated (Core.AnnotatedTerm {
+          Packaging.termDefinitionBody = (Core.TermAnnotated (Core.AnnotatedTerm {
             Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
               Core.lambdaParameter = (Core.Name "v"),
               Core.lambdaDomain = Nothing,
@@ -1486,7 +1486,7 @@ module_ =
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.encode.pg.model.property"),
           Packaging.termDefinitionMetadata = Nothing,
-          Packaging.termDefinitionTerm = (Core.TermAnnotated (Core.AnnotatedTerm {
+          Packaging.termDefinitionBody = (Core.TermAnnotated (Core.AnnotatedTerm {
             Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
               Core.lambdaParameter = (Core.Name "v"),
               Core.lambdaDomain = Nothing,
@@ -1560,7 +1560,7 @@ module_ =
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.encode.pg.model.propertyKey"),
           Packaging.termDefinitionMetadata = Nothing,
-          Packaging.termDefinitionTerm = (Core.TermAnnotated (Core.AnnotatedTerm {
+          Packaging.termDefinitionBody = (Core.TermAnnotated (Core.AnnotatedTerm {
             Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
               Core.lambdaParameter = (Core.Name "x"),
               Core.lambdaDomain = Nothing,
@@ -1605,7 +1605,7 @@ module_ =
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.encode.pg.model.propertyType"),
           Packaging.termDefinitionMetadata = Nothing,
-          Packaging.termDefinitionTerm = (Core.TermAnnotated (Core.AnnotatedTerm {
+          Packaging.termDefinitionBody = (Core.TermAnnotated (Core.AnnotatedTerm {
             Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
               Core.lambdaParameter = (Core.Name "t"),
               Core.lambdaDomain = Nothing,
@@ -1707,7 +1707,7 @@ module_ =
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.encode.pg.model.vertex"),
           Packaging.termDefinitionMetadata = Nothing,
-          Packaging.termDefinitionTerm = (Core.TermAnnotated (Core.AnnotatedTerm {
+          Packaging.termDefinitionBody = (Core.TermAnnotated (Core.AnnotatedTerm {
             Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
               Core.lambdaParameter = (Core.Name "v"),
               Core.lambdaDomain = Nothing,
@@ -1811,7 +1811,7 @@ module_ =
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.encode.pg.model.vertexLabel"),
           Packaging.termDefinitionMetadata = Nothing,
-          Packaging.termDefinitionTerm = (Core.TermAnnotated (Core.AnnotatedTerm {
+          Packaging.termDefinitionBody = (Core.TermAnnotated (Core.AnnotatedTerm {
             Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
               Core.lambdaParameter = (Core.Name "x"),
               Core.lambdaDomain = Nothing,
@@ -1856,7 +1856,7 @@ module_ =
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.encode.pg.model.vertexType"),
           Packaging.termDefinitionMetadata = Nothing,
-          Packaging.termDefinitionTerm = (Core.TermAnnotated (Core.AnnotatedTerm {
+          Packaging.termDefinitionBody = (Core.TermAnnotated (Core.AnnotatedTerm {
             Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
               Core.lambdaParameter = (Core.Name "t"),
               Core.lambdaDomain = Nothing,
@@ -1960,7 +1960,7 @@ module_ =
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.encode.pg.model.vertexWithAdjacentEdges"),
           Packaging.termDefinitionMetadata = Nothing,
-          Packaging.termDefinitionTerm = (Core.TermAnnotated (Core.AnnotatedTerm {
+          Packaging.termDefinitionBody = (Core.TermAnnotated (Core.AnnotatedTerm {
             Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
               Core.lambdaParameter = (Core.Name "v"),
               Core.lambdaDomain = Nothing,

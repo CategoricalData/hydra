@@ -100,11 +100,11 @@ dropDomains n t =
       Core.TypeForall v0 -> dropDomains n (Core.forallTypeBody v0)
       _ -> t)
 -- | Encode a case branch
-encodeCase :: t0 -> Graph.Graph -> M.Map Core.Name Core.Type -> Maybe Core.Name -> Core.Field -> Either Errors.Error Syntax.Case
+encodeCase :: t0 -> Graph.Graph -> M.Map Core.Name Core.Type -> Maybe Core.Name -> Core.CaseAlternative -> Either Errors.Error Syntax.Case
 encodeCase cx g ftypes sn f =
 
-      let fname = Core.fieldName f
-          fterm = Core.fieldTerm f
+      let fname = Core.caseAlternativeName f
+          fterm = Core.caseAlternativeHandler f
           isUnit =
                   Maybes.maybe (case (Strip.deannotateAndDetypeTerm fterm) of
                     Core.TermLambda v0 ->
@@ -475,7 +475,7 @@ encodeTermDefinition :: t0 -> Graph.Graph -> Packaging.TermDefinition -> Either 
 encodeTermDefinition cx g td =
 
       let name = Packaging.termDefinitionName td
-          term = Packaging.termDefinitionTerm td
+          term = Packaging.termDefinitionBody td
           lname = Utils.scalaEscapeName (Names.localNameOf name)
           typ_ =
                   Maybes.maybe (Core.TypeVariable (Core.Name "hydra.core.Unit")) Core.typeSchemeBody (Maybes.map Scoping.termSignatureToTypeScheme (Packaging.termDefinitionSignature td))
@@ -601,7 +601,7 @@ encodeTypeDefinition :: t0 -> t1 -> Packaging.TypeDefinition -> Either Errors.Er
 encodeTypeDefinition cx g td =
 
       let name = Packaging.typeDefinitionName td
-          typ = Core.typeSchemeBody (Packaging.typeDefinitionTypeScheme td)
+          typ = Core.typeSchemeBody (Packaging.typeDefinitionBody td)
           lname = Names.localNameOf name
           tname = Syntax.NameType {
                 Syntax.nameTypeValue = lname}
@@ -861,7 +861,7 @@ moduleToScala :: Packaging.Module -> [Packaging.Definition] -> t0 -> Graph.Graph
 moduleToScala mod defs cx g =
     Eithers.bind (constructModule cx g mod defs) (\pkg ->
       let s = Serialization.printExpr (Serialization.parenthesize (Serde.pkgToExpr pkg))
-      in (Right (Maps.singleton (Names.moduleNameToFilePath Util.CaseConventionCamel (Packaging.FileExtension "scala") (Packaging.moduleName mod)) s)))
+      in (Right (Maps.singleton (Names.moduleNameToFilePath Util.CaseConventionCamel (Util.FileExtension "scala") (Packaging.moduleName mod)) s)))
 -- | Strip wrap eliminations from terms (newtypes are erased in Scala)
 stripWrapEliminations :: Core.Term -> Core.Term
 stripWrapEliminations t =

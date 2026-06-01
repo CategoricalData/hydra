@@ -119,7 +119,7 @@ buildFieldMapping = define "buildFieldMapping" $
           _Definition_type>>: "td" ~> lets [
             "qname">: unwrap _Name @@ (Packaging.typeDefinitionName $ var "td"),
             "tname">: localName @@ var "qname",
-            "ty">: Core.typeSchemeBody (Packaging.typeDefinitionTypeScheme $ var "td"),
+            "ty">: Core.typeSchemeBody (Packaging.typeDefinitionBody $ var "td"),
             "extracted">: extractTypeParams @@ var "ty",
             "bodyTy">: Pairs.second (var "extracted")] $
             cases _Type (var "bodyTy") (Just $ list ([] :: [TypedTerm ((String, String), String)])) [
@@ -152,7 +152,7 @@ collectFreeTypeVars = define "collectFreeTypeVars" $
         (lambda "d" $ collectFreeTypeVars @@ var "d")
         (Core.caseStatementDefault $ var "cs"))
       (Sets.unions $ Lists.map
-        (lambda "f" $ collectFreeTypeVars @@ (Core.fieldTerm $ var "f"))
+        (lambda "f" $ collectFreeTypeVars @@ (Core.caseAlternativeHandler $ var "f"))
         (Core.caseStatementCases $ var "cs")),
     _Term_either>>: "e" ~> Eithers.either_
       (lambda "l" $ collectFreeTypeVars @@ var "l")
@@ -280,7 +280,7 @@ collectQualifiedNamesInTerm = define "collectQualifiedNamesInTerm" $
       (qualifiedFromName @@ (Core.caseStatementTypeName $ var "cs"))
       (Sets.union
         (Sets.unions $ Lists.map
-          (lambda "f" $ collectQualifiedNamesInTerm @@ (Core.fieldTerm $ var "f"))
+          (lambda "f" $ collectQualifiedNamesInTerm @@ (Core.caseAlternativeHandler $ var "f"))
           (Core.caseStatementCases $ var "cs"))
         (Maybes.maybe (Sets.empty :: TypedTerm (S.Set String))
           (lambda "d" $ collectQualifiedNamesInTerm @@ var "d")
@@ -1002,7 +1002,7 @@ termRefs = define "termRefs" $
       (termRefs @@ var "locals" @@ (Core.applicationArgument $ var "app")),
     _Term_cases>>: "cs" ~> Sets.union
       (Sets.unions $ Lists.map
-        (lambda "f" $ termRefs @@ var "locals" @@ (Core.fieldTerm $ var "f"))
+        (lambda "f" $ termRefs @@ var "locals" @@ (Core.caseAlternativeHandler $ var "f"))
         (Core.caseStatementCases $ var "cs"))
       (Maybes.maybe (Sets.empty :: TypedTerm (S.Set String))
         (lambda "d" $ termRefs @@ var "locals" @@ var "d")

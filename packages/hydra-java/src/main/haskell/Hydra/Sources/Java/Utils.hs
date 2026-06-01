@@ -22,6 +22,7 @@ import qualified Hydra.Dsl.Meta.Lib.Pairs                  as Pairs
 import qualified Hydra.Dsl.Meta.Lib.Sets                   as Sets
 import qualified Hydra.Dsl.Meta.Core                       as Core
 import qualified Hydra.Dsl.Packaging                     as Packaging
+import qualified Hydra.Dsl.Util                          as Util
 import qualified Hydra.Sources.Kernel.Terms.Formatting     as Formatting
 import qualified Hydra.Sources.Kernel.Terms.Names          as Names
 import qualified Hydra.Sources.Kernel.Terms.Serialization  as Serialization
@@ -1031,8 +1032,8 @@ nameToJavaName :: TypedTermDefinition (JavaHelpers.Aliases -> Name -> Java.Ident
 nameToJavaName = def "nameToJavaName" $
   lambda "aliases" $ lambda "name" $ lets [
     "qn">: Names.qualifyName @@ var "name",
-    "ns_">: Packaging.qualifiedNameModuleName (var "qn"),
-    "local">: Packaging.qualifiedNameLocal (var "qn")] $
+    "ns_">: Util.qualifiedNameModuleName (var "qn"),
+    "local">: Util.qualifiedNameLocal (var "qn")] $
     Logic.ifElse (isEscaped @@ (Core.unName $ var "name"))
       (JavaDsl.identifier (sanitizeJavaName @@ var "local"))
       (Maybes.cases (var "ns_")
@@ -1070,8 +1071,8 @@ nameToQualifiedJavaName :: TypedTermDefinition (JavaHelpers.Aliases -> Bool -> N
 nameToQualifiedJavaName = def "nameToQualifiedJavaName" $
   lambda "aliases" $ lambda "qualify" $ lambda "name" $ lambda "mlocal" $ lets [
     "qn">: Names.qualifyName @@ var "name",
-    "ns_">: Packaging.qualifiedNameModuleName (var "qn"),
-    "local">: Packaging.qualifiedNameLocal (var "qn"),
+    "ns_">: Util.qualifiedNameModuleName (var "qn"),
+    "local">: Util.qualifiedNameLocal (var "qn"),
     -- Build the alias: if ns is Just, look up in packages map; if not found, create from namespace
     "alias">: Maybes.cases (var "ns_")
       nothing
@@ -1273,15 +1274,15 @@ variantClassName :: TypedTermDefinition (Bool -> Name -> Name -> Name)
 variantClassName = def "variantClassName" $
   lambda "qualify" $ lambda "elName" $ lambda "fname" $ lets [
     "qn">: Names.qualifyName @@ var "elName",
-    "ns_">: Packaging.qualifiedNameModuleName (var "qn"),
-    "local">: Packaging.qualifiedNameLocal (var "qn"),
+    "ns_">: Util.qualifiedNameModuleName (var "qn"),
+    "local">: Util.qualifiedNameLocal (var "qn"),
     "flocal">: Formatting.capitalize @@ (Core.unName $ var "fname"),
     "local1">: Logic.ifElse (var "qualify")
       (Strings.cat2 (Strings.cat2 (var "local") (string ".")) (var "flocal"))
       (Logic.ifElse (Equality.equal (var "flocal") (var "local"))
         (Strings.cat2 (var "flocal") (string "_"))
         (var "flocal"))] $
-    Names.unqualifyName @@ Packaging.qualifiedName (var "ns_") (var "local1")
+    Names.unqualifyName @@ Util.qualifiedName (var "ns_") (var "local1")
 
 -- | The reference type for the visitor return type variable "r"
 visitorTypeVariable :: TypedTermDefinition Java.ReferenceType

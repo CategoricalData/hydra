@@ -1178,12 +1178,12 @@ encodeUnwrap cx g _ marg st = case marg of
       pure (argExpr, st')
 
 -- | Encode case arms for a union type switch.
-encodeCaseArms :: InferenceContext -> Graph -> Core.Name -> [Core.Field] -> GoState
+encodeCaseArms :: InferenceContext -> Graph -> Core.Name -> [Core.CaseAlternative] -> GoState
   -> GoResult [Go.TypeCaseClause]
 encodeCaseArms _ _ _ [] st = pure ([], st)
 encodeCaseArms cx g baseName (cf:cfs) st = do
-  let cfname = toGoExported (unName $ Core.fieldName cf)
-      cfterm = Core.fieldTerm cf
+  let cfname = toGoExported (unName $ Core.caseAlternativeName cf)
+      cfterm = Core.caseAlternativeHandler cf
       -- Build variant type name using the same logic as TermUnion
       variantQName = case moduleNameOf baseName of
         Just (ModuleName ns) -> Core.Name (ns ++ "." ++ toGoExported (localNameOf baseName) ++ cfname)
@@ -1195,7 +1195,7 @@ encodeCaseArms cx g baseName (cf:cfs) st = do
   -- expects the INNER value. Use v.Value for non-unit variants.
   let vExpr = Core.TermVariable $ Core.Name "v"
   -- Check if the variant type is unit (no Value field)
-  let variantFieldType = lookupUnionVariantType g baseName (Core.fieldName cf)
+  let variantFieldType = lookupUnionVariantType g baseName (Core.caseAlternativeName cf)
       isUnit = case variantFieldType of
         Just vt -> case deannotateType vt of
           Core.TypeUnit -> True
@@ -1858,7 +1858,7 @@ encodeTypeDefinition :: InferenceContext -> Graph -> TypeDefinition -> GoState
   -> GoResult Go.TopLevelDecl
 encodeTypeDefinition cx g tdef st = do
   let name = typeDefinitionName tdef
-      typ = Core.typeSchemeBody (typeDefinitionTypeScheme tdef)
+      typ = Core.typeSchemeBody (typeDefinitionBody tdef)
       goName = toGoExported (goLocalName name)
       (forallVars, innerTyp) = unpackForallType typ
       freeVars = filter isLocalVar $ S.toList (freeVariablesInType typ)
@@ -2148,7 +2148,7 @@ encodeTermDefinitionWithScheme :: InferenceContext -> Graph -> TermDefinition ->
   -> GoResult Go.TopLevelDecl
 encodeTermDefinitionWithScheme cx g tdef tscheme st = do
   let name = termDefinitionName tdef
-      term = termDefinitionTerm tdef
+      term = termDefinitionBody tdef
       goName = toGoExported (goLocalName name)
       typ = Core.typeSchemeBody tscheme
       -- Unpack forall type variables
@@ -2330,7 +2330,7 @@ findTypeApplicationArgs targetName = go
       Core.TermAnnotated at -> go (Core.annotatedTermBody at)
       Core.TermCases cs ->
         let inCases = L.find (/= Nothing) $
-              fmap (\f -> go (Core.fieldTerm f)) (Core.caseStatementCases cs)
+              fmap (\f -> go (Core.caseAlternativeHandler f)) (Core.caseStatementCases cs)
             inDefault = case Core.caseStatementDefault cs of
               Just dt -> go dt
               Nothing -> Nothing
@@ -2638,7 +2638,7 @@ encodeTypeDefs :: InferenceContext -> Graph -> [TypeDefinition] -> GoState
 encodeTypeDefs _ _ [] st = pure ([], st)
 encodeTypeDefs cx g (td:tds) st = do
   -- For union types, a single type definition may produce multiple Go declarations
-  let typ = Core.typeSchemeBody (typeDefinitionTypeScheme td)
+  let typ = Core.typeSchemeBody (typeDefinitionBody td)
       (forallVars, innerTyp) = unpackForallType typ
   case deannotateType innerTyp of
     Core.TypeUnion rt -> do

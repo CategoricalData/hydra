@@ -317,7 +317,7 @@ topologicalSortTypeDefinitions defs =
       let toPair =
               \def -> (
                 Packaging.typeDefinitionName def,
-                (Sets.toList (typeDependencyNames False (Core.typeSchemeBody (Packaging.typeDefinitionTypeScheme def)))))
+                (Sets.toList (typeDependencyNames False (Core.typeSchemeBody (Packaging.typeDefinitionBody def)))))
           nameToDef = Maps.fromList (Lists.map (\d -> (Packaging.typeDefinitionName d, d)) defs)
           sorted = Sorting.topologicalSortComponents (Lists.map toPair defs)
       in (Lists.map (\names -> Maybes.cat (Lists.map (\n -> Maps.lookup n nameToDef) names)) sorted)
