@@ -158,8 +158,8 @@ encodeName = def "encodeName" $
     "boundVars">: Pairs.second $ project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_boundTypeVariables @@ var "env",
     -- Qualify the name
     "qualName">: Names.qualifyName @@ var "name",
-    "mns">: Packaging.qualifiedNameModuleName $ var "qualName",
-    "local">: Packaging.qualifiedNameLocal $ var "qualName",
+    "mns">: Util.qualifiedNameModuleName $ var "qualName",
+    "local">: Util.qualifiedNameLocal $ var "qualName",
     -- Convert local name with case convention and sanitize
     "pyLocal">: sanitizePythonName @@ (Formatting.convertCase @@ Util.caseConventionCamel @@ var "conv" @@ var "local"),
     -- Convert namespace to Python dotted path
@@ -201,8 +201,8 @@ encodeNameQualified = def "encodeNameQualified" $
     "boundVars">: Pairs.second $ project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_boundTypeVariables @@ var "env",
     -- Qualify the name
     "qualName">: Names.qualifyName @@ var "name",
-    "mns">: Packaging.qualifiedNameModuleName $ var "qualName",
-    "local">: Packaging.qualifiedNameLocal $ var "qualName",
+    "mns">: Util.qualifiedNameModuleName $ var "qualName",
+    "local">: Util.qualifiedNameLocal $ var "qualName",
     -- Convert module name to Python dotted path (camel -> snake on each segment)
     "pyNs">: lambda "nsVal" $ Strings.intercalate (string ".") $
       Lists.map (Formatting.convertCase @@ Util.caseConventionCamel @@ Util.caseConventionLowerSnake)

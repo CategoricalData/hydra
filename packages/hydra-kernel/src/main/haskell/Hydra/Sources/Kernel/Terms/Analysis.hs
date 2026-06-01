@@ -255,9 +255,9 @@ definitionDependencyModuleNames = define "definitionDependencyModuleNames" $
   "defNames" <~ ("def" ~> cases _Definition (var "def")
     Nothing [
     _Definition_type>>: "typeDef" ~>
-      Dependencies.typeDependencyNames @@ true @@ (Core.typeSchemeBody $ Packaging.typeDefinitionTypeScheme (var "typeDef")),
+      Dependencies.typeDependencyNames @@ true @@ (Core.typeSchemeBody $ Packaging.typeDefinitionBody (var "typeDef")),
     _Definition_term>>: "termDef" ~>
-      Dependencies.termDependencyNames @@ true @@ true @@ true @@ Packaging.termDefinitionTerm (var "termDef"),
+      Dependencies.termDependencyNames @@ true @@ true @@ true @@ Packaging.termDefinitionBody (var "termDef"),
     _Definition_primitive>>: "primDef" ~>
       Dependencies.typeDependencyNames @@ true @@ (Core.typeSchemeBody $ Scoping.termSignatureToTypeScheme @@ Packaging.primitiveDefinitionSignature (var "primDef"))]) $
   "allNames" <~ Sets.unions (Lists.map (var "defNames") (var "defs")) $
@@ -429,7 +429,7 @@ isTailRecursiveInTailPosition = define "isTailRecursiveInTailPosition" $
             "branchesOk" <~ (Lists.foldl
               ("ok" ~> "field" ~>
                 Logic.and (var "ok")
-                  (isTailRecursiveInTailPosition @@ var "funcName" @@ Core.fieldTerm (var "field")))
+                  (isTailRecursiveInTailPosition @@ var "funcName" @@ Core.caseAlternativeHandler (var "field")))
               true
               (var "cases_")) $
             -- Default branch (if present) must also be tail-recursive
@@ -471,7 +471,7 @@ moduleContainsBinaryLiterals = define "moduleContainsBinaryLiterals" $
     Rewriting.foldOverTerm @@ Coders.traversalOrderPre @@ var "checkTerm" @@ false @@ var "term") $
   "defTerms" <~ Maybes.cat (Lists.map
     ("d" ~> cases _Definition (var "d") (Just nothing) [
-      _Definition_term>>: "td" ~> just (Packaging.termDefinitionTerm $ var "td")])
+      _Definition_term>>: "td" ~> just (Packaging.termDefinitionBody $ var "td")])
     (Packaging.moduleDefinitions (var "mod"))) $
   Lists.foldl
     ("acc" ~> "t" ~> Logic.or (var "acc") (var "termContainsBinary" @@ var "t"))
@@ -491,7 +491,7 @@ moduleContainsDecimalLiterals = define "moduleContainsDecimalLiterals" $
     Rewriting.foldOverTerm @@ Coders.traversalOrderPre @@ var "checkTerm" @@ false @@ var "term") $
   "defTerms" <~ Maybes.cat (Lists.map
     ("d" ~> cases _Definition (var "d") (Just nothing) [
-      _Definition_term>>: "td" ~> just (Packaging.termDefinitionTerm $ var "td")])
+      _Definition_term>>: "td" ~> just (Packaging.termDefinitionBody $ var "td")])
     (Packaging.moduleDefinitions (var "mod"))) $
   Lists.foldl
     ("acc" ~> "t" ~> Logic.or (var "acc") (var "termContainsDecimal" @@ var "t"))
@@ -505,9 +505,9 @@ moduleDependencyModuleNames = define "moduleDependencyModuleNames" $
   "allBindings" <~ Maybes.cat (Lists.map
     ("d" ~> cases _Definition (var "d") (Just nothing) [
       _Definition_type>>: "td" ~>
-        just (Annotations.typeBinding @@ (Packaging.typeDefinitionName $ var "td") @@ (Core.typeSchemeBody $ Packaging.typeDefinitionTypeScheme $ var "td")),
+        just (Annotations.typeBinding @@ (Packaging.typeDefinitionName $ var "td") @@ (Core.typeSchemeBody $ Packaging.typeDefinitionBody $ var "td")),
       _Definition_term>>: "td" ~>
-        just (Core.binding (Packaging.termDefinitionName $ var "td") (Packaging.termDefinitionTerm $ var "td")
+        just (Core.binding (Packaging.termDefinitionName $ var "td") (Packaging.termDefinitionBody $ var "td")
           (Maybes.map Scoping.termSignatureToTypeScheme $ Packaging.termDefinitionSignature $ var "td"))])
     (Packaging.moduleDefinitions (var "mod"))) $
   Eithers.map

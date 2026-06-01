@@ -120,7 +120,7 @@ generatePgFormats outDir = do
   let typeMap = M.fromList
         [ (Packaging.typeDefinitionName td,
            inlineRefs stringNewtypes
-                      (Core.typeSchemeBody (Packaging.typeDefinitionTypeScheme td)))
+                      (Core.typeSchemeBody (Packaging.typeDefinitionBody td)))
         | Packaging.DefinitionType td <- Packaging.moduleDefinitions pgModelMonomorphic ]
   writeAvroSchema outDir typeMap "hydra.pg.model.Graph" "Graph.avsc"
   writeAvroSchema outDir typeMap "hydra.pg.model.GraphSchema" "GraphSchema.avsc"
@@ -232,8 +232,8 @@ monomorphizeModuleStrict insts mod = do
   where
     monoDef (Packaging.DefinitionType td) = do
       let name = Packaging.typeDefinitionName td
-      ts' <- monoScheme name (Packaging.typeDefinitionTypeScheme td)
-      return $ Packaging.DefinitionType $ td { Packaging.typeDefinitionTypeScheme = ts' }
+      ts' <- monoScheme name (Packaging.typeDefinitionBody td)
+      return $ Packaging.DefinitionType $ td { Packaging.typeDefinitionBody = ts' }
     monoDef d = Right d
     monoScheme name (Core.TypeScheme _ body cs) = do
       body' <- monoType name body
@@ -280,10 +280,10 @@ monomorphizeModuleAllString mod = case monomorphizeModuleStrict allString mod of
       | Packaging.DefinitionType td <- Packaging.moduleDefinitions mod
       , let n = numVars td, n > 0 ]
     numVars td = length . fst . peelForalls . Core.typeSchemeBody
-                       . Packaging.typeDefinitionTypeScheme $ td
+                       . Packaging.typeDefinitionBody $ td
     stringType = Core.TypeLiteral Core.LiteralTypeString
     flattenDef (Packaging.DefinitionType td) = Packaging.DefinitionType $
-      td { Packaging.typeDefinitionTypeScheme = flattenScheme (Packaging.typeDefinitionTypeScheme td) }
+      td { Packaging.typeDefinitionBody = flattenScheme (Packaging.typeDefinitionBody td) }
     flattenDef d = d
     flattenScheme (Core.TypeScheme vs body cs) = Core.TypeScheme vs (flattenAppsAndForalls body) cs
 
@@ -347,7 +347,7 @@ stringNewtypeNames :: Packaging.Module -> [Core.Name]
 stringNewtypeNames mod =
   [ Packaging.typeDefinitionName td
   | Packaging.DefinitionType td <- Packaging.moduleDefinitions mod
-  , isStringNewtype (Core.typeSchemeBody (Packaging.typeDefinitionTypeScheme td)) ]
+  , isStringNewtype (Core.typeSchemeBody (Packaging.typeDefinitionBody td)) ]
   where
     isStringNewtype t = case t of
       Core.TypeAnnotated (Core.AnnotatedType inner _) -> isStringNewtype inner

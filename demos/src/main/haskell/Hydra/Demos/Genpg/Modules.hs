@@ -26,19 +26,19 @@ salesModule = Module {
     -- salesDatabaseSchema: list[TableType]
     DefinitionTerm $ TermDefinition {
       termDefinitionName = Name "hydra.demos.genpg.sales.salesDatabaseSchema",
-      termDefinitionTerm = TermList $ fmap EncodeTabular.tableType Sales.salesTableSchemas,
+      termDefinitionBody = TermList $ fmap EncodeTabular.tableType Sales.salesTableSchemas,
       termDefinitionSignature = Just (typeSchemeToTermSignature listTableTypeScheme)
     },
     -- salesGraphSchema: GraphSchema[Type]
     DefinitionTerm $ TermDefinition {
       termDefinitionName = Name "hydra.demos.genpg.sales.salesGraphSchema",
-      termDefinitionTerm = EncodePg.graphSchema EncodeCore.type_ Sales.salesGraphSchema,
+      termDefinitionBody = EncodePg.graphSchema EncodeCore.type_ Sales.salesGraphSchema,
       termDefinitionSignature = Just (typeSchemeToTermSignature graphSchemaTypeScheme)
     },
     -- salesMapping: LazyGraph[Term]
     DefinitionTerm $ TermDefinition {
       termDefinitionName = Name "hydra.demos.genpg.sales.salesMapping",
-      termDefinitionTerm = EncodePg.lazyGraph EncodeCore.term Sales.salesGraph,
+      termDefinitionBody = EncodePg.lazyGraph EncodeCore.term Sales.salesGraph,
       termDefinitionSignature = Just (typeSchemeToTermSignature lazyGraphTermScheme)
     }
   ],
@@ -66,19 +66,19 @@ healthModule = Module {
     -- healthDatabaseSchema: list[TableType]
     DefinitionTerm $ TermDefinition {
       termDefinitionName = Name "hydra.demos.genpg.health.healthDatabaseSchema",
-      termDefinitionTerm = TermList $ fmap EncodeTabular.tableType Health.healthTableSchemas,
+      termDefinitionBody = TermList $ fmap EncodeTabular.tableType Health.healthTableSchemas,
       termDefinitionSignature = Just (typeSchemeToTermSignature listTableTypeScheme)
     },
     -- healthGraphSchema: GraphSchema[Type]
     DefinitionTerm $ TermDefinition {
       termDefinitionName = Name "hydra.demos.genpg.health.healthGraphSchema",
-      termDefinitionTerm = EncodePg.graphSchema EncodeCore.type_ Health.healthGraphSchema,
+      termDefinitionBody = EncodePg.graphSchema EncodeCore.type_ Health.healthGraphSchema,
       termDefinitionSignature = Just (typeSchemeToTermSignature graphSchemaTypeScheme)
     },
     -- healthMapping: LazyGraph[Term]
     DefinitionTerm $ TermDefinition {
       termDefinitionName = Name "hydra.demos.genpg.health.healthMapping",
-      termDefinitionTerm = EncodePg.lazyGraph EncodeCore.term Health.healthGraph,
+      termDefinitionBody = EncodePg.lazyGraph EncodeCore.term Health.healthGraph,
       termDefinitionSignature = Just (typeSchemeToTermSignature lazyGraphTermScheme)
     }
   ],

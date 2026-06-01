@@ -211,7 +211,7 @@ termSignatureToTypeScheme = define "termSignatureToTypeScheme" $
     (Typing.resultType $ var "result")
     (Lists.reverse $ var "params") $
   -- Build the optional constraints map. If no type parameter carries any constraints, emit nothing;
-  -- otherwise build a map from each type parameter's name to its TypeVariableMetadata.
+  -- otherwise build a map from each type parameter's name to its TypeVariableConstraints.
   "hasConstraints" <~ Lists.foldl
     ("acc" ~> "tp" ~> Logic.or (var "acc") (Logic.not $ Lists.null $ Typing.typeParameterConstraints $ var "tp"))
     false
@@ -219,7 +219,7 @@ termSignatureToTypeScheme = define "termSignatureToTypeScheme" $
   "constraints" <~ Logic.ifElse (var "hasConstraints")
     (Phantoms.just $ Maps.fromList $ Lists.map
       ("tp" ~> pair (Typing.typeParameterName $ var "tp")
-        (Core.typeVariableMetadata $ Typing.typeParameterConstraints $ var "tp"))
+        (Core.typeVariableConstraints $ Typing.typeParameterConstraints $ var "tp"))
       (var "typeParams"))
     Phantoms.nothing $
   Core.typeScheme (var "variables") (var "body") (var "constraints")
@@ -249,7 +249,7 @@ typeSchemeToTermSignature = define "typeSchemeToTermSignature" $
     ("v" ~> Typing.typeParameter (var "v") $ optCases
       (Maps.lookup (var "v") (var "constraintsMap"))
       (list ([] :: [TypedTerm TypeClassConstraint]))
-      ("tvm" ~> Core.typeVariableMetadataClasses $ var "tvm"))
+      ("tvm" ~> Core.typeVariableConstraintsClasses $ var "tvm"))
     (var "variables") $
   -- Peel function arrows off the body, accumulating parameter types in reverse order.
   "peel" <~ ("acc" ~> "t" ~> cases _Type (var "t")

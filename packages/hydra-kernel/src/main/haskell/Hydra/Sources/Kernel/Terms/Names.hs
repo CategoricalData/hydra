@@ -93,8 +93,8 @@ compactName = define "compactName" $
   doc "Given a mapping of namespaces to prefixes, convert a name to a compact string representation" $
   lambda "namespaces" $ lambda "name" $ lets [
     "qualName">: qualifyName @@ var "name",
-    "mns">: Packaging.qualifiedNameModuleName $ var "qualName",
-    "local">: Packaging.qualifiedNameLocal $ var "qualName"]
+    "mns">: Util.qualifiedNameModuleName $ var "qualName",
+    "local">: Util.qualifiedNameLocal $ var "qualName"]
     $ Maybes.maybe
         (Core.unName $ var "name")
         (lambda "ns" $
@@ -129,12 +129,12 @@ freshNames = define "freshNames" $
 localNameOf :: TypedTermDefinition (Name -> String)
 localNameOf = define "localNameOf" $
   doc "Extract the local part of a name" $
-  reify Packaging.qualifiedNameLocal <.> qualifyName
+  reify Util.qualifiedNameLocal <.> qualifyName
 
 moduleNameOf :: TypedTermDefinition (Name -> Maybe ModuleName)
 moduleNameOf = define "moduleNameOf" $
   doc "Extract the module name of a name, if any" $
-  reify Packaging.qualifiedNameModuleName <.> qualifyName
+  reify Util.qualifiedNameModuleName <.> qualifyName
 
 moduleNameToFilePath :: TypedTermDefinition (CaseConvention -> FileExtension -> ModuleName -> String)
 moduleNameToFilePath = define "moduleNameToFilePath" $
@@ -143,15 +143,15 @@ moduleNameToFilePath = define "moduleNameToFilePath" $
     "parts">: Lists.map
       (Formatting.convertCase @@ Util.caseConventionCamel @@ var "caseConv")
       (Strings.splitOn (string ".") (Packaging.unModuleName $ var "ns"))]
-    $ (Strings.intercalate (string "/") $ var "parts") ++ string "." ++ (Packaging.unFileExtension $ var "ext")
+    $ (Strings.intercalate (string "/") $ var "parts") ++ string "." ++ (Util.unFileExtension $ var "ext")
 
 nameToFilePath :: TypedTermDefinition (CaseConvention -> CaseConvention -> FileExtension -> Name -> FilePath)
 nameToFilePath = define "nameToFilePath" $
   doc "Convert a name to file path, given case conventions for namespaces and local names, and assuming '/' as the file path separator" $
   "nsConv" ~> "localConv" ~> "ext" ~> "name" ~>
   "qualName" <~ qualifyName @@ var "name" $
-  "ns" <~ Packaging.qualifiedNameModuleName (var "qualName") $
-  "local" <~ Packaging.qualifiedNameLocal (var "qualName") $
+  "ns" <~ Util.qualifiedNameModuleName (var "qualName") $
+  "local" <~ Util.qualifiedNameLocal (var "qualName") $
   "nsToFilePath" <~ ("nsArg" ~>
     Strings.intercalate (string "/") (Lists.map
       ("part" ~> Formatting.convertCase @@ Util.caseConventionCamel @@ var "nsConv" @@ var "part")
@@ -160,7 +160,7 @@ nameToFilePath = define "nameToFilePath" $
     ("n" ~> Strings.cat2 (var "nsToFilePath" @@ var "n") (string "/"))
     (var "ns") $
   "suffix" <~ Formatting.convertCase @@ Util.caseConventionPascal @@ var "localConv" @@ var "local" $
-  Strings.cat (list [var "prefix", var "suffix", string ".", Packaging.unFileExtension (var "ext")])
+  Strings.cat (list [var "prefix", var "suffix", string ".", Util.unFileExtension (var "ext")])
 
 normalTypeVariable :: TypedTermDefinition (Int -> Name)
 normalTypeVariable = define "normalTypeVariable" $
@@ -190,14 +190,14 @@ qualifyName = define "qualifyName" $
     -- Empty parts is unreachable (splitOn on a string produces >= 1 element);
     -- in that case fall back to an unqualified name.
     $ Maybes.maybe
-      (Packaging.qualifiedName nothing (Core.unName $ var "name"))
+      (Util.qualifiedName nothing (Core.unName $ var "name"))
       ("uc" ~>
         "localName" <~ Pairs.first (var "uc") $
         "restReversed" <~ Pairs.second (var "uc") $
         Logic.ifElse
           (Lists.null $ var "restReversed")
-          (Packaging.qualifiedName nothing (Core.unName $ var "name"))
-          (Packaging.qualifiedName
+          (Util.qualifiedName nothing (Core.unName $ var "name"))
+          (Util.qualifiedName
             (just $ wrap _ModuleName (Strings.intercalate (string ".") (Lists.reverse (var "restReversed"))))
             (var "localName")))
       (Lists.uncons $ var "parts")
@@ -225,5 +225,5 @@ unqualifyName = define "unqualifyName" $
     "prefix">: Maybes.maybe
       (string "")
       (lambda "n" $ (Packaging.unModuleName $ var "n") ++ string ".")
-      (Packaging.qualifiedNameModuleName $ var "qname")]
-    $ wrap _Name $ var "prefix" ++ (Packaging.qualifiedNameLocal $ var "qname")
+      (Util.qualifiedNameModuleName $ var "qname")]
+    $ wrap _Name $ var "prefix" ++ (Util.qualifiedNameLocal $ var "qname")

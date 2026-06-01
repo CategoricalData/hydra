@@ -323,7 +323,7 @@ collectStrings = def "collectStrings" $
     "allStrings" <~ Lists.foldl
       (lambda "acc" $ lambda "td" $
         Rewriting.foldOverTerm @@ Coders.traversalOrderPre @@
-          (var "collectOne") @@ (var "acc") @@ (Packaging.termDefinitionTerm (var "td")))
+          (var "collectOne") @@ (var "acc") @@ (Packaging.termDefinitionBody (var "td")))
       (Sets.empty :: TypedTerm (S.Set String))
       (var "termDefs") $
     Sets.toList (var "allStrings")
@@ -541,8 +541,8 @@ encodeCases = def "encodeCases" $
     -- which is now initialized to the loaded payload before any arm runs.
     "explicitArms" <<~ (Eithers.mapList
       (lambda "cf" $
-        "cfname" <~ (Formatting.convertCaseCamelToLowerSnake @@ Core.unName (Core.fieldName (var "cf"))) $
-        "cfterm" <~ Core.fieldTerm (var "cf") $
+        "cfname" <~ (Formatting.convertCaseCamelToLowerSnake @@ Core.unName (Core.caseAlternativeName (var "cf"))) $
+        "cfterm" <~ Core.caseAlternativeHandler (var "cf") $
         "armBody" <<~ (encodeTerm @@ var "cx" @@ var "g" @@ var "stringOffsets" @@ var "fieldOffsets" @@ var "variantIndexes" @@ var "funcSigs" @@
           (Core.termApplication (Core.application (var "cfterm")
             (Core.termVariable (wrap _Name (string "v")))))) $
@@ -1261,7 +1261,7 @@ encodeTermDefinition :: TypedTermDefinition (InferenceContext -> Graph -> M.Map 
 encodeTermDefinition = def "encodeTermDefinition" $
   "cx" ~> "g" ~> "stringOffsets" ~> "fieldOffsets" ~> "variantIndexes" ~> "funcSigs" ~> lambda "tdef" $
     "name" <~ Packaging.termDefinitionName (var "tdef") $
-    "term" <~ Packaging.termDefinitionTerm (var "tdef") $
+    "term" <~ Packaging.termDefinitionBody (var "tdef") $
     "lname" <~ (Formatting.convertCaseCamelToLowerSnake @@ Core.unName (var "name")) $
     "typ" <~ Maybes.maybe
       (Core.typeUnit)
@@ -1398,7 +1398,7 @@ encodeTypeDefinition = def "encodeTypeDefinition" $
   "cx" ~> "g" ~> lambda "tdef" $
     "name" <~ Packaging.typeDefinitionName (var "tdef") $
     "lname" <~ (Formatting.convertCaseCamelToLowerSnake @@ (Names.localNameOf @@ var "name")) $
-    "typ" <~ (Core.typeSchemeBody $ Packaging.typeDefinitionTypeScheme (var "tdef")) $
+    "typ" <~ (Core.typeSchemeBody $ Packaging.typeDefinitionBody (var "tdef")) $
     "dtyp" <~ (Strip.deannotateType @@ var "typ") $
     -- Emit a type section entry for function types
     cases _Type (var "dtyp") (Just $

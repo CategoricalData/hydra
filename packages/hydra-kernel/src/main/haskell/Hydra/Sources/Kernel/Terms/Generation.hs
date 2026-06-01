@@ -359,8 +359,8 @@ generateSourceFiles = define "generateSourceFiles" $
                 ("b" ~> Packaging.definitionTerm (Packaging.termDefinition
                   (Core.bindingName $ var "b")
                   nothing
-                  (Core.bindingTerm $ var "b")
-                  (Maybes.map Scoping.typeSchemeToTermSignature $ Core.bindingTypeScheme $ var "b")))
+                  (Maybes.map Scoping.typeSchemeToTermSignature $ Core.bindingTypeScheme $ var "b")
+                  (Core.bindingTerm $ var "b")))
                 (Lists.find ("b" ~> Equality.equal (Core.bindingName $ var "b") (Packaging.termDefinitionName $ var "td")) (var "els")),
               _Definition_primitive>>: "pd" ~> just (Packaging.definitionPrimitive (var "pd"))])
             (Packaging.moduleDefinitions $ var "m"))) $
@@ -560,8 +560,8 @@ lowerPrimitiveDefinitions = define "lowerPrimitiveDefinitions" $
           Packaging.definitionTerm (Packaging.termDefinition
             (Packaging.primitiveDefinitionName $ var "pd")
             nothing
-            (encoderFor _PrimitiveDefinition @@ var "pd")
-            (just (var "primDefSig")))])
+            (just (var "primDefSig"))
+            (encoderFor _PrimitiveDefinition @@ var "pd"))])
       (var "origDefs") $
     -- Ensure hydra.packaging and hydra.core are among the module's
     -- dependencies. The encoded PrimitiveDefinition term references the
@@ -630,7 +630,7 @@ moduleTermBindings m = Maybes.cat $ Lists.map
     _Definition_term>>: "td" ~>
       just (Core.binding
         (Packaging.termDefinitionName $ var "td")
-        (Packaging.termDefinitionTerm $ var "td")
+        (Packaging.termDefinitionBody $ var "td")
         (Maybes.map Scoping.termSignatureToTypeScheme $ Packaging.termDefinitionSignature $ var "td"))])
   (Packaging.moduleDefinitions m)
 
@@ -671,11 +671,11 @@ moduleToSourceModule = define "moduleToSourceModule" $
   "moduleDef" <~ Packaging.definitionTerm (Packaging.termDefinition
     (wrap _Name (Packaging.unModuleName (var "sourceNs") ++ (string ".module_")))
     nothing
-    (encoderFor _Module @@ var "m")
     (just (Scoping.typeSchemeToTermSignature @@ Core.typeScheme
       (list ([] :: [TypedTerm Name]))
       (Core.typeVariable (wrap _Name (string "hydra.packaging.Module")))
-      nothing))) $
+      nothing))
+    (encoderFor _Module @@ var "m")) $
   Packaging.module_
     (var "sourceNs")
     (just (Packaging.entityMetadata
@@ -698,7 +698,7 @@ moduleTypeBindings :: TypedTerm Module -> TypedTerm [Binding]
 moduleTypeBindings m = Maybes.cat $ Lists.map
   ("d" ~> cases _Definition (var "d") (Just nothing) [
     _Definition_type>>: "td" ~>
-      just (Annotations.typeBinding @@ (Packaging.typeDefinitionName $ var "td") @@ (Core.typeSchemeBody $ Packaging.typeDefinitionTypeScheme $ var "td"))])
+      just (Annotations.typeBinding @@ (Packaging.typeDefinitionName $ var "td") @@ (Core.typeSchemeBody $ Packaging.typeDefinitionBody $ var "td"))])
   (Packaging.moduleDefinitions m)
 
 -- | Extract type definition names from a module.
@@ -776,8 +776,8 @@ refreshModule = define "refreshModule" $
             ("b" ~> Packaging.definitionTerm (Packaging.termDefinition
               (Core.bindingName $ var "b")
               nothing
-              (Core.bindingTerm $ var "b")
-              (Maybes.map Scoping.typeSchemeToTermSignature $ Core.bindingTypeScheme $ var "b")))
+              (Maybes.map Scoping.typeSchemeToTermSignature $ Core.bindingTypeScheme $ var "b")
+              (Core.bindingTerm $ var "b")))
             (Lists.find ("b" ~> Equality.equal (Core.bindingName $ var "b") (Packaging.termDefinitionName $ var "td"))
               (var "inferredElements")),
           _Definition_primitive>>: "pd" ~> just (Packaging.definitionPrimitive (var "pd"))])
