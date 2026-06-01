@@ -2,8 +2,7 @@
   "definitions": [
     {
       "type": {
-        "name": "hydra.delta.parquet.ArrayType",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "Represent array data type."}}}],
@@ -11,11 +10,11 @@
                 "record": [
                   {"name": "elementType", "type": {"variable": "hydra.delta.parquet.DataType"}},
                   {"name": "containsNull", "type": {"literal": {"boolean": {}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.delta.parquet.ArrayType"}},
     {
       "type": {
-        "name": "hydra.delta.parquet.BasePrimitiveType",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "Base class for all primitive types DataType."}}}],
@@ -97,11 +96,11 @@
                               "literal": {
                                 "string": "A timestamp type, supporting [0001-01-01T00:00:00.000000Z, 9999-12-31T23:59:59.999999Z] where the left/right-bound is a date and time of the proleptic Gregorian calendar in UTC+00:00. Internally, this is represented as the number of microseconds since the Unix epoch, 1970-01-01 00:00:00 UTC."}}}],
                         "body": {"unit": {}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.delta.parquet.BasePrimitiveType"}},
     {
       "type": {
-        "name": "hydra.delta.parquet.DataType",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {
@@ -134,11 +133,11 @@
                   "annotated": {
                     "annotation": [{"key": "description", "value": {"literal": {"string": "Struct type which contains one or more columns."}}}],
                     "body": {"variable": "hydra.delta.parquet.StructType"}}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.delta.parquet.DataType"}},
     {
       "type": {
-        "name": "hydra.delta.parquet.DecimalType",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [
@@ -151,11 +150,11 @@
                 "record": [
                   {"name": "precision", "type": {"literal": {"integer": {"int32": {}}}}},
                   {"name": "scale", "type": {"literal": {"integer": {"int32": {}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.delta.parquet.DecimalType"}},
     {
       "type": {
-        "name": "hydra.delta.parquet.MapType",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "Data type representing a map type."}}}],
@@ -164,11 +163,11 @@
                   {"name": "keyType", "type": {"variable": "hydra.delta.parquet.DataType"}},
                   {"name": "valueType", "type": {"variable": "hydra.delta.parquet.DataType"}},
                   {"name": "valueContainsNull", "type": {"literal": {"boolean": {}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.delta.parquet.MapType"}},
     {
       "type": {
-        "name": "hydra.delta.parquet.StructField",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [
@@ -180,16 +179,17 @@
                   {"name": "name", "type": {"literal": {"string": {}}}},
                   {"name": "dataType", "type": {"variable": "hydra.delta.parquet.DataType"}},
                   {"name": "nullable", "type": {"literal": {"boolean": {}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.delta.parquet.StructField"}},
     {
       "type": {
-        "name": "hydra.delta.parquet.StructType",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "Struct type which contains one or more columns."}}}],
               "body": {"record": [{"name": "fields", "type": {"list": {"variable": "hydra.delta.parquet.StructField"}}}]}}},
-          "variables": []}}}],
+          "variables": []},
+        "name": "hydra.delta.parquet.StructType"}}],
   "dependencies": [{"module": "hydra.core"}],
   "metadata": {
     "comments": [],

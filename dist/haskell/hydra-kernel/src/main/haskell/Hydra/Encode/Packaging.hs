@@ -57,10 +57,10 @@ entityLifecycle x =
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "availableSince"),
-          Core.fieldTerm = ((\opt -> Core.TermMaybe (Maybes.map version opt)) (Packaging.entityLifecycleAvailableSince x))},
+          Core.fieldTerm = ((\opt -> Core.TermMaybe (Maybes.map version opt)) (Packaging.lifecycleInfoAvailableSince x))},
         Core.Field {
           Core.fieldName = (Core.Name "deprecatedSince"),
-          Core.fieldTerm = ((\opt -> Core.TermMaybe (Maybes.map version opt)) (Packaging.entityLifecycleDeprecatedSince x))}]})
+          Core.fieldTerm = ((\opt -> Core.TermMaybe (Maybes.map version opt)) (Packaging.lifecycleInfoDeprecatedSince x))}]})
 -- | Encoder for hydra.packaging.EntityMetadata
 entityMetadata :: Packaging.EntityMetadata -> Core.Term
 entityMetadata x =
@@ -195,11 +195,11 @@ primitiveDefinition x =
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (EncodeCore.name (Packaging.primitiveDefinitionName x))},
         Core.Field {
-          Core.fieldName = (Core.Name "metadata"),
-          Core.fieldTerm = ((\opt -> Core.TermMaybe (Maybes.map entityMetadata opt)) (Packaging.primitiveDefinitionMetadata x))},
-        Core.Field {
           Core.fieldName = (Core.Name "signature"),
           Core.fieldTerm = (Typing.termSignature (Packaging.primitiveDefinitionSignature x))},
+        Core.Field {
+          Core.fieldName = (Core.Name "metadata"),
+          Core.fieldTerm = ((\opt -> Core.TermMaybe (Maybes.map entityMetadata opt)) (Packaging.primitiveDefinitionMetadata x))},
         Core.Field {
           Core.fieldName = (Core.Name "isPure"),
           Core.fieldTerm = ((\x2 -> Core.TermLiteral (Core.LiteralBoolean x2)) (Packaging.primitiveDefinitionIsPure x))},
@@ -234,11 +234,11 @@ termDefinition x =
           Core.fieldName = (Core.Name "metadata"),
           Core.fieldTerm = ((\opt -> Core.TermMaybe (Maybes.map entityMetadata opt)) (Packaging.termDefinitionMetadata x))},
         Core.Field {
-          Core.fieldName = (Core.Name "signature"),
-          Core.fieldTerm = ((\opt -> Core.TermMaybe (Maybes.map Typing.termSignature opt)) (Packaging.termDefinitionSignature x))},
-        Core.Field {
           Core.fieldName = (Core.Name "body"),
-          Core.fieldTerm = (EncodeCore.term (Packaging.termDefinitionBody x))}]})
+          Core.fieldTerm = (EncodeCore.term (Packaging.termDefinitionBody x))},
+        Core.Field {
+          Core.fieldName = (Core.Name "signature"),
+          Core.fieldTerm = ((\opt -> Core.TermMaybe (Maybes.map Typing.termSignature opt)) (Packaging.termDefinitionSignature x))}]})
 -- | Encoder for hydra.packaging.TypeDefinition
 typeDefinition :: Packaging.TypeDefinition -> Core.Term
 typeDefinition x =
