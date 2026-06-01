@@ -2,25 +2,7 @@
   "definitions": [
     {
       "term": {
-        "name": "hydra.dsl.shacl.model.closed",
-        "signature": {
-          "parameters": [
-            {
-              "isLazy": false,
-              "name": "arg0",
-              "type": {"application": {"argument": {"literal": {"boolean": {}}}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-            {
-              "isLazy": false,
-              "name": "arg1",
-              "type": {
-                "application": {
-                  "argument": {"maybe": {"set": {"variable": "hydra.rdf.syntax.Property"}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
-          "result": {
-            "type": {
-              "application": {"argument": {"variable": "hydra.shacl.model.Closed"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for hydra.shacl.model.Closed"}}}],
             "body": {
@@ -70,20 +52,28 @@
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "ignoredProperties"}},
                 "domain": {"application": {"argument": {"literal": {"boolean": {}}}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "isClosed"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.shacl.model.closedIsClosed",
+                "parameter": "isClosed"}}}},
+        "name": "hydra.dsl.shacl.model.closed",
         "signature": {
           "parameters": [
             {
               "isLazy": false,
               "name": "arg0",
+              "type": {"application": {"argument": {"literal": {"boolean": {}}}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
               "type": {
-                "application": {"argument": {"variable": "hydra.shacl.model.Closed"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
-          "result": {"type": {"application": {"argument": {"literal": {"boolean": {}}}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+                "application": {
+                  "argument": {"maybe": {"set": {"variable": "hydra.rdf.syntax.Property"}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+          "result": {
+            "type": {
+              "application": {"argument": {"variable": "hydra.shacl.model.Closed"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -123,10 +113,8 @@
                     "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.shacl.model.Closed"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.shacl.model.closedIgnoredProperties",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.shacl.model.closedIsClosed",
         "signature": {
           "parameters": [
             {
@@ -134,13 +122,11 @@
               "name": "arg0",
               "type": {
                 "application": {"argument": {"variable": "hydra.shacl.model.Closed"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
-          "result": {
-            "type": {
-              "application": {
-                "argument": {"maybe": {"set": {"variable": "hydra.rdf.syntax.Property"}}},
-                "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "result": {"type": {"application": {"argument": {"literal": {"boolean": {}}}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -182,26 +168,24 @@
                     "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.shacl.model.Closed"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.shacl.model.closedWithIsClosed",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.shacl.model.closedIgnoredProperties",
         "signature": {
           "parameters": [
             {
               "isLazy": false,
               "name": "arg0",
               "type": {
-                "application": {"argument": {"variable": "hydra.shacl.model.Closed"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-            {
-              "isLazy": false,
-              "name": "arg1",
-              "type": {"application": {"argument": {"literal": {"boolean": {}}}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+                "application": {"argument": {"variable": "hydra.shacl.model.Closed"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.shacl.model.Closed"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+              "application": {
+                "argument": {"maybe": {"set": {"variable": "hydra.rdf.syntax.Property"}}},
+                "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -280,10 +264,8 @@
                     "parameter": "newVal"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.shacl.model.Closed"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.shacl.model.closedWithIgnoredProperties",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.shacl.model.closedWithIsClosed",
         "signature": {
           "parameters": [
             {
@@ -294,15 +276,14 @@
             {
               "isLazy": false,
               "name": "arg1",
-              "type": {
-                "application": {
-                  "argument": {"maybe": {"set": {"variable": "hydra.rdf.syntax.Property"}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+              "type": {"application": {"argument": {"literal": {"boolean": {}}}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {"argument": {"variable": "hydra.shacl.model.Closed"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -382,29 +363,29 @@
                     "parameter": "newVal"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.shacl.model.Closed"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.shacl.model.commonConstraintAnd",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.shacl.model.closedWithIgnoredProperties",
         "signature": {
           "parameters": [
             {
               "isLazy": false,
               "name": "arg0",
               "type": {
+                "application": {"argument": {"variable": "hydra.shacl.model.Closed"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {
                 "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#AndConstraintComponent"}}}],
-                      "body": {
-                        "set": {
-                          "application": {"argument": {"variable": "hydra.shacl.model.Shape"}, "function": {"variable": "hydra.shacl.model.Reference"}}}}}},
+                  "argument": {"maybe": {"set": {"variable": "hydra.rdf.syntax.Property"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.shacl.model.CommonConstraint"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+              "application": {"argument": {"variable": "hydra.shacl.model.Closed"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -446,10 +427,8 @@
                           "set": {
                             "application": {"argument": {"variable": "hydra.shacl.model.Shape"}, "function": {"variable": "hydra.shacl.model.Reference"}}}}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.shacl.model.commonConstraintClosed",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.shacl.model.commonConstraintAnd",
         "signature": {
           "parameters": [
             {
@@ -459,14 +438,18 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#ClosedConstraintComponent"}}}],
-                      "body": {"variable": "hydra.shacl.model.Closed"}}},
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#AndConstraintComponent"}}}],
+                      "body": {
+                        "set": {
+                          "application": {"argument": {"variable": "hydra.shacl.model.Shape"}, "function": {"variable": "hydra.shacl.model.Reference"}}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {"argument": {"variable": "hydra.shacl.model.CommonConstraint"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -506,10 +489,8 @@
                         "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#ClosedConstraintComponent"}}}],
                         "body": {"variable": "hydra.shacl.model.Closed"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.shacl.model.commonConstraintClass",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.shacl.model.commonConstraintClosed",
         "signature": {
           "parameters": [
             {
@@ -519,14 +500,16 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#ClassConstraintComponent"}}}],
-                      "body": {"set": {"variable": "hydra.rdf.syntax.RdfsClass"}}}},
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#ClosedConstraintComponent"}}}],
+                      "body": {"variable": "hydra.shacl.model.Closed"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {"argument": {"variable": "hydra.shacl.model.CommonConstraint"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -566,10 +549,8 @@
                         "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#ClassConstraintComponent"}}}],
                         "body": {"set": {"variable": "hydra.rdf.syntax.RdfsClass"}}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.shacl.model.commonConstraintDatatype",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.shacl.model.commonConstraintClass",
         "signature": {
           "parameters": [
             {
@@ -579,15 +560,16 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#DatatypeConstraintComponent"}}}],
-                      "body": {"variable": "hydra.rdf.syntax.Iri"}}},
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#ClassConstraintComponent"}}}],
+                      "body": {"set": {"variable": "hydra.rdf.syntax.RdfsClass"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {"argument": {"variable": "hydra.shacl.model.CommonConstraint"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -628,10 +610,8 @@
                           {"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#DatatypeConstraintComponent"}}}],
                         "body": {"variable": "hydra.rdf.syntax.Iri"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.shacl.model.commonConstraintDisjoint",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.shacl.model.commonConstraintDatatype",
         "signature": {
           "parameters": [
             {
@@ -642,14 +622,16 @@
                   "argument": {
                     "annotated": {
                       "annotation": [
-                        {"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#DisjointConstraintComponent"}}}],
-                      "body": {"set": {"variable": "hydra.rdf.syntax.Property"}}}},
+                        {"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#DatatypeConstraintComponent"}}}],
+                      "body": {"variable": "hydra.rdf.syntax.Iri"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {"argument": {"variable": "hydra.shacl.model.CommonConstraint"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -690,10 +672,8 @@
                           {"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#DisjointConstraintComponent"}}}],
                         "body": {"set": {"variable": "hydra.rdf.syntax.Property"}}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.shacl.model.commonConstraintEquals",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.shacl.model.commonConstraintDisjoint",
         "signature": {
           "parameters": [
             {
@@ -703,14 +683,17 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#EqualsConstraintComponent"}}}],
+                      "annotation": [
+                        {"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#DisjointConstraintComponent"}}}],
                       "body": {"set": {"variable": "hydra.rdf.syntax.Property"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {"argument": {"variable": "hydra.shacl.model.CommonConstraint"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -750,10 +733,8 @@
                         "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#EqualsConstraintComponent"}}}],
                         "body": {"set": {"variable": "hydra.rdf.syntax.Property"}}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.shacl.model.commonConstraintHasValue",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.shacl.model.commonConstraintEquals",
         "signature": {
           "parameters": [
             {
@@ -763,19 +744,16 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {
-                            "literal": {
-                              "string": "Specifies the condition that at least one value node is equal to the given RDF term. See https://www.w3.org/TR/shacl/#HasValueConstraintComponent"}}}],
-                      "body": {"set": {"variable": "hydra.rdf.syntax.Node"}}}},
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#EqualsConstraintComponent"}}}],
+                      "body": {"set": {"variable": "hydra.rdf.syntax.Property"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {"argument": {"variable": "hydra.shacl.model.CommonConstraint"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -820,10 +798,8 @@
                                 "string": "Specifies the condition that at least one value node is equal to the given RDF term. See https://www.w3.org/TR/shacl/#HasValueConstraintComponent"}}}],
                         "body": {"set": {"variable": "hydra.rdf.syntax.Node"}}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.shacl.model.commonConstraintIn",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.shacl.model.commonConstraintHasValue",
         "signature": {
           "parameters": [
             {
@@ -838,14 +814,16 @@
                           "key": "description",
                           "value": {
                             "literal": {
-                              "string": "Specifies the condition that each value node is a member of a provided SHACL list. See https://www.w3.org/TR/shacl/#InConstraintComponent"}}}],
-                      "body": {"list": {"variable": "hydra.rdf.syntax.Node"}}}},
+                              "string": "Specifies the condition that at least one value node is equal to the given RDF term. See https://www.w3.org/TR/shacl/#HasValueConstraintComponent"}}}],
+                      "body": {"set": {"variable": "hydra.rdf.syntax.Node"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {"argument": {"variable": "hydra.shacl.model.CommonConstraint"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -890,10 +868,8 @@
                                 "string": "Specifies the condition that each value node is a member of a provided SHACL list. See https://www.w3.org/TR/shacl/#InConstraintComponent"}}}],
                         "body": {"list": {"variable": "hydra.rdf.syntax.Node"}}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.shacl.model.commonConstraintLanguageIn",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.shacl.model.commonConstraintIn",
         "signature": {
           "parameters": [
             {
@@ -906,14 +882,18 @@
                       "annotation": [
                         {
                           "key": "description",
-                          "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#LanguageInConstraintComponent"}}}],
-                      "body": {"set": {"variable": "hydra.rdf.syntax.LanguageTag"}}}},
+                          "value": {
+                            "literal": {
+                              "string": "Specifies the condition that each value node is a member of a provided SHACL list. See https://www.w3.org/TR/shacl/#InConstraintComponent"}}}],
+                      "body": {"list": {"variable": "hydra.rdf.syntax.Node"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {"argument": {"variable": "hydra.shacl.model.CommonConstraint"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -956,10 +936,8 @@
                             "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#LanguageInConstraintComponent"}}}],
                         "body": {"set": {"variable": "hydra.rdf.syntax.LanguageTag"}}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.shacl.model.commonConstraintNodeKind",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.shacl.model.commonConstraintLanguageIn",
         "signature": {
           "parameters": [
             {
@@ -970,14 +948,18 @@
                   "argument": {
                     "annotated": {
                       "annotation": [
-                        {"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#NodeKindConstraintComponent"}}}],
-                      "body": {"variable": "hydra.shacl.model.NodeKind"}}},
+                        {
+                          "key": "description",
+                          "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#LanguageInConstraintComponent"}}}],
+                      "body": {"set": {"variable": "hydra.rdf.syntax.LanguageTag"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {"argument": {"variable": "hydra.shacl.model.CommonConstraint"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -1018,10 +1000,8 @@
                           {"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#NodeKindConstraintComponent"}}}],
                         "body": {"variable": "hydra.shacl.model.NodeKind"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.shacl.model.commonConstraintNode",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.shacl.model.commonConstraintNodeKind",
         "signature": {
           "parameters": [
             {
@@ -1031,16 +1011,17 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#NodeConstraintComponent"}}}],
-                      "body": {
-                        "set": {
-                          "application": {"argument": {"variable": "hydra.shacl.model.NodeShape"}, "function": {"variable": "hydra.shacl.model.Reference"}}}}}},
+                      "annotation": [
+                        {"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#NodeKindConstraintComponent"}}}],
+                      "body": {"variable": "hydra.shacl.model.NodeKind"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {"argument": {"variable": "hydra.shacl.model.CommonConstraint"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -1082,10 +1063,8 @@
                           "set": {
                             "application": {"argument": {"variable": "hydra.shacl.model.NodeShape"}, "function": {"variable": "hydra.shacl.model.Reference"}}}}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.shacl.model.commonConstraintNot",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.shacl.model.commonConstraintNode",
         "signature": {
           "parameters": [
             {
@@ -1095,16 +1074,18 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#NotConstraintComponent"}}}],
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#NodeConstraintComponent"}}}],
                       "body": {
                         "set": {
-                          "application": {"argument": {"variable": "hydra.shacl.model.Shape"}, "function": {"variable": "hydra.shacl.model.Reference"}}}}}},
+                          "application": {"argument": {"variable": "hydra.shacl.model.NodeShape"}, "function": {"variable": "hydra.shacl.model.Reference"}}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {"argument": {"variable": "hydra.shacl.model.CommonConstraint"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -1146,10 +1127,8 @@
                           "set": {
                             "application": {"argument": {"variable": "hydra.shacl.model.Shape"}, "function": {"variable": "hydra.shacl.model.Reference"}}}}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.shacl.model.commonConstraintMaxExclusive",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.shacl.model.commonConstraintNot",
         "signature": {
           "parameters": [
             {
@@ -1159,17 +1138,18 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#MaxExclusiveConstraintComponent"}}}],
-                      "body": {"variable": "hydra.rdf.syntax.Literal"}}},
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#NotConstraintComponent"}}}],
+                      "body": {
+                        "set": {
+                          "application": {"argument": {"variable": "hydra.shacl.model.Shape"}, "function": {"variable": "hydra.shacl.model.Reference"}}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {"argument": {"variable": "hydra.shacl.model.CommonConstraint"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -1212,10 +1192,8 @@
                             "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#MaxExclusiveConstraintComponent"}}}],
                         "body": {"variable": "hydra.rdf.syntax.Literal"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.shacl.model.commonConstraintMaxInclusive",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.shacl.model.commonConstraintMaxExclusive",
         "signature": {
           "parameters": [
             {
@@ -1228,14 +1206,16 @@
                       "annotation": [
                         {
                           "key": "description",
-                          "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#MaxInclusiveConstraintComponent"}}}],
+                          "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#MaxExclusiveConstraintComponent"}}}],
                       "body": {"variable": "hydra.rdf.syntax.Literal"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {"argument": {"variable": "hydra.shacl.model.CommonConstraint"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -1278,10 +1258,8 @@
                             "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#MaxInclusiveConstraintComponent"}}}],
                         "body": {"variable": "hydra.rdf.syntax.Literal"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.shacl.model.commonConstraintMaxLength",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.shacl.model.commonConstraintMaxInclusive",
         "signature": {
           "parameters": [
             {
@@ -1294,14 +1272,16 @@
                       "annotation": [
                         {
                           "key": "description",
-                          "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#MaxLengthConstraintComponent"}}}],
-                      "body": {"literal": {"integer": {"bigint": {}}}}}},
+                          "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#MaxInclusiveConstraintComponent"}}}],
+                      "body": {"variable": "hydra.rdf.syntax.Literal"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {"argument": {"variable": "hydra.shacl.model.CommonConstraint"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -1344,10 +1324,8 @@
                             "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#MaxLengthConstraintComponent"}}}],
                         "body": {"literal": {"integer": {"bigint": {}}}}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.shacl.model.commonConstraintMinExclusive",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.shacl.model.commonConstraintMaxLength",
         "signature": {
           "parameters": [
             {
@@ -1360,14 +1338,16 @@
                       "annotation": [
                         {
                           "key": "description",
-                          "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#MinExclusiveConstraintComponent"}}}],
-                      "body": {"variable": "hydra.rdf.syntax.Literal"}}},
+                          "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#MaxLengthConstraintComponent"}}}],
+                      "body": {"literal": {"integer": {"bigint": {}}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {"argument": {"variable": "hydra.shacl.model.CommonConstraint"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -1410,10 +1390,8 @@
                             "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#MinExclusiveConstraintComponent"}}}],
                         "body": {"variable": "hydra.rdf.syntax.Literal"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.shacl.model.commonConstraintMinInclusive",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.shacl.model.commonConstraintMinExclusive",
         "signature": {
           "parameters": [
             {
@@ -1426,14 +1404,16 @@
                       "annotation": [
                         {
                           "key": "description",
-                          "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#MinInclusiveConstraintComponent"}}}],
+                          "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#MinExclusiveConstraintComponent"}}}],
                       "body": {"variable": "hydra.rdf.syntax.Literal"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {"argument": {"variable": "hydra.shacl.model.CommonConstraint"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -1476,10 +1456,8 @@
                             "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#MinInclusiveConstraintComponent"}}}],
                         "body": {"variable": "hydra.rdf.syntax.Literal"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.shacl.model.commonConstraintMinLength",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.shacl.model.commonConstraintMinInclusive",
         "signature": {
           "parameters": [
             {
@@ -1492,14 +1470,16 @@
                       "annotation": [
                         {
                           "key": "description",
-                          "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#MinLengthConstraintComponent"}}}],
-                      "body": {"literal": {"integer": {"bigint": {}}}}}},
+                          "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#MinInclusiveConstraintComponent"}}}],
+                      "body": {"variable": "hydra.rdf.syntax.Literal"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {"argument": {"variable": "hydra.shacl.model.CommonConstraint"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -1542,10 +1522,8 @@
                             "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#MinLengthConstraintComponent"}}}],
                         "body": {"literal": {"integer": {"bigint": {}}}}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.shacl.model.commonConstraintPattern",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.shacl.model.commonConstraintMinLength",
         "signature": {
           "parameters": [
             {
@@ -1556,14 +1534,18 @@
                   "argument": {
                     "annotated": {
                       "annotation": [
-                        {"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#PatternConstraintComponent"}}}],
-                      "body": {"variable": "hydra.shacl.model.Pattern"}}},
+                        {
+                          "key": "description",
+                          "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#MinLengthConstraintComponent"}}}],
+                      "body": {"literal": {"integer": {"bigint": {}}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {"argument": {"variable": "hydra.shacl.model.CommonConstraint"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -1604,10 +1586,8 @@
                           {"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#PatternConstraintComponent"}}}],
                         "body": {"variable": "hydra.shacl.model.Pattern"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.shacl.model.commonConstraintProperty",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.shacl.model.commonConstraintPattern",
         "signature": {
           "parameters": [
             {
@@ -1618,16 +1598,16 @@
                   "argument": {
                     "annotated": {
                       "annotation": [
-                        {"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#PropertyConstraintComponent"}}}],
-                      "body": {
-                        "set": {
-                          "application": {"argument": {"variable": "hydra.shacl.model.PropertyShape"}, "function": {"variable": "hydra.shacl.model.Reference"}}}}}},
+                        {"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#PatternConstraintComponent"}}}],
+                      "body": {"variable": "hydra.shacl.model.Pattern"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {"argument": {"variable": "hydra.shacl.model.CommonConstraint"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -1670,10 +1650,8 @@
                           "set": {
                             "application": {"argument": {"variable": "hydra.shacl.model.PropertyShape"}, "function": {"variable": "hydra.shacl.model.Reference"}}}}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.shacl.model.commonConstraintOr",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.shacl.model.commonConstraintProperty",
         "signature": {
           "parameters": [
             {
@@ -1683,16 +1661,19 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#OrConstraintComponent"}}}],
+                      "annotation": [
+                        {"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#PropertyConstraintComponent"}}}],
                       "body": {
                         "set": {
-                          "application": {"argument": {"variable": "hydra.shacl.model.Shape"}, "function": {"variable": "hydra.shacl.model.Reference"}}}}}},
+                          "application": {"argument": {"variable": "hydra.shacl.model.PropertyShape"}, "function": {"variable": "hydra.shacl.model.Reference"}}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {"argument": {"variable": "hydra.shacl.model.CommonConstraint"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -1734,10 +1715,8 @@
                           "set": {
                             "application": {"argument": {"variable": "hydra.shacl.model.Shape"}, "function": {"variable": "hydra.shacl.model.Reference"}}}}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.shacl.model.commonConstraintXone",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.shacl.model.commonConstraintOr",
         "signature": {
           "parameters": [
             {
@@ -1747,7 +1726,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#XoneConstraintComponent"}}}],
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#OrConstraintComponent"}}}],
                       "body": {
                         "set": {
                           "application": {"argument": {"variable": "hydra.shacl.model.Shape"}, "function": {"variable": "hydra.shacl.model.Reference"}}}}}},
@@ -1755,8 +1734,10 @@
           "result": {
             "type": {
               "application": {"argument": {"variable": "hydra.shacl.model.CommonConstraint"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -1798,10 +1779,8 @@
                           "set": {
                             "application": {"argument": {"variable": "hydra.shacl.model.Shape"}, "function": {"variable": "hydra.shacl.model.Reference"}}}}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.shacl.model.commonProperties",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.shacl.model.commonConstraintXone",
         "signature": {
           "parameters": [
             {
@@ -1811,84 +1790,18 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "Common constraint parameters attached to this shape"}}}],
-                      "body": {"set": {"variable": "hydra.shacl.model.CommonConstraint"}}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
-            {
-              "isLazy": false,
-              "name": "arg1",
-              "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#deactivated"}}}],
-                      "body": {"maybe": {"literal": {"boolean": {}}}}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
-            {
-              "isLazy": false,
-              "name": "arg2",
-              "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#message"}}}],
-                      "body": {"variable": "hydra.rdf.syntax.LangStrings"}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
-            {
-              "isLazy": false,
-              "name": "arg3",
-              "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#severity"}}}],
-                      "body": {"variable": "hydra.shacl.model.Severity"}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
-            {
-              "isLazy": false,
-              "name": "arg4",
-              "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#targetClass"}}}],
-                      "body": {"set": {"variable": "hydra.rdf.syntax.RdfsClass"}}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
-            {
-              "isLazy": false,
-              "name": "arg5",
-              "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#targetNode"}}}],
-                      "body": {"set": {"variable": "hydra.rdf.syntax.IriOrLiteral"}}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
-            {
-              "isLazy": false,
-              "name": "arg6",
-              "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#targetObjectsOf"}}}],
-                      "body": {"set": {"variable": "hydra.rdf.syntax.Property"}}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
-            {
-              "isLazy": false,
-              "name": "arg7",
-              "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#targetSubjectsOf"}}}],
-                      "body": {"set": {"variable": "hydra.rdf.syntax.Property"}}}},
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#XoneConstraintComponent"}}}],
+                      "body": {
+                        "set": {
+                          "application": {"argument": {"variable": "hydra.shacl.model.Shape"}, "function": {"variable": "hydra.shacl.model.Reference"}}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.shacl.model.CommonProperties"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+              "application": {"argument": {"variable": "hydra.shacl.model.CommonConstraint"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for hydra.shacl.model.CommonProperties"}}}],
             "body": {
@@ -2053,27 +1966,97 @@
                         "annotation": [{"key": "description", "value": {"literal": {"string": "Common constraint parameters attached to this shape"}}}],
                         "body": {"set": {"variable": "hydra.shacl.model.CommonConstraint"}}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "constraints"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.shacl.model.commonPropertiesConstraints",
+                "parameter": "constraints"}}}},
+        "name": "hydra.dsl.shacl.model.commonProperties",
         "signature": {
           "parameters": [
             {
               "isLazy": false,
               "name": "arg0",
               "type": {
-                "application": {"argument": {"variable": "hydra.shacl.model.CommonProperties"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "Common constraint parameters attached to this shape"}}}],
+                      "body": {"set": {"variable": "hydra.shacl.model.CommonConstraint"}}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#deactivated"}}}],
+                      "body": {"maybe": {"literal": {"boolean": {}}}}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg2",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#message"}}}],
+                      "body": {"variable": "hydra.rdf.syntax.LangStrings"}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg3",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#severity"}}}],
+                      "body": {"variable": "hydra.shacl.model.Severity"}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg4",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#targetClass"}}}],
+                      "body": {"set": {"variable": "hydra.rdf.syntax.RdfsClass"}}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg5",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#targetNode"}}}],
+                      "body": {"set": {"variable": "hydra.rdf.syntax.IriOrLiteral"}}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg6",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#targetObjectsOf"}}}],
+                      "body": {"set": {"variable": "hydra.rdf.syntax.Property"}}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg7",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#targetSubjectsOf"}}}],
+                      "body": {"set": {"variable": "hydra.rdf.syntax.Property"}}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
-              "application": {
-                "argument": {
-                  "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "Common constraint parameters attached to this shape"}}}],
-                    "body": {"set": {"variable": "hydra.shacl.model.CommonConstraint"}}}},
-                "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+              "application": {"argument": {"variable": "hydra.shacl.model.CommonProperties"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -2113,10 +2096,8 @@
                     "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.shacl.model.CommonProperties"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.shacl.model.commonPropertiesDeactivated",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.shacl.model.commonPropertiesConstraints",
         "signature": {
           "parameters": [
             {
@@ -2129,11 +2110,13 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#deactivated"}}}],
-                    "body": {"maybe": {"literal": {"boolean": {}}}}}},
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "Common constraint parameters attached to this shape"}}}],
+                    "body": {"set": {"variable": "hydra.shacl.model.CommonConstraint"}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -2173,10 +2156,8 @@
                     "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.shacl.model.CommonProperties"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.shacl.model.commonPropertiesMessage",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.shacl.model.commonPropertiesDeactivated",
         "signature": {
           "parameters": [
             {
@@ -2189,11 +2170,13 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#message"}}}],
-                    "body": {"variable": "hydra.rdf.syntax.LangStrings"}}},
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#deactivated"}}}],
+                    "body": {"maybe": {"literal": {"boolean": {}}}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -2233,10 +2216,8 @@
                     "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.shacl.model.CommonProperties"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.shacl.model.commonPropertiesSeverity",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.shacl.model.commonPropertiesMessage",
         "signature": {
           "parameters": [
             {
@@ -2249,11 +2230,13 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#severity"}}}],
-                    "body": {"variable": "hydra.shacl.model.Severity"}}},
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#message"}}}],
+                    "body": {"variable": "hydra.rdf.syntax.LangStrings"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -2293,10 +2276,8 @@
                     "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.shacl.model.CommonProperties"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.shacl.model.commonPropertiesTargetClass",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.shacl.model.commonPropertiesSeverity",
         "signature": {
           "parameters": [
             {
@@ -2309,11 +2290,13 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#targetClass"}}}],
-                    "body": {"set": {"variable": "hydra.rdf.syntax.RdfsClass"}}}},
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#severity"}}}],
+                    "body": {"variable": "hydra.shacl.model.Severity"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -2353,10 +2336,8 @@
                     "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.shacl.model.CommonProperties"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.shacl.model.commonPropertiesTargetNode",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.shacl.model.commonPropertiesTargetClass",
         "signature": {
           "parameters": [
             {
@@ -2369,11 +2350,13 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#targetNode"}}}],
-                    "body": {"set": {"variable": "hydra.rdf.syntax.IriOrLiteral"}}}},
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#targetClass"}}}],
+                    "body": {"set": {"variable": "hydra.rdf.syntax.RdfsClass"}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -2413,10 +2396,8 @@
                     "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.shacl.model.CommonProperties"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.shacl.model.commonPropertiesTargetObjectsOf",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.shacl.model.commonPropertiesTargetNode",
         "signature": {
           "parameters": [
             {
@@ -2429,11 +2410,13 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#targetObjectsOf"}}}],
-                    "body": {"set": {"variable": "hydra.rdf.syntax.Property"}}}},
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#targetNode"}}}],
+                    "body": {"set": {"variable": "hydra.rdf.syntax.IriOrLiteral"}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -2475,10 +2458,8 @@
                     "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.shacl.model.CommonProperties"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.shacl.model.commonPropertiesTargetSubjectsOf",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.shacl.model.commonPropertiesTargetObjectsOf",
         "signature": {
           "parameters": [
             {
@@ -2491,11 +2472,13 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#targetSubjectsOf"}}}],
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#targetObjectsOf"}}}],
                     "body": {"set": {"variable": "hydra.rdf.syntax.Property"}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -2537,32 +2520,27 @@
                     "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.shacl.model.CommonProperties"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.shacl.model.commonPropertiesWithConstraints",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.shacl.model.commonPropertiesTargetSubjectsOf",
         "signature": {
           "parameters": [
             {
               "isLazy": false,
               "name": "arg0",
               "type": {
-                "application": {"argument": {"variable": "hydra.shacl.model.CommonProperties"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-            {
-              "isLazy": false,
-              "name": "arg1",
-              "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "Common constraint parameters attached to this shape"}}}],
-                      "body": {"set": {"variable": "hydra.shacl.model.CommonConstraint"}}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+                "application": {"argument": {"variable": "hydra.shacl.model.CommonProperties"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.shacl.model.CommonProperties"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+              "application": {
+                "argument": {
+                  "annotated": {
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#targetSubjectsOf"}}}],
+                    "body": {"set": {"variable": "hydra.rdf.syntax.Property"}}}},
+                "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -2851,10 +2829,8 @@
                     "parameter": "newVal"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.shacl.model.CommonProperties"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.shacl.model.commonPropertiesWithDeactivated",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.shacl.model.commonPropertiesWithConstraints",
         "signature": {
           "parameters": [
             {
@@ -2869,14 +2845,16 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#deactivated"}}}],
-                      "body": {"maybe": {"literal": {"boolean": {}}}}}},
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "Common constraint parameters attached to this shape"}}}],
+                      "body": {"set": {"variable": "hydra.shacl.model.CommonConstraint"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {"argument": {"variable": "hydra.shacl.model.CommonProperties"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -3165,10 +3143,8 @@
                     "parameter": "newVal"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.shacl.model.CommonProperties"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.shacl.model.commonPropertiesWithMessage",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.shacl.model.commonPropertiesWithDeactivated",
         "signature": {
           "parameters": [
             {
@@ -3183,14 +3159,16 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#message"}}}],
-                      "body": {"variable": "hydra.rdf.syntax.LangStrings"}}},
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#deactivated"}}}],
+                      "body": {"maybe": {"literal": {"boolean": {}}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {"argument": {"variable": "hydra.shacl.model.CommonProperties"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -3479,10 +3457,8 @@
                     "parameter": "newVal"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.shacl.model.CommonProperties"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.shacl.model.commonPropertiesWithSeverity",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.shacl.model.commonPropertiesWithMessage",
         "signature": {
           "parameters": [
             {
@@ -3497,14 +3473,16 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#severity"}}}],
-                      "body": {"variable": "hydra.shacl.model.Severity"}}},
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#message"}}}],
+                      "body": {"variable": "hydra.rdf.syntax.LangStrings"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {"argument": {"variable": "hydra.shacl.model.CommonProperties"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -3793,10 +3771,8 @@
                     "parameter": "newVal"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.shacl.model.CommonProperties"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.shacl.model.commonPropertiesWithTargetClass",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.shacl.model.commonPropertiesWithSeverity",
         "signature": {
           "parameters": [
             {
@@ -3811,14 +3787,16 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#targetClass"}}}],
-                      "body": {"set": {"variable": "hydra.rdf.syntax.RdfsClass"}}}},
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#severity"}}}],
+                      "body": {"variable": "hydra.shacl.model.Severity"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {"argument": {"variable": "hydra.shacl.model.CommonProperties"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -4107,10 +4085,8 @@
                     "parameter": "newVal"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.shacl.model.CommonProperties"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.shacl.model.commonPropertiesWithTargetNode",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.shacl.model.commonPropertiesWithTargetClass",
         "signature": {
           "parameters": [
             {
@@ -4125,14 +4101,16 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#targetNode"}}}],
-                      "body": {"set": {"variable": "hydra.rdf.syntax.IriOrLiteral"}}}},
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#targetClass"}}}],
+                      "body": {"set": {"variable": "hydra.rdf.syntax.RdfsClass"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {"argument": {"variable": "hydra.shacl.model.CommonProperties"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -4421,10 +4399,8 @@
                     "parameter": "newVal"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.shacl.model.CommonProperties"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.shacl.model.commonPropertiesWithTargetObjectsOf",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.shacl.model.commonPropertiesWithTargetNode",
         "signature": {
           "parameters": [
             {
@@ -4439,14 +4415,16 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#targetObjectsOf"}}}],
-                      "body": {"set": {"variable": "hydra.rdf.syntax.Property"}}}},
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#targetNode"}}}],
+                      "body": {"set": {"variable": "hydra.rdf.syntax.IriOrLiteral"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {"argument": {"variable": "hydra.shacl.model.CommonProperties"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -4733,10 +4711,8 @@
                     "parameter": "newVal"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.shacl.model.CommonProperties"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.shacl.model.commonPropertiesWithTargetSubjectsOf",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.shacl.model.commonPropertiesWithTargetObjectsOf",
         "signature": {
           "parameters": [
             {
@@ -4751,14 +4727,16 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#targetSubjectsOf"}}}],
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#targetObjectsOf"}}}],
                       "body": {"set": {"variable": "hydra.rdf.syntax.Property"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {"argument": {"variable": "hydra.shacl.model.CommonProperties"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -5045,27 +5023,32 @@
                     "parameter": "newVal"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.shacl.model.CommonProperties"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.shacl.model.definition",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.shacl.model.commonPropertiesWithTargetSubjectsOf",
         "signature": {
           "parameters": [
             {
               "isLazy": false,
               "name": "arg0",
-              "type": {"application": {"argument": {"variable": "hydra.rdf.syntax.Iri"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+              "type": {
+                "application": {"argument": {"variable": "hydra.shacl.model.CommonProperties"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
               "isLazy": false,
               "name": "arg1",
-              "type": {"application": {"argument": {"variable": "a"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#targetSubjectsOf"}}}],
+                      "body": {"set": {"variable": "hydra.rdf.syntax.Property"}}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
-              "application": {
-                "argument": {"application": {"argument": {"variable": "a"}, "function": {"variable": "hydra.shacl.model.Definition"}}},
-                "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": [{"constraints": [], "name": "a"}]},
-        "term": {
+              "application": {"argument": {"variable": "hydra.shacl.model.CommonProperties"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for hydra.shacl.model.Definition"}}}],
             "body": {
@@ -5110,23 +5093,27 @@
                     "domain": {"application": {"argument": {"variable": "a"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "target"}},
                 "domain": {"application": {"argument": {"variable": "hydra.rdf.syntax.Iri"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "iri"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.shacl.model.definitionIri",
+                "parameter": "iri"}}}},
+        "name": "hydra.dsl.shacl.model.definition",
         "signature": {
           "parameters": [
             {
               "isLazy": false,
               "name": "arg0",
-              "type": {
-                "application": {
-                  "argument": {"application": {"argument": {"variable": "a"}, "function": {"variable": "hydra.shacl.model.Definition"}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+              "type": {"application": {"argument": {"variable": "hydra.rdf.syntax.Iri"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {"application": {"argument": {"variable": "a"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
-            "type": {"application": {"argument": {"variable": "hydra.rdf.syntax.Iri"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": [{"constraints": [], "name": "a"}]},
-        "term": {
+            "type": {
+              "application": {
+                "argument": {"application": {"argument": {"variable": "a"}, "function": {"variable": "hydra.shacl.model.Definition"}}},
+                "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": [{"constraints": [], "name": "a"}]}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -5168,10 +5155,8 @@
                   "application": {
                     "argument": {"application": {"argument": {"variable": "a"}, "function": {"variable": "hydra.shacl.model.Definition"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.shacl.model.definitionTarget",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.shacl.model.definitionIri",
         "signature": {
           "parameters": [
             {
@@ -5181,9 +5166,12 @@
                 "application": {
                   "argument": {"application": {"argument": {"variable": "a"}, "function": {"variable": "hydra.shacl.model.Definition"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
-          "result": {"type": {"application": {"argument": {"variable": "a"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": [{"constraints": [], "name": "a"}]},
-        "term": {
+          "result": {
+            "type": {"application": {"argument": {"variable": "hydra.rdf.syntax.Iri"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": [{"constraints": [], "name": "a"}]}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -5225,10 +5213,8 @@
                   "application": {
                     "argument": {"application": {"argument": {"variable": "a"}, "function": {"variable": "hydra.shacl.model.Definition"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.shacl.model.definitionWithIri",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.shacl.model.definitionTarget",
         "signature": {
           "parameters": [
             {
@@ -5237,18 +5223,12 @@
               "type": {
                 "application": {
                   "argument": {"application": {"argument": {"variable": "a"}, "function": {"variable": "hydra.shacl.model.Definition"}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
-            {
-              "isLazy": false,
-              "name": "arg1",
-              "type": {"application": {"argument": {"variable": "hydra.rdf.syntax.Iri"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
-          "result": {
-            "type": {
-              "application": {
-                "argument": {"application": {"argument": {"variable": "a"}, "function": {"variable": "hydra.shacl.model.Definition"}}},
-                "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": [{"constraints": [], "name": "a"}]},
-        "term": {
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+          "result": {"type": {"application": {"argument": {"variable": "a"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": [{"constraints": [], "name": "a"}]}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -5325,10 +5305,8 @@
                   "application": {
                     "argument": {"application": {"argument": {"variable": "a"}, "function": {"variable": "hydra.shacl.model.Definition"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.shacl.model.definitionWithTarget",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.shacl.model.definitionWithIri",
         "signature": {
           "parameters": [
             {
@@ -5341,14 +5319,16 @@
             {
               "isLazy": false,
               "name": "arg1",
-              "type": {"application": {"argument": {"variable": "a"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+              "type": {"application": {"argument": {"variable": "hydra.rdf.syntax.Iri"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {
                 "argument": {"application": {"argument": {"variable": "a"}, "function": {"variable": "hydra.shacl.model.Definition"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": [{"constraints": [], "name": "a"}]},
-        "term": {
+          "typeParameters": [{"constraints": [], "name": "a"}]}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -5425,17 +5405,30 @@
                   "application": {
                     "argument": {"application": {"argument": {"variable": "a"}, "function": {"variable": "hydra.shacl.model.Definition"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.shacl.model.nodeKindBlankNode",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.shacl.model.definitionWithTarget",
         "signature": {
-          "parameters": [],
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {
+                "application": {
+                  "argument": {"application": {"argument": {"variable": "a"}, "function": {"variable": "hydra.shacl.model.Definition"}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {"application": {"argument": {"variable": "a"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.shacl.model.NodeKind"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+              "application": {
+                "argument": {"application": {"argument": {"variable": "a"}, "function": {"variable": "hydra.shacl.model.Definition"}}},
+                "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": [{"constraints": [], "name": "a"}]}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -5463,17 +5456,17 @@
                                   "typeName": "hydra.core.Field"}}}],
                           "typeName": "hydra.core.Injection"}}},
                     "typeName": "hydra.core.Term"}},
-                "typeName": "hydra.typed.TypedTerm"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.shacl.model.nodeKindIri",
+                "typeName": "hydra.typed.TypedTerm"}}}},
+        "name": "hydra.dsl.shacl.model.nodeKindBlankNode",
         "signature": {
           "parameters": [],
           "result": {
             "type": {
               "application": {"argument": {"variable": "hydra.shacl.model.NodeKind"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -5501,17 +5494,17 @@
                                   "typeName": "hydra.core.Field"}}}],
                           "typeName": "hydra.core.Injection"}}},
                     "typeName": "hydra.core.Term"}},
-                "typeName": "hydra.typed.TypedTerm"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.shacl.model.nodeKindLiteral",
+                "typeName": "hydra.typed.TypedTerm"}}}},
+        "name": "hydra.dsl.shacl.model.nodeKindIri",
         "signature": {
           "parameters": [],
           "result": {
             "type": {
               "application": {"argument": {"variable": "hydra.shacl.model.NodeKind"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -5539,17 +5532,17 @@
                                   "typeName": "hydra.core.Field"}}}],
                           "typeName": "hydra.core.Injection"}}},
                     "typeName": "hydra.core.Term"}},
-                "typeName": "hydra.typed.TypedTerm"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.shacl.model.nodeKindBlankNodeOrIri",
+                "typeName": "hydra.typed.TypedTerm"}}}},
+        "name": "hydra.dsl.shacl.model.nodeKindLiteral",
         "signature": {
           "parameters": [],
           "result": {
             "type": {
               "application": {"argument": {"variable": "hydra.shacl.model.NodeKind"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -5577,17 +5570,17 @@
                                   "typeName": "hydra.core.Field"}}}],
                           "typeName": "hydra.core.Injection"}}},
                     "typeName": "hydra.core.Term"}},
-                "typeName": "hydra.typed.TypedTerm"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.shacl.model.nodeKindBlankNodeOrLiteral",
+                "typeName": "hydra.typed.TypedTerm"}}}},
+        "name": "hydra.dsl.shacl.model.nodeKindBlankNodeOrIri",
         "signature": {
           "parameters": [],
           "result": {
             "type": {
               "application": {"argument": {"variable": "hydra.shacl.model.NodeKind"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -5617,17 +5610,17 @@
                                   "typeName": "hydra.core.Field"}}}],
                           "typeName": "hydra.core.Injection"}}},
                     "typeName": "hydra.core.Term"}},
-                "typeName": "hydra.typed.TypedTerm"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.shacl.model.nodeKindIriOrLiteral",
+                "typeName": "hydra.typed.TypedTerm"}}}},
+        "name": "hydra.dsl.shacl.model.nodeKindBlankNodeOrLiteral",
         "signature": {
           "parameters": [],
           "result": {
             "type": {
               "application": {"argument": {"variable": "hydra.shacl.model.NodeKind"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -5655,22 +5648,17 @@
                                   "typeName": "hydra.core.Field"}}}],
                           "typeName": "hydra.core.Injection"}}},
                     "typeName": "hydra.core.Term"}},
-                "typeName": "hydra.typed.TypedTerm"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.shacl.model.nodeShape",
+                "typeName": "hydra.typed.TypedTerm"}}}},
+        "name": "hydra.dsl.shacl.model.nodeKindIriOrLiteral",
         "signature": {
-          "parameters": [
-            {
-              "isLazy": false,
-              "name": "arg0",
-              "type": {
-                "application": {"argument": {"variable": "hydra.shacl.model.CommonProperties"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+          "parameters": [],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.shacl.model.NodeShape"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+              "application": {"argument": {"variable": "hydra.shacl.model.NodeKind"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for hydra.shacl.model.NodeShape"}}}],
             "body": {
@@ -5704,22 +5692,22 @@
                     "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.shacl.model.CommonProperties"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "common"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.shacl.model.nodeShapeCommon",
+                "parameter": "common"}}}},
+        "name": "hydra.dsl.shacl.model.nodeShape",
         "signature": {
           "parameters": [
             {
               "isLazy": false,
               "name": "arg0",
               "type": {
-                "application": {"argument": {"variable": "hydra.shacl.model.NodeShape"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+                "application": {"argument": {"variable": "hydra.shacl.model.CommonProperties"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.shacl.model.CommonProperties"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+              "application": {"argument": {"variable": "hydra.shacl.model.NodeShape"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -5759,27 +5747,22 @@
                     "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.shacl.model.NodeShape"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.shacl.model.nodeShapeWithCommon",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.shacl.model.nodeShapeCommon",
         "signature": {
           "parameters": [
             {
               "isLazy": false,
               "name": "arg0",
               "type": {
-                "application": {"argument": {"variable": "hydra.shacl.model.NodeShape"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-            {
-              "isLazy": false,
-              "name": "arg1",
-              "type": {
-                "application": {"argument": {"variable": "hydra.shacl.model.CommonProperties"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+                "application": {"argument": {"variable": "hydra.shacl.model.NodeShape"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.shacl.model.NodeShape"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+              "application": {"argument": {"variable": "hydra.shacl.model.CommonProperties"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -5821,25 +5804,27 @@
                     "parameter": "newVal"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.shacl.model.NodeShape"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.shacl.model.pattern",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.shacl.model.nodeShapeWithCommon",
         "signature": {
           "parameters": [
             {
               "isLazy": false,
               "name": "arg0",
-              "type": {"application": {"argument": {"literal": {"string": {}}}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+              "type": {
+                "application": {"argument": {"variable": "hydra.shacl.model.NodeShape"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
               "isLazy": false,
               "name": "arg1",
-              "type": {"application": {"argument": {"maybe": {"literal": {"string": {}}}}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+              "type": {
+                "application": {"argument": {"variable": "hydra.shacl.model.CommonProperties"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.shacl.model.Pattern"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+              "application": {"argument": {"variable": "hydra.shacl.model.NodeShape"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for hydra.shacl.model.Pattern"}}}],
             "body": {
@@ -5884,20 +5869,25 @@
                     "domain": {"application": {"argument": {"maybe": {"literal": {"string": {}}}}, "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "flags"}},
                 "domain": {"application": {"argument": {"literal": {"string": {}}}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "regex"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.shacl.model.patternRegex",
+                "parameter": "regex"}}}},
+        "name": "hydra.dsl.shacl.model.pattern",
         "signature": {
           "parameters": [
             {
               "isLazy": false,
               "name": "arg0",
-              "type": {
-                "application": {"argument": {"variable": "hydra.shacl.model.Pattern"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
-          "result": {"type": {"application": {"argument": {"literal": {"string": {}}}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+              "type": {"application": {"argument": {"literal": {"string": {}}}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {"application": {"argument": {"maybe": {"literal": {"string": {}}}}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+          "result": {
+            "type": {
+              "application": {"argument": {"variable": "hydra.shacl.model.Pattern"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -5937,10 +5927,8 @@
                     "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.shacl.model.Pattern"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.shacl.model.patternFlags",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.shacl.model.patternRegex",
         "signature": {
           "parameters": [
             {
@@ -5948,10 +5936,11 @@
               "name": "arg0",
               "type": {
                 "application": {"argument": {"variable": "hydra.shacl.model.Pattern"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
-          "result": {
-            "type": {"application": {"argument": {"maybe": {"literal": {"string": {}}}}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "result": {"type": {"application": {"argument": {"literal": {"string": {}}}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -5991,26 +5980,21 @@
                     "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.shacl.model.Pattern"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.shacl.model.patternWithRegex",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.shacl.model.patternFlags",
         "signature": {
           "parameters": [
             {
               "isLazy": false,
               "name": "arg0",
               "type": {
-                "application": {"argument": {"variable": "hydra.shacl.model.Pattern"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-            {
-              "isLazy": false,
-              "name": "arg1",
-              "type": {"application": {"argument": {"literal": {"string": {}}}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+                "application": {"argument": {"variable": "hydra.shacl.model.Pattern"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
-            "type": {
-              "application": {"argument": {"variable": "hydra.shacl.model.Pattern"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+            "type": {"application": {"argument": {"maybe": {"literal": {"string": {}}}}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {"key": "description", "value": {"literal": {"string": "DSL updater for the regex field of hydra.shacl.model.Pattern"}}}],
@@ -6083,10 +6067,8 @@
                     "parameter": "newVal"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.shacl.model.Pattern"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.shacl.model.patternWithFlags",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.shacl.model.patternWithRegex",
         "signature": {
           "parameters": [
             {
@@ -6097,12 +6079,14 @@
             {
               "isLazy": false,
               "name": "arg1",
-              "type": {"application": {"argument": {"maybe": {"literal": {"string": {}}}}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+              "type": {"application": {"argument": {"literal": {"string": {}}}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {"argument": {"variable": "hydra.shacl.model.Pattern"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {"key": "description", "value": {"literal": {"string": "DSL updater for the flags field of hydra.shacl.model.Pattern"}}}],
@@ -6175,76 +6159,26 @@
                     "parameter": "newVal"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.shacl.model.Pattern"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.shacl.model.propertyShape",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.shacl.model.patternWithFlags",
         "signature": {
           "parameters": [
             {
               "isLazy": false,
               "name": "arg0",
               "type": {
-                "application": {"argument": {"variable": "hydra.shacl.model.CommonProperties"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+                "application": {"argument": {"variable": "hydra.shacl.model.Pattern"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
               "isLazy": false,
               "name": "arg1",
-              "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "Any property shape -specific constraint parameters"}}}],
-                      "body": {"set": {"variable": "hydra.shacl.model.PropertyShapeConstraint"}}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
-            {
-              "isLazy": false,
-              "name": "arg2",
-              "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#defaultValue"}}}],
-                      "body": {"maybe": {"variable": "hydra.rdf.syntax.Node"}}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
-            {
-              "isLazy": false,
-              "name": "arg3",
-              "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#name"}}}],
-                      "body": {"variable": "hydra.rdf.syntax.LangStrings"}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
-            {
-              "isLazy": false,
-              "name": "arg4",
-              "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#name"}}}],
-                      "body": {"variable": "hydra.rdf.syntax.LangStrings"}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
-            {
-              "isLazy": false,
-              "name": "arg5",
-              "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#order"}}}],
-                      "body": {"maybe": {"literal": {"integer": {"bigint": {}}}}}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
-            {
-              "isLazy": false,
-              "name": "arg6",
-              "type": {"application": {"argument": {"variable": "hydra.rdf.syntax.Iri"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+              "type": {"application": {"argument": {"maybe": {"literal": {"string": {}}}}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.shacl.model.PropertyShape"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+              "application": {"argument": {"variable": "hydra.shacl.model.Pattern"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for hydra.shacl.model.PropertyShape"}}}],
             "body": {
@@ -6380,22 +6314,76 @@
                     "parameter": "constraints"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.shacl.model.CommonProperties"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "common"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.shacl.model.propertyShapeCommon",
+                "parameter": "common"}}}},
+        "name": "hydra.dsl.shacl.model.propertyShape",
         "signature": {
           "parameters": [
             {
               "isLazy": false,
               "name": "arg0",
               "type": {
-                "application": {"argument": {"variable": "hydra.shacl.model.PropertyShape"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+                "application": {"argument": {"variable": "hydra.shacl.model.CommonProperties"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "Any property shape -specific constraint parameters"}}}],
+                      "body": {"set": {"variable": "hydra.shacl.model.PropertyShapeConstraint"}}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg2",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#defaultValue"}}}],
+                      "body": {"maybe": {"variable": "hydra.rdf.syntax.Node"}}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg3",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#name"}}}],
+                      "body": {"variable": "hydra.rdf.syntax.LangStrings"}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg4",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#name"}}}],
+                      "body": {"variable": "hydra.rdf.syntax.LangStrings"}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg5",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#order"}}}],
+                      "body": {"maybe": {"literal": {"integer": {"bigint": {}}}}}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg6",
+              "type": {"application": {"argument": {"variable": "hydra.rdf.syntax.Iri"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.shacl.model.CommonProperties"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+              "application": {"argument": {"variable": "hydra.shacl.model.PropertyShape"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -6435,10 +6423,8 @@
                     "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.shacl.model.PropertyShape"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.shacl.model.propertyShapeConstraints",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.shacl.model.propertyShapeCommon",
         "signature": {
           "parameters": [
             {
@@ -6448,14 +6434,11 @@
                 "application": {"argument": {"variable": "hydra.shacl.model.PropertyShape"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
-              "application": {
-                "argument": {
-                  "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "Any property shape -specific constraint parameters"}}}],
-                    "body": {"set": {"variable": "hydra.shacl.model.PropertyShapeConstraint"}}}},
-                "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+              "application": {"argument": {"variable": "hydra.shacl.model.CommonProperties"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -6495,10 +6478,8 @@
                     "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.shacl.model.PropertyShape"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.shacl.model.propertyShapeDefaultValue",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.shacl.model.propertyShapeConstraints",
         "signature": {
           "parameters": [
             {
@@ -6511,11 +6492,13 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#defaultValue"}}}],
-                    "body": {"maybe": {"variable": "hydra.rdf.syntax.Node"}}}},
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "Any property shape -specific constraint parameters"}}}],
+                    "body": {"set": {"variable": "hydra.shacl.model.PropertyShapeConstraint"}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -6557,10 +6540,8 @@
                     "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.shacl.model.PropertyShape"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.shacl.model.propertyShapeDescription",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.shacl.model.propertyShapeDefaultValue",
         "signature": {
           "parameters": [
             {
@@ -6573,11 +6554,13 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#name"}}}],
-                    "body": {"variable": "hydra.rdf.syntax.LangStrings"}}},
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#defaultValue"}}}],
+                    "body": {"maybe": {"variable": "hydra.rdf.syntax.Node"}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -6617,10 +6600,8 @@
                     "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.shacl.model.PropertyShape"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.shacl.model.propertyShapeName",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.shacl.model.propertyShapeDescription",
         "signature": {
           "parameters": [
             {
@@ -6636,8 +6617,10 @@
                     "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#name"}}}],
                     "body": {"variable": "hydra.rdf.syntax.LangStrings"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -6677,10 +6660,8 @@
                     "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.shacl.model.PropertyShape"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.shacl.model.propertyShapeOrder",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.shacl.model.propertyShapeName",
         "signature": {
           "parameters": [
             {
@@ -6693,11 +6674,13 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#order"}}}],
-                    "body": {"maybe": {"literal": {"integer": {"bigint": {}}}}}}},
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#name"}}}],
+                    "body": {"variable": "hydra.rdf.syntax.LangStrings"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -6737,10 +6720,8 @@
                     "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.shacl.model.PropertyShape"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.shacl.model.propertyShapePath",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.shacl.model.propertyShapeOrder",
         "signature": {
           "parameters": [
             {
@@ -6749,9 +6730,17 @@
               "type": {
                 "application": {"argument": {"variable": "hydra.shacl.model.PropertyShape"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
-            "type": {"application": {"argument": {"variable": "hydra.rdf.syntax.Iri"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+            "type": {
+              "application": {
+                "argument": {
+                  "annotated": {
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#order"}}}],
+                    "body": {"maybe": {"literal": {"integer": {"bigint": {}}}}}}},
+                "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -6791,27 +6780,21 @@
                     "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.shacl.model.PropertyShape"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.shacl.model.propertyShapeWithCommon",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.shacl.model.propertyShapePath",
         "signature": {
           "parameters": [
             {
               "isLazy": false,
               "name": "arg0",
               "type": {
-                "application": {"argument": {"variable": "hydra.shacl.model.PropertyShape"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-            {
-              "isLazy": false,
-              "name": "arg1",
-              "type": {
-                "application": {"argument": {"variable": "hydra.shacl.model.CommonProperties"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+                "application": {"argument": {"variable": "hydra.shacl.model.PropertyShape"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
-            "type": {
-              "application": {"argument": {"variable": "hydra.shacl.model.PropertyShape"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+            "type": {"application": {"argument": {"variable": "hydra.rdf.syntax.Iri"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -7059,10 +7042,8 @@
                     "parameter": "newVal"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.shacl.model.PropertyShape"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.shacl.model.propertyShapeWithConstraints",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.shacl.model.propertyShapeWithCommon",
         "signature": {
           "parameters": [
             {
@@ -7074,17 +7055,14 @@
               "isLazy": false,
               "name": "arg1",
               "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "Any property shape -specific constraint parameters"}}}],
-                      "body": {"set": {"variable": "hydra.shacl.model.PropertyShapeConstraint"}}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+                "application": {"argument": {"variable": "hydra.shacl.model.CommonProperties"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {"argument": {"variable": "hydra.shacl.model.PropertyShape"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -7337,10 +7315,8 @@
                     "parameter": "newVal"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.shacl.model.PropertyShape"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.shacl.model.propertyShapeWithDefaultValue",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.shacl.model.propertyShapeWithConstraints",
         "signature": {
           "parameters": [
             {
@@ -7355,14 +7331,16 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#defaultValue"}}}],
-                      "body": {"maybe": {"variable": "hydra.rdf.syntax.Node"}}}},
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "Any property shape -specific constraint parameters"}}}],
+                      "body": {"set": {"variable": "hydra.shacl.model.PropertyShapeConstraint"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {"argument": {"variable": "hydra.shacl.model.PropertyShape"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -7613,10 +7591,8 @@
                     "parameter": "newVal"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.shacl.model.PropertyShape"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.shacl.model.propertyShapeWithDescription",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.shacl.model.propertyShapeWithDefaultValue",
         "signature": {
           "parameters": [
             {
@@ -7631,14 +7607,16 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#name"}}}],
-                      "body": {"variable": "hydra.rdf.syntax.LangStrings"}}},
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#defaultValue"}}}],
+                      "body": {"maybe": {"variable": "hydra.rdf.syntax.Node"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {"argument": {"variable": "hydra.shacl.model.PropertyShape"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -7891,10 +7869,8 @@
                     "parameter": "newVal"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.shacl.model.PropertyShape"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.shacl.model.propertyShapeWithName",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.shacl.model.propertyShapeWithDescription",
         "signature": {
           "parameters": [
             {
@@ -7915,8 +7891,10 @@
           "result": {
             "type": {
               "application": {"argument": {"variable": "hydra.shacl.model.PropertyShape"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -8169,10 +8147,8 @@
                     "parameter": "newVal"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.shacl.model.PropertyShape"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.shacl.model.propertyShapeWithOrder",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.shacl.model.propertyShapeWithName",
         "signature": {
           "parameters": [
             {
@@ -8187,14 +8163,16 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#order"}}}],
-                      "body": {"maybe": {"literal": {"integer": {"bigint": {}}}}}}},
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#name"}}}],
+                      "body": {"variable": "hydra.rdf.syntax.LangStrings"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {"argument": {"variable": "hydra.shacl.model.PropertyShape"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -8447,10 +8425,8 @@
                     "parameter": "newVal"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.shacl.model.PropertyShape"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.shacl.model.propertyShapeWithPath",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.shacl.model.propertyShapeWithOrder",
         "signature": {
           "parameters": [
             {
@@ -8461,12 +8437,20 @@
             {
               "isLazy": false,
               "name": "arg1",
-              "type": {"application": {"argument": {"variable": "hydra.rdf.syntax.Iri"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#order"}}}],
+                      "body": {"maybe": {"literal": {"integer": {"bigint": {}}}}}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {"argument": {"variable": "hydra.shacl.model.PropertyShape"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -8713,30 +8697,26 @@
                     "parameter": "newVal"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.shacl.model.PropertyShape"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.shacl.model.propertyShapeConstraintLessThan",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.shacl.model.propertyShapeWithPath",
         "signature": {
           "parameters": [
             {
               "isLazy": false,
               "name": "arg0",
               "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [
-                        {"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#LessThanConstraintComponent"}}}],
-                      "body": {"set": {"variable": "hydra.rdf.syntax.Property"}}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+                "application": {"argument": {"variable": "hydra.shacl.model.PropertyShape"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {"application": {"argument": {"variable": "hydra.rdf.syntax.Iri"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
-              "application": {
-                "argument": {"variable": "hydra.shacl.model.PropertyShapeConstraint"},
-                "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+              "application": {"argument": {"variable": "hydra.shacl.model.PropertyShape"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -8777,10 +8757,8 @@
                           {"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#LessThanConstraintComponent"}}}],
                         "body": {"set": {"variable": "hydra.rdf.syntax.Property"}}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.shacl.model.propertyShapeConstraintLessThanOrEquals",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.shacl.model.propertyShapeConstraintLessThan",
         "signature": {
           "parameters": [
             {
@@ -8791,9 +8769,7 @@
                   "argument": {
                     "annotated": {
                       "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#LessThanOrEqualsConstraintComponent"}}}],
+                        {"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#LessThanConstraintComponent"}}}],
                       "body": {"set": {"variable": "hydra.rdf.syntax.Property"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -8801,8 +8777,10 @@
               "application": {
                 "argument": {"variable": "hydra.shacl.model.PropertyShapeConstraint"},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -8845,10 +8823,8 @@
                             "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#LessThanOrEqualsConstraintComponent"}}}],
                         "body": {"set": {"variable": "hydra.rdf.syntax.Property"}}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.shacl.model.propertyShapeConstraintMaxCount",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.shacl.model.propertyShapeConstraintLessThanOrEquals",
         "signature": {
           "parameters": [
             {
@@ -8861,18 +8837,18 @@
                       "annotation": [
                         {
                           "key": "description",
-                          "value": {
-                            "literal": {
-                              "string": "The maximum cardinality. Node shapes cannot have any value for sh:maxCount. See https://www.w3.org/TR/shacl/#MaxCountConstraintComponent"}}}],
-                      "body": {"literal": {"integer": {"bigint": {}}}}}},
+                          "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#LessThanOrEqualsConstraintComponent"}}}],
+                      "body": {"set": {"variable": "hydra.rdf.syntax.Property"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {
                 "argument": {"variable": "hydra.shacl.model.PropertyShapeConstraint"},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -8917,10 +8893,8 @@
                                 "string": "The maximum cardinality. Node shapes cannot have any value for sh:maxCount. See https://www.w3.org/TR/shacl/#MaxCountConstraintComponent"}}}],
                         "body": {"literal": {"integer": {"bigint": {}}}}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.shacl.model.propertyShapeConstraintMinCount",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.shacl.model.propertyShapeConstraintMaxCount",
         "signature": {
           "parameters": [
             {
@@ -8935,7 +8909,7 @@
                           "key": "description",
                           "value": {
                             "literal": {
-                              "string": "The minimum cardinality. Node shapes cannot have any value for sh:minCount. See https://www.w3.org/TR/shacl/#MinCountConstraintComponent"}}}],
+                              "string": "The maximum cardinality. Node shapes cannot have any value for sh:maxCount. See https://www.w3.org/TR/shacl/#MaxCountConstraintComponent"}}}],
                       "body": {"literal": {"integer": {"bigint": {}}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -8943,8 +8917,10 @@
               "application": {
                 "argument": {"variable": "hydra.shacl.model.PropertyShapeConstraint"},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -8989,10 +8965,8 @@
                                 "string": "The minimum cardinality. Node shapes cannot have any value for sh:minCount. See https://www.w3.org/TR/shacl/#MinCountConstraintComponent"}}}],
                         "body": {"literal": {"integer": {"bigint": {}}}}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.shacl.model.propertyShapeConstraintUniqueLang",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.shacl.model.propertyShapeConstraintMinCount",
         "signature": {
           "parameters": [
             {
@@ -9005,16 +8979,20 @@
                       "annotation": [
                         {
                           "key": "description",
-                          "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#UniqueLangConstraintComponent"}}}],
-                      "body": {"literal": {"boolean": {}}}}},
+                          "value": {
+                            "literal": {
+                              "string": "The minimum cardinality. Node shapes cannot have any value for sh:minCount. See https://www.w3.org/TR/shacl/#MinCountConstraintComponent"}}}],
+                      "body": {"literal": {"integer": {"bigint": {}}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {
                 "argument": {"variable": "hydra.shacl.model.PropertyShapeConstraint"},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -9057,10 +9035,8 @@
                             "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#UniqueLangConstraintComponent"}}}],
                         "body": {"literal": {"boolean": {}}}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.shacl.model.propertyShapeConstraintQualifiedValueShape",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.shacl.model.propertyShapeConstraintUniqueLang",
         "signature": {
           "parameters": [
             {
@@ -9073,16 +9049,18 @@
                       "annotation": [
                         {
                           "key": "description",
-                          "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#QualifiedValueShapeConstraintComponent"}}}],
-                      "body": {"variable": "hydra.shacl.model.QualifiedValueShape"}}},
+                          "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#UniqueLangConstraintComponent"}}}],
+                      "body": {"literal": {"boolean": {}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {
                 "argument": {"variable": "hydra.shacl.model.PropertyShapeConstraint"},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -9128,10 +9106,8 @@
                             "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#QualifiedValueShapeConstraintComponent"}}}],
                         "body": {"variable": "hydra.shacl.model.QualifiedValueShape"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.shacl.model.qualifiedValueShape",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.shacl.model.propertyShapeConstraintQualifiedValueShape",
         "signature": {
           "parameters": [
             {
@@ -9140,28 +9116,22 @@
               "type": {
                 "application": {
                   "argument": {
-                    "application": {"argument": {"variable": "hydra.shacl.model.Shape"}, "function": {"variable": "hydra.shacl.model.Reference"}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
-            {
-              "isLazy": false,
-              "name": "arg1",
-              "type": {
-                "application": {"argument": {"literal": {"integer": {"bigint": {}}}}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-            {
-              "isLazy": false,
-              "name": "arg2",
-              "type": {
-                "application": {"argument": {"literal": {"integer": {"bigint": {}}}}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-            {
-              "isLazy": false,
-              "name": "arg3",
-              "type": {
-                "application": {"argument": {"maybe": {"literal": {"boolean": {}}}}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "key": "description",
+                          "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#QualifiedValueShapeConstraintComponent"}}}],
+                      "body": {"variable": "hydra.shacl.model.QualifiedValueShape"}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.shacl.model.QualifiedValueShape"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+              "application": {
+                "argument": {"variable": "hydra.shacl.model.PropertyShapeConstraint"},
+                "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for hydra.shacl.model.QualifiedValueShape"}}}],
             "body": {
@@ -9246,25 +9216,40 @@
                     "argument": {
                       "application": {"argument": {"variable": "hydra.shacl.model.Shape"}, "function": {"variable": "hydra.shacl.model.Reference"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "qualifiedValueShape"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.shacl.model.qualifiedValueShapeQualifiedValueShape",
+                "parameter": "qualifiedValueShape"}}}},
+        "name": "hydra.dsl.shacl.model.qualifiedValueShape",
         "signature": {
           "parameters": [
             {
               "isLazy": false,
               "name": "arg0",
               "type": {
-                "application": {"argument": {"variable": "hydra.shacl.model.QualifiedValueShape"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+                "application": {
+                  "argument": {
+                    "application": {"argument": {"variable": "hydra.shacl.model.Shape"}, "function": {"variable": "hydra.shacl.model.Reference"}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {
+                "application": {"argument": {"literal": {"integer": {"bigint": {}}}}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg2",
+              "type": {
+                "application": {"argument": {"literal": {"integer": {"bigint": {}}}}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg3",
+              "type": {
+                "application": {"argument": {"maybe": {"literal": {"boolean": {}}}}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
-              "application": {
-                "argument": {
-                  "application": {"argument": {"variable": "hydra.shacl.model.Shape"}, "function": {"variable": "hydra.shacl.model.Reference"}}},
-                "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+              "application": {"argument": {"variable": "hydra.shacl.model.QualifiedValueShape"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -9306,10 +9291,8 @@
                     "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.shacl.model.QualifiedValueShape"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.shacl.model.qualifiedValueShapeQualifiedMaxCount",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.shacl.model.qualifiedValueShapeQualifiedValueShape",
         "signature": {
           "parameters": [
             {
@@ -9319,9 +9302,14 @@
                 "application": {"argument": {"variable": "hydra.shacl.model.QualifiedValueShape"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
-              "application": {"argument": {"literal": {"integer": {"bigint": {}}}}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+              "application": {
+                "argument": {
+                  "application": {"argument": {"variable": "hydra.shacl.model.Shape"}, "function": {"variable": "hydra.shacl.model.Reference"}}},
+                "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -9363,10 +9351,8 @@
                     "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.shacl.model.QualifiedValueShape"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.shacl.model.qualifiedValueShapeQualifiedMinCount",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.shacl.model.qualifiedValueShapeQualifiedMaxCount",
         "signature": {
           "parameters": [
             {
@@ -9377,8 +9363,10 @@
           "result": {
             "type": {
               "application": {"argument": {"literal": {"integer": {"bigint": {}}}}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -9420,10 +9408,8 @@
                     "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.shacl.model.QualifiedValueShape"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.shacl.model.qualifiedValueShapeQualifiedValueShapesDisjoint",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.shacl.model.qualifiedValueShapeQualifiedMinCount",
         "signature": {
           "parameters": [
             {
@@ -9433,9 +9419,11 @@
                 "application": {"argument": {"variable": "hydra.shacl.model.QualifiedValueShape"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
-              "application": {"argument": {"maybe": {"literal": {"boolean": {}}}}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+              "application": {"argument": {"literal": {"integer": {"bigint": {}}}}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -9478,30 +9466,22 @@
                     "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.shacl.model.QualifiedValueShape"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.shacl.model.qualifiedValueShapeWithQualifiedValueShape",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.shacl.model.qualifiedValueShapeQualifiedValueShapesDisjoint",
         "signature": {
           "parameters": [
             {
               "isLazy": false,
               "name": "arg0",
               "type": {
-                "application": {"argument": {"variable": "hydra.shacl.model.QualifiedValueShape"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-            {
-              "isLazy": false,
-              "name": "arg1",
-              "type": {
-                "application": {
-                  "argument": {
-                    "application": {"argument": {"variable": "hydra.shacl.model.Shape"}, "function": {"variable": "hydra.shacl.model.Reference"}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+                "application": {"argument": {"variable": "hydra.shacl.model.QualifiedValueShape"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.shacl.model.QualifiedValueShape"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+              "application": {"argument": {"maybe": {"literal": {"boolean": {}}}}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -9662,10 +9642,8 @@
                     "parameter": "newVal"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.shacl.model.QualifiedValueShape"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.shacl.model.qualifiedValueShapeWithQualifiedMaxCount",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.shacl.model.qualifiedValueShapeWithQualifiedValueShape",
         "signature": {
           "parameters": [
             {
@@ -9677,12 +9655,17 @@
               "isLazy": false,
               "name": "arg1",
               "type": {
-                "application": {"argument": {"literal": {"integer": {"bigint": {}}}}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+                "application": {
+                  "argument": {
+                    "application": {"argument": {"variable": "hydra.shacl.model.Shape"}, "function": {"variable": "hydra.shacl.model.Reference"}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {"argument": {"variable": "hydra.shacl.model.QualifiedValueShape"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -9840,10 +9823,8 @@
                     "parameter": "newVal"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.shacl.model.QualifiedValueShape"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.shacl.model.qualifiedValueShapeWithQualifiedMinCount",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.shacl.model.qualifiedValueShapeWithQualifiedMaxCount",
         "signature": {
           "parameters": [
             {
@@ -9859,8 +9840,10 @@
           "result": {
             "type": {
               "application": {"argument": {"variable": "hydra.shacl.model.QualifiedValueShape"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -10018,10 +10001,8 @@
                     "parameter": "newVal"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.shacl.model.QualifiedValueShape"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.shacl.model.qualifiedValueShapeWithQualifiedValueShapesDisjoint",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.shacl.model.qualifiedValueShapeWithQualifiedMinCount",
         "signature": {
           "parameters": [
             {
@@ -10033,12 +10014,14 @@
               "isLazy": false,
               "name": "arg1",
               "type": {
-                "application": {"argument": {"maybe": {"literal": {"boolean": {}}}}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+                "application": {"argument": {"literal": {"integer": {"bigint": {}}}}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {"argument": {"variable": "hydra.shacl.model.QualifiedValueShape"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -10197,23 +10180,27 @@
                     "parameter": "newVal"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.shacl.model.QualifiedValueShape"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.shacl.model.referenceNamed",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.shacl.model.qualifiedValueShapeWithQualifiedValueShapesDisjoint",
         "signature": {
           "parameters": [
             {
               "isLazy": false,
               "name": "arg0",
-              "type": {"application": {"argument": {"variable": "hydra.rdf.syntax.Iri"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+              "type": {
+                "application": {"argument": {"variable": "hydra.shacl.model.QualifiedValueShape"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {
+                "application": {"argument": {"maybe": {"literal": {"boolean": {}}}}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
-              "application": {
-                "argument": {"application": {"argument": {"variable": "a"}, "function": {"variable": "hydra.shacl.model.Reference"}}},
-                "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": [{"constraints": [], "name": "a"}]},
-        "term": {
+              "application": {"argument": {"variable": "hydra.shacl.model.QualifiedValueShape"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -10247,29 +10234,23 @@
                         "typeName": "hydra.core.Term"}},
                     "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {"application": {"argument": {"variable": "hydra.rdf.syntax.Iri"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.shacl.model.referenceAnonymous",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.shacl.model.referenceNamed",
         "signature": {
           "parameters": [
             {
               "isLazy": false,
               "name": "arg0",
-              "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "An anonymous instance"}}}],
-                      "body": {"variable": "a"}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+              "type": {"application": {"argument": {"variable": "hydra.rdf.syntax.Iri"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {
                 "argument": {"application": {"argument": {"variable": "a"}, "function": {"variable": "hydra.shacl.model.Reference"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": [{"constraints": [], "name": "a"}]},
-        "term": {
+          "typeParameters": [{"constraints": [], "name": "a"}]}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -10309,10 +10290,8 @@
                         "annotation": [{"key": "description", "value": {"literal": {"string": "An anonymous instance"}}}],
                         "body": {"variable": "a"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.shacl.model.referenceDefinition",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.shacl.model.referenceAnonymous",
         "signature": {
           "parameters": [
             {
@@ -10322,16 +10301,18 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "An inline definition"}}}],
-                      "body": {"application": {"argument": {"variable": "a"}, "function": {"variable": "hydra.shacl.model.Definition"}}}}},
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "An anonymous instance"}}}],
+                      "body": {"variable": "a"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {
                 "argument": {"application": {"argument": {"variable": "a"}, "function": {"variable": "hydra.shacl.model.Reference"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": [{"constraints": [], "name": "a"}]},
-        "term": {
+          "typeParameters": [{"constraints": [], "name": "a"}]}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -10371,17 +10352,29 @@
                         "annotation": [{"key": "description", "value": {"literal": {"string": "An inline definition"}}}],
                         "body": {"application": {"argument": {"variable": "a"}, "function": {"variable": "hydra.shacl.model.Definition"}}}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.shacl.model.severityInfo",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.shacl.model.referenceDefinition",
         "signature": {
-          "parameters": [],
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "An inline definition"}}}],
+                      "body": {"application": {"argument": {"variable": "a"}, "function": {"variable": "hydra.shacl.model.Definition"}}}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.shacl.model.Severity"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+              "application": {
+                "argument": {"application": {"argument": {"variable": "a"}, "function": {"variable": "hydra.shacl.model.Reference"}}},
+                "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": [{"constraints": [], "name": "a"}]}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -10409,17 +10402,17 @@
                                   "typeName": "hydra.core.Field"}}}],
                           "typeName": "hydra.core.Injection"}}},
                     "typeName": "hydra.core.Term"}},
-                "typeName": "hydra.typed.TypedTerm"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.shacl.model.severityWarning",
+                "typeName": "hydra.typed.TypedTerm"}}}},
+        "name": "hydra.dsl.shacl.model.severityInfo",
         "signature": {
           "parameters": [],
           "result": {
             "type": {
               "application": {"argument": {"variable": "hydra.shacl.model.Severity"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -10447,17 +10440,17 @@
                                   "typeName": "hydra.core.Field"}}}],
                           "typeName": "hydra.core.Injection"}}},
                     "typeName": "hydra.core.Term"}},
-                "typeName": "hydra.typed.TypedTerm"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.shacl.model.severityViolation",
+                "typeName": "hydra.typed.TypedTerm"}}}},
+        "name": "hydra.dsl.shacl.model.severityWarning",
         "signature": {
           "parameters": [],
           "result": {
             "type": {
               "application": {"argument": {"variable": "hydra.shacl.model.Severity"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -10485,22 +10478,17 @@
                                   "typeName": "hydra.core.Field"}}}],
                           "typeName": "hydra.core.Injection"}}},
                     "typeName": "hydra.core.Term"}},
-                "typeName": "hydra.typed.TypedTerm"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.shacl.model.shapeNode",
+                "typeName": "hydra.typed.TypedTerm"}}}},
+        "name": "hydra.dsl.shacl.model.severityViolation",
         "signature": {
-          "parameters": [
-            {
-              "isLazy": false,
-              "name": "arg0",
-              "type": {
-                "application": {"argument": {"variable": "hydra.shacl.model.NodeShape"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+          "parameters": [],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.shacl.model.Shape"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+              "application": {"argument": {"variable": "hydra.shacl.model.Severity"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -10535,22 +10523,22 @@
                     "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.shacl.model.NodeShape"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.shacl.model.shapeProperty",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.shacl.model.shapeNode",
         "signature": {
           "parameters": [
             {
               "isLazy": false,
               "name": "arg0",
               "type": {
-                "application": {"argument": {"variable": "hydra.shacl.model.PropertyShape"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+                "application": {"argument": {"variable": "hydra.shacl.model.NodeShape"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {"argument": {"variable": "hydra.shacl.model.Shape"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -10585,26 +10573,22 @@
                     "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.shacl.model.PropertyShape"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.shacl.model.shapesGraph",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.shacl.model.shapeProperty",
         "signature": {
           "parameters": [
             {
               "isLazy": false,
               "name": "arg0",
               "type": {
-                "application": {
-                  "argument": {
-                    "set": {
-                      "application": {"argument": {"variable": "hydra.shacl.model.Shape"}, "function": {"variable": "hydra.shacl.model.Definition"}}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+                "application": {"argument": {"variable": "hydra.shacl.model.PropertyShape"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.shacl.model.ShapesGraph"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+              "application": {"argument": {"variable": "hydra.shacl.model.Shape"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -10636,26 +10620,26 @@
                       "set": {
                         "application": {"argument": {"variable": "hydra.shacl.model.Shape"}, "function": {"variable": "hydra.shacl.model.Definition"}}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.shacl.model.unShapesGraph",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.shacl.model.shapesGraph",
         "signature": {
           "parameters": [
             {
               "isLazy": false,
               "name": "arg0",
               "type": {
-                "application": {"argument": {"variable": "hydra.shacl.model.ShapesGraph"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+                "application": {
+                  "argument": {
+                    "set": {
+                      "application": {"argument": {"variable": "hydra.shacl.model.Shape"}, "function": {"variable": "hydra.shacl.model.Definition"}}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
-              "application": {
-                "argument": {
-                  "set": {
-                    "application": {"argument": {"variable": "hydra.shacl.model.Shape"}, "function": {"variable": "hydra.shacl.model.Definition"}}}},
-                "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+              "application": {"argument": {"variable": "hydra.shacl.model.ShapesGraph"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL accessor for the body of hydra.shacl.model.ShapesGraph"}}}],
             "body": {
@@ -10685,7 +10669,23 @@
                     "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.shacl.model.ShapesGraph"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}}],
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.shacl.model.unShapesGraph",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {
+                "application": {"argument": {"variable": "hydra.shacl.model.ShapesGraph"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+          "result": {
+            "type": {
+              "application": {
+                "argument": {
+                  "set": {
+                    "application": {"argument": {"variable": "hydra.shacl.model.Shape"}, "function": {"variable": "hydra.shacl.model.Definition"}}}},
+                "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}}],
   "dependencies": [
     {"module": "hydra.shacl.model"},
     {"module": "hydra.typed"},

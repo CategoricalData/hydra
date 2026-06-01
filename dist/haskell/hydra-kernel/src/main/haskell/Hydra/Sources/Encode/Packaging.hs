@@ -657,7 +657,7 @@ module_ =
                         Core.fieldName = (Core.Name "typeName"),
                         Core.fieldTerm = (Core.TermWrap (Core.WrappedTerm {
                           Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
-                          Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "hydra.packaging.FileExtension"))}))},
+                          Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "hydra.util.FileExtension"))}))},
                       Core.Field {
                         Core.fieldName = (Core.Name "body"),
                         Core.fieldTerm = (Core.TermApplication (Core.Application {
@@ -674,7 +674,7 @@ module_ =
                                     Core.fieldName = (Core.Name "string"),
                                     Core.fieldTerm = (Core.TermVariable (Core.Name "x"))}}))}}))})),
                           Core.applicationArgument = (Core.TermApplication (Core.Application {
-                            Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.packaging.FileExtension")),
+                            Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.util.FileExtension")),
                             Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))}}))})),
             Core.annotatedTermAnnotation = (M.fromList [
               (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Encoder for hydra.packaging.FileExtension")))])})),
@@ -684,7 +684,7 @@ module_ =
               Typing.Parameter {
                 Typing.parameterName = (Core.Name "arg0"),
                 Typing.parameterDescription = Nothing,
-                Typing.parameterType = (Core.TypeVariable (Core.Name "hydra.packaging.FileExtension")),
+                Typing.parameterType = (Core.TypeVariable (Core.Name "hydra.util.FileExtension")),
                 Typing.parameterIsLazy = False}],
             Typing.termSignatureResult = Typing.Result {
               Typing.resultDescription = Nothing,
@@ -1469,7 +1469,7 @@ module_ =
                         Core.fieldName = (Core.Name "typeName"),
                         Core.fieldTerm = (Core.TermWrap (Core.WrappedTerm {
                           Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
-                          Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "hydra.packaging.QualifiedName"))}))},
+                          Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "hydra.util.QualifiedName"))}))},
                       Core.Field {
                         Core.fieldName = (Core.Name "fields"),
                         Core.fieldTerm = (Core.TermList [
@@ -1498,7 +1498,7 @@ module_ =
                                           Core.applicationArgument = (Core.TermVariable (Core.Name "opt"))}))}}))})),
                                   Core.applicationArgument = (Core.TermApplication (Core.Application {
                                     Core.applicationFunction = (Core.TermProject (Core.Projection {
-                                      Core.projectionTypeName = (Core.Name "hydra.packaging.QualifiedName"),
+                                      Core.projectionTypeName = (Core.Name "hydra.util.QualifiedName"),
                                       Core.projectionFieldName = (Core.Name "moduleName")})),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}),
                           (Core.TermRecord (Core.Record {
@@ -1526,7 +1526,7 @@ module_ =
                                             Core.fieldTerm = (Core.TermVariable (Core.Name "x"))}}))}}))})),
                                   Core.applicationArgument = (Core.TermApplication (Core.Application {
                                     Core.applicationFunction = (Core.TermProject (Core.Projection {
-                                      Core.projectionTypeName = (Core.Name "hydra.packaging.QualifiedName"),
+                                      Core.projectionTypeName = (Core.Name "hydra.util.QualifiedName"),
                                       Core.projectionFieldName = (Core.Name "local")})),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))})),
             Core.annotatedTermAnnotation = (M.fromList [
@@ -1537,7 +1537,7 @@ module_ =
               Typing.Parameter {
                 Typing.parameterName = (Core.Name "arg0"),
                 Typing.parameterDescription = Nothing,
-                Typing.parameterType = (Core.TypeVariable (Core.Name "hydra.packaging.QualifiedName")),
+                Typing.parameterType = (Core.TypeVariable (Core.Name "hydra.util.QualifiedName")),
                 Typing.parameterIsLazy = False}],
             Typing.termSignatureResult = Typing.Result {
               Typing.resultDescription = Nothing,

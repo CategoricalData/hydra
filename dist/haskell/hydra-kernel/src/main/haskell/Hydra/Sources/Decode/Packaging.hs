@@ -991,7 +991,7 @@ module_ =
                                       Core.lambdaParameter = (Core.Name "b"),
                                       Core.lambdaDomain = Nothing,
                                       Core.lambdaBody = (Core.TermWrap (Core.WrappedTerm {
-                                        Core.wrappedTermTypeName = (Core.Name "hydra.packaging.FileExtension"),
+                                        Core.wrappedTermTypeName = (Core.Name "hydra.util.FileExtension"),
                                         Core.wrappedTermBody = (Core.TermVariable (Core.Name "b"))}))}))})),
                                   Core.applicationArgument = (Core.TermApplication (Core.Application {
                                     Core.applicationFunction = (Core.TermApplication (Core.Application {
@@ -1075,7 +1075,7 @@ module_ =
               Typing.resultDescription = Nothing,
               Typing.resultType = (Core.TypeEither (Core.EitherType {
                 Core.eitherTypeLeft = (Core.TypeVariable (Core.Name "hydra.errors.DecodingError")),
-                Core.eitherTypeRight = (Core.TypeVariable (Core.Name "hydra.packaging.FileExtension"))}))}}))})),
+                Core.eitherTypeRight = (Core.TypeVariable (Core.Name "hydra.util.FileExtension"))}))}}))})),
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.decode.packaging.module"),
           Packaging.termDefinitionMetadata = Nothing,
@@ -2385,7 +2385,7 @@ module_ =
                                           Core.lambdaParameter = (Core.Name "field_local"),
                                           Core.lambdaDomain = Nothing,
                                           Core.lambdaBody = (Core.TermEither (Right (Core.TermRecord (Core.Record {
-                                            Core.recordTypeName = (Core.Name "hydra.packaging.QualifiedName"),
+                                            Core.recordTypeName = (Core.Name "hydra.util.QualifiedName"),
                                             Core.recordFields = [
                                               Core.Field {
                                                 Core.fieldName = (Core.Name "moduleName"),
@@ -2418,7 +2418,7 @@ module_ =
               Typing.resultDescription = Nothing,
               Typing.resultType = (Core.TypeEither (Core.EitherType {
                 Core.eitherTypeLeft = (Core.TypeVariable (Core.Name "hydra.errors.DecodingError")),
-                Core.eitherTypeRight = (Core.TypeVariable (Core.Name "hydra.packaging.QualifiedName"))}))}}))})),
+                Core.eitherTypeRight = (Core.TypeVariable (Core.Name "hydra.util.QualifiedName"))}))}}))})),
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.decode.packaging.termDefinition"),
           Packaging.termDefinitionMetadata = Nothing,

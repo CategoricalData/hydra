@@ -2,23 +2,7 @@
   "definitions": [
     {
       "term": {
-        "name": "hydra.dsl.yaml.model.nodeMapping",
-        "signature": {
-          "parameters": [
-            {
-              "isLazy": false,
-              "name": "arg0",
-              "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "A mapping from nodes to nodes"}}}],
-                      "body": {"map": {"keys": {"variable": "hydra.yaml.model.Node"}, "values": {"variable": "hydra.yaml.model.Node"}}}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
-          "result": {
-            "type": {"application": {"argument": {"variable": "hydra.yaml.model.Node"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -58,10 +42,8 @@
                         "annotation": [{"key": "description", "value": {"literal": {"string": "A mapping from nodes to nodes"}}}],
                         "body": {"map": {"keys": {"variable": "hydra.yaml.model.Node"}, "values": {"variable": "hydra.yaml.model.Node"}}}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.yaml.model.nodeScalar",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.yaml.model.nodeMapping",
         "signature": {
           "parameters": [
             {
@@ -71,13 +53,15 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "A scalar value"}}}],
-                      "body": {"variable": "hydra.yaml.model.Scalar"}}},
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "A mapping from nodes to nodes"}}}],
+                      "body": {"map": {"keys": {"variable": "hydra.yaml.model.Node"}, "values": {"variable": "hydra.yaml.model.Node"}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {"application": {"argument": {"variable": "hydra.yaml.model.Node"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -117,10 +101,8 @@
                         "annotation": [{"key": "description", "value": {"literal": {"string": "A scalar value"}}}],
                         "body": {"variable": "hydra.yaml.model.Scalar"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.yaml.model.nodeSequence",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.yaml.model.nodeScalar",
         "signature": {
           "parameters": [
             {
@@ -130,13 +112,15 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "A sequence of nodes"}}}],
-                      "body": {"list": {"variable": "hydra.yaml.model.Node"}}}},
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "A scalar value"}}}],
+                      "body": {"variable": "hydra.yaml.model.Scalar"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {"application": {"argument": {"variable": "hydra.yaml.model.Node"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -176,10 +160,8 @@
                         "annotation": [{"key": "description", "value": {"literal": {"string": "A sequence of nodes"}}}],
                         "body": {"list": {"variable": "hydra.yaml.model.Node"}}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.yaml.model.scalarBool",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.yaml.model.nodeSequence",
         "signature": {
           "parameters": [
             {
@@ -189,14 +171,15 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "Represents a true/false value"}}}],
-                      "body": {"literal": {"boolean": {}}}}},
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "A sequence of nodes"}}}],
+                      "body": {"list": {"variable": "hydra.yaml.model.Node"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
-            "type": {
-              "application": {"argument": {"variable": "hydra.yaml.model.Scalar"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+            "type": {"application": {"argument": {"variable": "hydra.yaml.model.Node"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -236,10 +219,8 @@
                         "annotation": [{"key": "description", "value": {"literal": {"string": "Represents a true/false value"}}}],
                         "body": {"literal": {"boolean": {}}}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.yaml.model.scalarDecimal",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.yaml.model.scalarBool",
         "signature": {
           "parameters": [
             {
@@ -249,17 +230,16 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "An arbitrary-precision decimal number (lexically a valid JSON number)"}}}],
-                      "body": {"literal": {"decimal": {}}}}},
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "Represents a true/false value"}}}],
+                      "body": {"literal": {"boolean": {}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {"argument": {"variable": "hydra.yaml.model.Scalar"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -302,10 +282,8 @@
                             "value": {"literal": {"string": "An arbitrary-precision decimal number (lexically a valid JSON number)"}}}],
                         "body": {"literal": {"decimal": {}}}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.yaml.model.scalarFloat",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.yaml.model.scalarDecimal",
         "signature": {
           "parameters": [
             {
@@ -315,14 +293,19 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "Represents an approximation to real numbers"}}}],
-                      "body": {"literal": {"float": {"float64": {}}}}}},
+                      "annotation": [
+                        {
+                          "key": "description",
+                          "value": {"literal": {"string": "An arbitrary-precision decimal number (lexically a valid JSON number)"}}}],
+                      "body": {"literal": {"decimal": {}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {"argument": {"variable": "hydra.yaml.model.Scalar"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -362,10 +345,8 @@
                         "annotation": [{"key": "description", "value": {"literal": {"string": "Represents an approximation to real numbers"}}}],
                         "body": {"literal": {"float": {"float64": {}}}}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.yaml.model.scalarInt",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.yaml.model.scalarFloat",
         "signature": {
           "parameters": [
             {
@@ -375,14 +356,16 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "Represents arbitrary sized finite mathematical integers"}}}],
-                      "body": {"literal": {"integer": {"bigint": {}}}}}},
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "Represents an approximation to real numbers"}}}],
+                      "body": {"literal": {"float": {"float64": {}}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {"argument": {"variable": "hydra.yaml.model.Scalar"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {"key": "description", "value": {"literal": {"string": "DSL injection for the int variant of hydra.yaml.model.Scalar"}}}],
@@ -420,17 +403,27 @@
                         "annotation": [{"key": "description", "value": {"literal": {"string": "Represents arbitrary sized finite mathematical integers"}}}],
                         "body": {"literal": {"integer": {"bigint": {}}}}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.yaml.model.scalarNull",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.yaml.model.scalarInt",
         "signature": {
-          "parameters": [],
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "Represents arbitrary sized finite mathematical integers"}}}],
+                      "body": {"literal": {"integer": {"bigint": {}}}}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {"argument": {"variable": "hydra.yaml.model.Scalar"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -458,27 +451,17 @@
                                   "typeName": "hydra.core.Field"}}}],
                           "typeName": "hydra.core.Injection"}}},
                     "typeName": "hydra.core.Term"}},
-                "typeName": "hydra.typed.TypedTerm"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.yaml.model.scalarStr",
+                "typeName": "hydra.typed.TypedTerm"}}}},
+        "name": "hydra.dsl.yaml.model.scalarNull",
         "signature": {
-          "parameters": [
-            {
-              "isLazy": false,
-              "name": "arg0",
-              "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "A string value"}}}],
-                      "body": {"literal": {"string": {}}}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+          "parameters": [],
           "result": {
             "type": {
               "application": {"argument": {"variable": "hydra.yaml.model.Scalar"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {"key": "description", "value": {"literal": {"string": "DSL injection for the str variant of hydra.yaml.model.Scalar"}}}],
@@ -516,7 +499,24 @@
                         "annotation": [{"key": "description", "value": {"literal": {"string": "A string value"}}}],
                         "body": {"literal": {"string": {}}}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}}],
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.yaml.model.scalarStr",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "A string value"}}}],
+                      "body": {"literal": {"string": {}}}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+          "result": {
+            "type": {
+              "application": {"argument": {"variable": "hydra.yaml.model.Scalar"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}}],
   "dependencies": [{"module": "hydra.yaml.model"}, {"module": "hydra.typed"}, {"module": "hydra.core"}, {"module": "hydra.dsl.core"}],
   "metadata": {"comments": [], "description": "DSL functions for hydra.yaml.model", "seeAlso": []},
   "name": "hydra.dsl.yaml.model"}
