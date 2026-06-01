@@ -72,7 +72,7 @@ and heterogeneous distributed systems.
 
 ## Releases
 
-The latest Hydra release is **0.15.0**. Published artifacts:
+The latest Hydra release is **0.16.0**. Published artifacts:
 
 | Channel | Packages |
 |---|---|
