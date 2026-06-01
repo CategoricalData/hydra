@@ -430,6 +430,25 @@ referenced *anywhere* in the manifest, and the file's basename is the
 type name not a path). Manual `rm` is required; safe because the next
 assemble regenerates the new-named file.
 
+### Reordering record fields is a breaking change, and "same-set" records still fail to unify
+
+Reordering the fields of a kernel record (e.g. `PrimitiveDefinition`,
+`TermDefinition` in #369) is NOT cosmetic. Hydra's inference treats record
+types as **order-sensitive**: `update-json` fails with `cannot unify
+record{...} with record{...}` where both sides list the *identical* field
+set, merely permuted. The culprit is a DSL-Term-literal *decoder* (in
+`dist/.../Sources/Decode/*.hs`) that constructs the `Core.Record`
+field-by-field in the old order — reorder those field blocks to match the new
+schema. Encoders are safe (they `project` by name). Separately, every
+*positional* constructor call breaks: the generated `Dsl.Packaging` builder
+*function* (`termDefinition name metadata signature body`) and the 12
+hand-written `PrimitiveDefinition`/`TermDefinition` sites
+(`reference_primitivedefinition_handwritten_sites`) — Haskell flags these as
+type errors, looser hosts don't. Full playbook + the `CaseStatement.cases ::
+[Field] → [CaseAlternative]` new-carrier-type variant are in
+[docs/recipes/extending-hydra-core.md](../docs/recipes/extending-hydra-core.md)
+under "Reordering fields…" / "Introducing a new carrier type…".
+
 ### Deleting a `dist/json/<pkg>/build/main/digest.json` causes Phase 2 silent exit
 
 `assemble_refresh_digest` in `bin/lib/assemble-common.sh` is gated by
