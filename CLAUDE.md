@@ -13,13 +13,16 @@ It explores an isomorphism between typed lambda calculus and labeled hypergraphs
 Hydra is self-hosting: the kernel is defined in Haskell-based DSLs and code-generated
 into eight host languages spanning five implementation families:
 Haskell, Java, Python, Scala, and Lisp (Clojure, Common Lisp, Emacs Lisp, Scheme — sharing one coder).
-All eight pass the common test suite.
+All eight pass the common test suite as targets; Haskell, Java, Python, Scala, and the JVM/native
+Lisp dialects also self-host (Emacs Lisp is still maturing as a host — see README implementation
+status).
 
 The Java and Python coder DSL sources (`packages/hydra-{java,python}/`) are now
-authored in Java and Python respectively (host-native), with legacy Haskell DSL
-copies retained as a backup through 0.15. See `bin/generate-hydra-java-from-java.sh`
-and `bin/generate-hydra-python-from-python.sh` for the self-host Phase-1 scripts.
-The main sync sequence will switch over to these before 0.16.
+authored in Java and Python respectively (host-native). The native sources are authoritative for the
+generated output: the main sync regenerates `dist/json/hydra-{java,python}` from them in Phase 5
+(`bin/generate-hydra-java-from-java.sh`, `bin/generate-hydra-python-from-python.sh`). The legacy
+Haskell DSL copies are retained as a Phase-1 cold-start bootstrap fallback through 0.16 and are slated
+for deletion in 0.17 (#346).
 
 A ninth target, Go (`hydra-go`, `heads/go/`), is a "head bud" — the kernel can be generated
 to Go via `bin/sync-go.sh`, but the Go coder still has emission bugs and the head's

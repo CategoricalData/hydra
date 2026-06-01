@@ -47,12 +47,10 @@ module Main where
 import Hydra.Digest
 import Hydra.Packaging (ModuleName(..))
 
-import Control.Exception (catch, IOException)
-import Control.Monad (when, forM, forM_)
-import Data.List (isPrefixOf)
+import Control.Monad (forM)
 import qualified Data.Map as M
 import qualified Data.Set as S
-import System.Directory (doesDirectoryExist, doesFileExist, listDirectory, removeFile, removeDirectory)
+import System.Directory (doesFileExist)
 import System.Environment (getArgs)
 import System.Exit (exitFailure, exitSuccess)
 import qualified System.FilePath as FP
@@ -208,16 +206,12 @@ doFresh opts = do
       -- output digest so the next run is a clean hit. No coder run needed.
       let keepRel = S.fromList
             [ FP.normalise rel | rel <- M.keys (digestOutputs outputDigest) ]
-          digestPath = FP.normalise (optOutputDigest opts)
-      onDiskAbs <- listFilesRecursive outputDir
-      let isDigestFile p = FP.normalise p == digestPath
-          orphans =
-            [ p
-            | p <- onDiskAbs
-            , not (isDigestFile p)
-            , let rel = FP.normalise (makeRelative' outputDir p)
-            , not (S.member rel keepRel)
-            ]
+          -- The output digest itself often lives inside outputDir; protect
+          -- it from deletion (it's about to be rewritten on reconcile and
+          -- isn't a recorded output).
+          protectRel = S.singleton
+            (FP.normalise (Hydra.Digest.makeRelativeTo outputDir (optOutputDigest opts)))
+      orphans <- Hydra.Digest.reconcileOrphans outputDir keepRel protectRel
       if null orphans
         then do
           putStrLn $ "  digest-check: cache hit; skipping work"
@@ -225,10 +219,7 @@ doFresh opts = do
         else do
           putStrLn $ "  digest-check: " ++ show (length orphans)
             ++ " orphan output file(s) present; reconciling (#393)"
-          forM_ orphans $ \p -> do
-            putStrLn $ "    - " ++ p
-            removeFile p `catch` \(_ :: IOException) -> return ()
-          pruneEmptyDirs outputDir
+          mapM_ (\p -> putStrLn $ "    - " ++ p) orphans
           -- Refresh the output digest from the now-clean dir so the orphan
           -- doesn't reappear in the recorded set and the next 'fresh' is a
           -- plain hit. Reuses the same recording path as 'refresh'.
@@ -262,7 +253,7 @@ doRefresh opts = do
   -- Exclude the output-digest file itself from the walk: we're about
   -- to overwrite it, and hashing it here would (a) be a self-reference
   -- that changes every run and (b) race with writeDigestV2 below.
-  allFiles <- listFilesRecursive outputDir
+  allFiles <- Hydra.Digest.listFilesRecursive outputDir
   -- Normalize both sides so "dir//digest.json" (double slash from a
   -- pkg_dir with trailing /) compares equal to "dir/digest.json" as
   -- emitted by listFilesRecursive.
@@ -270,7 +261,7 @@ doRefresh opts = do
       files = filter (\fp -> FP.normalise fp /= digestPath) allFiles
   outputs <- fmap M.fromList $ forM files $ \fp -> do
     h <- Hydra.Digest.hashFile fp
-    let rel = makeRelative' outputDir fp
+    let rel = Hydra.Digest.makeRelativeTo outputDir fp
     return (rel, DigestEntry KindTargetFile h)
 
   gen <- generatorStamp
@@ -288,51 +279,3 @@ doRefresh opts = do
     ++ " (" ++ show (M.size inputsAsMap) ++ " inputs, "
     ++ show (M.size outputs) ++ " outputs, "
     ++ show (M.size (Hydra.Digest.ppDeps inputPpd)) ++ " deps)"
-
--- | Recursively list every regular file under a directory.
--- Skips dotfiles and dot-directories.
-listFilesRecursive :: FilePath -> IO [FilePath]
-listFilesRecursive root = do
-  exists <- doesDirectoryExist root
-  if not exists then return [] else go root
-  where
-    go dir = do
-      entries <- listDirectory dir
-      fmap concat $ forM entries $ \e ->
-        if "." `isPrefixOf` e
-          then return []
-          else do
-            let p = dir FP.</> e
-            isDir <- doesDirectoryExist p
-            if isDir
-              then go p
-              else do
-                isFile <- doesFileExist p
-                return (if isFile then [p] else [])
-
--- | Remove any empty subdirectories under 'dir' (depth-first). 'dir'
--- itself is left alone; only its descendants are pruned. Used by the
--- #393 orphan reconcile to clean up directories emptied by orphan
--- deletion (e.g. a renamed-away namespace dir). Best-effort: failures
--- (e.g. a directory that isn't actually empty due to a race) are ignored.
-pruneEmptyDirs :: FilePath -> IO ()
-pruneEmptyDirs dir = do
-  entries <- listDirectory dir `catch` \(_ :: IOException) -> return []
-  forM_ entries $ \e -> do
-    let p = dir FP.</> e
-    isDir <- doesDirectoryExist p
-    when isDir $ do
-      pruneEmptyDirs p
-      children <- listDirectory p `catch` \(_ :: IOException) -> return []
-      when (null children) $
-        removeDirectory p `catch` \(_ :: IOException) -> return ()
-
--- | Compute 'path' relative to 'base'. If 'path' isn't under 'base',
--- returns 'path' unchanged (callers should guard against that, but the
--- fallback keeps us from producing absolute paths accidentally).
-makeRelative' :: FilePath -> FilePath -> FilePath
-makeRelative' base path =
-  let prefix = if not (null base) && last base == '/' then base else base ++ "/"
-  in if prefix `isPrefixOf` path
-       then drop (length prefix) path
-       else path

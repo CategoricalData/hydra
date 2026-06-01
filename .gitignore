@@ -110,3 +110,5 @@ heads/typescript/node_modules/
 *-plan.md
 # Cross-worktree Claude messages (see CLAUDE.md)
 claude-hydra-messages/
+# Claude session monitor helper scripts (local-only; log-tailing watchers)
+claude/.*-monitor.sh
