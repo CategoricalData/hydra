@@ -285,5 +285,5 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "description": "Language constraints and reserved words for Go 1.22+",
+  "metadata": {"comments": [], "description": "Language constraints and reserved words for Go 1.22+", "seeAlso": []},
   "name": "hydra.go.language"}

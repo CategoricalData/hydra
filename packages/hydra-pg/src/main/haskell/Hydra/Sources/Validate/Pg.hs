@@ -2,7 +2,7 @@ module Hydra.Sources.Validate.Pg where
 
 -- Standard imports for term-level sources outside of the kernel
 import Hydra.Kernel hiding (Edge(..), _Edge, _Edge_in, _Edge_out, Element(..), _Element, Graph(..), _Graph)
-import           Hydra.Dsl.Bootstrap (unqualifiedDep)
+import           Hydra.Dsl.Bootstrap (unqualifiedDep, descriptionMetadata)
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Meta.Lib.Strings                as Strings
 import           Hydra.Dsl.Meta.Phantoms                   as Phantoms
@@ -32,7 +32,7 @@ module_ = Module {
             moduleName = (ModuleName "hydra.validate.pg"),
             moduleDefinitions = definitions,
             moduleDependencies = unqualifiedDep <$> [PgModel.ns, ErrorPg.ns, ModuleName "hydra.validation", ModuleName "hydra.core"],
-            moduleDescription = Just "Validation functions for property graphs"}
+            moduleMetadata = descriptionMetadata (Just "Validation functions for property graphs")}
   where
    definitions = [
      toDefinition appendFindingEdge,

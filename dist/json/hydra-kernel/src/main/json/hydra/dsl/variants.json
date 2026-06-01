@@ -1673,5 +1673,5 @@
                     "typeName": "hydra.core.Term"}},
                 "typeName": "hydra.typed.TypedTerm"}}}}}}],
   "dependencies": [{"module": "hydra.variants"}, {"module": "hydra.typed"}, {"module": "hydra.core"}, {"module": "hydra.dsl.core"}],
-  "description": "DSL functions for hydra.variants",
+  "metadata": {"comments": [], "description": "DSL functions for hydra.variants", "seeAlso": []},
   "name": "hydra.dsl.variants"}

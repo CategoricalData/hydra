@@ -63,7 +63,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> ([ShowUtil.ns] L.++ kernelTypesModuleNames),
-            moduleDescription = Just "String representations of hydra.error.packaging types"}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just "String representations of hydra.error.packaging types")}
   where
    definitions = [
      toDefinition conflictingModuleNameError,

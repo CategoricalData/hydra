@@ -3420,5 +3420,5 @@
                 "parameter": "t1"}},
             "parameter": "t0"}}}}],
   "dependencies": [{"module": "hydra.pg.model"}, {"module": "hydra.error.pg"}, {"module": "hydra.validation"}, {"module": "hydra.core"}],
-  "description": "Validation functions for property graphs",
+  "metadata": {"comments": [], "description": "Validation functions for property graphs", "seeAlso": []},
   "name": "hydra.validate.pg"}

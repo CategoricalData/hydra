@@ -105,7 +105,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> ([SerializationSource.ns, TestUtils.ns, Formatting.ns, Names.ns, Constants.ns] L.++ (JavaSyntax.ns:KernelTypes.kernelTypesModuleNames)),
-            moduleDescription = Just "Java test code generation codec for JUnit-based generation tests"}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just "Java test code generation codec for JUnit-based generation tests")}
   where
     definitions = [
       toDefinition buildJavaTestModule,

@@ -2,7 +2,7 @@ module Hydra.Sources.Test.Inference.Classes where
 
 -- Standard imports for term-encoded tests
 import Hydra.Kernel
-import           Hydra.Dsl.Bootstrap (unqualifiedDep)
+import           Hydra.Dsl.Bootstrap (unqualifiedDep, descriptionMetadata)
 import Hydra.Dsl.Meta.Testing                 as Testing
 import Hydra.Dsl.Meta.Terms                   as Terms
 import Hydra.Sources.Kernel.Types.All
@@ -24,7 +24,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = unqualifiedDep <$> ([TestGraph.ns, ModuleName "hydra.inference", ModuleName "hydra.show.core"] ++ kernelTypesModuleNames),
-            moduleDescription = (Just "Inference tests for type class constraints (ordering and equality)")}
+            moduleMetadata = descriptionMetadata ((Just "Inference tests for type class constraints (ordering and equality)"))}
   where
     definitions = [
       Phantoms.toDefinition allTests,

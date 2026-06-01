@@ -860,5 +860,5 @@
               {"name": "target", "type": {"variable": "hydra.owl.syntax.Individual"}}]},
           "variables": []}}}],
   "dependencies": [{"module": "hydra.core"}, {"module": "hydra.rdf.syntax"}, {"module": "hydra.xml.schema"}],
-  "description": "An OWL 2 syntax model. See https://www.w3.org/TR/owl2-syntax",
+  "metadata": {"comments": [], "description": "An OWL 2 syntax model. See https://www.w3.org/TR/owl2-syntax", "seeAlso": []},
   "name": "hydra.owl.syntax"}

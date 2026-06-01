@@ -5321,5 +5321,5 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "description": "C++ code generator: converts Hydra modules to C++ header files",
+  "metadata": {"comments": [], "description": "C++ code generator: converts Hydra modules to C++ header files", "seeAlso": []},
   "name": "hydra.cpp.coder"}

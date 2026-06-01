@@ -1663,5 +1663,5 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "description": "Utilities for reading and writing type and term annotations",
+  "metadata": {"comments": [], "description": "Utilities for reading and writing type and term annotations", "seeAlso": []},
   "name": "hydra.annotations"}

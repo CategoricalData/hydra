@@ -5,7 +5,7 @@ Mirror of packages/hydra-python/src/main/haskell/Hydra/Sources/Python/Coder.hs.
 
 from hydra.core import Name
 from hydra.dsl.python import Just, Nothing  # noqa: F401
-from hydra.packaging import Module, ModuleName
+from hydra.packaging import EntityMetadata, Module, ModuleName
 
 import hydra.dsl.meta.lib.equality as Equality
 import hydra.dsl.meta.lib.lists as Lists
@@ -83,7 +83,12 @@ DEPENDENCIES = [
 
 _PLACEHOLDER = Module(
     NS,
-    Just("Python code generator: converts Hydra modules to Python source code"),
+    Just(EntityMetadata(
+        Just("Python code generator: converts Hydra modules to Python source code"),
+        (),
+        (),
+        Nothing,
+    )),
     DEPENDENCIES,
     (),
 )
@@ -2528,7 +2533,10 @@ def _encode_python_module():
                     ),
                     Maybes.map(
                         _kref.formatting_normalize_comment,
-                        Pkg.module_description(var("mod")),
+                        Maybes.bind(
+                            Pkg.module_metadata(var("mod")),
+                            lam("em", Pkg.entity_metadata_description(var("em"))),
+                        ),
                     ),
                 ),
             ),
@@ -7973,7 +7981,7 @@ def _load_environment_reorder_defs():
 def _build_module() -> Module:
     return Module(
         _PLACEHOLDER.name,
-        _PLACEHOLDER.description,
+        _PLACEHOLDER.metadata,
         _PLACEHOLDER.dependencies,
         (
             _load_environment_reorder_defs(),

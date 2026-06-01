@@ -150,6 +150,7 @@ import hydra.java.syntax.VariableDeclarator;  // AUTO-IMPORT (hydra-java DSL)
 import hydra.java.syntax.VariableDeclaratorId;  // AUTO-IMPORT (hydra-java DSL)
 import hydra.java.syntax.VariableInitializer;  // AUTO-IMPORT (hydra-java DSL)
 import hydra.java.syntax.WhileStatement;  // AUTO-IMPORT (hydra-java DSL)
+import hydra.packaging.EntityMetadata;  // AUTO-IMPORT (hydra-java DSL)
 import hydra.packaging.FileExtension;  // AUTO-IMPORT (hydra-java DSL)
 import hydra.packaging.PrimitiveDefinition;  // AUTO-IMPORT (hydra-java DSL)
 import hydra.packaging.QualifiedName;  // AUTO-IMPORT (hydra-java DSL)
@@ -2709,7 +2710,10 @@ public class Coder {
                                 var("itf")),
                             field(
                                 TopLevelClassOrInterfaceDeclarationWithComments.COMMENTS,
-                                proj(Module.TYPE_, Module.DESCRIPTION, "mod"))))),
+                                Maybes.bind(
+                                    proj(Module.TYPE_, Module.METADATA, "mod"),
+                                    lambda("em",
+                                        proj(EntityMetadata.TYPE_, EntityMetadata.DESCRIPTION, "em"))))))),
                     pair(
                         var("elName"),
                         inject(CompilationUnit.TYPE_,
@@ -14307,7 +14311,11 @@ public class Coder {
 
     public static final Module module_ = new Module(
         NS,
-        Maybe.just("Java code generator: converts Hydra modules to Java source code"),
+        Maybe.just(new EntityMetadata(
+            Maybe.just("Java code generator: converts Hydra modules to Java source code"),
+            List.of(),
+            List.of(),
+            Maybe.nothing())),
         DEPENDENCIES,
         DEFINITIONS);
 }

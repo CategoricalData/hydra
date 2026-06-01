@@ -2224,5 +2224,5 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "description": "Type dereference, lookup, requirements, and instantiation",
+  "metadata": {"comments": [], "description": "Type dereference, lookup, requirements, and instantiation", "seeAlso": []},
   "name": "hydra.resolution"}

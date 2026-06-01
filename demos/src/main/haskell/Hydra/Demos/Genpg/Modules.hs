@@ -49,7 +49,7 @@ salesModule = Module {
     ModuleName "hydra.relational",
     ModuleName "hydra.pg.model",
     ModuleName "hydra.core"],
-  moduleDescription = Just "GenPG schemas for the sales demo"
+  moduleMetadata = (Just (EntityMetadata (Just "GenPG schemas for the sales demo") [] [] Nothing))
 }
 
 
@@ -89,7 +89,7 @@ healthModule = Module {
     ModuleName "hydra.relational",
     ModuleName "hydra.pg.model",
     ModuleName "hydra.core"],
-  moduleDescription = Just "GenPG schemas for the health demo"
+  moduleMetadata = (Just (EntityMetadata (Just "GenPG schemas for the health demo") [] [] Nothing))
 }
 
 

@@ -8,7 +8,7 @@
 module Hydra.Sources.Coq.Utils where
 
 import Hydra.Kernel
-import           Hydra.Dsl.Bootstrap (unqualifiedDep)
+import           Hydra.Dsl.Bootstrap (unqualifiedDep, descriptionMetadata)
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Meta.Lib.Strings                as Strings
 import           Hydra.Dsl.Meta.Phantoms                   as Phantoms
@@ -47,7 +47,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = unqualifiedDep <$> ([Formatting.ns, Rewriting.ns, Sorting.ns, Variables.ns, CoqLanguage.ns] L.++ KernelTypes.kernelTypesModuleNames),
-            moduleDescription = Just "Pure helpers for the Coq code generator"}
+            moduleMetadata = descriptionMetadata (Just "Pure helpers for the Coq code generator")}
   where
     definitions = [
       toDefinition buildConstructorCounts,

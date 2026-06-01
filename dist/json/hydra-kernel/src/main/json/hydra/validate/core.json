@@ -6801,5 +6801,5 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "description": "Validation functions for core terms and types",
+  "metadata": {"comments": [], "description": "Validation functions for core terms and types", "seeAlso": []},
   "name": "hydra.validate.core"}

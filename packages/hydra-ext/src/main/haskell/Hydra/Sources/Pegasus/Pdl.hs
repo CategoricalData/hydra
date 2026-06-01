@@ -27,8 +27,8 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = (DefinitionType <$> definitions),
             moduleDependencies = unqualifiedDep <$> [JsonModel.ns, Core.ns],
-            moduleDescription = Just ("A model for PDL (Pegasus Data Language) schemas. Based on the specification at:\n" ++
-      "  https://linkedin.github.io/rest.li/pdl_schema")}
+            moduleMetadata = descriptionMetadata (Just ("A model for PDL (Pegasus Data Language) schemas. Based on the specification at:\n" ++
+      "  https://linkedin.github.io/rest.li/pdl_schema"))}
   where
     definitions = [
       annotations,

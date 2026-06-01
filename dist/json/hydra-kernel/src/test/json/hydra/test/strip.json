@@ -1198,5 +1198,5 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "description": "Test cases for annotation and type stripping operations",
+  "metadata": {"comments": [], "description": "Test cases for annotation and type stripping operations", "seeAlso": []},
   "name": "hydra.test.strip"}

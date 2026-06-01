@@ -2423,5 +2423,5 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "description": "Utilities for working with Haskell syntax trees",
+  "metadata": {"comments": [], "description": "Utilities for working with Haskell syntax trees", "seeAlso": []},
   "name": "hydra.haskell.utils"}

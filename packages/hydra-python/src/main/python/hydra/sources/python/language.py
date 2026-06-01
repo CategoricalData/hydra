@@ -7,7 +7,7 @@ path produces JSON byte-equivalent to the Haskell-generated language.json.
 
 from hydra.core import Name
 from hydra.dsl.python import Just
-from hydra.packaging import Module, ModuleName
+from hydra.packaging import EntityMetadata, Module, ModuleName
 
 import hydra.dsl.meta.lib.lists as Lists
 import hydra.dsl.meta.lib.sets as Sets
@@ -168,7 +168,11 @@ def _build_module() -> Module:
     # Mirror Haskell pattern: define = definitionInModule module_; build defs; then module_ uses them.
     placeholder = Module(
         _NS,
-        Just("Language constraints and reserved words for Python 3"),
+        Just(EntityMetadata(
+            Just("Language constraints and reserved words for Python 3"),
+            (),
+            (),
+            Nothing())),
         [unqualified_dep(LEXICAL_NS)] + KERNEL_TYPES_NAMESPACES,
         (),  # filled in below
     )
@@ -178,7 +182,7 @@ def _build_module() -> Module:
         placeholder, "pythonReservedWords", _python_reserved_words_term())
     return Module(
         placeholder.name,
-        placeholder.description,
+        placeholder.metadata,
         placeholder.dependencies,
         (
             to_definition(python_language),

@@ -92,7 +92,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> ([ShowPaths.ns, Names.ns, Rewriting.ns] L.++ (DotSyntax.ns:kernelTypesModuleNames)),
-            moduleDescription = Just "Functions for converting Hydra terms to Graphviz DOT graphs"}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just "Functions for converting Hydra terms to Graphviz DOT graphs")}
   where
     definitions = [
       toDefinition labelAttr,

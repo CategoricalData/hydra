@@ -9060,5 +9060,8 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "description": "Type checking and type reconstruction (type-of) for the results of Hydra unification and inference",
+  "metadata": {
+    "comments": [],
+    "description": "Type checking and type reconstruction (type-of) for the results of Hydra unification and inference",
+    "seeAlso": []},
   "name": "hydra.checking"}

@@ -84,7 +84,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> ([Scoping.ns] L.++ kernelTypesModuleNames),
-            moduleDescription = Just "Core rewrite and fold combinators for terms and types"}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just "Core rewrite and fold combinators for terms and types")}
   where
    definitions = [
      toDefinition applyInsideTypeLambdasAndAnnotations,

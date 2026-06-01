@@ -24,7 +24,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = (DefinitionType <$> definitions),
             moduleDependencies = unqualifiedDep <$> [Core.ns, ErrorsChecking.ns, ErrorsCore.ns, Paths.ns, Typing.ns, Variants.ns],
-            moduleDescription = Just "Top-level error types for the Hydra kernel"}
+            moduleMetadata = descriptionMetadata (Just "Top-level error types for the Hydra kernel")}
   where
     definitions = [
       decodingError,

@@ -60,7 +60,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> (kernelTypesModuleNames),
-            moduleDescription = Just "General-purpose parser combinators"}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just "General-purpose parser combinators")}
   where
    definitions = [
      toDefinition alt,

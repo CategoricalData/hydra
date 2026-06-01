@@ -15,7 +15,7 @@ module Hydra.Sources.TypeScript.Coder where
 
 -- Standard imports for term-level sources outside of the kernel
 import Hydra.Kernel
-import           Hydra.Dsl.Bootstrap (unqualifiedDep)
+import           Hydra.Dsl.Bootstrap (unqualifiedDep, descriptionMetadata)
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Meta.Lib.Strings                as Strings
 import           Hydra.Dsl.Meta.Phantoms                   as Phantoms
@@ -72,7 +72,7 @@ module_ = Module {
                Analysis.ns, Annotations.ns, Environment.ns, Formatting.ns, Names.ns, Rewriting.ns,
                Serialization.ns, Sorting.ns, Strip.ns, Variables.ns]
               L.++ (TypeScriptSyntax.ns : KernelTypes.kernelTypesModuleNames)),
-            moduleDescription = Just "TypeScript code generator: emits TypeScript type declarations from Hydra modules"}
+            moduleMetadata = descriptionMetadata (Just "TypeScript code generator: emits TypeScript type declarations from Hydra modules")}
   where
     definitions = [
       toDefinition collectForallParams,
@@ -1479,7 +1479,7 @@ moduleToTypeScript = def "moduleToTypeScript" $
     "allItems" <~ Lists.concat2 (var "typeItems") (var "termItems") $
     -- Module-level description becomes a JSDoc block at the top of the
     -- file, between the auto-generated warning and the imports.
-    "mModuleDoc" <~ Packaging.moduleDescription (var "mod") $
+    "mModuleDoc" <~ (Maybes.bind (Packaging.moduleMetadata (var "mod")) ("em" ~> Packaging.entityMetadataDescription (var "em"))) $
     "moduleDocText" <~ Maybes.cases (var "mModuleDoc")
       (string "")
       (lambda "d" $ Strings.cat2

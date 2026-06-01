@@ -10120,5 +10120,5 @@
     {"module": "hydra.core"},
     {"module": "hydra.util"},
     {"module": "hydra.decode.core"}],
-  "description": "Term decoders for hydra.core",
+  "metadata": {"comments": [], "description": "Term decoders for hydra.core", "seeAlso": []},
   "name": "hydra.decode.core"}

@@ -213,5 +213,5 @@
                 "parameter": "t1"}},
             "parameter": "t0"}}}}],
   "dependencies": [{"module": "hydra.encode.core"}, {"module": "hydra.typed"}],
-  "description": "Term encoders for hydra.typed",
+  "metadata": {"comments": [], "description": "Term encoders for hydra.typed", "seeAlso": []},
   "name": "hydra.encode.typed"}

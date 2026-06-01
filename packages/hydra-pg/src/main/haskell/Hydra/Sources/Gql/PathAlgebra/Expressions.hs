@@ -27,7 +27,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = (DefinitionType <$> definitions),
             moduleDependencies = unqualifiedDep <$> (kernelTypesModuleNames),
-            moduleDescription = Just "Algebraic expression trees for the path algebra by Angles et al., extended for GQL support"}
+            moduleMetadata = descriptionMetadata (Just "Algebraic expression trees for the path algebra by Angles et al., extended for GQL support")}
   where
     definitions = [
       queryExpression, pathExpression, baseExpression, graphReference,

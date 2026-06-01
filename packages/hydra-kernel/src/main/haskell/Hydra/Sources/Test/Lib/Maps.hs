@@ -4,7 +4,7 @@ module Hydra.Sources.Test.Lib.Maps where
 
 -- Standard imports for tests
 import Hydra.Kernel
-import           Hydra.Dsl.Bootstrap (unqualifiedDep)
+import           Hydra.Dsl.Bootstrap (unqualifiedDep, descriptionMetadata)
 import Hydra.Dsl.Meta.Testing                 as Testing
 import Hydra.Dsl.Meta.Terms                   as Terms hiding ((@@))
 import Hydra.Sources.Kernel.Types.All
@@ -39,7 +39,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = unqualifiedDep <$> ([ModuleName "hydra.reduction", ShowCore.ns] ++ kernelTypesModuleNames),
-            moduleDescription = Just "Test cases for hydra.lib.maps primitives"}
+            moduleMetadata = descriptionMetadata (Just "Test cases for hydra.lib.maps primitives")}
   where
     definitions = [Phantoms.toDefinition allTests]
 

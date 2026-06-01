@@ -23,7 +23,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = (DefinitionType <$> definitions),
             moduleDependencies = unqualifiedDep <$> [CoreTypes.ns, ModuleTypes.ns, UtilTypes.ns],
-            moduleDescription = Just "Type definitions for C++ code generation environment"}
+            moduleMetadata = descriptionMetadata (Just "Type definitions for C++ code generation environment")}
   where
     definitions = [
       cppEnvironmentType]

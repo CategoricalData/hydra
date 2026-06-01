@@ -6,7 +6,7 @@ module Hydra.Sources.Protobuf.Coder where
 
 -- Standard imports for term-level sources outside of the kernel
 import Hydra.Kernel
-import           Hydra.Dsl.Bootstrap (unqualifiedDep)
+import           Hydra.Dsl.Bootstrap (unqualifiedDep, descriptionMetadata)
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Meta.Lib.Strings                as Strings
 import           Hydra.Dsl.Meta.Phantoms                   as Phantoms
@@ -70,7 +70,7 @@ module_ = Module {
       Formatting.ns, Names.ns, Rewriting.ns, Strip.ns, Variables.ns, Analysis.ns, Environment.ns, Predicates.ns, Lexical.ns, Serialization.ns,
       Annotations.ns, Constants.ns, ExtractCore.ns, Adapt.ns, ShowCore.ns, ShowError.ns,
       moduleName DecodeCore.module_] L.++ (ProtobufEnvironment.ns:Proto3Syntax.ns:KernelTypes.kernelTypesModuleNames)),
-            moduleDescription = Just "Protobuf code generator: converts Hydra modules to Protocol Buffers v3 definitions"}
+            moduleMetadata = descriptionMetadata (Just "Protobuf code generator: converts Hydra modules to Protocol Buffers v3 definitions")}
   where
     definitions = [
       toDefinition collectStructuralTypes,
@@ -164,7 +164,7 @@ constructModule = def "constructModule" $
   doc "Construct a Protobuf file from a Hydra module and its type definitions" $
   "cx" ~> "g" ~> "mod" ~> "typeDefs" ~> lets [
     "ns_">: Packaging.moduleName (var "mod"),
-    "desc">: Packaging.moduleDescription (var "mod"),
+    "desc">: (Maybes.bind (Packaging.moduleMetadata (var "mod")) ("em" ~> Packaging.entityMetadataDescription (var "em"))),
     "toDef">: "td" ~> lets [
       "name">: Packaging.typeDefinitionName (var "td"),
       "typ">: Core.typeSchemeBody $ Packaging.typeDefinitionTypeScheme (var "td"),

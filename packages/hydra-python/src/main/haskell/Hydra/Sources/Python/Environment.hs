@@ -26,7 +26,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = (DefinitionType <$> definitions),
             moduleDependencies = unqualifiedDep <$> [Syntax.ns, Util.ns, Core.ns, Graph.ns, Module.ns, Typing.ns],
-            moduleDescription = Just "Environment types for Python code generation"}
+            moduleMetadata = descriptionMetadata (Just "Environment types for Python code generation")}
   where
     definitions = [
       pythonVersion,

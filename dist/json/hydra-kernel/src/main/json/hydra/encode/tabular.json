@@ -391,5 +391,5 @@
                 "domain": {"variable": "hydra.tabular.TableType"},
                 "parameter": "x"}}}}}}],
   "dependencies": [{"module": "hydra.encode.core"}, {"module": "hydra.encode.relational"}, {"module": "hydra.tabular"}],
-  "description": "Term encoders for hydra.tabular",
+  "metadata": {"comments": [], "description": "Term encoders for hydra.tabular", "seeAlso": []},
   "name": "hydra.encode.tabular"}

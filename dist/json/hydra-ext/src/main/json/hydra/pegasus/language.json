@@ -136,5 +136,5 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "description": "Language constraints for LinkedIn Pegasus (PDL)",
+  "metadata": {"comments": [], "description": "Language constraints for LinkedIn Pegasus (PDL)", "seeAlso": []},
   "name": "hydra.pegasus.language"}

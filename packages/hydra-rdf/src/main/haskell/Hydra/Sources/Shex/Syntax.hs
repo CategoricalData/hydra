@@ -19,8 +19,8 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = (DefinitionType <$> definitions),
             moduleDependencies = unqualifiedDep <$> [],
-            moduleDescription = Just ("A Shex model. Based on the BNF at:\n" ++
-        "  https://github.com/shexSpec/grammar/blob/master/bnf")}
+            moduleMetadata = descriptionMetadata (Just ("A Shex model. Based on the BNF at:\n" ++
+        "  https://github.com/shexSpec/grammar/blob/master/bnf"))}
   where
     definitions = [
       shexDoc,

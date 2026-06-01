@@ -2,7 +2,7 @@ module Hydra.Sources.Test.Formatting where
 
 -- Standard imports for shallow DSL tests
 import Hydra.Kernel
-import           Hydra.Dsl.Bootstrap (unqualifiedDep)
+import           Hydra.Dsl.Bootstrap (unqualifiedDep, descriptionMetadata)
 import Hydra.Dsl.Meta.Testing                 as Testing
 import Hydra.Sources.Kernel.Types.All
 import qualified Hydra.Dsl.Meta.Core          as Core
@@ -29,7 +29,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = unqualifiedDep <$> ([TestGraph.ns, Formatting.ns] ++ kernelTypesModuleNames),
-            moduleDescription = (Just "Test cases for string formatting and case conversion")}
+            moduleMetadata = descriptionMetadata ((Just "Test cases for string formatting and case conversion"))}
   where
     definitions = [
       Phantoms.toDefinition allTests,

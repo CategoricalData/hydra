@@ -84,7 +84,7 @@ module_ = Module {
             moduleName = (ModuleName "hydra.protobuf.language"),
             moduleDefinitions = [toDefinition protobufLanguage, toDefinition protobufReservedWords],
             moduleDependencies = Bootstrap.unqualifiedDep <$> ([Lexical.ns, Strip.ns] L.++ KernelTypes.kernelTypesModuleNames),
-            moduleDescription = Just "Language constraints for Protobuf v3"}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just "Language constraints for Protobuf v3")}
 definition_ :: String -> TypedTerm a -> TypedTermDefinition a
 definition_ = definitionInModule module_
 

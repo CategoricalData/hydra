@@ -95,7 +95,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> ([Strip.ns, moduleName Literals.module_, moduleName ExtractCore.module_] L.++ KernelTypes.kernelTypesModuleNames),
-            moduleDescription = Just "JSON decoding for Hydra terms. Converts JSON Values to Terms using Either for error handling."}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just "JSON decoding for Hydra terms. Converts JSON Values to Terms using Either for error handling.")}
   where
     definitions = [
       toDefinition decodeFloat,

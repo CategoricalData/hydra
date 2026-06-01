@@ -782,5 +782,5 @@
     {"module": "hydra.json.model"},
     {"module": "hydra.util"},
     {"module": "hydra.decode.core"}],
-  "description": "Term decoders for hydra.json.model",
+  "metadata": {"comments": [], "description": "Term decoders for hydra.json.model", "seeAlso": []},
   "name": "hydra.decode.json.model"}

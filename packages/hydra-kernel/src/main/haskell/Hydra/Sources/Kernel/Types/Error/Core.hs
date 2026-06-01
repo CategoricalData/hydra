@@ -21,7 +21,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = (DefinitionType <$> definitions),
             moduleDependencies = unqualifiedDep <$> [Paths.ns, Core.ns, Variants.ns],
-            moduleDescription = Just "Error types for core type and term validation"}
+            moduleMetadata = descriptionMetadata (Just "Error types for core type and term validation")}
   where
     definitions = [
       constantConditionError,

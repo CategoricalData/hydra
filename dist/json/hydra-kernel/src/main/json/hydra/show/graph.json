@@ -65,5 +65,5 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "description": "String representations of hydra.graph types",
+  "metadata": {"comments": [], "description": "String representations of hydra.graph types", "seeAlso": []},
   "name": "hydra.show.graph"}

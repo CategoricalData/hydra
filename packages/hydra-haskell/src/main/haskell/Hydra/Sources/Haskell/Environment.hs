@@ -22,7 +22,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = (DefinitionType <$> definitions),
             moduleDependencies = unqualifiedDep <$> [],
-            moduleDescription = Just "Environment types for Haskell code generation"}
+            moduleMetadata = descriptionMetadata (Just "Environment types for Haskell code generation")}
   where
     definitions = [
       haskellModuleMetadata]

@@ -120,5 +120,5 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "description": "Language constraints for JSON Schema",
+  "metadata": {"comments": [], "description": "Language constraints for JSON Schema", "seeAlso": []},
   "name": "hydra.json.schema.language"}

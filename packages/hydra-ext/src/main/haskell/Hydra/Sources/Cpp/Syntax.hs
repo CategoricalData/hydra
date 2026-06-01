@@ -27,7 +27,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = (DefinitionType <$> definitions),
             moduleDependencies = unqualifiedDep <$> [Core.ns],
-            moduleDescription = Just "A C++ syntax model, focusing on features for representing algebraic data types and declarative computations"}
+            moduleMetadata = descriptionMetadata (Just "A C++ syntax model, focusing on features for representing algebraic data types and declarative computations")}
   where
     definitions = accessSpecifiers ++ declarationTypes ++ expressionTypes ++ statementTypes
                ++ typeTypes ++ literalTypes ++ containers ++ utilities ++ operatorTypes

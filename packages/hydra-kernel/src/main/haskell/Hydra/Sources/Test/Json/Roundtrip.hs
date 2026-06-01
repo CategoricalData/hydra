@@ -9,7 +9,7 @@ module Hydra.Sources.Test.Json.Roundtrip where
 
 -- Standard imports for tests
 import Hydra.Kernel
-import           Hydra.Dsl.Bootstrap (unqualifiedDep)
+import           Hydra.Dsl.Bootstrap (unqualifiedDep, descriptionMetadata)
 import Hydra.Dsl.Meta.Testing                 as Testing
 import Hydra.Dsl.Meta.Terms                   as Terms hiding ((@@))
 import Hydra.Sources.Kernel.Types.All
@@ -41,7 +41,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = unqualifiedDep <$> ([ShowCore.ns, ModuleName "hydra.json.encode", ModuleName "hydra.json.decode"] ++ kernelTypesModuleNames),
-            moduleDescription = (Just "Round-trip test cases for JSON encoding and decoding")}
+            moduleMetadata = descriptionMetadata ((Just "Round-trip test cases for JSON encoding and decoding"))}
   where
     definitions = [
         Phantoms.toDefinition allTests]

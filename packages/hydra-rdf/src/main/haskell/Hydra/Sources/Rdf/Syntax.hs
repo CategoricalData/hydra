@@ -24,7 +24,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = (DefinitionType <$> definitions),
             moduleDependencies = unqualifiedDep <$> [Core.ns],
-            moduleDescription = Just "An RDF 1.1 syntax model"}
+            moduleMetadata = descriptionMetadata (Just "An RDF 1.1 syntax model")}
   where
     definitions = [
       blankNode,

@@ -67,7 +67,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> ([Annotations.ns, Constants.ns, Formatting.ns] L.++ kernelTypesModuleNames),
-            moduleDescription = Just ("Functions for working with qualified names.")}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just ("Functions for working with qualified names."))}
   where
    definitions = [
      toDefinition compactName,

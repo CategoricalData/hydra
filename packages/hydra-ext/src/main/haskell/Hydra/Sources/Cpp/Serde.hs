@@ -97,7 +97,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> ([Serialization.ns] L.++ (CppSyntax.ns:KernelTypes.kernelTypesModuleNames)),
-            moduleDescription = Just "Serialization functions for converting C++ AST to abstract expressions"}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just "Serialization functions for converting C++ AST to abstract expressions")}
   where
     definitions = [
       toDefinition accessSpecifierToExpr,

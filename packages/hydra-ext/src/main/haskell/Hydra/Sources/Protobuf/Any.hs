@@ -24,7 +24,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = (DefinitionType <$> definitions),
             moduleDependencies = unqualifiedDep <$> [Core.ns],
-            moduleDescription = Just "Based on https://github.com/protocolbuffers/protobuf/blob/main/src/google/protobuf/any.proto"}
+            moduleMetadata = descriptionMetadata (Just "Based on https://github.com/protocolbuffers/protobuf/blob/main/src/google/protobuf/any.proto")}
   where
     definitions = [any_]
 

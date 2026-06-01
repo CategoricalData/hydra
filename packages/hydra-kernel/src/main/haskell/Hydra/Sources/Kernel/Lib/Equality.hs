@@ -23,47 +23,55 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> kernelTypesModuleNames,
-            moduleDescription = Just "Primitives in the hydra.lib.equality module."}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just "Primitives in the hydra.lib.equality module.")}
   where
     definitions = [
-      primNoDef "compare" "Compare two values and return a Comparison." compareSig (Just
+      primNoDef "compare" "Compare two values and return a Comparison." compareSig [
         "compare(x, y) returns the hydra.util.Comparison value that classifies the relationship between x\
-        \ and y under the type's ordering: LessThan if x < y, EqualTo if x == y, GreaterThan if x > y. The\
-        \ result type's three-valued tag is the canonical primitive comparison; the boolean comparators\
-        \ (lt/lte/gt/gte) and equal are derivable from it. Requires an 'ordering' type-class constraint on\
-        \ the argument type, which is the closest Hydra equivalent to Haskell's Ord instance. Total.\
-        \ Corresponds to Haskell's compare :: Ord a => a -> a -> Ordering."),
-      primNoDef "equal"   "Check whether two values are equal." equalSig (Just
-        "equal(x, y) returns true if x and y are structurally equal under the type's notion of equality.\
-        \ Requires an 'equality' type-class constraint on the argument type, which is the closest Hydra\
-        \ equivalent to Haskell's Eq instance. Equality is reflexive, symmetric, and transitive (no\
-        \ NaN-style exception on floating-point: floating-point equality is provided per the underlying\
-        \ host's IEEE 754 comparison rules, so NaN /= NaN at the level of float64/float32). Total.\
-        \ Corresponds to Haskell's (==) :: Eq a => a -> a -> Bool."),
-      primNoDef "gt"      "Check whether the first value is greater than the second." gtSig (Just
-        "gt(x, y) returns true iff x > y under the type's ordering. Requires an 'ordering' constraint on\
-        \ the argument type. Total. Corresponds to Haskell's (>) :: Ord a => a -> a -> Bool."),
-      primNoDef "gte"     "Check whether the first value is greater than or equal to the second." gteSig (Just
-        "gte(x, y) returns true iff x >= y under the type's ordering. Requires an 'ordering' constraint on\
-        \ the argument type. Total. Corresponds to Haskell's (>=) :: Ord a => a -> a -> Bool."),
-      toPrimitive "Return a value unchanged." identitySig (Just
-        "identity(x) = x. The polymorphic identity function. Total. Corresponds to Haskell's\
-        \ id :: a -> a.") identity_,
-      primNoDef "lt"      "Check whether the first value is less than the second." ltSig (Just
-        "lt(x, y) returns true iff x < y under the type's ordering. Requires an 'ordering' constraint on\
-        \ the argument type. Total. Corresponds to Haskell's (<) :: Ord a => a -> a -> Bool."),
-      primNoDef "lte"     "Check whether the first value is less than or equal to the second." lteSig (Just
-        "lte(x, y) returns true iff x <= y under the type's ordering. Requires an 'ordering' constraint on\
-        \ the argument type. Total. Corresponds to Haskell's (<=) :: Ord a => a -> a -> Bool."),
-      toPrimitive "Return the maximum of two values." maxSig (Just
+        \ and y under the type's ordering: LessThan if x < y, EqualTo if x == y, GreaterThan if x > y.",
+        "The result type's three-valued tag is the canonical primitive comparison; the boolean comparators\
+        \ (lt/lte/gt/gte) and equal are derivable from it.",
+        "Requires an 'ordering' type-class constraint on the argument type, which is the closest Hydra\
+        \ equivalent to Haskell's Ord instance.",
+        "Total. Corresponds to Haskell's compare :: Ord a => a -> a -> Ordering."],
+      primNoDef "equal"   "Check whether two values are equal." equalSig [
+        "equal(x, y) returns true if x and y are structurally equal under the type's notion of equality.",
+        "Requires an 'equality' type-class constraint on the argument type, which is the closest Hydra\
+        \ equivalent to Haskell's Eq instance.",
+        "Equality is reflexive, symmetric, and transitive (no NaN-style exception on floating-point:\
+        \ floating-point equality is provided per the underlying host's IEEE 754 comparison rules, so\
+        \ NaN /= NaN at the level of float64/float32).",
+        "Total. Corresponds to Haskell's (==) :: Eq a => a -> a -> Bool."],
+      primNoDef "gt"      "Check whether the first value is greater than the second." gtSig [
+        "gt(x, y) returns true iff x > y under the type's ordering.",
+        "Requires an 'ordering' constraint on the argument type.",
+        "Total. Corresponds to Haskell's (>) :: Ord a => a -> a -> Bool."],
+      primNoDef "gte"     "Check whether the first value is greater than or equal to the second." gteSig [
+        "gte(x, y) returns true iff x >= y under the type's ordering.",
+        "Requires an 'ordering' constraint on the argument type.",
+        "Total. Corresponds to Haskell's (>=) :: Ord a => a -> a -> Bool."],
+      toPrimitive "Return a value unchanged." identitySig [
+        "identity(x) = x. The polymorphic identity function.",
+        "Total. Corresponds to Haskell's id :: a -> a."] identity_,
+      primNoDef "lt"      "Check whether the first value is less than the second." ltSig [
+        "lt(x, y) returns true iff x < y under the type's ordering.",
+        "Requires an 'ordering' constraint on the argument type.",
+        "Total. Corresponds to Haskell's (<) :: Ord a => a -> a -> Bool."],
+      primNoDef "lte"     "Check whether the first value is less than or equal to the second." lteSig [
+        "lte(x, y) returns true iff x <= y under the type's ordering.",
+        "Requires an 'ordering' constraint on the argument type.",
+        "Total. Corresponds to Haskell's (<=) :: Ord a => a -> a -> Bool."],
+      toPrimitive "Return the maximum of two values." maxSig [
         "max(x, y) returns the larger of x and y under the type's ordering; if x == y, it returns y\
-        \ (matching Haskell's convention). Requires an 'ordering' constraint on the argument type. Total.\
-        \ Corresponds to Haskell's max :: Ord a => a -> a -> a.") max_,
-      toPrimitive "Return the minimum of two values." minSig (Just
+        \ (matching Haskell's convention).",
+        "Requires an 'ordering' constraint on the argument type.",
+        "Total. Corresponds to Haskell's max :: Ord a => a -> a -> a."] max_,
+      toPrimitive "Return the minimum of two values." minSig [
         "min(x, y) returns the smaller of x and y under the type's ordering; if x == y, it returns x\
-        \ (matching Haskell's convention). Requires an 'ordering' constraint on the argument type. Total.\
-        \ Corresponds to Haskell's min :: Ord a => a -> a -> a.") min_]
-primNoDef :: String -> String -> TermSignature -> Maybe String -> Definition
+        \ (matching Haskell's convention).",
+        "Requires an 'ordering' constraint on the argument type.",
+        "Total. Corresponds to Haskell's min :: Ord a => a -> a -> a."] min_]
+primNoDef :: String -> String -> TermSignature -> [String] -> Definition
 primNoDef localName description s comments =
   toPrimitiveNoDefault description s (unqualifyName (QualifiedName (Just ns) localName)) comments
 

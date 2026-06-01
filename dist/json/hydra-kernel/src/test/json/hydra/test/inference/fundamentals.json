@@ -22039,5 +22039,5 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "description": "Inference tests for fundamental language features",
+  "metadata": {"comments": [], "description": "Inference tests for fundamental language features", "seeAlso": []},
   "name": "hydra.test.inference.fundamentals"}

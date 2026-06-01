@@ -64,7 +64,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> (kernelTypesModuleNames),
-            moduleDescription = Just ("Reflection functions for working with term, type, and literal type variants, as well as numeric precision.")}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just ("Reflection functions for working with term, type, and literal type variants, as well as numeric precision."))}
   where
     definitions = [
       toDefinition floatTypePrecision,

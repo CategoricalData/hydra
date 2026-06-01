@@ -331,6 +331,17 @@ or the loader's `hydra-defstruct` macro will short-circuit on the old constructo
 `fboundp` and skip defining the new accessor — leading to "function FOO undefined"
 errors at test time.
 
+`gen-compat.sh` is **not** run by `bin/sync.sh`, so a stale shim is invisible to a fully
+green sync (which only runs Haskell `stack test`) — it surfaces only under the per-target
+Lisp suites. When a field is *reshaped* (e.g. #402 collapsing `Module.description` into a
+`metadata` record), the symptom is a runtime type error rather than "undefined": the
+alist accessors still key the old field, so a `Maybe` value reaches list-typed code as
+`EXCEPTION: The value :JUST is not of type LIST` in the `validate.packaging` tests.
+Always run `bin/test.sh --no-sync clojure,common-lisp,scheme,emacs-lisp` after a
+`PrimitiveDefinition`/`Module`/`Package` field-shape change. The same change must also
+hand-update the per-dialect `prims.*` and `test_runner.*` registries under `heads/lisp/`,
+which construct these records positionally and break the same way.
+
 ### Emacs Lisp regex needs `case-fold-search` bound to nil
 
 Emacs' default `case-fold-search` is `t` in batch mode, which makes
@@ -371,6 +382,27 @@ Before scheduling a long sync in your worktree, scan for sibling activity:
 If another session is mid-sync, prefer waiting unless the user explicitly
 authorizes parallel syncs. Don't kill the other process — it belongs to a
 different session (see CLAUDE.md "Hard rules").
+
+### Phase 5 Java self-host wedging at "typed-so-far" is #372, not your change
+
+When Phase 5 (native Java DSL → JSON) hangs for tens of minutes pinned at ~100% CPU on a
+line like `[hydra-java] 8 write / 8 infer / 142 typed-so-far`, it is the latent O(N²)
+Java self-host inference ([#372](https://github.com/CategoricalData/hydra/issues/372)),
+whose severity is dominated by JVM/JIT state and is amplified ~50× by a competing
+`JavaSelfHostDemo`/`UpdateJavaJson` JVM from a sibling worktree sync. Confirm it's
+GC-bound rather than progressing: `sample <pid> 1` will show `G1CollectedHeap` /
+`GC Thread` frames dominating, with flat RSS (steady churn, not a growing leak).
+
+Two things this session established:
+- **Don't wait for an idle machine.** This is a shared box; insisting on a "solo" run to
+  make #372 finish is unrealistic. The fix is structural (skip already-typed bindings in
+  `inferModulesGiven`), not environmental — see [#372].
+- **A change that touches no java/python *coder* source does not need Phase 5 to re-run.**
+  Phase 5's output is a pure function of the `hydra.{java,python}.*` coder sources; a kernel
+  or `hydra.lib.*` edit (e.g. #402's `hydra.lib.chars` comments) leaves that output identical
+  to the prior green sync, so the committed `coder.json` already *is* the validated Phase-5
+  result. Validate such a change with `bin/test.sh` (which compiles/runs generated target
+  code, not the slow self-host inference) rather than fighting a Phase-5 wedge.
 
 ### Bootstrap "Could not find module" early in compile is usually transient
 
@@ -833,6 +865,14 @@ Recovery:
    `HYDRA_INCLUDE_JAVA_PYTHON=1`, regenerates the JSON from the Haskell
    DSL (which is the up-to-date source for the rename). Phases 2-4 then
    succeed; Phase 5 overwrites with the native generators' output.
+
+This warm-tree trap is tracked as
+[#406](https://github.com/CategoricalData/hydra/issues/406): the freshness gate keys on
+file *existence*, not source digest, so a kernel rename can pass Phase 1 (Haskell `stack
+test` green) yet deterministically break Phase 2 — the proposed fix is to make the
+java/python `coder.json` gate digest-based like the other Phase-1 inputs. Until then,
+exporting `HYDRA_INCLUDE_JAVA_PYTHON=1` for the run is the direct lever (no need to delete
+sentinels if you also drop `dist/json/hydra-{java,python}/build/main/digest.json`).
 
 Stale `dist/<lang>/hydra-kernel/<old-type>.{java,py,...}` files are a
 sibling symptom: `--prune-stale` in `assemble-distribution.sh` does NOT

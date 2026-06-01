@@ -1592,5 +1592,5 @@
     {"module": "hydra.encode.typing"},
     {"module": "hydra.encode.variants"},
     {"module": "hydra.errors"}],
-  "description": "Term encoders for hydra.errors",
+  "metadata": {"comments": [], "description": "Term encoders for hydra.errors", "seeAlso": []},
   "name": "hydra.encode.errors"}

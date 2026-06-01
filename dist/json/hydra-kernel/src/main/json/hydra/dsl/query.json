@@ -5338,5 +5338,5 @@
                 "domain": {"application": {"argument": {"variable": "hydra.query.Variable"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}}}}],
   "dependencies": [{"module": "hydra.query"}, {"module": "hydra.typed"}, {"module": "hydra.core"}, {"module": "hydra.dsl.core"}],
-  "description": "DSL functions for hydra.query",
+  "metadata": {"comments": [], "description": "DSL functions for hydra.query", "seeAlso": []},
   "name": "hydra.dsl.query"}

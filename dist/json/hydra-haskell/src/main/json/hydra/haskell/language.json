@@ -238,5 +238,5 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "description": "Language constraints and reserved words for Haskell",
+  "metadata": {"comments": [], "description": "Language constraints and reserved words for Haskell", "seeAlso": []},
   "name": "hydra.haskell.language"}

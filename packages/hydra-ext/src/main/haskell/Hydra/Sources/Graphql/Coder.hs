@@ -98,7 +98,7 @@ module_ = Module {
             moduleDependencies = Bootstrap.unqualifiedDep <$> ([Formatting.ns, Names.ns, Strip.ns, Environment.ns, Predicates.ns, Annotations.ns, Serialization.ns,
       moduleName GraphqlLanguage.module_,
       GraphqlSerde.ns] L.++ (moduleName GraphqlSyntax.module_:KernelTypes.kernelTypesModuleNames)),
-            moduleDescription = Just "GraphQL code generator: converts Hydra modules to GraphQL schema definitions"}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just "GraphQL code generator: converts Hydra modules to GraphQL schema definitions")}
   where
     definitions = [
       toDefinition descriptionFromType,

@@ -22,7 +22,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = (DefinitionType <$> definitions),
             moduleDependencies = unqualifiedDep <$> [Core.ns],
-            moduleDescription = Just "A JSON syntax model. See the BNF at https://www.json.org"}
+            moduleMetadata = descriptionMetadata (Just "A JSON syntax model. See the BNF at https://www.json.org")}
   where
     definitions = [
       value]

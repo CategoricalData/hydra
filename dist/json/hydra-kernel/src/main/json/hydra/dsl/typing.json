@@ -8388,5 +8388,5 @@
     {"module": "hydra.paths"},
     {"module": "hydra.dsl.core"},
     {"module": "hydra.dsl.paths"}],
-  "description": "DSL functions for hydra.typing",
+  "metadata": {"comments": [], "description": "DSL functions for hydra.typing", "seeAlso": []},
   "name": "hydra.dsl.typing"}

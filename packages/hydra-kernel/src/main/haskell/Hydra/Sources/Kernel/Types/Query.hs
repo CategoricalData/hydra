@@ -20,7 +20,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = (DefinitionType <$> definitions),
             moduleDependencies = unqualifiedDep <$> [Core.ns],
-            moduleDescription = Just "A model for language-agnostic graph pattern queries"}
+            moduleMetadata = descriptionMetadata (Just "A model for language-agnostic graph pattern queries")}
   where
     definitions = [
       comparisonConstraint,

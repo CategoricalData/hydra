@@ -93,7 +93,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> ([Constants.ns, Serialization.ns] L.++ (JavaSyntax.ns:KernelTypes.kernelTypesModuleNames)),
-            moduleDescription = Just "Java serializer: converts Java AST to concrete syntax"}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just "Java serializer: converts Java AST to concrete syntax")}
   where
     definitions = [
       toDefinition additionalBoundToExpr,

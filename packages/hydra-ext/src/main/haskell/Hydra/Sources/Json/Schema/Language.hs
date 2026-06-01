@@ -86,7 +86,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = [toDefinition jsonSchemaLanguage],
             moduleDependencies = Bootstrap.unqualifiedDep <$> ([Reflect.ns] L.++ KernelTypes.kernelTypesModuleNames),
-            moduleDescription = Just "Language constraints for JSON Schema"}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just "Language constraints for JSON Schema")}
 define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModule module_
 

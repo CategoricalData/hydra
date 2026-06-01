@@ -79,7 +79,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> ([Annotations.ns, ExtractCore.ns, Formatting.ns, Lexical.ns, Names.ns, Predicates.ns, Rewriting.ns, ShowCore.ns] L.++ kernelTypesModuleNames),
-            moduleDescription = Just "Functions for generating term decoders from type modules"}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just "Functions for generating term decoders from type modules")}
   where
     definitions = [
       toDefinition collectForallVariables,
@@ -491,9 +491,11 @@ decodeModule = define "decodeModule" $
         "allDecodedDeps" <~ (primitive _lists_nub @@ (Lists.map decodeModuleName (Lists.map ("dep" ~> Packaging.moduleDependencyModule (var "dep")) (Packaging.moduleDependencies (var "mod"))))) $
         right (just (Packaging.module_
           (decodeModuleName @@ (Packaging.moduleName (var "mod")))
-          (just (Strings.cat $ list [
-            string "Term decoders for ",
-            Packaging.unModuleName (Packaging.moduleName (var "mod"))]))
+          (just (Packaging.entityMetadata
+            (just (Strings.cat $ list [
+              string "Term decoders for ",
+              Packaging.unModuleName (Packaging.moduleName (var "mod"))]))
+            (list ([] :: [TypedTerm String])) (list ([] :: [TypedTerm EntityReference])) nothing))
           (Lists.map ("ns" ~> Packaging.moduleDependency (var "ns") nothing) (Lists.concat2
             (list [
               (Packaging.moduleName2 $ string "hydra.extract.core"),
@@ -503,7 +505,7 @@ decodeModule = define "decodeModule" $
               Packaging.moduleName2 $ string "hydra.util"])
             (var "allDecodedDeps")))
           (Lists.map ("b" ~> Packaging.definitionTerm (Packaging.termDefinition
-            (Core.bindingName $ var "b") (Core.bindingTerm $ var "b")
+            (Core.bindingName $ var "b") nothing (Core.bindingTerm $ var "b")
             (Maybes.map Scoping.typeSchemeToTermSignature $ Core.bindingTypeScheme $ var "b")))
             (var "decodedBindings")))))
 

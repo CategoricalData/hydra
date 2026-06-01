@@ -1664,5 +1664,8 @@
           "variables": []}}},
     {"type": {"name": "hydra.azure.dtld.Unit", "typeScheme": {"body": {"wrap": {"unit": {}}}, "variables": []}}}],
   "dependencies": [{"module": "hydra.core"}],
-  "description": "An Azure Digital Twin Definition Language (DTLD) model. Based on:\n  https://github.com/Azure/opendigitaltwins-dtdl/blob/master/DTDL/v2/dtdlv2.md#digital-twins-definition-language\nDTLD features which are not currently included in this model:\n  * geospatial schemas (https://github.com/Azure/opendigitaltwins-dtdl/blob/master/DTDL/v2/dtdlv2.md#geospatial-schemas)\n  * semantic types and units (https://github.com/Azure/opendigitaltwins-dtdl/blob/master/DTDL/v2/dtdlv2.md#semantic-types)\n  * model versioning (https://github.com/Azure/opendigitaltwins-dtdl/blob/master/DTDL/v2/dtdlv2.md#model-versioning)",
+  "metadata": {
+    "comments": [],
+    "description": "An Azure Digital Twin Definition Language (DTLD) model. Based on:\n  https://github.com/Azure/opendigitaltwins-dtdl/blob/master/DTDL/v2/dtdlv2.md#digital-twins-definition-language\nDTLD features which are not currently included in this model:\n  * geospatial schemas (https://github.com/Azure/opendigitaltwins-dtdl/blob/master/DTDL/v2/dtdlv2.md#geospatial-schemas)\n  * semantic types and units (https://github.com/Azure/opendigitaltwins-dtdl/blob/master/DTDL/v2/dtdlv2.md#semantic-types)\n  * model versioning (https://github.com/Azure/opendigitaltwins-dtdl/blob/master/DTDL/v2/dtdlv2.md#model-versioning)",
+    "seeAlso": []},
   "name": "hydra.azure.dtld"}

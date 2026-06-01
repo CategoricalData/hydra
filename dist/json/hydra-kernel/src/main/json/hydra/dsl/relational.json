@@ -2582,5 +2582,5 @@
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}}}}],
   "dependencies": [{"module": "hydra.relational"}, {"module": "hydra.typed"}, {"module": "hydra.core"}, {"module": "hydra.dsl.core"}],
-  "description": "DSL functions for hydra.relational",
+  "metadata": {"comments": [], "description": "DSL functions for hydra.relational", "seeAlso": []},
   "name": "hydra.dsl.relational"}

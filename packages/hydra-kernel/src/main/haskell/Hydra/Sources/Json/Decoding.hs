@@ -93,7 +93,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> (KernelTypes.kernelTypesModuleNames),
-            moduleDescription = Just "Decoding functions for JSON data"}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just "Decoding functions for JSON data")}
   where
    definitions = [
      Phantoms.toDefinition decodeArray,

@@ -24,12 +24,12 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = (DefinitionType <$> definitions),
             moduleDependencies = unqualifiedDep <$> [Core.ns],
-            moduleDescription = Just ("An Azure Digital Twin Definition Language (DTLD) model. Based on:\n" ++
+            moduleMetadata = descriptionMetadata (Just ("An Azure Digital Twin Definition Language (DTLD) model. Based on:\n" ++
       "  https://github.com/Azure/opendigitaltwins-dtdl/blob/master/DTDL/v2/dtdlv2.md#digital-twins-definition-language\n" ++
       "DTLD features which are not currently included in this model:\n" ++
       "  * geospatial schemas (https://github.com/Azure/opendigitaltwins-dtdl/blob/master/DTDL/v2/dtdlv2.md#geospatial-schemas)\n" ++
       "  * semantic types and units (https://github.com/Azure/opendigitaltwins-dtdl/blob/master/DTDL/v2/dtdlv2.md#semantic-types)\n" ++
-      "  * model versioning (https://github.com/Azure/opendigitaltwins-dtdl/blob/master/DTDL/v2/dtdlv2.md#model-versioning)")}
+      "  * model versioning (https://github.com/Azure/opendigitaltwins-dtdl/blob/master/DTDL/v2/dtdlv2.md#model-versioning)"))}
   where
     definitions = [
       command,

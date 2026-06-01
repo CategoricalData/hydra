@@ -134,5 +134,8 @@
               {"name": "none", "type": {"unit": {}}}]},
           "variables": []}}}],
   "dependencies": [{"module": "hydra.core"}],
-  "description": "A model from the Graphviz DOT graph description language. Based on the grammar at https://graphviz.org/doc/info/lang.html",
+  "metadata": {
+    "comments": [],
+    "description": "A model from the Graphviz DOT graph description language. Based on the grammar at https://graphviz.org/doc/info/lang.html",
+    "seeAlso": []},
   "name": "hydra.graphviz.dot"}

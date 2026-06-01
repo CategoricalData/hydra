@@ -249,12 +249,13 @@ generateSourceFiles printDefinitions lang doInfer doExpand doHoistCaseStatements
               refreshModule =
                       \els -> \m -> Packaging.Module {
                         Packaging.moduleName = (Packaging.moduleName m),
-                        Packaging.moduleDescription = (Packaging.moduleDescription m),
+                        Packaging.moduleMetadata = (Packaging.moduleMetadata m),
                         Packaging.moduleDependencies = (Packaging.moduleDependencies m),
                         Packaging.moduleDefinitions = (Maybes.cat (Lists.map (\d -> case d of
                           Packaging.DefinitionType v0 -> Just (Packaging.DefinitionType v0)
                           Packaging.DefinitionTerm v0 -> Maybes.map (\b -> Packaging.DefinitionTerm (Packaging.TermDefinition {
                             Packaging.termDefinitionName = (Core.bindingName b),
+                            Packaging.termDefinitionMetadata = Nothing,
                             Packaging.termDefinitionTerm = (Core.bindingTerm b),
                             Packaging.termDefinitionSignature = (Maybes.map Scoping.typeSchemeToTermSignature (Core.bindingTypeScheme b))})) (Lists.find (\b -> Equality.equal (Core.bindingName b) (Packaging.termDefinitionName v0)) els)
                           Packaging.DefinitionPrimitive v0 -> Just (Packaging.DefinitionPrimitive v0)) (Packaging.moduleDefinitions m)))}
@@ -365,6 +366,7 @@ lowerPrimitiveDefinitions m =
                 Lists.map (\d -> case d of
                   Packaging.DefinitionPrimitive v0 -> Packaging.DefinitionTerm (Packaging.TermDefinition {
                     Packaging.termDefinitionName = (Packaging.primitiveDefinitionName v0),
+                    Packaging.termDefinitionMetadata = Nothing,
                     Packaging.termDefinitionTerm = (EncodePackaging.primitiveDefinition v0),
                     Packaging.termDefinitionSignature = (Just primDefSig)})
                   _ -> d) origDefs
@@ -381,7 +383,7 @@ lowerPrimitiveDefinitions m =
                         Packaging.moduleDependencyPackage = Nothing}]
         in Packaging.Module {
           Packaging.moduleName = (Packaging.moduleName m),
-          Packaging.moduleDescription = (Packaging.moduleDescription m),
+          Packaging.moduleMetadata = (Packaging.moduleMetadata m),
           Packaging.moduleDependencies = newDeps,
           Packaging.moduleDefinitions = newDefs}))
 -- | Compute transitive closure of dependencies for a set of modules
@@ -411,6 +413,7 @@ moduleToSourceModule m =
           moduleDef =
                   Packaging.DefinitionTerm (Packaging.TermDefinition {
                     Packaging.termDefinitionName = (Core.Name (Strings.cat2 (Packaging.unModuleName sourceNs) ".module_")),
+                    Packaging.termDefinitionMetadata = Nothing,
                     Packaging.termDefinitionTerm = (EncodePackaging.module_ m),
                     Packaging.termDefinitionSignature = (Just (Scoping.typeSchemeToTermSignature (Core.TypeScheme {
                       Core.typeSchemeVariables = [],
@@ -418,7 +421,11 @@ moduleToSourceModule m =
                       Core.typeSchemeConstraints = Nothing})))})
       in Packaging.Module {
         Packaging.moduleName = sourceNs,
-        Packaging.moduleDescription = (Just (Strings.cat2 "Source module for " (Packaging.unModuleName (Packaging.moduleName m)))),
+        Packaging.moduleMetadata = (Just (Packaging.EntityMetadata {
+          Packaging.entityMetadataDescription = (Just (Strings.cat2 "Source module for " (Packaging.unModuleName (Packaging.moduleName m)))),
+          Packaging.entityMetadataComments = [],
+          Packaging.entityMetadataSeeAlso = [],
+          Packaging.entityMetadataLifecycle = Nothing})),
         Packaging.moduleDependencies = [
           Packaging.ModuleDependency {
             Packaging.moduleDependencyModule = modTypeNs,
@@ -486,12 +493,13 @@ refreshModule inferredElements m =
         Core.bindingTypeScheme = (Maybes.map Scoping.termSignatureToTypeScheme (Packaging.termDefinitionSignature v0))})
       _ -> Nothing) (Packaging.moduleDefinitions m)))))) m (Packaging.Module {
       Packaging.moduleName = (Packaging.moduleName m),
-      Packaging.moduleDescription = (Packaging.moduleDescription m),
+      Packaging.moduleMetadata = (Packaging.moduleMetadata m),
       Packaging.moduleDependencies = (Packaging.moduleDependencies m),
       Packaging.moduleDefinitions = (Maybes.cat (Lists.map (\d -> case d of
         Packaging.DefinitionType v0 -> Just (Packaging.DefinitionType v0)
         Packaging.DefinitionTerm v0 -> Maybes.map (\b -> Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.bindingName b),
+          Packaging.termDefinitionMetadata = Nothing,
           Packaging.termDefinitionTerm = (Core.bindingTerm b),
           Packaging.termDefinitionSignature = (Maybes.map Scoping.typeSchemeToTermSignature (Core.bindingTypeScheme b))})) (Lists.find (\b -> Equality.equal (Core.bindingName b) (Packaging.termDefinitionName v0)) inferredElements)
         Packaging.DefinitionPrimitive v0 -> Just (Packaging.DefinitionPrimitive v0)) (Packaging.moduleDefinitions m)))})

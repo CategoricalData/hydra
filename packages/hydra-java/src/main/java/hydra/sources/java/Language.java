@@ -20,6 +20,7 @@ import hydra.dsl.meta.lib.Pairs;
 import hydra.dsl.meta.lib.Sets;
 import hydra.dsl.meta.lib.Strings;
 import hydra.packaging.Definition;
+import hydra.packaging.EntityMetadata;
 import hydra.packaging.Module;
 import hydra.packaging.ModuleName;
 import hydra.packaging.ModuleDependency;
@@ -287,7 +288,11 @@ public class Language {
 
     public static final Module module_ = new Module(
         NS,
-        Maybe.just("Language constraints and reserved words for Java"),
+        Maybe.just(new EntityMetadata(
+            Maybe.just("Language constraints and reserved words for Java"),
+            java.util.List.of(),
+            java.util.List.of(),
+            Maybe.nothing())),
         DEPENDENCIES,
         DEFINITIONS);
 }

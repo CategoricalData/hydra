@@ -286,5 +286,5 @@
                         "parameter": "y"}}}],
                 "typeName": "hydra.json.model.Value"}}}}}}],
   "dependencies": [{"module": "hydra.encode.core"}, {"module": "hydra.json.model"}],
-  "description": "Term encoders for hydra.json.model",
+  "metadata": {"comments": [], "description": "Term encoders for hydra.json.model", "seeAlso": []},
   "name": "hydra.encode.json.model"}

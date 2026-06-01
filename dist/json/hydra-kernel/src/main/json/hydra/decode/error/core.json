@@ -8603,5 +8603,5 @@
     {"module": "hydra.decode.paths"},
     {"module": "hydra.decode.core"},
     {"module": "hydra.decode.variants"}],
-  "description": "Term decoders for hydra.error.core",
+  "metadata": {"comments": [], "description": "Term decoders for hydra.error.core", "seeAlso": []},
   "name": "hydra.decode.error.core"}

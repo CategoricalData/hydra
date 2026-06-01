@@ -89,7 +89,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> ([Arity.ns, Dependencies.ns, moduleName DecodeCore.module_, Lexical.ns, Reflect.ns, Rewriting.ns, Strip.ns] L.++ kernelTypesModuleNames),
-            moduleDescription = Just ("Type and term classification predicates")}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just ("Type and term classification predicates"))}
   where
     definitions = [
       toDefinition isComplexBinding,

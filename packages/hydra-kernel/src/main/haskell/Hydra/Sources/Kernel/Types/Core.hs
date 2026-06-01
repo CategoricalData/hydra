@@ -22,7 +22,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = (DefinitionType <$> definitions),
             moduleDependencies = unqualifiedDep <$> [ns],
-            moduleDescription = Just "Hydra's core data model, consisting of the fundamental hydra.core.Term type and all of its dependencies."}
+            moduleMetadata = descriptionMetadata (Just "Hydra's core data model, consisting of the fundamental hydra.core.Term type and all of its dependencies.")}
   where
     definitions = [
       annotatedTerm,

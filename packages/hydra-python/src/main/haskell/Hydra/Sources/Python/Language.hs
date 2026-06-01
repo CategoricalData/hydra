@@ -86,7 +86,7 @@ module_ = Module {
             moduleName = (ModuleName "hydra.python.language"),
             moduleDefinitions = [toDefinition pythonLanguage, toDefinition pythonReservedWords],
             moduleDependencies = Bootstrap.unqualifiedDep <$> ([Lexical.ns] L.++ KernelTypes.kernelTypesModuleNames),
-            moduleDescription = Just "Language constraints and reserved words for Python 3"}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just "Language constraints and reserved words for Python 3")}
 pythonLanguage :: TypedTermDefinition Language
 pythonLanguage = define "pythonLanguage" $
     doc "Language constraints for Python 3" $ lets [

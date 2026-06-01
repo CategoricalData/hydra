@@ -3117,5 +3117,5 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "description": "Test cases for topological sorting algorithms",
+  "metadata": {"comments": [], "description": "Test cases for topological sorting algorithms", "seeAlso": []},
   "name": "hydra.test.sorting"}

@@ -5,7 +5,7 @@ module Hydra.Sources.Test.Strip where
 
 -- Standard imports for tests
 import Hydra.Kernel
-import           Hydra.Dsl.Bootstrap (unqualifiedDep)
+import           Hydra.Dsl.Bootstrap (unqualifiedDep, descriptionMetadata)
 import Hydra.Dsl.Meta.Testing                 as Testing
 import Hydra.Dsl.Meta.Terms                   as Terms hiding ((@@))
 import Hydra.Sources.Kernel.Types.All
@@ -34,7 +34,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = unqualifiedDep <$> ([ShowCore.ns, Strip.ns, TestGraph.ns] ++ kernelTypesModuleNames),
-            moduleDescription = (Just "Test cases for annotation and type stripping operations")}
+            moduleMetadata = descriptionMetadata ((Just "Test cases for annotation and type stripping operations"))}
   where
     definitions = [Phantoms.toDefinition allTests]
 

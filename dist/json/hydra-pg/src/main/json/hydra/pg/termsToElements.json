@@ -5709,5 +5709,8 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "description": "Functions for mapping Hydra terms to property graph elements using mapping specifications",
+  "metadata": {
+    "comments": [],
+    "description": "Functions for mapping Hydra terms to property graph elements using mapping specifications",
+    "seeAlso": []},
   "name": "hydra.pg.termsToElements"}

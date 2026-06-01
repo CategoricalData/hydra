@@ -21,7 +21,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = (DefinitionType <$> definitions),
             moduleDependencies = unqualifiedDep <$> [CoreTypes.ns, Coders.ns, ModuleName "hydra.avro.schema", ModuleName "hydra.json.model"],
-            moduleDescription = Just "Type definitions for the Avro code generation environment"}
+            moduleMetadata = descriptionMetadata (Just "Type definitions for the Avro code generation environment")}
   where
     definitions = [
       avroQualifiedNameType,

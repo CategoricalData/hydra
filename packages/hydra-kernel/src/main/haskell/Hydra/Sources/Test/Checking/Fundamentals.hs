@@ -4,7 +4,7 @@ module Hydra.Sources.Test.Checking.Fundamentals where
 
 -- Standard imports for term-encoded tests
 import Hydra.Kernel
-import           Hydra.Dsl.Bootstrap (unqualifiedDep)
+import           Hydra.Dsl.Bootstrap (unqualifiedDep, descriptionMetadata)
 import Hydra.Dsl.Meta.Testing                 as Testing
 import Hydra.Dsl.Meta.Terms                   as Terms
 import Hydra.Sources.Kernel.Types.All
@@ -29,7 +29,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = unqualifiedDep <$> ([TestGraph.ns, ModuleName "hydra.rewriting", ModuleName "hydra.inference", ModuleName "hydra.scoping", ModuleName "hydra.show.core", ModuleName "hydra.test.testTypes"] ++ kernelTypesModuleNames),
-            moduleDescription = (Just "Fundamental type checking test cases: literals, variables, lambdas, applications, let terms, and primitives")}
+            moduleMetadata = descriptionMetadata ((Just "Fundamental type checking test cases: literals, variables, lambdas, applications, let terms, and primitives"))}
   where
     definitions = [
       Phantoms.toDefinition allTests,

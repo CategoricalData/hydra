@@ -284,15 +284,20 @@ encodeModule cx graph mod =
             Core.typeSchemeConstraints = Nothing}))}) (Packaging.typeDefinitionName v0) (Core.typeSchemeBody (Packaging.typeDefinitionTypeScheme v0)))
       _ -> Nothing) (Packaging.moduleDefinitions mod)))) (\typeBindings -> Logic.ifElse (Lists.null typeBindings) (Right Nothing) (Eithers.bind (Eithers.mapList (\b -> Eithers.bimap (\_e -> Errors.ErrorDecoding _e) (\x -> x) (encodeBinding cx graph b)) typeBindings) (\encodedBindings -> Right (Just (Packaging.Module {
       Packaging.moduleName = (encodeModuleName (Packaging.moduleName mod)),
-      Packaging.moduleDescription = (Just (Strings.cat [
-        "Term encoders for ",
-        (Packaging.unModuleName (Packaging.moduleName mod))])),
+      Packaging.moduleMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just (Strings.cat [
+          "Term encoders for ",
+          (Packaging.unModuleName (Packaging.moduleName mod))])),
+        Packaging.entityMetadataComments = [],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.moduleDependencies = (Lists.map (\ns -> Packaging.ModuleDependency {
         Packaging.moduleDependencyModule = ns,
         Packaging.moduleDependencyPackage = Nothing}) (Lists.nub (Lists.concat2 (Lists.map encodeModuleName (Lists.map (\dep -> Packaging.moduleDependencyModule dep) (Packaging.moduleDependencies mod))) [
         Packaging.moduleName mod]))),
       Packaging.moduleDefinitions = (Lists.map (\b -> Packaging.DefinitionTerm (Packaging.TermDefinition {
         Packaging.termDefinitionName = (Core.bindingName b),
+        Packaging.termDefinitionMetadata = Nothing,
         Packaging.termDefinitionTerm = (Core.bindingTerm b),
         Packaging.termDefinitionSignature = (Maybes.map Scoping.typeSchemeToTermSignature (Core.bindingTypeScheme b))})) encodedBindings)})))))
 -- | Generate an encoder module name from a source module name
