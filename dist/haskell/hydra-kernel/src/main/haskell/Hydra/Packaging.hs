@@ -33,16 +33,16 @@ _DefinitionReference_type = Core.Name "type"
 _DefinitionReference_term = Core.Name "term"
 _DefinitionReference_primitive = Core.Name "primitive"
 -- | Version-lifecycle milestones for a packaging entity. Each milestone is independently optional; further milestones (e.g. stableSince, removedSince) may be added without changing dependent types.
-data EntityLifecycle =
-  EntityLifecycle {
+data LifecycleInfo =
+  LifecycleInfo {
     -- | The version in which the entity was introduced, if known.
     entityLifecycleAvailableSince :: (Maybe Version),
     -- | The version in which the entity was deprecated, if applicable.
     entityLifecycleDeprecatedSince :: (Maybe Version)}
   deriving (Eq, Ord, Read, Show)
-_EntityLifecycle = Core.Name "hydra.packaging.EntityLifecycle"
-_EntityLifecycle_availableSince = Core.Name "availableSince"
-_EntityLifecycle_deprecatedSince = Core.Name "deprecatedSince"
+_LifecycleInfo = Core.Name "hydra.packaging.LifecycleInfo"
+_LifecycleInfo_availableSince = Core.Name "availableSince"
+_LifecycleInfo_deprecatedSince = Core.Name "deprecatedSince"
 -- | Documentation and lifecycle metadata attachable to a packaging entity (package, module, or definition). Bundling these fields in one type lets future metadata be added without changing the field shape of the entities that carry it.
 data EntityMetadata =
   EntityMetadata {
@@ -53,7 +53,7 @@ data EntityMetadata =
     -- | Typed cross-references to related entities, for navigation and documentation.
     entityMetadataSeeAlso :: [EntityReference],
     -- | Optional version-lifecycle milestones for the entity.
-    entityMetadataLifecycle :: (Maybe EntityLifecycle)}
+    entityMetadataLifecycle :: (Maybe LifecycleInfo)}
   deriving (Eq, Ord, Read, Show)
 _EntityMetadata = Core.Name "hydra.packaging.EntityMetadata"
 _EntityMetadata_description = Core.Name "description"
@@ -73,12 +73,6 @@ _EntityReference = Core.Name "hydra.packaging.EntityReference"
 _EntityReference_package = Core.Name "package"
 _EntityReference_module = Core.Name "module"
 _EntityReference_definition = Core.Name "definition"
--- | A file extension (without the dot), e.g. "json" or "py"
-newtype FileExtension =
-  FileExtension {
-    unFileExtension :: String}
-  deriving (Eq, Ord, Read, Show)
-_FileExtension = Core.Name "hydra.packaging.FileExtension"
 -- | A logical collection of elements sharing a common module name, having dependencies on zero or more other modules
 data Module =
   Module {
@@ -136,7 +130,7 @@ data PackageDependency =
     -- | The name of the depended-on package
     packageDependencyName :: PackageName,
     -- | The version-range constraint on the depended-on package
-    packageDependencyVersion :: PackageVersionSpecifier}
+    packageDependencyVersion :: VersionSpecifier}
   deriving (Eq, Ord, Read, Show)
 _PackageDependency = Core.Name "hydra.packaging.PackageDependency"
 _PackageDependency_name = Core.Name "name"
@@ -148,21 +142,21 @@ newtype PackageName =
   deriving (Eq, Ord, Read, Show)
 _PackageName = Core.Name "hydra.packaging.PackageName"
 -- | A specifier constraining acceptable versions of a depended-on package. Currently only the `any` (unit) specifier is defined; future variants such as `exact`, `caret`, and `range` may be added without breaking consumers of the `any` form.
-data PackageVersionSpecifier =
+data VersionSpecifier =
   -- | Any version of the package satisfies the dependency
-  PackageVersionSpecifierAny
+  VersionSpecifierAny
   deriving (Eq, Ord, Read, Show)
-_PackageVersionSpecifier = Core.Name "hydra.packaging.PackageVersionSpecifier"
-_PackageVersionSpecifier_any = Core.Name "any"
+_VersionSpecifier = Core.Name "hydra.packaging.VersionSpecifier"
+_VersionSpecifier_any = Core.Name "any"
 -- | A primitive definition: the universal, host-independent declarative metadata for a primitive, including name, signature, documentation and lifecycle metadata, totality and purity flags, and an optional default implementation expressed as a Hydra term.
 data PrimitiveDefinition =
   PrimitiveDefinition {
     -- | The name of the primitive
     primitiveDefinitionName :: Core.Name,
-    -- | The signature of the primitive (always explicit, never inferred)
-    primitiveDefinitionSignature :: Typing.TermSignature,
     -- | Optional documentation and lifecycle metadata for the primitive (description, long-form comments, cross-references, version milestones).
     primitiveDefinitionMetadata :: (Maybe EntityMetadata),
+    -- | The signature of the primitive (always explicit, never inferred)
+    primitiveDefinitionSignature :: Typing.TermSignature,
     -- | Whether the primitive is pure (referentially transparent, no observable side effects). Defaults to true.
     primitiveDefinitionIsPure :: Bool,
     -- | Whether the primitive is total (terminates on every input of its declared type). Defaults to true.
@@ -172,39 +166,28 @@ data PrimitiveDefinition =
   deriving (Eq, Ord, Read, Show)
 _PrimitiveDefinition = Core.Name "hydra.packaging.PrimitiveDefinition"
 _PrimitiveDefinition_name = Core.Name "name"
-_PrimitiveDefinition_signature = Core.Name "signature"
 _PrimitiveDefinition_metadata = Core.Name "metadata"
+_PrimitiveDefinition_signature = Core.Name "signature"
 _PrimitiveDefinition_isPure = Core.Name "isPure"
 _PrimitiveDefinition_isTotal = Core.Name "isTotal"
 _PrimitiveDefinition_defaultImplementation = Core.Name "defaultImplementation"
--- | A qualified name consisting of an optional module name together with a mandatory local name
-data QualifiedName =
-  QualifiedName {
-    -- | The optional module name
-    qualifiedNameModuleName :: (Maybe ModuleName),
-    -- | The local name
-    qualifiedNameLocal :: String}
-  deriving (Eq, Ord, Read, Show)
-_QualifiedName = Core.Name "hydra.packaging.QualifiedName"
-_QualifiedName_moduleName = Core.Name "moduleName"
-_QualifiedName_local = Core.Name "local"
--- | A term-level definition, including a name, a term, and an optional signature
+-- | A term-level definition, including a name, an optional signature, and a term
 data TermDefinition =
   TermDefinition {
     -- | The name of the term
     termDefinitionName :: Core.Name,
     -- | Optional documentation and lifecycle metadata for the term definition
     termDefinitionMetadata :: (Maybe EntityMetadata),
-    -- | The term being defined
-    termDefinitionTerm :: Core.Term,
     -- | The optional signature of the term. When absent, the signature is to be inferred.
-    termDefinitionSignature :: (Maybe Typing.TermSignature)}
+    termDefinitionSignature :: (Maybe Typing.TermSignature),
+    -- | The term being defined
+    termDefinitionBody :: Core.Term}
   deriving (Eq, Ord, Read, Show)
 _TermDefinition = Core.Name "hydra.packaging.TermDefinition"
 _TermDefinition_name = Core.Name "name"
 _TermDefinition_metadata = Core.Name "metadata"
-_TermDefinition_term = Core.Name "term"
 _TermDefinition_signature = Core.Name "signature"
+_TermDefinition_body = Core.Name "body"
 -- | A type-level definition, including a name and the type scheme
 data TypeDefinition =
   TypeDefinition {
@@ -213,12 +196,12 @@ data TypeDefinition =
     -- | Optional documentation and lifecycle metadata for the type definition
     typeDefinitionMetadata :: (Maybe EntityMetadata),
     -- | The type scheme being defined
-    typeDefinitionTypeScheme :: Core.TypeScheme}
+    typeDefinitionBody :: Core.TypeScheme}
   deriving (Eq, Ord, Read, Show)
 _TypeDefinition = Core.Name "hydra.packaging.TypeDefinition"
 _TypeDefinition_name = Core.Name "name"
 _TypeDefinition_metadata = Core.Name "metadata"
-_TypeDefinition_typeScheme = Core.Name "typeScheme"
+_TypeDefinition_body = Core.Name "body"
 -- | A version string, e.g. "0.15" or "1.0.0".
 newtype Version =
   Version {

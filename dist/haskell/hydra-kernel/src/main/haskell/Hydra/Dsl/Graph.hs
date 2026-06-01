@@ -17,7 +17,7 @@ import qualified Data.Scientific as Sci
 import qualified Data.Map as M
 import qualified Data.Set as S
 -- | DSL constructor for hydra.graph.Graph
-graph :: Typed.TypedTerm (M.Map Core.Name Core.Term) -> Typed.TypedTerm (M.Map Core.Name Core.TypeScheme) -> Typed.TypedTerm (M.Map Core.Name Core.TypeVariableMetadata) -> Typed.TypedTerm (S.Set Core.Name) -> Typed.TypedTerm (M.Map Core.Name Core.Term) -> Typed.TypedTerm (M.Map Core.Name Graph.Primitive) -> Typed.TypedTerm (M.Map Core.Name Core.TypeScheme) -> Typed.TypedTerm (S.Set Core.Name) -> Typed.TypedTerm Graph.Graph
+graph :: Typed.TypedTerm (M.Map Core.Name Core.Term) -> Typed.TypedTerm (M.Map Core.Name Core.TypeScheme) -> Typed.TypedTerm (M.Map Core.Name Core.TypeVariableConstraints) -> Typed.TypedTerm (S.Set Core.Name) -> Typed.TypedTerm (M.Map Core.Name Core.Term) -> Typed.TypedTerm (M.Map Core.Name Graph.Primitive) -> Typed.TypedTerm (M.Map Core.Name Core.TypeScheme) -> Typed.TypedTerm (S.Set Core.Name) -> Typed.TypedTerm Graph.Graph
 graph boundTerms boundTypes classConstraints lambdaVariables metadata primitives schemaTypes typeVariables =
     Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.graph.Graph"),
@@ -63,7 +63,7 @@ graphBoundTypes x =
         Core.projectionFieldName = (Core.Name "boundTypes")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL accessor for the classConstraints field of hydra.graph.Graph
-graphClassConstraints :: Typed.TypedTerm Graph.Graph -> Typed.TypedTerm (M.Map Core.Name Core.TypeVariableMetadata)
+graphClassConstraints :: Typed.TypedTerm Graph.Graph -> Typed.TypedTerm (M.Map Core.Name Core.TypeVariableConstraints)
 graphClassConstraints x =
     Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -227,7 +227,7 @@ graphWithBoundTypes original newVal =
               Core.projectionFieldName = (Core.Name "typeVariables")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
 -- | DSL updater for the classConstraints field of hydra.graph.Graph
-graphWithClassConstraints :: Typed.TypedTerm Graph.Graph -> Typed.TypedTerm (M.Map Core.Name Core.TypeVariableMetadata) -> Typed.TypedTerm Graph.Graph
+graphWithClassConstraints :: Typed.TypedTerm Graph.Graph -> Typed.TypedTerm (M.Map Core.Name Core.TypeVariableConstraints) -> Typed.TypedTerm Graph.Graph
 graphWithClassConstraints original newVal =
     Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.graph.Graph"),

@@ -210,7 +210,7 @@ encodeTermDefinition :: t0 -> t1 -> Packaging.TermDefinition -> Either Errors.Er
 encodeTermDefinition cx g tdef =
 
       let name = Packaging.termDefinitionName tdef
-          term = Packaging.termDefinitionTerm tdef
+          term = Packaging.termDefinitionBody tdef
           lname = Formatting.convertCaseCamelToLowerSnake (Names.localNameOf name)
           typ =
                   Maybes.maybe (Core.TypeVariable (Core.Name "hydra.core.Unit")) Core.typeSchemeBody (Maybes.map Scoping.termSignatureToTypeScheme (Packaging.termDefinitionSignature tdef))
@@ -268,7 +268,7 @@ encodeTypeDefinition :: t0 -> t1 -> Packaging.TypeDefinition -> Either Errors.Er
 encodeTypeDefinition cx g tdef =
 
       let name = Packaging.typeDefinitionName tdef
-          typ = Core.typeSchemeBody (Packaging.typeDefinitionTypeScheme tdef)
+          typ = Core.typeSchemeBody (Packaging.typeDefinitionBody tdef)
           lname = Formatting.capitalize (Names.localNameOf name)
           freeVars =
                   Lists.filter (\v -> Equality.equal (Lists.length (Strings.splitOn "." (Core.unName v))) 1) (Sets.toList (Variables.freeVariablesInType typ))
@@ -321,8 +321,8 @@ encodeUnionElim cx g cs marg =
           caseFields = Core.caseStatementCases cs
           defCase = Core.caseStatementDefault cs
       in (Eithers.bind (Eithers.mapList (\cf ->
-        let cfname = Formatting.capitalize (Core.unName (Core.fieldName cf))
-            cfterm = Core.fieldTerm cf
+        let cfname = Formatting.capitalize (Core.unName (Core.caseAlternativeName cf))
+            cfterm = Core.caseAlternativeHandler cf
         in (Eithers.bind (encodeTerm cx g (Core.TermApplication (Core.Application {
           Core.applicationFunction = cfterm,
           Core.applicationArgument = (Core.TermVariable (Core.Name "v"))}))) (\armBody -> Right (Syntax.MatchArm {
@@ -371,7 +371,7 @@ moduleToRust mod defs cx g =
                   Syntax.crateItems = allItems}
             code = Serialization.printExpr (Serialization.parenthesize (Serde.crateToExpr crate))
             filePath =
-                    Names.moduleNameToFilePath Util.CaseConventionLowerSnake (Packaging.FileExtension "rs") (Packaging.moduleName mod)
+                    Names.moduleNameToFilePath Util.CaseConventionLowerSnake (Util.FileExtension "rs") (Packaging.moduleName mod)
         in (Right (Maps.singleton filePath code)))))
 rustApply1 :: String -> Syntax.Type -> Syntax.Type
 rustApply1 name arg =

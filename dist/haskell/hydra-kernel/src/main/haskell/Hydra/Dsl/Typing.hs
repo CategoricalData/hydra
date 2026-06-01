@@ -512,7 +512,7 @@ inferenceContextWithTrace original newVal =
           Core.fieldName = (Core.Name "trace"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
 -- | DSL constructor for hydra.typing.InferenceResult
-inferenceResult :: Typed.TypedTerm Core.Term -> Typed.TypedTerm Core.Type -> Typed.TypedTerm Typing.TypeSubst -> Typed.TypedTerm (M.Map Core.Name Core.TypeVariableMetadata) -> Typed.TypedTerm Typing.InferenceContext -> Typed.TypedTerm Typing.InferenceResult
+inferenceResult :: Typed.TypedTerm Core.Term -> Typed.TypedTerm Core.Type -> Typed.TypedTerm Typing.TypeSubst -> Typed.TypedTerm (M.Map Core.Name Core.TypeVariableConstraints) -> Typed.TypedTerm Typing.InferenceContext -> Typed.TypedTerm Typing.InferenceResult
 inferenceResult term type_ subst classConstraints context =
     Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.typing.InferenceResult"),
@@ -533,7 +533,7 @@ inferenceResult term type_ subst classConstraints context =
           Core.fieldName = (Core.Name "context"),
           Core.fieldTerm = (Typed.unTypedTerm context)}]}))
 -- | DSL accessor for the classConstraints field of hydra.typing.InferenceResult
-inferenceResultClassConstraints :: Typed.TypedTerm Typing.InferenceResult -> Typed.TypedTerm (M.Map Core.Name Core.TypeVariableMetadata)
+inferenceResultClassConstraints :: Typed.TypedTerm Typing.InferenceResult -> Typed.TypedTerm (M.Map Core.Name Core.TypeVariableConstraints)
 inferenceResultClassConstraints x =
     Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -573,7 +573,7 @@ inferenceResultType x =
         Core.projectionFieldName = (Core.Name "type")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL updater for the classConstraints field of hydra.typing.InferenceResult
-inferenceResultWithClassConstraints :: Typed.TypedTerm Typing.InferenceResult -> Typed.TypedTerm (M.Map Core.Name Core.TypeVariableMetadata) -> Typed.TypedTerm Typing.InferenceResult
+inferenceResultWithClassConstraints :: Typed.TypedTerm Typing.InferenceResult -> Typed.TypedTerm (M.Map Core.Name Core.TypeVariableConstraints) -> Typed.TypedTerm Typing.InferenceResult
 inferenceResultWithClassConstraints original newVal =
     Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.typing.InferenceResult"),

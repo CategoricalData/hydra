@@ -56,7 +56,7 @@ allTests =
                     " :: ",
                     (Maybes.maybe "<no scheme>" (\ts -> ShowCore.typeScheme ts) (Maybes.map Scoping.termSignatureToTypeScheme (Packaging.termDefinitionSignature v0))),
                     " = ",
-                    (ShowCore.term (Packaging.termDefinitionTerm v0)),
+                    (ShowCore.term (Packaging.termDefinitionBody v0)),
                     "\n"]
                   Packaging.DefinitionPrimitive v0 -> Strings.cat [
                     Core.unName (Packaging.primitiveDefinitionName v0),
@@ -69,7 +69,7 @@ allTests =
                       Packaging.DefinitionTerm (Packaging.TermDefinition {
                         Packaging.termDefinitionName = (Core.Name "hydra.testInput.a.idA"),
                         Packaging.termDefinitionMetadata = Nothing,
-                        Packaging.termDefinitionTerm = (Core.TermLambda (Core.Lambda {
+                        Packaging.termDefinitionBody = (Core.TermLambda (Core.Lambda {
                           Core.lambdaParameter = (Core.Name "x"),
                           Core.lambdaDomain = Nothing,
                           Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})),
@@ -91,7 +91,7 @@ allTests =
                       Packaging.DefinitionTerm (Packaging.TermDefinition {
                         Packaging.termDefinitionName = (Core.Name "hydra.testInput.b.useId"),
                         Packaging.termDefinitionMetadata = Nothing,
-                        Packaging.termDefinitionTerm = (Core.TermApplication (Core.Application {
+                        Packaging.termDefinitionBody = (Core.TermApplication (Core.Application {
                           Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.testInput.a.idA")),
                           Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})),
                         Packaging.termDefinitionSignature = Nothing})]}] [
@@ -106,7 +106,7 @@ allTests =
                       Packaging.DefinitionTerm (Packaging.TermDefinition {
                         Packaging.termDefinitionName = (Core.Name "hydra.testInput.b.useId"),
                         Packaging.termDefinitionMetadata = Nothing,
-                        Packaging.termDefinitionTerm = (Core.TermApplication (Core.Application {
+                        Packaging.termDefinitionBody = (Core.TermApplication (Core.Application {
                           Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.testInput.a.idA")),
                           Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})),
                         Packaging.termDefinitionSignature = Nothing})]}])),
@@ -117,7 +117,7 @@ allTests =
                     " :: ",
                     (Maybes.maybe "<no scheme>" (\ts -> ShowCore.typeScheme ts) (Maybes.map Scoping.termSignatureToTypeScheme (Packaging.termDefinitionSignature v0))),
                     " = ",
-                    (ShowCore.term (Packaging.termDefinitionTerm v0)),
+                    (ShowCore.term (Packaging.termDefinitionBody v0)),
                     "\n"]
                   Packaging.DefinitionPrimitive v0 -> Strings.cat [
                     Core.unName (Packaging.primitiveDefinitionName v0),
@@ -130,7 +130,7 @@ allTests =
                       Packaging.DefinitionTerm (Packaging.TermDefinition {
                         Packaging.termDefinitionName = (Core.Name "hydra.testInput.a.idA"),
                         Packaging.termDefinitionMetadata = Nothing,
-                        Packaging.termDefinitionTerm = (Core.TermLambda (Core.Lambda {
+                        Packaging.termDefinitionBody = (Core.TermLambda (Core.Lambda {
                           Core.lambdaParameter = (Core.Name "x"),
                           Core.lambdaDomain = Nothing,
                           Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})),
@@ -152,7 +152,7 @@ allTests =
                       Packaging.DefinitionTerm (Packaging.TermDefinition {
                         Packaging.termDefinitionName = (Core.Name "hydra.testInput.b.useId"),
                         Packaging.termDefinitionMetadata = Nothing,
-                        Packaging.termDefinitionTerm = (Core.TermApplication (Core.Application {
+                        Packaging.termDefinitionBody = (Core.TermApplication (Core.Application {
                           Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.testInput.a.idA")),
                           Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})),
                         Packaging.termDefinitionSignature = Nothing})]}] [
@@ -167,7 +167,7 @@ allTests =
                       Packaging.DefinitionTerm (Packaging.TermDefinition {
                         Packaging.termDefinitionName = (Core.Name "hydra.testInput.b.useId"),
                         Packaging.termDefinitionMetadata = Nothing,
-                        Packaging.termDefinitionTerm = (Core.TermApplication (Core.Application {
+                        Packaging.termDefinitionBody = (Core.TermApplication (Core.Application {
                           Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.testInput.a.idA")),
                           Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})),
                         Packaging.termDefinitionSignature = Nothing})]}]))})),
@@ -183,7 +183,7 @@ allTests =
                     " :: ",
                     (Maybes.maybe "<no scheme>" (\ts -> ShowCore.typeScheme ts) (Maybes.map Scoping.termSignatureToTypeScheme (Packaging.termDefinitionSignature v0))),
                     " = ",
-                    (ShowCore.term (Packaging.termDefinitionTerm v0)),
+                    (ShowCore.term (Packaging.termDefinitionBody v0)),
                     "\n"]
                   Packaging.DefinitionPrimitive v0 -> Strings.cat [
                     Core.unName (Packaging.primitiveDefinitionName v0),
@@ -196,7 +196,7 @@ allTests =
                       Packaging.DefinitionTerm (Packaging.TermDefinition {
                         Packaging.termDefinitionName = (Core.Name "hydra.testInput.a.idA"),
                         Packaging.termDefinitionMetadata = Nothing,
-                        Packaging.termDefinitionTerm = (Core.TermLambda (Core.Lambda {
+                        Packaging.termDefinitionBody = (Core.TermLambda (Core.Lambda {
                           Core.lambdaParameter = (Core.Name "x"),
                           Core.lambdaDomain = Nothing,
                           Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})),
@@ -218,7 +218,7 @@ allTests =
                       Packaging.DefinitionTerm (Packaging.TermDefinition {
                         Packaging.termDefinitionName = (Core.Name "hydra.testInput.b.useId"),
                         Packaging.termDefinitionMetadata = Nothing,
-                        Packaging.termDefinitionTerm = (Core.TermApplication (Core.Application {
+                        Packaging.termDefinitionBody = (Core.TermApplication (Core.Application {
                           Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.testInput.a.idA")),
                           Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})),
                         Packaging.termDefinitionSignature = Nothing})]}] [
@@ -230,7 +230,7 @@ allTests =
                       Packaging.DefinitionTerm (Packaging.TermDefinition {
                         Packaging.termDefinitionName = (Core.Name "hydra.testInput.a.idA"),
                         Packaging.termDefinitionMetadata = Nothing,
-                        Packaging.termDefinitionTerm = (Core.TermLambda (Core.Lambda {
+                        Packaging.termDefinitionBody = (Core.TermLambda (Core.Lambda {
                           Core.lambdaParameter = (Core.Name "x"),
                           Core.lambdaDomain = Nothing,
                           Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})),
@@ -252,7 +252,7 @@ allTests =
                       Packaging.DefinitionTerm (Packaging.TermDefinition {
                         Packaging.termDefinitionName = (Core.Name "hydra.testInput.b.useId"),
                         Packaging.termDefinitionMetadata = Nothing,
-                        Packaging.termDefinitionTerm = (Core.TermApplication (Core.Application {
+                        Packaging.termDefinitionBody = (Core.TermApplication (Core.Application {
                           Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.testInput.a.idA")),
                           Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})),
                         Packaging.termDefinitionSignature = Nothing})]}])),
@@ -263,7 +263,7 @@ allTests =
                     " :: ",
                     (Maybes.maybe "<no scheme>" (\ts -> ShowCore.typeScheme ts) (Maybes.map Scoping.termSignatureToTypeScheme (Packaging.termDefinitionSignature v0))),
                     " = ",
-                    (ShowCore.term (Packaging.termDefinitionTerm v0)),
+                    (ShowCore.term (Packaging.termDefinitionBody v0)),
                     "\n"]
                   Packaging.DefinitionPrimitive v0 -> Strings.cat [
                     Core.unName (Packaging.primitiveDefinitionName v0),
@@ -276,7 +276,7 @@ allTests =
                       Packaging.DefinitionTerm (Packaging.TermDefinition {
                         Packaging.termDefinitionName = (Core.Name "hydra.testInput.a.idA"),
                         Packaging.termDefinitionMetadata = Nothing,
-                        Packaging.termDefinitionTerm = (Core.TermLambda (Core.Lambda {
+                        Packaging.termDefinitionBody = (Core.TermLambda (Core.Lambda {
                           Core.lambdaParameter = (Core.Name "x"),
                           Core.lambdaDomain = Nothing,
                           Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})),
@@ -298,7 +298,7 @@ allTests =
                       Packaging.DefinitionTerm (Packaging.TermDefinition {
                         Packaging.termDefinitionName = (Core.Name "hydra.testInput.b.useId"),
                         Packaging.termDefinitionMetadata = Nothing,
-                        Packaging.termDefinitionTerm = (Core.TermApplication (Core.Application {
+                        Packaging.termDefinitionBody = (Core.TermApplication (Core.Application {
                           Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.testInput.a.idA")),
                           Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})),
                         Packaging.termDefinitionSignature = Nothing})]}] [
@@ -310,7 +310,7 @@ allTests =
                       Packaging.DefinitionTerm (Packaging.TermDefinition {
                         Packaging.termDefinitionName = (Core.Name "hydra.testInput.a.idA"),
                         Packaging.termDefinitionMetadata = Nothing,
-                        Packaging.termDefinitionTerm = (Core.TermLambda (Core.Lambda {
+                        Packaging.termDefinitionBody = (Core.TermLambda (Core.Lambda {
                           Core.lambdaParameter = (Core.Name "x"),
                           Core.lambdaDomain = Nothing,
                           Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})),
@@ -332,7 +332,7 @@ allTests =
                       Packaging.DefinitionTerm (Packaging.TermDefinition {
                         Packaging.termDefinitionName = (Core.Name "hydra.testInput.b.useId"),
                         Packaging.termDefinitionMetadata = Nothing,
-                        Packaging.termDefinitionTerm = (Core.TermApplication (Core.Application {
+                        Packaging.termDefinitionBody = (Core.TermApplication (Core.Application {
                           Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.testInput.a.idA")),
                           Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})),
                         Packaging.termDefinitionSignature = Nothing})]}]))})),
@@ -348,7 +348,7 @@ allTests =
                     " :: ",
                     (Maybes.maybe "<no scheme>" (\ts -> ShowCore.typeScheme ts) (Maybes.map Scoping.termSignatureToTypeScheme (Packaging.termDefinitionSignature v0))),
                     " = ",
-                    (ShowCore.term (Packaging.termDefinitionTerm v0)),
+                    (ShowCore.term (Packaging.termDefinitionBody v0)),
                     "\n"]
                   Packaging.DefinitionPrimitive v0 -> Strings.cat [
                     Core.unName (Packaging.primitiveDefinitionName v0),
@@ -361,7 +361,7 @@ allTests =
                       Packaging.DefinitionTerm (Packaging.TermDefinition {
                         Packaging.termDefinitionName = (Core.Name "hydra.testInput.v.funky"),
                         Packaging.termDefinitionMetadata = Nothing,
-                        Packaging.termDefinitionTerm = (Core.TermLambda (Core.Lambda {
+                        Packaging.termDefinitionBody = (Core.TermLambda (Core.Lambda {
                           Core.lambdaParameter = (Core.Name "x"),
                           Core.lambdaDomain = Nothing,
                           Core.lambdaBody = (Core.TermLambda (Core.Lambda {
@@ -395,7 +395,7 @@ allTests =
                       Packaging.DefinitionTerm (Packaging.TermDefinition {
                         Packaging.termDefinitionName = (Core.Name "hydra.testInput.w.useFunky"),
                         Packaging.termDefinitionMetadata = Nothing,
-                        Packaging.termDefinitionTerm = (Core.TermApplication (Core.Application {
+                        Packaging.termDefinitionBody = (Core.TermApplication (Core.Application {
                           Core.applicationFunction = (Core.TermApplication (Core.Application {
                             Core.applicationFunction = (Core.TermApplication (Core.Application {
                               Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.testInput.v.funky")),
@@ -414,7 +414,7 @@ allTests =
                       Packaging.DefinitionTerm (Packaging.TermDefinition {
                         Packaging.termDefinitionName = (Core.Name "hydra.testInput.w.useFunky"),
                         Packaging.termDefinitionMetadata = Nothing,
-                        Packaging.termDefinitionTerm = (Core.TermApplication (Core.Application {
+                        Packaging.termDefinitionBody = (Core.TermApplication (Core.Application {
                           Core.applicationFunction = (Core.TermApplication (Core.Application {
                             Core.applicationFunction = (Core.TermApplication (Core.Application {
                               Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.testInput.v.funky")),
