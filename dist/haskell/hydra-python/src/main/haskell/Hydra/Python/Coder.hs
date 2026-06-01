@@ -7,7 +7,6 @@ import qualified Hydra.Annotations as Annotations
 import qualified Hydra.Arity as Arity
 import qualified Hydra.Ast as Ast
 import qualified Hydra.Checking as Checking
-import qualified Hydra.Classes as Classes
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
 import qualified Hydra.Dependencies as Dependencies
@@ -575,7 +574,7 @@ encodeDefinition cx env def_ =
                     Maybes.maybe (Core.TypeScheme {
                       Core.typeSchemeVariables = [],
                       Core.typeSchemeBody = (Core.TypeVariable (Core.Name "hydra.core.Unit")),
-                      Core.typeSchemeConstraints = Nothing}) (\sig -> Scoping.termSignatureToTypeScheme sig) (Packaging.termDefinitionSignature v0)
+                      Core.typeSchemeConstraints = Nothing}) (\x -> x) (Maybes.map Scoping.termSignatureToTypeScheme (Packaging.termDefinitionSignature v0))
         in (Eithers.bind (Annotations.getTermDescription cx (pythonEnvironmentGetGraph env) term) (\comment ->
           let normComment = Maybes.map Formatting.normalizeComment comment
           in (Eithers.bind (encodeTermAssignment cx env True name term typ normComment) (\stmt -> Right [
@@ -1578,7 +1577,7 @@ gatherMetadata focusNs defs =
                     Packaging.DefinitionTerm v0 ->
                       let term = Packaging.termDefinitionTerm v0
                           typ =
-                                  Maybes.maybe (Core.TypeVariable (Core.Name "hydra.core.Unit")) (\sig -> Core.typeSchemeBody (Scoping.termSignatureToTypeScheme sig)) (Packaging.termDefinitionSignature v0)
+                                  Maybes.maybe (Core.TypeVariable (Core.Name "hydra.core.Unit")) Core.typeSchemeBody (Maybes.map Scoping.termSignatureToTypeScheme (Packaging.termDefinitionSignature v0))
                           meta2 = extendMetaForType True True typ meta
                       in (extendMetaForTerm True meta2 term)
                     Packaging.DefinitionType v0 ->
@@ -1694,13 +1693,9 @@ isVariantUnitType rowType fieldName =
 -- | Wrap an expression in a .get() method call (for Lazy unwrap at use sites)
 lazyDotGet :: Syntax.Expression -> Syntax.Expression
 lazyDotGet expr = Utils.functionCall (Utils.pyExpressionToPyPrimary (Utils.projectFromExpression expr (Syntax.Name "get"))) []
--- | Per-parameter isLazy flags of a primitive (by name), or empty if not a primitive. Single source of truth for which arguments coders thunk; replaces hard-coded name tables (issue #391).
 lazyFlagsForPrimitive :: Graph.Graph -> Core.Name -> [Bool]
 lazyFlagsForPrimitive g name =
-    Maybes.cases (Maps.lookup name (Graph.graphPrimitives g)) [] (\prim ->
-      let def0 = Graph.primitiveDefinition prim
-          sig = Packaging.primitiveDefinitionSignature def0
-      in (Lists.map (\p -> Typing.parameterIsLazy p) (Typing.termSignatureParameters sig)))
+    Maybes.cases (Maps.lookup name (Graph.graphPrimitives g)) [] (\prim -> Lists.map (\p -> Typing.parameterIsLazy p) (Typing.termSignatureParameters (Packaging.primitiveDefinitionSignature (Graph.primitiveDefinition prim))))
 -- | Decorator for @lru_cache(1) to memoize zero-argument function results
 lruCacheDecorator :: Syntax.NamedExpression
 lruCacheDecorator =
@@ -2578,7 +2573,7 @@ withDefinitions env defs body =
                 Packaging.DefinitionTerm v0 -> Just (Core.Binding {
                   Core.bindingName = (Packaging.termDefinitionName v0),
                   Core.bindingTerm = (Packaging.termDefinitionTerm v0),
-                  Core.bindingTypeScheme = (Maybes.map (\sig -> Scoping.termSignatureToTypeScheme sig) (Packaging.termDefinitionSignature v0))})
+                  Core.bindingTypeScheme = (Maybes.map Scoping.termSignatureToTypeScheme (Packaging.termDefinitionSignature v0))})
                 Packaging.DefinitionType _ -> Nothing
                 _ -> Nothing) defs)
           dummyLet =
@@ -2623,7 +2618,7 @@ wrapInNullaryLambda expr =
         Syntax.lambdaParametersParamWithDefault = [],
         Syntax.lambdaParametersStarEtc = Nothing},
       Syntax.lambdaBody = expr})
--- | Wrap lazy-flagged arguments of a primitive call in nullary lambdas, per isLazy metadata (issue #391)
+-- | Wrap lazy-flagged arguments of a primitive call in nullary lambdas, per isLazy metadata
 wrapLazyArguments :: Graph.Graph -> Core.Name -> [Syntax.Expression] -> [Syntax.Expression]
 wrapLazyArguments g name args =
 

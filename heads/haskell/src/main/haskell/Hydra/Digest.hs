@@ -5,6 +5,7 @@
 -- the caller short-circuits. Otherwise it falls through to full inference
 -- and overwrites the digest on success.
 
+{-# LANGUAGE ScopedTypeVariables #-}
 module Hydra.Digest (
     -- v1 API (backwards-compatible namespace → hash map)
     DigestMap,
@@ -31,6 +32,12 @@ module Hydra.Digest (
     digestsMatch,
     verifyOutputsExist,
     generatorStamp,
+    -- Shared orphan-reconcile helpers (used by digest-check and the JSON
+    -- write path; see #393 / #405)
+    listFilesRecursive,
+    pruneEmptyDirs,
+    makeRelativeTo,
+    reconcileOrphans,
 ) where
 
 import Hydra.Packaging (Module(..), ModuleName(..))
@@ -39,6 +46,7 @@ import qualified Data.ByteString.Lazy as BL
 import qualified Data.ByteString.Lazy.Char8 as BLC
 import qualified Data.Digest.Pure.SHA as SHA
 import qualified Data.Map as M
+import qualified Data.Set as S
 import qualified Data.List as L
 import qualified Data.Maybe as Y
 import qualified System.Directory as SD
@@ -684,3 +692,89 @@ findIndex needle hay =
           | take n rest == needle = Just ix
           | otherwise = go (ix + 1) (drop 1 rest)
     in go 0 hay
+
+
+----------------------------------------------------------------------
+-- Shared orphan-reconcile helpers (#393 / #405).
+--
+-- A keep-set-based prune: given an output directory and the set of files
+-- that legitimately belong in it, delete everything else (the orphans).
+-- Used by:
+--   * digest-check fresh — the per-language target trees, keyed on the
+--     recorded output digest (#393).
+--   * the JSON write path — the dist/json/<pkg> trees, keyed on the
+--     in-memory module emission set (#405).
+-- Factored here so the two callers share one implementation.
+----------------------------------------------------------------------
+
+-- | Recursively list every regular file under a directory.
+-- Skips dotfiles and dot-directories.
+listFilesRecursive :: FilePath -> IO [FilePath]
+listFilesRecursive root = do
+    exists <- SD.doesDirectoryExist root
+    if not exists then return [] else go root
+  where
+    go dir = do
+      entries <- SD.listDirectory dir
+      fmap concat $ CM.forM entries $ \e ->
+        if "." `L.isPrefixOf` e
+          then return []
+          else do
+            let p = dir FP.</> e
+            isDir <- SD.doesDirectoryExist p
+            if isDir
+              then go p
+              else do
+                isFile <- SD.doesFileExist p
+                return (if isFile then [p] else [])
+
+-- | Remove any empty subdirectories under 'dir' (depth-first). 'dir'
+-- itself is left alone; only its descendants are pruned. Used by the
+-- orphan reconcile to clean up directories emptied by orphan deletion
+-- (e.g. a renamed-away namespace dir). Best-effort: failures (e.g. a
+-- directory that isn't actually empty due to a race) are ignored.
+pruneEmptyDirs :: FilePath -> IO ()
+pruneEmptyDirs dir = do
+    entries <- SD.listDirectory dir `E.catch` \(_ :: E.IOException) -> return []
+    CM.forM_ entries $ \e -> do
+      let p = dir FP.</> e
+      isDir <- SD.doesDirectoryExist p
+      CM.when isDir $ do
+        pruneEmptyDirs p
+        children <- SD.listDirectory p `E.catch` \(_ :: E.IOException) -> return []
+        CM.when (null children) $
+          SD.removeDirectory p `E.catch` \(_ :: E.IOException) -> return ()
+
+-- | Compute 'path' relative to 'base'. If 'path' isn't under 'base',
+-- returns 'path' unchanged (callers should guard against that, but the
+-- fallback keeps us from producing absolute paths accidentally).
+makeRelativeTo :: FilePath -> FilePath -> FilePath
+makeRelativeTo base path =
+    let prefix = if not (null base) && last base == '/' then base else base ++ "/"
+    in if prefix `L.isPrefixOf` path
+         then drop (length prefix) path
+         else path
+
+-- | Delete every regular file under 'outputDir' whose path (relative to
+-- 'outputDir', normalised) is not in 'keepRel', then prune any emptied
+-- subdirectories. Files listed in 'protectRel' (relative, normalised) are
+-- never deleted even if absent from the keep-set — used to shield a digest
+-- file or other sidecar living inside the output dir. Returns the list of
+-- deleted (absolute) paths so the caller can report them.
+--
+-- Deletion is best-effort (IOExceptions are swallowed) so a transient
+-- failure on one file doesn't abort the whole reconcile.
+reconcileOrphans :: FilePath -> S.Set FilePath -> S.Set FilePath -> IO [FilePath]
+reconcileOrphans outputDir keepRel protectRel = do
+    onDiskAbs <- listFilesRecursive outputDir
+    let orphans =
+          [ p
+          | p <- onDiskAbs
+          , let rel = FP.normalise (makeRelativeTo outputDir p)
+          , not (S.member rel keepRel)
+          , not (S.member rel protectRel)
+          ]
+    CM.forM_ orphans $ \p ->
+      SD.removeFile p `E.catch` \(_ :: E.IOException) -> return ()
+    CM.unless (null orphans) $ pruneEmptyDirs outputDir
+    return orphans

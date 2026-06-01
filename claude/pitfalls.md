@@ -203,6 +203,24 @@ only the stale *kernel* element refs in the 3–4 affected files (leave the pack
 Only `hydra-python` is usually affected; `hydra-java`'s JSON happened not to reference the
 renamed kernel symbol — check with `grep -rl '<old.qualified.name>' dist/json`.
 
+**The inverse gap: `coder.json` changed but the native source didn't.** The #400 fix keys the
+per-package input digest for `hydra.<lang>.coder` on `sha256` of the *native* source
+(`Coder.java`/`Coder.py`) — that source is the digest's authoritative owner of `hydra.<lang>.*`.
+That correctly catches a native edit, but it is *blind* to a `coder.json` content change that
+arrives by any other route. The route that bit #372: the legacy `Coder.hs` was fixed
+(`259eae45e0`) but the committed `dist/json/hydra-java/.../coder.json` was never re-exported,
+so it stayed stale for weeks. A cold-start re-export (`HYDRA_INCLUDE_JAVA_PYTHON=1` with the
+`coder.json` sentinel deleted) finally refreshed it — but Phase 2 still cache-hit and kept the
+old `dist/haskell/hydra-java/Coder.hs`, because `Coder.java` (the digest key) hadn't changed
+between runs. To force the refresh through every layer in this situation, clear **all** of:
+`dist/json/hydra-{java,python}/src/main/json/.../coder.json` (sentinels → triggers cold-start),
+`heads/haskell/.stack-work/phase1-input-cache.txt` (Phase-1 short-circuit), and the per-package
+**output** digests `dist/{haskell,java}/hydra-{java,python,kernel}/build/{main,test}/digest.json`.
+Tell-tale: `grep needsThunking dist/json/hydra-java/.../java/coder.json` — if a known-fixed
+symbol is still absent/old in the JSON, it's stale regardless of source state. (A standing fix —
+making a `coder.json` change invalidate downstream digests even without a native-source edit —
+is worth a follow-up issue; the bug_406_stale_json Phase-1.5 auto-heal does not cover this case.)
+
 **Post-0.16 cleanup:** once the legacy Haskell DSL copies for hydra-java/hydra-python are
 deleted, the native generators become the sole writers of `dist/json/hydra-<lang>/`. The
 native DSL→JSON step should then move *ahead* of Phase 2, and the Phase-5 re-assemble block
@@ -383,20 +401,25 @@ If another session is mid-sync, prefer waiting unless the user explicitly
 authorizes parallel syncs. Don't kill the other process — it belongs to a
 different session (see CLAUDE.md "Hard rules").
 
-### Phase 5 Java self-host wedging at "typed-so-far" is #372, not your change
+### Phase 5 Java self-host wedging at "typed-so-far" was #372 — FIXED (2026-06-01)
 
-When Phase 5 (native Java DSL → JSON) hangs for tens of minutes pinned at ~100% CPU on a
-line like `[hydra-java] 8 write / 8 infer / 142 typed-so-far`, it is the latent O(N²)
-Java self-host inference ([#372](https://github.com/CategoricalData/hydra/issues/372)),
-whose severity is dominated by JVM/JIT state and is amplified ~50× by a competing
-`JavaSelfHostDemo`/`UpdateJavaJson` JVM from a sibling worktree sync. Confirm it's
-GC-bound rather than progressing: `sample <pid> 1` will show `G1CollectedHeap` /
-`GC Thread` frames dominating, with flat RSS (steady churn, not a growing leak).
+[#372](https://github.com/CategoricalData/hydra/issues/372) is fixed: Phase 5's
+`[hydra-java] 8 write / 8 infer / 142 typed-so-far` step now completes in ~24s. If you see
+it pinned at ~100% CPU for *tens of minutes* again, the cause is a regression in the Java
+coder's laziness emission, not the old latent cost — investigate the coder, don't wait it out.
 
-Two things this session established:
-- **Don't wait for an idle machine.** This is a shared box; insisting on a "solo" run to
-  make #372 finish is unrealistic. The fix is structural (skip already-typed bindings in
-  `inferModulesGiven`), not environmental — see [#372].
+Root cause (for history): the Java coder emitted `let`-bound `cases` defaults *eagerly*
+(`hydra.core.Term dflt = (recurse).apply(term);`) instead of wrapping them in
+`hydra.util.Lazy<>`, so the recursive `recurse` descended every child unconditionally —
+O(2^d) in nesting depth on `substTypesInTerm`. The fix made the coder thunk a `let` binding
+when `isComplexBinding && !isTrivialTerm` (matching Python's `shouldThunkBinding`), replacing
+an older `needsThunking` heuristic that only fired on RHS textually containing
+let/typeApp/typeLambda. The earlier hypothesis ("skip already-typed bindings in
+`inferModulesGiven`") was **wrong** — the exponential was in eager evaluation, not redundant
+inference. The fix lives in both `Coder.hs` (committed `259eae45e0`) and `Coder.java`
+(this branch); the per-package digest key (below) explains why the `Coder.hs` fix sat
+un-propagated in `dist/json` for weeks.
+
 - **A change that touches no java/python *coder* source does not need Phase 5 to re-run.**
   Phase 5's output is a pure function of the `hydra.{java,python}.*` coder sources; a kernel
   or `hydra.lib.*` edit (e.g. #402's `hydra.lib.chars` comments) leaves that output identical
@@ -855,7 +878,14 @@ assemble the Haskell dist for hydra-java / hydra-python. If the JSON
 references the OLD type name but the kernel has the new one, Phase 2
 fails with `bootstrap-from-json: ... no such element:
 hydra.packaging.Namespace` before Phase 5 ever runs to refresh the JSON.
-Recovery:
+
+As of [#406](https://github.com/CategoricalData/hydra/issues/406) `bin/sync.sh`
+**auto-heals** this: a Phase 1.5 gate (`bin/lib/check-java-python-json-fresh.py`,
+keyed on the just-regenerated `dist/json/hydra-kernel/**.json`) runs between
+Phase 1 and Phase 2, and on a staleness miss re-exports the coder JSON via
+`update-json-main --include-java-python` before Phase 2 consumes it. So the
+manual recovery below should rarely be needed now; keep it as a fallback (e.g.
+if the gate's cache was hand-deleted or the executable is unbuilt):
 
 1. Delete the cold-start sentinels:
    `rm dist/json/hydra-{java,python}/src/main/json/hydra/{java,python}/*.json`
