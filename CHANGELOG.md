@@ -15,9 +15,9 @@ they are documented here for completeness.
 
 ---
 
-## [Unreleased] (in development for 0.16.0)
+## [0.16.0] - TBD
 
-In progress on the `staging` branch.
+Release candidate. Set the release date when 0.16.0 is tagged.
 Major themes: kernel-oriented validation rules, JSON Schema coder promotion,
 homogenization of writer conventions, a unified `Module.dependencies` field,
 and primitive-metadata reification.
