@@ -1049,5 +1049,8 @@
               {"name": "greaterEqual", "type": {"unit": {}}}]},
           "variables": []}}}],
   "dependencies": [{"module": "hydra.core"}],
-  "description": "A Go syntax model, based on the Go Language Specification retrieved on 2025-02-05 from https://go.dev/ref/spec",
+  "metadata": {
+    "comments": [],
+    "description": "A Go syntax model, based on the Go Language Specification retrieved on 2025-02-05 from https://go.dev/ref/spec",
+    "seeAlso": []},
   "name": "hydra.go.syntax"}

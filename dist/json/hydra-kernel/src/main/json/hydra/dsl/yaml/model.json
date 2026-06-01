@@ -518,5 +518,5 @@
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}}}}],
   "dependencies": [{"module": "hydra.yaml.model"}, {"module": "hydra.typed"}, {"module": "hydra.core"}, {"module": "hydra.dsl.core"}],
-  "description": "DSL functions for hydra.yaml.model",
+  "metadata": {"comments": [], "description": "DSL functions for hydra.yaml.model", "seeAlso": []},
   "name": "hydra.dsl.yaml.model"}

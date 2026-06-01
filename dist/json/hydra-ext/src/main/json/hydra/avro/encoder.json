@@ -9279,5 +9279,8 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "description": "Hydra-to-Avro encoder: converts Hydra types and terms to Avro schemas and JSON values",
+  "metadata": {
+    "comments": [],
+    "description": "Hydra-to-Avro encoder: converts Hydra types and terms to Avro schemas and JSON values",
+    "seeAlso": []},
   "name": "hydra.avro.encoder"}

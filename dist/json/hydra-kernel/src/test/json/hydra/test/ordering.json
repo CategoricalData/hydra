@@ -4959,5 +4959,5 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "description": "Test cases for Ord instance comparisons on complex Hydra types",
+  "metadata": {"comments": [], "description": "Test cases for Ord instance comparisons on complex Hydra types", "seeAlso": []},
   "name": "hydra.test.ordering"}

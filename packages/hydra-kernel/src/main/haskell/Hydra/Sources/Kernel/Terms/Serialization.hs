@@ -72,7 +72,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> (kernelTypesModuleNames),
-            moduleDescription = Just ("Utilities for constructing generic program code ASTs, used for the serialization phase of source code generation.")}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just ("Utilities for constructing generic program code ASTs, used for the serialization phase of source code generation."))}
   where
    definitions = [
      toDefinition angleBraces,

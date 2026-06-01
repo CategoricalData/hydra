@@ -671,5 +671,5 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "description": "Python test code generation codec for pytest-based generation tests",
+  "metadata": {"comments": [], "description": "Python test code generation codec for pytest-based generation tests", "seeAlso": []},
   "name": "hydra.python.testing"}

@@ -19,6 +19,7 @@ import hydra.dsl.meta.lib.Pairs;
 import hydra.dsl.meta.lib.Sets;
 import hydra.dsl.meta.lib.Strings;
 import hydra.packaging.Definition;
+import hydra.packaging.EntityMetadata;
 import hydra.packaging.Module;
 import hydra.packaging.ModuleName;
 import hydra.packaging.ModuleDependency;
@@ -3663,7 +3664,11 @@ public class Serde {
 
     public static final Module module_ = new Module(
         NS,
-        Maybe.just("Java serializer: converts Java AST to concrete syntax"),
+        Maybe.just(new EntityMetadata(
+            Maybe.just("Java serializer: converts Java AST to concrete syntax"),
+            java.util.List.of(),
+            java.util.List.of(),
+            Maybe.nothing())),
         DEPENDENCIES,
         DEFINITIONS);
 }

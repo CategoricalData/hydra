@@ -287,5 +287,8 @@
         "name": "com.gdblab.pathAlgebra.syntax.BoolOp",
         "typeScheme": {"body": {"union": [{"name": "and", "type": {"unit": {}}}, {"name": "or", "type": {"unit": {}}}]}, "variables": []}}}],
   "dependencies": [{"module": "hydra.core"}],
-  "description": "A syntax model for the path algebra grammar by Angles et al. See the paper \"Path-based Algebraic Foundations of Graph Query Languages\" and the ANTLR grammar at https://github.com/pathalgebra/AlgebraParser",
+  "metadata": {
+    "comments": [],
+    "description": "A syntax model for the path algebra grammar by Angles et al. See the paper \"Path-based Algebraic Foundations of Graph Query Languages\" and the ANTLR grammar at https://github.com/pathalgebra/AlgebraParser",
+    "seeAlso": []},
   "name": "com.gdblab.pathAlgebra.syntax"}

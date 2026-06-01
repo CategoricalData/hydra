@@ -21,7 +21,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = (DefinitionType <$> definitions),
             moduleDependencies = unqualifiedDep <$> [CoreTypes.ns, TypingTypes.ns],
-            moduleDescription = Just "Type definitions for the Protobuf code generation environment"}
+            moduleMetadata = descriptionMetadata (Just "Type definitions for the Protobuf code generation environment")}
   where
     definitions = [
       encoderStateType,

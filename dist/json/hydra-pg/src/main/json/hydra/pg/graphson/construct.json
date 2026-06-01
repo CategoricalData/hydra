@@ -1085,5 +1085,8 @@
     {"module": "hydra.pg.graphson.syntax"},
     {"module": "hydra.pg.model"},
     {"module": "hydra.json.model"}],
-  "description": "Functions for constructing GraphSON vertices from property graph vertices.",
+  "metadata": {
+    "comments": [],
+    "description": "Functions for constructing GraphSON vertices from property graph vertices.",
+    "seeAlso": []},
   "name": "hydra.pg.graphson.construct"}

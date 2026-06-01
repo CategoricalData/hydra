@@ -94,7 +94,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> ([Serialization.ns] L.++ (RdfSyntax.ns:KernelTypes.kernelTypesModuleNames)),
-            moduleDescription = Just "Serialization functions for converting RDF graphs to N-Triples format expressions"}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just "Serialization functions for converting RDF graphs to N-Triples format expressions")}
   where
     definitions = [
       toDefinition escapeIriChar,

@@ -94,7 +94,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> ([Formatting.ns, Serialization.ns] L.++ (Proto3Syntax.ns:KernelTypes.kernelTypesModuleNames)),
-            moduleDescription = Just "Serialization functions for converting Protocol Buffers v3 AST to abstract expressions"}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just "Serialization functions for converting Protocol Buffers v3 AST to abstract expressions")}
   where
     definitions = [
       toDefinition deprecatedOptionName,

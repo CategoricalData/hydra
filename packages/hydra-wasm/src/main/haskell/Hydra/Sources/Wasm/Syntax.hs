@@ -27,8 +27,8 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = (DefinitionType <$> definitions),
             moduleDependencies = unqualifiedDep <$> [Core.ns],
-            moduleDescription = Just ("A WebAssembly text format (WAT) syntax model, based on the WebAssembly spec"
-      ++ " (https://webassembly.github.io/spec/core/), retrieved 2026-04-06")}
+            moduleMetadata = descriptionMetadata (Just ("A WebAssembly text format (WAT) syntax model, based on the WebAssembly spec"
+      ++ " (https://webassembly.github.io/spec/core/), retrieved 2026-04-06"))}
   where
     definitions = moduleLevel ++ types ++ functions ++ instructions ++ memory
       ++ globals ++ tables ++ imports ++ exports ++ literals

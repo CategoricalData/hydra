@@ -96,7 +96,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> ((kernelTypesModuleNames L.++ [GraphsonSyntax.ns, JsonModel.ns])),
-            moduleDescription = Just "Encoding functions for converting GraphSON syntax to JSON."}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just "Encoding functions for converting GraphSON syntax to JSON.")}
   where
     definitions = [
       toDefinition adjacentEdgeToJson,
