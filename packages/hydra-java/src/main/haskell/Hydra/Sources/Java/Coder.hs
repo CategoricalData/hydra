@@ -438,7 +438,7 @@ applyOvergenSubstToTermAnnotations_go = def "applyOvergenSubstToTermAnnotations_
         Core.termCases (Core.caseStatement
           (Core.caseStatementTypeName (var "cs"))
           (Maybes.map (lambda "d" $ applyOvergenSubstToTermAnnotations_go @@ var "subst" @@ var "cx" @@ var "d") (Core.caseStatementDefault (var "cs")))
-          (Lists.map (lambda "fld" $ Core.field (Core.fieldName (var "fld")) (applyOvergenSubstToTermAnnotations_go @@ var "subst" @@ var "cx" @@ Core.fieldTerm (var "fld"))) (Core.caseStatementCases (var "cs")))),
+          (Lists.map (lambda "fld" $ Core.caseAlternative (Core.caseAlternativeName (var "fld")) (applyOvergenSubstToTermAnnotations_go @@ var "subst" @@ var "cx" @@ Core.caseAlternativeHandler (var "fld"))) (Core.caseStatementCases (var "cs")))),
       _Term_let>>: lambda "lt" $
         Core.termLet (Core.let_
           (Lists.map (lambda "b" $ Core.binding (Core.bindingName (var "b")) (applyOvergenSubstToTermAnnotations_go @@ var "subst" @@ var "cx" @@ Core.bindingTerm (var "b")) (Core.bindingTypeScheme (var "b"))) (Core.letBindings (var "lt")))
@@ -600,10 +600,10 @@ bindingNameToFilePath :: TypedTermDefinition (Name -> String)
 bindingNameToFilePath = def "bindingNameToFilePath" $
   lambda "name" $ lets [
     "qn">: Names.qualifyName @@ var "name",
-    "ns_">: Packaging.qualifiedNameModuleName (var "qn"),
-    "local">: Packaging.qualifiedNameLocal (var "qn"),
+    "ns_">: Util.qualifiedNameModuleName (var "qn"),
+    "local">: Util.qualifiedNameLocal (var "qn"),
     "sanitized">: Formatting.sanitizeWithUnderscores @@ JavaLanguageSource.reservedWords @@ var "local",
-    "unq">: Names.unqualifyName @@ Packaging.qualifiedName (var "ns_") (var "sanitized")] $
+    "unq">: Names.unqualifyName @@ Util.qualifiedName (var "ns_") (var "sanitized")] $
     Names.nameToFilePath @@ Util.caseConventionCamel @@ Util.caseConventionPascal
       @@ wrap _FileExtension (string "java") @@ var "unq"
 
@@ -815,7 +815,7 @@ buildSubstFromAnnotations_go = def "buildSubstFromAnnotations_go" $
           (lambda "d" $ buildSubstFromAnnotations_go @@ var "schemeVarSet" @@ var "g" @@ var "d") $
         "caseSubsts" <~ Lists.foldl
           (lambda "acc" $ lambda "fld" $
-            Maps.union (var "acc") (buildSubstFromAnnotations_go @@ var "schemeVarSet" @@ var "g" @@ Core.fieldTerm (var "fld")))
+            Maps.union (var "acc") (buildSubstFromAnnotations_go @@ var "schemeVarSet" @@ var "g" @@ Core.caseAlternativeHandler (var "fld")))
           Maps.empty
           (Core.caseStatementCases (var "cs")) $
         Maps.union (var "defSubst") (var "caseSubsts"),
@@ -1919,8 +1919,8 @@ elementJavaIdentifier :: TypedTermDefinition (Bool -> Bool -> JavaHelpers.Aliase
 elementJavaIdentifier = def "elementJavaIdentifier" $
   lambda "isPrim" $ lambda "isMethod" $ lambda "aliases" $ lambda "name" $ lets [
     "qn">: Names.qualifyName @@ var "name",
-    "ns_">: Packaging.qualifiedNameModuleName (var "qn"),
-    "local">: Packaging.qualifiedNameLocal (var "qn"),
+    "ns_">: Util.qualifiedNameModuleName (var "qn"),
+    "local">: Util.qualifiedNameLocal (var "qn"),
     "sep">: Logic.ifElse (var "isMethod") (string "::") (string ".")] $
     Logic.ifElse (var "isPrim")
       (wrap Java._Identifier (Strings.cat2
@@ -1943,7 +1943,7 @@ elementJavaIdentifier_qualify :: TypedTermDefinition (JavaHelpers.Aliases -> May
 elementJavaIdentifier_qualify = def "elementJavaIdentifier_qualify" $
   lambda "aliases" $ lambda "mns" $ lambda "s" $
     unwrap Java._Identifier @@ (JavaUtilsSource.nameToJavaName @@ var "aliases"
-      @@ (Names.unqualifyName @@ Packaging.qualifiedName (var "mns") (var "s")))
+      @@ (Names.unqualifyName @@ Util.qualifiedName (var "mns") (var "s")))
 
 -- | Convert a namespace to an elements class name (e.g., "hydra.java.syntax" -> "Syntax")
 elementsClassName :: TypedTermDefinition (ModuleName -> String)
@@ -1959,7 +1959,7 @@ elementsClassName = def "elementsClassName" $
 elementsQualifiedName :: TypedTermDefinition (ModuleName -> Name)
 elementsQualifiedName = def "elementsQualifiedName" $
   lambda "ns" $
-    Names.unqualifyName @@ Packaging.qualifiedName (namespaceParent @@ var "ns") (elementsClassName @@ var "ns")
+    Names.unqualifyName @@ Util.qualifiedName (namespaceParent @@ var "ns") (elementsClassName @@ var "ns")
 
 -- | Encode a function application.
 encodeApplication :: TypedTermDefinition (JavaHelpers.JavaEnvironment -> Application -> InferenceContext -> Graph -> Either Error Java.Expression)
@@ -2106,7 +2106,7 @@ encodeDefinitions = def "encodeDefinitions" $
     "termDefs" <~ Pairs.second (var "partitioned") $
     -- Filter out typedefs (non-record/union/wrap types)
     "nonTypedefDefs" <~ Lists.filter (lambda "td" $
-      "typ" <~ (Core.typeSchemeBody $ project _TypeDefinition _TypeDefinition_typeScheme @@ var "td") $
+      "typ" <~ (Core.typeSchemeBody $ project _TypeDefinition _TypeDefinition_body @@ var "td") $
       isSerializableJavaType @@ (var "typ"))
       (var "typeDefs") $
     "typeUnits" <<~ (Eithers.mapList (lambda "td" $ encodeTypeDefinition @@ var "pkg" @@ var "aliases" @@ var "td" @@ var "cx" @@ var "g") (var "nonTypedefDefs")) $
@@ -2636,7 +2636,7 @@ encodeTermDefinition = def "encodeTermDefinition" $
   lambda "env" $ lambda "tdef" $
     "cx" ~> "g" ~>
     "name" <~ (project _TermDefinition _TermDefinition_name @@ var "tdef") $
-    "term0" <~ (project _TermDefinition _TermDefinition_term @@ var "tdef") $
+    "term0" <~ (project _TermDefinition _TermDefinition_body @@ var "tdef") $
     "mDoc" <<~ (Annotations.getTermDescription @@ var "cx" @@ var "g" @@ var "term0") $
     "ts" <~ Maybes.maybe
       (Core.typeScheme (list ([] :: [TypedTerm Name])) (Core.typeVariable (wrap _Name (string "hydra.core.Unit"))) nothing)
@@ -3325,12 +3325,12 @@ encodeTermTCO = def "encodeTermTCO" $
                         "jArg" <~ (JavaUtilsSource.javaIdentifierToJavaExpression @@ var "matchVarId") $
                         -- Generate if/instanceof blocks for each case branch
                         "ifBlocks" <<~ (Eithers.mapList ("field" ~>
-                          "fieldName" <~ (Core.fieldName (var "field")) $
+                          "fieldName" <~ (Core.caseAlternativeName (var "field")) $
                           -- Build the variant reference type for instanceof
                           "variantRefType" <~ (JavaUtilsSource.nameToJavaReferenceType @@ var "aliases" @@ true @@ var "domArgs"
                             @@ var "tname" @@ just (Formatting.capitalize @@ (Core.unName (var "fieldName")))) $
                           -- Extract the lambda body from this case branch
-                          cases _Term (Strip.deannotateTerm @@ Core.fieldTerm (var "field"))
+                          cases _Term (Strip.deannotateTerm @@ Core.caseAlternativeHandler (var "field"))
                             (Just $ left (Error.errorOther $ Error.otherError $ string "TCO: case branch is not a lambda")) [
                             _Term_lambda>>: "lam" ~>
                                   -- Use withLambda to properly set up the lambda context
@@ -3548,7 +3548,7 @@ encodeTypeDefinition = def "encodeTypeDefinition" $
   lambda "pkg" $ lambda "aliases" $ lambda "tdef" $
     "cx" ~> "g" ~>
     "name" <~ (project _TypeDefinition _TypeDefinition_name @@ var "tdef") $
-    "typ" <~ (Core.typeSchemeBody $ project _TypeDefinition _TypeDefinition_typeScheme @@ var "tdef") $
+    "typ" <~ (Core.typeSchemeBody $ project _TypeDefinition _TypeDefinition_body @@ var "tdef") $
     -- Check if serializable
     "serializable" <~ (isSerializableJavaType @@ var "typ") $
     "imports" <~ Logic.ifElse (var "serializable")
@@ -4009,8 +4009,8 @@ functionCall = def "functionCall" $
                   (JavaDsl.methodInvocation_ (var "header") (var "jargs"))))
               -- With type applications: need qualified invocation
               ("qn" <~ (Names.qualifyName @@ var "name") $
-                "mns" <~ (Packaging.qualifiedNameModuleName (var "qn")) $
-                "localName" <~ (Packaging.qualifiedNameLocal (var "qn")) $
+                "mns" <~ (Util.qualifiedNameModuleName (var "qn")) $
+                "localName" <~ (Util.qualifiedNameLocal (var "qn")) $
                 Maybes.cases (var "mns")
                   -- No namespace: simple header
                   ("header" <~ JavaDsl.methodInvocationHeaderSimple
@@ -4021,7 +4021,7 @@ functionCall = def "functionCall" $
                     "classId" <~ (JavaUtilsSource.nameToJavaName @@ var "aliases" @@ (elementsQualifiedName @@ var "ns_")) $
                     "methodId" <~ (Logic.ifElse (var "isPrim")
                       (var "overrideMethodName" @@ (JavaDsl.identifier (Strings.cat2
-                        (JavaDsl.unIdentifier (JavaUtilsSource.nameToJavaName @@ var "aliases" @@ (Names.unqualifyName @@ (Packaging.qualifiedName (just (var "ns_")) (Formatting.capitalize @@ var "localName")))))
+                        (JavaDsl.unIdentifier (JavaUtilsSource.nameToJavaName @@ var "aliases" @@ (Names.unqualifyName @@ (Util.qualifiedName (just (var "ns_")) (Formatting.capitalize @@ var "localName")))))
                         (Strings.cat2 (string ".") (asTerm JavaNamesSource.applyMethodName)))))
                       (JavaDsl.identifier (JavaUtilsSource.sanitizeJavaName @@ var "localName"))) $
                     "jTypeArgs" <<~ (Eithers.mapList (lambda "t" $
@@ -4258,7 +4258,7 @@ isLambdaBoundIn = def "isLambdaBoundIn" $
 -- | Helper: check if a name is qualified (has a namespace)
 isLambdaBoundIn_isQualified :: TypedTermDefinition (Name -> Bool)
 isLambdaBoundIn_isQualified = def "isLambdaBoundIn_isQualified" $
-  lambda "n" $ Maybes.isJust (Packaging.qualifiedNameModuleName (Names.qualifyName @@ var "n"))
+  lambda "n" $ Maybes.isJust (Util.qualifiedNameModuleName (Names.qualifyName @@ var "n"))
 
 -- | Check if a name (possibly qualified) is lambda-bound
 
@@ -4271,7 +4271,7 @@ isLambdaBoundVariable = def "isLambdaBoundVariable" $
 isLocalVariable :: TypedTermDefinition (Name -> Bool)
 isLocalVariable = def "isLocalVariable" $
   lambda "name" $ Maybes.isNothing
-    (Packaging.qualifiedNameModuleName (Names.qualifyName @@ var "name"))
+    (Util.qualifiedNameModuleName (Names.qualifyName @@ var "name"))
 
 -- | Check whether a Hydra type maps to a Java type that does not implement Comparable
 isNonComparableType :: TypedTermDefinition (Type -> Bool)
@@ -5180,8 +5180,8 @@ typeAppNullaryOrHoisted = def "typeAppNullaryOrHoisted" $
       lambda "cls" $ lambda "allTypeArgs" $
         "cx" ~> "g" ~>
         "qn" <~ (Names.qualifyName @@ var "varName") $
-        "mns" <~ Packaging.qualifiedNameModuleName (var "qn") $
-        "localName" <~ Packaging.qualifiedNameLocal (var "qn") $
+        "mns" <~ Util.qualifiedNameModuleName (var "qn") $
+        "localName" <~ Util.qualifiedNameLocal (var "qn") $
         cases JavaHelpers._JavaSymbolClass (var "cls")
           (Just $ typeAppFallbackCast @@ var "env" @@ var "aliases" @@ var "anns" @@ var "tyapps"
             @@ var "jatyp" @@ var "body" @@ var "correctedTyp" @@ var "cx" @@ var "g") [
@@ -5300,19 +5300,19 @@ variantCompareToMethod = def "variantCompareToMethod" $
       @@ just (var "body")
 
 -- | Generate a visit branch for a field of a union type.
-visitBranch :: TypedTermDefinition (JavaHelpers.JavaEnvironment -> JavaHelpers.Aliases -> Type -> Name -> Java.Type -> [Java.TypeArgument] -> Field -> InferenceContext -> Graph -> Either Error Java.ClassBodyDeclarationWithComments)
+visitBranch :: TypedTermDefinition (JavaHelpers.JavaEnvironment -> JavaHelpers.Aliases -> Type -> Name -> Java.Type -> [Java.TypeArgument] -> CaseAlternative -> InferenceContext -> Graph -> Either Error Java.ClassBodyDeclarationWithComments)
 visitBranch = def "visitBranch" $
   lambda "env" $ lambda "aliases" $ lambda "dom" $ lambda "tname" $ lambda "jcod" $ lambda "targs" $ lambda "field" $
     "cx" ~> "g" ~>
     -- Compute the domain type for this specific branch
     "jdom" <~ (JavaDsl.typeReference (JavaUtilsSource.nameToJavaReferenceType @@ var "aliases" @@ true @@ var "targs"
-      @@ var "tname" @@ just (Formatting.capitalize @@ (Core.unName (Core.fieldName (var "field")))))) $
+      @@ var "tname" @@ just (Formatting.capitalize @@ (Core.unName (Core.caseAlternativeName (var "field")))))) $
     "mods" <~ list [inject Java._MethodModifier Java._MethodModifier_public unit] $
     "anns" <~ list [asTerm JavaUtilsSource.overrideAnnotation] $
     "result" <~ (JavaDsl.resultType (JavaDsl.unannType (var "jcod"))) $
     -- Field terms are lambdas; apply to special var that encodes to instance.value
-    cases _Term (Strip.deannotateTerm @@ Core.fieldTerm (var "field"))
-      (Just $ left (Error.errorOther $ Error.otherError $ Strings.cat2 (string "visitBranch: field term is not a lambda: ") (ShowCore.term @@ Core.fieldTerm (var "field")))) [
+    cases _Term (Strip.deannotateTerm @@ Core.caseAlternativeHandler (var "field"))
+      (Just $ left (Error.errorOther $ Error.otherError $ Strings.cat2 (string "visitBranch: field term is not a lambda: ") (ShowCore.term @@ Core.caseAlternativeHandler (var "field")))) [
       _Term_lambda>>: lambda "lam" $
         withLambda @@ var "env" @@ var "lam" @@ (lambda "env2" $
           "lambdaParam" <~ Core.lambdaParameter (var "lam") $

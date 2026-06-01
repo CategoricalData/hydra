@@ -467,7 +467,7 @@ avroNameToHydraName = define "avroNameToHydraName" $
   lambda "qname" $ lets [
     "mns">: project AvroEnv._AvroQualifiedName AvroEnv._AvroQualifiedName_namespace @@ var "qname",
     "local">: project AvroEnv._AvroQualifiedName AvroEnv._AvroQualifiedName_name @@ var "qname"] $
-    Names.unqualifyName @@ Packaging.qualifiedName
+    Names.unqualifyName @@ Util.qualifiedName
       (Maybes.map (lambda "s" $ wrap _ModuleName (var "s")) (var "mns"))
       (var "local")
 

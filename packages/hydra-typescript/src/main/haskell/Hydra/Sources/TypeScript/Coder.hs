@@ -756,8 +756,8 @@ encodeTerm = def "encodeTerm" $
        -- <armExpr>(u.value);`.
        "armCases" <~ Lists.map
          (lambda "f" $
-           "fname" <~ Core.unName (Core.fieldName (var "f")) $
-           "armExpr" <~ (encodeTerm @@ var "cx" @@ var "g" @@ var "currentNs" @@ Core.fieldTerm (var "f")) $
+           "fname" <~ Core.unName (Core.caseAlternativeName (var "f")) $
+           "armExpr" <~ (encodeTerm @@ var "cx" @@ var "g" @@ var "currentNs" @@ Core.caseAlternativeHandler (var "f")) $
            "callExpr" <~ (tsCall @@ var "armExpr" @@ list [var "uValue"]) $
            record TS._SwitchCase [
              TS._SwitchCase_test>>: just (tsExprStr @@ var "fname"),
@@ -824,7 +824,7 @@ encodeTermDefinition = def "encodeTermDefinition" $
     "name" <~ Packaging.termDefinitionName (var "td") $
     "lname" <~ (Formatting.sanitizeWithUnderscores @@ TypeScriptLanguageSource.typeScriptReservedWords
       @@ (Names.localNameOf @@ var "name")) $
-    "rawTerm" <~ Packaging.termDefinitionTerm (var "td") $
+    "rawTerm" <~ Packaging.termDefinitionBody (var "td") $
     -- Pull the term's description annotation. Extraction errors (rare —
     -- only when the value isn't a string) collapse to "no doc" so we
     -- never fail the whole module emit over a single bad annotation.
@@ -1029,7 +1029,7 @@ encodeTypeDefinition :: TypedTermDefinition (InferenceContext -> Graph -> TypeDe
 encodeTypeDefinition = def "encodeTypeDefinition" $
   "cx" ~> "g" ~> lambda "tdef" $
     "name" <~ Packaging.typeDefinitionName (var "tdef") $
-    "typScheme" <~ Packaging.typeDefinitionTypeScheme (var "tdef") $
+    "typScheme" <~ Packaging.typeDefinitionBody (var "tdef") $
     "rawTyp" <~ Core.typeSchemeBody (var "typScheme") $
     "lname" <~ (Formatting.capitalize @@ (Names.localNameOf @@ var "name")) $
     "mdoc" <<~ (Annotations.getTypeDescription @@ var "cx" @@ var "g" @@ var "rawTyp") $
@@ -1435,7 +1435,7 @@ moduleToTypeScript = def "moduleToTypeScript" $
       (lambda "acc" $ lambda "td" $
         Sets.union (var "acc")
           (collectImports @@ var "currentNs"
-            @@ (Core.typeSchemeBody (Packaging.typeDefinitionTypeScheme (var "td")))))
+            @@ (Core.typeSchemeBody (Packaging.typeDefinitionBody (var "td")))))
       (Sets.empty :: TypedTerm (S.Set Name))
       (var "typeDefs")) $
     -- Also collect imports from each term-definition's typeScheme: typed
@@ -1459,7 +1459,7 @@ moduleToTypeScript = def "moduleToTypeScript" $
       (lambda "acc" $ lambda "td" $
         Sets.union (var "acc")
           (collectInnerTypeImports @@ var "currentNs"
-            @@ (Packaging.termDefinitionTerm (var "td"))))
+            @@ (Packaging.termDefinitionBody (var "td"))))
       (Sets.empty :: TypedTerm (S.Set Name))
       (var "termDefs")) $
     "typeImports" <~ Sets.union (Sets.union (var "typeImportsFromTypes") (var "typeImportsFromTerms"))
@@ -1468,7 +1468,7 @@ moduleToTypeScript = def "moduleToTypeScript" $
       (lambda "acc" $ lambda "td" $
         Sets.union (var "acc")
           (collectTermImports @@ var "currentNs"
-            @@ (Packaging.termDefinitionTerm (var "td"))))
+            @@ (Packaging.termDefinitionBody (var "td"))))
       (Sets.empty :: TypedTerm (S.Set Name))
       (var "termDefs")) $
     "typeImportsBlock" <~ (importsToText @@ string "type" @@ var "currentNs" @@ var "typeImports") $
@@ -1761,7 +1761,7 @@ sortTermDefsTopologically = def "sortTermDefsTopologically" $
     "adjacency" <~ (Lists.map
       (lambda "td" $
         "tname" <~ Packaging.termDefinitionName (var "td") $
-        "tterm" <~ Packaging.termDefinitionTerm (var "td") $
+        "tterm" <~ Packaging.termDefinitionBody (var "td") $
         "freeVars" <~ (Variables.freeVariablesInTerm @@ var "tterm") $
         -- Keep only references that point to defs in this module.
         "deps" <~ (Lists.filter

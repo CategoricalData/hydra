@@ -137,12 +137,12 @@ modulesToGraph = CodeGeneration.modulesToGraph bootstrapGraph
 definitionAsBinding :: Definition -> Binding
 definitionAsBinding (DefinitionTerm td) = Binding {
     bindingName = termDefinitionName td,
-    bindingTerm = termDefinitionTerm td,
+    bindingTerm = termDefinitionBody td,
     bindingTypeScheme = termSignatureToTypeScheme <$> termDefinitionSignature td}
 definitionAsBinding (DefinitionType td) = Binding {
     bindingName = typeDefinitionName td,
     bindingTerm = TermAnnotated $ AnnotatedTerm {
-      annotatedTermBody = EncodeCore.type_ (typeSchemeBody (typeDefinitionTypeScheme td)),
+      annotatedTermBody = EncodeCore.type_ (typeSchemeBody (typeDefinitionBody td)),
       annotatedTermAnnotation = M.fromList [
         (Name "type", TermVariable (Name "hydra.core.Type"))]},
     bindingTypeScheme = Just (TypeScheme [] (TypeVariable (Name "hydra.core.Type")) Nothing)}
@@ -401,7 +401,7 @@ inferAndWriteByPackageSeededFor
               , Just ts <- [termSignatureToTypeScheme <$> termDefinitionSignature td]
               ]
             !newSchemaSchemes = M.fromList
-              [ (typeDefinitionName td, normalizeTypeScheme (typeDefinitionTypeScheme td))
+              [ (typeDefinitionName td, normalizeTypeScheme (typeDefinitionBody td))
               | m <- inferred
               , DefinitionType td <- moduleDefinitions m
               ]
@@ -465,7 +465,7 @@ inferModulesGivenSchemes cx bsGraph accBindingSchemes accSchemaSchemes universeM
         targetNamespaces = S.fromList (map moduleName targetMods)
         termBindingsOf m =
           [ Binding { bindingName = termDefinitionName td
-                    , bindingTerm = termDefinitionTerm td
+                    , bindingTerm = termDefinitionBody td
                     , bindingTypeScheme = termSignatureToTypeScheme <$> termDefinitionSignature td
                     }
           | DefinitionTerm td <- moduleDefinitions m ]
@@ -716,7 +716,7 @@ writeTestModulesJson distJsonRoot mainMods testMods = do
                 , Just ts <- [termSignatureToTypeScheme <$> termDefinitionSignature td]
                 ]
               seedSchemaSchemes = M.fromList
-                [ (typeDefinitionName td, normalizeTypeScheme (typeDefinitionTypeScheme td))
+                [ (typeDefinitionName td, normalizeTypeScheme (typeDefinitionBody td))
                 | m <- mainLoaded
                 , DefinitionType td <- moduleDefinitions m
                 ]
@@ -1104,7 +1104,7 @@ tryIncrementalInference distJsonRoot universeMods targetMods = do
                         , Just ts <- [termSignatureToTypeScheme <$> termDefinitionSignature td]
                         ]
                       seedSchemaSchemes = M.fromList
-                        [ (typeDefinitionName td, normalizeTypeScheme (typeDefinitionTypeScheme td))
+                        [ (typeDefinitionName td, normalizeTypeScheme (typeDefinitionBody td))
                         | m <- cleanLoaded
                         , DefinitionType td <- moduleDefinitions m
                         ]
