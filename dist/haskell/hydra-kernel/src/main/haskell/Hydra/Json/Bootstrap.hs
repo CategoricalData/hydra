@@ -2043,7 +2043,7 @@ typesByName =
               Core.Name "description",
               (Core.TermLiteral (Core.LiteralString "A typed reference to a packaging entity: a package, a module, or a definition")))])}))),
       (
-        Core.Name "hydra.packaging.FileExtension",
+        Core.Name "hydra.util.FileExtension",
         (Core.TypeAnnotated (Core.AnnotatedType {
           Core.annotatedTypeBody = (Core.TypeWrap (Core.TypeLiteral Core.LiteralTypeString)),
           Core.annotatedTypeAnnotation = (M.fromList [
@@ -2247,7 +2247,7 @@ typesByName =
               Core.Name "description",
               (Core.TermLiteral (Core.LiteralString "A primitive definition: the universal, host-independent declarative metadata for a primitive, including name, signature, documentation and lifecycle metadata, totality and purity flags, and an optional default implementation expressed as a Hydra term.")))])}))),
       (
-        Core.Name "hydra.packaging.QualifiedName",
+        Core.Name "hydra.util.QualifiedName",
         (Core.TypeAnnotated (Core.AnnotatedType {
           Core.annotatedTypeBody = (Core.TypeRecord [
             Core.FieldType {
