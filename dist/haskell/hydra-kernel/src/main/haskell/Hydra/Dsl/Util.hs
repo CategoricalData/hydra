@@ -153,9 +153,7 @@ fileExtension x =
 unFileExtension :: Typed.TypedTerm Util.FileExtension -> Typed.TypedTerm String
 unFileExtension x =
     Typed.TypedTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermProject (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.util.FileExtension"),
-        Core.projectionFieldName = (Core.Name "")})),
+      Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.util.FileExtension")),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL constructor for hydra.util.QualifiedName
 qualifiedName :: Typed.TypedTerm (Maybe Packaging.ModuleName) -> Typed.TypedTerm String -> Typed.TypedTerm Util.QualifiedName
