@@ -519,6 +519,17 @@ writeDigestV2 path d = do
 -- output, and generator fields all match. Output hashes are NOT
 -- compared against the filesystem here — see 'verifyOutputsExist'
 -- for that.
+--
+-- INVARIANT: this is an explicit ALLOWLIST of the fields that gate
+-- freshness. It must never become a whole-'Digest' equality (@a == b@) or
+-- a hash of the serialized digest file. Any *informational* metadata we
+-- add to the digest (e.g. a 'generation' record's host, timestamp, or
+-- hydraVersion) must be OMITTED here, or it becomes gating. That would be
+-- wrong: a timestamp varies across byte-identical rebuilds, and 'host'
+-- varies across hosts that — by the self-hosting contract — produce
+-- identical output, so gating on either causes spurious cache misses and
+-- punishes self-hosting. A field gates iff it appears below; add a field
+-- here only if it is deterministic AND content-determining.
 digestsMatch :: Digest -> Digest -> Bool
 digestsMatch a b =
     digestInputs a == digestInputs b
