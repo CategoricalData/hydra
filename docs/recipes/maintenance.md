@@ -198,6 +198,27 @@ cd heads/python && uv run pytest
 # etc.
 ```
 
+### Removing a dead *definition* (not a whole file)
+
+To remove a standalone definition (an unused helper, a superseded heuristic), verify
+it's dead by the call graph, not by regenerating and diffing:
+
+```bash
+# A hit in another Source module is a live caller; hits in docs/comments are fine.
+git grep -n "mySymbol" -- ':!dist/'
+```
+
+If it's not in the module's `definitions` list, it can't be emitted or called as a
+module element — delete it and stop.
+Otherwise, the only remaining hits being explanatory comments means it's safe to delete.
+
+Do not trust a byte-identical regen as proof the symbol was dead: the JSON coder emits
+only elements reachable from a module's roots, so a registered-but-unreachable
+definition is pruned during emission and produces the same output whether or not you
+remove it.
+(Example: #411 removed a dead `needsThunking` helper from the legacy Java coder DSL;
+`coder.json` was byte-identical because the symbol had been unreachable all along.)
+
 ### Known patterns that produce stale files
 
 These refactoring patterns are especially prone to leaving orphans:
