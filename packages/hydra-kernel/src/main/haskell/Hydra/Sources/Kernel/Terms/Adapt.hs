@@ -380,8 +380,8 @@ adaptPrimitive = define "adaptPrimitive" $
     @@ Packaging.primitiveDefinitionSignature (var "def0") $
   "def1" <~ Packaging.primitiveDefinition
     (Packaging.primitiveDefinitionName (var "def0"))
-    (var "sig1")
     (Packaging.primitiveDefinitionMetadata (var "def0"))
+    (var "sig1")
     (Packaging.primitiveDefinitionIsPure (var "def0"))
     (Packaging.primitiveDefinitionIsTotal (var "def0"))
     (Packaging.primitiveDefinitionDefaultImplementation (var "def0")) $
@@ -702,8 +702,8 @@ dataGraphToDefinitions = define "dataGraphToDefinitions" $
       ("ts" ~> Packaging.termDefinition
         (Core.bindingName $ var "el")
         nothing
-        (Core.bindingTerm $ var "el")
-        (just $ Scoping.typeSchemeToTermSignature @@ var "ts"))
+        (just $ Scoping.typeSchemeToTermSignature @@ var "ts")
+        (Core.bindingTerm $ var "el"))
       (Core.bindingTypeScheme $ var "el")) $
   -- Filter to elements in the requested namespaces
   "selectedElements" <~ Lists.filter
@@ -916,6 +916,7 @@ pushTypeAppsInward = define "pushTypeAppsInward" $
           (var "typ")))]),
   "go">: ("t" ~>
     "forField" <~ ("fld" ~> Core.fieldWithTerm (var "fld") (var "go" @@ (Core.fieldTerm $ var "fld"))) $
+    "forCaseAlternative" <~ ("alt" ~> Core.caseAlternativeWithHandler (var "alt") (var "go" @@ (Core.caseAlternativeHandler $ var "alt"))) $
     "forLet" <~ ("lt" ~>
       "mapBinding" <~ ("b" ~> Core.binding
         (Core.bindingName $ var "b")
@@ -937,7 +938,7 @@ pushTypeAppsInward = define "pushTypeAppsInward" $
       _Term_cases>>: "cs" ~> Core.termCases $ Core.caseStatement
         (Core.caseStatementTypeName $ var "cs")
         (Maybes.map (var "go") (Core.caseStatementDefault $ var "cs"))
-        (Lists.map (var "forField") (Core.caseStatementCases $ var "cs")),
+        (Lists.map (var "forCaseAlternative") (Core.caseStatementCases $ var "cs")),
       _Term_either>>: "e" ~> Core.termEither $ Eithers.either_
         ("l" ~> left $ var "go" @@ var "l")
         ("r" ~> right $ var "go" @@ var "r")

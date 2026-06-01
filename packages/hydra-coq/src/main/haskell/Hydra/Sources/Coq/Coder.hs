@@ -650,8 +650,8 @@ encodeUnionElim = define "encodeUnionElim" $
     "caseCount">: Lists.length $ var "csCases",
     "baseEqs">: Lists.map
       (lambda "c" $ lets [
-        "cfn">: Core.fieldName $ var "c",
-        "cft">: Core.fieldTerm $ var "c",
+        "cfn">: Core.caseAlternativeName $ var "c",
+        "cft">: Core.caseAlternativeHandler $ var "c",
         "constr">: resolveQualifiedName @@ var "env" @@ (unionConstructorName
           @@ (unwrap _Name @@ var "csName")
           @@ (unwrap _Name @@ var "cfn"))] $
@@ -982,7 +982,7 @@ termReferencesVar = define "termReferencesVar" $
       termReferencesVar @@ var "name" @@ (Core.lambdaBody $ var "lam"),
     _Term_cases>>: "cs" ~> Logic.or
       (listAny
-        (lambda "f" $ termReferencesVar @@ var "name" @@ (Core.fieldTerm $ var "f"))
+        (lambda "f" $ termReferencesVar @@ var "name" @@ (Core.caseAlternativeHandler $ var "f"))
         (Core.caseStatementCases $ var "cs"))
       (Maybes.maybe (boolean False)
         (lambda "d" $ termReferencesVar @@ var "name" @@ var "d")

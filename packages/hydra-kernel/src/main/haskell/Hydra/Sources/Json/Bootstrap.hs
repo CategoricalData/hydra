@@ -53,7 +53,7 @@ typesByNameDefinition :: TermDefinition
 typesByNameDefinition = TermDefinition {
     termDefinitionName = Name "hydra.json.bootstrap.typesByName",
     termDefinitionMetadata = Nothing,
-    termDefinitionTerm = typesByNameTerm,
+    termDefinitionBody = typesByNameTerm,
     termDefinitionSignature = Nothing}
 
 -- | Build a Term-level map from Name to Type, by extracting all type
@@ -74,7 +74,7 @@ typesByNameTerm = TermAnnotated $ AnnotatedTerm {
     moduleEntries mod = [defEntry td | DefinitionType td <- moduleDefinitions mod]
     defEntry td = (
       EncodeCore.name (typeDefinitionName td),
-      annotateAsType (EncodeCore.type_ (typeSchemeBody (typeDefinitionTypeScheme td))))
+      annotateAsType (EncodeCore.type_ (typeSchemeBody (typeDefinitionBody td))))
     annotateAsType encoded = TermAnnotated $ AnnotatedTerm {
       annotatedTermBody = encoded,
       annotatedTermAnnotation = M.fromList [

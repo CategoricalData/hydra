@@ -614,7 +614,7 @@ encodeTermDefinition :: TypedTermDefinition (L.Dialect -> InferenceContext -> Gr
 encodeTermDefinition = def "encodeTermDefinition" $
   "dialect" ~> "cx" ~> "g" ~> lambda "tdef" $
     "name" <~ Packaging.termDefinitionName (var "tdef") $
-    "term" <~ Packaging.termDefinitionTerm (var "tdef") $
+    "term" <~ Packaging.termDefinitionBody (var "tdef") $
     "lname" <~ (qualifiedSnakeName @@ var "name") $
     "dterm" <~ (Strip.deannotateTerm @@ var "term") $
     -- Check if the term is a lambda (function) or a value
@@ -761,7 +761,7 @@ encodeTypeDefinition :: TypedTermDefinition (InferenceContext -> Graph -> TypeDe
 encodeTypeDefinition = def "encodeTypeDefinition" $
   "cx" ~> "g" ~> lambda "tdef" $
     "name" <~ Packaging.typeDefinitionName (var "tdef") $
-    "typ" <~ (Core.typeSchemeBody $ Packaging.typeDefinitionTypeScheme (var "tdef")) $
+    "typ" <~ (Core.typeSchemeBody $ Packaging.typeDefinitionBody (var "tdef")) $
     "lname" <~ (qualifiedSnakeName @@ var "name") $
     "dtyp" <~ (Strip.deannotateType @@ var "typ") $
     encodeTypeBody @@ var "lname" @@ var "typ" @@ var "dtyp"
@@ -778,8 +778,8 @@ encodeUnionElim = def "encodeUnionElim" $
         -- Build cond clauses from each case field
         "clauses" <<~ (Eithers.mapList
           (lambda "cf" $
-            "cfname" <~ (Formatting.convertCaseCamelToLowerSnake @@ Core.unName (Core.fieldName (var "cf"))) $
-            "cfterm" <~ Core.fieldTerm (var "cf") $
+            "cfname" <~ (Formatting.convertCaseCamelToLowerSnake @@ Core.unName (Core.caseAlternativeName (var "cf"))) $
+            "cfterm" <~ Core.caseAlternativeHandler (var "cf") $
             -- Each case applies the handler to the value: ((handler) v)
             -- Condition: (equal? (car __m) :variantName) or (= (first __m) :variantName)
             "condExpr" <~ (lispApp @@ (lispVar @@ (dialectEqual @@ var "dialect")) @@ list [
@@ -1031,7 +1031,7 @@ moduleToLisp = def "moduleToLisp" $
     "termDefs" <~ Pairs.second (var "partitioned") $
     -- Filter out type aliases (non-nominal types)
     "typeDefs" <~ Lists.filter (lambda "td" $
-      Predicates.isNominalType @@ (Core.typeSchemeBody $ Packaging.typeDefinitionTypeScheme (var "td")))
+      Predicates.isNominalType @@ (Core.typeSchemeBody $ Packaging.typeDefinitionBody (var "td")))
       (var "allTypeDefs") $
     "typeItems" <<~ (Eithers.mapList (encodeTypeDefinition @@ var "cx" @@ var "g") (var "typeDefs")) $
     "termItems" <<~ (Eithers.mapList (encodeTermDefinition @@ var "dialect" @@ var "cx" @@ var "g") (var "termDefs")) $

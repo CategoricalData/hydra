@@ -222,7 +222,11 @@ map = TermMap
 -- This allows handling different cases of a union type with specific logic for each variant.
 -- The optional second parameter provides a default case for any unmatched variants.
 match :: Name -> Maybe Term -> [Field] -> Term
-match tname def fields = TermCases $ CaseStatement tname def fields
+match tname def fields = TermCases $ CaseStatement tname def (fieldToCaseAlternative <$> fields)
+  where
+    -- The DSL builds case alternatives via the same >>: operator used for record/union
+    -- fields, so call sites still pass [Field]; convert each to a CaseAlternative here.
+    fieldToCaseAlternative (Field fname fterm) = CaseAlternative fname fterm
 
 -- | Create a 'Nothing' optional value
 nothing :: Term

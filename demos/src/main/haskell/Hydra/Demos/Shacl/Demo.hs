@@ -121,7 +121,7 @@ encodeShapes cx defs =
 encodeOneShape :: Int -> TypeDefinition -> Either String (Shacl.Definition Shacl.Shape)
 encodeOneShape cx td =
   let nm = typeDefinitionName td
-      typ = typeSchemeBody (typeDefinitionTypeScheme td)
+      typ = typeSchemeBody (typeDefinitionBody td)
   in case ShaclCoder.encodeType nm typ cx of
        Left _ic -> Left $ "encode error for " ++ unName nm
        Right cp -> Right $ Shacl.Definition {
@@ -160,7 +160,7 @@ simplifyModule :: Module -> Module
 simplifyModule m = m { moduleDefinitions = map simplifyDef (moduleDefinitions m) }
   where
     simplifyDef (DefinitionTerm td) = DefinitionTerm $ td {
-      termDefinitionTerm = TermLiteral (LiteralString (unName (termDefinitionName td))) }
+      termDefinitionBody = TermLiteral (LiteralString (unName (termDefinitionName td))) }
     simplifyDef d = d
 
 -- | Try to encode a term as RDF, catching both Either errors and exceptions.

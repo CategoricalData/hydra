@@ -281,8 +281,8 @@ propertyIri = define "propertyIri" $
   doc "Construct a property IRI from a record name and field name" $
   lambda "rname" $ lambda "fname" $ lets [
     "qualName">: Names.qualifyName @@ var "rname",
-    "gname">: Packaging.qualifiedNameModuleName (var "qualName"),
-    "local_">: Packaging.qualifiedNameLocal (var "qualName")] $
+    "gname">: Util.qualifiedNameModuleName (var "qualName"),
+    "local_">: Util.qualifiedNameLocal (var "qualName")] $
     wrap Rdf._Iri
       (Strings.cat $ list [
         string "urn:",

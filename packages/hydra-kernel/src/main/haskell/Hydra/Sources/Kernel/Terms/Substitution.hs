@@ -129,7 +129,7 @@ singletonTypeSubst = define "singletonTypeSubst" $
 -- | Apply a type substitution to a map of class constraints.
 -- When a type variable is mapped to another type variable, the constraint is transferred to the new variable.
 -- When a type variable is mapped to a complex type, the constraint is propagated to all free variables in that type.
-substInClassConstraints :: TypedTermDefinition (TypeSubst -> M.Map Name TypeVariableMetadata -> M.Map Name TypeVariableMetadata)
+substInClassConstraints :: TypedTermDefinition (TypeSubst -> M.Map Name TypeVariableConstraints -> M.Map Name TypeVariableConstraints)
 substInClassConstraints = define "substInClassConstraints" $
   doc "Apply a type substitution to class constraints, propagating to free variables" $
   "subst" ~> "constraints" ~>
@@ -139,7 +139,7 @@ substInClassConstraints = define "substInClassConstraints" $
     Maybes.maybe
       (Maps.insert (var "varName") (var "metadata") (var "acc"))
       ("existing" ~>
-        "merged" <~ Core.typeVariableMetadata (Lists.nub $ Lists.concat2 (Core.typeVariableMetadataClasses $ var "existing") (Core.typeVariableMetadataClasses $ var "metadata")) $
+        "merged" <~ Core.typeVariableConstraints (Lists.nub $ Lists.concat2 (Core.typeVariableConstraintsClasses $ var "existing") (Core.typeVariableConstraintsClasses $ var "metadata")) $
         Maps.insert (var "varName") (var "merged") (var "acc"))
       (Maps.lookup (var "varName") (var "acc"))) $
   -- For each (varName, metadata) in constraints:

@@ -31,20 +31,24 @@ apply lhs rhs = Core.termApplication $ Core.application lhs rhs
 -- Case statements and pattern matching
 --------------------------------------------------------------------------------
 
-cases :: Name -> TypedTerm Term -> TypedTerm (Maybe Term) -> [TypedTerm Field] -> TypedTerm Term
-cases tname arg dflt fields = match tname dflt fields @@@ arg
+cases :: Name -> TypedTerm Term -> TypedTerm (Maybe Term) -> [TypedTerm CaseAlternative] -> TypedTerm Term
+cases tname arg dflt alts = match tname dflt alts @@@ arg
 
--- | Create a field for case matching
+-- | Create a field (e.g. for injection payloads)
 field :: Name -> TypedTerm Term -> TypedTerm Field
 field fname body = Core.field (Core.nameLift fname) body
 
+-- | Create a case alternative (a variant tag together with its handler) for case matching
+caseAlternative :: Name -> TypedTerm Term -> TypedTerm CaseAlternative
+caseAlternative aname handler = Core.caseAlternative (Core.nameLift aname) handler
+
 -- | Create a union case statement with optional default case
-match :: Name -> TypedTerm (Maybe Term) -> [TypedTerm Field] -> TypedTerm Term
-match tname dflt fields = Core.termCases $
+match :: Name -> TypedTerm (Maybe Term) -> [TypedTerm CaseAlternative] -> TypedTerm Term
+match tname dflt alts = Core.termCases $
   Core.caseStatement
     (Core.nameLift tname)
     dflt
-    (P.list fields)
+    (P.list alts)
 
 --------------------------------------------------------------------------------
 -- Functions and lambdas
