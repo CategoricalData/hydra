@@ -74,7 +74,7 @@ binding x =
         Core.Field {
           Core.fieldName = (Core.Name "typeScheme"),
           Core.fieldTerm = ((\opt -> Core.TermMaybe (Maybes.map typeScheme opt)) (Core.bindingTypeScheme x))}]})
--- | Encoder for hydra.core.CaseStatement
+-- | Encoder for hydra.core.CaseAlternative
 caseAlternative :: Core.CaseAlternative -> Core.Term
 caseAlternative x =
     Core.TermRecord (Core.Record {
@@ -86,7 +86,6 @@ caseAlternative x =
         Core.Field {
           Core.fieldName = (Core.Name "handler"),
           Core.fieldTerm = (term (Core.caseAlternativeHandler x))}]})
-
 -- | Encoder for hydra.core.CaseStatement
 caseStatement :: Core.CaseStatement -> Core.Term
 caseStatement x =

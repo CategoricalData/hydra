@@ -2,8 +2,7 @@
   "definitions": [
     {
       "type": {
-        "name": "hydra.protobuf.sourceContext.SourceContext",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [
@@ -25,7 +24,8 @@
                               "literal": {
                                 "string": "The path-qualified name of the .proto file that contained the associated protobuf element.  For example: `\"google/protobuf/source_context.proto\"`."}}}],
                         "body": {"literal": {"string": {}}}}}}]}}},
-          "variables": []}}}],
+          "variables": []},
+        "name": "hydra.protobuf.sourceContext.SourceContext"}}],
   "dependencies": [{"module": "hydra.core"}],
   "metadata": {
     "comments": [],

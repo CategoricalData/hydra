@@ -107,7 +107,7 @@ data Field =
   Field {
     -- | The name of the field
     fieldName :: Name,
-    -- | The term value of the field
+    -- | The value of the field
     fieldTerm :: Term}
   deriving (Eq, Ord, Read, Show)
 _Field = Name "hydra.core.Field"
@@ -480,7 +480,7 @@ _Type_unit = Name "unit"
 _Type_variable = Name "variable"
 _Type_void = Name "void"
 _Type_wrap = Name "wrap"
--- | A term applied to a type; a type application
+-- | A term applied to a type; a type application.
 data TypeApplicationTerm =
   TypeApplicationTerm {
     -- | The term being applied to a type

@@ -2,8 +2,7 @@
   "definitions": [
     {
       "type": {
-        "name": "hydra.tinkerpop.features.DataTypeFeatures",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [
@@ -120,11 +119,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "Supports setting of a List value."}}}],
                         "body": {"literal": {"boolean": {}}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.tinkerpop.features.DataTypeFeatures"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.features.EdgeFeatures",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "Features that are related to Edge operations."}}}],
@@ -155,20 +154,20 @@
                               "literal": {
                                 "string": "Determines if the Graph implementation uses upsert functionality as opposed to insert functionality for Vertex.addEdge(String, Vertex, Object...)."}}}],
                         "body": {"literal": {"boolean": {}}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.tinkerpop.features.EdgeFeatures"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.features.EdgePropertyFeatures",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "Features that are related to Edge Property objects."}}}],
               "body": {"record": [{"name": "propertyFeatures", "type": {"variable": "hydra.tinkerpop.features.PropertyFeatures"}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.tinkerpop.features.EdgePropertyFeatures"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.features.ElementFeatures",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "Features that are related to Element objects."}}}],
@@ -238,11 +237,11 @@
                             "key": "description",
                             "value": {"literal": {"string": "Determines if an Element has UUID identifiers as their internal representation."}}}],
                         "body": {"literal": {"boolean": {}}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.tinkerpop.features.ElementFeatures"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.features.ExtraFeatures",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [
@@ -259,11 +258,11 @@
                         "name": "supportsMapKey",
                         "type": {"function": {"codomain": {"literal": {"boolean": {}}}, "domain": {"variable": "hydra.core.Type"}}}}]},
                   "parameter": "a"}}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.tinkerpop.features.ExtraFeatures"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.features.Features",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [
@@ -292,11 +291,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "Gets the features related to vertex operation."}}}],
                         "body": {"variable": "hydra.tinkerpop.features.VertexFeatures"}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.tinkerpop.features.Features"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.features.GraphFeatures",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "Features specific to a operations of a graph."}}}],
@@ -379,11 +378,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "Gets the features related to graph sideEffects operation."}}}],
                         "body": {"variable": "hydra.tinkerpop.features.VariableFeatures"}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.tinkerpop.features.GraphFeatures"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.features.PropertyFeatures",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A base interface for Edge or Vertex Property features."}}}],
@@ -400,11 +399,11 @@
                             "value": {
                               "literal": {"string": "Determines if an Element allows for the processing of at least one data type defined by the features."}}}],
                         "body": {"literal": {"boolean": {}}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.tinkerpop.features.PropertyFeatures"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.features.VariableFeatures",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "Features for Graph.Variables."}}}],
@@ -421,11 +420,11 @@
                             "value": {
                               "literal": {"string": "If any of the features on Graph.Features.VariableFeatures is true then this value must be true."}}}],
                         "body": {"literal": {"boolean": {}}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.tinkerpop.features.VariableFeatures"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.features.VertexFeatures",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "Features that are related to Vertex operations."}}}],
@@ -483,11 +482,11 @@
                               "literal": {
                                 "string": "Determines if the Graph implementation uses upsert functionality as opposed to insert functionality for Graph.addVertex(String)."}}}],
                         "body": {"literal": {"boolean": {}}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.tinkerpop.features.VertexFeatures"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.features.VertexPropertyFeatures",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "Features that are related to Vertex Property objects."}}}],
@@ -505,7 +504,8 @@
                             "key": "description",
                             "value": {"literal": {"string": "Determines if a VertexProperty allows properties to be removed."}}}],
                         "body": {"literal": {"boolean": {}}}}}}]}}},
-          "variables": []}}}],
+          "variables": []},
+        "name": "hydra.tinkerpop.features.VertexPropertyFeatures"}}],
   "dependencies": [{"module": "hydra.core"}],
   "metadata": {
     "comments": [],

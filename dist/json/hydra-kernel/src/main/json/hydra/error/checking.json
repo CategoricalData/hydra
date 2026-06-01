@@ -2,8 +2,7 @@
   "definitions": [
     {
       "type": {
-        "name": "hydra.error.checking.CheckingError",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "An error that occurred during type checking"}}}],
@@ -97,11 +96,11 @@
                             "key": "description",
                             "value": {"literal": {"string": "A reference to a term variable whose type is not known, encountered during checking"}}}],
                         "body": {"variable": "hydra.error.checking.UntypedTermVariableCheckingError"}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.error.checking.CheckingError"}},
     {
       "type": {
-        "name": "hydra.error.checking.IncorrectUnificationError",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A post-unification consistency check failure"}}}],
@@ -113,11 +112,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The substitution that failed the consistency check"}}}],
                         "body": {"variable": "hydra.typing.TypeSubst"}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.error.checking.IncorrectUnificationError"}},
     {
       "type": {
-        "name": "hydra.error.checking.NotAForallTypeError",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [
@@ -138,11 +137,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The type arguments that were being applied"}}}],
                         "body": {"list": {"variable": "hydra.core.Type"}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.error.checking.NotAForallTypeError"}},
     {
       "type": {
-        "name": "hydra.error.checking.NotAFunctionTypeError",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [
@@ -157,11 +156,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The actual type encountered"}}}],
                         "body": {"variable": "hydra.core.Type"}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.error.checking.NotAFunctionTypeError"}},
     {
       "type": {
-        "name": "hydra.error.checking.OtherCheckingError",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A generic checking error: message + subterm path"}}}],
@@ -179,11 +178,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "A human-readable error message"}}}],
                         "body": {"literal": {"string": {}}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.error.checking.OtherCheckingError"}},
     {
       "type": {
-        "name": "hydra.error.checking.TypeArityMismatchError",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [
@@ -216,11 +215,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The type arguments that were provided"}}}],
                         "body": {"list": {"variable": "hydra.core.Type"}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.error.checking.TypeArityMismatchError"}},
     {
       "type": {
-        "name": "hydra.error.checking.TypeMismatchError",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A type mismatch between expected and actual types"}}}],
@@ -238,11 +237,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The actual type encountered"}}}],
                         "body": {"variable": "hydra.core.Type"}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.error.checking.TypeMismatchError"}},
     {
       "type": {
-        "name": "hydra.error.checking.UnboundTypeVariablesError",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [
@@ -263,11 +262,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The type containing the unbound variables"}}}],
                         "body": {"variable": "hydra.core.Type"}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.error.checking.UnboundTypeVariablesError"}},
     {
       "type": {
-        "name": "hydra.error.checking.UndefinedTermVariableCheckingError",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [
@@ -288,11 +287,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the undefined variable"}}}],
                         "body": {"variable": "hydra.core.Name"}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.error.checking.UndefinedTermVariableCheckingError"}},
     {
       "type": {
-        "name": "hydra.error.checking.UnequalTypesError",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "Multiple types that should all be equal but are not"}}}],
@@ -313,11 +312,11 @@
                             "key": "description",
                             "value": {"literal": {"string": "A description of the context in which the types were expected to be equal"}}}],
                         "body": {"literal": {"string": {}}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.error.checking.UnequalTypesError"}},
     {
       "type": {
-        "name": "hydra.error.checking.UnsupportedTermVariantError",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A term variant that the type checker does not support"}}}],
@@ -329,11 +328,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The unsupported term variant"}}}],
                         "body": {"variable": "hydra.variants.TermVariant"}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.error.checking.UnsupportedTermVariantError"}},
     {
       "type": {
-        "name": "hydra.error.checking.UntypedLambdaError",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [
@@ -341,11 +340,11 @@
                   "key": "description",
                   "value": {"literal": {"string": "A lambda expression without a type annotation on its parameter"}}}],
               "body": {"record": []}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.error.checking.UntypedLambdaError"}},
     {
       "type": {
-        "name": "hydra.error.checking.UntypedLetBindingError",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A let binding without a type annotation"}}}],
@@ -357,11 +356,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The untyped binding"}}}],
                         "body": {"variable": "hydra.core.Binding"}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.error.checking.UntypedLetBindingError"}},
     {
       "type": {
-        "name": "hydra.error.checking.UntypedTermVariableCheckingError",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [
@@ -382,7 +381,8 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the untyped variable"}}}],
                         "body": {"variable": "hydra.core.Name"}}}}]}}},
-          "variables": []}}}],
+          "variables": []},
+        "name": "hydra.error.checking.UntypedTermVariableCheckingError"}}],
   "dependencies": [{"module": "hydra.core"}, {"module": "hydra.paths"}, {"module": "hydra.typing"}, {"module": "hydra.variants"}],
   "metadata": {"comments": [], "description": "Error types for type checking", "seeAlso": []},
   "name": "hydra.error.checking"}

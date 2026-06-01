@@ -66,7 +66,7 @@ binding cx raw =
           Core.bindingTerm = field_term,
           Core.bindingTypeScheme = field_typeScheme})))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
--- | Decoder for hydra.core.CaseStatement
+-- | Decoder for hydra.core.CaseAlternative
 caseAlternative :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.CaseAlternative
 caseAlternative cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of

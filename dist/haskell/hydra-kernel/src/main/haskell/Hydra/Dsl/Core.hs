@@ -402,6 +402,22 @@ caseAlternativeWithHandler original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "handler"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
+-- | DSL updater for the name field of hydra.core.CaseAlternative
+caseAlternativeWithName :: Typed.TypedTerm Core.CaseAlternative -> Typed.TypedTerm Core.Name -> Typed.TypedTerm Core.CaseAlternative
+caseAlternativeWithName original newVal =
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.core.CaseAlternative"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "name"),
+          Core.fieldTerm = (Typed.unTypedTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "handler"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.core.CaseAlternative"),
+              Core.projectionFieldName = (Core.Name "handler")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
 -- | DSL constructor for hydra.core.CaseStatement
 caseStatement :: Typed.TypedTerm Core.Name -> Typed.TypedTerm (Maybe Core.Term) -> Typed.TypedTerm [Core.CaseAlternative] -> Typed.TypedTerm Core.CaseStatement
 caseStatement typeName default_ cases =

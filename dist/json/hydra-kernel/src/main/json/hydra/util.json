@@ -2,8 +2,7 @@
   "definitions": [
     {
       "type": {
-        "name": "hydra.util.CaseConvention",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [
@@ -16,11 +15,11 @@
                   {"name": "pascal", "type": {"unit": {}}},
                   {"name": "lowerSnake", "type": {"unit": {}}},
                   {"name": "upperSnake", "type": {"unit": {}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.util.CaseConvention"}},
     {
       "type": {
-        "name": "hydra.util.Comparison",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [
@@ -30,11 +29,21 @@
                   {"name": "lessThan", "type": {"unit": {}}},
                   {"name": "equalTo", "type": {"unit": {}}},
                   {"name": "greaterThan", "type": {"unit": {}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.util.Comparison"}},
     {
       "type": {
-        "name": "hydra.util.ModuleNames",
-        "typeScheme": {
+        "body": {
+          "body": {
+            "annotated": {
+              "annotation": [
+                {"key": "description", "value": {"literal": {"string": "A file extension (without the dot), e.g. \"json\" or \"py\""}}}],
+              "body": {"wrap": {"literal": {"string": {}}}}}},
+          "variables": []},
+        "name": "hydra.util.FileExtension"}},
+    {
+      "type": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [
@@ -59,11 +68,11 @@
                             "annotation": [{"key": "description", "value": {"literal": {"string": "A mapping of module names to values"}}}],
                             "body": {"map": {"keys": {"variable": "hydra.packaging.ModuleName"}, "values": {"variable": "n"}}}}}}]},
                   "parameter": "n"}}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.util.ModuleNames"}},
     {
       "type": {
-        "name": "hydra.util.Precision",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [
@@ -82,7 +91,33 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "Precision to a specified number of bits"}}}],
                         "body": {"literal": {"integer": {"int32": {}}}}}}}]}}},
-          "variables": []}}}],
+          "variables": []},
+        "name": "hydra.util.Precision"}},
+    {
+      "type": {
+        "body": {
+          "body": {
+            "annotated": {
+              "annotation": [
+                {
+                  "key": "description",
+                  "value": {"literal": {"string": "A qualified name consisting of an optional module name together with a mandatory local name"}}}],
+              "body": {
+                "record": [
+                  {
+                    "name": "moduleName",
+                    "type": {
+                      "annotated": {
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The optional module name"}}}],
+                        "body": {"maybe": {"variable": "hydra.packaging.ModuleName"}}}}},
+                  {
+                    "name": "local",
+                    "type": {
+                      "annotated": {
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The local name"}}}],
+                        "body": {"literal": {"string": {}}}}}}]}}},
+          "variables": []},
+        "name": "hydra.util.QualifiedName"}}],
   "dependencies": [{"module": "hydra.core"}, {"module": "hydra.packaging"}],
   "metadata": {"comments": [], "description": "General-purpose utility types used across Hydra.", "seeAlso": []},
   "name": "hydra.util"}
