@@ -2,78 +2,7 @@
   "definitions": [
     {
       "term": {
-        "name": "hydra.dsl.coders.adapter",
-        "signature": {
-          "parameters": [
-            {
-              "isLazy": false,
-              "name": "arg0",
-              "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "Whether information may be lost in the course of this adaptation"}}}],
-                      "body": {"literal": {"boolean": {}}}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
-            {
-              "isLazy": false,
-              "name": "arg1",
-              "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The source type"}}}],
-                      "body": {"variable": "t1"}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
-            {
-              "isLazy": false,
-              "name": "arg2",
-              "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The target type"}}}],
-                      "body": {"variable": "t2"}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
-            {
-              "isLazy": false,
-              "name": "arg3",
-              "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "The coder for transforming instances of the source type to instances of the target type"}}}],
-                      "body": {
-                        "application": {
-                          "argument": {"variable": "v2"},
-                          "function": {"application": {"argument": {"variable": "v1"}, "function": {"variable": "hydra.coders.Coder"}}}}}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
-          "result": {
-            "type": {
-              "application": {
-                "argument": {
-                  "application": {
-                    "argument": {"variable": "v2"},
-                    "function": {
-                      "application": {
-                        "argument": {"variable": "v1"},
-                        "function": {
-                          "application": {
-                            "argument": {"variable": "t2"},
-                            "function": {"application": {"argument": {"variable": "t1"}, "function": {"variable": "hydra.coders.Adapter"}}}}}}}}},
-                "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": [
-            {"constraints": [], "name": "t1"},
-            {"constraints": [], "name": "t2"},
-            {"constraints": [], "name": "v1"},
-            {"constraints": [], "name": "v2"}]},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for hydra.coders.Adapter"}}}],
             "body": {
@@ -175,10 +104,8 @@
                             "value": {"literal": {"string": "Whether information may be lost in the course of this adaptation"}}}],
                         "body": {"literal": {"boolean": {}}}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "isLossy"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.coders.adapterIsLossy",
+                "parameter": "isLossy"}}}},
+        "name": "hydra.dsl.coders.adapter",
         "signature": {
           "parameters": [
             {
@@ -187,33 +114,71 @@
               "type": {
                 "application": {
                   "argument": {
-                    "application": {
-                      "argument": {"variable": "v2"},
-                      "function": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "key": "description",
+                          "value": {"literal": {"string": "Whether information may be lost in the course of this adaptation"}}}],
+                      "body": {"literal": {"boolean": {}}}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The source type"}}}],
+                      "body": {"variable": "t1"}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg2",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The target type"}}}],
+                      "body": {"variable": "t2"}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg3",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "key": "description",
+                          "value": {"literal": {"string": "The coder for transforming instances of the source type to instances of the target type"}}}],
+                      "body": {
                         "application": {
-                          "argument": {"variable": "v1"},
-                          "function": {
-                            "application": {
-                              "argument": {"variable": "t2"},
-                              "function": {"application": {"argument": {"variable": "t1"}, "function": {"variable": "hydra.coders.Adapter"}}}}}}}}},
+                          "argument": {"variable": "v2"},
+                          "function": {"application": {"argument": {"variable": "v1"}, "function": {"variable": "hydra.coders.Coder"}}}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {
                 "argument": {
-                  "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {"literal": {"string": "Whether information may be lost in the course of this adaptation"}}}],
-                    "body": {"literal": {"boolean": {}}}}},
+                  "application": {
+                    "argument": {"variable": "v2"},
+                    "function": {
+                      "application": {
+                        "argument": {"variable": "v1"},
+                        "function": {
+                          "application": {
+                            "argument": {"variable": "t2"},
+                            "function": {"application": {"argument": {"variable": "t1"}, "function": {"variable": "hydra.coders.Adapter"}}}}}}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": [
             {"constraints": [], "name": "t1"},
             {"constraints": [], "name": "t2"},
             {"constraints": [], "name": "v1"},
-            {"constraints": [], "name": "v2"}]},
-        "term": {
+            {"constraints": [], "name": "v2"}]}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL accessor for the isLossy field of hydra.coders.Adapter"}}}],
             "body": {
@@ -261,10 +226,8 @@
                                 "argument": {"variable": "t2"},
                                 "function": {"application": {"argument": {"variable": "t1"}, "function": {"variable": "hydra.coders.Adapter"}}}}}}}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.coders.adapterSource",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.coders.adapterIsLossy",
         "signature": {
           "parameters": [
             {
@@ -288,15 +251,20 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The source type"}}}],
-                    "body": {"variable": "t1"}}},
+                    "annotation": [
+                      {
+                        "key": "description",
+                        "value": {"literal": {"string": "Whether information may be lost in the course of this adaptation"}}}],
+                    "body": {"literal": {"boolean": {}}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": [
             {"constraints": [], "name": "t1"},
             {"constraints": [], "name": "t2"},
             {"constraints": [], "name": "v1"},
-            {"constraints": [], "name": "v2"}]},
-        "term": {
+            {"constraints": [], "name": "v2"}]}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL accessor for the source field of hydra.coders.Adapter"}}}],
             "body": {
@@ -344,10 +312,8 @@
                                 "argument": {"variable": "t2"},
                                 "function": {"application": {"argument": {"variable": "t1"}, "function": {"variable": "hydra.coders.Adapter"}}}}}}}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.coders.adapterTarget",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.coders.adapterSource",
         "signature": {
           "parameters": [
             {
@@ -371,15 +337,17 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The target type"}}}],
-                    "body": {"variable": "t2"}}},
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "The source type"}}}],
+                    "body": {"variable": "t1"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": [
             {"constraints": [], "name": "t1"},
             {"constraints": [], "name": "t2"},
             {"constraints": [], "name": "v1"},
-            {"constraints": [], "name": "v2"}]},
-        "term": {
+            {"constraints": [], "name": "v2"}]}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL accessor for the target field of hydra.coders.Adapter"}}}],
             "body": {
@@ -427,10 +395,8 @@
                                 "argument": {"variable": "t2"},
                                 "function": {"application": {"argument": {"variable": "t1"}, "function": {"variable": "hydra.coders.Adapter"}}}}}}}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.coders.adapterCoder",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.coders.adapterTarget",
         "signature": {
           "parameters": [
             {
@@ -454,21 +420,17 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {"literal": {"string": "The coder for transforming instances of the source type to instances of the target type"}}}],
-                    "body": {
-                      "application": {
-                        "argument": {"variable": "v2"},
-                        "function": {"application": {"argument": {"variable": "v1"}, "function": {"variable": "hydra.coders.Coder"}}}}}}},
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "The target type"}}}],
+                    "body": {"variable": "t2"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": [
             {"constraints": [], "name": "t1"},
             {"constraints": [], "name": "t2"},
             {"constraints": [], "name": "v1"},
-            {"constraints": [], "name": "v2"}]},
-        "term": {
+            {"constraints": [], "name": "v2"}]}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL accessor for the coder field of hydra.coders.Adapter"}}}],
             "body": {
@@ -516,10 +478,8 @@
                                 "argument": {"variable": "t2"},
                                 "function": {"application": {"argument": {"variable": "t1"}, "function": {"variable": "hydra.coders.Adapter"}}}}}}}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.coders.adapterWithIsLossy",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.coders.adapterCoder",
         "signature": {
           "parameters": [
             {
@@ -537,40 +497,29 @@
                             "application": {
                               "argument": {"variable": "t2"},
                               "function": {"application": {"argument": {"variable": "t1"}, "function": {"variable": "hydra.coders.Adapter"}}}}}}}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
-            {
-              "isLazy": false,
-              "name": "arg1",
-              "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "Whether information may be lost in the course of this adaptation"}}}],
-                      "body": {"literal": {"boolean": {}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {
                 "argument": {
-                  "application": {
-                    "argument": {"variable": "v2"},
-                    "function": {
+                  "annotated": {
+                    "annotation": [
+                      {
+                        "key": "description",
+                        "value": {"literal": {"string": "The coder for transforming instances of the source type to instances of the target type"}}}],
+                    "body": {
                       "application": {
-                        "argument": {"variable": "v1"},
-                        "function": {
-                          "application": {
-                            "argument": {"variable": "t2"},
-                            "function": {"application": {"argument": {"variable": "t1"}, "function": {"variable": "hydra.coders.Adapter"}}}}}}}}},
+                        "argument": {"variable": "v2"},
+                        "function": {"application": {"argument": {"variable": "v1"}, "function": {"variable": "hydra.coders.Coder"}}}}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": [
             {"constraints": [], "name": "t1"},
             {"constraints": [], "name": "t2"},
             {"constraints": [], "name": "v1"},
-            {"constraints": [], "name": "v2"}]},
-        "term": {
+            {"constraints": [], "name": "v2"}]}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL updater for the isLossy field of hydra.coders.Adapter"}}}],
             "body": {
@@ -730,10 +679,8 @@
                                 "argument": {"variable": "t2"},
                                 "function": {"application": {"argument": {"variable": "t1"}, "function": {"variable": "hydra.coders.Adapter"}}}}}}}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.coders.adapterWithSource",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.coders.adapterWithIsLossy",
         "signature": {
           "parameters": [
             {
@@ -759,8 +706,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The source type"}}}],
-                      "body": {"variable": "t1"}}},
+                      "annotation": [
+                        {
+                          "key": "description",
+                          "value": {"literal": {"string": "Whether information may be lost in the course of this adaptation"}}}],
+                      "body": {"literal": {"boolean": {}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
@@ -780,8 +730,10 @@
             {"constraints": [], "name": "t1"},
             {"constraints": [], "name": "t2"},
             {"constraints": [], "name": "v1"},
-            {"constraints": [], "name": "v2"}]},
-        "term": {
+            {"constraints": [], "name": "v2"}]}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL updater for the source field of hydra.coders.Adapter"}}}],
             "body": {
@@ -938,10 +890,8 @@
                                 "argument": {"variable": "t2"},
                                 "function": {"application": {"argument": {"variable": "t1"}, "function": {"variable": "hydra.coders.Adapter"}}}}}}}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.coders.adapterWithTarget",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.coders.adapterWithSource",
         "signature": {
           "parameters": [
             {
@@ -967,8 +917,8 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The target type"}}}],
-                      "body": {"variable": "t2"}}},
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The source type"}}}],
+                      "body": {"variable": "t1"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
@@ -988,8 +938,10 @@
             {"constraints": [], "name": "t1"},
             {"constraints": [], "name": "t2"},
             {"constraints": [], "name": "v1"},
-            {"constraints": [], "name": "v2"}]},
-        "term": {
+            {"constraints": [], "name": "v2"}]}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL updater for the target field of hydra.coders.Adapter"}}}],
             "body": {
@@ -1146,10 +1098,8 @@
                                 "argument": {"variable": "t2"},
                                 "function": {"application": {"argument": {"variable": "t1"}, "function": {"variable": "hydra.coders.Adapter"}}}}}}}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.coders.adapterWithCoder",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.coders.adapterWithTarget",
         "signature": {
           "parameters": [
             {
@@ -1175,14 +1125,8 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "The coder for transforming instances of the source type to instances of the target type"}}}],
-                      "body": {
-                        "application": {
-                          "argument": {"variable": "v2"},
-                          "function": {"application": {"argument": {"variable": "v1"}, "function": {"variable": "hydra.coders.Coder"}}}}}}},
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The target type"}}}],
+                      "body": {"variable": "t2"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
@@ -1202,8 +1146,10 @@
             {"constraints": [], "name": "t1"},
             {"constraints": [], "name": "t2"},
             {"constraints": [], "name": "v1"},
-            {"constraints": [], "name": "v2"}]},
-        "term": {
+            {"constraints": [], "name": "v2"}]}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL updater for the coder field of hydra.coders.Adapter"}}}],
             "body": {
@@ -1366,10 +1312,8 @@
                                 "argument": {"variable": "t2"},
                                 "function": {"application": {"argument": {"variable": "t1"}, "function": {"variable": "hydra.coders.Adapter"}}}}}}}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.coders.adapterContext",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.coders.adapterWithCoder",
         "signature": {
           "parameters": [
             {
@@ -1378,9 +1322,15 @@
               "type": {
                 "application": {
                   "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The underlying graph of elements and primitives"}}}],
-                      "body": {"variable": "hydra.graph.Graph"}}},
+                    "application": {
+                      "argument": {"variable": "v2"},
+                      "function": {
+                        "application": {
+                          "argument": {"variable": "v1"},
+                          "function": {
+                            "application": {
+                              "argument": {"variable": "t2"},
+                              "function": {"application": {"argument": {"variable": "t1"}, "function": {"variable": "hydra.coders.Adapter"}}}}}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
               "isLazy": false,
@@ -1389,36 +1339,37 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The language being encoded or decoded"}}}],
-                      "body": {"variable": "hydra.coders.Language"}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
-            {
-              "isLazy": false,
-              "name": "arg2",
-              "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "A map of type names to adapters for those types"}}}],
+                      "annotation": [
+                        {
+                          "key": "description",
+                          "value": {"literal": {"string": "The coder for transforming instances of the source type to instances of the target type"}}}],
                       "body": {
-                        "map": {
-                          "keys": {"variable": "hydra.core.Name"},
-                          "values": {
-                            "application": {
-                              "argument": {"variable": "hydra.core.Term"},
-                              "function": {
-                                "application": {
-                                  "argument": {"variable": "hydra.core.Term"},
-                                  "function": {
-                                    "application": {
-                                      "argument": {"variable": "hydra.core.Type"},
-                                      "function": {"application": {"argument": {"variable": "hydra.core.Type"}, "function": {"variable": "hydra.coders.Adapter"}}}}}}}}}}}}},
+                        "application": {
+                          "argument": {"variable": "v2"},
+                          "function": {"application": {"argument": {"variable": "v1"}, "function": {"variable": "hydra.coders.Coder"}}}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.coders.AdapterContext"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+              "application": {
+                "argument": {
+                  "application": {
+                    "argument": {"variable": "v2"},
+                    "function": {
+                      "application": {
+                        "argument": {"variable": "v1"},
+                        "function": {
+                          "application": {
+                            "argument": {"variable": "t2"},
+                            "function": {"application": {"argument": {"variable": "t1"}, "function": {"variable": "hydra.coders.Adapter"}}}}}}}}},
+                "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": [
+            {"constraints": [], "name": "t1"},
+            {"constraints": [], "name": "t2"},
+            {"constraints": [], "name": "v1"},
+            {"constraints": [], "name": "v2"}]}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for hydra.coders.AdapterContext"}}}],
             "body": {
@@ -1505,27 +1456,59 @@
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The underlying graph of elements and primitives"}}}],
                         "body": {"variable": "hydra.graph.Graph"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "graph"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.coders.adapterContextGraph",
+                "parameter": "graph"}}}},
+        "name": "hydra.dsl.coders.adapterContext",
         "signature": {
           "parameters": [
             {
               "isLazy": false,
               "name": "arg0",
               "type": {
-                "application": {"argument": {"variable": "hydra.coders.AdapterContext"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The underlying graph of elements and primitives"}}}],
+                      "body": {"variable": "hydra.graph.Graph"}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The language being encoded or decoded"}}}],
+                      "body": {"variable": "hydra.coders.Language"}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg2",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "A map of type names to adapters for those types"}}}],
+                      "body": {
+                        "map": {
+                          "keys": {"variable": "hydra.core.Name"},
+                          "values": {
+                            "application": {
+                              "argument": {"variable": "hydra.core.Term"},
+                              "function": {
+                                "application": {
+                                  "argument": {"variable": "hydra.core.Term"},
+                                  "function": {
+                                    "application": {
+                                      "argument": {"variable": "hydra.core.Type"},
+                                      "function": {"application": {"argument": {"variable": "hydra.core.Type"}, "function": {"variable": "hydra.coders.Adapter"}}}}}}}}}}}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
-              "application": {
-                "argument": {
-                  "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The underlying graph of elements and primitives"}}}],
-                    "body": {"variable": "hydra.graph.Graph"}}},
-                "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+              "application": {"argument": {"variable": "hydra.coders.AdapterContext"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -1565,10 +1548,8 @@
                     "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.coders.AdapterContext"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.coders.adapterContextLanguage",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.coders.adapterContextGraph",
         "signature": {
           "parameters": [
             {
@@ -1581,11 +1562,13 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The language being encoded or decoded"}}}],
-                    "body": {"variable": "hydra.coders.Language"}}},
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "The underlying graph of elements and primitives"}}}],
+                    "body": {"variable": "hydra.graph.Graph"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -1625,10 +1608,8 @@
                     "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.coders.AdapterContext"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.coders.adapterContextAdapters",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.coders.adapterContextLanguage",
         "signature": {
           "parameters": [
             {
@@ -1641,23 +1622,13 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "A map of type names to adapters for those types"}}}],
-                    "body": {
-                      "map": {
-                        "keys": {"variable": "hydra.core.Name"},
-                        "values": {
-                          "application": {
-                            "argument": {"variable": "hydra.core.Term"},
-                            "function": {
-                              "application": {
-                                "argument": {"variable": "hydra.core.Term"},
-                                "function": {
-                                  "application": {
-                                    "argument": {"variable": "hydra.core.Type"},
-                                    "function": {"application": {"argument": {"variable": "hydra.core.Type"}, "function": {"variable": "hydra.coders.Adapter"}}}}}}}}}}}}},
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "The language being encoded or decoded"}}}],
+                    "body": {"variable": "hydra.coders.Language"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -1697,32 +1668,39 @@
                     "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.coders.AdapterContext"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.coders.adapterContextWithGraph",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.coders.adapterContextAdapters",
         "signature": {
           "parameters": [
             {
               "isLazy": false,
               "name": "arg0",
               "type": {
-                "application": {"argument": {"variable": "hydra.coders.AdapterContext"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-            {
-              "isLazy": false,
-              "name": "arg1",
-              "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The underlying graph of elements and primitives"}}}],
-                      "body": {"variable": "hydra.graph.Graph"}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+                "application": {"argument": {"variable": "hydra.coders.AdapterContext"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.coders.AdapterContext"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+              "application": {
+                "argument": {
+                  "annotated": {
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "A map of type names to adapters for those types"}}}],
+                    "body": {
+                      "map": {
+                        "keys": {"variable": "hydra.core.Name"},
+                        "values": {
+                          "application": {
+                            "argument": {"variable": "hydra.core.Term"},
+                            "function": {
+                              "application": {
+                                "argument": {"variable": "hydra.core.Term"},
+                                "function": {
+                                  "application": {
+                                    "argument": {"variable": "hydra.core.Type"},
+                                    "function": {"application": {"argument": {"variable": "hydra.core.Type"}, "function": {"variable": "hydra.coders.Adapter"}}}}}}}}}}}}},
+                "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -1837,10 +1815,8 @@
                     "parameter": "newVal"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.coders.AdapterContext"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.coders.adapterContextWithLanguage",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.coders.adapterContextWithGraph",
         "signature": {
           "parameters": [
             {
@@ -1855,14 +1831,16 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The language being encoded or decoded"}}}],
-                      "body": {"variable": "hydra.coders.Language"}}},
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The underlying graph of elements and primitives"}}}],
+                      "body": {"variable": "hydra.graph.Graph"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {"argument": {"variable": "hydra.coders.AdapterContext"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -1977,10 +1955,8 @@
                     "parameter": "newVal"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.coders.AdapterContext"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.coders.adapterContextWithAdapters",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.coders.adapterContextWithLanguage",
         "signature": {
           "parameters": [
             {
@@ -1995,26 +1971,16 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "A map of type names to adapters for those types"}}}],
-                      "body": {
-                        "map": {
-                          "keys": {"variable": "hydra.core.Name"},
-                          "values": {
-                            "application": {
-                              "argument": {"variable": "hydra.core.Term"},
-                              "function": {
-                                "application": {
-                                  "argument": {"variable": "hydra.core.Term"},
-                                  "function": {
-                                    "application": {
-                                      "argument": {"variable": "hydra.core.Type"},
-                                      "function": {"application": {"argument": {"variable": "hydra.core.Type"}, "function": {"variable": "hydra.coders.Adapter"}}}}}}}}}}}}},
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The language being encoded or decoded"}}}],
+                      "body": {"variable": "hydra.coders.Language"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {"argument": {"variable": "hydra.coders.AdapterContext"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -2141,34 +2107,15 @@
                     "parameter": "newVal"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.coders.AdapterContext"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.coders.bicoder",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.coders.adapterContextWithAdapters",
         "signature": {
           "parameters": [
             {
               "isLazy": false,
               "name": "arg0",
               "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "A function from source types to adapters"}}}],
-                      "body": {
-                        "function": {
-                          "codomain": {
-                            "application": {
-                              "argument": {"variable": "v2"},
-                              "function": {
-                                "application": {
-                                  "argument": {"variable": "v1"},
-                                  "function": {
-                                    "application": {
-                                      "argument": {"variable": "t2"},
-                                      "function": {"application": {"argument": {"variable": "t1"}, "function": {"variable": "hydra.coders.Adapter"}}}}}}}}},
-                          "domain": {"variable": "t1"}}}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
+                "application": {"argument": {"variable": "hydra.coders.AdapterContext"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
               "isLazy": false,
               "name": "arg1",
@@ -2176,41 +2123,28 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "A function from target types to adapters"}}}],
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "A map of type names to adapters for those types"}}}],
                       "body": {
-                        "function": {
-                          "codomain": {
+                        "map": {
+                          "keys": {"variable": "hydra.core.Name"},
+                          "values": {
                             "application": {
-                              "argument": {"variable": "v1"},
+                              "argument": {"variable": "hydra.core.Term"},
                               "function": {
                                 "application": {
-                                  "argument": {"variable": "v2"},
+                                  "argument": {"variable": "hydra.core.Term"},
                                   "function": {
                                     "application": {
-                                      "argument": {"variable": "t1"},
-                                      "function": {"application": {"argument": {"variable": "t2"}, "function": {"variable": "hydra.coders.Adapter"}}}}}}}}},
-                          "domain": {"variable": "t2"}}}}},
+                                      "argument": {"variable": "hydra.core.Type"},
+                                      "function": {"application": {"argument": {"variable": "hydra.core.Type"}, "function": {"variable": "hydra.coders.Adapter"}}}}}}}}}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
-              "application": {
-                "argument": {
-                  "application": {
-                    "argument": {"variable": "v2"},
-                    "function": {
-                      "application": {
-                        "argument": {"variable": "v1"},
-                        "function": {
-                          "application": {
-                            "argument": {"variable": "t2"},
-                            "function": {"application": {"argument": {"variable": "t1"}, "function": {"variable": "hydra.coders.Bicoder"}}}}}}}}},
-                "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": [
-            {"constraints": [], "name": "t1"},
-            {"constraints": [], "name": "t2"},
-            {"constraints": [], "name": "v1"},
-            {"constraints": [], "name": "v2"}]},
-        "term": {
+              "application": {"argument": {"variable": "hydra.coders.AdapterContext"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for hydra.coders.Bicoder"}}}],
             "body": {
@@ -2291,10 +2225,8 @@
                                         "function": {"application": {"argument": {"variable": "t1"}, "function": {"variable": "hydra.coders.Adapter"}}}}}}}}},
                             "domain": {"variable": "t1"}}}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "encode"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.coders.bicoderEncode",
+                "parameter": "encode"}}}},
+        "name": "hydra.dsl.coders.bicoder",
         "signature": {
           "parameters": [
             {
@@ -2303,42 +2235,66 @@
               "type": {
                 "application": {
                   "argument": {
-                    "application": {
-                      "argument": {"variable": "v2"},
-                      "function": {
-                        "application": {
-                          "argument": {"variable": "v1"},
-                          "function": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "A function from source types to adapters"}}}],
+                      "body": {
+                        "function": {
+                          "codomain": {
                             "application": {
-                              "argument": {"variable": "t2"},
-                              "function": {"application": {"argument": {"variable": "t1"}, "function": {"variable": "hydra.coders.Bicoder"}}}}}}}}},
+                              "argument": {"variable": "v2"},
+                              "function": {
+                                "application": {
+                                  "argument": {"variable": "v1"},
+                                  "function": {
+                                    "application": {
+                                      "argument": {"variable": "t2"},
+                                      "function": {"application": {"argument": {"variable": "t1"}, "function": {"variable": "hydra.coders.Adapter"}}}}}}}}},
+                          "domain": {"variable": "t1"}}}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "A function from target types to adapters"}}}],
+                      "body": {
+                        "function": {
+                          "codomain": {
+                            "application": {
+                              "argument": {"variable": "v1"},
+                              "function": {
+                                "application": {
+                                  "argument": {"variable": "v2"},
+                                  "function": {
+                                    "application": {
+                                      "argument": {"variable": "t1"},
+                                      "function": {"application": {"argument": {"variable": "t2"}, "function": {"variable": "hydra.coders.Adapter"}}}}}}}}},
+                          "domain": {"variable": "t2"}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {
                 "argument": {
-                  "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "A function from source types to adapters"}}}],
-                    "body": {
-                      "function": {
-                        "codomain": {
+                  "application": {
+                    "argument": {"variable": "v2"},
+                    "function": {
+                      "application": {
+                        "argument": {"variable": "v1"},
+                        "function": {
                           "application": {
-                            "argument": {"variable": "v2"},
-                            "function": {
-                              "application": {
-                                "argument": {"variable": "v1"},
-                                "function": {
-                                  "application": {
-                                    "argument": {"variable": "t2"},
-                                    "function": {"application": {"argument": {"variable": "t1"}, "function": {"variable": "hydra.coders.Adapter"}}}}}}}}},
-                        "domain": {"variable": "t1"}}}}},
+                            "argument": {"variable": "t2"},
+                            "function": {"application": {"argument": {"variable": "t1"}, "function": {"variable": "hydra.coders.Bicoder"}}}}}}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": [
             {"constraints": [], "name": "t1"},
             {"constraints": [], "name": "t2"},
             {"constraints": [], "name": "v1"},
-            {"constraints": [], "name": "v2"}]},
-        "term": {
+            {"constraints": [], "name": "v2"}]}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL accessor for the encode field of hydra.coders.Bicoder"}}}],
             "body": {
@@ -2386,10 +2342,8 @@
                                 "argument": {"variable": "t2"},
                                 "function": {"application": {"argument": {"variable": "t1"}, "function": {"variable": "hydra.coders.Bicoder"}}}}}}}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.coders.bicoderDecode",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.coders.bicoderEncode",
         "signature": {
           "parameters": [
             {
@@ -2413,27 +2367,29 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "A function from target types to adapters"}}}],
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "A function from source types to adapters"}}}],
                     "body": {
                       "function": {
                         "codomain": {
                           "application": {
-                            "argument": {"variable": "v1"},
+                            "argument": {"variable": "v2"},
                             "function": {
                               "application": {
-                                "argument": {"variable": "v2"},
+                                "argument": {"variable": "v1"},
                                 "function": {
                                   "application": {
-                                    "argument": {"variable": "t1"},
-                                    "function": {"application": {"argument": {"variable": "t2"}, "function": {"variable": "hydra.coders.Adapter"}}}}}}}}},
-                        "domain": {"variable": "t2"}}}}},
+                                    "argument": {"variable": "t2"},
+                                    "function": {"application": {"argument": {"variable": "t1"}, "function": {"variable": "hydra.coders.Adapter"}}}}}}}}},
+                        "domain": {"variable": "t1"}}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": [
             {"constraints": [], "name": "t1"},
             {"constraints": [], "name": "t2"},
             {"constraints": [], "name": "v1"},
-            {"constraints": [], "name": "v2"}]},
-        "term": {
+            {"constraints": [], "name": "v2"}]}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL accessor for the decode field of hydra.coders.Bicoder"}}}],
             "body": {
@@ -2481,10 +2437,8 @@
                                 "argument": {"variable": "t2"},
                                 "function": {"application": {"argument": {"variable": "t1"}, "function": {"variable": "hydra.coders.Bicoder"}}}}}}}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.coders.bicoderWithEncode",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.coders.bicoderDecode",
         "signature": {
           "parameters": [
             {
@@ -2502,49 +2456,35 @@
                             "application": {
                               "argument": {"variable": "t2"},
                               "function": {"application": {"argument": {"variable": "t1"}, "function": {"variable": "hydra.coders.Bicoder"}}}}}}}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
-            {
-              "isLazy": false,
-              "name": "arg1",
-              "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "A function from source types to adapters"}}}],
-                      "body": {
-                        "function": {
-                          "codomain": {
-                            "application": {
-                              "argument": {"variable": "v2"},
-                              "function": {
-                                "application": {
-                                  "argument": {"variable": "v1"},
-                                  "function": {
-                                    "application": {
-                                      "argument": {"variable": "t2"},
-                                      "function": {"application": {"argument": {"variable": "t1"}, "function": {"variable": "hydra.coders.Adapter"}}}}}}}}},
-                          "domain": {"variable": "t1"}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {
                 "argument": {
-                  "application": {
-                    "argument": {"variable": "v2"},
-                    "function": {
-                      "application": {
-                        "argument": {"variable": "v1"},
-                        "function": {
+                  "annotated": {
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "A function from target types to adapters"}}}],
+                    "body": {
+                      "function": {
+                        "codomain": {
                           "application": {
-                            "argument": {"variable": "t2"},
-                            "function": {"application": {"argument": {"variable": "t1"}, "function": {"variable": "hydra.coders.Bicoder"}}}}}}}}},
+                            "argument": {"variable": "v1"},
+                            "function": {
+                              "application": {
+                                "argument": {"variable": "v2"},
+                                "function": {
+                                  "application": {
+                                    "argument": {"variable": "t1"},
+                                    "function": {"application": {"argument": {"variable": "t2"}, "function": {"variable": "hydra.coders.Adapter"}}}}}}}}},
+                        "domain": {"variable": "t2"}}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": [
             {"constraints": [], "name": "t1"},
             {"constraints": [], "name": "t2"},
             {"constraints": [], "name": "v1"},
-            {"constraints": [], "name": "v2"}]},
-        "term": {
+            {"constraints": [], "name": "v2"}]}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL updater for the encode field of hydra.coders.Bicoder"}}}],
             "body": {
@@ -2645,10 +2585,8 @@
                                 "argument": {"variable": "t2"},
                                 "function": {"application": {"argument": {"variable": "t1"}, "function": {"variable": "hydra.coders.Bicoder"}}}}}}}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.coders.bicoderWithDecode",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.coders.bicoderWithEncode",
         "signature": {
           "parameters": [
             {
@@ -2674,20 +2612,20 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "A function from target types to adapters"}}}],
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "A function from source types to adapters"}}}],
                       "body": {
                         "function": {
                           "codomain": {
                             "application": {
-                              "argument": {"variable": "v1"},
+                              "argument": {"variable": "v2"},
                               "function": {
                                 "application": {
-                                  "argument": {"variable": "v2"},
+                                  "argument": {"variable": "v1"},
                                   "function": {
                                     "application": {
-                                      "argument": {"variable": "t1"},
-                                      "function": {"application": {"argument": {"variable": "t2"}, "function": {"variable": "hydra.coders.Adapter"}}}}}}}}},
-                          "domain": {"variable": "t2"}}}}},
+                                      "argument": {"variable": "t2"},
+                                      "function": {"application": {"argument": {"variable": "t1"}, "function": {"variable": "hydra.coders.Adapter"}}}}}}}}},
+                          "domain": {"variable": "t1"}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
@@ -2707,8 +2645,10 @@
             {"constraints": [], "name": "t1"},
             {"constraints": [], "name": "t2"},
             {"constraints": [], "name": "v1"},
-            {"constraints": [], "name": "v2"}]},
-        "term": {
+            {"constraints": [], "name": "v2"}]}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL updater for the decode field of hydra.coders.Bicoder"}}}],
             "body": {
@@ -2809,10 +2749,8 @@
                                 "argument": {"variable": "t2"},
                                 "function": {"application": {"argument": {"variable": "t1"}, "function": {"variable": "hydra.coders.Bicoder"}}}}}}}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.coders.coder",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.coders.bicoderWithDecode",
         "signature": {
           "parameters": [
             {
@@ -2821,20 +2759,15 @@
               "type": {
                 "application": {
                   "argument": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {
-                            "literal": {
-                              "string": "A function which encodes source values as target values, given an InferenceContext for fresh-variable state and subterm-path tracing"}}}],
-                      "body": {
-                        "function": {
-                          "codomain": {
-                            "function": {
-                              "codomain": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "v2"}}},
-                              "domain": {"variable": "v1"}}},
-                          "domain": {"variable": "hydra.typing.InferenceContext"}}}}},
+                    "application": {
+                      "argument": {"variable": "v2"},
+                      "function": {
+                        "application": {
+                          "argument": {"variable": "v1"},
+                          "function": {
+                            "application": {
+                              "argument": {"variable": "t2"},
+                              "function": {"application": {"argument": {"variable": "t1"}, "function": {"variable": "hydra.coders.Bicoder"}}}}}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
               "isLazy": false,
@@ -2843,19 +2776,20 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {
-                            "literal": {
-                              "string": "A function which decodes target values as source values, given an InferenceContext for fresh-variable state and subterm-path tracing"}}}],
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "A function from target types to adapters"}}}],
                       "body": {
                         "function": {
                           "codomain": {
-                            "function": {
-                              "codomain": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "v1"}}},
-                              "domain": {"variable": "v2"}}},
-                          "domain": {"variable": "hydra.typing.InferenceContext"}}}}},
+                            "application": {
+                              "argument": {"variable": "v1"},
+                              "function": {
+                                "application": {
+                                  "argument": {"variable": "v2"},
+                                  "function": {
+                                    "application": {
+                                      "argument": {"variable": "t1"},
+                                      "function": {"application": {"argument": {"variable": "t2"}, "function": {"variable": "hydra.coders.Adapter"}}}}}}}}},
+                          "domain": {"variable": "t2"}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
@@ -2863,10 +2797,22 @@
                 "argument": {
                   "application": {
                     "argument": {"variable": "v2"},
-                    "function": {"application": {"argument": {"variable": "v1"}, "function": {"variable": "hydra.coders.Coder"}}}}},
+                    "function": {
+                      "application": {
+                        "argument": {"variable": "v1"},
+                        "function": {
+                          "application": {
+                            "argument": {"variable": "t2"},
+                            "function": {"application": {"argument": {"variable": "t1"}, "function": {"variable": "hydra.coders.Bicoder"}}}}}}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": [{"constraints": [], "name": "v1"}, {"constraints": [], "name": "v2"}]},
-        "term": {
+          "typeParameters": [
+            {"constraints": [], "name": "t1"},
+            {"constraints": [], "name": "t2"},
+            {"constraints": [], "name": "v1"},
+            {"constraints": [], "name": "v2"}]}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for hydra.coders.Coder"}}}],
             "body": {
@@ -2945,10 +2891,8 @@
                                 "domain": {"variable": "v1"}}},
                             "domain": {"variable": "hydra.typing.InferenceContext"}}}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "encode"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.coders.coderEncode",
+                "parameter": "encode"}}}},
+        "name": "hydra.dsl.coders.coder",
         "signature": {
           "parameters": [
             {
@@ -2957,31 +2901,54 @@
               "type": {
                 "application": {
                   "argument": {
-                    "application": {
-                      "argument": {"variable": "v2"},
-                      "function": {"application": {"argument": {"variable": "v1"}, "function": {"variable": "hydra.coders.Coder"}}}}},
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "key": "description",
+                          "value": {
+                            "literal": {
+                              "string": "A function which encodes source values as target values, given an InferenceContext for fresh-variable state and subterm-path tracing"}}}],
+                      "body": {
+                        "function": {
+                          "codomain": {
+                            "function": {
+                              "codomain": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "v2"}}},
+                              "domain": {"variable": "v1"}}},
+                          "domain": {"variable": "hydra.typing.InferenceContext"}}}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "key": "description",
+                          "value": {
+                            "literal": {
+                              "string": "A function which decodes target values as source values, given an InferenceContext for fresh-variable state and subterm-path tracing"}}}],
+                      "body": {
+                        "function": {
+                          "codomain": {
+                            "function": {
+                              "codomain": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "v1"}}},
+                              "domain": {"variable": "v2"}}},
+                          "domain": {"variable": "hydra.typing.InferenceContext"}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {
                 "argument": {
-                  "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {
-                          "literal": {
-                            "string": "A function which encodes source values as target values, given an InferenceContext for fresh-variable state and subterm-path tracing"}}}],
-                    "body": {
-                      "function": {
-                        "codomain": {
-                          "function": {
-                            "codomain": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "v2"}}},
-                            "domain": {"variable": "v1"}}},
-                        "domain": {"variable": "hydra.typing.InferenceContext"}}}}},
+                  "application": {
+                    "argument": {"variable": "v2"},
+                    "function": {"application": {"argument": {"variable": "v1"}, "function": {"variable": "hydra.coders.Coder"}}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": [{"constraints": [], "name": "v1"}, {"constraints": [], "name": "v2"}]},
-        "term": {
+          "typeParameters": [{"constraints": [], "name": "v1"}, {"constraints": [], "name": "v2"}]}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL accessor for the encode field of hydra.coders.Coder"}}}],
             "body": {
@@ -3023,10 +2990,8 @@
                         "argument": {"variable": "v2"},
                         "function": {"application": {"argument": {"variable": "v1"}, "function": {"variable": "hydra.coders.Coder"}}}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.coders.coderDecode",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.coders.coderEncode",
         "signature": {
           "parameters": [
             {
@@ -3049,17 +3014,19 @@
                         "key": "description",
                         "value": {
                           "literal": {
-                            "string": "A function which decodes target values as source values, given an InferenceContext for fresh-variable state and subterm-path tracing"}}}],
+                            "string": "A function which encodes source values as target values, given an InferenceContext for fresh-variable state and subterm-path tracing"}}}],
                     "body": {
                       "function": {
                         "codomain": {
                           "function": {
-                            "codomain": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "v1"}}},
-                            "domain": {"variable": "v2"}}},
+                            "codomain": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "v2"}}},
+                            "domain": {"variable": "v1"}}},
                         "domain": {"variable": "hydra.typing.InferenceContext"}}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": [{"constraints": [], "name": "v1"}, {"constraints": [], "name": "v2"}]},
-        "term": {
+          "typeParameters": [{"constraints": [], "name": "v1"}, {"constraints": [], "name": "v2"}]}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL accessor for the decode field of hydra.coders.Coder"}}}],
             "body": {
@@ -3101,10 +3068,8 @@
                         "argument": {"variable": "v2"},
                         "function": {"application": {"argument": {"variable": "v1"}, "function": {"variable": "hydra.coders.Coder"}}}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.coders.coderWithEncode",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.coders.coderDecode",
         "signature": {
           "parameters": [
             {
@@ -3116,38 +3081,30 @@
                     "application": {
                       "argument": {"variable": "v2"},
                       "function": {"application": {"argument": {"variable": "v1"}, "function": {"variable": "hydra.coders.Coder"}}}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
-            {
-              "isLazy": false,
-              "name": "arg1",
-              "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {
-                            "literal": {
-                              "string": "A function which encodes source values as target values, given an InferenceContext for fresh-variable state and subterm-path tracing"}}}],
-                      "body": {
-                        "function": {
-                          "codomain": {
-                            "function": {
-                              "codomain": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "v2"}}},
-                              "domain": {"variable": "v1"}}},
-                          "domain": {"variable": "hydra.typing.InferenceContext"}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {
                 "argument": {
-                  "application": {
-                    "argument": {"variable": "v2"},
-                    "function": {"application": {"argument": {"variable": "v1"}, "function": {"variable": "hydra.coders.Coder"}}}}},
+                  "annotated": {
+                    "annotation": [
+                      {
+                        "key": "description",
+                        "value": {
+                          "literal": {
+                            "string": "A function which decodes target values as source values, given an InferenceContext for fresh-variable state and subterm-path tracing"}}}],
+                    "body": {
+                      "function": {
+                        "codomain": {
+                          "function": {
+                            "codomain": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "v1"}}},
+                            "domain": {"variable": "v2"}}},
+                        "domain": {"variable": "hydra.typing.InferenceContext"}}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": [{"constraints": [], "name": "v1"}, {"constraints": [], "name": "v2"}]},
-        "term": {
+          "typeParameters": [{"constraints": [], "name": "v1"}, {"constraints": [], "name": "v2"}]}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL updater for the encode field of hydra.coders.Coder"}}}],
             "body": {
@@ -3241,10 +3198,8 @@
                         "argument": {"variable": "v2"},
                         "function": {"application": {"argument": {"variable": "v1"}, "function": {"variable": "hydra.coders.Coder"}}}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.coders.coderWithDecode",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.coders.coderWithEncode",
         "signature": {
           "parameters": [
             {
@@ -3269,13 +3224,13 @@
                           "key": "description",
                           "value": {
                             "literal": {
-                              "string": "A function which decodes target values as source values, given an InferenceContext for fresh-variable state and subterm-path tracing"}}}],
+                              "string": "A function which encodes source values as target values, given an InferenceContext for fresh-variable state and subterm-path tracing"}}}],
                       "body": {
                         "function": {
                           "codomain": {
                             "function": {
-                              "codomain": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "v1"}}},
-                              "domain": {"variable": "v2"}}},
+                              "codomain": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "v2"}}},
+                              "domain": {"variable": "v1"}}},
                           "domain": {"variable": "hydra.typing.InferenceContext"}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -3286,8 +3241,10 @@
                     "argument": {"variable": "v2"},
                     "function": {"application": {"argument": {"variable": "v1"}, "function": {"variable": "hydra.coders.Coder"}}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": [{"constraints": [], "name": "v1"}, {"constraints": [], "name": "v2"}]},
-        "term": {
+          "typeParameters": [{"constraints": [], "name": "v1"}, {"constraints": [], "name": "v2"}]}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL updater for the decode field of hydra.coders.Coder"}}}],
             "body": {
@@ -3381,17 +3338,53 @@
                         "argument": {"variable": "v2"},
                         "function": {"application": {"argument": {"variable": "v1"}, "function": {"variable": "hydra.coders.Coder"}}}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.coders.coderDirectionEncode",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.coders.coderWithDecode",
         "signature": {
-          "parameters": [],
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {
+                "application": {
+                  "argument": {
+                    "application": {
+                      "argument": {"variable": "v2"},
+                      "function": {"application": {"argument": {"variable": "v1"}, "function": {"variable": "hydra.coders.Coder"}}}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "key": "description",
+                          "value": {
+                            "literal": {
+                              "string": "A function which decodes target values as source values, given an InferenceContext for fresh-variable state and subterm-path tracing"}}}],
+                      "body": {
+                        "function": {
+                          "codomain": {
+                            "function": {
+                              "codomain": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "v1"}}},
+                              "domain": {"variable": "v2"}}},
+                          "domain": {"variable": "hydra.typing.InferenceContext"}}}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.coders.CoderDirection"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+              "application": {
+                "argument": {
+                  "application": {
+                    "argument": {"variable": "v2"},
+                    "function": {"application": {"argument": {"variable": "v1"}, "function": {"variable": "hydra.coders.Coder"}}}}},
+                "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": [{"constraints": [], "name": "v1"}, {"constraints": [], "name": "v2"}]}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -3419,17 +3412,17 @@
                                   "typeName": "hydra.core.Field"}}}],
                           "typeName": "hydra.core.Injection"}}},
                     "typeName": "hydra.core.Term"}},
-                "typeName": "hydra.typed.TypedTerm"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.coders.coderDirectionDecode",
+                "typeName": "hydra.typed.TypedTerm"}}}},
+        "name": "hydra.dsl.coders.coderDirectionEncode",
         "signature": {
           "parameters": [],
           "result": {
             "type": {
               "application": {"argument": {"variable": "hydra.coders.CoderDirection"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -3457,36 +3450,17 @@
                                   "typeName": "hydra.core.Field"}}}],
                           "typeName": "hydra.core.Injection"}}},
                     "typeName": "hydra.core.Term"}},
-                "typeName": "hydra.typed.TypedTerm"}}}}}},
+                "typeName": "hydra.typed.TypedTerm"}}}},
+        "name": "hydra.dsl.coders.coderDirectionDecode",
+        "signature": {
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"argument": {"variable": "hydra.coders.CoderDirection"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.dsl.coders.language",
-        "signature": {
-          "parameters": [
-            {
-              "isLazy": false,
-              "name": "arg0",
-              "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The unique name of the language"}}}],
-                      "body": {"variable": "hydra.coders.LanguageName"}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
-            {
-              "isLazy": false,
-              "name": "arg1",
-              "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The constraints which characterize the language"}}}],
-                      "body": {"variable": "hydra.coders.LanguageConstraints"}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
-          "result": {
-            "type": {"application": {"argument": {"variable": "hydra.coders.Language"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for hydra.coders.Language"}}}],
             "body": {
@@ -3543,26 +3517,36 @@
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The unique name of the language"}}}],
                         "body": {"variable": "hydra.coders.LanguageName"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "name"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.coders.languageName",
+                "parameter": "name"}}}},
+        "name": "hydra.dsl.coders.language",
         "signature": {
           "parameters": [
             {
               "isLazy": false,
               "name": "arg0",
-              "type": {"application": {"argument": {"variable": "hydra.coders.Language"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The unique name of the language"}}}],
+                      "body": {"variable": "hydra.coders.LanguageName"}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The constraints which characterize the language"}}}],
+                      "body": {"variable": "hydra.coders.LanguageConstraints"}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
-            "type": {
-              "application": {
-                "argument": {
-                  "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The unique name of the language"}}}],
-                    "body": {"variable": "hydra.coders.LanguageName"}}},
-                "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+            "type": {"application": {"argument": {"variable": "hydra.coders.Language"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL accessor for the name field of hydra.coders.Language"}}}],
             "body": {
@@ -3598,10 +3582,8 @@
                         "typeName": "hydra.core.Term"}},
                     "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {"application": {"argument": {"variable": "hydra.coders.Language"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.coders.languageConstraints",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.coders.languageName",
         "signature": {
           "parameters": [
             {
@@ -3613,11 +3595,13 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The constraints which characterize the language"}}}],
-                    "body": {"variable": "hydra.coders.LanguageConstraints"}}},
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "The unique name of the language"}}}],
+                    "body": {"variable": "hydra.coders.LanguageName"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -3656,30 +3640,26 @@
                         "typeName": "hydra.core.Term"}},
                     "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {"application": {"argument": {"variable": "hydra.coders.Language"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.coders.languageWithName",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.coders.languageConstraints",
         "signature": {
           "parameters": [
             {
               "isLazy": false,
               "name": "arg0",
-              "type": {"application": {"argument": {"variable": "hydra.coders.Language"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-            {
-              "isLazy": false,
-              "name": "arg1",
-              "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The unique name of the language"}}}],
-                      "body": {"variable": "hydra.coders.LanguageName"}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+              "type": {"application": {"argument": {"variable": "hydra.coders.Language"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
-            "type": {"application": {"argument": {"variable": "hydra.coders.Language"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+            "type": {
+              "application": {
+                "argument": {
+                  "annotated": {
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "The constraints which characterize the language"}}}],
+                    "body": {"variable": "hydra.coders.LanguageConstraints"}}},
+                "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL updater for the name field of hydra.coders.Language"}}}],
             "body": {
@@ -3756,10 +3736,8 @@
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {"application": {"argument": {"variable": "hydra.coders.Language"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.coders.languageWithConstraints",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.coders.languageWithName",
         "signature": {
           "parameters": [
             {
@@ -3773,13 +3751,15 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The constraints which characterize the language"}}}],
-                      "body": {"variable": "hydra.coders.LanguageConstraints"}}},
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The unique name of the language"}}}],
+                      "body": {"variable": "hydra.coders.LanguageName"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {"application": {"argument": {"variable": "hydra.coders.Language"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -3859,22 +3839,14 @@
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {"application": {"argument": {"variable": "hydra.coders.Language"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.coders.languageConstraints2",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.coders.languageWithConstraints",
         "signature": {
           "parameters": [
             {
               "isLazy": false,
               "name": "arg0",
-              "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "All supported literal variants"}}}],
-                      "body": {"set": {"variable": "hydra.variants.LiteralVariant"}}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
+              "type": {"application": {"argument": {"variable": "hydra.coders.Language"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
               "isLazy": false,
               "name": "arg1",
@@ -3882,57 +3854,15 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "All supported float types"}}}],
-                      "body": {"set": {"variable": "hydra.core.FloatType"}}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
-            {
-              "isLazy": false,
-              "name": "arg2",
-              "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "All supported integer types"}}}],
-                      "body": {"set": {"variable": "hydra.core.IntegerType"}}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
-            {
-              "isLazy": false,
-              "name": "arg3",
-              "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "All supported term variants"}}}],
-                      "body": {"set": {"variable": "hydra.variants.TermVariant"}}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
-            {
-              "isLazy": false,
-              "name": "arg4",
-              "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "All supported type variants"}}}],
-                      "body": {"set": {"variable": "hydra.variants.TypeVariant"}}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
-            {
-              "isLazy": false,
-              "name": "arg5",
-              "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "A logical set of types, as a predicate which tests a type for inclusion"}}}],
-                      "body": {"function": {"codomain": {"literal": {"boolean": {}}}, "domain": {"variable": "hydra.core.Type"}}}}},
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The constraints which characterize the language"}}}],
+                      "body": {"variable": "hydra.coders.LanguageConstraints"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
-            "type": {
-              "application": {"argument": {"variable": "hydra.coders.LanguageConstraints"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+            "type": {"application": {"argument": {"variable": "hydra.coders.Language"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for hydra.coders.LanguageConstraints"}}}],
             "body": {
@@ -4064,27 +3994,80 @@
                         "annotation": [{"key": "description", "value": {"literal": {"string": "All supported literal variants"}}}],
                         "body": {"set": {"variable": "hydra.variants.LiteralVariant"}}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "literalVariants"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.coders.languageConstraintsLiteralVariants",
+                "parameter": "literalVariants"}}}},
+        "name": "hydra.dsl.coders.languageConstraints2",
         "signature": {
           "parameters": [
             {
               "isLazy": false,
               "name": "arg0",
               "type": {
-                "application": {"argument": {"variable": "hydra.coders.LanguageConstraints"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "All supported literal variants"}}}],
+                      "body": {"set": {"variable": "hydra.variants.LiteralVariant"}}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "All supported float types"}}}],
+                      "body": {"set": {"variable": "hydra.core.FloatType"}}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg2",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "All supported integer types"}}}],
+                      "body": {"set": {"variable": "hydra.core.IntegerType"}}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg3",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "All supported term variants"}}}],
+                      "body": {"set": {"variable": "hydra.variants.TermVariant"}}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg4",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "All supported type variants"}}}],
+                      "body": {"set": {"variable": "hydra.variants.TypeVariant"}}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg5",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "key": "description",
+                          "value": {"literal": {"string": "A logical set of types, as a predicate which tests a type for inclusion"}}}],
+                      "body": {"function": {"codomain": {"literal": {"boolean": {}}}, "domain": {"variable": "hydra.core.Type"}}}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
-              "application": {
-                "argument": {
-                  "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "All supported literal variants"}}}],
-                    "body": {"set": {"variable": "hydra.variants.LiteralVariant"}}}},
-                "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+              "application": {"argument": {"variable": "hydra.coders.LanguageConstraints"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -4126,10 +4109,8 @@
                     "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.coders.LanguageConstraints"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.coders.languageConstraintsFloatTypes",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.coders.languageConstraintsLiteralVariants",
         "signature": {
           "parameters": [
             {
@@ -4142,11 +4123,13 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "All supported float types"}}}],
-                    "body": {"set": {"variable": "hydra.core.FloatType"}}}},
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "All supported literal variants"}}}],
+                    "body": {"set": {"variable": "hydra.variants.LiteralVariant"}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -4186,10 +4169,8 @@
                     "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.coders.LanguageConstraints"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.coders.languageConstraintsIntegerTypes",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.coders.languageConstraintsFloatTypes",
         "signature": {
           "parameters": [
             {
@@ -4202,11 +4183,13 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "All supported integer types"}}}],
-                    "body": {"set": {"variable": "hydra.core.IntegerType"}}}},
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "All supported float types"}}}],
+                    "body": {"set": {"variable": "hydra.core.FloatType"}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -4248,10 +4231,8 @@
                     "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.coders.LanguageConstraints"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.coders.languageConstraintsTermVariants",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.coders.languageConstraintsIntegerTypes",
         "signature": {
           "parameters": [
             {
@@ -4264,11 +4245,13 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "All supported term variants"}}}],
-                    "body": {"set": {"variable": "hydra.variants.TermVariant"}}}},
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "All supported integer types"}}}],
+                    "body": {"set": {"variable": "hydra.core.IntegerType"}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -4310,10 +4293,8 @@
                     "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.coders.LanguageConstraints"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.coders.languageConstraintsTypeVariants",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.coders.languageConstraintsTermVariants",
         "signature": {
           "parameters": [
             {
@@ -4326,11 +4307,13 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "All supported type variants"}}}],
-                    "body": {"set": {"variable": "hydra.variants.TypeVariant"}}}},
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "All supported term variants"}}}],
+                    "body": {"set": {"variable": "hydra.variants.TermVariant"}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -4372,10 +4355,8 @@
                     "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.coders.LanguageConstraints"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.coders.languageConstraintsTypes",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.coders.languageConstraintsTypeVariants",
         "signature": {
           "parameters": [
             {
@@ -4388,14 +4369,13 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {"literal": {"string": "A logical set of types, as a predicate which tests a type for inclusion"}}}],
-                    "body": {"function": {"codomain": {"literal": {"boolean": {}}}, "domain": {"variable": "hydra.core.Type"}}}}},
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "All supported type variants"}}}],
+                    "body": {"set": {"variable": "hydra.variants.TypeVariant"}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -4435,32 +4415,30 @@
                     "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.coders.LanguageConstraints"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.coders.languageConstraintsWithLiteralVariants",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.coders.languageConstraintsTypes",
         "signature": {
           "parameters": [
             {
               "isLazy": false,
               "name": "arg0",
               "type": {
-                "application": {"argument": {"variable": "hydra.coders.LanguageConstraints"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-            {
-              "isLazy": false,
-              "name": "arg1",
-              "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "All supported literal variants"}}}],
-                      "body": {"set": {"variable": "hydra.variants.LiteralVariant"}}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+                "application": {"argument": {"variable": "hydra.coders.LanguageConstraints"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.coders.LanguageConstraints"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+              "application": {
+                "argument": {
+                  "annotated": {
+                    "annotation": [
+                      {
+                        "key": "description",
+                        "value": {"literal": {"string": "A logical set of types, as a predicate which tests a type for inclusion"}}}],
+                    "body": {"function": {"codomain": {"literal": {"boolean": {}}}, "domain": {"variable": "hydra.core.Type"}}}}},
+                "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -4683,10 +4661,8 @@
                     "parameter": "newVal"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.coders.LanguageConstraints"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.coders.languageConstraintsWithFloatTypes",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.coders.languageConstraintsWithLiteralVariants",
         "signature": {
           "parameters": [
             {
@@ -4701,14 +4677,16 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "All supported float types"}}}],
-                      "body": {"set": {"variable": "hydra.core.FloatType"}}}},
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "All supported literal variants"}}}],
+                      "body": {"set": {"variable": "hydra.variants.LiteralVariant"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {"argument": {"variable": "hydra.coders.LanguageConstraints"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -4933,10 +4911,8 @@
                     "parameter": "newVal"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.coders.LanguageConstraints"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.coders.languageConstraintsWithIntegerTypes",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.coders.languageConstraintsWithFloatTypes",
         "signature": {
           "parameters": [
             {
@@ -4951,14 +4927,16 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "All supported integer types"}}}],
-                      "body": {"set": {"variable": "hydra.core.IntegerType"}}}},
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "All supported float types"}}}],
+                      "body": {"set": {"variable": "hydra.core.FloatType"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {"argument": {"variable": "hydra.coders.LanguageConstraints"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -5181,10 +5159,8 @@
                     "parameter": "newVal"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.coders.LanguageConstraints"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.coders.languageConstraintsWithTermVariants",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.coders.languageConstraintsWithIntegerTypes",
         "signature": {
           "parameters": [
             {
@@ -5199,14 +5175,16 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "All supported term variants"}}}],
-                      "body": {"set": {"variable": "hydra.variants.TermVariant"}}}},
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "All supported integer types"}}}],
+                      "body": {"set": {"variable": "hydra.core.IntegerType"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {"argument": {"variable": "hydra.coders.LanguageConstraints"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -5429,10 +5407,8 @@
                     "parameter": "newVal"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.coders.LanguageConstraints"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.coders.languageConstraintsWithTypeVariants",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.coders.languageConstraintsWithTermVariants",
         "signature": {
           "parameters": [
             {
@@ -5447,14 +5423,16 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "All supported type variants"}}}],
-                      "body": {"set": {"variable": "hydra.variants.TypeVariant"}}}},
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "All supported term variants"}}}],
+                      "body": {"set": {"variable": "hydra.variants.TermVariant"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {"argument": {"variable": "hydra.coders.LanguageConstraints"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -5677,10 +5655,8 @@
                     "parameter": "newVal"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.coders.LanguageConstraints"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.coders.languageConstraintsWithTypes",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.coders.languageConstraintsWithTypeVariants",
         "signature": {
           "parameters": [
             {
@@ -5695,17 +5671,16 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "A logical set of types, as a predicate which tests a type for inclusion"}}}],
-                      "body": {"function": {"codomain": {"literal": {"boolean": {}}}, "domain": {"variable": "hydra.core.Type"}}}}},
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "All supported type variants"}}}],
+                      "body": {"set": {"variable": "hydra.variants.TypeVariant"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {"argument": {"variable": "hydra.coders.LanguageConstraints"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -5933,21 +5908,35 @@
                     "parameter": "newVal"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.coders.LanguageConstraints"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.coders.languageName2",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.coders.languageConstraintsWithTypes",
         "signature": {
           "parameters": [
             {
               "isLazy": false,
               "name": "arg0",
-              "type": {"application": {"argument": {"literal": {"string": {}}}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+              "type": {
+                "application": {"argument": {"variable": "hydra.coders.LanguageConstraints"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "key": "description",
+                          "value": {"literal": {"string": "A logical set of types, as a predicate which tests a type for inclusion"}}}],
+                      "body": {"function": {"codomain": {"literal": {"boolean": {}}}, "domain": {"variable": "hydra.core.Type"}}}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.coders.LanguageName"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+              "application": {"argument": {"variable": "hydra.coders.LanguageConstraints"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for the hydra.coders.LanguageName wrapper"}}}],
             "body": {
@@ -5971,20 +5960,21 @@
                         "typeName": "hydra.core.Term"}},
                     "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {"application": {"argument": {"literal": {"string": {}}}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.coders.unLanguageName",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.coders.languageName2",
         "signature": {
           "parameters": [
             {
               "isLazy": false,
               "name": "arg0",
-              "type": {
-                "application": {"argument": {"variable": "hydra.coders.LanguageName"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
-          "result": {"type": {"application": {"argument": {"literal": {"string": {}}}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+              "type": {"application": {"argument": {"literal": {"string": {}}}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+          "result": {
+            "type": {
+              "application": {"argument": {"variable": "hydra.coders.LanguageName"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL accessor for the body of hydra.coders.LanguageName"}}}],
             "body": {
@@ -6014,17 +6004,20 @@
                     "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.coders.LanguageName"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.coders.unLanguageName",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {
+                "application": {"argument": {"variable": "hydra.coders.LanguageName"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+          "result": {"type": {"application": {"argument": {"literal": {"string": {}}}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.dsl.coders.traversalOrderPre",
-        "signature": {
-          "parameters": [],
-          "result": {
-            "type": {
-              "application": {"argument": {"variable": "hydra.coders.TraversalOrder"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -6052,17 +6045,17 @@
                                   "typeName": "hydra.core.Field"}}}],
                           "typeName": "hydra.core.Injection"}}},
                     "typeName": "hydra.core.Term"}},
-                "typeName": "hydra.typed.TypedTerm"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.coders.traversalOrderPost",
+                "typeName": "hydra.typed.TypedTerm"}}}},
+        "name": "hydra.dsl.coders.traversalOrderPre",
         "signature": {
           "parameters": [],
           "result": {
             "type": {
               "application": {"argument": {"variable": "hydra.coders.TraversalOrder"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -6090,7 +6083,14 @@
                                   "typeName": "hydra.core.Field"}}}],
                           "typeName": "hydra.core.Injection"}}},
                     "typeName": "hydra.core.Term"}},
-                "typeName": "hydra.typed.TypedTerm"}}}}}}],
+                "typeName": "hydra.typed.TypedTerm"}}}},
+        "name": "hydra.dsl.coders.traversalOrderPost",
+        "signature": {
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"argument": {"variable": "hydra.coders.TraversalOrder"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}}],
   "dependencies": [
     {"module": "hydra.coders"},
     {"module": "hydra.typed"},

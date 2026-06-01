@@ -2,89 +2,7 @@
   "definitions": [
     {
       "term": {
-        "name": "hydra.dsl.typing.functionStructure",
-        "signature": {
-          "parameters": [
-            {
-              "isLazy": false,
-              "name": "arg0",
-              "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "Type parameters (from type lambdas)"}}}],
-                      "body": {"list": {"variable": "hydra.core.Name"}}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
-            {
-              "isLazy": false,
-              "name": "arg1",
-              "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "Value parameters (from lambdas)"}}}],
-                      "body": {"list": {"variable": "hydra.core.Name"}}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
-            {
-              "isLazy": false,
-              "name": "arg2",
-              "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "Let bindings accumulated from the term"}}}],
-                      "body": {"list": {"variable": "hydra.core.Binding"}}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
-            {
-              "isLazy": false,
-              "name": "arg3",
-              "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The body term after removing all lambdas, lets, etc."}}}],
-                      "body": {"variable": "hydra.core.Term"}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
-            {
-              "isLazy": false,
-              "name": "arg4",
-              "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "Domain types of the value parameters"}}}],
-                      "body": {"list": {"variable": "hydra.core.Type"}}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
-            {
-              "isLazy": false,
-              "name": "arg5",
-              "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "The return type of the function (if type inference succeeded)"}}}],
-                      "body": {"maybe": {"variable": "hydra.core.Type"}}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
-            {
-              "isLazy": false,
-              "name": "arg6",
-              "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "Updated environment after processing all bindings"}}}],
-                      "body": {"variable": "env"}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
-          "result": {
-            "type": {
-              "application": {
-                "argument": {"application": {"argument": {"variable": "env"}, "function": {"variable": "hydra.typing.FunctionStructure"}}},
-                "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": [{"constraints": [], "name": "env"}]},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for hydra.typing.FunctionStructure"}}}],
             "body": {
@@ -234,10 +152,8 @@
                         "annotation": [{"key": "description", "value": {"literal": {"string": "Type parameters (from type lambdas)"}}}],
                         "body": {"list": {"variable": "hydra.core.Name"}}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "typeParams"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.typing.functionStructureTypeParams",
+                "parameter": "typeParams"}}}},
+        "name": "hydra.dsl.typing.functionStructure",
         "signature": {
           "parameters": [
             {
@@ -245,18 +161,83 @@
               "name": "arg0",
               "type": {
                 "application": {
-                  "argument": {"application": {"argument": {"variable": "env"}, "function": {"variable": "hydra.typing.FunctionStructure"}}},
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "Type parameters (from type lambdas)"}}}],
+                      "body": {"list": {"variable": "hydra.core.Name"}}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "Value parameters (from lambdas)"}}}],
+                      "body": {"list": {"variable": "hydra.core.Name"}}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg2",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "Let bindings accumulated from the term"}}}],
+                      "body": {"list": {"variable": "hydra.core.Binding"}}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg3",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The body term after removing all lambdas, lets, etc."}}}],
+                      "body": {"variable": "hydra.core.Term"}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg4",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "Domain types of the value parameters"}}}],
+                      "body": {"list": {"variable": "hydra.core.Type"}}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg5",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "key": "description",
+                          "value": {"literal": {"string": "The return type of the function (if type inference succeeded)"}}}],
+                      "body": {"maybe": {"variable": "hydra.core.Type"}}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg6",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "Updated environment after processing all bindings"}}}],
+                      "body": {"variable": "env"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {
-                "argument": {
-                  "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "Type parameters (from type lambdas)"}}}],
-                    "body": {"list": {"variable": "hydra.core.Name"}}}},
+                "argument": {"application": {"argument": {"variable": "env"}, "function": {"variable": "hydra.typing.FunctionStructure"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": [{"constraints": [], "name": "env"}]},
-        "term": {
+          "typeParameters": [{"constraints": [], "name": "env"}]}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -298,10 +279,8 @@
                   "application": {
                     "argument": {"application": {"argument": {"variable": "env"}, "function": {"variable": "hydra.typing.FunctionStructure"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.typing.functionStructureParams",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.typing.functionStructureTypeParams",
         "signature": {
           "parameters": [
             {
@@ -316,11 +295,13 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "Value parameters (from lambdas)"}}}],
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "Type parameters (from type lambdas)"}}}],
                     "body": {"list": {"variable": "hydra.core.Name"}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": [{"constraints": [], "name": "env"}]},
-        "term": {
+          "typeParameters": [{"constraints": [], "name": "env"}]}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -362,10 +343,8 @@
                   "application": {
                     "argument": {"application": {"argument": {"variable": "env"}, "function": {"variable": "hydra.typing.FunctionStructure"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.typing.functionStructureBindings",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.typing.functionStructureParams",
         "signature": {
           "parameters": [
             {
@@ -380,11 +359,13 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "Let bindings accumulated from the term"}}}],
-                    "body": {"list": {"variable": "hydra.core.Binding"}}}},
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "Value parameters (from lambdas)"}}}],
+                    "body": {"list": {"variable": "hydra.core.Name"}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": [{"constraints": [], "name": "env"}]},
-        "term": {
+          "typeParameters": [{"constraints": [], "name": "env"}]}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -426,10 +407,8 @@
                   "application": {
                     "argument": {"application": {"argument": {"variable": "env"}, "function": {"variable": "hydra.typing.FunctionStructure"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.typing.functionStructureBody",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.typing.functionStructureBindings",
         "signature": {
           "parameters": [
             {
@@ -444,11 +423,13 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The body term after removing all lambdas, lets, etc."}}}],
-                    "body": {"variable": "hydra.core.Term"}}},
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "Let bindings accumulated from the term"}}}],
+                    "body": {"list": {"variable": "hydra.core.Binding"}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": [{"constraints": [], "name": "env"}]},
-        "term": {
+          "typeParameters": [{"constraints": [], "name": "env"}]}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -490,10 +471,8 @@
                   "application": {
                     "argument": {"application": {"argument": {"variable": "env"}, "function": {"variable": "hydra.typing.FunctionStructure"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.typing.functionStructureDomains",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.typing.functionStructureBody",
         "signature": {
           "parameters": [
             {
@@ -508,11 +487,13 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "Domain types of the value parameters"}}}],
-                    "body": {"list": {"variable": "hydra.core.Type"}}}},
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "The body term after removing all lambdas, lets, etc."}}}],
+                    "body": {"variable": "hydra.core.Term"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": [{"constraints": [], "name": "env"}]},
-        "term": {
+          "typeParameters": [{"constraints": [], "name": "env"}]}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -554,10 +535,8 @@
                   "application": {
                     "argument": {"application": {"argument": {"variable": "env"}, "function": {"variable": "hydra.typing.FunctionStructure"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.typing.functionStructureCodomain",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.typing.functionStructureDomains",
         "signature": {
           "parameters": [
             {
@@ -572,14 +551,13 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {"literal": {"string": "The return type of the function (if type inference succeeded)"}}}],
-                    "body": {"maybe": {"variable": "hydra.core.Type"}}}},
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "Domain types of the value parameters"}}}],
+                    "body": {"list": {"variable": "hydra.core.Type"}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": [{"constraints": [], "name": "env"}]},
-        "term": {
+          "typeParameters": [{"constraints": [], "name": "env"}]}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -621,10 +599,8 @@
                   "application": {
                     "argument": {"application": {"argument": {"variable": "env"}, "function": {"variable": "hydra.typing.FunctionStructure"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.typing.functionStructureEnvironment",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.typing.functionStructureCodomain",
         "signature": {
           "parameters": [
             {
@@ -639,11 +615,16 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "Updated environment after processing all bindings"}}}],
-                    "body": {"variable": "env"}}},
+                    "annotation": [
+                      {
+                        "key": "description",
+                        "value": {"literal": {"string": "The return type of the function (if type inference succeeded)"}}}],
+                    "body": {"maybe": {"variable": "hydra.core.Type"}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": [{"constraints": [], "name": "env"}]},
-        "term": {
+          "typeParameters": [{"constraints": [], "name": "env"}]}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -685,10 +666,8 @@
                   "application": {
                     "argument": {"application": {"argument": {"variable": "env"}, "function": {"variable": "hydra.typing.FunctionStructure"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.typing.functionStructureWithTypeParams",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.typing.functionStructureEnvironment",
         "signature": {
           "parameters": [
             {
@@ -697,24 +676,19 @@
               "type": {
                 "application": {
                   "argument": {"application": {"argument": {"variable": "env"}, "function": {"variable": "hydra.typing.FunctionStructure"}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
-            {
-              "isLazy": false,
-              "name": "arg1",
-              "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "Type parameters (from type lambdas)"}}}],
-                      "body": {"list": {"variable": "hydra.core.Name"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {
-                "argument": {"application": {"argument": {"variable": "env"}, "function": {"variable": "hydra.typing.FunctionStructure"}}},
+                "argument": {
+                  "annotated": {
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "Updated environment after processing all bindings"}}}],
+                    "body": {"variable": "env"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": [{"constraints": [], "name": "env"}]},
-        "term": {
+          "typeParameters": [{"constraints": [], "name": "env"}]}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -967,10 +941,8 @@
                   "application": {
                     "argument": {"application": {"argument": {"variable": "env"}, "function": {"variable": "hydra.typing.FunctionStructure"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.typing.functionStructureWithParams",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.typing.functionStructureWithTypeParams",
         "signature": {
           "parameters": [
             {
@@ -987,7 +959,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "Value parameters (from lambdas)"}}}],
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "Type parameters (from type lambdas)"}}}],
                       "body": {"list": {"variable": "hydra.core.Name"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -995,8 +967,10 @@
               "application": {
                 "argument": {"application": {"argument": {"variable": "env"}, "function": {"variable": "hydra.typing.FunctionStructure"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": [{"constraints": [], "name": "env"}]},
-        "term": {
+          "typeParameters": [{"constraints": [], "name": "env"}]}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -1249,10 +1223,8 @@
                   "application": {
                     "argument": {"application": {"argument": {"variable": "env"}, "function": {"variable": "hydra.typing.FunctionStructure"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.typing.functionStructureWithBindings",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.typing.functionStructureWithParams",
         "signature": {
           "parameters": [
             {
@@ -1269,16 +1241,18 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "Let bindings accumulated from the term"}}}],
-                      "body": {"list": {"variable": "hydra.core.Binding"}}}},
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "Value parameters (from lambdas)"}}}],
+                      "body": {"list": {"variable": "hydra.core.Name"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {
                 "argument": {"application": {"argument": {"variable": "env"}, "function": {"variable": "hydra.typing.FunctionStructure"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": [{"constraints": [], "name": "env"}]},
-        "term": {
+          "typeParameters": [{"constraints": [], "name": "env"}]}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -1531,10 +1505,8 @@
                   "application": {
                     "argument": {"application": {"argument": {"variable": "env"}, "function": {"variable": "hydra.typing.FunctionStructure"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.typing.functionStructureWithBody",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.typing.functionStructureWithBindings",
         "signature": {
           "parameters": [
             {
@@ -1551,16 +1523,18 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The body term after removing all lambdas, lets, etc."}}}],
-                      "body": {"variable": "hydra.core.Term"}}},
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "Let bindings accumulated from the term"}}}],
+                      "body": {"list": {"variable": "hydra.core.Binding"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {
                 "argument": {"application": {"argument": {"variable": "env"}, "function": {"variable": "hydra.typing.FunctionStructure"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": [{"constraints": [], "name": "env"}]},
-        "term": {
+          "typeParameters": [{"constraints": [], "name": "env"}]}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -1813,10 +1787,8 @@
                   "application": {
                     "argument": {"application": {"argument": {"variable": "env"}, "function": {"variable": "hydra.typing.FunctionStructure"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.typing.functionStructureWithDomains",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.typing.functionStructureWithBody",
         "signature": {
           "parameters": [
             {
@@ -1833,16 +1805,18 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "Domain types of the value parameters"}}}],
-                      "body": {"list": {"variable": "hydra.core.Type"}}}},
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The body term after removing all lambdas, lets, etc."}}}],
+                      "body": {"variable": "hydra.core.Term"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {
                 "argument": {"application": {"argument": {"variable": "env"}, "function": {"variable": "hydra.typing.FunctionStructure"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": [{"constraints": [], "name": "env"}]},
-        "term": {
+          "typeParameters": [{"constraints": [], "name": "env"}]}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -2095,10 +2069,8 @@
                   "application": {
                     "argument": {"application": {"argument": {"variable": "env"}, "function": {"variable": "hydra.typing.FunctionStructure"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.typing.functionStructureWithCodomain",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.typing.functionStructureWithDomains",
         "signature": {
           "parameters": [
             {
@@ -2115,19 +2087,18 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "The return type of the function (if type inference succeeded)"}}}],
-                      "body": {"maybe": {"variable": "hydra.core.Type"}}}},
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "Domain types of the value parameters"}}}],
+                      "body": {"list": {"variable": "hydra.core.Type"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {
                 "argument": {"application": {"argument": {"variable": "env"}, "function": {"variable": "hydra.typing.FunctionStructure"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": [{"constraints": [], "name": "env"}]},
-        "term": {
+          "typeParameters": [{"constraints": [], "name": "env"}]}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -2383,10 +2354,8 @@
                   "application": {
                     "argument": {"application": {"argument": {"variable": "env"}, "function": {"variable": "hydra.typing.FunctionStructure"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.typing.functionStructureWithEnvironment",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.typing.functionStructureWithCodomain",
         "signature": {
           "parameters": [
             {
@@ -2403,16 +2372,21 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "Updated environment after processing all bindings"}}}],
-                      "body": {"variable": "env"}}},
+                      "annotation": [
+                        {
+                          "key": "description",
+                          "value": {"literal": {"string": "The return type of the function (if type inference succeeded)"}}}],
+                      "body": {"maybe": {"variable": "hydra.core.Type"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {
                 "argument": {"application": {"argument": {"variable": "env"}, "function": {"variable": "hydra.typing.FunctionStructure"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": [{"constraints": [], "name": "env"}]},
-        "term": {
+          "typeParameters": [{"constraints": [], "name": "env"}]}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -2665,10 +2639,8 @@
                   "application": {
                     "argument": {"application": {"argument": {"variable": "env"}, "function": {"variable": "hydra.typing.FunctionStructure"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.typing.inferenceContext",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.typing.functionStructureWithEnvironment",
         "signature": {
           "parameters": [
             {
@@ -2676,13 +2648,7 @@
               "name": "arg0",
               "type": {
                 "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "Counter used to generate distinct fresh type variables during inference"}}}],
-                      "body": {"literal": {"integer": {"int32": {}}}}}},
+                  "argument": {"application": {"argument": {"variable": "env"}, "function": {"variable": "hydra.typing.FunctionStructure"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
               "isLazy": false,
@@ -2691,19 +2657,18 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {
-                            "literal": {
-                              "string": "The current subterm-path trace, accumulated backwards (head = most-recently-pushed step, corresponding to the deepest point in the descent). At the moment an inference error is constructed, the list is reversed and wrapped into a SubtermPath (root-to-leaf order) and stamped onto the error."}}}],
-                      "body": {"list": {"variable": "hydra.paths.SubtermStep"}}}},
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "Updated environment after processing all bindings"}}}],
+                      "body": {"variable": "env"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.typing.InferenceContext"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+              "application": {
+                "argument": {"application": {"argument": {"variable": "env"}, "function": {"variable": "hydra.typing.FunctionStructure"}}},
+                "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": [{"constraints": [], "name": "env"}]}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for hydra.typing.InferenceContext"}}}],
             "body": {
@@ -2770,30 +2735,45 @@
                             "value": {"literal": {"string": "Counter used to generate distinct fresh type variables during inference"}}}],
                         "body": {"literal": {"integer": {"int32": {}}}}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "freshTypeVariableCount"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.typing.inferenceContextFreshTypeVariableCount",
+                "parameter": "freshTypeVariableCount"}}}},
+        "name": "hydra.dsl.typing.inferenceContext",
         "signature": {
           "parameters": [
             {
               "isLazy": false,
               "name": "arg0",
               "type": {
-                "application": {"argument": {"variable": "hydra.typing.InferenceContext"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "key": "description",
+                          "value": {"literal": {"string": "Counter used to generate distinct fresh type variables during inference"}}}],
+                      "body": {"literal": {"integer": {"int32": {}}}}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "key": "description",
+                          "value": {
+                            "literal": {
+                              "string": "The current subterm-path trace, accumulated backwards (head = most-recently-pushed step, corresponding to the deepest point in the descent). At the moment an inference error is constructed, the list is reversed and wrapped into a SubtermPath (root-to-leaf order) and stamped onto the error."}}}],
+                      "body": {"list": {"variable": "hydra.paths.SubtermStep"}}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
-              "application": {
-                "argument": {
-                  "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {"literal": {"string": "Counter used to generate distinct fresh type variables during inference"}}}],
-                    "body": {"literal": {"integer": {"int32": {}}}}}},
-                "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+              "application": {"argument": {"variable": "hydra.typing.InferenceContext"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -2835,10 +2815,8 @@
                     "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.typing.InferenceContext"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.typing.inferenceContextTrace",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.typing.inferenceContextFreshTypeVariableCount",
         "signature": {
           "parameters": [
             {
@@ -2854,13 +2832,13 @@
                     "annotation": [
                       {
                         "key": "description",
-                        "value": {
-                          "literal": {
-                            "string": "The current subterm-path trace, accumulated backwards (head = most-recently-pushed step, corresponding to the deepest point in the descent). At the moment an inference error is constructed, the list is reversed and wrapped into a SubtermPath (root-to-leaf order) and stamped onto the error."}}}],
-                    "body": {"list": {"variable": "hydra.paths.SubtermStep"}}}},
+                        "value": {"literal": {"string": "Counter used to generate distinct fresh type variables during inference"}}}],
+                    "body": {"literal": {"integer": {"int32": {}}}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -2900,35 +2878,32 @@
                     "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.typing.InferenceContext"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.typing.inferenceContextWithFreshTypeVariableCount",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.typing.inferenceContextTrace",
         "signature": {
           "parameters": [
             {
               "isLazy": false,
               "name": "arg0",
               "type": {
-                "application": {"argument": {"variable": "hydra.typing.InferenceContext"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-            {
-              "isLazy": false,
-              "name": "arg1",
-              "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "Counter used to generate distinct fresh type variables during inference"}}}],
-                      "body": {"literal": {"integer": {"int32": {}}}}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+                "application": {"argument": {"variable": "hydra.typing.InferenceContext"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.typing.InferenceContext"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+              "application": {
+                "argument": {
+                  "annotated": {
+                    "annotation": [
+                      {
+                        "key": "description",
+                        "value": {
+                          "literal": {
+                            "string": "The current subterm-path trace, accumulated backwards (head = most-recently-pushed step, corresponding to the deepest point in the descent). At the moment an inference error is constructed, the list is reversed and wrapped into a SubtermPath (root-to-leaf order) and stamped onto the error."}}}],
+                    "body": {"list": {"variable": "hydra.paths.SubtermStep"}}}},
+                "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -3014,10 +2989,8 @@
                     "parameter": "newVal"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.typing.InferenceContext"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.typing.inferenceContextWithTrace",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.typing.inferenceContextWithFreshTypeVariableCount",
         "signature": {
           "parameters": [
             {
@@ -3035,16 +3008,16 @@
                       "annotation": [
                         {
                           "key": "description",
-                          "value": {
-                            "literal": {
-                              "string": "The current subterm-path trace, accumulated backwards (head = most-recently-pushed step, corresponding to the deepest point in the descent). At the moment an inference error is constructed, the list is reversed and wrapped into a SubtermPath (root-to-leaf order) and stamped onto the error."}}}],
-                      "body": {"list": {"variable": "hydra.paths.SubtermStep"}}}},
+                          "value": {"literal": {"string": "Counter used to generate distinct fresh type variables during inference"}}}],
+                      "body": {"literal": {"integer": {"int32": {}}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {"argument": {"variable": "hydra.typing.InferenceContext"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -3134,22 +3107,15 @@
                     "parameter": "newVal"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.typing.InferenceContext"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.typing.inferenceResult",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.typing.inferenceContextWithTrace",
         "signature": {
           "parameters": [
             {
               "isLazy": false,
               "name": "arg0",
               "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The term which was inferred"}}}],
-                      "body": {"variable": "hydra.core.Term"}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
+                "application": {"argument": {"variable": "hydra.typing.InferenceContext"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
               "isLazy": false,
               "name": "arg1",
@@ -3157,50 +3123,21 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The inferred type of the term"}}}],
-                      "body": {"variable": "hydra.core.Type"}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
-            {
-              "isLazy": false,
-              "name": "arg2",
-              "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The type substitution resulting from unification"}}}],
-                      "body": {"variable": "hydra.typing.TypeSubst"}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
-            {
-              "isLazy": false,
-              "name": "arg3",
-              "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
                       "annotation": [
                         {
                           "key": "description",
-                          "value": {"literal": {"string": "Class constraints discovered during inference (e.g., Ord constraints from Map.lookup)"}}}],
-                      "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableMetadata"}}}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
-            {
-              "isLazy": false,
-              "name": "arg4",
-              "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "The updated InferenceContext after inference (carries fresh-variable counter and trace)"}}}],
-                      "body": {"variable": "hydra.typing.InferenceContext"}}},
+                          "value": {
+                            "literal": {
+                              "string": "The current subterm-path trace, accumulated backwards (head = most-recently-pushed step, corresponding to the deepest point in the descent). At the moment an inference error is constructed, the list is reversed and wrapped into a SubtermPath (root-to-leaf order) and stamped onto the error."}}}],
+                      "body": {"list": {"variable": "hydra.paths.SubtermStep"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.typing.InferenceResult"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+              "application": {"argument": {"variable": "hydra.typing.InferenceContext"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for hydra.typing.InferenceResult"}}}],
             "body": {
@@ -3291,7 +3228,7 @@
                                       {
                                         "key": "description",
                                         "value": {"literal": {"string": "Class constraints discovered during inference (e.g., Ord constraints from Map.lookup)"}}}],
-                                    "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableMetadata"}}}}},
+                                    "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}},
                                 "function": {"variable": "hydra.typed.TypedTerm"}}},
                             "parameter": "classConstraints"}},
                         "domain": {
@@ -3317,27 +3254,73 @@
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The term which was inferred"}}}],
                         "body": {"variable": "hydra.core.Term"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "term"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.typing.inferenceResultTerm",
+                "parameter": "term"}}}},
+        "name": "hydra.dsl.typing.inferenceResult",
         "signature": {
           "parameters": [
             {
               "isLazy": false,
               "name": "arg0",
               "type": {
-                "application": {"argument": {"variable": "hydra.typing.InferenceResult"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The term which was inferred"}}}],
+                      "body": {"variable": "hydra.core.Term"}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The inferred type of the term"}}}],
+                      "body": {"variable": "hydra.core.Type"}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg2",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The type substitution resulting from unification"}}}],
+                      "body": {"variable": "hydra.typing.TypeSubst"}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg3",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "key": "description",
+                          "value": {"literal": {"string": "Class constraints discovered during inference (e.g., Ord constraints from Map.lookup)"}}}],
+                      "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg4",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "key": "description",
+                          "value": {"literal": {"string": "The updated InferenceContext after inference (carries fresh-variable counter and trace)"}}}],
+                      "body": {"variable": "hydra.typing.InferenceContext"}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
-              "application": {
-                "argument": {
-                  "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The term which was inferred"}}}],
-                    "body": {"variable": "hydra.core.Term"}}},
-                "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+              "application": {"argument": {"variable": "hydra.typing.InferenceResult"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -3377,10 +3360,8 @@
                     "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.typing.InferenceResult"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.typing.inferenceResultType",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.typing.inferenceResultTerm",
         "signature": {
           "parameters": [
             {
@@ -3393,11 +3374,13 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The inferred type of the term"}}}],
-                    "body": {"variable": "hydra.core.Type"}}},
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "The term which was inferred"}}}],
+                    "body": {"variable": "hydra.core.Term"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -3437,10 +3420,8 @@
                     "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.typing.InferenceResult"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.typing.inferenceResultSubst",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.typing.inferenceResultType",
         "signature": {
           "parameters": [
             {
@@ -3453,11 +3434,13 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The type substitution resulting from unification"}}}],
-                    "body": {"variable": "hydra.typing.TypeSubst"}}},
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "The inferred type of the term"}}}],
+                    "body": {"variable": "hydra.core.Type"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -3497,10 +3480,8 @@
                     "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.typing.InferenceResult"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.typing.inferenceResultClassConstraints",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.typing.inferenceResultSubst",
         "signature": {
           "parameters": [
             {
@@ -3513,14 +3494,13 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {"literal": {"string": "Class constraints discovered during inference (e.g., Ord constraints from Map.lookup)"}}}],
-                    "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableMetadata"}}}}},
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "The type substitution resulting from unification"}}}],
+                    "body": {"variable": "hydra.typing.TypeSubst"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -3562,10 +3542,8 @@
                     "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.typing.InferenceResult"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.typing.inferenceResultContext",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.typing.inferenceResultClassConstraints",
         "signature": {
           "parameters": [
             {
@@ -3581,11 +3559,13 @@
                     "annotation": [
                       {
                         "key": "description",
-                        "value": {"literal": {"string": "The updated InferenceContext after inference (carries fresh-variable counter and trace)"}}}],
-                    "body": {"variable": "hydra.typing.InferenceContext"}}},
+                        "value": {"literal": {"string": "Class constraints discovered during inference (e.g., Ord constraints from Map.lookup)"}}}],
+                    "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -3625,32 +3605,30 @@
                     "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.typing.InferenceResult"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.typing.inferenceResultWithTerm",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.typing.inferenceResultContext",
         "signature": {
           "parameters": [
             {
               "isLazy": false,
               "name": "arg0",
               "type": {
-                "application": {"argument": {"variable": "hydra.typing.InferenceResult"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-            {
-              "isLazy": false,
-              "name": "arg1",
-              "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The term which was inferred"}}}],
-                      "body": {"variable": "hydra.core.Term"}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+                "application": {"argument": {"variable": "hydra.typing.InferenceResult"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.typing.InferenceResult"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+              "application": {
+                "argument": {
+                  "annotated": {
+                    "annotation": [
+                      {
+                        "key": "description",
+                        "value": {"literal": {"string": "The updated InferenceContext after inference (carries fresh-variable counter and trace)"}}}],
+                    "body": {"variable": "hydra.typing.InferenceContext"}}},
+                "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -3835,10 +3813,8 @@
                     "parameter": "newVal"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.typing.InferenceResult"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.typing.inferenceResultWithType",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.typing.inferenceResultWithTerm",
         "signature": {
           "parameters": [
             {
@@ -3853,14 +3829,16 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The inferred type of the term"}}}],
-                      "body": {"variable": "hydra.core.Type"}}},
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The term which was inferred"}}}],
+                      "body": {"variable": "hydra.core.Term"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {"argument": {"variable": "hydra.typing.InferenceResult"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -4045,10 +4023,8 @@
                     "parameter": "newVal"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.typing.InferenceResult"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.typing.inferenceResultWithSubst",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.typing.inferenceResultWithType",
         "signature": {
           "parameters": [
             {
@@ -4063,14 +4039,16 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The type substitution resulting from unification"}}}],
-                      "body": {"variable": "hydra.typing.TypeSubst"}}},
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The inferred type of the term"}}}],
+                      "body": {"variable": "hydra.core.Type"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {"argument": {"variable": "hydra.typing.InferenceResult"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -4255,10 +4233,8 @@
                     "parameter": "newVal"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.typing.InferenceResult"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.typing.inferenceResultWithClassConstraints",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.typing.inferenceResultWithSubst",
         "signature": {
           "parameters": [
             {
@@ -4273,17 +4249,16 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "Class constraints discovered during inference (e.g., Ord constraints from Map.lookup)"}}}],
-                      "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableMetadata"}}}}},
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The type substitution resulting from unification"}}}],
+                      "body": {"variable": "hydra.typing.TypeSubst"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {"argument": {"variable": "hydra.typing.InferenceResult"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -4464,15 +4439,13 @@
                               {
                                 "key": "description",
                                 "value": {"literal": {"string": "Class constraints discovered during inference (e.g., Ord constraints from Map.lookup)"}}}],
-                            "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableMetadata"}}}}},
+                            "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.typing.InferenceResult"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.typing.inferenceResultWithContext",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.typing.inferenceResultWithClassConstraints",
         "signature": {
           "parameters": [
             {
@@ -4490,14 +4463,16 @@
                       "annotation": [
                         {
                           "key": "description",
-                          "value": {"literal": {"string": "The updated InferenceContext after inference (carries fresh-variable counter and trace)"}}}],
-                      "body": {"variable": "hydra.typing.InferenceContext"}}},
+                          "value": {"literal": {"string": "Class constraints discovered during inference (e.g., Ord constraints from Map.lookup)"}}}],
+                      "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {"argument": {"variable": "hydra.typing.InferenceResult"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -4685,22 +4660,15 @@
                     "parameter": "newVal"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.typing.InferenceResult"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.typing.parameter",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.typing.inferenceResultWithContext",
         "signature": {
           "parameters": [
             {
               "isLazy": false,
               "name": "arg0",
               "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the parameter"}}}],
-                      "body": {"variable": "hydra.core.Name"}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
+                "application": {"argument": {"variable": "hydra.typing.InferenceResult"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
               "isLazy": false,
               "name": "arg1",
@@ -4708,38 +4676,19 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "An optional human-readable description of the parameter"}}}],
-                      "body": {"maybe": {"literal": {"string": {}}}}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
-            {
-              "isLazy": false,
-              "name": "arg2",
-              "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The type of the parameter"}}}],
-                      "body": {"variable": "hydra.core.Type"}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
-            {
-              "isLazy": false,
-              "name": "arg3",
-              "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
                       "annotation": [
                         {
                           "key": "description",
-                          "value": {
-                            "literal": {
-                              "string": "Whether the parameter must be passed lazily (thunked) at call sites in hosts that distinguish strict from lazy evaluation"}}}],
-                      "body": {"literal": {"boolean": {}}}}},
+                          "value": {"literal": {"string": "The updated InferenceContext after inference (carries fresh-variable counter and trace)"}}}],
+                      "body": {"variable": "hydra.typing.InferenceContext"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
-            "type": {"application": {"argument": {"variable": "hydra.typing.Parameter"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+            "type": {
+              "application": {"argument": {"variable": "hydra.typing.InferenceResult"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for hydra.typing.Parameter"}}}],
             "body": {
@@ -4837,26 +4786,61 @@
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the parameter"}}}],
                         "body": {"variable": "hydra.core.Name"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "name"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.typing.parameterName",
+                "parameter": "name"}}}},
+        "name": "hydra.dsl.typing.parameter",
         "signature": {
           "parameters": [
             {
               "isLazy": false,
               "name": "arg0",
-              "type": {"application": {"argument": {"variable": "hydra.typing.Parameter"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the parameter"}}}],
+                      "body": {"variable": "hydra.core.Name"}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "An optional human-readable description of the parameter"}}}],
+                      "body": {"maybe": {"literal": {"string": {}}}}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg2",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The type of the parameter"}}}],
+                      "body": {"variable": "hydra.core.Type"}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg3",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "key": "description",
+                          "value": {
+                            "literal": {
+                              "string": "Whether the parameter must be passed lazily (thunked) at call sites in hosts that distinguish strict from lazy evaluation"}}}],
+                      "body": {"literal": {"boolean": {}}}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
-            "type": {
-              "application": {
-                "argument": {
-                  "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the parameter"}}}],
-                    "body": {"variable": "hydra.core.Name"}}},
-                "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+            "type": {"application": {"argument": {"variable": "hydra.typing.Parameter"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL accessor for the name field of hydra.typing.Parameter"}}}],
             "body": {
@@ -4892,10 +4876,8 @@
                         "typeName": "hydra.core.Term"}},
                     "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {"application": {"argument": {"variable": "hydra.typing.Parameter"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.typing.parameterDescription",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.typing.parameterName",
         "signature": {
           "parameters": [
             {
@@ -4907,11 +4889,13 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "An optional human-readable description of the parameter"}}}],
-                    "body": {"maybe": {"literal": {"string": {}}}}}},
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the parameter"}}}],
+                    "body": {"variable": "hydra.core.Name"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -4950,10 +4934,8 @@
                         "typeName": "hydra.core.Term"}},
                     "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {"application": {"argument": {"variable": "hydra.typing.Parameter"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.typing.parameterType",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.typing.parameterDescription",
         "signature": {
           "parameters": [
             {
@@ -4965,11 +4947,13 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The type of the parameter"}}}],
-                    "body": {"variable": "hydra.core.Type"}}},
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "An optional human-readable description of the parameter"}}}],
+                    "body": {"maybe": {"literal": {"string": {}}}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL accessor for the type field of hydra.typing.Parameter"}}}],
             "body": {
@@ -5005,10 +4989,8 @@
                         "typeName": "hydra.core.Term"}},
                     "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {"application": {"argument": {"variable": "hydra.typing.Parameter"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.typing.parameterIsLazy",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.typing.parameterType",
         "signature": {
           "parameters": [
             {
@@ -5020,16 +5002,13 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {
-                          "literal": {
-                            "string": "Whether the parameter must be passed lazily (thunked) at call sites in hosts that distinguish strict from lazy evaluation"}}}],
-                    "body": {"literal": {"boolean": {}}}}},
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "The type of the parameter"}}}],
+                    "body": {"variable": "hydra.core.Type"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {"key": "description", "value": {"literal": {"string": "DSL accessor for the isLazy field of hydra.typing.Parameter"}}}],
@@ -5066,30 +5045,31 @@
                         "typeName": "hydra.core.Term"}},
                     "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {"application": {"argument": {"variable": "hydra.typing.Parameter"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.typing.parameterWithName",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.typing.parameterIsLazy",
         "signature": {
           "parameters": [
             {
               "isLazy": false,
               "name": "arg0",
-              "type": {"application": {"argument": {"variable": "hydra.typing.Parameter"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-            {
-              "isLazy": false,
-              "name": "arg1",
-              "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the parameter"}}}],
-                      "body": {"variable": "hydra.core.Name"}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+              "type": {"application": {"argument": {"variable": "hydra.typing.Parameter"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
-            "type": {"application": {"argument": {"variable": "hydra.typing.Parameter"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+            "type": {
+              "application": {
+                "argument": {
+                  "annotated": {
+                    "annotation": [
+                      {
+                        "key": "description",
+                        "value": {
+                          "literal": {
+                            "string": "Whether the parameter must be passed lazily (thunked) at call sites in hosts that distinguish strict from lazy evaluation"}}}],
+                    "body": {"literal": {"boolean": {}}}}},
+                "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL updater for the name field of hydra.typing.Parameter"}}}],
             "body": {
@@ -5234,10 +5214,8 @@
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {"application": {"argument": {"variable": "hydra.typing.Parameter"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.typing.parameterWithDescription",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.typing.parameterWithName",
         "signature": {
           "parameters": [
             {
@@ -5251,13 +5229,15 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "An optional human-readable description of the parameter"}}}],
-                      "body": {"maybe": {"literal": {"string": {}}}}}},
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the parameter"}}}],
+                      "body": {"variable": "hydra.core.Name"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {"application": {"argument": {"variable": "hydra.typing.Parameter"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -5405,10 +5385,8 @@
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {"application": {"argument": {"variable": "hydra.typing.Parameter"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.typing.parameterWithType",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.typing.parameterWithDescription",
         "signature": {
           "parameters": [
             {
@@ -5422,13 +5400,15 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The type of the parameter"}}}],
-                      "body": {"variable": "hydra.core.Type"}}},
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "An optional human-readable description of the parameter"}}}],
+                      "body": {"maybe": {"literal": {"string": {}}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {"application": {"argument": {"variable": "hydra.typing.Parameter"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL updater for the type field of hydra.typing.Parameter"}}}],
             "body": {
@@ -5573,10 +5553,8 @@
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {"application": {"argument": {"variable": "hydra.typing.Parameter"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.typing.parameterWithIsLazy",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.typing.parameterWithType",
         "signature": {
           "parameters": [
             {
@@ -5590,18 +5568,15 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {
-                            "literal": {
-                              "string": "Whether the parameter must be passed lazily (thunked) at call sites in hosts that distinguish strict from lazy evaluation"}}}],
-                      "body": {"literal": {"boolean": {}}}}},
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The type of the parameter"}}}],
+                      "body": {"variable": "hydra.core.Type"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {"application": {"argument": {"variable": "hydra.typing.Parameter"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL updater for the isLazy field of hydra.typing.Parameter"}}}],
             "body": {
@@ -5751,22 +5726,14 @@
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {"application": {"argument": {"variable": "hydra.typing.Parameter"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.typing.result",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.typing.parameterWithIsLazy",
         "signature": {
           "parameters": [
             {
               "isLazy": false,
               "name": "arg0",
-              "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "An optional human-readable description of the result"}}}],
-                      "body": {"maybe": {"literal": {"string": {}}}}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
+              "type": {"application": {"argument": {"variable": "hydra.typing.Parameter"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
               "isLazy": false,
               "name": "arg1",
@@ -5774,13 +5741,20 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The type of the result"}}}],
-                      "body": {"variable": "hydra.core.Type"}}},
+                      "annotation": [
+                        {
+                          "key": "description",
+                          "value": {
+                            "literal": {
+                              "string": "Whether the parameter must be passed lazily (thunked) at call sites in hosts that distinguish strict from lazy evaluation"}}}],
+                      "body": {"literal": {"boolean": {}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
-            "type": {"application": {"argument": {"variable": "hydra.typing.Result"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+            "type": {"application": {"argument": {"variable": "hydra.typing.Parameter"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for hydra.typing.Result"}}}],
             "body": {
@@ -5837,26 +5811,36 @@
                         "annotation": [{"key": "description", "value": {"literal": {"string": "An optional human-readable description of the result"}}}],
                         "body": {"maybe": {"literal": {"string": {}}}}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "description"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.typing.resultDescription",
+                "parameter": "description"}}}},
+        "name": "hydra.dsl.typing.result",
         "signature": {
           "parameters": [
             {
               "isLazy": false,
               "name": "arg0",
-              "type": {"application": {"argument": {"variable": "hydra.typing.Result"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "An optional human-readable description of the result"}}}],
+                      "body": {"maybe": {"literal": {"string": {}}}}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The type of the result"}}}],
+                      "body": {"variable": "hydra.core.Type"}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
-            "type": {
-              "application": {
-                "argument": {
-                  "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "An optional human-readable description of the result"}}}],
-                    "body": {"maybe": {"literal": {"string": {}}}}}},
-                "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+            "type": {"application": {"argument": {"variable": "hydra.typing.Result"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -5895,10 +5879,8 @@
                         "typeName": "hydra.core.Term"}},
                     "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {"application": {"argument": {"variable": "hydra.typing.Result"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.typing.resultType",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.typing.resultDescription",
         "signature": {
           "parameters": [
             {
@@ -5910,11 +5892,13 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The type of the result"}}}],
-                    "body": {"variable": "hydra.core.Type"}}},
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "An optional human-readable description of the result"}}}],
+                    "body": {"maybe": {"literal": {"string": {}}}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL accessor for the type field of hydra.typing.Result"}}}],
             "body": {
@@ -5950,30 +5934,26 @@
                         "typeName": "hydra.core.Term"}},
                     "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {"application": {"argument": {"variable": "hydra.typing.Result"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.typing.resultWithDescription",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.typing.resultType",
         "signature": {
           "parameters": [
             {
               "isLazy": false,
               "name": "arg0",
-              "type": {"application": {"argument": {"variable": "hydra.typing.Result"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-            {
-              "isLazy": false,
-              "name": "arg1",
-              "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "An optional human-readable description of the result"}}}],
-                      "body": {"maybe": {"literal": {"string": {}}}}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+              "type": {"application": {"argument": {"variable": "hydra.typing.Result"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
-            "type": {"application": {"argument": {"variable": "hydra.typing.Result"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+            "type": {
+              "application": {
+                "argument": {
+                  "annotated": {
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "The type of the result"}}}],
+                    "body": {"variable": "hydra.core.Type"}}},
+                "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {"key": "description", "value": {"literal": {"string": "DSL updater for the description field of hydra.typing.Result"}}}],
@@ -6051,10 +6031,8 @@
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {"application": {"argument": {"variable": "hydra.typing.Result"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.typing.resultWithType",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.typing.resultWithDescription",
         "signature": {
           "parameters": [
             {
@@ -6068,13 +6046,15 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The type of the result"}}}],
-                      "body": {"variable": "hydra.core.Type"}}},
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "An optional human-readable description of the result"}}}],
+                      "body": {"maybe": {"literal": {"string": {}}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {"application": {"argument": {"variable": "hydra.typing.Result"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL updater for the type field of hydra.typing.Result"}}}],
             "body": {
@@ -6151,22 +6131,14 @@
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {"application": {"argument": {"variable": "hydra.typing.Result"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.typing.termSignature",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.typing.resultWithType",
         "signature": {
           "parameters": [
             {
               "isLazy": false,
               "name": "arg0",
-              "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The type parameters of the term, in order"}}}],
-                      "body": {"list": {"variable": "hydra.typing.TypeParameter"}}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
+              "type": {"application": {"argument": {"variable": "hydra.typing.Result"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
               "isLazy": false,
               "name": "arg1",
@@ -6174,24 +6146,15 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The value parameters of the term, in order"}}}],
-                      "body": {"list": {"variable": "hydra.typing.Parameter"}}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
-            {
-              "isLazy": false,
-              "name": "arg2",
-              "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The result of the term"}}}],
-                      "body": {"variable": "hydra.typing.Result"}}},
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The type of the result"}}}],
+                      "body": {"variable": "hydra.core.Type"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
-            "type": {
-              "application": {"argument": {"variable": "hydra.typing.TermSignature"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+            "type": {"application": {"argument": {"variable": "hydra.typing.Result"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for hydra.typing.TermSignature"}}}],
             "body": {
@@ -6266,27 +6229,47 @@
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The type parameters of the term, in order"}}}],
                         "body": {"list": {"variable": "hydra.typing.TypeParameter"}}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "typeParameters"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.typing.termSignatureTypeParameters",
+                "parameter": "typeParameters"}}}},
+        "name": "hydra.dsl.typing.termSignature",
         "signature": {
           "parameters": [
             {
               "isLazy": false,
               "name": "arg0",
               "type": {
-                "application": {"argument": {"variable": "hydra.typing.TermSignature"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The type parameters of the term, in order"}}}],
+                      "body": {"list": {"variable": "hydra.typing.TypeParameter"}}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The value parameters of the term, in order"}}}],
+                      "body": {"list": {"variable": "hydra.typing.Parameter"}}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg2",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The result of the term"}}}],
+                      "body": {"variable": "hydra.typing.Result"}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
-              "application": {
-                "argument": {
-                  "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The type parameters of the term, in order"}}}],
-                    "body": {"list": {"variable": "hydra.typing.TypeParameter"}}}},
-                "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+              "application": {"argument": {"variable": "hydra.typing.TermSignature"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -6328,10 +6311,8 @@
                     "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.typing.TermSignature"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.typing.termSignatureParameters",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.typing.termSignatureTypeParameters",
         "signature": {
           "parameters": [
             {
@@ -6344,11 +6325,13 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The value parameters of the term, in order"}}}],
-                    "body": {"list": {"variable": "hydra.typing.Parameter"}}}},
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "The type parameters of the term, in order"}}}],
+                    "body": {"list": {"variable": "hydra.typing.TypeParameter"}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -6388,10 +6371,8 @@
                     "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.typing.TermSignature"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.typing.termSignatureResult",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.typing.termSignatureParameters",
         "signature": {
           "parameters": [
             {
@@ -6404,11 +6385,13 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The result of the term"}}}],
-                    "body": {"variable": "hydra.typing.Result"}}},
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "The value parameters of the term, in order"}}}],
+                    "body": {"list": {"variable": "hydra.typing.Parameter"}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -6448,32 +6431,27 @@
                     "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.typing.TermSignature"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.typing.termSignatureWithTypeParameters",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.typing.termSignatureResult",
         "signature": {
           "parameters": [
             {
               "isLazy": false,
               "name": "arg0",
               "type": {
-                "application": {"argument": {"variable": "hydra.typing.TermSignature"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-            {
-              "isLazy": false,
-              "name": "arg1",
-              "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The type parameters of the term, in order"}}}],
-                      "body": {"list": {"variable": "hydra.typing.TypeParameter"}}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+                "application": {"argument": {"variable": "hydra.typing.TermSignature"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.typing.TermSignature"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+              "application": {
+                "argument": {
+                  "annotated": {
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "The result of the term"}}}],
+                    "body": {"variable": "hydra.typing.Result"}}},
+                "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -6588,10 +6566,8 @@
                     "parameter": "newVal"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.typing.TermSignature"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.typing.termSignatureWithParameters",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.typing.termSignatureWithTypeParameters",
         "signature": {
           "parameters": [
             {
@@ -6606,14 +6582,16 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The value parameters of the term, in order"}}}],
-                      "body": {"list": {"variable": "hydra.typing.Parameter"}}}},
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The type parameters of the term, in order"}}}],
+                      "body": {"list": {"variable": "hydra.typing.TypeParameter"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {"argument": {"variable": "hydra.typing.TermSignature"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -6730,10 +6708,8 @@
                     "parameter": "newVal"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.typing.TermSignature"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.typing.termSignatureWithResult",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.typing.termSignatureWithParameters",
         "signature": {
           "parameters": [
             {
@@ -6748,14 +6724,16 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The result of the term"}}}],
-                      "body": {"variable": "hydra.typing.Result"}}},
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The value parameters of the term, in order"}}}],
+                      "body": {"list": {"variable": "hydra.typing.Parameter"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {"argument": {"variable": "hydra.typing.TermSignature"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -6872,23 +6850,32 @@
                     "parameter": "newVal"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.typing.TermSignature"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.typing.termSubst",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.typing.termSignatureWithResult",
         "signature": {
           "parameters": [
             {
               "isLazy": false,
               "name": "arg0",
               "type": {
+                "application": {"argument": {"variable": "hydra.typing.TermSignature"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {
                 "application": {
-                  "argument": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Term"}}},
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The result of the term"}}}],
+                      "body": {"variable": "hydra.typing.Result"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
-            "type": {"application": {"argument": {"variable": "hydra.typing.TermSubst"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+            "type": {
+              "application": {"argument": {"variable": "hydra.typing.TermSignature"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for the hydra.typing.TermSubst wrapper"}}}],
             "body": {
@@ -6915,23 +6902,23 @@
                   "application": {
                     "argument": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Term"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.typing.unTermSubst",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.typing.termSubst",
         "signature": {
           "parameters": [
             {
               "isLazy": false,
               "name": "arg0",
-              "type": {"application": {"argument": {"variable": "hydra.typing.TermSubst"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+              "type": {
+                "application": {
+                  "argument": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Term"}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
-            "type": {
-              "application": {
-                "argument": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Term"}}},
-                "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+            "type": {"application": {"argument": {"variable": "hydra.typing.TermSubst"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL accessor for the body of hydra.typing.TermSubst"}}}],
             "body": {
@@ -6960,26 +6947,23 @@
                         "typeName": "hydra.core.Term"}},
                     "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {"application": {"argument": {"variable": "hydra.typing.TermSubst"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.typing.typeClass",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.typing.unTermSubst",
         "signature": {
           "parameters": [
             {
               "isLazy": false,
               "name": "arg0",
-              "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "A human-readable description of the type class"}}}],
-                      "body": {"literal": {"string": {}}}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+              "type": {"application": {"argument": {"variable": "hydra.typing.TermSubst"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
-            "type": {"application": {"argument": {"variable": "hydra.typing.TypeClass"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+            "type": {
+              "application": {
+                "argument": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Term"}}},
+                "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for hydra.typing.TypeClass"}}}],
             "body": {
@@ -7018,26 +7002,26 @@
                         "annotation": [{"key": "description", "value": {"literal": {"string": "A human-readable description of the type class"}}}],
                         "body": {"literal": {"string": {}}}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "description"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.typing.typeClassDescription",
+                "parameter": "description"}}}},
+        "name": "hydra.dsl.typing.typeClass",
         "signature": {
           "parameters": [
             {
               "isLazy": false,
               "name": "arg0",
-              "type": {"application": {"argument": {"variable": "hydra.typing.TypeClass"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "A human-readable description of the type class"}}}],
+                      "body": {"literal": {"string": {}}}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
-            "type": {
-              "application": {
-                "argument": {
-                  "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "A human-readable description of the type class"}}}],
-                    "body": {"literal": {"string": {}}}}},
-                "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+            "type": {"application": {"argument": {"variable": "hydra.typing.TypeClass"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -7076,30 +7060,26 @@
                         "typeName": "hydra.core.Term"}},
                     "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {"application": {"argument": {"variable": "hydra.typing.TypeClass"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.typing.typeClassWithDescription",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.typing.typeClassDescription",
         "signature": {
           "parameters": [
             {
               "isLazy": false,
               "name": "arg0",
-              "type": {"application": {"argument": {"variable": "hydra.typing.TypeClass"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-            {
-              "isLazy": false,
-              "name": "arg1",
-              "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "A human-readable description of the type class"}}}],
-                      "body": {"literal": {"string": {}}}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+              "type": {"application": {"argument": {"variable": "hydra.typing.TypeClass"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
-            "type": {"application": {"argument": {"variable": "hydra.typing.TypeClass"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+            "type": {
+              "application": {
+                "argument": {
+                  "annotated": {
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "A human-readable description of the type class"}}}],
+                    "body": {"literal": {"string": {}}}}},
+                "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -7145,22 +7125,14 @@
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {"application": {"argument": {"variable": "hydra.typing.TypeClass"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.typing.typeConstraint",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.typing.typeClassWithDescription",
         "signature": {
           "parameters": [
             {
               "isLazy": false,
               "name": "arg0",
-              "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The left-hand side of the constraint"}}}],
-                      "body": {"variable": "hydra.core.Type"}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
+              "type": {"application": {"argument": {"variable": "hydra.typing.TypeClass"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
               "isLazy": false,
               "name": "arg1",
@@ -7168,27 +7140,15 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The right-hand side of the constraint"}}}],
-                      "body": {"variable": "hydra.core.Type"}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
-            {
-              "isLazy": false,
-              "name": "arg2",
-              "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "A description of the type constraint which may be used for tracing or debugging"}}}],
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "A human-readable description of the type class"}}}],
                       "body": {"literal": {"string": {}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
-            "type": {
-              "application": {"argument": {"variable": "hydra.typing.TypeConstraint"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+            "type": {"application": {"argument": {"variable": "hydra.typing.TypeClass"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for hydra.typing.TypeConstraint"}}}],
             "body": {
@@ -7266,27 +7226,50 @@
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The left-hand side of the constraint"}}}],
                         "body": {"variable": "hydra.core.Type"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "left"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.typing.typeConstraintLeft",
+                "parameter": "left"}}}},
+        "name": "hydra.dsl.typing.typeConstraint",
         "signature": {
           "parameters": [
             {
               "isLazy": false,
               "name": "arg0",
               "type": {
-                "application": {"argument": {"variable": "hydra.typing.TypeConstraint"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The left-hand side of the constraint"}}}],
+                      "body": {"variable": "hydra.core.Type"}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The right-hand side of the constraint"}}}],
+                      "body": {"variable": "hydra.core.Type"}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg2",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "key": "description",
+                          "value": {"literal": {"string": "A description of the type constraint which may be used for tracing or debugging"}}}],
+                      "body": {"literal": {"string": {}}}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
-              "application": {
-                "argument": {
-                  "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The left-hand side of the constraint"}}}],
-                    "body": {"variable": "hydra.core.Type"}}},
-                "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+              "application": {"argument": {"variable": "hydra.typing.TypeConstraint"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -7326,10 +7309,8 @@
                     "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.typing.TypeConstraint"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.typing.typeConstraintRight",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.typing.typeConstraintLeft",
         "signature": {
           "parameters": [
             {
@@ -7342,11 +7323,13 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The right-hand side of the constraint"}}}],
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "The left-hand side of the constraint"}}}],
                     "body": {"variable": "hydra.core.Type"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -7386,10 +7369,8 @@
                     "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.typing.TypeConstraint"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.typing.typeConstraintComment",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.typing.typeConstraintRight",
         "signature": {
           "parameters": [
             {
@@ -7402,14 +7383,13 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {"literal": {"string": "A description of the type constraint which may be used for tracing or debugging"}}}],
-                    "body": {"literal": {"string": {}}}}},
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "The right-hand side of the constraint"}}}],
+                    "body": {"variable": "hydra.core.Type"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -7449,32 +7429,30 @@
                     "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.typing.TypeConstraint"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.typing.typeConstraintWithLeft",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.typing.typeConstraintComment",
         "signature": {
           "parameters": [
             {
               "isLazy": false,
               "name": "arg0",
               "type": {
-                "application": {"argument": {"variable": "hydra.typing.TypeConstraint"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-            {
-              "isLazy": false,
-              "name": "arg1",
-              "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The left-hand side of the constraint"}}}],
-                      "body": {"variable": "hydra.core.Type"}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+                "application": {"argument": {"variable": "hydra.typing.TypeConstraint"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.typing.TypeConstraint"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+              "application": {
+                "argument": {
+                  "annotated": {
+                    "annotation": [
+                      {
+                        "key": "description",
+                        "value": {"literal": {"string": "A description of the type constraint which may be used for tracing or debugging"}}}],
+                    "body": {"literal": {"string": {}}}}},
+                "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -7589,10 +7567,8 @@
                     "parameter": "newVal"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.typing.TypeConstraint"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.typing.typeConstraintWithRight",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.typing.typeConstraintWithLeft",
         "signature": {
           "parameters": [
             {
@@ -7607,14 +7583,16 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The right-hand side of the constraint"}}}],
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The left-hand side of the constraint"}}}],
                       "body": {"variable": "hydra.core.Type"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {"argument": {"variable": "hydra.typing.TypeConstraint"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -7729,10 +7707,8 @@
                     "parameter": "newVal"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.typing.TypeConstraint"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.typing.typeConstraintWithComment",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.typing.typeConstraintWithRight",
         "signature": {
           "parameters": [
             {
@@ -7747,17 +7723,16 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "A description of the type constraint which may be used for tracing or debugging"}}}],
-                      "body": {"literal": {"string": {}}}}},
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The right-hand side of the constraint"}}}],
+                      "body": {"variable": "hydra.core.Type"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {"argument": {"variable": "hydra.typing.TypeConstraint"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -7875,22 +7850,15 @@
                     "parameter": "newVal"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.typing.TypeConstraint"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.typing.typeParameter",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.typing.typeConstraintWithComment",
         "signature": {
           "parameters": [
             {
               "isLazy": false,
               "name": "arg0",
               "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the type parameter"}}}],
-                      "body": {"variable": "hydra.core.Name"}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
+                "application": {"argument": {"variable": "hydra.typing.TypeConstraint"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
               "isLazy": false,
               "name": "arg1",
@@ -7898,14 +7866,19 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "Any type class constraints on the type parameter"}}}],
-                      "body": {"list": {"variable": "hydra.core.TypeClassConstraint"}}}},
+                      "annotation": [
+                        {
+                          "key": "description",
+                          "value": {"literal": {"string": "A description of the type constraint which may be used for tracing or debugging"}}}],
+                      "body": {"literal": {"string": {}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.typing.TypeParameter"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+              "application": {"argument": {"variable": "hydra.typing.TypeConstraint"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for hydra.typing.TypeParameter"}}}],
             "body": {
@@ -7962,27 +7935,37 @@
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the type parameter"}}}],
                         "body": {"variable": "hydra.core.Name"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "name"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.typing.typeParameterName",
+                "parameter": "name"}}}},
+        "name": "hydra.dsl.typing.typeParameter",
         "signature": {
           "parameters": [
             {
               "isLazy": false,
               "name": "arg0",
               "type": {
-                "application": {"argument": {"variable": "hydra.typing.TypeParameter"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the type parameter"}}}],
+                      "body": {"variable": "hydra.core.Name"}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "Any type class constraints on the type parameter"}}}],
+                      "body": {"list": {"variable": "hydra.core.TypeClassConstraint"}}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
-              "application": {
-                "argument": {
-                  "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the type parameter"}}}],
-                    "body": {"variable": "hydra.core.Name"}}},
-                "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+              "application": {"argument": {"variable": "hydra.typing.TypeParameter"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -8022,10 +8005,8 @@
                     "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.typing.TypeParameter"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.typing.typeParameterConstraints",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.typing.typeParameterName",
         "signature": {
           "parameters": [
             {
@@ -8038,11 +8019,13 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "Any type class constraints on the type parameter"}}}],
-                    "body": {"list": {"variable": "hydra.core.TypeClassConstraint"}}}},
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the type parameter"}}}],
+                    "body": {"variable": "hydra.core.Name"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -8082,32 +8065,27 @@
                     "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.typing.TypeParameter"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.typing.typeParameterWithName",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.typing.typeParameterConstraints",
         "signature": {
           "parameters": [
             {
               "isLazy": false,
               "name": "arg0",
               "type": {
-                "application": {"argument": {"variable": "hydra.typing.TypeParameter"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-            {
-              "isLazy": false,
-              "name": "arg1",
-              "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the type parameter"}}}],
-                      "body": {"variable": "hydra.core.Name"}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+                "application": {"argument": {"variable": "hydra.typing.TypeParameter"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.typing.TypeParameter"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+              "application": {
+                "argument": {
+                  "annotated": {
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "Any type class constraints on the type parameter"}}}],
+                    "body": {"list": {"variable": "hydra.core.TypeClassConstraint"}}}},
+                "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {"key": "description", "value": {"literal": {"string": "DSL updater for the name field of hydra.typing.TypeParameter"}}}],
@@ -8186,10 +8164,8 @@
                     "parameter": "newVal"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.typing.TypeParameter"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.typing.typeParameterWithConstraints",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.typing.typeParameterWithName",
         "signature": {
           "parameters": [
             {
@@ -8204,14 +8180,16 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "Any type class constraints on the type parameter"}}}],
-                      "body": {"list": {"variable": "hydra.core.TypeClassConstraint"}}}},
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the type parameter"}}}],
+                      "body": {"variable": "hydra.core.Name"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {"argument": {"variable": "hydra.typing.TypeParameter"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -8292,23 +8270,32 @@
                     "parameter": "newVal"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.typing.TypeParameter"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.typing.typeSubst",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.typing.typeParameterWithConstraints",
         "signature": {
           "parameters": [
             {
               "isLazy": false,
               "name": "arg0",
               "type": {
+                "application": {"argument": {"variable": "hydra.typing.TypeParameter"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {
                 "application": {
-                  "argument": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Type"}}},
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "Any type class constraints on the type parameter"}}}],
+                      "body": {"list": {"variable": "hydra.core.TypeClassConstraint"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
-            "type": {"application": {"argument": {"variable": "hydra.typing.TypeSubst"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+            "type": {
+              "application": {"argument": {"variable": "hydra.typing.TypeParameter"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for the hydra.typing.TypeSubst wrapper"}}}],
             "body": {
@@ -8335,23 +8322,23 @@
                   "application": {
                     "argument": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Type"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.typing.unTypeSubst",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.typing.typeSubst",
         "signature": {
           "parameters": [
             {
               "isLazy": false,
               "name": "arg0",
-              "type": {"application": {"argument": {"variable": "hydra.typing.TypeSubst"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+              "type": {
+                "application": {
+                  "argument": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Type"}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
-            "type": {
-              "application": {
-                "argument": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Type"}}},
-                "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+            "type": {"application": {"argument": {"variable": "hydra.typing.TypeSubst"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL accessor for the body of hydra.typing.TypeSubst"}}}],
             "body": {
@@ -8380,7 +8367,20 @@
                         "typeName": "hydra.core.Term"}},
                     "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {"application": {"argument": {"variable": "hydra.typing.TypeSubst"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}}],
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.typing.unTypeSubst",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {"application": {"argument": {"variable": "hydra.typing.TypeSubst"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+          "result": {
+            "type": {
+              "application": {
+                "argument": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Type"}}},
+                "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}}],
   "dependencies": [
     {"module": "hydra.typing"},
     {"module": "hydra.typed"},

@@ -102,7 +102,7 @@ entityReference x =
 fileExtension :: Util.FileExtension -> Core.Term
 fileExtension x =
     Core.TermWrap (Core.WrappedTerm {
-      Core.wrappedTermTypeName = (Core.Name "hydra.packaging.FileExtension"),
+      Core.wrappedTermTypeName = (Core.Name "hydra.util.FileExtension"),
       Core.wrappedTermBody = ((\x2 -> Core.TermLiteral (Core.LiteralString x2)) (Util.unFileExtension x))})
 -- | Encoder for hydra.packaging.Module
 module_ :: Packaging.Module -> Core.Term
@@ -213,7 +213,7 @@ primitiveDefinition x =
 qualifiedName :: Util.QualifiedName -> Core.Term
 qualifiedName x =
     Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.packaging.QualifiedName"),
+      Core.recordTypeName = (Core.Name "hydra.util.QualifiedName"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "moduleName"),
