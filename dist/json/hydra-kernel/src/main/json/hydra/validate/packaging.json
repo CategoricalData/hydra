@@ -1118,15 +1118,40 @@
                                                                               "application": {
                                                                                 "argument": {
                                                                                   "application": {
-                                                                                    "argument": {"literal": {"string": ""}},
+                                                                                    "argument": {"variable": "pd"},
+                                                                                    "function": {"project": {"fieldName": "metadata", "typeName": "hydra.packaging.PrimitiveDefinition"}}}},
+                                                                                "function": {
+                                                                                  "application": {
+                                                                                    "argument": {
+                                                                                      "lambda": {
+                                                                                        "body": {
+                                                                                          "application": {
+                                                                                            "argument": {
+                                                                                              "application": {
+                                                                                                "argument": {"literal": {"string": ""}},
+                                                                                                "function": {
+                                                                                                  "application": {
+                                                                                                    "argument": {
+                                                                                                      "application": {
+                                                                                                        "argument": {
+                                                                                                          "application": {
+                                                                                                            "argument": {"variable": "em"},
+                                                                                                            "function": {"project": {"fieldName": "description", "typeName": "hydra.packaging.EntityMetadata"}}}},
+                                                                                                        "function": {
+                                                                                                          "application": {
+                                                                                                            "argument": {"literal": {"string": ""}},
+                                                                                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.fromMaybe"}, "type": {"literal": {"string": {}}}}}}}}},
+                                                                                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.equality.equal"}, "type": {"literal": {"string": {}}}}}}}}},
+                                                                                            "function": {"variable": "hydra.lib.logic.not"}}},
+                                                                                        "domain": {"variable": "hydra.packaging.EntityMetadata"},
+                                                                                        "parameter": "em"}},
                                                                                     "function": {
                                                                                       "application": {
-                                                                                        "argument": {
-                                                                                          "application": {
-                                                                                            "argument": {"variable": "pd"},
-                                                                                            "function": {"project": {"fieldName": "description", "typeName": "hydra.packaging.PrimitiveDefinition"}}}},
-                                                                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.equality.equal"}, "type": {"literal": {"string": {}}}}}}}}},
-                                                                                "function": {"variable": "hydra.lib.logic.not"}}},
+                                                                                        "argument": {"literal": {"boolean": false}},
+                                                                                        "function": {
+                                                                                          "typeApplication": {
+                                                                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.maybe"}, "type": {"literal": {"boolean": {}}}}},
+                                                                                            "type": {"variable": "hydra.packaging.EntityMetadata"}}}}}}}}},
                                                                             "domain": {"variable": "hydra.packaging.PrimitiveDefinition"},
                                                                             "parameter": "pd"}}}],
                                                                     "default": {"literal": {"boolean": false}},
@@ -3475,5 +3500,5 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "description": "Validation functions for modules and packages",
+  "metadata": {"comments": [], "description": "Validation functions for modules and packages", "seeAlso": []},
   "name": "hydra.validate.packaging"}

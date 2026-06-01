@@ -1778,5 +1778,5 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "description": "Utilities for type unification.",
+  "metadata": {"comments": [], "description": "Utilities for type unification.", "seeAlso": []},
   "name": "hydra.unification"}

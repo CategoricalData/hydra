@@ -999,5 +999,5 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "description": "Utility functions for constructing Scala AST nodes",
+  "metadata": {"comments": [], "description": "Utility functions for constructing Scala AST nodes", "seeAlso": []},
   "name": "hydra.scala.utils"}

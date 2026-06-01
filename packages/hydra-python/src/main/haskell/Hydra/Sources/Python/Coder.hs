@@ -110,7 +110,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> ([PyUtils.ns, PyNames.ns, PySerde.ns, Serialization.ns, Analysis.ns, Environment.ns, Formatting.ns, Names.ns, Predicates.ns, Resolution.ns, Rewriting.ns, Dependencies.ns, Scoping.ns, Strip.ns, Variables.ns, ShowCore.ns, Reduction.ns, Sorting.ns, Inference.ns] L.++ (PyEnvironmentSource.ns:PySyntax.ns:KernelTypes.kernelTypesModuleNames)),
-            moduleDescription = Just "Python code generator: converts Hydra modules to Python source code"}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just "Python code generator: converts Hydra modules to Python source code")}
   where
     definitions = [
       toDefinition Environment.reorderDefs,
@@ -1308,7 +1308,7 @@ encodePythonModule = def "encodePythonModule" $
       "commentStmts" <~ (Maybes.maybe
         (list ([] :: [TypedTerm Py.Statement]))
         ("c" ~> list [PyUtils.commentStatement @@ var "c"])
-        (Maybes.map Formatting.normalizeComment (Packaging.moduleDescription $ var "mod"))) $
+        (Maybes.map Formatting.normalizeComment ((Maybes.bind (Packaging.moduleMetadata (var "mod")) ("em" ~> Packaging.entityMetadataDescription (var "em")))))) $
       -- Generate import statements
       "importStmts" <~ (moduleImports @@ var "namespaces" @@ var "meta") $
       -- Generate type variable statements

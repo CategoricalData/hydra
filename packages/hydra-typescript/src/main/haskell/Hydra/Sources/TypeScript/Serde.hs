@@ -100,7 +100,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> ([Constants.ns, Serialization.ns, TypeScriptOperators.ns] L.++ (TypeScriptSyntax.ns:KernelTypes.kernelTypesModuleNames)),
-            moduleDescription = Just "Serialization functions for converting TypeScript AST to abstract expressions"}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just "Serialization functions for converting TypeScript AST to abstract expressions")}
   where
     definitions = [
       -- Core conversions

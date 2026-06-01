@@ -93,7 +93,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> ([jsonWriterNs] L.++ (jsonSchemaSyntaxNs:KernelTypes.kernelTypesModuleNames)),
-            moduleDescription = Just "Serialization functions for converting JSON Schema documents to JSON values"}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just "Serialization functions for converting JSON Schema documents to JSON values")}
   where
     definitions = [
       toDefinition additionalItemsToExpr,

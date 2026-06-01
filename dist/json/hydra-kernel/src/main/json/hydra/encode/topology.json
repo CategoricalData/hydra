@@ -369,5 +369,5 @@
                 "domain": {"literal": {"integer": {"int32": {}}}},
                 "parameter": "x"}}}}}}],
   "dependencies": [{"module": "hydra.encode.core"}, {"module": "hydra.topology"}],
-  "description": "Term encoders for hydra.topology",
+  "metadata": {"comments": [], "description": "Term encoders for hydra.topology", "seeAlso": []},
   "name": "hydra.encode.topology"}

@@ -191,5 +191,5 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "description": "Java naming constants and package name utilities",
+  "metadata": {"comments": [], "description": "Java naming constants and package name utilities", "seeAlso": []},
   "name": "hydra.java.names"}

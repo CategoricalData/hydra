@@ -691,5 +691,5 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "description": "Utilities for extracting values from JSON objects",
+  "metadata": {"comments": [], "description": "Utilities for extracting values from JSON objects", "seeAlso": []},
   "name": "hydra.extract.json"}

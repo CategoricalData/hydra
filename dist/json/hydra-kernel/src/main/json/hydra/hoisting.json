@@ -5394,5 +5394,8 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "description": "Functions for deep term rewriting operations involving hoisting subterms or bindings into enclosing let terms.",
+  "metadata": {
+    "comments": [],
+    "description": "Functions for deep term rewriting operations involving hoisting subterms or bindings into enclosing let terms.",
+    "seeAlso": []},
   "name": "hydra.hoisting"}

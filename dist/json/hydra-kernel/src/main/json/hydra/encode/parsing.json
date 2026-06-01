@@ -255,5 +255,5 @@
                     "parameter": "a"}}}},
             "parameter": "t0"}}}}],
   "dependencies": [{"module": "hydra.encode.core"}, {"module": "hydra.parsing"}],
-  "description": "Term encoders for hydra.parsing",
+  "metadata": {"comments": [], "description": "Term encoders for hydra.parsing", "seeAlso": []},
   "name": "hydra.encode.parsing"}

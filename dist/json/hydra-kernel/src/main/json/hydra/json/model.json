@@ -45,5 +45,5 @@
                         "body": {"literal": {"string": {}}}}}}]}}},
           "variables": []}}}],
   "dependencies": [{"module": "hydra.core"}],
-  "description": "A JSON syntax model. See the BNF at https://www.json.org",
+  "metadata": {"comments": [], "description": "A JSON syntax model. See the BNF at https://www.json.org", "seeAlso": []},
   "name": "hydra.json.model"}

@@ -69,7 +69,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> ([Strip.ns, Variables.ns] L.++ kernelTypesModuleNames),
-            moduleDescription = Just "Source-to-source automatic differentiation for Float64 terms."}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just "Source-to-source automatic differentiation for Float64 terms.")}
   where
     definitions = [
       toDefinition differentiateBinary,

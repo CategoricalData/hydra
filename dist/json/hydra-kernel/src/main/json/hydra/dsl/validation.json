@@ -1665,5 +1665,5 @@
     {"module": "hydra.error.core"},
     {"module": "hydra.dsl.core"},
     {"module": "hydra.dsl.error.core"}],
-  "description": "DSL functions for hydra.validation",
+  "metadata": {"comments": [], "description": "DSL functions for hydra.validation", "seeAlso": []},
   "name": "hydra.dsl.validation"}

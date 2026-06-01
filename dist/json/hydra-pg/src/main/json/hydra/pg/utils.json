@@ -1896,5 +1896,5 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "description": "Utility functions for property graph operations",
+  "metadata": {"comments": [], "description": "Utility functions for property graph operations", "seeAlso": []},
   "name": "hydra.pg.utils"}

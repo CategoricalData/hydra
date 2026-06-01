@@ -69,7 +69,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> ([Reflect.ns, Rewriting.ns, Variables.ns] L.++ kernelTypesModuleNames),
-            moduleDescription = Just "Validation functions for core terms and types"}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just "Validation functions for core terms and types")}
   where
    definitions = [
      toDefinition appendFinding,

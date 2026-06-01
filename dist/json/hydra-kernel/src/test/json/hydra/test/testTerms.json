@@ -222,5 +222,5 @@
                       "typeName": "hydra.core.TypeScheme"}}}}],
             "typeName": "hydra.core.Binding"}}}}],
   "dependencies": [{"module": "hydra.test.testTypes"}, {"module": "hydra.core"}],
-  "description": "Term definitions for the test suite",
+  "metadata": {"comments": [], "description": "Term definitions for the test suite", "seeAlso": []},
   "name": "hydra.test.testTerms"}

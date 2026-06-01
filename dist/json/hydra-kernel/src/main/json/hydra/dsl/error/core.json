@@ -17773,5 +17773,5 @@
     {"module": "hydra.dsl.paths"},
     {"module": "hydra.dsl.core"},
     {"module": "hydra.dsl.variants"}],
-  "description": "DSL functions for hydra.error.core",
+  "metadata": {"comments": [], "description": "DSL functions for hydra.error.core", "seeAlso": []},
   "name": "hydra.dsl.error.core"}

@@ -1563,5 +1563,5 @@
     {"module": "hydra.validation"},
     {"module": "hydra.variants"},
     {"module": "hydra.yaml.model"}],
-  "description": "Native YAML serialization: YAML Node to String",
+  "metadata": {"comments": [], "description": "Native YAML serialization: YAML Node to String", "seeAlso": []},
   "name": "hydra.yaml.serde"}

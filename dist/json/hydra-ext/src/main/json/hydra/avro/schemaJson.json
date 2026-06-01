@@ -4101,5 +4101,5 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "description": "JSON serialization and deserialization for Avro schemas",
+  "metadata": {"comments": [], "description": "JSON serialization and deserialization for Avro schemas", "seeAlso": []},
   "name": "hydra.avro.schemaJson"}

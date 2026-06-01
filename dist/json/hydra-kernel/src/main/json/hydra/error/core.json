@@ -1196,5 +1196,5 @@
                         "body": {"variable": "hydra.paths.SubtermPath"}}}}]}}},
           "variables": []}}}],
   "dependencies": [{"module": "hydra.paths"}, {"module": "hydra.core"}, {"module": "hydra.variants"}],
-  "description": "Error types for core type and term validation",
+  "metadata": {"comments": [], "description": "Error types for core type and term validation", "seeAlso": []},
   "name": "hydra.error.core"}

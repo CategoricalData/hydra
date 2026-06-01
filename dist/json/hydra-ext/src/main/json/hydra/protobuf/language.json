@@ -231,5 +231,5 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "description": "Language constraints for Protobuf v3",
+  "metadata": {"comments": [], "description": "Language constraints for Protobuf v3", "seeAlso": []},
   "name": "hydra.protobuf.language"}

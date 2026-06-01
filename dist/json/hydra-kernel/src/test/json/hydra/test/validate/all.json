@@ -44,5 +44,5 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "description": "Hydra's validation test suite",
+  "metadata": {"comments": [], "description": "Hydra's validation test suite", "seeAlso": []},
   "name": "hydra.test.validate.all"}

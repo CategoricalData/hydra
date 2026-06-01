@@ -87,7 +87,7 @@ module_ = Module {
             moduleName = (ModuleName "hydra.graphql.language"),
             moduleDefinitions = [toDefinition graphqlLanguage, toDefinition graphqlReservedWords],
             moduleDependencies = Bootstrap.unqualifiedDep <$> ([Lexical.ns, Strip.ns] L.++ KernelTypes.kernelTypesModuleNames),
-            moduleDescription = Just "Language constraints and reserved words for GraphQL"}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just "Language constraints and reserved words for GraphQL")}
 graphqlLanguage :: TypedTermDefinition Language
 graphqlLanguage = define "graphqlLanguage" $
   doc "Language constraints for GraphQL" $ lets [
