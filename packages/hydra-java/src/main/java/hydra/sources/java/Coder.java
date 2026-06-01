@@ -1144,9 +1144,15 @@ public class Coder {
                                                             var("bname"),
                                                             var("recursiveVars"))),
                                                     Logic.and_(
-                                                        apply(
-                                                            ref(Coder.needsThunking),
-                                                            proj(Binding.TYPE_, Binding.TERM, "b")),
+                                                        Logic.and_(
+                                                            apply(
+                                                                var("hydra.predicates.isComplexBinding"),
+                                                                var("g"),
+                                                                var("b")),
+                                                            Logic.not_(
+                                                                apply(
+                                                                    var("hydra.predicates.isTrivialTerm"),
+                                                                    proj(Binding.TYPE_, Binding.TERM, "b")))),
                                                         Logic.not_(
                                                             apply(
                                                                 ref(Coder.bindingIsFunctionType),
@@ -11242,22 +11248,6 @@ public class Coder {
                             wrap(ModuleName.TYPE_,
                                 Strings.intercalate(string("."), var("initParts"))))))));
 
-    public static final Def needsThunking = def(
-        "needsThunking",
-        () -> lambda("t",
-                casesWithDefault(Term.TYPE_,
-                    apply(var("hydra.strip.deannotateTerm"), var("t")),
-                    Lists.foldl(
-                        lambda(
-                            "b",
-                            "st",
-                            Logic.or_(var("b"), apply(ref(Coder.needsThunking), var("st")))),
-                        bool(false),
-                        apply(var("hydra.rewriting.subterms"), var("t"))),
-                    field(Term.LET, constant(bool(true))),
-                    field(Term.TYPE_APPLICATION, constant(bool(true))),
-                    field(Term.TYPE_LAMBDA, constant(bool(true))))));
-
     public static final Def noComment = def(
         "noComment",
         () -> lambda("decl",
@@ -14208,7 +14198,6 @@ public class Coder {
             moduleToJava,
             nameMapToTypeMap,
             namespaceParent,
-            needsThunking,
             noComment,
             noInterfaceComment,
             otherwiseBranch,
