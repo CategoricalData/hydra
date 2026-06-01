@@ -2800,20 +2800,20 @@
 (setf (symbol-function 'copy-type_subst) #'copy-hydra_typing_type_subst)
 (setf (symbol-function 'type_subst-p) #'hydra_typing_type_subst-p)
 
-;; hydra_util_namespaces -> hydra_util_namespaces
-(defun make-hydra_util_namespaces (&rest args)
+;; hydra_util_module_names -> hydra_util_module_names
+(defun make-hydra_util_module_names (&rest args)
   (if (and args (keywordp (first args)))
     (loop for (k v) on args by #'cddr collect (cons k v))
     (mapcar #'cons '( :focus :mapping) args)))
-(defun hydra_util_namespaces-focus (rec) (cdr (assoc :focus rec)))
-(defun hydra_util_namespaces-mapping (rec) (cdr (assoc :mapping rec)))
-(defun copy-hydra_util_namespaces (x) (copy-alist x))
-(defun hydra_util_namespaces-p (x) (listp x))
-(setf (symbol-function 'make-namespaces) #'make-hydra_util_namespaces)
-(setf (symbol-function 'namespaces-focus) #'hydra_util_namespaces-focus)
-(setf (symbol-function 'namespaces-mapping) #'hydra_util_namespaces-mapping)
-(setf (symbol-function 'copy-namespaces) #'copy-hydra_util_namespaces)
-(setf (symbol-function 'namespaces-p) #'hydra_util_namespaces-p)
+(defun hydra_util_module_names-focus (rec) (cdr (assoc :focus rec)))
+(defun hydra_util_module_names-mapping (rec) (cdr (assoc :mapping rec)))
+(defun copy-hydra_util_module_names (x) (copy-alist x))
+(defun hydra_util_module_names-p (x) (listp x))
+(setf (symbol-function 'make-module_names) #'make-hydra_util_module_names)
+(setf (symbol-function 'module_names-focus) #'hydra_util_module_names-focus)
+(setf (symbol-function 'module_names-mapping) #'hydra_util_module_names-mapping)
+(setf (symbol-function 'copy-module_names) #'copy-hydra_util_module_names)
+(setf (symbol-function 'module_names-p) #'hydra_util_module_names-p)
 
 ;; hydra_validation_validation_profile -> hydra_validation_validation_profile
 (defun make-hydra_validation_validation_profile (&rest args)
