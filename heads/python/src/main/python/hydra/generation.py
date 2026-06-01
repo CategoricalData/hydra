@@ -605,7 +605,102 @@ def infer_and_write_by_package(
             _write_package_split_json(dist_json_root, typed_universe, inferred, to_write)
         acc = acc + inferred
         inferred_all.extend(inferred)
+    # #405: prune orphaned JSON for the packages this generator wrote. The
+    # native Python generator owns hydra.python.* (this package's mods are its
+    # keep-set); reconcile deletes stale .json under the owned namespace dirs.
+    # Prefix-scoped so the Haskell-written hydra/dsl/python/ wrappers and the
+    # separately-written manifest.json are never touched (they live outside the
+    # hydra/python/ owned dirs). Mirrors Hydra.Generation.reconcilePackageJsonOrphans.
+    _reconcile_package_json_orphans(dist_json_root, pkg_to_mods)
     return inferred_all
+
+
+def _second_level_dir(rel):
+    """First two path segments of a relative path as "seg1/seg2"
+    (e.g. "hydra/python/coder.json" -> "hydra/python"), or None if fewer than
+    two segments."""
+    forward = rel.replace(os.sep, "/")
+    parts = forward.split("/")
+    if len(parts) < 2:
+        return None
+    return parts[0] + "/" + parts[1]
+
+
+def _reconcile_package_json_orphans(dist_json_root, pkg_to_mods):
+    """Delete orphaned .json files left behind when a module is dropped from
+    this generator's emission set, mirroring the Haskell-side #405 reconcile
+    (Hydra.Generation.reconcilePackageJsonOrphans + Hydra.Digest.reconcileOrphans).
+
+    For each package the native generator wrote, the keep-set is the set of
+    <module_name_to_path ns>.json paths for its written modules. The prune is
+    PREFIX-SCOPED to the second-level namespace directories those files occupy
+    (e.g. hydra/python/); any .json under those dirs not in the keep-set is an
+    orphan and is deleted. Files outside the owned dirs — the Haskell-written
+    hydra/dsl/python/ DSL wrappers and the top-level manifest.json — are out of
+    scope and survive, which is required during the transition where both the
+    native generator and the Haskell DSL pass write into one package dir (#344).
+    Best-effort: I/O failures on individual files are swallowed.
+    """
+    for pkg, pkg_mods in pkg_to_mods.items():
+        if not pkg_mods:
+            continue
+        pkg_dir = os.path.join(dist_json_root, pkg, "src", "main", "json")
+        if not os.path.isdir(pkg_dir):
+            continue
+
+        keep_rel = set()
+        owned_prefixes = set()
+        for m in pkg_mods:
+            rel = module_name_to_path(m.name) + ".json"
+            keep_rel.add(rel.replace(os.sep, "/"))
+            prefix = _second_level_dir(rel)
+            if prefix is not None:
+                owned_prefixes.add(prefix)
+        if not owned_prefixes:
+            continue
+
+        pruned = 0
+        for abs_path in _list_json_files_recursive(pkg_dir):
+            rel = os.path.relpath(abs_path, pkg_dir).replace(os.sep, "/")
+            owned = any(rel == pre or rel.startswith(pre + "/") for pre in owned_prefixes)
+            if not owned:
+                continue
+            if rel in keep_rel:
+                continue
+            try:
+                os.remove(abs_path)
+                print(f"    pruned orphan JSON (#405): {abs_path}", flush=True)
+                pruned += 1
+            except OSError:
+                pass  # best-effort
+        if pruned > 0:
+            print(f"  {pkg}: pruned {pruned} orphaned JSON file(s) under "
+                  f"{', '.join(sorted(owned_prefixes))} (#405)", flush=True)
+            _prune_empty_dirs(pkg_dir)
+
+
+def _list_json_files_recursive(root):
+    """Every regular .json file under root, skipping dotfiles/dot-directories."""
+    out = []
+    for dirpath, dirnames, filenames in os.walk(root):
+        dirnames[:] = [d for d in dirnames if not d.startswith(".")]
+        for fn in filenames:
+            if fn.endswith(".json") and not fn.startswith("."):
+                out.append(os.path.join(dirpath, fn))
+    return out
+
+
+def _prune_empty_dirs(root):
+    """Remove empty subdirectories under root (depth-first); root itself is
+    left alone. Best-effort."""
+    for dirpath, dirnames, filenames in os.walk(root, topdown=False):
+        if dirpath == root:
+            continue
+        try:
+            if not os.listdir(dirpath):
+                os.rmdir(dirpath)
+        except OSError:
+            pass  # best-effort
 
 
 def _write_package_split_json(dist_json_root, universe_mods, universe_for_schema, to_write):
