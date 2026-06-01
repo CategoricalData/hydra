@@ -4,7 +4,7 @@ module Hydra.Sources.Test.Validate.Core where
 
 -- Standard imports for term-encoded tests
 import Hydra.Kernel
-import           Hydra.Dsl.Bootstrap (unqualifiedDep)
+import           Hydra.Dsl.Bootstrap (unqualifiedDep, descriptionMetadata)
 import Hydra.Dsl.Meta.Testing                 as Testing
 import Hydra.Dsl.Meta.Terms                   as Terms
 import Hydra.Sources.Kernel.Types.All
@@ -32,7 +32,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = unqualifiedDep <$> ([ModuleName "hydra.validate.core", ModuleName "hydra.show.error.core", ModuleName "hydra.test.testGraph"] ++ kernelTypesModuleNames),
-            moduleDescription = (Just "Test cases for core term and type validation")}
+            moduleMetadata = descriptionMetadata ((Just "Test cases for core term and type validation"))}
   where
     definitions = [
       Phantoms.toDefinition allTests,

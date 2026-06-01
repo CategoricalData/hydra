@@ -839,5 +839,8 @@
               {"name": "INPUT_FIELD_DEFINITION", "type": {"unit": {}}}]},
           "variables": []}}}],
   "dependencies": [],
-  "description": "A GraphQL model. Based on the (extended) BNF at:\n  https://spec.graphql.org/draft/#sec-Appendix-Grammar-Summary",
+  "metadata": {
+    "comments": [],
+    "description": "A GraphQL model. Based on the (extended) BNF at:\n  https://spec.graphql.org/draft/#sec-Appendix-Grammar-Summary",
+    "seeAlso": []},
   "name": "hydra.graphql.syntax"}

@@ -2031,5 +2031,5 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "description": "Inference tests for examples from the Hydra kernel",
+  "metadata": {"comments": [], "description": "Inference tests for examples from the Hydra kernel", "seeAlso": []},
   "name": "hydra.test.inference.kernelExamples"}

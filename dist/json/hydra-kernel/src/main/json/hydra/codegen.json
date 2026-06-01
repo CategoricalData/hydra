@@ -2318,11 +2318,11 @@
                                                                                                                                                                         "term": {
                                                                                                                                                                           "application": {"argument": {"variable": "m"}, "function": {"project": {"fieldName": "name", "typeName": "hydra.packaging.Module"}}}}},
                                                                                                                                                                       {
-                                                                                                                                                                        "name": "description",
+                                                                                                                                                                        "name": "metadata",
                                                                                                                                                                         "term": {
                                                                                                                                                                           "application": {
                                                                                                                                                                             "argument": {"variable": "m"},
-                                                                                                                                                                            "function": {"project": {"fieldName": "description", "typeName": "hydra.packaging.Module"}}}}},
+                                                                                                                                                                            "function": {"project": {"fieldName": "metadata", "typeName": "hydra.packaging.Module"}}}}},
                                                                                                                                                                       {
                                                                                                                                                                         "name": "dependencies",
                                                                                                                                                                         "term": {
@@ -2398,6 +2398,9 @@
                                                                                                                                                                                                                                   "name": "name",
                                                                                                                                                                                                                                   "term": {
                                                                                                                                                                                                                                     "application": {"argument": {"variable": "b"}, "function": {"project": {"fieldName": "name", "typeName": "hydra.core.Binding"}}}}},
+                                                                                                                                                                                                                                {
+                                                                                                                                                                                                                                  "name": "metadata",
+                                                                                                                                                                                                                                  "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.packaging.EntityMetadata"}}}},
                                                                                                                                                                                                                                 {
                                                                                                                                                                                                                                   "name": "term",
                                                                                                                                                                                                                                   "term": {
@@ -4270,6 +4273,9 @@
                                                                                               "argument": {"variable": "pd"},
                                                                                               "function": {"project": {"fieldName": "name", "typeName": "hydra.packaging.PrimitiveDefinition"}}}}},
                                                                                         {
+                                                                                          "name": "metadata",
+                                                                                          "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.packaging.EntityMetadata"}}}},
+                                                                                        {
                                                                                           "name": "term",
                                                                                           "term": {
                                                                                             "application": {"argument": {"variable": "pd"}, "function": {"variable": "hydra.encode.packaging.primitiveDefinition"}}}},
@@ -4386,11 +4392,11 @@
                                                                 "term": {
                                                                   "application": {"argument": {"variable": "m"}, "function": {"project": {"fieldName": "name", "typeName": "hydra.packaging.Module"}}}}},
                                                               {
-                                                                "name": "description",
+                                                                "name": "metadata",
                                                                 "term": {
                                                                   "application": {
                                                                     "argument": {"variable": "m"},
-                                                                    "function": {"project": {"fieldName": "description", "typeName": "hydra.packaging.Module"}}}}},
+                                                                    "function": {"project": {"fieldName": "metadata", "typeName": "hydra.packaging.Module"}}}}},
                                                               {"name": "dependencies", "term": {"variable": "newDeps"}},
                                                               {"name": "definitions", "term": {"variable": "newDefs"}}],
                                                             "typeName": "hydra.packaging.Module"}}}}}}}}}},
@@ -4713,6 +4719,9 @@
                                                           "function": {"variable": "hydra.lib.strings.cat2"}}}}},
                                                   "typeName": "hydra.core.Name"}}},
                                             {
+                                              "name": "metadata",
+                                              "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.packaging.EntityMetadata"}}}},
+                                            {
                                               "name": "term",
                                               "term": {"application": {"argument": {"variable": "m"}, "function": {"variable": "hydra.encode.packaging.module"}}}},
                                             {
@@ -4748,17 +4757,31 @@
                                 "fields": [
                                   {"name": "name", "term": {"variable": "sourceNs"}},
                                   {
-                                    "name": "description",
+                                    "name": "metadata",
                                     "term": {
                                       "maybe": {
-                                        "application": {
-                                          "argument": {
-                                            "application": {
-                                              "argument": {
-                                                "application": {"argument": {"variable": "m"}, "function": {"project": {"fieldName": "name", "typeName": "hydra.packaging.Module"}}}},
-                                              "function": {"unwrap": "hydra.packaging.ModuleName"}}},
-                                          "function": {
-                                            "application": {"argument": {"literal": {"string": "Source module for "}}, "function": {"variable": "hydra.lib.strings.cat2"}}}}}}},
+                                        "record": {
+                                          "fields": [
+                                            {
+                                              "name": "description",
+                                              "term": {
+                                                "maybe": {
+                                                  "application": {
+                                                    "argument": {
+                                                      "application": {
+                                                        "argument": {
+                                                          "application": {"argument": {"variable": "m"}, "function": {"project": {"fieldName": "name", "typeName": "hydra.packaging.Module"}}}},
+                                                        "function": {"unwrap": "hydra.packaging.ModuleName"}}},
+                                                    "function": {
+                                                      "application": {"argument": {"literal": {"string": "Source module for "}}, "function": {"variable": "hydra.lib.strings.cat2"}}}}}}},
+                                            {"name": "comments", "term": {"typeApplication": {"body": {"list": []}, "type": {"literal": {"string": {}}}}}},
+                                            {
+                                              "name": "seeAlso",
+                                              "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.EntityReference"}}}},
+                                            {
+                                              "name": "lifecycle",
+                                              "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.packaging.EntityLifecycle"}}}}],
+                                          "typeName": "hydra.packaging.EntityMetadata"}}}},
                                   {
                                     "name": "dependencies",
                                     "term": {
@@ -5388,11 +5411,11 @@
                                 "term": {
                                   "application": {"argument": {"variable": "m"}, "function": {"project": {"fieldName": "name", "typeName": "hydra.packaging.Module"}}}}},
                               {
-                                "name": "description",
+                                "name": "metadata",
                                 "term": {
                                   "application": {
                                     "argument": {"variable": "m"},
-                                    "function": {"project": {"fieldName": "description", "typeName": "hydra.packaging.Module"}}}}},
+                                    "function": {"project": {"fieldName": "metadata", "typeName": "hydra.packaging.Module"}}}}},
                               {
                                 "name": "dependencies",
                                 "term": {
@@ -5468,6 +5491,9 @@
                                                                                           "name": "name",
                                                                                           "term": {
                                                                                             "application": {"argument": {"variable": "b"}, "function": {"project": {"fieldName": "name", "typeName": "hydra.core.Binding"}}}}},
+                                                                                        {
+                                                                                          "name": "metadata",
+                                                                                          "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.packaging.EntityMetadata"}}}},
                                                                                         {
                                                                                           "name": "term",
                                                                                           "term": {
@@ -5847,5 +5873,8 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "description": "Pure code generation pipeline for bootstrapping Hydra across languages.",
+  "metadata": {
+    "comments": [],
+    "description": "Pure code generation pipeline for bootstrapping Hydra across languages.",
+    "seeAlso": []},
   "name": "hydra.codegen"}

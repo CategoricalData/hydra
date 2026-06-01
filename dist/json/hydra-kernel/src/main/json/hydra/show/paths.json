@@ -1202,5 +1202,5 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "description": "Utilities for working with subterm steps and paths.",
+  "metadata": {"comments": [], "description": "Utilities for working with subterm steps and paths.", "seeAlso": []},
   "name": "hydra.show.paths"}

@@ -71,7 +71,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> ([Strip.ns, ShowCore.ns, ShowError.ns] L.++ kernelTypesModuleNames),
-            moduleDescription = Just ("A module for lexical operations over graphs.")}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just ("A module for lexical operations over graphs."))}
   where
     definitions = [
       toDefinition buildGraph,

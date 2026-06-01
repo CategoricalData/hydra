@@ -790,5 +790,8 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "description": "Serialization functions for converting RDF graphs to N-Triples format expressions",
+  "metadata": {
+    "comments": [],
+    "description": "Serialization functions for converting RDF graphs to N-Triples format expressions",
+    "seeAlso": []},
   "name": "hydra.rdf.serde"}

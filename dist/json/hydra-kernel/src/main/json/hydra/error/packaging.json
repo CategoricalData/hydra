@@ -397,5 +397,5 @@
                         "body": {"variable": "hydra.core.Name"}}}}]}}},
           "variables": []}}}],
   "dependencies": [{"module": "hydra.core"}, {"module": "hydra.packaging"}, {"module": "hydra.util"}],
-  "description": "Error types for module and package validation",
+  "metadata": {"comments": [], "description": "Error types for module and package validation", "seeAlso": []},
   "name": "hydra.error.packaging"}

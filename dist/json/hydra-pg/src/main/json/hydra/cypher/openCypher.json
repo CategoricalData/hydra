@@ -887,5 +887,8 @@
               {"name": "integer", "type": {"literal": {"integer": {"bigint": {}}}}}]},
           "variables": []}}}],
   "dependencies": [{"module": "hydra.core"}],
-  "description": "A Cypher model based on the OpenCypher specification (version 23), copyright Neo Technology, available at:\n  https://opencypher.org/resources/",
+  "metadata": {
+    "comments": [],
+    "description": "A Cypher model based on the OpenCypher specification (version 23), copyright Neo Technology, available at:\n  https://opencypher.org/resources/",
+    "seeAlso": []},
   "name": "hydra.cypher.openCypher"}

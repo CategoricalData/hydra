@@ -23,7 +23,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = (DefinitionType <$> definitions),
             moduleDependencies = unqualifiedDep <$> [Core.ns, AvroSchema.ns, JsonModel.ns],
-            moduleDescription = Just "Test case types for the bidirectional Avro coder"}
+            moduleMetadata = descriptionMetadata (Just "Test case types for the bidirectional Avro coder")}
   where
     definitions = [
       typeLevelForwardTestCase,

@@ -137,10 +137,14 @@ the descriptions below cover the main ones:
 - Provides introspection capabilities: `Precision`, `Comparison`
 
 **Packaging.hs** - `hydra.packaging` module
-- Defines module structure: `Module`, `Definition`, `ModuleName`, `ModuleDependency`, `QualifiedName`, `Package`, `PackageDependency`, `PackageVersionSpecifier`
-- A `Module` carries a `name :: ModuleName`, a list of `definitions`, and a list of
-  `dependencies :: [ModuleDependency]`. A `ModuleDependency` is the depended-on
-  `module :: ModuleName` plus an optional `package :: Maybe PackageName`.
+- Defines the packaging model: `Package`, `Module`, `Definition`, `ModuleName`, `ModuleDependency`,
+  `QualifiedName`, `PackageDependency`, `PackageVersionSpecifier`, and the metadata types
+  `EntityMetadata`, `EntityLifecycle`, `EntityReference`, `DefinitionReference`, `Version`.
+- A `Module` carries a `name :: ModuleName`, an optional `metadata :: Maybe EntityMetadata`, a list of
+  `dependencies :: [ModuleDependency]`, and a list of `definitions`. A `ModuleDependency` is the
+  depended-on `module :: ModuleName` plus an optional `package :: Maybe PackageName`.
+- For the conceptual model (entity metadata, lifecycle/versioning, cross-references), see the
+  [Packaging wiki page](https://github.com/CategoricalData/hydra/wiki/Packaging).
 
 #### Transformation framework
 

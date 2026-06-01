@@ -25,7 +25,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = (DefinitionType <$> definitions),
             moduleDependencies = unqualifiedDep <$> [],
-            moduleDescription = Just "See https://ossf.github.io/osv-schema"}
+            moduleMetadata = descriptionMetadata (Just "See https://ossf.github.io/osv-schema")}
   where
     definitions = [
       credited,

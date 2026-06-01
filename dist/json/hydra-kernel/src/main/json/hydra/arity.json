@@ -324,5 +324,5 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "description": "Functions dealing with arguments and arity.",
+  "metadata": {"comments": [], "description": "Functions dealing with arguments and arity.", "seeAlso": []},
   "name": "hydra.arity"}

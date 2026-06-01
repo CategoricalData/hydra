@@ -2556,8 +2556,20 @@
                                                                                 "argument": {
                                                                                   "application": {
                                                                                     "argument": {
-                                                                                      "application": {"argument": {"variable": "b"}, "function": {"project": {"fieldName": "term", "typeName": "hydra.core.Binding"}}}},
-                                                                                    "function": {"variable": "hydra.java.coder.needsThunking"}}},
+                                                                                      "application": {
+                                                                                        "argument": {
+                                                                                          "application": {
+                                                                                            "argument": {
+                                                                                              "application": {"argument": {"variable": "b"}, "function": {"project": {"fieldName": "term", "typeName": "hydra.core.Binding"}}}},
+                                                                                            "function": {"variable": "hydra.predicates.isTrivialTerm"}}},
+                                                                                        "function": {"variable": "hydra.lib.logic.not"}}},
+                                                                                    "function": {
+                                                                                      "application": {
+                                                                                        "argument": {
+                                                                                          "application": {
+                                                                                            "argument": {"variable": "b"},
+                                                                                            "function": {"application": {"argument": {"variable": "g"}, "function": {"variable": "hydra.predicates.isComplexBinding"}}}}},
+                                                                                        "function": {"variable": "hydra.lib.logic.and"}}}}},
                                                                                 "function": {"variable": "hydra.lib.logic.and"}}}}},
                                                                         "function": {
                                                                           "application": {
@@ -7229,8 +7241,25 @@
                                 "name": "comments",
                                 "term": {
                                   "application": {
-                                    "argument": {"variable": "mod"},
-                                    "function": {"project": {"fieldName": "description", "typeName": "hydra.packaging.Module"}}}}}],
+                                    "argument": {
+                                      "lambda": {
+                                        "body": {
+                                          "application": {
+                                            "argument": {"variable": "em"},
+                                            "function": {"project": {"fieldName": "description", "typeName": "hydra.packaging.EntityMetadata"}}}},
+                                        "domain": {"variable": "hydra.packaging.EntityMetadata"},
+                                        "parameter": "em"}},
+                                    "function": {
+                                      "application": {
+                                        "argument": {
+                                          "application": {
+                                            "argument": {"variable": "mod"},
+                                            "function": {"project": {"fieldName": "metadata", "typeName": "hydra.packaging.Module"}}}},
+                                        "function": {
+                                          "typeApplication": {
+                                            "body": {
+                                              "typeApplication": {"body": {"variable": "hydra.lib.maybes.bind"}, "type": {"variable": "hydra.packaging.EntityMetadata"}}},
+                                            "type": {"literal": {"string": {}}}}}}}}}}],
                             "typeName": "hydra.java.syntax.TopLevelClassOrInterfaceDeclarationWithComments"}},
                         "typeScheme": {"body": {"variable": "hydra.java.syntax.TopLevelClassOrInterfaceDeclarationWithComments"}, "variables": []}}],
                     "body": {
@@ -32371,58 +32400,6 @@
             "parameter": "ns"}}}},
     {
       "term": {
-        "name": "hydra.java.coder.needsThunking",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.core.Term"}}],
-          "result": {"type": {"literal": {"boolean": {}}}},
-          "typeParameters": []},
-        "term": {
-          "lambda": {
-            "body": {
-              "application": {
-                "argument": {"application": {"argument": {"variable": "t"}, "function": {"variable": "hydra.strip.deannotateTerm"}}},
-                "function": {
-                  "cases": {
-                    "cases": [
-                      {
-                        "name": "let",
-                        "term": {"lambda": {"body": {"literal": {"boolean": true}}, "domain": {"variable": "hydra.core.Let"}, "parameter": "_"}}},
-                      {
-                        "name": "typeApplication",
-                        "term": {
-                          "lambda": {"body": {"literal": {"boolean": true}}, "domain": {"variable": "hydra.core.TypeApplicationTerm"}, "parameter": "_"}}},
-                      {
-                        "name": "typeLambda",
-                        "term": {"lambda": {"body": {"literal": {"boolean": true}}, "domain": {"variable": "hydra.core.TypeLambda"}, "parameter": "_"}}}],
-                    "default": {
-                      "application": {
-                        "argument": {"application": {"argument": {"variable": "t"}, "function": {"variable": "hydra.rewriting.subterms"}}},
-                        "function": {
-                          "application": {
-                            "argument": {"literal": {"boolean": false}},
-                            "function": {
-                              "application": {
-                                "argument": {
-                                  "lambda": {
-                                    "body": {
-                                      "lambda": {
-                                        "body": {
-                                          "application": {
-                                            "argument": {"application": {"argument": {"variable": "st"}, "function": {"variable": "hydra.java.coder.needsThunking"}}},
-                                            "function": {"application": {"argument": {"variable": "b"}, "function": {"variable": "hydra.lib.logic.or"}}}}},
-                                        "domain": {"variable": "hydra.core.Term"},
-                                        "parameter": "st"}},
-                                    "domain": {"literal": {"boolean": {}}},
-                                    "parameter": "b"}},
-                                "function": {
-                                  "typeApplication": {
-                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.foldl"}, "type": {"literal": {"boolean": {}}}}},
-                                    "type": {"variable": "hydra.core.Term"}}}}}}}}},
-                    "typeName": "hydra.core.Term"}}}},
-            "domain": {"variable": "hydra.core.Term"},
-            "parameter": "t"}}}},
-    {
-      "term": {
         "name": "hydra.java.coder.noComment",
         "signature": {
           "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.java.syntax.ClassBodyDeclaration"}}],
@@ -39514,5 +39491,5 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "description": "Java code generator: converts Hydra modules to Java source code",
+  "metadata": {"comments": [], "description": "Java code generator: converts Hydra modules to Java source code", "seeAlso": []},
   "name": "hydra.java.coder"}

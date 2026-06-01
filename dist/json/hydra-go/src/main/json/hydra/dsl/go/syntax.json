@@ -36010,5 +36010,5 @@
                     "typeName": "hydra.core.Term"}},
                 "typeName": "hydra.typed.TypedTerm"}}}}}}],
   "dependencies": [{"module": "hydra.go.syntax"}, {"module": "hydra.typed"}, {"module": "hydra.core"}, {"module": "hydra.dsl.core"}],
-  "description": "DSL functions for hydra.go.syntax",
+  "metadata": {"comments": [], "description": "DSL functions for hydra.go.syntax", "seeAlso": []},
   "name": "hydra.dsl.go.syntax"}

@@ -13393,5 +13393,8 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "description": "Type inference following Algorithm W, extended for nominal terms and types",
+  "metadata": {
+    "comments": [],
+    "description": "Type inference following Algorithm W, extended for nominal terms and types",
+    "seeAlso": []},
   "name": "hydra.inference"}

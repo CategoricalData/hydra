@@ -20,7 +20,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = (DefinitionType <$> definitions),
             moduleDependencies = unqualifiedDep <$> [Core.ns],
-            moduleDescription = Just "Variant types which describe the structure of Hydra core types and terms."}
+            moduleMetadata = descriptionMetadata (Just "Variant types which describe the structure of Hydra core types and terms.")}
   where
     definitions = [
       literalVariant,

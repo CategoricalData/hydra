@@ -8,6 +8,7 @@ import hydra.core.Type;
 import hydra.core.TypeScheme;
 import hydra.dsl.Terms;
 import hydra.dsl.Types;
+import hydra.packaging.EntityMetadata;
 import hydra.packaging.Definition;
 import hydra.packaging.Module;
 import hydra.packaging.ModuleName;
@@ -470,6 +471,7 @@ public final class Phantoms {
     public static <A> Definition toDefinition(TypedBinding<A> tb) {
         return new Definition.Term(new TermDefinition(
             tb.name,
+            Maybe.<EntityMetadata>nothing(),
             tb.term.value,
             Maybe.<TermSignature>nothing()));
     }
@@ -479,6 +481,7 @@ public final class Phantoms {
         Name fqName = new Name(ns.value + "." + localName);
         return new Definition.Term(new TermDefinition(
             fqName,
+            Maybe.<EntityMetadata>nothing(),
             term.value,
             Maybe.<TermSignature>nothing()));
     }
@@ -489,6 +492,7 @@ public final class Phantoms {
         Name fqName = new Name(ns.value + "." + localName);
         return new Definition.Term(new TermDefinition(
             fqName,
+            Maybe.<EntityMetadata>nothing(),
             term.value,
             Maybe.<TermSignature>just(Scoping.typeSchemeToTermSignature(ts))));
     }

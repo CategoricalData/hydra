@@ -29,8 +29,8 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = (DefinitionType <$> definitions),
             moduleDependencies = unqualifiedDep <$> [Core.ns],
-            moduleDescription = Just ("A unified Lisp syntax model covering Clojure, Emacs Lisp, Common Lisp, and Scheme (R7RS)."
-      ++ " Designed for code generation from Hydra types and terms.")}
+            moduleMetadata = descriptionMetadata (Just ("A unified Lisp syntax model covering Clojure, Emacs Lisp, Common Lisp, and Scheme (R7RS)."
+      ++ " Designed for code generation from Hydra types and terms."))}
   where
     definitions = toplevel ++ defnTypes ++ expressions ++ specialForms ++ bindings
       ++ patterns ++ literals ++ names ++ collections ++ types ++ modules ++ misc

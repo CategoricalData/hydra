@@ -24,8 +24,8 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = (DefinitionType <$> definitions),
             moduleDependencies = unqualifiedDep <$> [Core.ns],
-            moduleDescription = Just ("A Cypher model based on the OpenCypher specification (version 23), copyright Neo Technology, available at:\n" ++
-      "  https://opencypher.org/resources/")}
+            moduleMetadata = descriptionMetadata (Just ("A Cypher model based on the OpenCypher specification (version 23), copyright Neo Technology, available at:\n" ++
+      "  https://opencypher.org/resources/"))}
   where
     definitions = [
       query,

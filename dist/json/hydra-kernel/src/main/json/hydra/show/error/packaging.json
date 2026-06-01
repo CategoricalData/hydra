@@ -450,5 +450,5 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "description": "String representations of hydra.error.packaging types",
+  "metadata": {"comments": [], "description": "String representations of hydra.error.packaging types", "seeAlso": []},
   "name": "hydra.show.error.packaging"}

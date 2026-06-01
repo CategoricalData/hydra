@@ -1116,5 +1116,8 @@
                         "body": {"variable": "hydra.core.Term"}}}}]}}},
           "variables": []}}}],
   "dependencies": [{"module": "hydra.core"}],
-  "description": "Hydra's core data model, consisting of the fundamental hydra.core.Term type and all of its dependencies.",
+  "metadata": {
+    "comments": [],
+    "description": "Hydra's core data model, consisting of the fundamental hydra.core.Term type and all of its dependencies.",
+    "seeAlso": []},
   "name": "hydra.core"}

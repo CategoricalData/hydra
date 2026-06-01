@@ -61,5 +61,5 @@
                   "parameter": "a"}}}},
           "variables": []}}}],
   "dependencies": [{"module": "hydra.core"}],
-  "description": "Typed (phantom) wrappers for use with Hydra DSLs",
+  "metadata": {"comments": [], "description": "Typed (phantom) wrappers for use with Hydra DSLs", "seeAlso": []},
   "name": "hydra.typed"}

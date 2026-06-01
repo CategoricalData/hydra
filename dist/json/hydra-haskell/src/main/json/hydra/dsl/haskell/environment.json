@@ -1189,5 +1189,5 @@
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "original"}}}}}}],
   "dependencies": [{"module": "hydra.haskell.environment"}, {"module": "hydra.typed"}],
-  "description": "DSL functions for hydra.haskell.environment",
+  "metadata": {"comments": [], "description": "DSL functions for hydra.haskell.environment", "seeAlso": []},
   "name": "hydra.dsl.haskell.environment"}
