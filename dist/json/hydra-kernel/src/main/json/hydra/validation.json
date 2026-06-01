@@ -2,8 +2,7 @@
   "definitions": [
     {
       "type": {
-        "name": "hydra.validation.ValidationProfile",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [
@@ -58,11 +57,11 @@
                               "literal": {
                                 "string": "Soft upper bound on collected warnings. Once the warnings list reaches this length, further warning matches are silently dropped, but validation does not terminate; it continues until maxErrors is reached or the traversal completes."}}}],
                         "body": {"literal": {"integer": {"int32": {}}}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.validation.ValidationProfile"}},
     {
       "type": {
-        "name": "hydra.validation.ValidationResult",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [
@@ -94,7 +93,8 @@
                                 "value": {"literal": {"string": "Findings classified as warnings, in traversal order, bounded by the profile's maxWarnings."}}}],
                             "body": {"list": {"variable": "e"}}}}}]},
                   "parameter": "e"}}}},
-          "variables": []}}}],
+          "variables": []},
+        "name": "hydra.validation.ValidationResult"}}],
   "dependencies": [{"module": "hydra.core"}, {"module": "hydra.error.core"}],
   "metadata": {
     "comments": [],

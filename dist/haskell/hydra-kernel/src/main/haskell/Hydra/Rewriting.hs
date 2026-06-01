@@ -419,6 +419,10 @@ rewriteTerm f term0 =
                         \f2 -> Core.Field {
                           Core.fieldName = (Core.fieldName f2),
                           Core.fieldTerm = (recurse (Core.fieldTerm f2))}
+                    forCaseAlternative =
+                            \a -> Core.CaseAlternative {
+                              Core.caseAlternativeName = (Core.caseAlternativeName a),
+                              Core.caseAlternativeHandler = (recurse (Core.caseAlternativeHandler a))}
                     forLet =
                             \lt ->
                               let mapBinding =
@@ -443,7 +447,7 @@ rewriteTerm f term0 =
                   Core.TermCases v0 -> Core.TermCases (Core.CaseStatement {
                     Core.caseStatementTypeName = (Core.caseStatementTypeName v0),
                     Core.caseStatementDefault = (Maybes.map recurse (Core.caseStatementDefault v0)),
-                    Core.caseStatementCases = (Lists.map (\alt -> Core.CaseAlternative {Core.caseAlternativeName = (Core.caseAlternativeName alt), Core.caseAlternativeHandler = (recurse (Core.caseAlternativeHandler alt))}) (Core.caseStatementCases v0))})
+                    Core.caseStatementCases = (Lists.map forCaseAlternative (Core.caseStatementCases v0))})
                   Core.TermEither v0 -> Core.TermEither (Eithers.either (\l -> Left (recurse l)) (\r -> Right (recurse r)) v0)
                   Core.TermLambda v0 -> Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.lambdaParameter v0),
@@ -487,6 +491,10 @@ rewriteTermM f term0 =
                         \field -> Eithers.bind (recurse (Core.fieldTerm field)) (\t -> Right (Core.Field {
                           Core.fieldName = (Core.fieldName field),
                           Core.fieldTerm = t}))
+                    forCaseAlternative =
+                            \alt -> Eithers.bind (recurse (Core.caseAlternativeHandler alt)) (\t -> Right (Core.CaseAlternative {
+                              Core.caseAlternativeName = (Core.caseAlternativeName alt),
+                              Core.caseAlternativeHandler = t}))
                     forPair =
                             \kv -> Eithers.bind (recurse (Pairs.first kv)) (\k -> Eithers.bind (recurse (Pairs.second kv)) (\v -> Right (k, v)))
                     mapBinding =
@@ -508,7 +516,7 @@ rewriteTermM f term0 =
                     in (Eithers.bind (Maybes.maybe (Right Nothing) (\t -> Eithers.map Maybes.pure (recurse t)) def) (\rdef -> Eithers.map (\rcases -> Core.TermCases (Core.CaseStatement {
                       Core.caseStatementTypeName = n,
                       Core.caseStatementDefault = rdef,
-                      Core.caseStatementCases = rcases})) (Eithers.mapList (\alt -> Eithers.bind (recurse (Core.caseAlternativeHandler alt)) (\t -> Right (Core.CaseAlternative {Core.caseAlternativeName = (Core.caseAlternativeName alt), Core.caseAlternativeHandler = t}))) csCases)))
+                      Core.caseStatementCases = rcases})) (Eithers.mapList forCaseAlternative csCases)))
                   Core.TermEither v0 -> Eithers.bind (Eithers.either (\l -> Eithers.map (\x -> Left x) (recurse l)) (\r -> Eithers.map (\x -> Right x) (recurse r)) v0) (\re -> Right (Core.TermEither re))
                   Core.TermLambda v0 ->
                     let v = Core.lambdaParameter v0
@@ -574,6 +582,10 @@ rewriteTermWithContext f cx0 term0 =
                             \field -> Core.Field {
                               Core.fieldName = (Core.fieldName field),
                               Core.fieldTerm = (recurse (Core.fieldTerm field))}
+                    forCaseAlternative =
+                            \alt -> Core.CaseAlternative {
+                              Core.caseAlternativeName = (Core.caseAlternativeName alt),
+                              Core.caseAlternativeHandler = (recurse (Core.caseAlternativeHandler alt))}
                     forLet =
                             \lt ->
                               let mapBinding =
@@ -598,7 +610,7 @@ rewriteTermWithContext f cx0 term0 =
                   Core.TermCases v0 -> Core.TermCases (Core.CaseStatement {
                     Core.caseStatementTypeName = (Core.caseStatementTypeName v0),
                     Core.caseStatementDefault = (Maybes.map recurse (Core.caseStatementDefault v0)),
-                    Core.caseStatementCases = (Lists.map (\alt -> Core.CaseAlternative {Core.caseAlternativeName = (Core.caseAlternativeName alt), Core.caseAlternativeHandler = (recurse (Core.caseAlternativeHandler alt))}) (Core.caseStatementCases v0))})
+                    Core.caseStatementCases = (Lists.map forCaseAlternative (Core.caseStatementCases v0))})
                   Core.TermEither v0 -> Core.TermEither (Eithers.either (\l -> Left (recurse l)) (\r -> Right (recurse r)) v0)
                   Core.TermLambda v0 -> Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.lambdaParameter v0),
@@ -643,6 +655,10 @@ rewriteTermWithContextM f cx0 term0 =
                             \field -> Eithers.bind (recurse (Core.fieldTerm field)) (\t -> Right (Core.Field {
                               Core.fieldName = (Core.fieldName field),
                               Core.fieldTerm = t}))
+                    forCaseAlternative =
+                            \alt -> Eithers.bind (recurse (Core.caseAlternativeHandler alt)) (\t -> Right (Core.CaseAlternative {
+                              Core.caseAlternativeName = (Core.caseAlternativeName alt),
+                              Core.caseAlternativeHandler = t}))
                     forPair =
                             \kv -> Eithers.bind (recurse (Pairs.first kv)) (\k -> Eithers.bind (recurse (Pairs.second kv)) (\v -> Right (k, v)))
                     mapBinding =
@@ -664,7 +680,7 @@ rewriteTermWithContextM f cx0 term0 =
                     in (Eithers.bind (Maybes.maybe (Right Nothing) (\t -> Eithers.map Maybes.pure (recurse t)) def) (\rdef -> Eithers.map (\rcases -> Core.TermCases (Core.CaseStatement {
                       Core.caseStatementTypeName = n,
                       Core.caseStatementDefault = rdef,
-                      Core.caseStatementCases = rcases})) (Eithers.mapList (\alt -> Eithers.bind (recurse (Core.caseAlternativeHandler alt)) (\t -> Right (Core.CaseAlternative {Core.caseAlternativeName = (Core.caseAlternativeName alt), Core.caseAlternativeHandler = t}))) csCases)))
+                      Core.caseStatementCases = rcases})) (Eithers.mapList forCaseAlternative csCases)))
                   Core.TermEither v0 -> Eithers.bind (Eithers.either (\l -> Eithers.map (\x -> Left x) (recurse l)) (\r -> Eithers.map (\x -> Right x) (recurse r)) v0) (\re -> Right (Core.TermEither re))
                   Core.TermLambda v0 ->
                     let v = Core.lambdaParameter v0

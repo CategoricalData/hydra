@@ -2,73 +2,72 @@
   "definitions": [
     {
       "type": {
-        "name": "hydra.cypher.openCypher.Query",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "regular", "type": {"variable": "hydra.cypher.openCypher.RegularQuery"}},
               {"name": "standalone", "type": {"variable": "hydra.cypher.openCypher.StandaloneCall"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.cypher.openCypher.Query"}},
     {
       "type": {
-        "name": "hydra.cypher.openCypher.RegularQuery",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "head", "type": {"variable": "hydra.cypher.openCypher.SingleQuery"}},
               {"name": "rest", "type": {"list": {"variable": "hydra.cypher.openCypher.Union"}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.cypher.openCypher.RegularQuery"}},
     {
       "type": {
-        "name": "hydra.cypher.openCypher.Union",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "all", "type": {"literal": {"boolean": {}}}},
               {"name": "query", "type": {"variable": "hydra.cypher.openCypher.SingleQuery"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.cypher.openCypher.Union"}},
     {
       "type": {
-        "name": "hydra.cypher.openCypher.SingleQuery",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "singlePart", "type": {"variable": "hydra.cypher.openCypher.SinglePartQuery"}},
               {"name": "multiPart", "type": {"variable": "hydra.cypher.openCypher.MultiPartQuery"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.cypher.openCypher.SingleQuery"}},
     {
       "type": {
-        "name": "hydra.cypher.openCypher.SinglePartQuery",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "reading", "type": {"list": {"variable": "hydra.cypher.openCypher.ReadingClause"}}},
               {"name": "updating", "type": {"list": {"variable": "hydra.cypher.openCypher.UpdatingClause"}}},
               {"name": "return", "type": {"maybe": {"variable": "hydra.cypher.openCypher.Return"}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.cypher.openCypher.SinglePartQuery"}},
     {
       "type": {
-        "name": "hydra.cypher.openCypher.WithClause",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "reading", "type": {"list": {"variable": "hydra.cypher.openCypher.ReadingClause"}}},
               {"name": "updating", "type": {"list": {"variable": "hydra.cypher.openCypher.UpdatingClause"}}},
               {"name": "with", "type": {"variable": "hydra.cypher.openCypher.With"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.cypher.openCypher.WithClause"}},
     {
       "type": {
-        "name": "hydra.cypher.openCypher.MultiPartQuery",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "with", "type": {"list": {"variable": "hydra.cypher.openCypher.WithClause"}}},
               {"name": "body", "type": {"variable": "hydra.cypher.openCypher.SinglePartQuery"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.cypher.openCypher.MultiPartQuery"}},
     {
       "type": {
-        "name": "hydra.cypher.openCypher.UpdatingClause",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "create", "type": {"variable": "hydra.cypher.openCypher.Create"}},
@@ -76,206 +75,206 @@
               {"name": "delete", "type": {"variable": "hydra.cypher.openCypher.Delete"}},
               {"name": "set", "type": {"variable": "hydra.cypher.openCypher.Set"}},
               {"name": "remove", "type": {"variable": "hydra.cypher.openCypher.Remove"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.cypher.openCypher.UpdatingClause"}},
     {
       "type": {
-        "name": "hydra.cypher.openCypher.ReadingClause",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "match", "type": {"variable": "hydra.cypher.openCypher.Match"}},
               {"name": "unwind", "type": {"variable": "hydra.cypher.openCypher.Unwind"}},
               {"name": "inQueryCall", "type": {"variable": "hydra.cypher.openCypher.InQueryCall"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.cypher.openCypher.ReadingClause"}},
     {
       "type": {
-        "name": "hydra.cypher.openCypher.Match",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "optional", "type": {"literal": {"boolean": {}}}},
               {"name": "pattern", "type": {"variable": "hydra.cypher.openCypher.Pattern"}},
               {"name": "where", "type": {"maybe": {"variable": "hydra.cypher.openCypher.Where"}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.cypher.openCypher.Match"}},
     {
       "type": {
-        "name": "hydra.cypher.openCypher.Unwind",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "expression", "type": {"variable": "hydra.cypher.openCypher.Expression"}},
               {"name": "variable", "type": {"variable": "hydra.cypher.openCypher.Variable"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.cypher.openCypher.Unwind"}},
     {
       "type": {
-        "name": "hydra.cypher.openCypher.Merge",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "patternPart", "type": {"variable": "hydra.cypher.openCypher.PatternPart"}},
               {"name": "actions", "type": {"list": {"variable": "hydra.cypher.openCypher.MergeAction"}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.cypher.openCypher.Merge"}},
     {
       "type": {
-        "name": "hydra.cypher.openCypher.MatchOrCreate",
-        "typeScheme": {
+        "body": {
           "body": {"union": [{"name": "match", "type": {"unit": {}}}, {"name": "create", "type": {"unit": {}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.cypher.openCypher.MatchOrCreate"}},
     {
       "type": {
-        "name": "hydra.cypher.openCypher.MergeAction",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "action", "type": {"variable": "hydra.cypher.openCypher.MatchOrCreate"}},
               {"name": "set", "type": {"variable": "hydra.cypher.openCypher.Set"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.cypher.openCypher.MergeAction"}},
     {
       "type": {
-        "name": "hydra.cypher.openCypher.Create",
-        "typeScheme": {"body": {"wrap": {"variable": "hydra.cypher.openCypher.Pattern"}}, "variables": []}}},
+        "body": {"body": {"wrap": {"variable": "hydra.cypher.openCypher.Pattern"}}, "variables": []},
+        "name": "hydra.cypher.openCypher.Create"}},
     {
       "type": {
-        "name": "hydra.cypher.openCypher.Set",
-        "typeScheme": {"body": {"wrap": {"list": {"variable": "hydra.cypher.openCypher.SetItem"}}}, "variables": []}}},
+        "body": {"body": {"wrap": {"list": {"variable": "hydra.cypher.openCypher.SetItem"}}}, "variables": []},
+        "name": "hydra.cypher.openCypher.Set"}},
     {
       "type": {
-        "name": "hydra.cypher.openCypher.SetItem",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "property", "type": {"variable": "hydra.cypher.openCypher.PropertyEquals"}},
               {"name": "variableEqual", "type": {"variable": "hydra.cypher.openCypher.VariableEquals"}},
               {"name": "variablePlusEqual", "type": {"variable": "hydra.cypher.openCypher.VariablePlusEquals"}},
               {"name": "variableLabels", "type": {"variable": "hydra.cypher.openCypher.VariableAndNodeLabels"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.cypher.openCypher.SetItem"}},
     {
       "type": {
-        "name": "hydra.cypher.openCypher.PropertyEquals",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "lhs", "type": {"variable": "hydra.cypher.openCypher.PropertyExpression"}},
               {"name": "rhs", "type": {"variable": "hydra.cypher.openCypher.Expression"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.cypher.openCypher.PropertyEquals"}},
     {
       "type": {
-        "name": "hydra.cypher.openCypher.VariableEquals",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "lhs", "type": {"variable": "hydra.cypher.openCypher.Variable"}},
               {"name": "rhs", "type": {"variable": "hydra.cypher.openCypher.Expression"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.cypher.openCypher.VariableEquals"}},
     {
       "type": {
-        "name": "hydra.cypher.openCypher.VariablePlusEquals",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "lhs", "type": {"variable": "hydra.cypher.openCypher.Variable"}},
               {"name": "rhs", "type": {"variable": "hydra.cypher.openCypher.Expression"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.cypher.openCypher.VariablePlusEquals"}},
     {
       "type": {
-        "name": "hydra.cypher.openCypher.VariableAndNodeLabels",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "variable", "type": {"variable": "hydra.cypher.openCypher.Variable"}},
               {"name": "labels", "type": {"variable": "hydra.cypher.openCypher.NodeLabels"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.cypher.openCypher.VariableAndNodeLabels"}},
     {
       "type": {
-        "name": "hydra.cypher.openCypher.Delete",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "detach", "type": {"literal": {"boolean": {}}}},
               {"name": "expressions", "type": {"list": {"variable": "hydra.cypher.openCypher.Expression"}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.cypher.openCypher.Delete"}},
     {
       "type": {
-        "name": "hydra.cypher.openCypher.Remove",
-        "typeScheme": {"body": {"wrap": {"list": {"variable": "hydra.cypher.openCypher.RemoveItem"}}}, "variables": []}}},
+        "body": {"body": {"wrap": {"list": {"variable": "hydra.cypher.openCypher.RemoveItem"}}}, "variables": []},
+        "name": "hydra.cypher.openCypher.Remove"}},
     {
       "type": {
-        "name": "hydra.cypher.openCypher.RemoveItem",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "variableLabels", "type": {"variable": "hydra.cypher.openCypher.VariableAndNodeLabels"}},
               {"name": "property", "type": {"variable": "hydra.cypher.openCypher.PropertyExpression"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.cypher.openCypher.RemoveItem"}},
     {
       "type": {
-        "name": "hydra.cypher.openCypher.InQueryCall",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "call", "type": {"variable": "hydra.cypher.openCypher.ExplicitProcedureInvocation"}},
               {"name": "yieldItems", "type": {"maybe": {"variable": "hydra.cypher.openCypher.YieldItems"}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.cypher.openCypher.InQueryCall"}},
     {
       "type": {
-        "name": "hydra.cypher.openCypher.ProcedureInvocation",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "explicit", "type": {"variable": "hydra.cypher.openCypher.ExplicitProcedureInvocation"}},
               {"name": "implicit", "type": {"variable": "hydra.cypher.openCypher.ImplicitProcedureInvocation"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.cypher.openCypher.ProcedureInvocation"}},
     {
       "type": {
-        "name": "hydra.cypher.openCypher.StarOrYieldItems",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [{"name": "star", "type": {"unit": {}}}, {"name": "items", "type": {"variable": "hydra.cypher.openCypher.YieldItems"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.cypher.openCypher.StarOrYieldItems"}},
     {
       "type": {
-        "name": "hydra.cypher.openCypher.StandaloneCall",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "call", "type": {"variable": "hydra.cypher.openCypher.ProcedureInvocation"}},
               {"name": "yieldItems", "type": {"maybe": {"variable": "hydra.cypher.openCypher.StarOrYieldItems"}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.cypher.openCypher.StandaloneCall"}},
     {
       "type": {
-        "name": "hydra.cypher.openCypher.YieldItems",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "items", "type": {"list": {"variable": "hydra.cypher.openCypher.YieldItem"}}},
               {"name": "where", "type": {"maybe": {"variable": "hydra.cypher.openCypher.Where"}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.cypher.openCypher.YieldItems"}},
     {
       "type": {
-        "name": "hydra.cypher.openCypher.YieldItem",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "field", "type": {"maybe": {"variable": "hydra.cypher.openCypher.ProcedureResultField"}}},
               {"name": "variable", "type": {"variable": "hydra.cypher.openCypher.Variable"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.cypher.openCypher.YieldItem"}},
     {
       "type": {
-        "name": "hydra.cypher.openCypher.With",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "projection", "type": {"variable": "hydra.cypher.openCypher.ProjectionBody"}},
               {"name": "where", "type": {"maybe": {"variable": "hydra.cypher.openCypher.Where"}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.cypher.openCypher.With"}},
     {
       "type": {
-        "name": "hydra.cypher.openCypher.Return",
-        "typeScheme": {"body": {"wrap": {"variable": "hydra.cypher.openCypher.ProjectionBody"}}, "variables": []}}},
+        "body": {"body": {"wrap": {"variable": "hydra.cypher.openCypher.ProjectionBody"}}, "variables": []},
+        "name": "hydra.cypher.openCypher.Return"}},
     {
       "type": {
-        "name": "hydra.cypher.openCypher.ProjectionBody",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "distinct", "type": {"literal": {"boolean": {}}}},
@@ -283,221 +282,219 @@
               {"name": "order", "type": {"maybe": {"variable": "hydra.cypher.openCypher.Order"}}},
               {"name": "skip", "type": {"maybe": {"variable": "hydra.cypher.openCypher.Skip"}}},
               {"name": "limit", "type": {"maybe": {"variable": "hydra.cypher.openCypher.Limit"}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.cypher.openCypher.ProjectionBody"}},
     {
       "type": {
-        "name": "hydra.cypher.openCypher.ProjectionItems",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "star", "type": {"literal": {"boolean": {}}}},
               {"name": "explicit", "type": {"list": {"variable": "hydra.cypher.openCypher.ProjectionItem"}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.cypher.openCypher.ProjectionItems"}},
     {
       "type": {
-        "name": "hydra.cypher.openCypher.ProjectionItem",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "expression", "type": {"variable": "hydra.cypher.openCypher.Expression"}},
               {"name": "variable", "type": {"maybe": {"variable": "hydra.cypher.openCypher.Variable"}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.cypher.openCypher.ProjectionItem"}},
     {
       "type": {
-        "name": "hydra.cypher.openCypher.Order",
-        "typeScheme": {"body": {"wrap": {"list": {"variable": "hydra.cypher.openCypher.SortItem"}}}, "variables": []}}},
+        "body": {"body": {"wrap": {"list": {"variable": "hydra.cypher.openCypher.SortItem"}}}, "variables": []},
+        "name": "hydra.cypher.openCypher.Order"}},
     {
       "type": {
-        "name": "hydra.cypher.openCypher.Skip",
-        "typeScheme": {"body": {"wrap": {"variable": "hydra.cypher.openCypher.Expression"}}, "variables": []}}},
+        "body": {"body": {"wrap": {"variable": "hydra.cypher.openCypher.Expression"}}, "variables": []},
+        "name": "hydra.cypher.openCypher.Skip"}},
     {
       "type": {
-        "name": "hydra.cypher.openCypher.Limit",
-        "typeScheme": {"body": {"wrap": {"variable": "hydra.cypher.openCypher.Expression"}}, "variables": []}}},
+        "body": {"body": {"wrap": {"variable": "hydra.cypher.openCypher.Expression"}}, "variables": []},
+        "name": "hydra.cypher.openCypher.Limit"}},
     {
       "type": {
-        "name": "hydra.cypher.openCypher.SortOrder",
-        "typeScheme": {
+        "body": {
           "body": {"union": [{"name": "ascending", "type": {"unit": {}}}, {"name": "descending", "type": {"unit": {}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.cypher.openCypher.SortOrder"}},
     {
       "type": {
-        "name": "hydra.cypher.openCypher.SortItem",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "expression", "type": {"variable": "hydra.cypher.openCypher.Expression"}},
               {"name": "order", "type": {"maybe": {"variable": "hydra.cypher.openCypher.SortOrder"}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.cypher.openCypher.SortItem"}},
     {
       "type": {
-        "name": "hydra.cypher.openCypher.Where",
-        "typeScheme": {"body": {"wrap": {"variable": "hydra.cypher.openCypher.Expression"}}, "variables": []}}},
+        "body": {"body": {"wrap": {"variable": "hydra.cypher.openCypher.Expression"}}, "variables": []},
+        "name": "hydra.cypher.openCypher.Where"}},
     {
       "type": {
-        "name": "hydra.cypher.openCypher.Pattern",
-        "typeScheme": {"body": {"wrap": {"list": {"variable": "hydra.cypher.openCypher.PatternPart"}}}, "variables": []}}},
+        "body": {"body": {"wrap": {"list": {"variable": "hydra.cypher.openCypher.PatternPart"}}}, "variables": []},
+        "name": "hydra.cypher.openCypher.Pattern"}},
     {
       "type": {
-        "name": "hydra.cypher.openCypher.PatternPart",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "variable", "type": {"maybe": {"variable": "hydra.cypher.openCypher.Variable"}}},
               {"name": "pattern", "type": {"variable": "hydra.cypher.openCypher.AnonymousPatternPart"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.cypher.openCypher.PatternPart"}},
     {
       "type": {
-        "name": "hydra.cypher.openCypher.AnonymousPatternPart",
-        "typeScheme": {"body": {"wrap": {"variable": "hydra.cypher.openCypher.PatternElement"}}, "variables": []}}},
+        "body": {"body": {"wrap": {"variable": "hydra.cypher.openCypher.PatternElement"}}, "variables": []},
+        "name": "hydra.cypher.openCypher.AnonymousPatternPart"}},
     {
       "type": {
-        "name": "hydra.cypher.openCypher.NodePatternChain",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "nodePattern", "type": {"variable": "hydra.cypher.openCypher.NodePattern"}},
               {"name": "chain", "type": {"list": {"variable": "hydra.cypher.openCypher.PatternElementChain"}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.cypher.openCypher.NodePatternChain"}},
     {
       "type": {
-        "name": "hydra.cypher.openCypher.PatternElement",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "chained", "type": {"variable": "hydra.cypher.openCypher.NodePatternChain"}},
               {"name": "parenthesized", "type": {"variable": "hydra.cypher.openCypher.PatternElement"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.cypher.openCypher.PatternElement"}},
     {
       "type": {
-        "name": "hydra.cypher.openCypher.RelationshipsPattern",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "nodePattern", "type": {"variable": "hydra.cypher.openCypher.NodePattern"}},
               {"name": "chain", "type": {"list": {"variable": "hydra.cypher.openCypher.PatternElementChain"}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.cypher.openCypher.RelationshipsPattern"}},
     {
       "type": {
-        "name": "hydra.cypher.openCypher.NodePattern",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "variable", "type": {"maybe": {"variable": "hydra.cypher.openCypher.Variable"}}},
               {"name": "labels", "type": {"maybe": {"variable": "hydra.cypher.openCypher.NodeLabels"}}},
               {"name": "properties", "type": {"maybe": {"variable": "hydra.cypher.openCypher.Properties"}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.cypher.openCypher.NodePattern"}},
     {
       "type": {
-        "name": "hydra.cypher.openCypher.PatternElementChain",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "relationship", "type": {"variable": "hydra.cypher.openCypher.RelationshipPattern"}},
               {"name": "node", "type": {"variable": "hydra.cypher.openCypher.NodePattern"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.cypher.openCypher.PatternElementChain"}},
     {
       "type": {
-        "name": "hydra.cypher.openCypher.RelationshipPattern",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "leftArrow", "type": {"literal": {"boolean": {}}}},
               {"name": "detail", "type": {"maybe": {"variable": "hydra.cypher.openCypher.RelationshipDetail"}}},
               {"name": "rightArrow", "type": {"literal": {"boolean": {}}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.cypher.openCypher.RelationshipPattern"}},
     {
       "type": {
-        "name": "hydra.cypher.openCypher.RelationshipDetail",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "variable", "type": {"maybe": {"variable": "hydra.cypher.openCypher.Variable"}}},
               {"name": "types", "type": {"maybe": {"variable": "hydra.cypher.openCypher.RelationshipTypes"}}},
               {"name": "range", "type": {"maybe": {"variable": "hydra.cypher.openCypher.RangeLiteral"}}},
               {"name": "properties", "type": {"maybe": {"variable": "hydra.cypher.openCypher.Properties"}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.cypher.openCypher.RelationshipDetail"}},
     {
       "type": {
-        "name": "hydra.cypher.openCypher.Properties",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "map", "type": {"variable": "hydra.cypher.openCypher.MapLiteral"}},
               {"name": "parameter", "type": {"variable": "hydra.cypher.openCypher.Parameter"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.cypher.openCypher.Properties"}},
     {
       "type": {
-        "name": "hydra.cypher.openCypher.RelationshipTypes",
-        "typeScheme": {"body": {"wrap": {"list": {"variable": "hydra.cypher.openCypher.RelTypeName"}}}, "variables": []}}},
+        "body": {"body": {"wrap": {"list": {"variable": "hydra.cypher.openCypher.RelTypeName"}}}, "variables": []},
+        "name": "hydra.cypher.openCypher.RelationshipTypes"}},
     {
       "type": {
-        "name": "hydra.cypher.openCypher.NodeLabels",
-        "typeScheme": {"body": {"wrap": {"list": {"variable": "hydra.cypher.openCypher.NodeLabel"}}}, "variables": []}}},
+        "body": {"body": {"wrap": {"list": {"variable": "hydra.cypher.openCypher.NodeLabel"}}}, "variables": []},
+        "name": "hydra.cypher.openCypher.NodeLabels"}},
+    {
+      "type": {"body": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}, "name": "hydra.cypher.openCypher.NodeLabel"}},
     {
       "type": {
-        "name": "hydra.cypher.openCypher.NodeLabel",
-        "typeScheme": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
-    {
-      "type": {
-        "name": "hydra.cypher.openCypher.RangeLiteral",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "start", "type": {"maybe": {"literal": {"integer": {"bigint": {}}}}}},
               {"name": "end", "type": {"maybe": {"literal": {"integer": {"bigint": {}}}}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.cypher.openCypher.RangeLiteral"}},
     {
       "type": {
-        "name": "hydra.cypher.openCypher.RelTypeName",
-        "typeScheme": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
+        "body": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []},
+        "name": "hydra.cypher.openCypher.RelTypeName"}},
     {
       "type": {
-        "name": "hydra.cypher.openCypher.PropertyExpression",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "atom", "type": {"variable": "hydra.cypher.openCypher.Atom"}},
               {"name": "lookups", "type": {"list": {"variable": "hydra.cypher.openCypher.PropertyLookup"}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.cypher.openCypher.PropertyExpression"}},
     {
       "type": {
-        "name": "hydra.cypher.openCypher.Expression",
-        "typeScheme": {"body": {"wrap": {"variable": "hydra.cypher.openCypher.OrExpression"}}, "variables": []}}},
+        "body": {"body": {"wrap": {"variable": "hydra.cypher.openCypher.OrExpression"}}, "variables": []},
+        "name": "hydra.cypher.openCypher.Expression"}},
     {
       "type": {
-        "name": "hydra.cypher.openCypher.OrExpression",
-        "typeScheme": {"body": {"wrap": {"list": {"variable": "hydra.cypher.openCypher.XorExpression"}}}, "variables": []}}},
+        "body": {"body": {"wrap": {"list": {"variable": "hydra.cypher.openCypher.XorExpression"}}}, "variables": []},
+        "name": "hydra.cypher.openCypher.OrExpression"}},
     {
       "type": {
-        "name": "hydra.cypher.openCypher.XorExpression",
-        "typeScheme": {"body": {"wrap": {"list": {"variable": "hydra.cypher.openCypher.AndExpression"}}}, "variables": []}}},
+        "body": {"body": {"wrap": {"list": {"variable": "hydra.cypher.openCypher.AndExpression"}}}, "variables": []},
+        "name": "hydra.cypher.openCypher.XorExpression"}},
     {
       "type": {
-        "name": "hydra.cypher.openCypher.AndExpression",
-        "typeScheme": {"body": {"wrap": {"list": {"variable": "hydra.cypher.openCypher.NotExpression"}}}, "variables": []}}},
+        "body": {"body": {"wrap": {"list": {"variable": "hydra.cypher.openCypher.NotExpression"}}}, "variables": []},
+        "name": "hydra.cypher.openCypher.AndExpression"}},
     {
       "type": {
-        "name": "hydra.cypher.openCypher.NotExpression",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "not", "type": {"literal": {"boolean": {}}}},
               {"name": "expression", "type": {"variable": "hydra.cypher.openCypher.ComparisonExpression"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.cypher.openCypher.NotExpression"}},
     {
       "type": {
-        "name": "hydra.cypher.openCypher.ComparisonExpression",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "left", "type": {"variable": "hydra.cypher.openCypher.StringListNullPredicateExpression"}},
               {"name": "right", "type": {"list": {"variable": "hydra.cypher.openCypher.PartialComparisonExpression"}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.cypher.openCypher.ComparisonExpression"}},
     {
       "type": {
-        "name": "hydra.cypher.openCypher.ComparisonOperator",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "eq", "type": {"unit": {}}},
@@ -506,140 +503,140 @@
               {"name": "gt", "type": {"unit": {}}},
               {"name": "lte", "type": {"unit": {}}},
               {"name": "gte", "type": {"unit": {}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.cypher.openCypher.ComparisonOperator"}},
     {
       "type": {
-        "name": "hydra.cypher.openCypher.PartialComparisonExpression",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "operator", "type": {"variable": "hydra.cypher.openCypher.ComparisonOperator"}},
               {"name": "right", "type": {"variable": "hydra.cypher.openCypher.StringListNullPredicateExpression"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.cypher.openCypher.PartialComparisonExpression"}},
     {
       "type": {
-        "name": "hydra.cypher.openCypher.StringListNullPredicateExpression",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "left", "type": {"variable": "hydra.cypher.openCypher.AddOrSubtractExpression"}},
               {"name": "right", "type": {"list": {"variable": "hydra.cypher.openCypher.StringListNullPredicateRightHandSide"}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.cypher.openCypher.StringListNullPredicateExpression"}},
     {
       "type": {
-        "name": "hydra.cypher.openCypher.StringListNullPredicateRightHandSide",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "string", "type": {"variable": "hydra.cypher.openCypher.StringPredicateExpression"}},
               {"name": "list", "type": {"variable": "hydra.cypher.openCypher.ListPredicateExpression"}},
               {"name": "null", "type": {"variable": "hydra.cypher.openCypher.NullPredicateExpression"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.cypher.openCypher.StringListNullPredicateRightHandSide"}},
     {
       "type": {
-        "name": "hydra.cypher.openCypher.StringPredicateExpression",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "operator", "type": {"variable": "hydra.cypher.openCypher.StringPredicateOperator"}},
               {"name": "expression", "type": {"variable": "hydra.cypher.openCypher.AddOrSubtractExpression"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.cypher.openCypher.StringPredicateExpression"}},
     {
       "type": {
-        "name": "hydra.cypher.openCypher.StringPredicateOperator",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "startsWith", "type": {"unit": {}}},
               {"name": "endsWith", "type": {"unit": {}}},
               {"name": "contains", "type": {"unit": {}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.cypher.openCypher.StringPredicateOperator"}},
     {
       "type": {
-        "name": "hydra.cypher.openCypher.ListPredicateExpression",
-        "typeScheme": {"body": {"wrap": {"variable": "hydra.cypher.openCypher.AddOrSubtractExpression"}}, "variables": []}}},
+        "body": {"body": {"wrap": {"variable": "hydra.cypher.openCypher.AddOrSubtractExpression"}}, "variables": []},
+        "name": "hydra.cypher.openCypher.ListPredicateExpression"}},
     {
       "type": {
-        "name": "hydra.cypher.openCypher.NullPredicateExpression",
-        "typeScheme": {"body": {"wrap": {"literal": {"boolean": {}}}}, "variables": []}}},
+        "body": {"body": {"wrap": {"literal": {"boolean": {}}}}, "variables": []},
+        "name": "hydra.cypher.openCypher.NullPredicateExpression"}},
     {
       "type": {
-        "name": "hydra.cypher.openCypher.AddOrSubtractExpression",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "left", "type": {"variable": "hydra.cypher.openCypher.MultiplyDivideModuloExpression"}},
               {"name": "right", "type": {"list": {"variable": "hydra.cypher.openCypher.AddOrSubtractRightHandSide"}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.cypher.openCypher.AddOrSubtractExpression"}},
     {
       "type": {
-        "name": "hydra.cypher.openCypher.AddOrSubtractRightHandSide",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "operator", "type": {"variable": "hydra.cypher.openCypher.AddOrSubtractOperator"}},
               {"name": "expression", "type": {"variable": "hydra.cypher.openCypher.MultiplyDivideModuloExpression"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.cypher.openCypher.AddOrSubtractRightHandSide"}},
     {
       "type": {
-        "name": "hydra.cypher.openCypher.AddOrSubtractOperator",
-        "typeScheme": {
+        "body": {
           "body": {"union": [{"name": "add", "type": {"unit": {}}}, {"name": "subtract", "type": {"unit": {}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.cypher.openCypher.AddOrSubtractOperator"}},
     {
       "type": {
-        "name": "hydra.cypher.openCypher.MultiplyDivideModuloExpression",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "left", "type": {"variable": "hydra.cypher.openCypher.PowerOfExpression"}},
               {"name": "right", "type": {"list": {"variable": "hydra.cypher.openCypher.MultiplyDivideModuloRightHandSide"}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.cypher.openCypher.MultiplyDivideModuloExpression"}},
     {
       "type": {
-        "name": "hydra.cypher.openCypher.MultiplyDivideModuloRightHandSide",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "operator", "type": {"variable": "hydra.cypher.openCypher.MultiplyDivideModuloOperator"}},
               {"name": "expression", "type": {"variable": "hydra.cypher.openCypher.PowerOfExpression"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.cypher.openCypher.MultiplyDivideModuloRightHandSide"}},
     {
       "type": {
-        "name": "hydra.cypher.openCypher.MultiplyDivideModuloOperator",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "multiply", "type": {"unit": {}}},
               {"name": "divide", "type": {"unit": {}}},
               {"name": "modulo", "type": {"unit": {}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.cypher.openCypher.MultiplyDivideModuloOperator"}},
     {
       "type": {
-        "name": "hydra.cypher.openCypher.PowerOfExpression",
-        "typeScheme": {"body": {"wrap": {"list": {"variable": "hydra.cypher.openCypher.UnaryAddOrSubtractExpression"}}}, "variables": []}}},
+        "body": {"body": {"wrap": {"list": {"variable": "hydra.cypher.openCypher.UnaryAddOrSubtractExpression"}}}, "variables": []},
+        "name": "hydra.cypher.openCypher.PowerOfExpression"}},
     {
       "type": {
-        "name": "hydra.cypher.openCypher.UnaryAddOrSubtractExpression",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "operator", "type": {"maybe": {"variable": "hydra.cypher.openCypher.AddOrSubtractOperator"}}},
               {"name": "expression", "type": {"variable": "hydra.cypher.openCypher.NonArithmeticOperatorExpression"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.cypher.openCypher.UnaryAddOrSubtractExpression"}},
     {
       "type": {
-        "name": "hydra.cypher.openCypher.ListOperatorExpressionOrPropertyLookup",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "list", "type": {"variable": "hydra.cypher.openCypher.ListOperatorExpression"}},
               {"name": "property", "type": {"variable": "hydra.cypher.openCypher.PropertyLookup"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.cypher.openCypher.ListOperatorExpressionOrPropertyLookup"}},
     {
       "type": {
-        "name": "hydra.cypher.openCypher.NonArithmeticOperatorExpression",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "atom", "type": {"variable": "hydra.cypher.openCypher.Atom"}},
@@ -647,33 +644,33 @@
                 "name": "listsAndLookups",
                 "type": {"list": {"variable": "hydra.cypher.openCypher.ListOperatorExpressionOrPropertyLookup"}}},
               {"name": "labels", "type": {"maybe": {"variable": "hydra.cypher.openCypher.NodeLabels"}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.cypher.openCypher.NonArithmeticOperatorExpression"}},
     {
       "type": {
-        "name": "hydra.cypher.openCypher.RangeExpression",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "start", "type": {"maybe": {"variable": "hydra.cypher.openCypher.Expression"}}},
               {"name": "end", "type": {"maybe": {"variable": "hydra.cypher.openCypher.Expression"}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.cypher.openCypher.RangeExpression"}},
     {
       "type": {
-        "name": "hydra.cypher.openCypher.ListOperatorExpression",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "single", "type": {"variable": "hydra.cypher.openCypher.Expression"}},
               {"name": "range", "type": {"variable": "hydra.cypher.openCypher.RangeExpression"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.cypher.openCypher.ListOperatorExpression"}},
     {
       "type": {
-        "name": "hydra.cypher.openCypher.PropertyLookup",
-        "typeScheme": {"body": {"wrap": {"variable": "hydra.cypher.openCypher.PropertyKeyName"}}, "variables": []}}},
+        "body": {"body": {"wrap": {"variable": "hydra.cypher.openCypher.PropertyKeyName"}}, "variables": []},
+        "name": "hydra.cypher.openCypher.PropertyLookup"}},
     {
       "type": {
-        "name": "hydra.cypher.openCypher.Atom",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "literal", "type": {"variable": "hydra.cypher.openCypher.Literal"}},
@@ -688,152 +685,150 @@
               {"name": "functionInvocation", "type": {"variable": "hydra.cypher.openCypher.FunctionInvocation"}},
               {"name": "existentialSubquery", "type": {"variable": "hydra.cypher.openCypher.ExistentialSubquery"}},
               {"name": "variable", "type": {"variable": "hydra.cypher.openCypher.Variable"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.cypher.openCypher.Atom"}},
     {
       "type": {
-        "name": "hydra.cypher.openCypher.CaseExpression",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "expression", "type": {"maybe": {"variable": "hydra.cypher.openCypher.Expression"}}},
               {"name": "alternatives", "type": {"list": {"variable": "hydra.cypher.openCypher.CaseAlternative"}}},
               {"name": "else", "type": {"maybe": {"variable": "hydra.cypher.openCypher.Expression"}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.cypher.openCypher.CaseExpression"}},
     {
       "type": {
-        "name": "hydra.cypher.openCypher.CaseAlternative",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "condition", "type": {"variable": "hydra.cypher.openCypher.Expression"}},
               {"name": "result", "type": {"variable": "hydra.cypher.openCypher.Expression"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.cypher.openCypher.CaseAlternative"}},
     {
       "type": {
-        "name": "hydra.cypher.openCypher.ListComprehension",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "left", "type": {"variable": "hydra.cypher.openCypher.FilterExpression"}},
               {"name": "right", "type": {"maybe": {"variable": "hydra.cypher.openCypher.Expression"}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.cypher.openCypher.ListComprehension"}},
     {
       "type": {
-        "name": "hydra.cypher.openCypher.PatternComprehension",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "variable", "type": {"maybe": {"variable": "hydra.cypher.openCypher.Variable"}}},
               {"name": "pattern", "type": {"variable": "hydra.cypher.openCypher.RelationshipsPattern"}},
               {"name": "where", "type": {"maybe": {"variable": "hydra.cypher.openCypher.Where"}}},
               {"name": "right", "type": {"variable": "hydra.cypher.openCypher.Expression"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.cypher.openCypher.PatternComprehension"}},
     {
       "type": {
-        "name": "hydra.cypher.openCypher.Quantifier",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "operator", "type": {"variable": "hydra.cypher.openCypher.QuantifierOperator"}},
               {"name": "expression", "type": {"variable": "hydra.cypher.openCypher.FilterExpression"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.cypher.openCypher.Quantifier"}},
     {
       "type": {
-        "name": "hydra.cypher.openCypher.QuantifierOperator",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "all", "type": {"unit": {}}},
               {"name": "any", "type": {"unit": {}}},
               {"name": "none", "type": {"unit": {}}},
               {"name": "single", "type": {"unit": {}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.cypher.openCypher.QuantifierOperator"}},
     {
       "type": {
-        "name": "hydra.cypher.openCypher.FilterExpression",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "idInColl", "type": {"variable": "hydra.cypher.openCypher.IdInColl"}},
               {"name": "where", "type": {"maybe": {"variable": "hydra.cypher.openCypher.Where"}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.cypher.openCypher.FilterExpression"}},
     {
       "type": {
-        "name": "hydra.cypher.openCypher.PatternPredicate",
-        "typeScheme": {"body": {"wrap": {"variable": "hydra.cypher.openCypher.RelationshipsPattern"}}, "variables": []}}},
+        "body": {"body": {"wrap": {"variable": "hydra.cypher.openCypher.RelationshipsPattern"}}, "variables": []},
+        "name": "hydra.cypher.openCypher.PatternPredicate"}},
     {
       "type": {
-        "name": "hydra.cypher.openCypher.ParenthesizedExpression",
-        "typeScheme": {"body": {"wrap": {"variable": "hydra.cypher.openCypher.Expression"}}, "variables": []}}},
+        "body": {"body": {"wrap": {"variable": "hydra.cypher.openCypher.Expression"}}, "variables": []},
+        "name": "hydra.cypher.openCypher.ParenthesizedExpression"}},
     {
       "type": {
-        "name": "hydra.cypher.openCypher.IdInColl",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "variable", "type": {"variable": "hydra.cypher.openCypher.Variable"}},
               {"name": "expression", "type": {"variable": "hydra.cypher.openCypher.Expression"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.cypher.openCypher.IdInColl"}},
     {
       "type": {
-        "name": "hydra.cypher.openCypher.FunctionInvocation",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "name", "type": {"variable": "hydra.cypher.openCypher.QualifiedName"}},
               {"name": "distinct", "type": {"literal": {"boolean": {}}}},
               {"name": "arguments", "type": {"list": {"variable": "hydra.cypher.openCypher.Expression"}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.cypher.openCypher.FunctionInvocation"}},
     {
       "type": {
-        "name": "hydra.cypher.openCypher.QualifiedName",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [{"name": "namespace", "type": {"literal": {"string": {}}}}, {"name": "local", "type": {"literal": {"string": {}}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.cypher.openCypher.QualifiedName"}},
     {
       "type": {
-        "name": "hydra.cypher.openCypher.PatternWhere",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "pattern", "type": {"variable": "hydra.cypher.openCypher.Pattern"}},
               {"name": "where", "type": {"maybe": {"variable": "hydra.cypher.openCypher.Where"}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.cypher.openCypher.PatternWhere"}},
     {
       "type": {
-        "name": "hydra.cypher.openCypher.ExistentialSubquery",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "regular", "type": {"variable": "hydra.cypher.openCypher.RegularQuery"}},
               {"name": "pattern", "type": {"variable": "hydra.cypher.openCypher.PatternWhere"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.cypher.openCypher.ExistentialSubquery"}},
     {
       "type": {
-        "name": "hydra.cypher.openCypher.ExplicitProcedureInvocation",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "name", "type": {"variable": "hydra.cypher.openCypher.QualifiedName"}},
               {"name": "arguments", "type": {"list": {"variable": "hydra.cypher.openCypher.Expression"}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.cypher.openCypher.ExplicitProcedureInvocation"}},
     {
       "type": {
-        "name": "hydra.cypher.openCypher.ImplicitProcedureInvocation",
-        "typeScheme": {"body": {"wrap": {"variable": "hydra.cypher.openCypher.QualifiedName"}}, "variables": []}}},
+        "body": {"body": {"wrap": {"variable": "hydra.cypher.openCypher.QualifiedName"}}, "variables": []},
+        "name": "hydra.cypher.openCypher.ImplicitProcedureInvocation"}},
     {
       "type": {
-        "name": "hydra.cypher.openCypher.ProcedureResultField",
-        "typeScheme": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
+        "body": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []},
+        "name": "hydra.cypher.openCypher.ProcedureResultField"}},
+    {
+      "type": {"body": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}, "name": "hydra.cypher.openCypher.Variable"}},
     {
       "type": {
-        "name": "hydra.cypher.openCypher.Variable",
-        "typeScheme": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
-    {
-      "type": {
-        "name": "hydra.cypher.openCypher.Literal",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "boolean", "type": {"literal": {"boolean": {}}}},
@@ -842,50 +837,51 @@
               {"name": "string", "type": {"variable": "hydra.cypher.openCypher.StringLiteral"}},
               {"name": "list", "type": {"variable": "hydra.cypher.openCypher.ListLiteral"}},
               {"name": "map", "type": {"variable": "hydra.cypher.openCypher.MapLiteral"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.cypher.openCypher.Literal"}},
     {
       "type": {
-        "name": "hydra.cypher.openCypher.NumberLiteral",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "double", "type": {"literal": {"float": {"float64": {}}}}},
               {"name": "integer", "type": {"literal": {"integer": {"bigint": {}}}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.cypher.openCypher.NumberLiteral"}},
     {
       "type": {
-        "name": "hydra.cypher.openCypher.StringLiteral",
-        "typeScheme": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
+        "body": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []},
+        "name": "hydra.cypher.openCypher.StringLiteral"}},
     {
       "type": {
-        "name": "hydra.cypher.openCypher.ListLiteral",
-        "typeScheme": {"body": {"wrap": {"list": {"variable": "hydra.cypher.openCypher.Expression"}}}, "variables": []}}},
+        "body": {"body": {"wrap": {"list": {"variable": "hydra.cypher.openCypher.Expression"}}}, "variables": []},
+        "name": "hydra.cypher.openCypher.ListLiteral"}},
     {
       "type": {
-        "name": "hydra.cypher.openCypher.MapLiteral",
-        "typeScheme": {"body": {"wrap": {"list": {"variable": "hydra.cypher.openCypher.KeyValuePair"}}}, "variables": []}}},
+        "body": {"body": {"wrap": {"list": {"variable": "hydra.cypher.openCypher.KeyValuePair"}}}, "variables": []},
+        "name": "hydra.cypher.openCypher.MapLiteral"}},
     {
       "type": {
-        "name": "hydra.cypher.openCypher.KeyValuePair",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "key", "type": {"variable": "hydra.cypher.openCypher.PropertyKeyName"}},
               {"name": "value", "type": {"variable": "hydra.cypher.openCypher.Expression"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.cypher.openCypher.KeyValuePair"}},
     {
       "type": {
-        "name": "hydra.cypher.openCypher.PropertyKeyName",
-        "typeScheme": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
+        "body": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []},
+        "name": "hydra.cypher.openCypher.PropertyKeyName"}},
     {
       "type": {
-        "name": "hydra.cypher.openCypher.Parameter",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "symbolic", "type": {"literal": {"string": {}}}},
               {"name": "integer", "type": {"literal": {"integer": {"bigint": {}}}}}]},
-          "variables": []}}}],
+          "variables": []},
+        "name": "hydra.cypher.openCypher.Parameter"}}],
   "dependencies": [{"module": "hydra.core"}],
   "metadata": {
     "comments": [],

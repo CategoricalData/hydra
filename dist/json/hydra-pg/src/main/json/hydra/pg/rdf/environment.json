@@ -2,8 +2,7 @@
   "definitions": [
     {
       "type": {
-        "name": "hydra.pg.rdf.environment.PgRdfEnvironment",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "The environment for property graph to RDF mapping"}}}],
@@ -49,7 +48,8 @@
                               {"key": "description", "value": {"literal": {"string": "A function which encodes a property value as an RDF literal"}}}],
                             "body": {"function": {"codomain": {"variable": "hydra.rdf.syntax.Literal"}, "domain": {"variable": "v"}}}}}}]},
                   "parameter": "v"}}}},
-          "variables": []}}}],
+          "variables": []},
+        "name": "hydra.pg.rdf.environment.PgRdfEnvironment"}}],
   "dependencies": [{"module": "hydra.rdf.syntax"}, {"module": "hydra.pg.model"}, {"module": "hydra.core"}],
   "metadata": {"comments": [], "description": "Environment types for property graph to RDF mapping", "seeAlso": []},
   "name": "hydra.pg.rdf.environment"}

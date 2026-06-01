@@ -2,15 +2,7 @@
   "definitions": [
     {
       "term": {
-        "name": "hydra.decode.json.model.value",
-        "signature": {
-          "parameters": [
-            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.graph.Graph"}},
-            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.core.Term"}}],
-          "result": {
-            "type": {"either": {"left": {"variable": "hydra.errors.DecodingError"}, "right": {"variable": "hydra.json.model.Value"}}}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Decoder for hydra.json.model.Value"}}}],
             "body": {
@@ -34,8 +26,7 @@
                                       "cases": {
                                         "cases": [
                                           {
-                                            "name": "inject",
-                                            "term": {
+                                            "handler": {
                                               "lambda": {
                                                 "body": {
                                                   "let": {
@@ -143,8 +134,7 @@
                                                                                                                       "cases": {
                                                                                                                         "cases": [
                                                                                                                           {
-                                                                                                                            "name": "literal",
-                                                                                                                            "term": {
+                                                                                                                            "handler": {
                                                                                                                               "lambda": {
                                                                                                                                 "body": {
                                                                                                                                   "application": {
@@ -153,8 +143,7 @@
                                                                                                                                       "cases": {
                                                                                                                                         "cases": [
                                                                                                                                           {
-                                                                                                                                            "name": "boolean",
-                                                                                                                                            "term": {
+                                                                                                                                            "handler": {
                                                                                                                                               "lambda": {
                                                                                                                                                 "body": {
                                                                                                                                                   "typeApplication": {
@@ -162,7 +151,8 @@
                                                                                                                                                       "typeApplication": {"body": {"either": {"right": {"variable": "b"}}}, "type": {"variable": "hydra.errors.DecodingError"}}},
                                                                                                                                                     "type": {"literal": {"boolean": {}}}}},
                                                                                                                                                 "domain": {"literal": {"boolean": {}}},
-                                                                                                                                                "parameter": "b"}}}],
+                                                                                                                                                "parameter": "b"}},
+                                                                                                                                            "name": "boolean"}],
                                                                                                                                         "default": {
                                                                                                                                           "typeApplication": {
                                                                                                                                             "body": {
@@ -174,7 +164,8 @@
                                                                                                                                             "type": {"literal": {"boolean": {}}}}},
                                                                                                                                         "typeName": "hydra.core.Literal"}}}},
                                                                                                                                 "domain": {"variable": "hydra.core.Literal"},
-                                                                                                                                "parameter": "v"}}}],
+                                                                                                                                "parameter": "v"}},
+                                                                                                                            "name": "literal"}],
                                                                                                                         "default": {
                                                                                                                           "typeApplication": {
                                                                                                                             "body": {
@@ -318,8 +309,7 @@
                                                                                                                       "cases": {
                                                                                                                         "cases": [
                                                                                                                           {
-                                                                                                                            "name": "literal",
-                                                                                                                            "term": {
+                                                                                                                            "handler": {
                                                                                                                               "lambda": {
                                                                                                                                 "body": {
                                                                                                                                   "application": {
@@ -328,8 +318,7 @@
                                                                                                                                       "cases": {
                                                                                                                                         "cases": [
                                                                                                                                           {
-                                                                                                                                            "name": "decimal",
-                                                                                                                                            "term": {
+                                                                                                                                            "handler": {
                                                                                                                                               "lambda": {
                                                                                                                                                 "body": {
                                                                                                                                                   "typeApplication": {
@@ -337,7 +326,8 @@
                                                                                                                                                       "typeApplication": {"body": {"either": {"right": {"variable": "d"}}}, "type": {"variable": "hydra.errors.DecodingError"}}},
                                                                                                                                                     "type": {"literal": {"decimal": {}}}}},
                                                                                                                                                 "domain": {"literal": {"decimal": {}}},
-                                                                                                                                                "parameter": "d"}}}],
+                                                                                                                                                "parameter": "d"}},
+                                                                                                                                            "name": "decimal"}],
                                                                                                                                         "default": {
                                                                                                                                           "typeApplication": {
                                                                                                                                             "body": {
@@ -349,7 +339,8 @@
                                                                                                                                             "type": {"literal": {"decimal": {}}}}},
                                                                                                                                         "typeName": "hydra.core.Literal"}}}},
                                                                                                                                 "domain": {"variable": "hydra.core.Literal"},
-                                                                                                                                "parameter": "v"}}}],
+                                                                                                                                "parameter": "v"}},
+                                                                                                                            "name": "literal"}],
                                                                                                                         "default": {
                                                                                                                           "typeApplication": {
                                                                                                                             "body": {
@@ -448,8 +439,7 @@
                                                                                                                               "cases": {
                                                                                                                                 "cases": [
                                                                                                                                   {
-                                                                                                                                    "name": "literal",
-                                                                                                                                    "term": {
+                                                                                                                                    "handler": {
                                                                                                                                       "lambda": {
                                                                                                                                         "body": {
                                                                                                                                           "application": {
@@ -458,8 +448,7 @@
                                                                                                                                               "cases": {
                                                                                                                                                 "cases": [
                                                                                                                                                   {
-                                                                                                                                                    "name": "string",
-                                                                                                                                                    "term": {
+                                                                                                                                                    "handler": {
                                                                                                                                                       "lambda": {
                                                                                                                                                         "body": {
                                                                                                                                                           "typeApplication": {
@@ -467,7 +456,8 @@
                                                                                                                                                               "typeApplication": {"body": {"either": {"right": {"variable": "s"}}}, "type": {"variable": "hydra.errors.DecodingError"}}},
                                                                                                                                                             "type": {"literal": {"string": {}}}}},
                                                                                                                                                         "domain": {"literal": {"string": {}}},
-                                                                                                                                                        "parameter": "s"}}}],
+                                                                                                                                                        "parameter": "s"}},
+                                                                                                                                                    "name": "string"}],
                                                                                                                                                 "default": {
                                                                                                                                                   "typeApplication": {
                                                                                                                                                     "body": {
@@ -479,7 +469,8 @@
                                                                                                                                                     "type": {"literal": {"string": {}}}}},
                                                                                                                                                 "typeName": "hydra.core.Literal"}}}},
                                                                                                                                         "domain": {"variable": "hydra.core.Literal"},
-                                                                                                                                        "parameter": "v"}}}],
+                                                                                                                                        "parameter": "v"}},
+                                                                                                                                    "name": "literal"}],
                                                                                                                                 "default": {
                                                                                                                                   "typeApplication": {
                                                                                                                                     "body": {
@@ -580,8 +571,7 @@
                                                                                                                       "cases": {
                                                                                                                         "cases": [
                                                                                                                           {
-                                                                                                                            "name": "literal",
-                                                                                                                            "term": {
+                                                                                                                            "handler": {
                                                                                                                               "lambda": {
                                                                                                                                 "body": {
                                                                                                                                   "application": {
@@ -590,8 +580,7 @@
                                                                                                                                       "cases": {
                                                                                                                                         "cases": [
                                                                                                                                           {
-                                                                                                                                            "name": "string",
-                                                                                                                                            "term": {
+                                                                                                                                            "handler": {
                                                                                                                                               "lambda": {
                                                                                                                                                 "body": {
                                                                                                                                                   "typeApplication": {
@@ -599,7 +588,8 @@
                                                                                                                                                       "typeApplication": {"body": {"either": {"right": {"variable": "s"}}}, "type": {"variable": "hydra.errors.DecodingError"}}},
                                                                                                                                                     "type": {"literal": {"string": {}}}}},
                                                                                                                                                 "domain": {"literal": {"string": {}}},
-                                                                                                                                                "parameter": "s"}}}],
+                                                                                                                                                "parameter": "s"}},
+                                                                                                                                            "name": "string"}],
                                                                                                                                         "default": {
                                                                                                                                           "typeApplication": {
                                                                                                                                             "body": {
@@ -611,7 +601,8 @@
                                                                                                                                             "type": {"literal": {"string": {}}}}},
                                                                                                                                         "typeName": "hydra.core.Literal"}}}},
                                                                                                                                 "domain": {"variable": "hydra.core.Literal"},
-                                                                                                                                "parameter": "v"}}}],
+                                                                                                                                "parameter": "v"}},
+                                                                                                                            "name": "literal"}],
                                                                                                                         "default": {
                                                                                                                           "typeApplication": {
                                                                                                                             "body": {
@@ -740,7 +731,8 @@
                                                                         "codomain": {"either": {"left": {"variable": "hydra.errors.DecodingError"}, "right": {"variable": "hydra.json.model.Value"}}},
                                                                         "domain": {"variable": "hydra.core.Term"}}}}}}}}}}}}},
                                                 "domain": {"variable": "hydra.core.Injection"},
-                                                "parameter": "inj"}}}],
+                                                "parameter": "inj"}},
+                                            "name": "inject"}],
                                         "default": {
                                           "typeApplication": {
                                             "body": {
@@ -774,7 +766,15 @@
                     "domain": {"variable": "hydra.core.Term"},
                     "parameter": "raw"}},
                 "domain": {"variable": "hydra.graph.Graph"},
-                "parameter": "cx"}}}}}}],
+                "parameter": "cx"}}}},
+        "name": "hydra.decode.json.model.value",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.graph.Graph"}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.core.Term"}}],
+          "result": {
+            "type": {"either": {"left": {"variable": "hydra.errors.DecodingError"}, "right": {"variable": "hydra.json.model.Value"}}}},
+          "typeParameters": []}}}],
   "dependencies": [
     {"module": "hydra.extract.core"},
     {"module": "hydra.lexical"},

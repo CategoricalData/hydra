@@ -31,6 +31,14 @@ apply :: Packaging.PrimitiveDefinition
 apply =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.maybes.apply"),
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "Applicative apply for maybes: combine a maybe function and a maybe argument."),
+        Packaging.entityMetadataComments = [
+          "apply(mf, mx) returns Just(f x) when mf is Just(f) and mx is Just(x), and Nothing if either is Nothing.",
+          "The applicative apply for maybe; threads a function-in-context with a value-in-context.",
+          "Total. Corresponds to Haskell's (<*>) :: Maybe (a -> b) -> Maybe a -> Maybe b."],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [
           Typing.TypeParameter {
@@ -55,14 +63,6 @@ apply =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeMaybe (Core.TypeVariable (Core.Name "y")))}},
-      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
-        Packaging.entityMetadataDescription = (Just "Applicative apply for maybes: combine a maybe function and a maybe argument."),
-        Packaging.entityMetadataComments = [
-          "apply(mf, mx) returns Just(f x) when mf is Just(f) and mx is Just(x), and Nothing if either is Nothing.",
-          "The applicative apply for maybe; threads a function-in-context with a value-in-context.",
-          "Total. Corresponds to Haskell's (<*>) :: Maybe (a -> b) -> Maybe a -> Maybe b."],
-        Packaging.entityMetadataSeeAlso = [],
-        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = (Just (Core.TermAnnotated (Core.AnnotatedTerm {
@@ -97,6 +97,14 @@ bind :: Packaging.PrimitiveDefinition
 bind =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.maybes.bind"),
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "Monadic bind for maybes."),
+        Packaging.entityMetadataComments = [
+          "bind(m, f) returns f(x) when m is Just(x), and Nothing when m is Nothing.",
+          "The monadic bind for maybe; used to chain computations that may be absent.",
+          "Total. Corresponds to Haskell's (>>=) :: Maybe a -> (a -> Maybe b) -> Maybe b."],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [
           Typing.TypeParameter {
@@ -121,14 +129,6 @@ bind =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeMaybe (Core.TypeVariable (Core.Name "y")))}},
-      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
-        Packaging.entityMetadataDescription = (Just "Monadic bind for maybes."),
-        Packaging.entityMetadataComments = [
-          "bind(m, f) returns f(x) when m is Just(x), and Nothing when m is Nothing.",
-          "The monadic bind for maybe; used to chain computations that may be absent.",
-          "Total. Corresponds to Haskell's (>>=) :: Maybe a -> (a -> Maybe b) -> Maybe b."],
-        Packaging.entityMetadataSeeAlso = [],
-        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = (Just (Core.TermAnnotated (Core.AnnotatedTerm {
@@ -151,6 +151,14 @@ cases :: Packaging.PrimitiveDefinition
 cases =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.maybes.cases"),
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "Case analysis on a maybe, with cases-style argument order."),
+        Packaging.entityMetadataComments = [
+          "cases(m, def, f) returns f(x) when m is Just(x), and def when m is Nothing.",
+          "Identical in behavior to the maybe primitive but with the maybe value as the first argument (matching the convention for case-statement-like elimination).",
+          "Total. Argument order is (m, def, f) rather than Haskell's (def, f, m)."],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [
           Typing.TypeParameter {
@@ -180,14 +188,6 @@ cases =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeVariable (Core.Name "y"))}},
-      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
-        Packaging.entityMetadataDescription = (Just "Case analysis on a maybe, with cases-style argument order."),
-        Packaging.entityMetadataComments = [
-          "cases(m, def, f) returns f(x) when m is Just(x), and def when m is Nothing.",
-          "Identical in behavior to the maybe primitive but with the maybe value as the first argument (matching the convention for case-statement-like elimination).",
-          "Total. Argument order is (m, def, f) rather than Haskell's (def, f, m)."],
-        Packaging.entityMetadataSeeAlso = [],
-        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
@@ -195,6 +195,13 @@ cat :: Packaging.PrimitiveDefinition
 cat =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.maybes.cat"),
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "Concatenate maybes, keeping only the present values."),
+        Packaging.entityMetadataComments = [
+          "cat(xs) returns the list of contained values from Just elements of xs, in original order; Nothing elements are discarded.",
+          "Total. Corresponds to Haskell's Data.Maybe.catMaybes :: [Maybe a] -> [a]."],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [
           Typing.TypeParameter {
@@ -209,13 +216,6 @@ cat =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeList (Core.TypeVariable (Core.Name "x")))}},
-      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
-        Packaging.entityMetadataDescription = (Just "Concatenate maybes, keeping only the present values."),
-        Packaging.entityMetadataComments = [
-          "cat(xs) returns the list of contained values from Just elements of xs, in original order; Nothing elements are discarded.",
-          "Total. Corresponds to Haskell's Data.Maybe.catMaybes :: [Maybe a] -> [a]."],
-        Packaging.entityMetadataSeeAlso = [],
-        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = (Just (Core.TermAnnotated (Core.AnnotatedTerm {
@@ -256,6 +256,14 @@ compose :: Packaging.PrimitiveDefinition
 compose =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.maybes.compose"),
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "Kleisli composition for maybes."),
+        Packaging.entityMetadataComments = [
+          "compose(f, g, x) returns the Kleisli composition of f and g applied to x: bind(f(x), g).",
+          "If either f or the second stage produces Nothing, the result is Nothing.",
+          "Total. Corresponds to Haskell's Kleisli composition for Maybe, (>=>) :: (a -> Maybe b) -> (b -> Maybe c) -> a -> Maybe c."],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [
           Typing.TypeParameter {
@@ -290,14 +298,6 @@ compose =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeMaybe (Core.TypeVariable (Core.Name "z")))}},
-      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
-        Packaging.entityMetadataDescription = (Just "Kleisli composition for maybes."),
-        Packaging.entityMetadataComments = [
-          "compose(f, g, x) returns the Kleisli composition of f and g applied to x: bind(f(x), g).",
-          "If either f or the second stage produces Nothing, the result is Nothing.",
-          "Total. Corresponds to Haskell's Kleisli composition for Maybe, (>=>) :: (a -> Maybe b) -> (b -> Maybe c) -> a -> Maybe c."],
-        Packaging.entityMetadataSeeAlso = [],
-        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = (Just (Core.TermAnnotated (Core.AnnotatedTerm {
@@ -325,6 +325,13 @@ fromMaybe :: Packaging.PrimitiveDefinition
 fromMaybe =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.maybes.fromMaybe"),
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "Return the value contained in a maybe, falling back to a default if absent."),
+        Packaging.entityMetadataComments = [
+          "fromMaybe(def, m) returns x when m is Just(x), and def when m is Nothing.",
+          "Total. Corresponds to Haskell's Data.Maybe.fromMaybe :: a -> Maybe a -> a."],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [
           Typing.TypeParameter {
@@ -344,13 +351,6 @@ fromMaybe =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeVariable (Core.Name "x"))}},
-      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
-        Packaging.entityMetadataDescription = (Just "Return the value contained in a maybe, falling back to a default if absent."),
-        Packaging.entityMetadataComments = [
-          "fromMaybe(def, m) returns x when m is Just(x), and def when m is Nothing.",
-          "Total. Corresponds to Haskell's Data.Maybe.fromMaybe :: a -> Maybe a -> a."],
-        Packaging.entityMetadataSeeAlso = [],
-        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = (Just (Core.TermAnnotated (Core.AnnotatedTerm {
@@ -378,6 +378,13 @@ isJust :: Packaging.PrimitiveDefinition
 isJust =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.maybes.isJust"),
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "Test whether a maybe is present (Just)."),
+        Packaging.entityMetadataComments = [
+          "isJust(m) returns true iff m is a Just variant.",
+          "Total. Corresponds to Haskell's Data.Maybe.isJust :: Maybe a -> Bool."],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [
           Typing.TypeParameter {
@@ -392,13 +399,6 @@ isJust =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeLiteral Core.LiteralTypeBoolean)}},
-      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
-        Packaging.entityMetadataDescription = (Just "Test whether a maybe is present (Just)."),
-        Packaging.entityMetadataComments = [
-          "isJust(m) returns true iff m is a Just variant.",
-          "Total. Corresponds to Haskell's Data.Maybe.isJust :: Maybe a -> Bool."],
-        Packaging.entityMetadataSeeAlso = [],
-        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = (Just (Core.TermAnnotated (Core.AnnotatedTerm {
@@ -421,6 +421,13 @@ isNothing :: Packaging.PrimitiveDefinition
 isNothing =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.maybes.isNothing"),
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "Test whether a maybe is absent (Nothing)."),
+        Packaging.entityMetadataComments = [
+          "isNothing(m) returns true iff m is the Nothing variant.",
+          "Total. Corresponds to Haskell's Data.Maybe.isNothing :: Maybe a -> Bool."],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [
           Typing.TypeParameter {
@@ -435,13 +442,6 @@ isNothing =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeLiteral Core.LiteralTypeBoolean)}},
-      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
-        Packaging.entityMetadataDescription = (Just "Test whether a maybe is absent (Nothing)."),
-        Packaging.entityMetadataComments = [
-          "isNothing(m) returns true iff m is the Nothing variant.",
-          "Total. Corresponds to Haskell's Data.Maybe.isNothing :: Maybe a -> Bool."],
-        Packaging.entityMetadataSeeAlso = [],
-        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = (Just (Core.TermAnnotated (Core.AnnotatedTerm {
@@ -464,6 +464,14 @@ map :: Packaging.PrimitiveDefinition
 map =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.maybes.map"),
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "Map a function over a maybe."),
+        Packaging.entityMetadataComments = [
+          "map(f, m) returns Just(f x) when m is Just(x), and Nothing when m is Nothing.",
+          "The functor instance for maybe.",
+          "Total. Corresponds to Haskell's fmap :: (a -> b) -> Maybe a -> Maybe b."],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [
           Typing.TypeParameter {
@@ -488,14 +496,6 @@ map =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeMaybe (Core.TypeVariable (Core.Name "y")))}},
-      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
-        Packaging.entityMetadataDescription = (Just "Map a function over a maybe."),
-        Packaging.entityMetadataComments = [
-          "map(f, m) returns Just(f x) when m is Just(x), and Nothing when m is Nothing.",
-          "The functor instance for maybe.",
-          "Total. Corresponds to Haskell's fmap :: (a -> b) -> Maybe a -> Maybe b."],
-        Packaging.entityMetadataSeeAlso = [],
-        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = (Just (Core.TermAnnotated (Core.AnnotatedTerm {
@@ -525,6 +525,13 @@ mapMaybe :: Packaging.PrimitiveDefinition
 mapMaybe =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.maybes.mapMaybe"),
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "Map a partial function over a list, keeping only the present results."),
+        Packaging.entityMetadataComments = [
+          "mapMaybe(f, xs) applies f to each element of xs and returns the list of contained values from Just results in original order; Nothing results are discarded.",
+          "Total. Corresponds to Haskell's Data.Maybe.mapMaybe :: (a -> Maybe b) -> [a] -> [b]."],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [
           Typing.TypeParameter {
@@ -549,13 +556,6 @@ mapMaybe =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeList (Core.TypeVariable (Core.Name "y")))}},
-      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
-        Packaging.entityMetadataDescription = (Just "Map a partial function over a list, keeping only the present results."),
-        Packaging.entityMetadataComments = [
-          "mapMaybe(f, xs) applies f to each element of xs and returns the list of contained values from Just results in original order; Nothing results are discarded.",
-          "Total. Corresponds to Haskell's Data.Maybe.mapMaybe :: (a -> Maybe b) -> [a] -> [b]."],
-        Packaging.entityMetadataSeeAlso = [],
-        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = (Just (Core.TermAnnotated (Core.AnnotatedTerm {
@@ -580,6 +580,14 @@ maybe :: Packaging.PrimitiveDefinition
 maybe =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.maybes.maybe"),
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "Case analysis on a maybe, applying a function if present or returning a default if absent."),
+        Packaging.entityMetadataComments = [
+          "maybe(def, f, m) returns f(x) when m is Just(x), and def when m is Nothing.",
+          "The fundamental eliminator for the maybe type; every other primitive in this namespace can be derived from it.",
+          "Total. Corresponds to Haskell's maybe :: b -> (a -> b) -> Maybe a -> b."],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [
           Typing.TypeParameter {
@@ -609,14 +617,6 @@ maybe =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeVariable (Core.Name "y"))}},
-      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
-        Packaging.entityMetadataDescription = (Just "Case analysis on a maybe, applying a function if present or returning a default if absent."),
-        Packaging.entityMetadataComments = [
-          "maybe(def, f, m) returns f(x) when m is Just(x), and def when m is Nothing.",
-          "The fundamental eliminator for the maybe type; every other primitive in this namespace can be derived from it.",
-          "Total. Corresponds to Haskell's maybe :: b -> (a -> b) -> Maybe a -> b."],
-        Packaging.entityMetadataSeeAlso = [],
-        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
@@ -624,6 +624,13 @@ pure :: Packaging.PrimitiveDefinition
 pure =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.maybes.pure"),
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "Wrap a value in Just."),
+        Packaging.entityMetadataComments = [
+          "pure(x) = Just(x). The applicative pure for maybe.",
+          "Total. Corresponds to Haskell's pure :: a -> Maybe a / Just."],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [
           Typing.TypeParameter {
@@ -638,13 +645,6 @@ pure =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeMaybe (Core.TypeVariable (Core.Name "x")))}},
-      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
-        Packaging.entityMetadataDescription = (Just "Wrap a value in Just."),
-        Packaging.entityMetadataComments = [
-          "pure(x) = Just(x). The applicative pure for maybe.",
-          "Total. Corresponds to Haskell's pure :: a -> Maybe a / Just."],
-        Packaging.entityMetadataSeeAlso = [],
-        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = (Just (Core.TermAnnotated (Core.AnnotatedTerm {
@@ -658,6 +658,13 @@ toList :: Packaging.PrimitiveDefinition
 toList =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.maybes.toList"),
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "Convert a maybe to a list: Just x maps to [x], Nothing to []."),
+        Packaging.entityMetadataComments = [
+          "toList(m) returns [x] when m is Just(x), and the empty list when m is Nothing.",
+          "Total. Corresponds to Haskell's Data.Maybe.maybeToList :: Maybe a -> [a]."],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [
           Typing.TypeParameter {
@@ -672,13 +679,6 @@ toList =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeList (Core.TypeVariable (Core.Name "x")))}},
-      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
-        Packaging.entityMetadataDescription = (Just "Convert a maybe to a list: Just x maps to [x], Nothing to []."),
-        Packaging.entityMetadataComments = [
-          "toList(m) returns [x] when m is Just(x), and the empty list when m is Nothing.",
-          "Total. Corresponds to Haskell's Data.Maybe.maybeToList :: Maybe a -> [a]."],
-        Packaging.entityMetadataSeeAlso = [],
-        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = (Just (Core.TermAnnotated (Core.AnnotatedTerm {

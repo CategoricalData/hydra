@@ -2,8 +2,7 @@
   "definitions": [
     {
       "type": {
-        "name": "hydra.ast.Associativity",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "Operator associativity"}}}],
@@ -13,11 +12,11 @@
                   {"name": "left", "type": {"unit": {}}},
                   {"name": "right", "type": {"unit": {}}},
                   {"name": "both", "type": {"unit": {}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.ast.Associativity"}},
     {
       "type": {
-        "name": "hydra.ast.BlockStyle",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "Formatting option for code blocks"}}}],
@@ -41,11 +40,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "Whether to place a newline after the content"}}}],
                         "body": {"literal": {"boolean": {}}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.ast.BlockStyle"}},
     {
       "type": {
-        "name": "hydra.ast.BracketExpr",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "An expression enclosed by brackets"}}}],
@@ -69,11 +68,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The formatting style for the bracketed block"}}}],
                         "body": {"variable": "hydra.ast.BlockStyle"}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.ast.BracketExpr"}},
     {
       "type": {
-        "name": "hydra.ast.Brackets",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "Matching open and close bracket symbols"}}}],
@@ -91,11 +90,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The closing bracket symbol"}}}],
                         "body": {"variable": "hydra.ast.Symbol"}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.ast.Brackets"}},
     {
       "type": {
-        "name": "hydra.ast.Expr",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "An abstract expression"}}}],
@@ -136,11 +135,11 @@
                               "literal": {
                                 "string": "A sequence of expressions joined by a separator, treated as structural layout (not subject to parenthesization)"}}}],
                         "body": {"variable": "hydra.ast.SeqExpr"}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.ast.Expr"}},
     {
       "type": {
-        "name": "hydra.ast.IndentStyle",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "Any of several indentation styles"}}}],
@@ -158,11 +157,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "Indent only lines after the first with the given string"}}}],
                         "body": {"literal": {"string": {}}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.ast.IndentStyle"}},
     {
       "type": {
-        "name": "hydra.ast.IndentedExpression",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "An expression indented in a certain style"}}}],
@@ -180,11 +179,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The expression to be indented"}}}],
                         "body": {"variable": "hydra.ast.Expr"}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.ast.IndentedExpression"}},
     {
       "type": {
-        "name": "hydra.ast.Op",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "An operator symbol"}}}],
@@ -214,11 +213,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The associativity of the operator"}}}],
                         "body": {"variable": "hydra.ast.Associativity"}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.ast.Op"}},
     {
       "type": {
-        "name": "hydra.ast.OpExpr",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "An operator expression"}}}],
@@ -242,11 +241,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The right-hand side operand"}}}],
                         "body": {"variable": "hydra.ast.Expr"}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.ast.OpExpr"}},
     {
       "type": {
-        "name": "hydra.ast.Padding",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "Left and right padding for an operator"}}}],
@@ -264,20 +263,20 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "Padding to the right of the operator"}}}],
                         "body": {"variable": "hydra.ast.Ws"}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.ast.Padding"}},
     {
       "type": {
-        "name": "hydra.ast.Precedence",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "Operator precedence"}}}],
               "body": {"wrap": {"literal": {"integer": {"int32": {}}}}}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.ast.Precedence"}},
     {
       "type": {
-        "name": "hydra.ast.SeqExpr",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [
@@ -300,20 +299,20 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The expressions to join"}}}],
                         "body": {"list": {"variable": "hydra.ast.Expr"}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.ast.SeqExpr"}},
     {
       "type": {
-        "name": "hydra.ast.Symbol",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "Any symbol"}}}],
               "body": {"wrap": {"literal": {"string": {}}}}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.ast.Symbol"}},
     {
       "type": {
-        "name": "hydra.ast.Ws",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "One of several classes of whitespace"}}}],
@@ -341,7 +340,8 @@
                     "name": "doubleBreak",
                     "type": {
                       "annotated": {"annotation": [{"key": "description", "value": {"literal": {"string": "Two line breaks"}}}], "body": {"unit": {}}}}}]}}},
-          "variables": []}}}],
+          "variables": []},
+        "name": "hydra.ast.Ws"}}],
   "dependencies": [{"module": "hydra.core"}],
   "metadata": {"comments": [], "description": "A model which provides a common syntax tree for Hydra serializers", "seeAlso": []},
   "name": "hydra.ast"}

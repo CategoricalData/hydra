@@ -2,8 +2,7 @@
   "definitions": [
     {
       "type": {
-        "name": "hydra.typed.TypedBinding",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [
@@ -25,20 +24,20 @@
                             "annotation": [{"key": "description", "value": {"literal": {"string": "The term with its phantom type"}}}],
                             "body": {"application": {"argument": {"variable": "a"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}}}]},
                   "parameter": "a"}}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.typed.TypedBinding"}},
     {
       "type": {
-        "name": "hydra.typed.TypedTerm",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "An association of a term with a phantom type"}}}],
               "body": {"forall": {"body": {"wrap": {"variable": "hydra.core.Term"}}, "parameter": "a"}}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.typed.TypedTerm"}},
     {
       "type": {
-        "name": "hydra.typed.TypedTermDefinition",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "An association of a term definition with a phantom type"}}}],
@@ -59,7 +58,8 @@
                             "annotation": [{"key": "description", "value": {"literal": {"string": "The term with its phantom type"}}}],
                             "body": {"application": {"argument": {"variable": "a"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}}}]},
                   "parameter": "a"}}}},
-          "variables": []}}}],
+          "variables": []},
+        "name": "hydra.typed.TypedTermDefinition"}}],
   "dependencies": [{"module": "hydra.core"}],
   "metadata": {"comments": [], "description": "Typed (phantom) wrappers for use with Hydra DSLs", "seeAlso": []},
   "name": "hydra.typed"}

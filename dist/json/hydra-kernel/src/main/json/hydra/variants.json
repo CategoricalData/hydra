@@ -2,8 +2,7 @@
   "definitions": [
     {
       "type": {
-        "name": "hydra.variants.LiteralVariant",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "The identifier of a literal constructor"}}}],
@@ -15,11 +14,11 @@
                   {"name": "float", "type": {"unit": {}}},
                   {"name": "integer", "type": {"unit": {}}},
                   {"name": "string", "type": {"unit": {}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.variants.LiteralVariant"}},
     {
       "type": {
-        "name": "hydra.variants.TermVariant",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "The identifier of a term expression constructor"}}}],
@@ -46,11 +45,11 @@
                   {"name": "unwrap", "type": {"unit": {}}},
                   {"name": "variable", "type": {"unit": {}}},
                   {"name": "wrap", "type": {"unit": {}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.variants.TermVariant"}},
     {
       "type": {
-        "name": "hydra.variants.TypeVariant",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "The identifier of a type constructor"}}}],
@@ -73,7 +72,8 @@
                   {"name": "variable", "type": {"unit": {}}},
                   {"name": "void", "type": {"unit": {}}},
                   {"name": "wrap", "type": {"unit": {}}}]}}},
-          "variables": []}}}],
+          "variables": []},
+        "name": "hydra.variants.TypeVariant"}}],
   "dependencies": [{"module": "hydra.core"}],
   "metadata": {
     "comments": [],

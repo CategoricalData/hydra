@@ -2,8 +2,7 @@
   "definitions": [
     {
       "type": {
-        "name": "hydra.typing.FunctionStructure",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [
@@ -62,11 +61,11 @@
                             "annotation": [{"key": "description", "value": {"literal": {"string": "Updated environment after processing all bindings"}}}],
                             "body": {"variable": "env"}}}}]},
                   "parameter": "env"}}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.typing.FunctionStructure"}},
     {
       "type": {
-        "name": "hydra.typing.InferenceContext",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [
@@ -96,11 +95,11 @@
                               "literal": {
                                 "string": "The current subterm-path trace, accumulated backwards (head = most-recently-pushed step, corresponding to the deepest point in the descent). At the moment an inference error is constructed, the list is reversed and wrapped into a SubtermPath (root-to-leaf order) and stamped onto the error."}}}],
                         "body": {"list": {"variable": "hydra.paths.SubtermStep"}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.typing.InferenceContext"}},
     {
       "type": {
-        "name": "hydra.typing.InferenceResult",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "The result of applying inference rules to a term."}}}],
@@ -132,7 +131,7 @@
                           {
                             "key": "description",
                             "value": {"literal": {"string": "Class constraints discovered during inference (e.g., Ord constraints from Map.lookup)"}}}],
-                        "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableMetadata"}}}}}},
+                        "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}},
                   {
                     "name": "context",
                     "type": {
@@ -142,11 +141,11 @@
                             "key": "description",
                             "value": {"literal": {"string": "The updated InferenceContext after inference (carries fresh-variable counter and trace)"}}}],
                         "body": {"variable": "hydra.typing.InferenceContext"}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.typing.InferenceResult"}},
     {
       "type": {
-        "name": "hydra.typing.Parameter",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [
@@ -186,11 +185,11 @@
                               "literal": {
                                 "string": "Whether the parameter must be passed lazily (thunked) at call sites in hosts that distinguish strict from lazy evaluation"}}}],
                         "body": {"literal": {"boolean": {}}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.typing.Parameter"}},
     {
       "type": {
-        "name": "hydra.typing.Result",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [
@@ -211,11 +210,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The type of the result"}}}],
                         "body": {"variable": "hydra.core.Type"}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.typing.Result"}},
     {
       "type": {
-        "name": "hydra.typing.TermSignature",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [
@@ -244,20 +243,20 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The result of the term"}}}],
                         "body": {"variable": "hydra.typing.Result"}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.typing.TermSignature"}},
     {
       "type": {
-        "name": "hydra.typing.TermSubst",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A substitution of term variables for terms"}}}],
               "body": {"wrap": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Term"}}}}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.typing.TermSubst"}},
     {
       "type": {
-        "name": "hydra.typing.TypeClass",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [
@@ -265,7 +264,7 @@
                   "key": "description",
                   "value": {
                     "literal": {
-                      "string": "A type class identifier together with a human-readable description. Type classes are referenced as bare names (e.g. the local name \"equality\") in TypeVariableMetadata.classes; the canonical definitions live as term bindings under hydra.classes."}}}],
+                      "string": "A type class identifier together with a human-readable description. Type classes are referenced as bare names (e.g. the local name \"equality\") in TypeVariableConstraints.classes; the canonical definitions live as term bindings under hydra.classes."}}}],
               "body": {
                 "record": [
                   {
@@ -274,11 +273,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "A human-readable description of the type class"}}}],
                         "body": {"literal": {"string": {}}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.typing.TypeClass"}},
     {
       "type": {
-        "name": "hydra.typing.TypeConstraint",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [
@@ -308,11 +307,11 @@
                             "key": "description",
                             "value": {"literal": {"string": "A description of the type constraint which may be used for tracing or debugging"}}}],
                         "body": {"literal": {"string": {}}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.typing.TypeConstraint"}},
     {
       "type": {
-        "name": "hydra.typing.TypeParameter",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [
@@ -333,16 +332,17 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "Any type class constraints on the type parameter"}}}],
                         "body": {"list": {"variable": "hydra.core.TypeClassConstraint"}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.typing.TypeParameter"}},
     {
       "type": {
-        "name": "hydra.typing.TypeSubst",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A substitution of type variables for types"}}}],
               "body": {"wrap": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Type"}}}}}},
-          "variables": []}}}],
+          "variables": []},
+        "name": "hydra.typing.TypeSubst"}}],
   "dependencies": [{"module": "hydra.core"}, {"module": "hydra.paths"}],
   "metadata": {"comments": [], "description": "Types supporting type inference and type reconstruction.", "seeAlso": []},
   "name": "hydra.typing"}

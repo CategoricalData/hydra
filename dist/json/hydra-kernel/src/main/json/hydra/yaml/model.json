@@ -2,8 +2,7 @@
   "definitions": [
     {
       "type": {
-        "name": "hydra.yaml.model.Node",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A YAML node (value)"}}}],
@@ -27,11 +26,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "A sequence of nodes"}}}],
                         "body": {"list": {"variable": "hydra.yaml.model.Node"}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.yaml.model.Node"}},
     {
       "type": {
-        "name": "hydra.yaml.model.Scalar",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [
@@ -80,7 +79,8 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "A string value"}}}],
                         "body": {"literal": {"string": {}}}}}}]}}},
-          "variables": []}}}],
+          "variables": []},
+        "name": "hydra.yaml.model.Scalar"}}],
   "dependencies": [{"module": "hydra.core"}],
   "metadata": {
     "comments": [],

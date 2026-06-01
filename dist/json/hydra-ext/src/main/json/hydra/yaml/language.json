@@ -2,9 +2,7 @@
   "definitions": [
     {
       "term": {
-        "name": "hydra.yaml.language.yamlLanguage",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.coders.Language"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Language constraints for YAML"}}}],
             "body": {
@@ -79,8 +77,7 @@
                               "cases": {
                                 "cases": [
                                   {
-                                    "name": "maybe",
-                                    "term": {
+                                    "handler": {
                                       "lambda": {
                                         "body": {
                                           "application": {
@@ -89,12 +86,13 @@
                                               "cases": {
                                                 "cases": [
                                                   {
-                                                    "name": "maybe",
-                                                    "term": {"lambda": {"body": {"literal": {"boolean": false}}, "domain": {"variable": "hydra.core.Type"}, "parameter": "_"}}}],
+                                                    "handler": {"lambda": {"body": {"literal": {"boolean": false}}, "domain": {"variable": "hydra.core.Type"}, "parameter": "_"}},
+                                                    "name": "maybe"}],
                                                 "default": {"literal": {"boolean": true}},
                                                 "typeName": "hydra.core.Type"}}}},
                                         "domain": {"variable": "hydra.core.Type"},
-                                        "parameter": "innerType"}}}],
+                                        "parameter": "innerType"}},
+                                    "name": "maybe"}],
                                 "default": {"literal": {"boolean": true}},
                                 "typeName": "hydra.core.Type"}}}},
                         "domain": {"variable": "hydra.core.Type"},
@@ -120,7 +118,9 @@
                               {"name": "typeVariants", "term": {"variable": "typeVariants"}},
                               {"name": "types", "term": {"variable": "typePredicate"}}],
                             "typeName": "hydra.coders.LanguageConstraints"}}}],
-                    "typeName": "hydra.coders.Language"}}}}}}}}],
+                    "typeName": "hydra.coders.Language"}}}}}},
+        "name": "hydra.yaml.language.yamlLanguage",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.coders.Language"}}, "typeParameters": []}}}],
   "dependencies": [
     {"module": "hydra.strip"},
     {"module": "hydra.paths"},

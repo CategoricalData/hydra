@@ -32,17 +32,6 @@ _DefinitionReference = Core.Name "hydra.packaging.DefinitionReference"
 _DefinitionReference_type = Core.Name "type"
 _DefinitionReference_term = Core.Name "term"
 _DefinitionReference_primitive = Core.Name "primitive"
--- | Version-lifecycle milestones for a packaging entity. Each milestone is independently optional; further milestones (e.g. stableSince, removedSince) may be added without changing dependent types.
-data LifecycleInfo =
-  LifecycleInfo {
-    -- | The version in which the entity was introduced, if known.
-    entityLifecycleAvailableSince :: (Maybe Version),
-    -- | The version in which the entity was deprecated, if applicable.
-    entityLifecycleDeprecatedSince :: (Maybe Version)}
-  deriving (Eq, Ord, Read, Show)
-_LifecycleInfo = Core.Name "hydra.packaging.LifecycleInfo"
-_LifecycleInfo_availableSince = Core.Name "availableSince"
-_LifecycleInfo_deprecatedSince = Core.Name "deprecatedSince"
 -- | Documentation and lifecycle metadata attachable to a packaging entity (package, module, or definition). Bundling these fields in one type lets future metadata be added without changing the field shape of the entities that carry it.
 data EntityMetadata =
   EntityMetadata {
@@ -73,6 +62,17 @@ _EntityReference = Core.Name "hydra.packaging.EntityReference"
 _EntityReference_package = Core.Name "package"
 _EntityReference_module = Core.Name "module"
 _EntityReference_definition = Core.Name "definition"
+-- | Version-lifecycle milestones for a packaging entity. Each milestone is independently optional; further milestones (e.g. stableSince, removedSince) may be added without changing dependent types.
+data LifecycleInfo =
+  LifecycleInfo {
+    -- | The version in which the entity was introduced, if known.
+    lifecycleInfoAvailableSince :: (Maybe Version),
+    -- | The version in which the entity was deprecated, if applicable.
+    lifecycleInfoDeprecatedSince :: (Maybe Version)}
+  deriving (Eq, Ord, Read, Show)
+_LifecycleInfo = Core.Name "hydra.packaging.LifecycleInfo"
+_LifecycleInfo_availableSince = Core.Name "availableSince"
+_LifecycleInfo_deprecatedSince = Core.Name "deprecatedSince"
 -- | A logical collection of elements sharing a common module name, having dependencies on zero or more other modules
 data Module =
   Module {
@@ -141,25 +141,18 @@ newtype PackageName =
     unPackageName :: String}
   deriving (Eq, Ord, Read, Show)
 _PackageName = Core.Name "hydra.packaging.PackageName"
--- | A specifier constraining acceptable versions of a depended-on package. Currently only the `any` (unit) specifier is defined; future variants such as `exact`, `caret`, and `range` may be added without breaking consumers of the `any` form.
-data VersionSpecifier =
-  -- | Any version of the package satisfies the dependency
-  VersionSpecifierAny
-  deriving (Eq, Ord, Read, Show)
-_VersionSpecifier = Core.Name "hydra.packaging.VersionSpecifier"
-_VersionSpecifier_any = Core.Name "any"
 -- | A primitive definition: the universal, host-independent declarative metadata for a primitive, including name, signature, documentation and lifecycle metadata, totality and purity flags, and an optional default implementation expressed as a Hydra term.
 data PrimitiveDefinition =
   PrimitiveDefinition {
     -- | The name of the primitive
     primitiveDefinitionName :: Core.Name,
-    -- | Optional documentation and lifecycle metadata for the primitive (description, long-form comments, cross-references, version milestones).
+    -- | Optional documentation and lifecycle metadata for the primitive.
     primitiveDefinitionMetadata :: (Maybe EntityMetadata),
-    -- | The signature of the primitive (always explicit, never inferred)
+    -- | The signature of the primitive. Always explicit, never inferred.
     primitiveDefinitionSignature :: Typing.TermSignature,
-    -- | Whether the primitive is pure (referentially transparent, no observable side effects). Defaults to true.
+    -- | Whether the primitive is pure (referentially transparent, no observable side effects). Normally true.
     primitiveDefinitionIsPure :: Bool,
-    -- | Whether the primitive is total (terminates on every input of its declared type). Defaults to true.
+    -- | Whether the primitive is total (terminates on every input of its declared type). Normally true.
     primitiveDefinitionIsTotal :: Bool,
     -- | An optional cross-compilable reference implementation of the primitive, expressed as a Hydra term. Used by interpreters lacking a native implementation and as a proof-friendly reference. Distinct from the per-host Primitive.implementation.
     primitiveDefinitionDefaultImplementation :: (Maybe Core.Term)}
@@ -178,7 +171,7 @@ data TermDefinition =
     termDefinitionName :: Core.Name,
     -- | Optional documentation and lifecycle metadata for the term definition
     termDefinitionMetadata :: (Maybe EntityMetadata),
-    -- | The optional signature of the term. When absent, the signature is to be inferred.
+    -- | The optional signature of the term. When absent, the signature has yet to be inferred.
     termDefinitionSignature :: (Maybe Typing.TermSignature),
     -- | The term being defined
     termDefinitionBody :: Core.Term}
@@ -208,3 +201,10 @@ newtype Version =
     unVersion :: String}
   deriving (Eq, Ord, Read, Show)
 _Version = Core.Name "hydra.packaging.Version"
+-- | A specifier constraining acceptable versions of a dependency. Currently only the `any` (unit) specifier is defined; future variants such as `exact`, `caret`, and `range` may be added without breaking consumers of the `any` form.
+data VersionSpecifier =
+  -- | Any version satisfies the dependency
+  VersionSpecifierAny
+  deriving (Eq, Ord, Read, Show)
+_VersionSpecifier = Core.Name "hydra.packaging.VersionSpecifier"
+_VersionSpecifier_any = Core.Name "any"
