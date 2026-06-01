@@ -90,7 +90,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> ([Lexical.ns, Names.ns, Scoping.ns, ShowCore.ns, Strip.ns, Substitution.ns, Variables.ns] L.++ kernelTypesModuleNames),
-            moduleDescription = Just ("Type dereference, lookup, requirements, and instantiation")}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just ("Type dereference, lookup, requirements, and instantiation"))}
   where
     definitions = [
       toDefinition dereferenceType,

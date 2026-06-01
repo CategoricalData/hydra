@@ -1624,5 +1624,5 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "description": "Type and term classification predicates",
+  "metadata": {"comments": [], "description": "Type and term classification predicates", "seeAlso": []},
   "name": "hydra.predicates"}

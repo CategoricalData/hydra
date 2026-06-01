@@ -64,7 +64,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> ([ExtractCore.ns, ShowError.ns] L.++ kernelTypesModuleNames),
-            moduleDescription = Just ("Extraction and validation for hydra.util types")}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just ("Extraction and validation for hydra.util types"))}
   where
    definitions = [
      toDefinition comparison]

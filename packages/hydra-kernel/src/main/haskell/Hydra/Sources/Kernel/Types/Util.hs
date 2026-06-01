@@ -21,7 +21,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = (DefinitionType <$> definitions),
             moduleDependencies = unqualifiedDep <$> [Core.ns, Packaging.ns],
-            moduleDescription = Just "General-purpose utility types used across Hydra."}
+            moduleMetadata = descriptionMetadata (Just "General-purpose utility types used across Hydra.")}
   where
     -- Note: either_ and pair are NOT included here because they correspond to built-in
     -- type constructors (TypeEither, TypePair) which are handled natively by all target languages.

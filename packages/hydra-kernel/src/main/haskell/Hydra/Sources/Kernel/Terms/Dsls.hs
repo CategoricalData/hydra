@@ -4,7 +4,7 @@ module Hydra.Sources.Kernel.Terms.Dsls where
 
 -- Standard imports for kernel terms modules
 import Hydra.Kernel
-import           Hydra.Dsl.Bootstrap (unqualifiedDep)
+import           Hydra.Dsl.Bootstrap (unqualifiedDep, descriptionMetadata)
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Annotations       as Annotations
 import qualified Hydra.Dsl.Meta.Core         as Core
@@ -48,7 +48,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = unqualifiedDep <$> ([Annotations.ns, Formatting.ns, Lexical.ns, Names.ns, Strip.ns, ModuleName "hydra.constants", ModuleName "hydra.decode.core", ModuleName "hydra.encode.core"] L.++ kernelTypesModuleNames),
-            moduleDescription = Just "Functions for generating domain-specific DSL modules from type modules"}
+            moduleMetadata = descriptionMetadata (Just "Functions for generating domain-specific DSL modules from type modules")}
   where
     definitions = [
       toDefinition collectForallVars,
@@ -248,9 +248,11 @@ dslModule = define "dslModule" $
           (generateBindingsForType @@ var "cx" @@ var "graph" @@ var "b")) (var "typeBindings") $
         right (just (Packaging.module_
           (dslModuleName @@ (Packaging.moduleName (var "mod")))
-          (just (Strings.cat $ list [
-            string "DSL functions for ",
-            Packaging.unModuleName (Packaging.moduleName (var "mod"))]))
+          (just (Packaging.entityMetadata
+            (just (Strings.cat $ list [
+              string "DSL functions for ",
+              Packaging.unModuleName (Packaging.moduleName (var "mod"))]))
+            (list ([] :: [TypedTerm String])) (list ([] :: [TypedTerm EntityReference])) nothing))
           -- DSL modules depend on:
           -- (1) the original module + its source dependencies + hydra.typed (for TypedTerm), and
           -- (2) DSL modules for the source's dependencies (to reference other types' DSL functions)
@@ -260,7 +262,7 @@ dslModule = define "dslModule" $
               (Lists.map ("dep" ~> Packaging.moduleDependencyModule (var "dep")) (Packaging.moduleDependencies (var "mod")))
               (primitive _lists_map @@ dslModuleName @@ (Lists.map ("dep" ~> Packaging.moduleDependencyModule (var "dep")) (Packaging.moduleDependencies (var "mod"))))))))
           (Lists.map ("b" ~> Packaging.definitionTerm (Packaging.termDefinition
-            (Core.bindingName $ var "b") (Core.bindingTerm $ var "b")
+            (Core.bindingName $ var "b") nothing (Core.bindingTerm $ var "b")
             (Maybes.map Scoping.typeSchemeToTermSignature $ Core.bindingTypeScheme $ var "b")))
             (deduplicateBindings @@ Lists.concat (var "dslBindings"))))))
 -- | Generate a DSL module name from a source module name

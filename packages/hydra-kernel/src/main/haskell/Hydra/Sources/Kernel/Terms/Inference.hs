@@ -100,7 +100,7 @@ module_ = Module {
             moduleDependencies = Bootstrap.unqualifiedDep <$> ([Annotations.ns, Checking.ns, ExtractCore.ns, Lexical.ns, Reflect.ns,
       Rewriting.ns, Names.ns, Resolution.ns, ShowCore.ns, ShowError.ns, ShowTyping.ns, Sorting.ns, Substitution.ns, Variables.ns,
       Unification.ns] L.++ kernelTypesModuleNames),
-            moduleDescription = Just "Type inference following Algorithm W, extended for nominal terms and types"}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just "Type inference following Algorithm W, extended for nominal terms and types")}
   where
     definitions = [
       toDefinition atOrFail,

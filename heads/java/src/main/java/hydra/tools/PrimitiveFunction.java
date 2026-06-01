@@ -100,13 +100,9 @@ public abstract class PrimitiveFunction {
         PrimitiveDefinition definition = new PrimitiveDefinition(
             name(),
             signatureWithLaziness(),
-            "",
             Maybe.nothing(),
-            java.util.Collections.emptyList(),
             Boolean.TRUE,
             Boolean.TRUE,
-            Maybe.nothing(),
-            Maybe.nothing(),
             Maybe.nothing());
         return new Primitive(definition, nativeImpl);
     }

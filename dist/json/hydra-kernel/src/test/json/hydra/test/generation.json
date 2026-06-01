@@ -57,7 +57,9 @@
                                                                                 {
                                                                                   "name": "name",
                                                                                   "term": {"wrap": {"body": {"literal": {"string": "hydra.testInput.b"}}, "typeName": "hydra.packaging.ModuleName"}}},
-                                                                                {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                                                                                {
+                                                                                  "name": "metadata",
+                                                                                  "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.packaging.EntityMetadata"}}}},
                                                                                 {
                                                                                   "name": "dependencies",
                                                                                   "term": {
@@ -86,6 +88,9 @@
                                                                                                   {
                                                                                                     "name": "name",
                                                                                                     "term": {"wrap": {"body": {"literal": {"string": "hydra.testInput.b.useId"}}, "typeName": "hydra.core.Name"}}},
+                                                                                                  {
+                                                                                                    "name": "metadata",
+                                                                                                    "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.packaging.EntityMetadata"}}}},
                                                                                                   {
                                                                                                     "name": "term",
                                                                                                     "term": {
@@ -135,7 +140,9 @@
                                                                                     {
                                                                                       "name": "name",
                                                                                       "term": {"wrap": {"body": {"literal": {"string": "hydra.testInput.a"}}, "typeName": "hydra.packaging.ModuleName"}}},
-                                                                                    {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                                                                                    {
+                                                                                      "name": "metadata",
+                                                                                      "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.packaging.EntityMetadata"}}}},
                                                                                     {
                                                                                       "name": "dependencies",
                                                                                       "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.ModuleDependency"}}}},
@@ -153,6 +160,9 @@
                                                                                                       {
                                                                                                         "name": "name",
                                                                                                         "term": {"wrap": {"body": {"literal": {"string": "hydra.testInput.a.idA"}}, "typeName": "hydra.core.Name"}}},
+                                                                                                      {
+                                                                                                        "name": "metadata",
+                                                                                                        "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.packaging.EntityMetadata"}}}},
                                                                                                       {
                                                                                                         "name": "term",
                                                                                                         "term": {
@@ -223,7 +233,9 @@
                                                                                     {
                                                                                       "name": "name",
                                                                                       "term": {"wrap": {"body": {"literal": {"string": "hydra.testInput.b"}}, "typeName": "hydra.packaging.ModuleName"}}},
-                                                                                    {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                                                                                    {
+                                                                                      "name": "metadata",
+                                                                                      "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.packaging.EntityMetadata"}}}},
                                                                                     {
                                                                                       "name": "dependencies",
                                                                                       "term": {
@@ -252,6 +264,9 @@
                                                                                                       {
                                                                                                         "name": "name",
                                                                                                         "term": {"wrap": {"body": {"literal": {"string": "hydra.testInput.b.useId"}}, "typeName": "hydra.core.Name"}}},
+                                                                                                      {
+                                                                                                        "name": "metadata",
+                                                                                                        "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.packaging.EntityMetadata"}}}},
                                                                                                       {
                                                                                                         "name": "term",
                                                                                                         "term": {
@@ -455,7 +470,9 @@
                                                                                 {
                                                                                   "name": "name",
                                                                                   "term": {"wrap": {"body": {"literal": {"string": "hydra.testInput.b"}}, "typeName": "hydra.packaging.ModuleName"}}},
-                                                                                {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                                                                                {
+                                                                                  "name": "metadata",
+                                                                                  "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.packaging.EntityMetadata"}}}},
                                                                                 {
                                                                                   "name": "dependencies",
                                                                                   "term": {
@@ -484,6 +501,9 @@
                                                                                                   {
                                                                                                     "name": "name",
                                                                                                     "term": {"wrap": {"body": {"literal": {"string": "hydra.testInput.b.useId"}}, "typeName": "hydra.core.Name"}}},
+                                                                                                  {
+                                                                                                    "name": "metadata",
+                                                                                                    "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.packaging.EntityMetadata"}}}},
                                                                                                   {
                                                                                                     "name": "term",
                                                                                                     "term": {
@@ -533,7 +553,9 @@
                                                                                     {
                                                                                       "name": "name",
                                                                                       "term": {"wrap": {"body": {"literal": {"string": "hydra.testInput.a"}}, "typeName": "hydra.packaging.ModuleName"}}},
-                                                                                    {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                                                                                    {
+                                                                                      "name": "metadata",
+                                                                                      "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.packaging.EntityMetadata"}}}},
                                                                                     {
                                                                                       "name": "dependencies",
                                                                                       "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.ModuleDependency"}}}},
@@ -551,6 +573,9 @@
                                                                                                       {
                                                                                                         "name": "name",
                                                                                                         "term": {"wrap": {"body": {"literal": {"string": "hydra.testInput.a.idA"}}, "typeName": "hydra.core.Name"}}},
+                                                                                                      {
+                                                                                                        "name": "metadata",
+                                                                                                        "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.packaging.EntityMetadata"}}}},
                                                                                                       {
                                                                                                         "name": "term",
                                                                                                         "term": {
@@ -621,7 +646,9 @@
                                                                                     {
                                                                                       "name": "name",
                                                                                       "term": {"wrap": {"body": {"literal": {"string": "hydra.testInput.b"}}, "typeName": "hydra.packaging.ModuleName"}}},
-                                                                                    {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                                                                                    {
+                                                                                      "name": "metadata",
+                                                                                      "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.packaging.EntityMetadata"}}}},
                                                                                     {
                                                                                       "name": "dependencies",
                                                                                       "term": {
@@ -650,6 +677,9 @@
                                                                                                       {
                                                                                                         "name": "name",
                                                                                                         "term": {"wrap": {"body": {"literal": {"string": "hydra.testInput.b.useId"}}, "typeName": "hydra.core.Name"}}},
+                                                                                                      {
+                                                                                                        "name": "metadata",
+                                                                                                        "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.packaging.EntityMetadata"}}}},
                                                                                                       {
                                                                                                         "name": "term",
                                                                                                         "term": {
@@ -869,7 +899,9 @@
                                                                                 {
                                                                                   "name": "name",
                                                                                   "term": {"wrap": {"body": {"literal": {"string": "hydra.testInput.a"}}, "typeName": "hydra.packaging.ModuleName"}}},
-                                                                                {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                                                                                {
+                                                                                  "name": "metadata",
+                                                                                  "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.packaging.EntityMetadata"}}}},
                                                                                 {
                                                                                   "name": "dependencies",
                                                                                   "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.ModuleDependency"}}}},
@@ -887,6 +919,9 @@
                                                                                                   {
                                                                                                     "name": "name",
                                                                                                     "term": {"wrap": {"body": {"literal": {"string": "hydra.testInput.a.idA"}}, "typeName": "hydra.core.Name"}}},
+                                                                                                  {
+                                                                                                    "name": "metadata",
+                                                                                                    "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.packaging.EntityMetadata"}}}},
                                                                                                   {
                                                                                                     "name": "term",
                                                                                                     "term": {
@@ -957,7 +992,9 @@
                                                                                 {
                                                                                   "name": "name",
                                                                                   "term": {"wrap": {"body": {"literal": {"string": "hydra.testInput.b"}}, "typeName": "hydra.packaging.ModuleName"}}},
-                                                                                {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                                                                                {
+                                                                                  "name": "metadata",
+                                                                                  "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.packaging.EntityMetadata"}}}},
                                                                                 {
                                                                                   "name": "dependencies",
                                                                                   "term": {
@@ -986,6 +1023,9 @@
                                                                                                   {
                                                                                                     "name": "name",
                                                                                                     "term": {"wrap": {"body": {"literal": {"string": "hydra.testInput.b.useId"}}, "typeName": "hydra.core.Name"}}},
+                                                                                                  {
+                                                                                                    "name": "metadata",
+                                                                                                    "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.packaging.EntityMetadata"}}}},
                                                                                                   {
                                                                                                     "name": "term",
                                                                                                     "term": {
@@ -1035,7 +1075,9 @@
                                                                                     {
                                                                                       "name": "name",
                                                                                       "term": {"wrap": {"body": {"literal": {"string": "hydra.testInput.a"}}, "typeName": "hydra.packaging.ModuleName"}}},
-                                                                                    {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                                                                                    {
+                                                                                      "name": "metadata",
+                                                                                      "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.packaging.EntityMetadata"}}}},
                                                                                     {
                                                                                       "name": "dependencies",
                                                                                       "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.ModuleDependency"}}}},
@@ -1053,6 +1095,9 @@
                                                                                                       {
                                                                                                         "name": "name",
                                                                                                         "term": {"wrap": {"body": {"literal": {"string": "hydra.testInput.a.idA"}}, "typeName": "hydra.core.Name"}}},
+                                                                                                      {
+                                                                                                        "name": "metadata",
+                                                                                                        "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.packaging.EntityMetadata"}}}},
                                                                                                       {
                                                                                                         "name": "term",
                                                                                                         "term": {
@@ -1123,7 +1168,9 @@
                                                                                     {
                                                                                       "name": "name",
                                                                                       "term": {"wrap": {"body": {"literal": {"string": "hydra.testInput.b"}}, "typeName": "hydra.packaging.ModuleName"}}},
-                                                                                    {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                                                                                    {
+                                                                                      "name": "metadata",
+                                                                                      "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.packaging.EntityMetadata"}}}},
                                                                                     {
                                                                                       "name": "dependencies",
                                                                                       "term": {
@@ -1152,6 +1199,9 @@
                                                                                                       {
                                                                                                         "name": "name",
                                                                                                         "term": {"wrap": {"body": {"literal": {"string": "hydra.testInput.b.useId"}}, "typeName": "hydra.core.Name"}}},
+                                                                                                      {
+                                                                                                        "name": "metadata",
+                                                                                                        "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.packaging.EntityMetadata"}}}},
                                                                                                       {
                                                                                                         "name": "term",
                                                                                                         "term": {
@@ -1355,7 +1405,9 @@
                                                                                 {
                                                                                   "name": "name",
                                                                                   "term": {"wrap": {"body": {"literal": {"string": "hydra.testInput.a"}}, "typeName": "hydra.packaging.ModuleName"}}},
-                                                                                {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                                                                                {
+                                                                                  "name": "metadata",
+                                                                                  "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.packaging.EntityMetadata"}}}},
                                                                                 {
                                                                                   "name": "dependencies",
                                                                                   "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.ModuleDependency"}}}},
@@ -1373,6 +1425,9 @@
                                                                                                   {
                                                                                                     "name": "name",
                                                                                                     "term": {"wrap": {"body": {"literal": {"string": "hydra.testInput.a.idA"}}, "typeName": "hydra.core.Name"}}},
+                                                                                                  {
+                                                                                                    "name": "metadata",
+                                                                                                    "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.packaging.EntityMetadata"}}}},
                                                                                                   {
                                                                                                     "name": "term",
                                                                                                     "term": {
@@ -1443,7 +1498,9 @@
                                                                                 {
                                                                                   "name": "name",
                                                                                   "term": {"wrap": {"body": {"literal": {"string": "hydra.testInput.b"}}, "typeName": "hydra.packaging.ModuleName"}}},
-                                                                                {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                                                                                {
+                                                                                  "name": "metadata",
+                                                                                  "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.packaging.EntityMetadata"}}}},
                                                                                 {
                                                                                   "name": "dependencies",
                                                                                   "term": {
@@ -1472,6 +1529,9 @@
                                                                                                   {
                                                                                                     "name": "name",
                                                                                                     "term": {"wrap": {"body": {"literal": {"string": "hydra.testInput.b.useId"}}, "typeName": "hydra.core.Name"}}},
+                                                                                                  {
+                                                                                                    "name": "metadata",
+                                                                                                    "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.packaging.EntityMetadata"}}}},
                                                                                                   {
                                                                                                     "name": "term",
                                                                                                     "term": {
@@ -1521,7 +1581,9 @@
                                                                                     {
                                                                                       "name": "name",
                                                                                       "term": {"wrap": {"body": {"literal": {"string": "hydra.testInput.a"}}, "typeName": "hydra.packaging.ModuleName"}}},
-                                                                                    {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                                                                                    {
+                                                                                      "name": "metadata",
+                                                                                      "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.packaging.EntityMetadata"}}}},
                                                                                     {
                                                                                       "name": "dependencies",
                                                                                       "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.ModuleDependency"}}}},
@@ -1539,6 +1601,9 @@
                                                                                                       {
                                                                                                         "name": "name",
                                                                                                         "term": {"wrap": {"body": {"literal": {"string": "hydra.testInput.a.idA"}}, "typeName": "hydra.core.Name"}}},
+                                                                                                      {
+                                                                                                        "name": "metadata",
+                                                                                                        "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.packaging.EntityMetadata"}}}},
                                                                                                       {
                                                                                                         "name": "term",
                                                                                                         "term": {
@@ -1609,7 +1674,9 @@
                                                                                     {
                                                                                       "name": "name",
                                                                                       "term": {"wrap": {"body": {"literal": {"string": "hydra.testInput.b"}}, "typeName": "hydra.packaging.ModuleName"}}},
-                                                                                    {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                                                                                    {
+                                                                                      "name": "metadata",
+                                                                                      "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.packaging.EntityMetadata"}}}},
                                                                                     {
                                                                                       "name": "dependencies",
                                                                                       "term": {
@@ -1638,6 +1705,9 @@
                                                                                                       {
                                                                                                         "name": "name",
                                                                                                         "term": {"wrap": {"body": {"literal": {"string": "hydra.testInput.b.useId"}}, "typeName": "hydra.core.Name"}}},
+                                                                                                      {
+                                                                                                        "name": "metadata",
+                                                                                                        "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.packaging.EntityMetadata"}}}},
                                                                                                       {
                                                                                                         "name": "term",
                                                                                                         "term": {
@@ -1859,7 +1929,9 @@
                                                                                 {
                                                                                   "name": "name",
                                                                                   "term": {"wrap": {"body": {"literal": {"string": "hydra.testInput.w"}}, "typeName": "hydra.packaging.ModuleName"}}},
-                                                                                {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                                                                                {
+                                                                                  "name": "metadata",
+                                                                                  "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.packaging.EntityMetadata"}}}},
                                                                                 {
                                                                                   "name": "dependencies",
                                                                                   "term": {
@@ -1888,6 +1960,9 @@
                                                                                                   {
                                                                                                     "name": "name",
                                                                                                     "term": {"wrap": {"body": {"literal": {"string": "hydra.testInput.w.useFunky"}}, "typeName": "hydra.core.Name"}}},
+                                                                                                  {
+                                                                                                    "name": "metadata",
+                                                                                                    "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.packaging.EntityMetadata"}}}},
                                                                                                   {
                                                                                                     "name": "term",
                                                                                                     "term": {
@@ -1981,7 +2056,9 @@
                                                                                     {
                                                                                       "name": "name",
                                                                                       "term": {"wrap": {"body": {"literal": {"string": "hydra.testInput.v"}}, "typeName": "hydra.packaging.ModuleName"}}},
-                                                                                    {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                                                                                    {
+                                                                                      "name": "metadata",
+                                                                                      "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.packaging.EntityMetadata"}}}},
                                                                                     {
                                                                                       "name": "dependencies",
                                                                                       "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.ModuleDependency"}}}},
@@ -1999,6 +2076,9 @@
                                                                                                       {
                                                                                                         "name": "name",
                                                                                                         "term": {"wrap": {"body": {"literal": {"string": "hydra.testInput.v.funky"}}, "typeName": "hydra.core.Name"}}},
+                                                                                                      {
+                                                                                                        "name": "metadata",
+                                                                                                        "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.packaging.EntityMetadata"}}}},
                                                                                                       {
                                                                                                         "name": "term",
                                                                                                         "term": {
@@ -2133,7 +2213,9 @@
                                                                                     {
                                                                                       "name": "name",
                                                                                       "term": {"wrap": {"body": {"literal": {"string": "hydra.testInput.w"}}, "typeName": "hydra.packaging.ModuleName"}}},
-                                                                                    {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                                                                                    {
+                                                                                      "name": "metadata",
+                                                                                      "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.packaging.EntityMetadata"}}}},
                                                                                     {
                                                                                       "name": "dependencies",
                                                                                       "term": {
@@ -2162,6 +2244,9 @@
                                                                                                       {
                                                                                                         "name": "name",
                                                                                                         "term": {"wrap": {"body": {"literal": {"string": "hydra.testInput.w.useFunky"}}, "typeName": "hydra.core.Name"}}},
+                                                                                                      {
+                                                                                                        "name": "metadata",
+                                                                                                        "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.packaging.EntityMetadata"}}}},
                                                                                                       {
                                                                                                         "name": "term",
                                                                                                         "term": {
@@ -2438,5 +2523,8 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "description": "Test cases for code generation operations such as inferModules and inferModulesGiven",
+  "metadata": {
+    "comments": [],
+    "description": "Test cases for code generation operations such as inferModules and inferModulesGiven",
+    "seeAlso": []},
   "name": "hydra.test.generation"}

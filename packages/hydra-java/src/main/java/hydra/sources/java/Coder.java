@@ -150,6 +150,7 @@ import hydra.java.syntax.VariableDeclarator;  // AUTO-IMPORT (hydra-java DSL)
 import hydra.java.syntax.VariableDeclaratorId;  // AUTO-IMPORT (hydra-java DSL)
 import hydra.java.syntax.VariableInitializer;  // AUTO-IMPORT (hydra-java DSL)
 import hydra.java.syntax.WhileStatement;  // AUTO-IMPORT (hydra-java DSL)
+import hydra.packaging.EntityMetadata;  // AUTO-IMPORT (hydra-java DSL)
 import hydra.packaging.FileExtension;  // AUTO-IMPORT (hydra-java DSL)
 import hydra.packaging.PrimitiveDefinition;  // AUTO-IMPORT (hydra-java DSL)
 import hydra.packaging.QualifiedName;  // AUTO-IMPORT (hydra-java DSL)
@@ -1143,9 +1144,15 @@ public class Coder {
                                                             var("bname"),
                                                             var("recursiveVars"))),
                                                     Logic.and_(
-                                                        apply(
-                                                            ref(Coder.needsThunking),
-                                                            proj(Binding.TYPE_, Binding.TERM, "b")),
+                                                        Logic.and_(
+                                                            apply(
+                                                                var("hydra.predicates.isComplexBinding"),
+                                                                var("g"),
+                                                                var("b")),
+                                                            Logic.not_(
+                                                                apply(
+                                                                    var("hydra.predicates.isTrivialTerm"),
+                                                                    proj(Binding.TYPE_, Binding.TERM, "b")))),
                                                         Logic.not_(
                                                             apply(
                                                                 ref(Coder.bindingIsFunctionType),
@@ -2709,7 +2716,10 @@ public class Coder {
                                 var("itf")),
                             field(
                                 TopLevelClassOrInterfaceDeclarationWithComments.COMMENTS,
-                                proj(Module.TYPE_, Module.DESCRIPTION, "mod"))))),
+                                Maybes.bind(
+                                    proj(Module.TYPE_, Module.METADATA, "mod"),
+                                    lambda("em",
+                                        proj(EntityMetadata.TYPE_, EntityMetadata.DESCRIPTION, "em"))))))),
                     pair(
                         var("elName"),
                         inject(CompilationUnit.TYPE_,
@@ -11238,22 +11248,6 @@ public class Coder {
                             wrap(ModuleName.TYPE_,
                                 Strings.intercalate(string("."), var("initParts"))))))));
 
-    public static final Def needsThunking = def(
-        "needsThunking",
-        () -> lambda("t",
-                casesWithDefault(Term.TYPE_,
-                    apply(var("hydra.strip.deannotateTerm"), var("t")),
-                    Lists.foldl(
-                        lambda(
-                            "b",
-                            "st",
-                            Logic.or_(var("b"), apply(ref(Coder.needsThunking), var("st")))),
-                        bool(false),
-                        apply(var("hydra.rewriting.subterms"), var("t"))),
-                    field(Term.LET, constant(bool(true))),
-                    field(Term.TYPE_APPLICATION, constant(bool(true))),
-                    field(Term.TYPE_LAMBDA, constant(bool(true))))));
-
     public static final Def noComment = def(
         "noComment",
         () -> lambda("decl",
@@ -14204,7 +14198,6 @@ public class Coder {
             moduleToJava,
             nameMapToTypeMap,
             namespaceParent,
-            needsThunking,
             noComment,
             noInterfaceComment,
             otherwiseBranch,
@@ -14307,7 +14300,11 @@ public class Coder {
 
     public static final Module module_ = new Module(
         NS,
-        Maybe.just("Java code generator: converts Hydra modules to Java source code"),
+        Maybe.just(new EntityMetadata(
+            Maybe.just("Java code generator: converts Hydra modules to Java source code"),
+            List.of(),
+            List.of(),
+            Maybe.nothing())),
         DEPENDENCIES,
         DEFINITIONS);
 }

@@ -97,7 +97,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> ([Constants.ns, Serialization.ns] L.++ (WasmSyntax.ns:KernelTypes.kernelTypesModuleNames)),
-            moduleDescription = Just "WebAssembly serializer: converts WAT AST to concrete WAT text format"}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just "WebAssembly serializer: converts WAT AST to concrete WAT text format")}
   where
     definitions = [
       -- Top-level serialization

@@ -21,7 +21,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = (DefinitionType <$> definitions),
             moduleDependencies = unqualifiedDep <$> [Core.ns, Paths.ns],
-            moduleDescription = Just "Types supporting type inference and type reconstruction."}
+            moduleMetadata = descriptionMetadata (Just "Types supporting type inference and type reconstruction.")}
   where
     definitions = [
       functionStructure,

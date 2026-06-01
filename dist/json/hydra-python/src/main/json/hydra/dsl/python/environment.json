@@ -24728,5 +24728,5 @@
     {"module": "hydra.dsl.graph"},
     {"module": "hydra.dsl.packaging"},
     {"module": "hydra.dsl.typing"}],
-  "description": "DSL functions for hydra.python.environment",
+  "metadata": {"comments": [], "description": "DSL functions for hydra.python.environment", "seeAlso": []},
   "name": "hydra.dsl.python.environment"}

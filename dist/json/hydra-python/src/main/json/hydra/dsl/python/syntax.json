@@ -62408,5 +62408,5 @@
                   "application": {"argument": {"variable": "hydra.python.syntax.FuncTypeComment"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}}}}],
   "dependencies": [{"module": "hydra.python.syntax"}, {"module": "hydra.typed"}, {"module": "hydra.core"}, {"module": "hydra.dsl.core"}],
-  "description": "DSL functions for hydra.python.syntax",
+  "metadata": {"comments": [], "description": "DSL functions for hydra.python.syntax", "seeAlso": []},
   "name": "hydra.dsl.python.syntax"}

@@ -13,7 +13,7 @@ module Hydra.Sources.Json.Bootstrap where
 
 -- Note: non-standard imports; this module is constructed dynamically from other modules.
 import Hydra.Kernel
-import           Hydra.Dsl.Bootstrap (unqualifiedDep)
+import           Hydra.Dsl.Bootstrap (unqualifiedDep, descriptionMetadata)
 import qualified Hydra.Encode.Core as EncodeCore
 import qualified Hydra.Sources.Kernel.Types.Coders as Coders
 import qualified Hydra.Sources.Kernel.Types.Core as Core
@@ -46,12 +46,13 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = [DefinitionTerm typesByNameDefinition],
             moduleDependencies = unqualifiedDep <$> [ModuleName "hydra.coders", ModuleName "hydra.core", ModuleName "hydra.error.checking", ModuleName "hydra.error.core", ModuleName "hydra.errors", ModuleName "hydra.graph", ModuleName "hydra.packaging", ModuleName "hydra.paths", ModuleName "hydra.typing", ModuleName "hydra.util", ModuleName "hydra.variants"],
-            moduleDescription = Just ("A module which provides a minimal typing environment for decoding other modules from JSON."
+            moduleMetadata = descriptionMetadata (Just ("A module which provides a minimal typing environment for decoding other modules from JSON."
       ++ " This avoids certain problems with generating entire source modules into target languages like Java,"
-      ++ " which is subject to method size limits for large modules like hydra.core.")}
+      ++ " which is subject to method size limits for large modules like hydra.core."))}
 typesByNameDefinition :: TermDefinition
 typesByNameDefinition = TermDefinition {
     termDefinitionName = Name "hydra.json.bootstrap.typesByName",
+    termDefinitionMetadata = Nothing,
     termDefinitionTerm = typesByNameTerm,
     termDefinitionSignature = Nothing}
 

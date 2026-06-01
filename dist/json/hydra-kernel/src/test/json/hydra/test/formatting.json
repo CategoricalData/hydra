@@ -654,5 +654,5 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "description": "Test cases for string formatting and case conversion",
+  "metadata": {"comments": [], "description": "Test cases for string formatting and case conversion", "seeAlso": []},
   "name": "hydra.test.formatting"}

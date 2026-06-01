@@ -108,7 +108,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> ((CppSyntax.ns:KernelTypes.kernelTypesModuleNames)),
-            moduleDescription = Just "C++ utilities for constructing C++ syntax trees"}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just "C++ utilities for constructing C++ syntax trees")}
   where
     definitions = [
       toDefinition constParameter,

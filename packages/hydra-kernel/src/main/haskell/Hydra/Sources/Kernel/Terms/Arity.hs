@@ -62,7 +62,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> (kernelTypesModuleNames),
-            moduleDescription = Just "Functions dealing with arguments and arity."}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just "Functions dealing with arguments and arity.")}
   where
     definitions = [
       toDefinition primitiveArity,

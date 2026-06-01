@@ -17,8 +17,8 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = (DefinitionType <$> definitions),
             moduleDependencies = unqualifiedDep <$> [Core.ns],
-            moduleDescription = Just ("A Python syntax model, tracking the Python 3.14 PEG grammar:\n"
-      ++ "  https://docs.python.org/3.14/reference/grammar.html")}
+            moduleMetadata = descriptionMetadata (Just ("A Python syntax model, tracking the Python 3.14 PEG grammar:\n"
+      ++ "  https://docs.python.org/3.14/reference/grammar.html"))}
   where
     definitions = constructs ++ terminals ++ nonterminals
 

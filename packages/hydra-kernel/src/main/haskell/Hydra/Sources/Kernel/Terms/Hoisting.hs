@@ -79,7 +79,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> ([Lexical.ns, Rewriting.ns, Environment.ns, Resolution.ns, Scoping.ns, Sorting.ns, Strip.ns, Substitution.ns, Variables.ns] L.++ kernelTypesModuleNames),
-            moduleDescription = Just "Functions for deep term rewriting operations involving hoisting subterms or bindings into enclosing let terms."}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just "Functions for deep term rewriting operations involving hoisting subterms or bindings into enclosing let terms.")}
   where
    definitions = [
      toDefinition augmentBindingsWithNewFreeVars,

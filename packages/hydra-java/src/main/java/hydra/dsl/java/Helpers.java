@@ -7,6 +7,7 @@ import hydra.core.TypeScheme;
 import hydra.core.TypeVariableMetadata;
 import hydra.dsl.Terms;
 import hydra.dsl.Types;
+import hydra.packaging.EntityMetadata;
 import hydra.packaging.Definition;
 import hydra.packaging.ModuleName;
 import hydra.packaging.TermDefinition;
@@ -67,7 +68,7 @@ public final class Helpers {
             Collections.emptyList(),
             typ,
             Maybe.<Map<Name, TypeVariableMetadata>>nothing());
-        return new Definition.Type(new TypeDefinition(fqName, ts));
+        return new Definition.Type(new TypeDefinition(fqName, Maybe.<EntityMetadata>nothing(), ts));
     }
 
     /**
@@ -78,6 +79,7 @@ public final class Helpers {
         Name fqName = new Name(ns.value + "." + localName);
         return new Definition.Term(new TermDefinition(
             fqName,
+            Maybe.<EntityMetadata>nothing(),
             term,
             Maybe.<TermSignature>nothing()));
     }
@@ -87,6 +89,7 @@ public final class Helpers {
         Name fqName = new Name(ns.value + "." + localName);
         return new Definition.Term(new TermDefinition(
             fqName,
+            Maybe.<EntityMetadata>nothing(),
             term,
             Maybe.<TermSignature>just(Scoping.typeSchemeToTermSignature(ts))));
     }

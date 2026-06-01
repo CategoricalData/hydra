@@ -89,7 +89,7 @@ module_ = Module {
             moduleDefinitions = definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> ([Dependencies.ns, Hoisting.ns, Inference.ns, Lexical.ns, Literals.ns, Names.ns, Reduction.ns, Reflect.ns, Rewriting.ns,
       Scoping.ns, Environment.ns, Resolution.ns, ShowCore.ns, ShowError.ns, ShowGraph.ns, Strip.ns, Variables.ns] L.++ kernelTypesModuleNames),
-            moduleDescription = Just "Simple, one-way adapters for types and terms"}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just "Simple, one-way adapters for types and terms")}
   where
     definitions = [
       toDefinition adaptDataGraph,
@@ -381,13 +381,9 @@ adaptPrimitive = define "adaptPrimitive" $
   "def1" <~ Packaging.primitiveDefinition
     (Packaging.primitiveDefinitionName (var "def0"))
     (var "sig1")
-    (Packaging.primitiveDefinitionDescription (var "def0"))
-    (Packaging.primitiveDefinitionComments (var "def0"))
-    (Packaging.primitiveDefinitionSeeAlso (var "def0"))
+    (Packaging.primitiveDefinitionMetadata (var "def0"))
     (Packaging.primitiveDefinitionIsPure (var "def0"))
     (Packaging.primitiveDefinitionIsTotal (var "def0"))
-    (Packaging.primitiveDefinitionAvailableSince (var "def0"))
-    (Packaging.primitiveDefinitionDeprecatedSince (var "def0"))
     (Packaging.primitiveDefinitionDefaultImplementation (var "def0")) $
   right $ Graph.primitiveWithDefinition (var "prim0") (var "def1")
 
@@ -705,6 +701,7 @@ dataGraphToDefinitions = define "dataGraphToDefinitions" $
     Maybes.map
       ("ts" ~> Packaging.termDefinition
         (Core.bindingName $ var "el")
+        nothing
         (Core.bindingTerm $ var "el")
         (just $ Scoping.typeSchemeToTermSignature @@ var "ts"))
       (Core.bindingTypeScheme $ var "el")) $
@@ -987,7 +984,7 @@ schemaGraphToDefinitions = define "schemaGraphToDefinitions" $
   "litmap" <~ adaptLiteralTypesMap @@ var "constraints" $
   "tmap0" <<~ Eithers.bimap formatDecodingError ("x" ~> var "x") (Environment.graphAsTypes @@ var "graph" @@ (Lexical.graphToBindings @@ var "graph")) $
   "tmap1" <<~ adaptGraphSchema @@ var "constraints" @@ var "litmap" @@ var "tmap0" $
-  "toDef" <~ ("pair" ~> Packaging.typeDefinition (Pairs.first $ var "pair") (Core.typeScheme (list ([] :: [TypedTerm Name])) (Pairs.second $ var "pair") nothing)) $
+  "toDef" <~ ("pair" ~> Packaging.typeDefinition (Pairs.first $ var "pair") nothing (Core.typeScheme (list ([] :: [TypedTerm Name])) (Pairs.second $ var "pair") nothing)) $
   right $ pair
     (var "tmap1")
     (Lists.map

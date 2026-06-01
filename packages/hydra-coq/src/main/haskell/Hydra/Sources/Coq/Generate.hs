@@ -8,7 +8,7 @@
 module Hydra.Sources.Coq.Generate where
 
 import Hydra.Kernel
-import           Hydra.Dsl.Bootstrap (unqualifiedDep)
+import           Hydra.Dsl.Bootstrap (unqualifiedDep, descriptionMetadata)
 import Hydra.Dsl.AsTerm (asTerm)
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Meta.Lib.Strings                as Strings
@@ -59,7 +59,7 @@ module_ = Module {
             moduleDefinitions = definitions,
             moduleDependencies = unqualifiedDep <$> ([CoqUtils.ns, CoqCoderSource.ns, CoqSerdeSource.ns, Formatting.ns, Serialization.ns,
      CoqLanguage.ns, CoqEnvironmentSource.ns, CoqSyntax.ns] L.++ KernelTypes.kernelTypesModuleNames),
-            moduleDescription = Just "Coq code generation driver — pre-passes, sentence producers, and per-module pipeline"}
+            moduleMetadata = descriptionMetadata (Just "Coq code generation driver — pre-passes, sentence producers, and per-module pipeline")}
   where
     definitions = [
       toDefinition buildAxiomOnlyContent,
@@ -1050,7 +1050,7 @@ moduleToCoq = define "moduleToCoq" $
   "desc" <~ Maybes.maybe
     (string "")
     ("d" ~> Strings.cat (list [string "(* ", var "d", string " *)\n\n"]))
-    (Packaging.moduleDescription $ var "mod_") $
+    ((Maybes.bind (Packaging.moduleMetadata (var "mod_")) ("em" ~> Packaging.entityMetadataDescription (var "em")))) $
   -- Modules known to blow up Coq's type-checker; emit axiom stubs instead.
   "axiomOnlyModules" <~ (list [string "hydra.hoisting", string "hydra.inference"]) $
   "isAxiomOnly" <~ ((Lists.elem :: TypedTerm String -> TypedTerm [String] -> TypedTerm Bool)

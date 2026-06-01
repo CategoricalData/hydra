@@ -211,5 +211,5 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "description": "A module for tier-0 constants.",
+  "metadata": {"comments": [], "description": "A module for tier-0 constants.", "seeAlso": []},
   "name": "hydra.constants"}

@@ -22,7 +22,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = (DefinitionType <$> definitions),
             moduleDependencies = unqualifiedDep <$> [Core.ns],
-            moduleDescription = Just "Environment types for Coq code generation"}
+            moduleMetadata = descriptionMetadata (Just "Environment types for Coq code generation")}
   where
     definitions = [
       coqEnvironment]

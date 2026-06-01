@@ -1134,5 +1134,5 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "description": "Python naming utilities: encoding Hydra names as Python names",
+  "metadata": {"comments": [], "description": "Python naming utilities: encoding Hydra names as Python names", "seeAlso": []},
   "name": "hydra.python.names"}

@@ -21,6 +21,7 @@ import hydra.dsl.meta.lib.Pairs;
 import hydra.dsl.meta.lib.Sets;
 import hydra.dsl.meta.lib.Strings;
 import hydra.packaging.Definition;
+import hydra.packaging.EntityMetadata;
 import hydra.packaging.Module;
 import hydra.packaging.ModuleName;
 import hydra.packaging.ModuleDependency;
@@ -403,7 +404,11 @@ public class Testing {
 
     public static final Module module_ = new Module(
         NS,
-        Maybe.just("Java test code generation codec for JUnit-based generation tests"),
+        Maybe.just(new EntityMetadata(
+            Maybe.just("Java test code generation codec for JUnit-based generation tests"),
+            java.util.List.of(),
+            java.util.List.of(),
+            Maybe.nothing())),
         DEPENDENCIES,
         DEFINITIONS);
 }

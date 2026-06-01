@@ -86,7 +86,7 @@ module_ = Module {
             moduleName = (ModuleName "hydra.shacl.language"),
             moduleDefinitions = [toDefinition shaclLanguage],
             moduleDependencies = Bootstrap.unqualifiedDep <$> ([Lexical.ns] L.++ KernelTypes.kernelTypesModuleNames),
-            moduleDescription = Just "Language constraints for W3C SHACL"}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just "Language constraints for W3C SHACL")}
 shaclLanguage :: TypedTermDefinition Language
 shaclLanguage = define "shaclLanguage" $
   doc "Language constraints for W3C SHACL" $ lets [

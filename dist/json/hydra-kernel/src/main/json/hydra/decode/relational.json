@@ -1563,5 +1563,5 @@
     {"module": "hydra.relational"},
     {"module": "hydra.util"},
     {"module": "hydra.decode.core"}],
-  "description": "Term decoders for hydra.relational",
+  "metadata": {"comments": [], "description": "Term decoders for hydra.relational", "seeAlso": []},
   "name": "hydra.decode.relational"}

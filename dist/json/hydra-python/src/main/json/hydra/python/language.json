@@ -229,5 +229,5 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "description": "Language constraints and reserved words for Python 3",
+  "metadata": {"comments": [], "description": "Language constraints and reserved words for Python 3", "seeAlso": []},
   "name": "hydra.python.language"}

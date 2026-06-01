@@ -4,6 +4,7 @@ module Hydra.Dsl.Bootstrap (
   module Hydra.Dsl.AsType,
   bootstrapGraph,
   datatype,
+  descriptionMetadata,
   qualify,
   qualifiedDep,
   typeref,
@@ -42,6 +43,7 @@ bootstrapGraph = Graph {
 datatype :: ModuleName -> String -> Type -> TypeDefinition
 datatype gname lname typ = TypeDefinition {
     typeDefinitionName = qualify gname (Name lname),
+    typeDefinitionMetadata = Nothing,
     typeDefinitionTypeScheme = TypeScheme {
       typeSchemeVariables = [],
       typeSchemeBody = typ,
@@ -65,3 +67,10 @@ typeref ns = TypeVariable . qualify ns . Name
 -- | An unqualified module dependency (package omitted; resolver searches all packages in scope)
 unqualifiedDep :: ModuleName -> ModuleDependency
 unqualifiedDep ns = ModuleDependency ns Nothing
+
+-- | Wrap an optional description string as entity metadata carrying only that description.
+-- Used to migrate the former Module/Package `description` field into the `metadata` field
+-- without data loss; a Nothing description yields no metadata.
+descriptionMetadata :: Maybe String -> Maybe EntityMetadata
+descriptionMetadata Nothing = Nothing
+descriptionMetadata desc = Just (EntityMetadata desc [] [] Nothing)

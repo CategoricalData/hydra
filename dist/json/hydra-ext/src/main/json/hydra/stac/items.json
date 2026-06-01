@@ -305,5 +305,8 @@
     {
       "type": {"name": "hydra.stac.items.Url", "typeScheme": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}}}],
   "dependencies": [{"module": "hydra.geojson.model"}, {"module": "hydra.iana.linkrelations"}, {"module": "hydra.core"}],
-  "description": "A model for SpatioTemporal Asset Catalog (STAC) Items. See https://github.com/radiantearth/stac-spec/blob/master/item-spec/item-spec.md",
+  "metadata": {
+    "comments": [],
+    "description": "A model for SpatioTemporal Asset Catalog (STAC) Items. See https://github.com/radiantearth/stac-spec/blob/master/item-spec/item-spec.md",
+    "seeAlso": []},
   "name": "hydra.stac.items"}

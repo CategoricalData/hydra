@@ -20,7 +20,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = (DefinitionType <$> definitions),
             moduleDependencies = unqualifiedDep <$> [Core.ns],
-            moduleDescription = Just "Parser combinator types for text parsing"}
+            moduleMetadata = descriptionMetadata (Just "Parser combinator types for text parsing")}
   where
     definitions = [
       parseError,

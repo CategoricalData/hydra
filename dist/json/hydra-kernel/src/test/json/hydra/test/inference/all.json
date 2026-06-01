@@ -57,5 +57,5 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "description": "Hydra's inference test suite",
+  "metadata": {"comments": [], "description": "Hydra's inference test suite", "seeAlso": []},
   "name": "hydra.test.inference.all"}

@@ -90,7 +90,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> ([Parsers.ns] L.++ KernelTypes.kernelTypesModuleNames),
-            moduleDescription = Just "JSON parser using Hydra parser combinators"}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just "JSON parser using Hydra parser combinators")}
   where
     ns = ModuleName "hydra.json.parser"
     definitions = [

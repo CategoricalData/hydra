@@ -288,5 +288,5 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "description": "Language constraints and reserved words for C Sharp (C#)",
+  "metadata": {"comments": [], "description": "Language constraints and reserved words for C Sharp (C#)", "seeAlso": []},
   "name": "hydra.csharp.language"}

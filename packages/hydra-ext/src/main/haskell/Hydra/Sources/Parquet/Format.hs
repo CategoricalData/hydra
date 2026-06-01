@@ -25,8 +25,8 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = (DefinitionType <$> definitions),
             moduleDependencies = unqualifiedDep <$> [Core.ns],
-            moduleDescription = Just ("A model for the Parquet format. Based on the Thrift-based specification at:\n" ++
-      "  https://github.com/apache/parquet-format/blob/master/src/main/thrift/parquet.thrift")}
+            moduleMetadata = descriptionMetadata (Just ("A model for the Parquet format. Based on the Thrift-based specification at:\n" ++
+      "  https://github.com/apache/parquet-format/blob/master/src/main/thrift/parquet.thrift"))}
   where
     definitions = [
       type_,

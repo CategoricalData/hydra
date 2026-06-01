@@ -104,5 +104,5 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "description": "Language constraints for Hydra Core",
+  "metadata": {"comments": [], "description": "Language constraints for Hydra Core", "seeAlso": []},
   "name": "hydra.languages"}

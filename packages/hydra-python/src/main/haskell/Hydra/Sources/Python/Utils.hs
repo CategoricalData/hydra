@@ -99,7 +99,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> ([PyNames.ns, PySerde.ns, Serialization.ns, Analysis.ns] L.++ (PyEnvironmentSource.ns:PySyntax.ns:KernelTypes.kernelTypesModuleNames)),
-            moduleDescription = Just "Python utilities for constructing Python syntax trees"}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just "Python utilities for constructing Python syntax trees")}
   where
     definitions = [
       toDefinition annotatedExpression,

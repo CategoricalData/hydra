@@ -24,7 +24,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = (DefinitionType <$> definitions),
             moduleDependencies = unqualifiedDep <$> [Core.ns],
-            moduleDescription = Just ("A partial KQL (Kusto Query Language) model, based on examples from the documentation. Not normative.")}
+            moduleMetadata = descriptionMetadata (Just ("A partial KQL (Kusto Query Language) model, based on examples from the documentation. Not normative."))}
   where
     definitions = [
       betweenExpression,

@@ -94,7 +94,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> ([Constants.ns, Serialization.ns] L.++ (PySyntax.ns:KernelTypes.kernelTypesModuleNames)),
-            moduleDescription = Just "Python serializer: converts Python AST to concrete syntax"}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just "Python serializer: converts Python AST to concrete syntax")}
   where
     definitions = [
       toDefinition annotatedRhsToExpr,

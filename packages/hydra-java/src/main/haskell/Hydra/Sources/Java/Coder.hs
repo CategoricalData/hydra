@@ -5,7 +5,7 @@ module Hydra.Sources.Java.Coder where
 
 -- Standard imports for term-level sources outside of the kernel
 import Hydra.Kernel
-import           Hydra.Dsl.Bootstrap (unqualifiedDep)
+import           Hydra.Dsl.Bootstrap (unqualifiedDep, descriptionMetadata)
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Meta.Lib.Strings                as Strings
 import           Hydra.Dsl.Meta.Phantoms                   as Phantoms
@@ -78,7 +78,7 @@ module_ = Module {
             moduleDefinitions = definitions,
             moduleDependencies = unqualifiedDep <$> ([JavaUtilsSource.ns, JavaNamesSource.ns, JavaSerdeSource.ns, moduleName JavaLanguageSource.module_, Analysis.ns, Checking.ns, Formatting.ns, Names.ns, Rewriting.ns, Dependencies.ns, Scoping.ns, Strip.ns, Variables.ns, Lexical.ns, Environment.ns, Predicates.ns, Resolution.ns, ShowCore.ns, Annotations.ns, Constants.ns,
       Inference.ns, Sorting.ns, Arity.ns, moduleName DecodeCore.module_, moduleName EncodeCore.module_, SerializationSource.ns] L.++ (JavaEnvironmentSource.ns:JavaSyntax.ns:KernelTypes.kernelTypesModuleNames)),
-            moduleDescription = Just "Java code generator: converts Hydra modules to Java source code"}
+            moduleMetadata = descriptionMetadata (Just "Java code generator: converts Hydra modules to Java source code")}
   where
     definitions = [
       toDefinition addComment,
@@ -1365,7 +1365,7 @@ constructElementsInterface = def "constructElementsInterface" $
           Java._NormalInterfaceDeclaration_body>>: var "body"])),
     "decl">: record Java._TopLevelClassOrInterfaceDeclarationWithComments [
       Java._TopLevelClassOrInterfaceDeclarationWithComments_value>>: var "itf",
-      Java._TopLevelClassOrInterfaceDeclarationWithComments_comments>>: Packaging.moduleDescription (var "mod")]] $
+      Java._TopLevelClassOrInterfaceDeclarationWithComments_comments>>: (Maybes.bind (Packaging.moduleMetadata (var "mod")) ("em" ~> Packaging.entityMetadataDescription (var "em")))]] $
     pair (var "elName")
       (inject Java._CompilationUnit Java._CompilationUnit_ordinary
         (record Java._OrdinaryCompilationUnit [

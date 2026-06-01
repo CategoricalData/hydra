@@ -27,7 +27,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = (DefinitionType <$> definitions),
             moduleDependencies = unqualifiedDep <$> [PgModel.ns, Core.ns],
-            moduleDescription = Just ("A common model for pattern-matching queries over property graphs")}
+            moduleMetadata = descriptionMetadata (Just ("A common model for pattern-matching queries over property graphs"))}
   where
     definitions = [
       aggregationQuery,

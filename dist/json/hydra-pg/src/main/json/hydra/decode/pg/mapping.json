@@ -3186,5 +3186,5 @@
     {"module": "hydra.decode.pg.model"},
     {"module": "hydra.decode.coders"},
     {"module": "hydra.decode.core"}],
-  "description": "Term decoders for hydra.pg.mapping",
+  "metadata": {"comments": [], "description": "Term decoders for hydra.pg.mapping", "seeAlso": []},
   "name": "hydra.decode.pg.mapping"}

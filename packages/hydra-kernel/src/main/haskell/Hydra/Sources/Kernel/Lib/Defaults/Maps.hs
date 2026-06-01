@@ -65,7 +65,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> ([ExtractCore.ns, ShowCore.ns] L.++ kernelTypesModuleNames),
-            moduleDescription = Just ("Default term-level implementations of Map functions for the Hydra interpreter.")}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just ("Default term-level implementations of Map functions for the Hydra interpreter."))}
   where
     definitions = [
       toDefinition alter_,

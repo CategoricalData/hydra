@@ -19,9 +19,9 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = (DefinitionType <$> definitions),
             moduleDependencies = unqualifiedDep <$> [],
-            moduleDescription = Just ("A subset of ANSI SQL:2003, capturing selected productions of the BNF grammar provided at "
+            moduleMetadata = descriptionMetadata (Just ("A subset of ANSI SQL:2003, capturing selected productions of the BNF grammar provided at "
       ++ "https://ronsavage.github.io/SQL/sql-2003-2.bnf.html, which is based on "
-      ++ "the Final Committee Draft (FCD) of ISO/IEC 9075-2:2003")}
+      ++ "the Final Committee Draft (FCD) of ISO/IEC 9075-2:2003"))}
   where
     definitions = [
       approximateNumericLiteral,

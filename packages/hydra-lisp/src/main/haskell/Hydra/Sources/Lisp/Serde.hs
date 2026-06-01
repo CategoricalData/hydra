@@ -8,7 +8,7 @@ module Hydra.Sources.Lisp.Serde where
 
 -- Standard imports for term-level sources outside of the kernel
 import Hydra.Kernel
-import           Hydra.Dsl.Bootstrap (unqualifiedDep)
+import           Hydra.Dsl.Bootstrap (unqualifiedDep, descriptionMetadata)
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Meta.Lib.Strings                as Strings
 import           Hydra.Dsl.Meta.Phantoms                   as Phantoms
@@ -49,7 +49,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = unqualifiedDep <$> ([Constants.ns, Formatting.ns, Serialization.ns] DL.++ (LispSyntax.ns:KernelTypes.kernelTypesModuleNames)),
-            moduleDescription = Just "Lisp serializer: converts Lisp AST to concrete syntax for Clojure, Emacs Lisp, Common Lisp, or Scheme"}
+            moduleMetadata = descriptionMetadata (Just "Lisp serializer: converts Lisp AST to concrete syntax for Clojure, Emacs Lisp, Common Lisp, or Scheme")}
   where
     definitions = [
       toDefinition andExpressionToExpr,

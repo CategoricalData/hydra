@@ -204,5 +204,5 @@
                   "parameter": "a"}}}},
           "variables": []}}}],
   "dependencies": [{"module": "hydra.core"}, {"module": "hydra.errors"}, {"module": "hydra.packaging"}, {"module": "hydra.typing"}],
-  "description": "The extension to graphs of Hydra's core type system (hydra.core)",
+  "metadata": {"comments": [], "description": "The extension to graphs of Hydra's core type system (hydra.core)", "seeAlso": []},
   "name": "hydra.graph"}

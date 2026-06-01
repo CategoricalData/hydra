@@ -21,10 +21,10 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = (DefinitionType <$> definitions),
             moduleDependencies = unqualifiedDep <$> [Core.ns],
-            moduleDescription = Just ("An interpretation of Codd's Relational Model, " ++
+            moduleMetadata = descriptionMetadata (Just ("An interpretation of Codd's Relational Model, " ++
       "as described in 'A Relational Model of Data for Large Shared Data Banks' (1970). " ++
       "Types ('domains') and values are parameterized so as to allow for application-specific implementations. " ++
-      "No special support is provided for 'nonsimple' domains; i.e. relations are assumed to be normalized.")}
+      "No special support is provided for 'nonsimple' domains; i.e. relations are assumed to be normalized."))}
   where
     definitions = [
       columnName,

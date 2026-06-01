@@ -339,5 +339,5 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "description": "Language constraints and reserved words for C++",
+  "metadata": {"comments": [], "description": "Language constraints and reserved words for C++", "seeAlso": []},
   "name": "hydra.cpp.language"}

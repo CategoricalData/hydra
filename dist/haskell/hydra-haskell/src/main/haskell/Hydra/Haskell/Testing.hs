@@ -76,10 +76,11 @@ buildNamespacesForTestGroup mod tgroup graph_ =
           tempModule =
                   Packaging.Module {
                     Packaging.moduleName = (Packaging.moduleName mod),
-                    Packaging.moduleDescription = (Packaging.moduleDescription mod),
+                    Packaging.moduleMetadata = (Packaging.moduleMetadata mod),
                     Packaging.moduleDependencies = (Packaging.moduleDependencies mod),
                     Packaging.moduleDefinitions = (Lists.map (\b -> Packaging.DefinitionTerm (Packaging.TermDefinition {
                       Packaging.termDefinitionName = (Core.bindingName b),
+                      Packaging.termDefinitionMetadata = Nothing,
                       Packaging.termDefinitionTerm = (Core.bindingTerm b),
                       Packaging.termDefinitionSignature = (Maybes.map Scoping.typeSchemeToTermSignature (Core.bindingTypeScheme b))})) testBindings)}
       in (Eithers.bind (Eithers.bimap (\e -> ShowErrors.error e) (\a -> a) (Utils.namespacesForModule tempModule Lexical.emptyInferenceContext graph_)) (\baseNamespaces ->

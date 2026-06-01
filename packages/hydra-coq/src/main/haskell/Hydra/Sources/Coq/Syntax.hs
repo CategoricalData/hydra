@@ -24,9 +24,9 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = (DefinitionType <$> definitions),
             moduleDependencies = unqualifiedDep <$> [],
-            moduleDescription = Just ("A model for Coq core and extensions. Based on the Coq 8.15 grammar:\n" ++
+            moduleMetadata = descriptionMetadata (Just ("A model for Coq core and extensions. Based on the Coq 8.15 grammar:\n" ++
       "  https://coq.github.io/doc/v8.15/refman/language/core/basic.html#essential-vocabulary\n" ++
-      "  Extended with Vernacular commands for complete .v file generation.")}
+      "  Extended with Vernacular commands for complete .v file generation."))}
   where
     definitions = termLanguage ++ vernacular
 

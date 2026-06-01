@@ -25,7 +25,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = (DefinitionType <$> definitions),
             moduleDependencies = unqualifiedDep <$> [JavaSyntax.ns, Core.ns, Graph.ns, Module.ns, Typing.ns],
-            moduleDescription = Just "Environment types for Java code generation"}
+            moduleMetadata = descriptionMetadata (Just "Environment types for Java code generation")}
   where
     definitions = [
       javaSymbolClass,

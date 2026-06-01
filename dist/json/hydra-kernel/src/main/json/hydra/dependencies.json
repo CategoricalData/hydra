@@ -2956,5 +2956,5 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "description": "Dependency extraction, binding sort, and let normalization",
+  "metadata": {"comments": [], "description": "Dependency extraction, binding sort, and let normalization", "seeAlso": []},
   "name": "hydra.dependencies"}

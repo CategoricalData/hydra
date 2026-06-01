@@ -74,7 +74,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> ([Lexical.ns, Strip.ns, ShowCore.ns, ShowError.ns] L.++ kernelTypesModuleNames),
-            moduleDescription = Just ("Extraction and validation for hydra.core types")}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just ("Extraction and validation for hydra.core types"))}
   where
    definitions = [
      toDefinition bigint,

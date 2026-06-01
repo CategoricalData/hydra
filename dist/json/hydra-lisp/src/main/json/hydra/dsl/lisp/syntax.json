@@ -28235,5 +28235,5 @@
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}}}}],
   "dependencies": [{"module": "hydra.lisp.syntax"}, {"module": "hydra.typed"}, {"module": "hydra.core"}, {"module": "hydra.dsl.core"}],
-  "description": "DSL functions for hydra.lisp.syntax",
+  "metadata": {"comments": [], "description": "DSL functions for hydra.lisp.syntax", "seeAlso": []},
   "name": "hydra.dsl.lisp.syntax"}

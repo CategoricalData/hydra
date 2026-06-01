@@ -266,5 +266,8 @@
                   {"name": "altitude", "type": {"maybe": {"literal": {"float": {"float64": {}}}}}}]}}},
           "variables": []}}}],
   "dependencies": [{"module": "hydra.json.model"}],
-  "description": "A GeoJSON model based on the specification at https://www.rfc-editor.org/rfc/rfc7946. This model provides some additional structure beyond the JSON encoding described in the specification; For example, it provides MultiPoint not as an object with an array of coordinates which encode points, but as an array of Points. A BoundingBox is not simply an list of numbers, but a list of CoordinateRanges.",
+  "metadata": {
+    "comments": [],
+    "description": "A GeoJSON model based on the specification at https://www.rfc-editor.org/rfc/rfc7946. This model provides some additional structure beyond the JSON encoding described in the specification; For example, it provides MultiPoint not as an object with an array of coordinates which encode points, but as an array of Points. A BoundingBox is not simply an list of numbers, but a list of CoordinateRanges.",
+    "seeAlso": []},
   "name": "hydra.geojson.model"}

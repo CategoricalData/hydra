@@ -1723,5 +1723,5 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "description": "String formatting types and functions.",
+  "metadata": {"comments": [], "description": "String formatting types and functions.", "seeAlso": []},
   "name": "hydra.formatting"}

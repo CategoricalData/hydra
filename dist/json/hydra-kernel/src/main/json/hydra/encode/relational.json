@@ -704,5 +704,5 @@
                     "parameter": "v"}}}},
             "parameter": "t0"}}}}],
   "dependencies": [{"module": "hydra.encode.core"}, {"module": "hydra.relational"}],
-  "description": "Term encoders for hydra.relational",
+  "metadata": {"comments": [], "description": "Term encoders for hydra.relational", "seeAlso": []},
   "name": "hydra.encode.relational"}

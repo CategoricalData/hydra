@@ -1515,5 +1515,5 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "description": "C++ utilities for constructing C++ syntax trees",
+  "metadata": {"comments": [], "description": "C++ utilities for constructing C++ syntax trees", "seeAlso": []},
   "name": "hydra.cpp.utils"}

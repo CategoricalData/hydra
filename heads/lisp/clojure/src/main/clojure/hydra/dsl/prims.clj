@@ -98,7 +98,7 @@
   [pname variables inputs output constraints]
   (let [ts (build-type-scheme variables inputs output constraints)
         sig (hydra_scoping_type_scheme_to_term_signature ts)]
-    (->hydra_packaging_primitive_definition pname sig "" (list :nothing) (list) true true (list :nothing) (list :nothing) (list :nothing))))
+    (->hydra_packaging_primitive_definition pname sig (list :nothing) true true (list :nothing))))
 
 ;; Error helpers
 

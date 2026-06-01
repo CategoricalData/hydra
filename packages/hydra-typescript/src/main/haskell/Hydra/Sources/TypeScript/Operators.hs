@@ -98,7 +98,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> ([Serialization.ns] L.++ KernelTypes.kernelTypesModuleNames),
-            moduleDescription = Just "AST operators for TypeScript with precedence and associativity"}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just "AST operators for TypeScript with precedence and associativity")}
   where
     definitions = [
       -- Function application

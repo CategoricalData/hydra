@@ -29,7 +29,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = (DefinitionType <$> definitions),
             moduleDependencies = unqualifiedDep <$> [Core.ns, RdfSyntax.ns, XmlSchema.ns],
-            moduleDescription = Just "An OWL 2 syntax model. See https://www.w3.org/TR/owl2-syntax"}
+            moduleMetadata = descriptionMetadata (Just "An OWL 2 syntax model. See https://www.w3.org/TR/owl2-syntax")}
   where
     definitions = generalDefinitions ++ owl2Definitions
 

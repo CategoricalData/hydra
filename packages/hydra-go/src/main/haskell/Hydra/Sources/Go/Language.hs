@@ -86,7 +86,7 @@ module_ = Module {
             moduleName = (ModuleName "hydra.go.language"),
             moduleDefinitions = [toDefinition goLanguage, toDefinition goReservedWords],
             moduleDependencies = Bootstrap.unqualifiedDep <$> ([Lexical.ns] L.++ KernelTypes.kernelTypesModuleNames),
-            moduleDescription = Just "Language constraints and reserved words for Go 1.22+"}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just "Language constraints and reserved words for Go 1.22+")}
 goLanguage :: TypedTermDefinition Language
 goLanguage = define "goLanguage" $
     doc "Language constraints for Go 1.22+" $ lets [

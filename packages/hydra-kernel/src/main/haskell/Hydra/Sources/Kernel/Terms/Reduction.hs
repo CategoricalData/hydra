@@ -83,7 +83,7 @@ module_ = Module {
             moduleDependencies = Bootstrap.unqualifiedDep <$> ([Arity.ns, Checking.ns, ExtractCore.ns, Hoisting.ns, Inference.ns, Lexical.ns,
       Rewriting.ns, Scoping.ns,
       Resolution.ns, ShowCore.ns, ShowError.ns, Strip.ns, Variables.ns] L.++ kernelTypesModuleNames),
-            moduleDescription = Just "Functions for reducing terms and types, i.e. performing computations."}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just "Functions for reducing terms and types, i.e. performing computations.")}
   where
    definitions = [
      toDefinition alphaConvert,

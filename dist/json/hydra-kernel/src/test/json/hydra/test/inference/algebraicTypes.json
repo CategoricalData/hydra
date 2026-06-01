@@ -11679,5 +11679,5 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "description": "Inference tests for algebraic data types",
+  "metadata": {"comments": [], "description": "Inference tests for algebraic data types", "seeAlso": []},
   "name": "hydra.test.inference.algebraicTypes"}

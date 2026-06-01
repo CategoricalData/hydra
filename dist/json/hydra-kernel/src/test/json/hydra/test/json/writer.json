@@ -1392,5 +1392,5 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "description": "Test cases for JSON serialization",
+  "metadata": {"comments": [], "description": "Test cases for JSON serialization", "seeAlso": []},
   "name": "hydra.test.json.writer"}

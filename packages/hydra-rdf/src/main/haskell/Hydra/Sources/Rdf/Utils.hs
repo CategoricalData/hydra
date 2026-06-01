@@ -93,7 +93,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> ([Formatting.ns, Names.ns] L.++ (RdfSyntax.ns:KernelTypes.kernelTypesModuleNames)),
-            moduleDescription = Just "Utility functions for working with RDF graphs and descriptions"}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just "Utility functions for working with RDF graphs and descriptions")}
   where
     definitions = [
       toDefinition descriptionsToGraph,

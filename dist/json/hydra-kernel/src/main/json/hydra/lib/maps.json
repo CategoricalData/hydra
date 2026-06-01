@@ -2,12 +2,17 @@
   "definitions": [
     {
       "primitive": {
-        "comments": "alter(f, k, m) applies f to Just(v) when m contains key k with value v, or to Nothing when k is absent. If f returns Just(v'), the binding (k, v') is set in the result; if f returns Nothing, k is removed from the result. A single primitive that subsumes insert, delete, and adjust. Requires an 'ordering' constraint on the key type. Total. Corresponds to Haskell's Data.Map.alter :: Ord k => (Maybe v -> Maybe v) -> k -> Map k v -> Map k v.",
-        "description": "Alter a value at a key using a function which sees the optional current value.",
         "isPure": true,
         "isTotal": true,
+        "metadata": {
+          "comments": [
+            "alter(f, k, m) applies f to Just(v) when m contains key k with value v, or to Nothing when k is absent. If f returns Just(v'), the binding (k, v') is set in the result; if f returns Nothing, k is removed from the result.",
+            "A single primitive that subsumes insert, delete, and adjust.",
+            "Requires an 'ordering' constraint on the key type.",
+            "Total. Corresponds to Haskell's Data.Map.alter :: Ord k => (Maybe v -> Maybe v) -> k -> Map k v -> Map k v."],
+          "description": "Alter a value at a key using a function which sees the optional current value.",
+          "seeAlso": []},
         "name": "hydra.lib.maps.alter",
-        "seeAlso": [],
         "signature": {
           "parameters": [
             {
@@ -20,12 +25,17 @@
           "typeParameters": [{"constraints": [], "name": "v"}, {"constraints": [{"simple": "ordering"}], "name": "k"}]}}},
     {
       "primitive": {
-        "comments": "bimap(fk, fv, m) returns a new map with key fk(k) and value fv(v) for each binding (k, v) in m. Key collisions after applying fk are resolved by keeping the last binding encountered (host may differ on collision policy if fk is not injective). Requires 'ordering' constraints on both the input and output key types. Total. Corresponds to a key-and-value lift of Haskell's Data.Map.fromList . map (\\(k,v) -> (fk k, fv v)) . toList.",
-        "description": "Map functions over both the keys and values of a map.",
         "isPure": true,
         "isTotal": true,
+        "metadata": {
+          "comments": [
+            "bimap(fk, fv, m) returns a new map with key fk(k) and value fv(v) for each binding (k, v) in m.",
+            "Key collisions after applying fk are resolved by keeping the last binding encountered (host may differ on collision policy if fk is not injective).",
+            "Requires 'ordering' constraints on both the input and output key types.",
+            "Total. Corresponds to a key-and-value lift of Haskell's Data.Map.fromList . map (\\(k,v) -> (fk k, fv v)) . toList."],
+          "description": "Map functions over both the keys and values of a map.",
+          "seeAlso": []},
         "name": "hydra.lib.maps.bimap",
-        "seeAlso": [],
         "signature": {
           "parameters": [
             {"isLazy": false, "name": "arg0", "type": {"function": {"codomain": {"variable": "k2"}, "domain": {"variable": "k1"}}}},
@@ -39,12 +49,16 @@
             {"constraints": [], "name": "v2"}]}}},
     {
       "primitive": {
-        "comments": "delete(k, m) returns m with the binding for k removed; if k is not present, m is returned unchanged. Requires an 'ordering' constraint on the key type. Total. Corresponds to Haskell's Data.Map.delete :: Ord k => k -> Map k v -> Map k v.",
-        "description": "Remove a key from a map.",
         "isPure": true,
         "isTotal": true,
+        "metadata": {
+          "comments": [
+            "delete(k, m) returns m with the binding for k removed; if k is not present, m is returned unchanged.",
+            "Requires an 'ordering' constraint on the key type.",
+            "Total. Corresponds to Haskell's Data.Map.delete :: Ord k => k -> Map k v -> Map k v."],
+          "description": "Remove a key from a map.",
+          "seeAlso": []},
         "name": "hydra.lib.maps.delete",
-        "seeAlso": [],
         "signature": {
           "parameters": [
             {"isLazy": false, "name": "arg0", "type": {"variable": "k"}},
@@ -53,36 +67,48 @@
           "typeParameters": [{"constraints": [{"simple": "ordering"}], "name": "k"}, {"constraints": [], "name": "v"}]}}},
     {
       "primitive": {
-        "comments": "elems(m) returns the values of m as a list, ordered by their keys' ascending order. Requires an 'ordering' constraint on the key type. Total. Corresponds to Haskell's Data.Map.elems :: Map k v -> [v].",
-        "description": "Return the values of a map (in key order).",
         "isPure": true,
         "isTotal": true,
+        "metadata": {
+          "comments": [
+            "elems(m) returns the values of m as a list, ordered by their keys' ascending order.",
+            "Requires an 'ordering' constraint on the key type.",
+            "Total. Corresponds to Haskell's Data.Map.elems :: Map k v -> [v]."],
+          "description": "Return the values of a map (in key order).",
+          "seeAlso": []},
         "name": "hydra.lib.maps.elems",
-        "seeAlso": [],
         "signature": {
           "parameters": [{"isLazy": false, "name": "arg0", "type": {"map": {"keys": {"variable": "k"}, "values": {"variable": "v"}}}}],
           "result": {"type": {"list": {"variable": "v"}}},
           "typeParameters": [{"constraints": [{"simple": "ordering"}], "name": "k"}, {"constraints": [], "name": "v"}]}}},
     {
       "primitive": {
-        "comments": "empty is the map with no bindings. Requires an 'ordering' constraint on the key type. Total. Corresponds to Haskell's Data.Map.empty :: Map k v.",
-        "description": "The empty map.",
         "isPure": true,
         "isTotal": true,
+        "metadata": {
+          "comments": [
+            "empty is the map with no bindings.",
+            "Requires an 'ordering' constraint on the key type.",
+            "Total. Corresponds to Haskell's Data.Map.empty :: Map k v."],
+          "description": "The empty map.",
+          "seeAlso": []},
         "name": "hydra.lib.maps.empty",
-        "seeAlso": [],
         "signature": {
           "parameters": [],
           "result": {"type": {"map": {"keys": {"variable": "k"}, "values": {"variable": "v"}}}},
           "typeParameters": [{"constraints": [{"simple": "ordering"}], "name": "k"}, {"constraints": [], "name": "v"}]}}},
     {
       "primitive": {
-        "comments": "filter(p, m) returns the submap of m containing exactly the bindings (k, v) for which p(v) is true. Requires an 'ordering' constraint on the key type. Total. Corresponds to Haskell's Data.Map.filter :: (v -> Bool) -> Map k v -> Map k v.",
-        "description": "Filter a map by value.",
         "isPure": true,
         "isTotal": true,
+        "metadata": {
+          "comments": [
+            "filter(p, m) returns the submap of m containing exactly the bindings (k, v) for which p(v) is true.",
+            "Requires an 'ordering' constraint on the key type.",
+            "Total. Corresponds to Haskell's Data.Map.filter :: (v -> Bool) -> Map k v -> Map k v."],
+          "description": "Filter a map by value.",
+          "seeAlso": []},
         "name": "hydra.lib.maps.filter",
-        "seeAlso": [],
         "signature": {
           "parameters": [
             {
@@ -94,12 +120,16 @@
           "typeParameters": [{"constraints": [], "name": "v"}, {"constraints": [{"simple": "ordering"}], "name": "k"}]}}},
     {
       "primitive": {
-        "comments": "filterWithKey(p, m) returns the submap of m containing exactly the bindings (k, v) for which p(k, v) is true. Requires an 'ordering' constraint on the key type. Total. Corresponds to Haskell's Data.Map.filterWithKey :: (k -> v -> Bool) -> Map k v -> Map k v.",
-        "description": "Filter a map by key and value.",
         "isPure": true,
         "isTotal": true,
+        "metadata": {
+          "comments": [
+            "filterWithKey(p, m) returns the submap of m containing exactly the bindings (k, v) for which p(k, v) is true.",
+            "Requires an 'ordering' constraint on the key type.",
+            "Total. Corresponds to Haskell's Data.Map.filterWithKey :: (k -> v -> Bool) -> Map k v -> Map k v."],
+          "description": "Filter a map by key and value.",
+          "seeAlso": []},
         "name": "hydra.lib.maps.filterWithKey",
-        "seeAlso": [],
         "signature": {
           "parameters": [
             {
@@ -114,12 +144,16 @@
           "typeParameters": [{"constraints": [{"simple": "ordering"}], "name": "k"}, {"constraints": [], "name": "v"}]}}},
     {
       "primitive": {
-        "comments": "findWithDefault(def, k, m) returns the value bound to k in m if k is present, or def otherwise. Equivalent to maybe(def, identity, lookup(k, m)). Requires an 'ordering' constraint on the key type. Total. Corresponds to Haskell's Data.Map.findWithDefault :: Ord k => v -> k -> Map k v -> v.",
-        "description": "Look up a value with a default if the key is absent.",
         "isPure": true,
         "isTotal": true,
+        "metadata": {
+          "comments": [
+            "findWithDefault(def, k, m) returns the value bound to k in m if k is present, or def otherwise. Equivalent to maybe(def, identity, lookup(k, m)).",
+            "Requires an 'ordering' constraint on the key type.",
+            "Total. Corresponds to Haskell's Data.Map.findWithDefault :: Ord k => v -> k -> Map k v -> v."],
+          "description": "Look up a value with a default if the key is absent.",
+          "seeAlso": []},
         "name": "hydra.lib.maps.findWithDefault",
-        "seeAlso": [],
         "signature": {
           "parameters": [
             {"isLazy": true, "name": "arg0", "type": {"variable": "v"}},
@@ -129,12 +163,16 @@
           "typeParameters": [{"constraints": [], "name": "v"}, {"constraints": [{"simple": "ordering"}], "name": "k"}]}}},
     {
       "primitive": {
-        "comments": "fromList(xs) returns the map containing exactly the bindings in xs. If xs contains multiple entries for the same key, the last one wins (matching Haskell's fromList behavior). Requires an 'ordering' constraint on the key type. Total. Corresponds to Haskell's Data.Map.fromList :: Ord k => [(k, v)] -> Map k v.",
-        "description": "Build a map from a list of key-value pairs.",
         "isPure": true,
         "isTotal": true,
+        "metadata": {
+          "comments": [
+            "fromList(xs) returns the map containing exactly the bindings in xs. If xs contains multiple entries for the same key, the last one wins (matching Haskell's fromList behavior).",
+            "Requires an 'ordering' constraint on the key type.",
+            "Total. Corresponds to Haskell's Data.Map.fromList :: Ord k => [(k, v)] -> Map k v."],
+          "description": "Build a map from a list of key-value pairs.",
+          "seeAlso": []},
         "name": "hydra.lib.maps.fromList",
-        "seeAlso": [],
         "signature": {
           "parameters": [
             {"isLazy": false, "name": "arg0", "type": {"list": {"pair": {"first": {"variable": "k"}, "second": {"variable": "v"}}}}}],
@@ -142,12 +180,16 @@
           "typeParameters": [{"constraints": [{"simple": "ordering"}], "name": "k"}, {"constraints": [], "name": "v"}]}}},
     {
       "primitive": {
-        "comments": "insert(k, v, m) returns m with the binding (k, v) added or updated. If k is already present, its value is overwritten. Requires an 'ordering' constraint on the key type. Total. Corresponds to Haskell's Data.Map.insert :: Ord k => k -> v -> Map k v -> Map k v.",
-        "description": "Insert a key-value pair into a map.",
         "isPure": true,
         "isTotal": true,
+        "metadata": {
+          "comments": [
+            "insert(k, v, m) returns m with the binding (k, v) added or updated. If k is already present, its value is overwritten.",
+            "Requires an 'ordering' constraint on the key type.",
+            "Total. Corresponds to Haskell's Data.Map.insert :: Ord k => k -> v -> Map k v -> Map k v."],
+          "description": "Insert a key-value pair into a map.",
+          "seeAlso": []},
         "name": "hydra.lib.maps.insert",
-        "seeAlso": [],
         "signature": {
           "parameters": [
             {"isLazy": false, "name": "arg0", "type": {"variable": "k"}},
@@ -157,24 +199,32 @@
           "typeParameters": [{"constraints": [{"simple": "ordering"}], "name": "k"}, {"constraints": [], "name": "v"}]}}},
     {
       "primitive": {
-        "comments": "keys(m) returns the keys of m as a list, in ascending order. Requires an 'ordering' constraint on the key type. Total. Corresponds to Haskell's Data.Map.keys :: Map k v -> [k].",
-        "description": "Return the keys of a map (in key order).",
         "isPure": true,
         "isTotal": true,
+        "metadata": {
+          "comments": [
+            "keys(m) returns the keys of m as a list, in ascending order.",
+            "Requires an 'ordering' constraint on the key type.",
+            "Total. Corresponds to Haskell's Data.Map.keys :: Map k v -> [k]."],
+          "description": "Return the keys of a map (in key order).",
+          "seeAlso": []},
         "name": "hydra.lib.maps.keys",
-        "seeAlso": [],
         "signature": {
           "parameters": [{"isLazy": false, "name": "arg0", "type": {"map": {"keys": {"variable": "k"}, "values": {"variable": "v"}}}}],
           "result": {"type": {"list": {"variable": "k"}}},
           "typeParameters": [{"constraints": [{"simple": "ordering"}], "name": "k"}, {"constraints": [], "name": "v"}]}}},
     {
       "primitive": {
-        "comments": "lookup(k, m) returns Just(v) where v is the value bound to k in m, or Nothing if k is not present. Requires an 'ordering' constraint on the key type. Total. Corresponds to Haskell's Data.Map.lookup :: Ord k => k -> Map k v -> Maybe v.",
-        "description": "Look up a value in a map by key, returning Nothing if absent.",
         "isPure": true,
         "isTotal": true,
+        "metadata": {
+          "comments": [
+            "lookup(k, m) returns Just(v) where v is the value bound to k in m, or Nothing if k is not present.",
+            "Requires an 'ordering' constraint on the key type.",
+            "Total. Corresponds to Haskell's Data.Map.lookup :: Ord k => k -> Map k v -> Maybe v."],
+          "description": "Look up a value in a map by key, returning Nothing if absent.",
+          "seeAlso": []},
         "name": "hydra.lib.maps.lookup",
-        "seeAlso": [],
         "signature": {
           "parameters": [
             {"isLazy": false, "name": "arg0", "type": {"variable": "k"}},
@@ -183,12 +233,16 @@
           "typeParameters": [{"constraints": [{"simple": "ordering"}], "name": "k"}, {"constraints": [], "name": "v"}]}}},
     {
       "primitive": {
-        "comments": "map(f, m) returns a map with the same keys as m and value f(v) for each binding (k, v). Requires an 'ordering' constraint on the key type. Total. Corresponds to Haskell's Data.Map.map :: (v -> w) -> Map k v -> Map k w / fmap on Map.",
-        "description": "Map a function over the values of a map.",
         "isPure": true,
         "isTotal": true,
+        "metadata": {
+          "comments": [
+            "map(f, m) returns a map with the same keys as m and value f(v) for each binding (k, v).",
+            "Requires an 'ordering' constraint on the key type.",
+            "Total. Corresponds to Haskell's Data.Map.map :: (v -> w) -> Map k v -> Map k w / fmap on Map."],
+          "description": "Map a function over the values of a map.",
+          "seeAlso": []},
         "name": "hydra.lib.maps.map",
-        "seeAlso": [],
         "signature": {
           "parameters": [
             {"isLazy": false, "name": "arg0", "type": {"function": {"codomain": {"variable": "v2"}, "domain": {"variable": "v1"}}}},
@@ -200,12 +254,16 @@
             {"constraints": [{"simple": "ordering"}], "name": "k"}]}}},
     {
       "primitive": {
-        "comments": "mapKeys(f, m) returns a map where each binding (k, v) becomes (f(k), v). If f maps multiple keys to the same image, key collisions are resolved by keeping the binding with the greater original key (matching Haskell's mapKeys behavior). Requires 'ordering' constraints on both the input and output key types. Total. Corresponds to Haskell's Data.Map.mapKeys :: (Ord k1, Ord k2) => (k1 -> k2) -> Map k1 v -> Map k2 v.",
-        "description": "Map a function over the keys of a map.",
         "isPure": true,
         "isTotal": true,
+        "metadata": {
+          "comments": [
+            "mapKeys(f, m) returns a map where each binding (k, v) becomes (f(k), v). If f maps multiple keys to the same image, key collisions are resolved by keeping the binding with the greater original key (matching Haskell's mapKeys behavior).",
+            "Requires 'ordering' constraints on both the input and output key types.",
+            "Total. Corresponds to Haskell's Data.Map.mapKeys :: (Ord k1, Ord k2) => (k1 -> k2) -> Map k1 v -> Map k2 v."],
+          "description": "Map a function over the keys of a map.",
+          "seeAlso": []},
         "name": "hydra.lib.maps.mapKeys",
-        "seeAlso": [],
         "signature": {
           "parameters": [
             {"isLazy": false, "name": "arg0", "type": {"function": {"codomain": {"variable": "k2"}, "domain": {"variable": "k1"}}}},
@@ -217,12 +275,16 @@
             {"constraints": [], "name": "v"}]}}},
     {
       "primitive": {
-        "comments": "member(k, m) returns true iff k is a key in m. Requires an 'ordering' constraint on the key type. Total. Corresponds to Haskell's Data.Map.member :: Ord k => k -> Map k v -> Bool.",
-        "description": "Test whether a key is present in a map.",
         "isPure": true,
         "isTotal": true,
+        "metadata": {
+          "comments": [
+            "member(k, m) returns true iff k is a key in m.",
+            "Requires an 'ordering' constraint on the key type.",
+            "Total. Corresponds to Haskell's Data.Map.member :: Ord k => k -> Map k v -> Bool."],
+          "description": "Test whether a key is present in a map.",
+          "seeAlso": []},
         "name": "hydra.lib.maps.member",
-        "seeAlso": [],
         "signature": {
           "parameters": [
             {"isLazy": false, "name": "arg0", "type": {"variable": "k"}},
@@ -231,24 +293,32 @@
           "typeParameters": [{"constraints": [{"simple": "ordering"}], "name": "k"}, {"constraints": [], "name": "v"}]}}},
     {
       "primitive": {
-        "comments": "null(m) returns true iff m has no bindings. Requires an 'ordering' constraint on the key type. Total. Corresponds to Haskell's Data.Map.null :: Map k v -> Bool.",
-        "description": "Test whether a map is empty.",
         "isPure": true,
         "isTotal": true,
+        "metadata": {
+          "comments": [
+            "null(m) returns true iff m has no bindings.",
+            "Requires an 'ordering' constraint on the key type.",
+            "Total. Corresponds to Haskell's Data.Map.null :: Map k v -> Bool."],
+          "description": "Test whether a map is empty.",
+          "seeAlso": []},
         "name": "hydra.lib.maps.null",
-        "seeAlso": [],
         "signature": {
           "parameters": [{"isLazy": false, "name": "arg0", "type": {"map": {"keys": {"variable": "k"}, "values": {"variable": "v"}}}}],
           "result": {"type": {"literal": {"boolean": {}}}},
           "typeParameters": [{"constraints": [{"simple": "ordering"}], "name": "k"}, {"constraints": [], "name": "v"}]}}},
     {
       "primitive": {
-        "comments": "singleton(k, v) returns the map containing exactly the binding (k, v). Requires an 'ordering' constraint on the key type. Total. Corresponds to Haskell's Data.Map.singleton :: k -> v -> Map k v.",
-        "description": "Construct a map with a single key-value pair.",
         "isPure": true,
         "isTotal": true,
+        "metadata": {
+          "comments": [
+            "singleton(k, v) returns the map containing exactly the binding (k, v).",
+            "Requires an 'ordering' constraint on the key type.",
+            "Total. Corresponds to Haskell's Data.Map.singleton :: k -> v -> Map k v."],
+          "description": "Construct a map with a single key-value pair.",
+          "seeAlso": []},
         "name": "hydra.lib.maps.singleton",
-        "seeAlso": [],
         "signature": {
           "parameters": [
             {"isLazy": false, "name": "arg0", "type": {"variable": "k"}},
@@ -257,36 +327,48 @@
           "typeParameters": [{"constraints": [{"simple": "ordering"}], "name": "k"}, {"constraints": [], "name": "v"}]}}},
     {
       "primitive": {
-        "comments": "size(m) returns the number of bindings in m as an int32. Requires an 'ordering' constraint on the key type. Total. Corresponds to Haskell's Data.Map.size :: Map k v -> Int (with narrowing to int32).",
-        "description": "Return the number of key-value pairs in a map.",
         "isPure": true,
         "isTotal": true,
+        "metadata": {
+          "comments": [
+            "size(m) returns the number of bindings in m as an int32.",
+            "Requires an 'ordering' constraint on the key type.",
+            "Total. Corresponds to Haskell's Data.Map.size :: Map k v -> Int (with narrowing to int32)."],
+          "description": "Return the number of key-value pairs in a map.",
+          "seeAlso": []},
         "name": "hydra.lib.maps.size",
-        "seeAlso": [],
         "signature": {
           "parameters": [{"isLazy": false, "name": "arg0", "type": {"map": {"keys": {"variable": "k"}, "values": {"variable": "v"}}}}],
           "result": {"type": {"literal": {"integer": {"int32": {}}}}},
           "typeParameters": [{"constraints": [{"simple": "ordering"}], "name": "k"}, {"constraints": [], "name": "v"}]}}},
     {
       "primitive": {
-        "comments": "toList(m) returns the bindings of m as a list of (key, value) pairs, in ascending key order. Requires an 'ordering' constraint on the key type. Total. Corresponds to Haskell's Data.Map.toList :: Map k v -> [(k, v)].",
-        "description": "Convert a map to a list of key-value pairs (in key order).",
         "isPure": true,
         "isTotal": true,
+        "metadata": {
+          "comments": [
+            "toList(m) returns the bindings of m as a list of (key, value) pairs, in ascending key order.",
+            "Requires an 'ordering' constraint on the key type.",
+            "Total. Corresponds to Haskell's Data.Map.toList :: Map k v -> [(k, v)]."],
+          "description": "Convert a map to a list of key-value pairs (in key order).",
+          "seeAlso": []},
         "name": "hydra.lib.maps.toList",
-        "seeAlso": [],
         "signature": {
           "parameters": [{"isLazy": false, "name": "arg0", "type": {"map": {"keys": {"variable": "k"}, "values": {"variable": "v"}}}}],
           "result": {"type": {"list": {"pair": {"first": {"variable": "k"}, "second": {"variable": "v"}}}}},
           "typeParameters": [{"constraints": [{"simple": "ordering"}], "name": "k"}, {"constraints": [], "name": "v"}]}}},
     {
       "primitive": {
-        "comments": "union(m1, m2) returns the map containing all bindings from m1 plus the bindings of m2 whose keys are not in m1. On key collision, the binding from m1 is preferred. Requires an 'ordering' constraint on the key type. Total. Corresponds to Haskell's Data.Map.union :: Ord k => Map k v -> Map k v -> Map k v.",
-        "description": "Compute the union of two maps; the first map's bindings take precedence on key collision.",
         "isPure": true,
         "isTotal": true,
+        "metadata": {
+          "comments": [
+            "union(m1, m2) returns the map containing all bindings from m1 plus the bindings of m2 whose keys are not in m1. On key collision, the binding from m1 is preferred.",
+            "Requires an 'ordering' constraint on the key type.",
+            "Total. Corresponds to Haskell's Data.Map.union :: Ord k => Map k v -> Map k v -> Map k v."],
+          "description": "Compute the union of two maps; the first map's bindings take precedence on key collision.",
+          "seeAlso": []},
         "name": "hydra.lib.maps.union",
-        "seeAlso": [],
         "signature": {
           "parameters": [
             {"isLazy": false, "name": "arg0", "type": {"map": {"keys": {"variable": "k"}, "values": {"variable": "v"}}}},
@@ -316,5 +398,5 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "description": "Primitives in the hydra.lib.maps module.",
+  "metadata": {"comments": [], "description": "Primitives in the hydra.lib.maps module.", "seeAlso": []},
   "name": "hydra.lib.maps"}

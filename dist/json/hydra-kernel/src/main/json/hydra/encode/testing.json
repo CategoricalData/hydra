@@ -42,5 +42,5 @@
                 "domain": {"variable": "hydra.testing.Tag"},
                 "parameter": "x"}}}}}}],
   "dependencies": [{"module": "hydra.encode.core"}, {"module": "hydra.testing"}],
-  "description": "Term encoders for hydra.testing",
+  "metadata": {"comments": [], "description": "Term encoders for hydra.testing", "seeAlso": []},
   "name": "hydra.encode.testing"}

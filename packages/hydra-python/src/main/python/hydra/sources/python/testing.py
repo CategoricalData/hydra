@@ -5,7 +5,7 @@ Mirror of packages/hydra-python/src/main/haskell/Hydra/Sources/Python/Testing.hs
 
 from hydra.core import Name
 from hydra.dsl.python import Just, Nothing
-from hydra.packaging import Module, ModuleName
+from hydra.packaging import EntityMetadata, Module, ModuleName
 
 import hydra.dsl.meta.lib.chars as Chars
 import hydra.dsl.meta.lib.eithers as Eithers
@@ -52,7 +52,11 @@ DEPENDENCIES = [
 
 _PLACEHOLDER = Module(
     NS,
-    Just("Python test code generation codec for pytest-based generation tests"),
+    Just(EntityMetadata(
+        Just("Python test code generation codec for pytest-based generation tests"),
+        (),
+        (),
+        Nothing())),
     DEPENDENCIES,
     (),
 )
@@ -371,7 +375,7 @@ def _generate_test_file_with_python_codec():
 def _build_module() -> Module:
     return Module(
         _PLACEHOLDER.name,
-        _PLACEHOLDER.description,
+        _PLACEHOLDER.metadata,
         _PLACEHOLDER.dependencies,
         (
             to_definition(_build_python_test_module()),

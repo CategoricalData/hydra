@@ -4,7 +4,7 @@ module Hydra.Sources.Test.Checking.Failures where
 
 -- Standard imports for term-encoded tests
 import Hydra.Kernel
-import           Hydra.Dsl.Bootstrap (unqualifiedDep)
+import           Hydra.Dsl.Bootstrap (unqualifiedDep, descriptionMetadata)
 import Hydra.Dsl.Meta.Testing                 as Testing
 import Hydra.Dsl.Meta.Terms                   as Terms
 import Hydra.Sources.Kernel.Types.All
@@ -26,7 +26,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = unqualifiedDep <$> ([TestGraph.ns, ModuleName "hydra.rewriting"] ++ kernelTypesModuleNames),
-            moduleDescription = (Just "Type checking failure test cases")}
+            moduleMetadata = descriptionMetadata ((Just "Type checking failure test cases"))}
   where
     definitions = [
       Phantoms.toDefinition allTests,

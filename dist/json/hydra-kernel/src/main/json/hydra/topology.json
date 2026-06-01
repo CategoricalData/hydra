@@ -108,5 +108,5 @@
               "body": {"literal": {"integer": {"int32": {}}}}}},
           "variables": []}}}],
   "dependencies": [{"module": "hydra.core"}],
-  "description": "A model for simple graphs as adjacency lists",
+  "metadata": {"comments": [], "description": "A model for simple graphs as adjacency lists", "seeAlso": []},
   "name": "hydra.topology"}

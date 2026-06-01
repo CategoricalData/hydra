@@ -82,7 +82,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> ([Names.ns, Rewriting.ns] L.++ kernelTypesModuleNames),
-            moduleDescription = Just ("Free variable analysis, term-level substitution, and unshadowing")}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just ("Free variable analysis, term-level substitution, and unshadowing"))}
   where
    definitions = [
      toDefinition freeTypeVariablesInTerm,

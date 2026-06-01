@@ -24,8 +24,8 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = (DefinitionType <$> definitions),
             moduleDependencies = unqualifiedDep <$> [Core.ns],
-            moduleDescription = Just ("A partial Delta Parquet model, based on DataType and its subclasses as specified in the 3.0.0 Java API:"
-      ++ " https://docs.delta.io/3.0.0/api/java/kernel/io/delta/kernel/types/DataType.html")}
+            moduleMetadata = descriptionMetadata (Just ("A partial Delta Parquet model, based on DataType and its subclasses as specified in the 3.0.0 Java API:"
+      ++ " https://docs.delta.io/3.0.0/api/java/kernel/io/delta/kernel/types/DataType.html"))}
   where
     definitions = [
       arrayType,

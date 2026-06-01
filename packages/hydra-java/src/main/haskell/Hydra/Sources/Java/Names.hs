@@ -94,7 +94,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> ((JavaSyntax.ns:KernelTypes.kernelTypesModuleNames)),
-            moduleDescription = Just "Java naming constants and package name utilities"}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just "Java naming constants and package name utilities")}
   where
     definitions = [
       toDefinition acceptMethodName,

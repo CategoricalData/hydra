@@ -1507,5 +1507,5 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "description": "Graph context extension and type scheme conversion",
+  "metadata": {"comments": [], "description": "Graph context extension and type scheme conversion", "seeAlso": []},
   "name": "hydra.scoping"}

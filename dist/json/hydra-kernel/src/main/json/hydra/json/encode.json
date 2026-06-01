@@ -3076,5 +3076,8 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "description": "JSON encoding for Hydra terms. Converts Terms to JSON Values using Either for error handling.",
+  "metadata": {
+    "comments": [],
+    "description": "JSON encoding for Hydra terms. Converts Terms to JSON Values using Either for error handling.",
+    "seeAlso": []},
   "name": "hydra.json.encode"}

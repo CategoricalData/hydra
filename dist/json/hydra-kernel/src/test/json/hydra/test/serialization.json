@@ -979,5 +979,5 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "description": "Test cases for AST serialization",
+  "metadata": {"comments": [], "description": "Test cases for AST serialization", "seeAlso": []},
   "name": "hydra.test.serialization"}

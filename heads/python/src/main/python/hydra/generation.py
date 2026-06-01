@@ -214,10 +214,10 @@ def strip_term_types(m):
         if isinstance(d, DefinitionTerm):
             td = d.value
             new_term = remove_types_from_term(td.term)
-            stripped.append(DefinitionTerm(TermDefinition(td.name, new_term, Nothing())))
+            stripped.append(DefinitionTerm(TermDefinition(td.name, Nothing(), new_term, Nothing())))
         else:
             stripped.append(d)
-    return Module(m.name, m.description, m.dependencies, tuple(stripped))
+    return Module(m.name, m.metadata, m.dependencies, tuple(stripped))
 
 
 def strip_all_term_types(modules):

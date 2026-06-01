@@ -2,7 +2,7 @@ module Hydra.Sources.Test.TestTypes where
 
 -- Standard imports for kernel test fixtures
 import Hydra.Kernel
-import           Hydra.Dsl.Bootstrap (unqualifiedDep)
+import           Hydra.Dsl.Bootstrap (unqualifiedDep, descriptionMetadata)
 import Hydra.Dsl.Meta.Testing                 as Testing
 import Hydra.Dsl.Meta.Phantoms                as Phantoms hiding ((++), (>:))
 import Hydra.Sources.Kernel.Types.All
@@ -25,7 +25,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = unqualifiedDep <$> (kernelTypesModuleNames),
-            moduleDescription = (Just "Type definitions for the test suite")}
+            moduleMetadata = descriptionMetadata ((Just "Type definitions for the test suite"))}
   where
     definitions = [
       toDefinition testTypeBuddyListA,

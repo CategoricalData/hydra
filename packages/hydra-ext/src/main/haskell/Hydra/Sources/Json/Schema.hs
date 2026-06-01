@@ -24,7 +24,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = (DefinitionType <$> definitions),
             moduleDependencies = unqualifiedDep <$> [JsonModel.ns, Core.ns],
-            moduleDescription = Just ("A model for JSON Schema. Based on https://cswr.github.io/JsonSchema/spec/grammar")}
+            moduleMetadata = descriptionMetadata (Just ("A model for JSON Schema. Based on https://cswr.github.io/JsonSchema/spec/grammar"))}
   where
     def = datatype ns
     js = typeref ns

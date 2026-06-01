@@ -98,7 +98,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> ([Constants.ns, Serialization.ns, RustOperators.ns] L.++ (RustSyntax.ns:KernelTypes.kernelTypesModuleNames)),
-            moduleDescription = Just "Rust serializer: converts Rust AST to concrete syntax"}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just "Rust serializer: converts Rust AST to concrete syntax")}
   where
     definitions = [
       -- Top-level serialization

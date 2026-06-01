@@ -31,21 +31,6 @@ subprojects {
     apply plugin: 'java-library'
     apply plugin: 'checkstyle'
 
-    sourceSets {
-        main {
-            java {
-                srcDirs 'src/main/java'
-                srcDirs 'src/gen-main/java'
-            }
-        }
-        test {
-            java {
-                srcDirs 'src/test/java'
-                srcDirs 'src/gen-test/java'
-            }
-        }
-    }
-
     java {
         withJavadocJar()
         withSourcesJar()

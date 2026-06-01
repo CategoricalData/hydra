@@ -20,6 +20,7 @@ import hydra.dsl.meta.lib.Pairs;
 import hydra.dsl.meta.lib.Sets;
 import hydra.dsl.meta.lib.Strings;
 import hydra.packaging.Definition;
+import hydra.packaging.EntityMetadata;
 import hydra.packaging.Module;
 import hydra.packaging.ModuleName;
 import hydra.packaging.ModuleDependency;
@@ -3418,7 +3419,11 @@ public class Utils {
 
     public static final Module module_ = new Module(
         NS,
-        Maybe.just("Java utilities for constructing Java syntax trees"),
+        Maybe.just(new EntityMetadata(
+            Maybe.just("Java utilities for constructing Java syntax trees"),
+            java.util.List.of(),
+            java.util.List.of(),
+            Maybe.nothing())),
         DEPENDENCIES,
         DEFINITIONS);
 }

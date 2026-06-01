@@ -762,5 +762,5 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "description": "C++ naming utilities: encoding Hydra names as C++ names",
+  "metadata": {"comments": [], "description": "C++ naming utilities: encoding Hydra names as C++ names", "seeAlso": []},
   "name": "hydra.cpp.names"}

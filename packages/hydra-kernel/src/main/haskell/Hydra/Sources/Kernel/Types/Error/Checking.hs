@@ -22,7 +22,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = (DefinitionType <$> definitions),
             moduleDependencies = unqualifiedDep <$> [Core.ns, Paths.ns, Typing.ns, Variants.ns],
-            moduleDescription = Just "Error types for type checking"}
+            moduleMetadata = descriptionMetadata (Just "Error types for type checking")}
   where
     definitions = [
       checkingError,

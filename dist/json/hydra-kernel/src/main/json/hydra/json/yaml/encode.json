@@ -256,5 +256,8 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "description": "JSON-to-YAML encoding. Converts JSON Values to YAML Nodes (always succeeds), and Hydra Terms to YAML Nodes via JSON.",
+  "metadata": {
+    "comments": [],
+    "description": "JSON-to-YAML encoding. Converts JSON Values to YAML Nodes (always succeeds), and Hydra Terms to YAML Nodes via JSON.",
+    "seeAlso": []},
   "name": "hydra.json.yaml.encode"}

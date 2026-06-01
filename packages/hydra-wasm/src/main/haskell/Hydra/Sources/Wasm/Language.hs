@@ -86,7 +86,7 @@ module_ = Module {
             moduleName = (ModuleName "hydra.wasm.language"),
             moduleDefinitions = [toDefinition wasmLanguage, toDefinition wasmReservedWords],
             moduleDependencies = Bootstrap.unqualifiedDep <$> ([Lexical.ns] L.++ KernelTypes.kernelTypesModuleNames),
-            moduleDescription = Just "Language constraints and reserved words for WebAssembly (WAT text format)"}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just "Language constraints and reserved words for WebAssembly (WAT text format)")}
 wasmLanguage :: TypedTermDefinition Language
 wasmLanguage = define "wasmLanguage" $
     doc "Language constraints for WebAssembly" $ lets [

@@ -274,6 +274,44 @@ else
 fi
 
 # ────────────────────────────────────────────────────────────────────
+# Phase 1.5: Auto-heal stale hydra-java / hydra-python coder JSON (#406).
+# ────────────────────────────────────────────────────────────────────
+# Per #344, Phase 1 re-exports the hydra.java.* / hydra.python.* coder JSON
+# only on cold-start (HYDRA_INCLUDE_JAVA_PYTHON, set above when a sentinel is
+# missing). On a WARM tree it skips them — but dist/json/hydra-{java,python}/
+# coder.json feeds Phase 2's dist/haskell/hydra-{java,python}/Coder.hs, which
+# is compiled into the core `hydra` library. When a kernel rename ripples into
+# the coders, that warm-skip leaves the coder JSON stale against the just-
+# regenerated kernel; Phase 2 then emits a Coder.hs referencing a renamed-away
+# field and the next `stack build` dies (#406).
+#
+# The native Phase 5 generator (the authoritative writer post-#344, and the
+# sole writer once the legacy Haskell coder DSL is deleted) cannot run here:
+# it needs the host built (Phase 4 output), which needs this library. So we
+# heal in place: detect staleness against the now-fresh kernel JSON and re-run
+# update-json-main --include-java-python (the JSON-write step only — Phase 0
+# already built the executable) so Phase 2 translates fresh coder JSON.
+#
+# check-java-python-json-fresh.py keys on the translated kernel JSON (the
+# rename signal that survives the legacy-DSL deletion), so this gate is
+# correct both today and after that deletion. The cold-start branch above
+# already re-exported; there we only stamp the cache.
+JP_FRESH_CHECK="$HYDRA_ROOT/bin/lib/check-java-python-json-fresh.py"
+if [ -x "$JP_FRESH_CHECK" ]; then
+    if [ "${HYDRA_INCLUDE_JAVA_PYTHON:-0}" = "1" ]; then
+        # Cold-start (or already forced): Phase 1 wrote fresh coder JSON. Stamp.
+        "$JP_FRESH_CHECK" "$HYDRA_ROOT" --record || true
+    elif ! "$JP_FRESH_CHECK" "$HYDRA_ROOT"; then
+        banner1 "Phase 1.5: re-exporting stale hydra-java/hydra-python coder JSON (#406)"
+        echo ""
+        ( cd "$HYDRA_HASKELL_DIR" \
+            && stack exec update-json-main -- --include-java-python ) || exit 1
+        "$JP_FRESH_CHECK" "$HYDRA_ROOT" --record || true
+        echo ""
+    fi
+fi
+
+# ────────────────────────────────────────────────────────────────────
 # Phase 2: Each coder (hydra-<L> for L ∈ union) regenerated in Haskell.
 # ────────────────────────────────────────────────────────────────────
 # Every host in any future phase drives target-language code generation

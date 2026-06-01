@@ -20,7 +20,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = (DefinitionType <$> definitions),
             moduleDependencies = unqualifiedDep <$> [Core.ns],
-            moduleDescription = Just "A model for simple graphs as adjacency lists"}
+            moduleMetadata = descriptionMetadata (Just "A model for simple graphs as adjacency lists")}
   where
     definitions = [
       graph,

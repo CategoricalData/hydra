@@ -2936,5 +2936,8 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "description": "GraphQL code generator: converts Hydra modules to GraphQL schema definitions",
+  "metadata": {
+    "comments": [],
+    "description": "GraphQL code generator: converts Hydra modules to GraphQL schema definitions",
+    "seeAlso": []},
   "name": "hydra.graphql.coder"}

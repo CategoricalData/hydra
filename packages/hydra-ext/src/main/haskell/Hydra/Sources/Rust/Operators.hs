@@ -96,7 +96,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> ([Serialization.ns] L.++ KernelTypes.kernelTypesModuleNames),
-            moduleDescription = Just "AST operators for Rust serialization"}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just "AST operators for Rust serialization")}
   where
     definitions = [
       -- Assignment operators (lowest precedence)

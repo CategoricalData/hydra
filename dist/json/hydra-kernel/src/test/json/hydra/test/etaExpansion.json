@@ -15414,5 +15414,5 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "description": "Test cases for eta expansion of terms",
+  "metadata": {"comments": [], "description": "Test cases for eta expansion of terms", "seeAlso": []},
   "name": "hydra.test.etaExpansion"}

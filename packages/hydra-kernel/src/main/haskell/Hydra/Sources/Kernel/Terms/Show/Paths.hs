@@ -62,7 +62,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> ([Names.ns, Rewriting.ns] L.++ kernelTypesModuleNames),
-            moduleDescription = Just ("Utilities for working with subterm steps and paths.")}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just ("Utilities for working with subterm steps and paths."))}
   where
    definitions = [
      toDefinition subtermStep,

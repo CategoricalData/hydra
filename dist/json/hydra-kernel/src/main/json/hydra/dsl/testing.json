@@ -2729,5 +2729,5 @@
                   "application": {"argument": {"variable": "hydra.testing.UniversalTestCase"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "original"}}}}}}],
   "dependencies": [{"module": "hydra.testing"}, {"module": "hydra.typed"}, {"module": "hydra.core"}, {"module": "hydra.dsl.core"}],
-  "description": "DSL functions for hydra.testing",
+  "metadata": {"comments": [], "description": "DSL functions for hydra.testing", "seeAlso": []},
   "name": "hydra.dsl.testing"}

@@ -24,8 +24,8 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = (DefinitionType <$> definitions),
             moduleDependencies = unqualifiedDep <$> [],
-            moduleDescription = Just ("All IANA Link Relation Types, as of 2022-10-11. " ++
-          "See https://www.iana.org/assignments/link-relations/link-relations.xhtml")}
+            moduleMetadata = descriptionMetadata (Just ("All IANA Link Relation Types, as of 2022-10-11. " ++
+          "See https://www.iana.org/assignments/link-relations/link-relations.xhtml"))}
   where
     definitions = [
       linkRelationType]

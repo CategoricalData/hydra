@@ -3,6 +3,7 @@ import hydra.core.Type;
 import static hydra.dsl.meta.Defs.unqualifiedDeps;
 import hydra.dsl.Types;
 import hydra.packaging.Definition;
+import hydra.packaging.EntityMetadata;
 import hydra.packaging.Module;
 import hydra.packaging.ModuleName;
 import hydra.packaging.ModuleDependency;
@@ -1411,7 +1412,11 @@ public class Syntax {
 
     public static final Module module_ = new Module(
         NS,
-        Maybe.just("A Java syntax module. Tracks the Oracle Java SE 21 BNF:\n  https://docs.oracle.com/javase/specs/jls/se21/html/jls-19.html\nNote: all *WithComments types were added manually, rather than derived from the BNF, which does not allow for comments."),
+        Maybe.just(new EntityMetadata(
+            Maybe.just("A Java syntax module. Tracks the Oracle Java SE 21 BNF:\n  https://docs.oracle.com/javase/specs/jls/se21/html/jls-19.html\nNote: all *WithComments types were added manually, rather than derived from the BNF, which does not allow for comments."),
+            java.util.List.of(),
+            java.util.List.of(),
+            Maybe.nothing())),
         DEPENDENCIES,
         DEFINITIONS);
 }

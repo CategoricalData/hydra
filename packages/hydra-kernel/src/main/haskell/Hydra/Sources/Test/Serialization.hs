@@ -7,7 +7,7 @@ module Hydra.Sources.Test.Serialization where
 
 -- Standard imports for deep DSL tests (produces TypedTerm a with specific types)
 import Hydra.Kernel
-import           Hydra.Dsl.Bootstrap (unqualifiedDep)
+import           Hydra.Dsl.Bootstrap (unqualifiedDep, descriptionMetadata)
 import Hydra.Dsl.Meta.Testing                 as Testing
 import Hydra.Dsl.Meta.Phantoms                as Phantoms hiding ((++))
 import Hydra.Sources.Kernel.Types.All
@@ -37,7 +37,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = unqualifiedDep <$> ([Serialization.ns] ++ kernelTypesModuleNames),
-            moduleDescription = (Just "Test cases for AST serialization")}
+            moduleMetadata = descriptionMetadata ((Just "Test cases for AST serialization"))}
   where
     definitions = [
       Phantoms.toDefinition arrowOp,

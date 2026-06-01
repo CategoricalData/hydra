@@ -440,6 +440,14 @@ default computation in a lambda (`_ -> ...`) in the kernel DSL source, making it
 languages. If you encounter unexpected performance degradation in kernel functions, check for
 eagerly-evaluated `let` bindings that are only used in some code paths.
 
+A coder can also defend against this structurally, so authors don't have to remember the
+lambda-wrapping. The Java and Python coders thunk a `let` binding (emit `hydra.util.Lazy<>` /
+`Lazy(lambda: ...)`) when it is complex and non-trivial — `isComplexBinding && !isTrivialTerm`.
+This is what makes the let-bound default form (`"dflt">: recurse @@ var "term"`) safe even
+without an explicit `λ_.`; before that rule, the Java coder emitted such a default eagerly and
+`substTypesInTerm` was exponential in term depth (#372). A new strict target should apply the
+same thunking predicate rather than relying on every DSL author to wrap defaults by hand.
+
 ### Data structure performance
 
 The kernel uses maps and sets extensively (`Graph.primitives`, `Graph.schemaTypes`, free variable

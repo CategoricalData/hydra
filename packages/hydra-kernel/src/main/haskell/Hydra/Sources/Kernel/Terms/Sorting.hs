@@ -67,10 +67,10 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> ([Constants.ns] L.++ kernelTypesModuleNames),
-            moduleDescription = Just ("Utilities for sorting."
+            moduleMetadata = Bootstrap.descriptionMetadata (Just ("Utilities for sorting."
       <> " This module includes an implementation of Tarjan's algorithm,"
       <> " originally based on GraphSCC by Iavor S. Diatchki:"
-      <> " https://hackage.haskell.org/package/GraphSCC.")}
+      <> " https://hackage.haskell.org/package/GraphSCC."))}
   where
    definitions = [
      toDefinition adjacencyListToMap,

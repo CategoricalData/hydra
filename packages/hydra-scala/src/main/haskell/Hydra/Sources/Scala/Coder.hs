@@ -5,7 +5,7 @@ module Hydra.Sources.Scala.Coder where
 
 -- Standard imports for term-level sources outside of the kernel
 import Hydra.Kernel
-import           Hydra.Dsl.Bootstrap (unqualifiedDep)
+import           Hydra.Dsl.Bootstrap (unqualifiedDep, descriptionMetadata)
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Meta.Lib.Strings                as Strings
 import           Hydra.Dsl.Meta.Phantoms                   as Phantoms
@@ -71,7 +71,7 @@ module_ = Module {
             moduleDefinitions = definitions,
             moduleDependencies = unqualifiedDep <$> ([ScalaUtilsSource.ns, ScalaSerdeSource.ns, Formatting.ns, Names.ns, Scoping.ns, Strip.ns, Variables.ns, Analysis.ns, Environment.ns, Predicates.ns, Resolution.ns, ShowCore.ns, Annotations.ns, Constants.ns,
       Inference.ns, Sorting.ns, Arity.ns, SerializationSource.ns, Reduction.ns] L.++ (ScalaSyntax.ns:moduleName ScalaLanguageSource.module_:KernelTypes.kernelTypesModuleNames)),
-            moduleDescription = Just "Scala code generator: converts Hydra modules to Scala source code"}
+            moduleMetadata = descriptionMetadata (Just "Scala code generator: converts Hydra modules to Scala source code")}
   where
     definitions = [
       toDefinition applyVar,

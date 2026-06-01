@@ -2,7 +2,7 @@ module Hydra.Sources.Test.TestGraph where
 
 -- Standard imports for kernel test fixtures
 import Hydra.Kernel
-import           Hydra.Dsl.Bootstrap (unqualifiedDep)
+import           Hydra.Dsl.Bootstrap (unqualifiedDep, descriptionMetadata)
 import Hydra.Dsl.Meta.Testing                 as Testing
 import Hydra.Dsl.Meta.Terms                   as Terms hiding ((@@))
 import Hydra.Sources.Kernel.Types.All
@@ -44,7 +44,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = unqualifiedDep <$> ([TestTerms.ns, TestTypes.ns, TestEnv.ns, Lexical.ns] L.++ kernelTypesModuleNames),
-            moduleDescription = Just ("A module defining the graph used in the test suite.")}
+            moduleMetadata = descriptionMetadata (Just ("A module defining the graph used in the test suite."))}
   where
    definitions = [
      Phantoms.toDefinition testTerms,

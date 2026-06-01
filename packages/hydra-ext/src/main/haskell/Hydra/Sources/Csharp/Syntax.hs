@@ -21,8 +21,8 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = (DefinitionType <$> definitions),
             moduleDependencies = unqualifiedDep <$> [Core.ns],
-            moduleDescription = Just ("A C# syntax module based on the ANTLR grammar dated 02/07/2024 and available at:\n"
-      ++ "  https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/language-specification/grammar")}
+            moduleMetadata = descriptionMetadata (Just ("A C# syntax module based on the ANTLR grammar dated 02/07/2024 and available at:\n"
+      ++ "  https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/language-specification/grammar"))}
   where
     definitions = lexicalElements ++ syntacticElements ++ unsafeElements
 

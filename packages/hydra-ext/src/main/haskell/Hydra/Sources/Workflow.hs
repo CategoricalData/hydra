@@ -22,7 +22,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = (DefinitionType <$> definitions),
             moduleDependencies = unqualifiedDep <$> [Graph.ns, Module.ns, Core.ns],
-            moduleDescription = Just "A model for Hydra transformation workflows"}
+            moduleMetadata = descriptionMetadata (Just "A model for Hydra transformation workflows")}
   where
     definitions = [
       hydraSchemaSpec,

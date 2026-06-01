@@ -854,5 +854,5 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "description": "Java test code generation codec for JUnit-based generation tests",
+  "metadata": {"comments": [], "description": "Java test code generation codec for JUnit-based generation tests", "seeAlso": []},
   "name": "hydra.java.testing"}

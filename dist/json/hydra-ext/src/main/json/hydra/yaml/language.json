@@ -145,5 +145,5 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "description": "Language constraints for YAML",
+  "metadata": {"comments": [], "description": "Language constraints for YAML", "seeAlso": []},
   "name": "hydra.yaml.language"}

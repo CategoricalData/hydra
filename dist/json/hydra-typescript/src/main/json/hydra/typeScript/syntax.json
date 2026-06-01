@@ -2165,5 +2165,5 @@
                         "body": {"maybe": {"variable": "hydra.typeScript.syntax.DocumentationComment"}}}}}]}}},
           "variables": []}}}],
   "dependencies": [{"module": "hydra.core"}],
-  "description": "A TypeScript 5.x syntax model for Hydra code generation",
+  "metadata": {"comments": [], "description": "A TypeScript 5.x syntax model for Hydra code generation", "seeAlso": []},
   "name": "hydra.typeScript.syntax"}
