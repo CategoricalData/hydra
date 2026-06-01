@@ -20,7 +20,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = (DefinitionType <$> definitions),
             moduleDependencies = unqualifiedDep <$> [Core.ns],
-            moduleDescription = Just "Typed (phantom) wrappers for use with Hydra DSLs"}
+            moduleMetadata = descriptionMetadata (Just "Typed (phantom) wrappers for use with Hydra DSLs")}
   where
     definitions = [
       typedBinding,

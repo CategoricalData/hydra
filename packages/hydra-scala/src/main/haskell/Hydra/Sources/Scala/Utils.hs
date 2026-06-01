@@ -93,7 +93,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> ([scalaLanguageNs, Names.ns, Formatting.ns] L.++ (ScalaSyntax.ns:KernelTypes.kernelTypesModuleNames)),
-            moduleDescription = Just "Utility functions for constructing Scala AST nodes"}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just "Utility functions for constructing Scala AST nodes")}
   where
     definitions = [
       toDefinition nameOfType,

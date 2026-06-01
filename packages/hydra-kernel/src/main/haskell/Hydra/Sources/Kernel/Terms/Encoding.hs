@@ -74,7 +74,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> ([Annotations.ns, moduleName DecodeCore.module_, Formatting.ns, Names.ns, Predicates.ns, Rewriting.ns] L.++ kernelTypesModuleNames),
-            moduleDescription = Just "Functions for generating term encoders from type modules"}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just "Functions for generating term encoders from type modules")}
   where
     definitions = [
       toDefinition encodeBinding,
@@ -360,14 +360,16 @@ encodeModule = define "encodeModule" $
         -- The encoder module depends on encoder modules of the source's dependencies, plus the original module
         right (just (Packaging.module_
           (encodeModuleName @@ (Packaging.moduleName (var "mod")))
-          (just (Strings.cat $ list [
-            string "Term encoders for ",
-            Packaging.unModuleName (Packaging.moduleName (var "mod"))]))
+          (just (Packaging.entityMetadata
+            (just (Strings.cat $ list [
+              string "Term encoders for ",
+              Packaging.unModuleName (Packaging.moduleName (var "mod"))]))
+            (list ([] :: [TypedTerm String])) (list ([] :: [TypedTerm EntityReference])) nothing))
           (Lists.map ("ns" ~> Packaging.moduleDependency (var "ns") nothing) (Lists.nub (Lists.concat2
             (primitive _lists_map @@ encodeModuleName @@ (Lists.map ("dep" ~> Packaging.moduleDependencyModule (var "dep")) (Packaging.moduleDependencies (var "mod"))))
             (list [Packaging.moduleName (var "mod")]))))
           (Lists.map ("b" ~> Packaging.definitionTerm (Packaging.termDefinition
-            (Core.bindingName $ var "b") (Core.bindingTerm $ var "b")
+            (Core.bindingName $ var "b") nothing (Core.bindingTerm $ var "b")
             (Maybes.map Scoping.typeSchemeToTermSignature $ Core.bindingTypeScheme $ var "b")))
             (var "encodedBindings")))))
 

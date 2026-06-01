@@ -107,7 +107,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> ([SerializationSource.ns, Formatting.ns, Names.ns, TestUtils.ns, Constants.ns] L.++ (PySyntax.ns:KernelTypes.kernelTypesModuleNames)),
-            moduleDescription = Just "Python test code generation codec for pytest-based generation tests"}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just "Python test code generation codec for pytest-based generation tests")}
   where
     definitions = [
       toDefinition buildPythonTestModule,

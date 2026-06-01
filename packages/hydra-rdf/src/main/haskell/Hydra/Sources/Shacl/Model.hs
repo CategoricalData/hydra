@@ -27,7 +27,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = (DefinitionType <$> definitions),
             moduleDependencies = unqualifiedDep <$> [RdfSyntax.ns, Core.ns],
-            moduleDescription = Just "A SHACL syntax model. See https://www.w3.org/TR/shacl"}
+            moduleMetadata = descriptionMetadata (Just "A SHACL syntax model. See https://www.w3.org/TR/shacl")}
   where
     definitions = [
       closed,

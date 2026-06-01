@@ -8666,5 +8666,5 @@
     {"module": "hydra.dsl.graph"},
     {"module": "hydra.dsl.packaging"},
     {"module": "hydra.dsl.typing"}],
-  "description": "DSL functions for hydra.java.environment",
+  "metadata": {"comments": [], "description": "DSL functions for hydra.java.environment", "seeAlso": []},
   "name": "hydra.dsl.java.environment"}

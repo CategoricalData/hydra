@@ -23,7 +23,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = (DefinitionType <$> definitions),
             moduleDependencies = unqualifiedDep <$> [Core.ns, Error.ns, Packaging.ns, Typing.ns],
-            moduleDescription = Just "The extension to graphs of Hydra's core type system (hydra.core)"}
+            moduleMetadata = descriptionMetadata (Just "The extension to graphs of Hydra's core type system (hydra.core)")}
   where
     definitions = [
       graph,

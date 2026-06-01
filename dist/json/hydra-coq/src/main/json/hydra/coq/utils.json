@@ -7338,5 +7338,5 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "description": "Pure helpers for the Coq code generator",
+  "metadata": {"comments": [], "description": "Pure helpers for the Coq code generator", "seeAlso": []},
   "name": "hydra.coq.utils"}

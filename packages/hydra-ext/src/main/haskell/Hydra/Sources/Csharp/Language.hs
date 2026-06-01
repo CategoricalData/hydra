@@ -86,7 +86,7 @@ module_ = Module {
             moduleName = (ModuleName "hydra.csharp.language"),
             moduleDefinitions = [toDefinition csharpLanguage, toDefinition csharpReservedWords],
             moduleDependencies = Bootstrap.unqualifiedDep <$> ([Lexical.ns] L.++ KernelTypes.kernelTypesModuleNames),
-            moduleDescription = Just "Language constraints and reserved words for C Sharp (C#)"}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just "Language constraints and reserved words for C Sharp (C#)")}
 csharpLanguage :: TypedTermDefinition Language
 csharpLanguage = define "csharpLanguage" $
   doc "Language constraints for C Sharp (C#)" $ lets [

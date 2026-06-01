@@ -24,10 +24,10 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = (DefinitionType <$> definitions),
             moduleDependencies = unqualifiedDep <$> [Core.ns],
-            moduleDescription = Just ("A model for characterizing OpenCypher queries and implementations in terms of included features."
+            moduleMetadata = descriptionMetadata (Just ("A model for characterizing OpenCypher queries and implementations in terms of included features."
       ++ "Based on the OpenCypher grammar and the list of standard Cypher functions at "
       ++ "https://neo4j.com/docs/cypher-manual/current/functions."
-      ++ " Current as of August 2024.")}
+      ++ " Current as of August 2024."))}
   where
     definitions = featureSetToType <$> flatten openCypherFeatures
       where
@@ -243,7 +243,7 @@ openCypherFeaturesEnumModule = Module {
                                  moduleName = ns2,
                                  moduleDefinitions = (DefinitionType <$> definitions),
                                  moduleDependencies = unqualifiedDep <$> [Core.ns],
-                                 moduleDescription = Just ("A model with an enumeration of (Open)Cypher features.")}
+                                 moduleMetadata = descriptionMetadata (Just ("A model with an enumeration of (Open)Cypher features."))}
   where
     ns2 = ModuleName "hydra.org/opencypher/features"
     def = datatype ns2

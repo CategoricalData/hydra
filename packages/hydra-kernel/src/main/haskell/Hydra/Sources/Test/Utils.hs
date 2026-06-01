@@ -98,7 +98,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> ([Inference.ns, ShowError.ns, Lexical.ns] L.++ KernelTypes.kernelTypesModuleNames),
-            moduleDescription = Just "Shared utility functions for test code generation codecs"}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just "Shared utility functions for test code generation codecs")}
   where
     definitions = [
       toDefinition inferTestGroupTerms,

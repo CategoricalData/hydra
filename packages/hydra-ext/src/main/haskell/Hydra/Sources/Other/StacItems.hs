@@ -28,8 +28,8 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = (DefinitionType <$> definitions),
             moduleDependencies = unqualifiedDep <$> [GeoJson.ns, IanaRelations.ns, Core.ns],
-            moduleDescription = Just ("A model for SpatioTemporal Asset Catalog (STAC) Items. " ++
-          "See https://github.com/radiantearth/stac-spec/blob/master/item-spec/item-spec.md")}
+            moduleMetadata = descriptionMetadata (Just ("A model for SpatioTemporal Asset Catalog (STAC) Items. " ++
+          "See https://github.com/radiantearth/stac-spec/blob/master/item-spec/item-spec.md"))}
   where
     definitions = [
       asset,

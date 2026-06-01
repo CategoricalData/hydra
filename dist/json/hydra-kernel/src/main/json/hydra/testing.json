@@ -130,5 +130,5 @@
                         "body": {"function": {"codomain": {"literal": {"string": {}}}, "domain": {"unit": {}}}}}}}]}}},
           "variables": []}}}],
   "dependencies": [{"module": "hydra.core"}],
-  "description": "A model for unit testing",
+  "metadata": {"comments": [], "description": "A model for unit testing", "seeAlso": []},
   "name": "hydra.testing"}

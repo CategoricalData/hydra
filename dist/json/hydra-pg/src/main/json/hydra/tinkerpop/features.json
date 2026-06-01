@@ -507,5 +507,8 @@
                         "body": {"literal": {"boolean": {}}}}}}]}}},
           "variables": []}}}],
   "dependencies": [{"module": "hydra.core"}],
-  "description": "A model derived from TinkerPop's Graph.Features. See\n  https://tinkerpop.apache.org/javadocs/current/core/org/apache/tinkerpop/gremlin/structure/Graph.Features.html\n\nAn interface that represents the capabilities of a Graph implementation.\nBy default all methods of features return true and it is up to implementers to disable feature they don't support.\nUsers should check features prior to using various functions of TinkerPop to help ensure code portability across implementations.\nFor example, a common usage would be to check if a graph supports transactions prior to calling the commit method on Graph.tx().",
+  "metadata": {
+    "comments": [],
+    "description": "A model derived from TinkerPop's Graph.Features. See\n  https://tinkerpop.apache.org/javadocs/current/core/org/apache/tinkerpop/gremlin/structure/Graph.Features.html\n\nAn interface that represents the capabilities of a Graph implementation.\nBy default all methods of features return true and it is up to implementers to disable feature they don't support.\nUsers should check features prior to using various functions of TinkerPop to help ensure code portability across implementations.\nFor example, a common usage would be to check if a graph supports transactions prior to calling the commit method on Graph.tx().",
+    "seeAlso": []},
   "name": "hydra.tinkerpop.features"}

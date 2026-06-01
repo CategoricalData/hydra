@@ -1083,9 +1083,13 @@ decodeModule cx graph mod =
               Lists.nub (Lists.map decodeModuleName (Lists.map (\dep -> Packaging.moduleDependencyModule dep) (Packaging.moduleDependencies mod)))
       in (Right (Just (Packaging.Module {
         Packaging.moduleName = (decodeModuleName (Packaging.moduleName mod)),
-        Packaging.moduleDescription = (Just (Strings.cat [
-          "Term decoders for ",
-          (Packaging.unModuleName (Packaging.moduleName mod))])),
+        Packaging.moduleMetadata = (Just (Packaging.EntityMetadata {
+          Packaging.entityMetadataDescription = (Just (Strings.cat [
+            "Term decoders for ",
+            (Packaging.unModuleName (Packaging.moduleName mod))])),
+          Packaging.entityMetadataComments = [],
+          Packaging.entityMetadataSeeAlso = [],
+          Packaging.entityMetadataLifecycle = Nothing})),
         Packaging.moduleDependencies = (Lists.map (\ns -> Packaging.ModuleDependency {
           Packaging.moduleDependencyModule = ns,
           Packaging.moduleDependencyPackage = Nothing}) (Lists.concat2 [
@@ -1096,6 +1100,7 @@ decodeModule cx graph mod =
           (Packaging.ModuleName "hydra.util")] allDecodedDeps)),
         Packaging.moduleDefinitions = (Lists.map (\b -> Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.bindingName b),
+          Packaging.termDefinitionMetadata = Nothing,
           Packaging.termDefinitionTerm = (Core.bindingTerm b),
           Packaging.termDefinitionSignature = (Maybes.map Scoping.typeSchemeToTermSignature (Core.bindingTypeScheme b))})) decodedBindings)}))))))
 -- | Generate a decoder module name from a source module name

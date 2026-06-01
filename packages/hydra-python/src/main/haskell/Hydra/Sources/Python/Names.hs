@@ -98,7 +98,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> ([Names.ns, Formatting.ns, PySerde.ns, pyLanguageNs] L.++ (PyEnvironmentSource.ns:PySyntax.ns:KernelTypes.kernelTypesModuleNames)),
-            moduleDescription = Just "Python naming utilities: encoding Hydra names as Python names"}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just "Python naming utilities: encoding Hydra names as Python names")}
   where
     definitions = [
       toDefinition encodeConstantForFieldName,

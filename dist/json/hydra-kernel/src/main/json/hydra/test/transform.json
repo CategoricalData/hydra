@@ -572,11 +572,11 @@
                               "application": {"argument": {"variable": "m"}, "function": {"project": {"fieldName": "name", "typeName": "hydra.packaging.Module"}}}},
                             "function": {"variable": "hydra.test.transform.addGenerationPrefix"}}}},
                       {
-                        "name": "description",
+                        "name": "metadata",
                         "term": {
                           "application": {
                             "argument": {"variable": "m"},
-                            "function": {"project": {"fieldName": "description", "typeName": "hydra.packaging.Module"}}}}},
+                            "function": {"project": {"fieldName": "metadata", "typeName": "hydra.packaging.Module"}}}}},
                       {
                         "name": "dependencies",
                         "term": {
@@ -756,5 +756,8 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "description": "Transform test cases for code generation, filtering to tests that can be compiled to target languages",
+  "metadata": {
+    "comments": [],
+    "description": "Transform test cases for code generation, filtering to tests that can be compiled to target languages",
+    "seeAlso": []},
   "name": "hydra.test.transform"}

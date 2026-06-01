@@ -2,6 +2,7 @@ package hydra.dsl.meta;
 import hydra.core.Name;
 import hydra.core.Term;
 import hydra.core.TypeScheme;
+import hydra.packaging.EntityMetadata;
 import hydra.packaging.Definition;
 import hydra.packaging.ModuleDependency;
 import hydra.packaging.ModuleName;
@@ -85,6 +86,7 @@ public final class Defs {
                     if (d == null) {
                         d = new Definition.Term(new TermDefinition(
                             fqName,
+                            Maybe.<EntityMetadata>nothing(),
                             bodySupplier.get(),
                             Maybe.<TermSignature>nothing()));
                         cached = d;

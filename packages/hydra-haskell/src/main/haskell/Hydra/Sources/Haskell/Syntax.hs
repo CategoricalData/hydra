@@ -23,7 +23,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = (DefinitionType <$> definitions),
             moduleDependencies = unqualifiedDep <$> [Core.ns],
-            moduleDescription = Just "A Haskell syntax model for Hydra. Originally inspired by Language.Haskell.Tools.AST, but now diverges freely to suit Hydra's needs."}
+            moduleMetadata = descriptionMetadata (Just "A Haskell syntax model for Hydra. Originally inspired by Language.Haskell.Tools.AST, but now diverges freely to suit Hydra's needs.")}
   where
     definitions = [
       alternative,

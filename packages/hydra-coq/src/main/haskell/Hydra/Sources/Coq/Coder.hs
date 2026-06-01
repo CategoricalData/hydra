@@ -7,7 +7,7 @@ module Hydra.Sources.Coq.Coder where
 
 -- Standard imports for term-level sources outside of the kernel
 import Hydra.Kernel
-import           Hydra.Dsl.Bootstrap (unqualifiedDep)
+import           Hydra.Dsl.Bootstrap (unqualifiedDep, descriptionMetadata)
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Meta.Lib.Strings                as Strings
 import           Hydra.Dsl.Meta.Phantoms                   as Phantoms
@@ -51,7 +51,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = unqualifiedDep <$> ([Formatting.ns, CoqLanguage.ns, ModuleName "hydra.coq.utils"] DL.++ (CoqEnvironmentSource.ns:CoqSyntax.ns:KernelTypes.kernelTypesModuleNames)),
-            moduleDescription = Just "Coq code generator: converts Hydra modules to Coq source"}
+            moduleMetadata = descriptionMetadata (Just "Coq code generator: converts Hydra modules to Coq source")}
   where
     definitions = [
       toDefinition coqArrow,

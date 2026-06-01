@@ -20,7 +20,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = (DefinitionType <$> definitions),
             moduleDependencies = unqualifiedDep <$> [Core.ns],
-            moduleDescription = Just "A model for unit testing"}
+            moduleMetadata = descriptionMetadata (Just "A model for unit testing")}
   where
     definitions = [
       tag,

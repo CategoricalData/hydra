@@ -27,8 +27,8 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = (DefinitionType <$> definitions),
             moduleDependencies = unqualifiedDep <$> [JsonModel.ns, Core.ns],
-            moduleDescription = Just ("A model for Avro schemas. Based on the Avro 1.11.1 specification:\n" ++
-      "  https://avro.apache.org/docs/1.11.1/specification")}
+            moduleMetadata = descriptionMetadata (Just ("A model for Avro schemas. Based on the Avro 1.11.1 specification:\n" ++
+      "  https://avro.apache.org/docs/1.11.1/specification"))}
   where
     definitions = [
       array_,

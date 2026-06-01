@@ -33,7 +33,9 @@ defines the core data structures:
   containers for terms, types, and primitive bindings. Each `Primitive` pairs
   a universal `PrimitiveDefinition` (from `Packaging.hs`) with a host-specific
   native implementation.
-- **`Packaging.hs`** — `Module`, `ModuleName`, `Namespace`, module dependencies.
+- **`Packaging.hs`** — `Package`, `Module`, `Definition`, module/package dependencies, and
+  the `EntityMetadata` documentation/lifecycle types. See the
+  [Packaging wiki page](https://github.com/CategoricalData/hydra/wiki/Packaging) for the model.
 - **`Coders.hs`** — the bidirectional `Coder` framework that every per-language
   coder builds on, plus `Adapter` (which transforms both type and value).
 - **`Errors.hs`** — the unified error taxonomy used across inference, validation,

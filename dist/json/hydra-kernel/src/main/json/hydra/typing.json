@@ -344,5 +344,5 @@
               "body": {"wrap": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Type"}}}}}},
           "variables": []}}}],
   "dependencies": [{"module": "hydra.core"}, {"module": "hydra.paths"}],
-  "description": "Types supporting type inference and type reconstruction.",
+  "metadata": {"comments": [], "description": "Types supporting type inference and type reconstruction.", "seeAlso": []},
   "name": "hydra.typing"}

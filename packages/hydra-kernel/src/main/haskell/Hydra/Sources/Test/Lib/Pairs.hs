@@ -4,7 +4,7 @@ module Hydra.Sources.Test.Lib.Pairs where
 
 -- Standard imports for term-encoded tests
 import Hydra.Kernel
-import           Hydra.Dsl.Bootstrap (unqualifiedDep)
+import           Hydra.Dsl.Bootstrap (unqualifiedDep, descriptionMetadata)
 import Hydra.Dsl.Meta.Testing                 as Testing
 import Hydra.Dsl.Meta.Terms                   as Terms
 import Hydra.Sources.Kernel.Types.All
@@ -34,7 +34,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = unqualifiedDep <$> ([ModuleName "hydra.reduction", ModuleName "hydra.show.core"] ++ kernelTypesModuleNames),
-            moduleDescription = Just "Test cases for hydra.lib.pairs primitives"}
+            moduleMetadata = descriptionMetadata (Just "Test cases for hydra.lib.pairs primitives")}
   where
     definitions = [Phantoms.toDefinition allTests]
 
