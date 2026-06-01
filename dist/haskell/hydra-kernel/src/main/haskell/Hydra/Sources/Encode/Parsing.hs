@@ -28,7 +28,7 @@ module_ =
         Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.encode.parsing.parseError"),
           Packaging.termDefinitionMetadata = Nothing,
-          Packaging.termDefinitionTerm = (Core.TermAnnotated (Core.AnnotatedTerm {
+          Packaging.termDefinitionBody = (Core.TermAnnotated (Core.AnnotatedTerm {
             Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
               Core.lambdaParameter = (Core.Name "x"),
               Core.lambdaDomain = Nothing,
@@ -119,7 +119,7 @@ module_ =
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.encode.parsing.parseResult"),
           Packaging.termDefinitionMetadata = Nothing,
-          Packaging.termDefinitionTerm = (Core.TermAnnotated (Core.AnnotatedTerm {
+          Packaging.termDefinitionBody = (Core.TermAnnotated (Core.AnnotatedTerm {
             Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
               Core.lambdaParameter = (Core.Name "a"),
               Core.lambdaDomain = Nothing,
@@ -127,9 +127,9 @@ module_ =
                 Core.caseStatementTypeName = (Core.Name "hydra.parsing.ParseResult"),
                 Core.caseStatementDefault = Nothing,
                 Core.caseStatementCases = [
-                  Core.Field {
-                    Core.fieldName = (Core.Name "success"),
-                    Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                  Core.CaseAlternative {
+                    Core.caseAlternativeName = (Core.Name "success"),
+                    Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                       Core.lambdaParameter = (Core.Name "y"),
                       Core.lambdaDomain = Nothing,
                       Core.lambdaBody = (Core.TermInject (Core.Injection {
@@ -161,9 +161,9 @@ module_ =
                                           Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.parsing.parseSuccess")),
                                           Core.applicationArgument = (Core.TermVariable (Core.Name "a"))})),
                                         Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}]}))}]}))}}))}))},
-                  Core.Field {
-                    Core.fieldName = (Core.Name "failure"),
-                    Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                  Core.CaseAlternative {
+                    Core.caseAlternativeName = (Core.Name "failure"),
+                    Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                       Core.lambdaParameter = (Core.Name "y"),
                       Core.lambdaDomain = Nothing,
                       Core.lambdaBody = (Core.TermInject (Core.Injection {
@@ -221,7 +221,7 @@ module_ =
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.encode.parsing.parseSuccess"),
           Packaging.termDefinitionMetadata = Nothing,
-          Packaging.termDefinitionTerm = (Core.TermAnnotated (Core.AnnotatedTerm {
+          Packaging.termDefinitionBody = (Core.TermAnnotated (Core.AnnotatedTerm {
             Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
               Core.lambdaParameter = (Core.Name "a"),
               Core.lambdaDomain = Nothing,

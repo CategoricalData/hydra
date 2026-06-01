@@ -380,8 +380,8 @@ encodeUnionElim env cs =
           caseCount = Lists.length csCases
           baseEqs =
                   Lists.map (\c ->
-                    let cfn = Core.fieldName c
-                        cft = Core.fieldTerm c
+                    let cfn = Core.caseAlternativeName c
+                        cft = Core.caseAlternativeHandler c
                         constr = resolveQualifiedName env (unionConstructorName (Core.unName csName) (Core.unName cfn))
                     in (Logic.ifElse (isUnitLambda cft) (Syntax.Equation {
                       Syntax.equationPattern = [
@@ -561,7 +561,7 @@ termReferencesVar name tm =
       Core.TermAnnotated v0 -> termReferencesVar name (Core.annotatedTermBody v0)
       Core.TermApplication v0 -> Logic.or (termReferencesVar name (Core.applicationFunction v0)) (termReferencesVar name (Core.applicationArgument v0))
       Core.TermLambda v0 -> termReferencesVar name (Core.lambdaBody v0)
-      Core.TermCases v0 -> Logic.or (Maybes.isJust (Lists.find (\f -> termReferencesVar name (Core.fieldTerm f)) (Core.caseStatementCases v0))) (Maybes.maybe False (\d -> termReferencesVar name d) (Core.caseStatementDefault v0))
+      Core.TermCases v0 -> Logic.or (Maybes.isJust (Lists.find (\f -> termReferencesVar name (Core.caseAlternativeHandler f)) (Core.caseStatementCases v0))) (Maybes.maybe False (\d -> termReferencesVar name d) (Core.caseStatementDefault v0))
       Core.TermLet v0 -> Logic.or (Maybes.isJust (Lists.find (\b -> termReferencesVar name (Core.bindingTerm b)) (Core.letBindings v0))) (termReferencesVar name (Core.letBody v0))
       Core.TermList v0 -> Maybes.isJust (Lists.find (\el -> termReferencesVar name el) v0)
       Core.TermMaybe v0 -> Maybes.maybe False (\el -> termReferencesVar name el) v0

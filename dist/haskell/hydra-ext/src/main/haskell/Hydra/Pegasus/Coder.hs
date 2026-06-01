@@ -195,8 +195,8 @@ pdlNameForElement :: M.Map Packaging.ModuleName String -> Bool -> Core.Name -> P
 pdlNameForElement aliases withNs name =
 
       let qn = Names.qualifyName name
-          ns_ = Packaging.qualifiedNameModuleName qn
-          local = Packaging.qualifiedNameLocal qn
+          ns_ = Util.qualifiedNameModuleName qn
+          local = Util.qualifiedNameLocal qn
           alias = Maybes.bind ns_ (\n -> Maps.lookup n aliases)
       in Pdl.QualifiedName {
         Pdl.qualifiedNameName = (Pdl.Name local),
@@ -222,7 +222,7 @@ toPair mod aliases schemaPair =
           ns_ = pdlNameForModule mod
           local = Pdl.unName (Pdl.qualifiedNameName (Pdl.namedSchemaQualifiedName schema))
           path =
-                  Names.moduleNameToFilePath Util.CaseConventionCamel (Packaging.FileExtension "pdl") (Packaging.ModuleName (Strings.cat2 (Packaging.unModuleName (Packaging.moduleName mod)) (Strings.cat2 "/" local)))
+                  Names.moduleNameToFilePath Util.CaseConventionCamel (Util.FileExtension "pdl") (Packaging.ModuleName (Strings.cat2 (Packaging.unModuleName (Packaging.moduleName mod)) (Strings.cat2 "/" local)))
       in (
         path,
         Pdl.SchemaFile {
@@ -234,7 +234,7 @@ toPair mod aliases schemaPair =
 typeToSchema :: t0 -> Graph.Graph -> M.Map Packaging.ModuleName String -> t1 -> Packaging.TypeDefinition -> Either Errors.Error (Pdl.NamedSchema, [t2])
 typeToSchema cx g aliases mod typeDef =
 
-      let typ = Core.typeSchemeBody (Packaging.typeDefinitionTypeScheme typeDef)
+      let typ = Core.typeSchemeBody (Packaging.typeDefinitionBody typeDef)
       in (Eithers.bind (encodeType cx g aliases typ) (\res ->
         let ptype = Eithers.either (\schema -> Pdl.NamedSchemaTypeTyperef schema) (\t -> t) res
         in (Eithers.bind (Annotations.getTypeDescription cx g typ) (\descr ->

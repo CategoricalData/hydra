@@ -42,7 +42,7 @@ buildFieldMapping modules =
       Packaging.DefinitionType v0 ->
         let qname = Core.unName (Packaging.typeDefinitionName v0)
             tname = localName qname
-            ty = Core.typeSchemeBody (Packaging.typeDefinitionTypeScheme v0)
+            ty = Core.typeSchemeBody (Packaging.typeDefinitionBody v0)
             extracted = extractTypeParams ty
             bodyTy = Pairs.second extracted
         in case bodyTy of
@@ -63,7 +63,7 @@ collectFreeTypeVars tm =
     case tm of
       Core.TermAnnotated v0 -> collectFreeTypeVars (Core.annotatedTermBody v0)
       Core.TermApplication v0 -> Sets.union (collectFreeTypeVars (Core.applicationFunction v0)) (collectFreeTypeVars (Core.applicationArgument v0))
-      Core.TermCases v0 -> Sets.union (Maybes.maybe Sets.empty (\d -> collectFreeTypeVars d) (Core.caseStatementDefault v0)) (Sets.unions (Lists.map (\f -> collectFreeTypeVars (Core.fieldTerm f)) (Core.caseStatementCases v0)))
+      Core.TermCases v0 -> Sets.union (Maybes.maybe Sets.empty (\d -> collectFreeTypeVars d) (Core.caseStatementDefault v0)) (Sets.unions (Lists.map (\f -> collectFreeTypeVars (Core.caseAlternativeHandler f)) (Core.caseStatementCases v0)))
       Core.TermEither v0 -> Eithers.either (\l -> collectFreeTypeVars l) (\r -> collectFreeTypeVars r) v0
       Core.TermInject v0 -> collectFreeTypeVars (Core.fieldTerm (Core.injectionField v0))
       Core.TermLambda v0 ->
@@ -126,7 +126,7 @@ collectQualifiedNamesInTerm tm =
     case tm of
       Core.TermAnnotated v0 -> collectQualifiedNamesInTerm (Core.annotatedTermBody v0)
       Core.TermApplication v0 -> Sets.union (collectQualifiedNamesInTerm (Core.applicationFunction v0)) (collectQualifiedNamesInTerm (Core.applicationArgument v0))
-      Core.TermCases v0 -> Sets.union (qualifiedFromName (Core.caseStatementTypeName v0)) (Sets.union (Sets.unions (Lists.map (\f -> collectQualifiedNamesInTerm (Core.fieldTerm f)) (Core.caseStatementCases v0))) (Maybes.maybe Sets.empty (\d -> collectQualifiedNamesInTerm d) (Core.caseStatementDefault v0)))
+      Core.TermCases v0 -> Sets.union (qualifiedFromName (Core.caseStatementTypeName v0)) (Sets.union (Sets.unions (Lists.map (\f -> collectQualifiedNamesInTerm (Core.caseAlternativeHandler f)) (Core.caseStatementCases v0))) (Maybes.maybe Sets.empty (\d -> collectQualifiedNamesInTerm d) (Core.caseStatementDefault v0)))
       Core.TermEither v0 -> Eithers.either (\l -> collectQualifiedNamesInTerm l) (\r -> collectQualifiedNamesInTerm r) v0
       Core.TermInject v0 -> Sets.union (qualifiedFromName (Core.injectionTypeName v0)) (collectQualifiedNamesInTerm (Core.fieldTerm (Core.injectionField v0)))
       Core.TermLambda v0 -> Sets.union (Maybes.maybe Sets.empty (\domTy -> collectQualifiedNamesInType domTy) (Core.lambdaDomain v0)) (collectQualifiedNamesInTerm (Core.lambdaBody v0))
@@ -527,7 +527,7 @@ termRefs locals tm =
     case tm of
       Core.TermAnnotated v0 -> termRefs locals (Core.annotatedTermBody v0)
       Core.TermApplication v0 -> Sets.union (termRefs locals (Core.applicationFunction v0)) (termRefs locals (Core.applicationArgument v0))
-      Core.TermCases v0 -> Sets.union (Sets.unions (Lists.map (\f -> termRefs locals (Core.fieldTerm f)) (Core.caseStatementCases v0))) (Maybes.maybe Sets.empty (\d -> termRefs locals d) (Core.caseStatementDefault v0))
+      Core.TermCases v0 -> Sets.union (Sets.unions (Lists.map (\f -> termRefs locals (Core.caseAlternativeHandler f)) (Core.caseStatementCases v0))) (Maybes.maybe Sets.empty (\d -> termRefs locals d) (Core.caseStatementDefault v0))
       Core.TermEither v0 -> Eithers.either (\l -> termRefs locals l) (\r -> termRefs locals r) v0
       Core.TermInject v0 -> termRefs locals (Core.fieldTerm (Core.injectionField v0))
       Core.TermLambda v0 -> termRefs locals (Core.lambdaBody v0)

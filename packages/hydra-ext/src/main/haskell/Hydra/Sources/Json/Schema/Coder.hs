@@ -131,7 +131,7 @@ constructModule = define "constructModule" $
   doc "Construct JSON Schema documents from type definitions" $
   lambda "cx" $ lambda "g" $ lambda "mod" $ lambda "typeDefs" $ lets [
     "typeBody">: lambda "td" $
-      Core.typeSchemeBody (project _TypeDefinition _TypeDefinition_typeScheme @@ var "td"),
+      Core.typeSchemeBody (project _TypeDefinition _TypeDefinition_body @@ var "td"),
     "typeMap">: Maps.fromList (Lists.map
       ("td" ~> pair (project _TypeDefinition _TypeDefinition_name @@ var "td") (var "typeBody" @@ var "td"))
       (var "typeDefs"))] $
@@ -295,8 +295,8 @@ nameToPath = define "nameToPath" $
   doc "Compute the JSON Schema output file path for a named type" $
   lambda "name" $ lets [
     "qn">: Names.qualifyName @@ var "name",
-    "mns">: Packaging.qualifiedNameModuleName (var "qn"),
-    "local">: Packaging.qualifiedNameLocal (var "qn"),
+    "mns">: Util.qualifiedNameModuleName (var "qn"),
+    "local">: Util.qualifiedNameLocal (var "qn"),
     "nsPart">: Maybes.maybe (string "")
       ("ns" ~> Strings.cat2 (Packaging.unModuleName (var "ns")) (string "."))
       (var "mns")] $

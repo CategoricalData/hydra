@@ -60,6 +60,10 @@ caseStatement cs =
       let tname = Core.unName (Core.caseStatementTypeName cs)
           mdef = Core.caseStatementDefault cs
           csCases = Core.caseStatementCases cs
+          caseFields =
+                  Lists.map (\alt -> Core.Field {
+                    Core.fieldName = (Core.caseAlternativeName alt),
+                    Core.fieldTerm = (Core.caseAlternativeHandler alt)}) csCases
           defaultField =
                   Maybes.maybe [] (\d -> [
                     Core.Field {
@@ -67,7 +71,7 @@ caseStatement cs =
                       Core.fieldTerm = d}]) mdef
           allFields =
                   Lists.concat [
-                    csCases,
+                    caseFields,
                     defaultField]
       in (Strings.cat [
         "case(",
@@ -481,7 +485,7 @@ typeScheme ts =
                     " ",
                     (Core.unName v)]
           toConstraintPairs =
-                  \p -> Lists.map (toConstraintPair (Pairs.first p)) (Core.typeVariableMetadataClasses (Pairs.second p))
+                  \p -> Lists.map (toConstraintPair (Pairs.first p)) (Core.typeVariableConstraintsClasses (Pairs.second p))
           tc = Maybes.maybe [] (\m -> Lists.concat (Lists.map toConstraintPairs (Maps.toList m))) (Core.typeSchemeConstraints ts)
       in (Strings.cat [
         "(",

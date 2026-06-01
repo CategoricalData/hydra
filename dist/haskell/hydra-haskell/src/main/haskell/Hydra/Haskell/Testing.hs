@@ -81,7 +81,7 @@ buildNamespacesForTestGroup mod tgroup graph_ =
                     Packaging.moduleDefinitions = (Lists.map (\b -> Packaging.DefinitionTerm (Packaging.TermDefinition {
                       Packaging.termDefinitionName = (Core.bindingName b),
                       Packaging.termDefinitionMetadata = Nothing,
-                      Packaging.termDefinitionTerm = (Core.bindingTerm b),
+                      Packaging.termDefinitionBody = (Core.bindingTerm b),
                       Packaging.termDefinitionSignature = (Maybes.map Scoping.typeSchemeToTermSignature (Core.bindingTypeScheme b))})) testBindings)}
       in (Eithers.bind (Eithers.bimap (\e -> ShowErrors.error e) (\a -> a) (Utils.namespacesForModule tempModule Lexical.emptyInferenceContext graph_)) (\baseNamespaces ->
         let encodedNames = Sets.unions (Lists.map (\t -> extractEncodedTermVariableNames graph_ t) testTerms)
@@ -191,7 +191,7 @@ generateTestFile testModule testGroup namespaces =
       let testModuleContent = buildTestModule testModule testGroup testBody namespaces
           ns_ = Packaging.moduleName testModule
           specNs = Packaging.ModuleName (Strings.cat2 (Packaging.unModuleName ns_) "Spec")
-          filePath = Names.moduleNameToFilePath Util.CaseConventionPascal (Packaging.FileExtension "hs") specNs
+          filePath = Names.moduleNameToFilePath Util.CaseConventionPascal (Util.FileExtension "hs") specNs
       in (filePath, testModuleContent)) (generateTestGroupHierarchy 1 testGroup)
 -- | Generate test hierarchy preserving the structure with H.describe blocks for subgroups
 generateTestGroupHierarchy :: Int -> Testing.TestGroup -> Either t0 String

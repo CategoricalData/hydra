@@ -207,7 +207,7 @@ checkTerm p typed path cx term =
           (Logic.ifElse (enabled p (Core.Name "hydra.error.core.InvalidTermError.emptyCaseStatement")) (Maybes.map (\f -> (Core.Name "hydra.error.core.InvalidTermError.emptyCaseStatement", f)) (Logic.ifElse (Logic.and (Lists.null csCases) (Maybes.isNothing csDefault)) (Just (ErrorCore.InvalidTermErrorEmptyCaseStatement (ErrorCore.EmptyCaseStatementError {
             ErrorCore.emptyCaseStatementErrorLocation = path,
             ErrorCore.emptyCaseStatementErrorTypeName = tname}))) Nothing)) Nothing),
-          (Logic.ifElse (enabled p (Core.Name "hydra.error.core.InvalidTermError.duplicateField")) (Maybes.map (\f -> (Core.Name "hydra.error.core.InvalidTermError.duplicateField", f)) (checkDuplicateFields path (Lists.map Core.fieldName csCases))) Nothing)])
+          (Logic.ifElse (enabled p (Core.Name "hydra.error.core.InvalidTermError.duplicateField")) (Maybes.map (\f -> (Core.Name "hydra.error.core.InvalidTermError.duplicateField", f)) (checkDuplicateFields path (Lists.map Core.caseAlternativeName csCases))) Nothing)])
       Core.TermTypeApplication v0 -> Logic.ifElse (enabled p (Core.Name "hydra.error.core.InvalidTermError.undefinedTypeVariableInTypeApplication")) (Maybes.map (\f -> (Core.Name "hydra.error.core.InvalidTermError.undefinedTypeVariableInTypeApplication", f)) (Logic.ifElse typed (checkUndefinedTypeVariablesInType path cx (Core.typeApplicationTermType v0) (\uvName -> Just (ErrorCore.InvalidTermErrorUndefinedTypeVariableInTypeApplication (ErrorCore.UndefinedTypeVariableInTypeApplicationError {
         ErrorCore.undefinedTypeVariableInTypeApplicationErrorLocation = path,
         ErrorCore.undefinedTypeVariableInTypeApplicationErrorName = uvName})))) Nothing)) Nothing

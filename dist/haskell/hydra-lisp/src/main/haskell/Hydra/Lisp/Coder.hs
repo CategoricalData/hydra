@@ -307,7 +307,7 @@ encodeTermDefinition :: Syntax.Dialect -> t0 -> Graph.Graph -> Packaging.TermDef
 encodeTermDefinition dialect cx g tdef =
 
       let name = Packaging.termDefinitionName tdef
-          term = Packaging.termDefinitionTerm tdef
+          term = Packaging.termDefinitionBody tdef
           lname = qualifiedSnakeName name
           dterm = Strip.deannotateTerm term
       in case dterm of
@@ -383,7 +383,7 @@ encodeTypeDefinition :: t0 -> t1 -> Packaging.TypeDefinition -> Either t2 Syntax
 encodeTypeDefinition cx g tdef =
 
       let name = Packaging.typeDefinitionName tdef
-          typ = Core.typeSchemeBody (Packaging.typeDefinitionTypeScheme tdef)
+          typ = Core.typeSchemeBody (Packaging.typeDefinitionBody tdef)
           lname = qualifiedSnakeName name
           dtyp = Strip.deannotateType typ
       in (encodeTypeBody lname typ dtyp)
@@ -394,8 +394,8 @@ encodeUnionElim dialect cx g cs marg =
           caseFields = Core.caseStatementCases cs
           defCase = Core.caseStatementDefault cs
       in (Eithers.bind (Eithers.mapList (\cf ->
-        let cfname = Formatting.convertCaseCamelToLowerSnake (Core.unName (Core.fieldName cf))
-            cfterm = Core.fieldTerm cf
+        let cfname = Formatting.convertCaseCamelToLowerSnake (Core.unName (Core.caseAlternativeName cf))
+            cfterm = Core.caseAlternativeHandler cf
             condExpr =
                     lispApp (lispVar (dialectEqual dialect)) [
                       lispApp (lispVar (dialectCar dialect)) [
@@ -531,7 +531,7 @@ moduleToLisp dialect mod defs0 cx g =
           allTypeDefs = Pairs.first partitioned
           termDefs = Pairs.second partitioned
           typeDefs =
-                  Lists.filter (\td -> Predicates.isNominalType (Core.typeSchemeBody (Packaging.typeDefinitionTypeScheme td))) allTypeDefs
+                  Lists.filter (\td -> Predicates.isNominalType (Core.typeSchemeBody (Packaging.typeDefinitionBody td))) allTypeDefs
       in (Eithers.bind (Eithers.mapList (encodeTypeDefinition cx g) typeDefs) (\typeItems -> Eithers.bind (Eithers.mapList (encodeTermDefinition dialect cx g) termDefs) (\termItems ->
         let allItems = Lists.concat2 typeItems termItems
             nsName = Packaging.unModuleName (Packaging.moduleName mod)

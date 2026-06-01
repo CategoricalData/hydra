@@ -37,7 +37,7 @@ import qualified Data.Set as S
 constructModule :: t0 -> Graph.Graph -> t1 -> [Packaging.TypeDefinition] -> Either Errors.Error (M.Map String Schema.Document)
 constructModule cx g mod typeDefs =
 
-      let typeBody = \td -> Core.typeSchemeBody (Packaging.typeDefinitionTypeScheme td)
+      let typeBody = \td -> Core.typeSchemeBody (Packaging.typeDefinitionBody td)
           typeMap = Maps.fromList (Lists.map (\td -> (Packaging.typeDefinitionName td, (typeBody td))) typeDefs)
       in (Eithers.map (\ps -> Maps.fromList ps) (Eithers.mapList (\td -> typeDefToDocument cx g typeMap (Packaging.typeDefinitionName td) (typeBody td)) typeDefs))
 -- | Build a single-property record Schema for one branch of an Either oneOf
@@ -143,10 +143,10 @@ nameToPath :: Core.Name -> String
 nameToPath name =
 
       let qn = Names.qualifyName name
-          mns = Packaging.qualifiedNameModuleName qn
-          local = Packaging.qualifiedNameLocal qn
+          mns = Util.qualifiedNameModuleName qn
+          local = Util.qualifiedNameLocal qn
           nsPart = Maybes.maybe "" (\ns -> Strings.cat2 (Packaging.unModuleName ns) ".") mns
-      in (Names.moduleNameToFilePath Util.CaseConventionCamel (Packaging.FileExtension "json") (Packaging.ModuleName (Strings.cat2 nsPart local)))
+      in (Names.moduleNameToFilePath Util.CaseConventionCamel (Util.FileExtension "json") (Packaging.ModuleName (Strings.cat2 nsPart local)))
 -- | Build the JSON Schema restriction list for a pair type
 pairRestrictions :: Bool -> [Schema.Restriction] -> [Schema.Restriction] -> [Schema.Restriction]
 pairRestrictions optional firstRes secondRes =

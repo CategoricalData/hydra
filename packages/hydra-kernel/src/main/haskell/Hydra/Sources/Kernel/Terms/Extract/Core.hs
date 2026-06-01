@@ -203,14 +203,14 @@ booleanLiteral = define "booleanLiteral" $
     _Literal_boolean>>: "b" ~> right (var "b")]
 
 -- TODO: nonstandard; move me
-caseField :: TypedTermDefinition (Name -> String -> Graph -> Term -> Prelude.Either Error Field)
+caseField :: TypedTermDefinition (Name -> String -> Graph -> Term -> Prelude.Either Error CaseAlternative)
 caseField = define "caseField" $
   doc "Extract a specific case handler from a case statement term" $
   "name" ~> "n" ~> "graph" ~> "term" ~>
   "fieldName" <~ Core.name (var "n") $
   "cs" <<~ cases @@ var "name" @@ var "graph" @@ var "term" $
   "matching" <~ (Lists.find
-    ("f" ~> Core.equalName_ (Core.fieldName (var "f")) (var "fieldName"))
+    ("f" ~> Core.equalName_ (Core.caseAlternativeName (var "f")) (var "fieldName"))
     (Core.caseStatementCases (var "cs"))) $
   Maybes.maybe
     (left (Error.errorExtraction $ Error.extractionErrorUnexpectedShape $ Error.unexpectedShapeError (Phantoms.string "matching case") (Phantoms.string "no matching case")))

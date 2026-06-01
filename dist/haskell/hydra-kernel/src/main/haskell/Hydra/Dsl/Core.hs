@@ -358,8 +358,52 @@ bindingWithTypeScheme original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "typeScheme"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
+-- | DSL constructor for hydra.core.CaseAlternative
+caseAlternative :: Typed.TypedTerm Core.Name -> Typed.TypedTerm Core.Term -> Typed.TypedTerm Core.CaseAlternative
+caseAlternative name handler =
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.core.CaseAlternative"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "name"),
+          Core.fieldTerm = (Typed.unTypedTerm name)},
+        Core.Field {
+          Core.fieldName = (Core.Name "handler"),
+          Core.fieldTerm = (Typed.unTypedTerm handler)}]}))
+-- | DSL accessor for the handler field of hydra.core.CaseAlternative
+caseAlternativeHandler :: Typed.TypedTerm Core.CaseAlternative -> Typed.TypedTerm Core.Term
+caseAlternativeHandler x =
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.core.CaseAlternative"),
+        Core.projectionFieldName = (Core.Name "handler")})),
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
+-- | DSL accessor for the name field of hydra.core.CaseAlternative
+caseAlternativeName :: Typed.TypedTerm Core.CaseAlternative -> Typed.TypedTerm Core.Name
+caseAlternativeName x =
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.core.CaseAlternative"),
+        Core.projectionFieldName = (Core.Name "name")})),
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
+-- | DSL updater for the handler field of hydra.core.CaseAlternative
+caseAlternativeWithHandler :: Typed.TypedTerm Core.CaseAlternative -> Typed.TypedTerm Core.Term -> Typed.TypedTerm Core.CaseAlternative
+caseAlternativeWithHandler original newVal =
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.core.CaseAlternative"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "name"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.core.CaseAlternative"),
+              Core.projectionFieldName = (Core.Name "name")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "handler"),
+          Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
 -- | DSL constructor for hydra.core.CaseStatement
-caseStatement :: Typed.TypedTerm Core.Name -> Typed.TypedTerm (Maybe Core.Term) -> Typed.TypedTerm [Core.Field] -> Typed.TypedTerm Core.CaseStatement
+caseStatement :: Typed.TypedTerm Core.Name -> Typed.TypedTerm (Maybe Core.Term) -> Typed.TypedTerm [Core.CaseAlternative] -> Typed.TypedTerm Core.CaseStatement
 caseStatement typeName default_ cases =
     Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.core.CaseStatement"),
@@ -374,7 +418,7 @@ caseStatement typeName default_ cases =
           Core.fieldName = (Core.Name "cases"),
           Core.fieldTerm = (Typed.unTypedTerm cases)}]}))
 -- | DSL accessor for the cases field of hydra.core.CaseStatement
-caseStatementCases :: Typed.TypedTerm Core.CaseStatement -> Typed.TypedTerm [Core.Field]
+caseStatementCases :: Typed.TypedTerm Core.CaseStatement -> Typed.TypedTerm [Core.CaseAlternative]
 caseStatementCases x =
     Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -398,7 +442,7 @@ caseStatementTypeName x =
         Core.projectionFieldName = (Core.Name "typeName")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL updater for the cases field of hydra.core.CaseStatement
-caseStatementWithCases :: Typed.TypedTerm Core.CaseStatement -> Typed.TypedTerm [Core.Field] -> Typed.TypedTerm Core.CaseStatement
+caseStatementWithCases :: Typed.TypedTerm Core.CaseStatement -> Typed.TypedTerm [Core.CaseAlternative] -> Typed.TypedTerm Core.CaseStatement
 caseStatementWithCases original newVal =
     Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.core.CaseStatement"),
@@ -1897,7 +1941,7 @@ typeRecord x =
         Core.fieldName = (Core.Name "record"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
 -- | DSL constructor for hydra.core.TypeScheme
-typeScheme :: Typed.TypedTerm [Core.Name] -> Typed.TypedTerm Core.Type -> Typed.TypedTerm (Maybe (M.Map Core.Name Core.TypeVariableMetadata)) -> Typed.TypedTerm Core.TypeScheme
+typeScheme :: Typed.TypedTerm [Core.Name] -> Typed.TypedTerm Core.Type -> Typed.TypedTerm (Maybe (M.Map Core.Name Core.TypeVariableConstraints)) -> Typed.TypedTerm Core.TypeScheme
 typeScheme variables body constraints =
     Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.core.TypeScheme"),
@@ -1920,7 +1964,7 @@ typeSchemeBody x =
         Core.projectionFieldName = (Core.Name "body")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL accessor for the constraints field of hydra.core.TypeScheme
-typeSchemeConstraints :: Typed.TypedTerm Core.TypeScheme -> Typed.TypedTerm (Maybe (M.Map Core.Name Core.TypeVariableMetadata))
+typeSchemeConstraints :: Typed.TypedTerm Core.TypeScheme -> Typed.TypedTerm (Maybe (M.Map Core.Name Core.TypeVariableConstraints))
 typeSchemeConstraints x =
     Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -1959,7 +2003,7 @@ typeSchemeWithBody original newVal =
               Core.projectionFieldName = (Core.Name "constraints")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
 -- | DSL updater for the constraints field of hydra.core.TypeScheme
-typeSchemeWithConstraints :: Typed.TypedTerm Core.TypeScheme -> Typed.TypedTerm (Maybe (M.Map Core.Name Core.TypeVariableMetadata)) -> Typed.TypedTerm Core.TypeScheme
+typeSchemeWithConstraints :: Typed.TypedTerm Core.TypeScheme -> Typed.TypedTerm (Maybe (M.Map Core.Name Core.TypeVariableConstraints)) -> Typed.TypedTerm Core.TypeScheme
 typeSchemeWithConstraints original newVal =
     Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.core.TypeScheme"),
@@ -2036,28 +2080,28 @@ typeVariable x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "variable"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
--- | DSL constructor for hydra.core.TypeVariableMetadata
-typeVariableMetadata :: Typed.TypedTerm [Core.TypeClassConstraint] -> Typed.TypedTerm Core.TypeVariableMetadata
-typeVariableMetadata classes =
+-- | DSL constructor for hydra.core.TypeVariableConstraints
+typeVariableConstraints :: Typed.TypedTerm [Core.TypeClassConstraint] -> Typed.TypedTerm Core.TypeVariableConstraints
+typeVariableConstraints classes =
     Typed.TypedTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.core.TypeVariableMetadata"),
+      Core.recordTypeName = (Core.Name "hydra.core.TypeVariableConstraints"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "classes"),
           Core.fieldTerm = (Typed.unTypedTerm classes)}]}))
--- | DSL accessor for the classes field of hydra.core.TypeVariableMetadata
-typeVariableMetadataClasses :: Typed.TypedTerm Core.TypeVariableMetadata -> Typed.TypedTerm [Core.TypeClassConstraint]
-typeVariableMetadataClasses x =
+-- | DSL accessor for the classes field of hydra.core.TypeVariableConstraints
+typeVariableConstraintsClasses :: Typed.TypedTerm Core.TypeVariableConstraints -> Typed.TypedTerm [Core.TypeClassConstraint]
+typeVariableConstraintsClasses x =
     Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.core.TypeVariableMetadata"),
+        Core.projectionTypeName = (Core.Name "hydra.core.TypeVariableConstraints"),
         Core.projectionFieldName = (Core.Name "classes")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
--- | DSL updater for the classes field of hydra.core.TypeVariableMetadata
-typeVariableMetadataWithClasses :: Typed.TypedTerm Core.TypeVariableMetadata -> Typed.TypedTerm [Core.TypeClassConstraint] -> Typed.TypedTerm Core.TypeVariableMetadata
-typeVariableMetadataWithClasses original newVal =
+-- | DSL updater for the classes field of hydra.core.TypeVariableConstraints
+typeVariableConstraintsWithClasses :: Typed.TypedTerm Core.TypeVariableConstraints -> Typed.TypedTerm [Core.TypeClassConstraint] -> Typed.TypedTerm Core.TypeVariableConstraints
+typeVariableConstraintsWithClasses original newVal =
     Typed.TypedTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.core.TypeVariableMetadata"),
+      Core.recordTypeName = (Core.Name "hydra.core.TypeVariableConstraints"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "classes"),

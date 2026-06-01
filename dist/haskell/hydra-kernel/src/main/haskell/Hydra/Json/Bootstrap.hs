@@ -1271,7 +1271,7 @@ typesByName =
               Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
                 Core.annotatedTypeBody = (Core.TypeMaybe (Core.TypeMap (Core.MapType {
                   Core.mapTypeKeys = (Core.TypeVariable (Core.Name "hydra.core.Name")),
-                  Core.mapTypeValues = (Core.TypeVariable (Core.Name "hydra.core.TypeVariableMetadata"))}))),
+                  Core.mapTypeValues = (Core.TypeVariable (Core.Name "hydra.core.TypeVariableConstraints"))}))),
                 Core.annotatedTypeAnnotation = (M.fromList [
                   (
                     Core.Name "description",
@@ -1281,7 +1281,7 @@ typesByName =
               Core.Name "description",
               (Core.TermLiteral (Core.LiteralString "A type expression together with free type variables occurring in the expression")))])}))),
       (
-        Core.Name "hydra.core.TypeVariableMetadata",
+        Core.Name "hydra.core.TypeVariableConstraints",
         (Core.TypeAnnotated (Core.AnnotatedType {
           Core.annotatedTypeBody = (Core.TypeRecord [
             Core.FieldType {
@@ -1749,7 +1749,7 @@ typesByName =
               Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
                 Core.annotatedTypeBody = (Core.TypeMap (Core.MapType {
                   Core.mapTypeKeys = (Core.TypeVariable (Core.Name "hydra.core.Name")),
-                  Core.mapTypeValues = (Core.TypeVariable (Core.Name "hydra.core.TypeVariableMetadata"))})),
+                  Core.mapTypeValues = (Core.TypeVariable (Core.Name "hydra.core.TypeVariableConstraints"))})),
                 Core.annotatedTypeAnnotation = (M.fromList [
                   (
                     Core.Name "description",
@@ -1955,7 +1955,7 @@ typesByName =
               Core.Name "description",
               (Core.TermLiteral (Core.LiteralString "A typed reference to a definition: a type, a term, or a primitive, identified by name")))])}))),
       (
-        Core.Name "hydra.packaging.EntityLifecycle",
+        Core.Name "hydra.packaging.LifecycleInfo",
         (Core.TypeAnnotated (Core.AnnotatedType {
           Core.annotatedTypeBody = (Core.TypeRecord [
             Core.FieldType {
@@ -2009,7 +2009,7 @@ typesByName =
             Core.FieldType {
               Core.fieldTypeName = (Core.Name "lifecycle"),
               Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
-                Core.annotatedTypeBody = (Core.TypeMaybe (Core.TypeVariable (Core.Name "hydra.packaging.EntityLifecycle"))),
+                Core.annotatedTypeBody = (Core.TypeMaybe (Core.TypeVariable (Core.Name "hydra.packaging.LifecycleInfo"))),
                 Core.annotatedTypeAnnotation = (M.fromList [
                   (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Optional version-lifecycle milestones for the entity.")))])}))}]),
           Core.annotatedTypeAnnotation = (M.fromList [
@@ -2163,7 +2163,7 @@ typesByName =
             Core.FieldType {
               Core.fieldTypeName = (Core.Name "version"),
               Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
-                Core.annotatedTypeBody = (Core.TypeVariable (Core.Name "hydra.packaging.PackageVersionSpecifier")),
+                Core.annotatedTypeBody = (Core.TypeVariable (Core.Name "hydra.packaging.VersionSpecifier")),
                 Core.annotatedTypeAnnotation = (M.fromList [
                   (Core.Name "description", (Core.TermLiteral (Core.LiteralString "The version-range constraint on the depended-on package")))])}))}]),
           Core.annotatedTypeAnnotation = (M.fromList [
@@ -2179,7 +2179,7 @@ typesByName =
               Core.Name "description",
               (Core.TermLiteral (Core.LiteralString "The unique name of a package, e.g. \"hydra-kernel\" or \"hydra-python\"")))])}))),
       (
-        Core.Name "hydra.packaging.PackageVersionSpecifier",
+        Core.Name "hydra.packaging.VersionSpecifier",
         (Core.TypeAnnotated (Core.AnnotatedType {
           Core.annotatedTypeBody = (Core.TypeUnion [
             Core.FieldType {
@@ -2441,7 +2441,7 @@ typesByName =
               Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
                 Core.annotatedTypeBody = (Core.TypeMap (Core.MapType {
                   Core.mapTypeKeys = (Core.TypeVariable (Core.Name "hydra.core.Name")),
-                  Core.mapTypeValues = (Core.TypeVariable (Core.Name "hydra.core.TypeVariableMetadata"))})),
+                  Core.mapTypeValues = (Core.TypeVariable (Core.Name "hydra.core.TypeVariableConstraints"))})),
                 Core.annotatedTypeAnnotation = (M.fromList [
                   (
                     Core.Name "description",
@@ -2557,7 +2557,7 @@ typesByName =
           Core.annotatedTypeAnnotation = (M.fromList [
             (
               Core.Name "description",
-              (Core.TermLiteral (Core.LiteralString "A type class identifier together with a human-readable description. Type classes are referenced as bare names (e.g. the local name \"equality\") in TypeVariableMetadata.classes; the canonical definitions live as term bindings under hydra.classes.")))])}))),
+              (Core.TermLiteral (Core.LiteralString "A type class identifier together with a human-readable description. Type classes are referenced as bare names (e.g. the local name \"equality\") in TypeVariableConstraints.classes; the canonical definitions live as term bindings under hydra.classes.")))])}))),
       (
         Core.Name "hydra.typing.TypeConstraint",
         (Core.TypeAnnotated (Core.AnnotatedType {

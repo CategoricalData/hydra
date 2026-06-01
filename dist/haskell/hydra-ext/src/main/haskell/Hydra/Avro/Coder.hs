@@ -22,6 +22,7 @@ import qualified Hydra.Haskell.Lib.Sets as Sets
 import qualified Hydra.Haskell.Lib.Strings as Strings
 import qualified Hydra.Names as Names
 import qualified Hydra.Packaging as Packaging
+import qualified Hydra.Util as Util
 import qualified Hydra.Strip as Strip
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
@@ -327,9 +328,9 @@ avroNameToHydraName qname =
 
       let mns = Environment.avroQualifiedNameNamespace qname
           local = Environment.avroQualifiedNameName qname
-      in (Names.unqualifyName (Packaging.QualifiedName {
-        Packaging.qualifiedNameModuleName = (Maybes.map (\s -> Packaging.ModuleName s) mns),
-        Packaging.qualifiedNameLocal = local}))
+      in (Names.unqualifyName (Util.QualifiedName {
+        Util.qualifiedNameModuleName = (Maybes.map (\s -> Packaging.ModuleName s) mns),
+        Util.qualifiedNameLocal = local}))
 avro_foreignKey :: String
 avro_foreignKey = "@foreignKey"
 avro_primaryKey :: String

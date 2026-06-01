@@ -1266,12 +1266,12 @@ allTests =
                     Core.caseStatementTypeName = (Core.Name "Maybe"),
                     Core.caseStatementDefault = Nothing,
                     Core.caseStatementCases = [
-                      Core.Field {
-                        Core.fieldName = (Core.Name "nothing"),
-                        Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))},
-                      Core.Field {
-                        Core.fieldName = (Core.Name "just"),
-                        Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                      Core.CaseAlternative {
+                        Core.caseAlternativeName = (Core.Name "nothing"),
+                        Core.caseAlternativeHandler = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))},
+                      Core.CaseAlternative {
+                        Core.caseAlternativeName = (Core.Name "just"),
+                        Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                           Core.lambdaParameter = (Core.Name "x"),
                           Core.lambdaDomain = Nothing,
                           Core.lambdaBody = (Core.TermVariable (Core.Name "x"))}))}]}))})))),
@@ -1282,12 +1282,12 @@ allTests =
                     Core.caseStatementTypeName = (Core.Name "Maybe"),
                     Core.caseStatementDefault = Nothing,
                     Core.caseStatementCases = [
-                      Core.Field {
-                        Core.fieldName = (Core.Name "nothing"),
-                        Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))},
-                      Core.Field {
-                        Core.fieldName = (Core.Name "just"),
-                        Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                      Core.CaseAlternative {
+                        Core.caseAlternativeName = (Core.Name "nothing"),
+                        Core.caseAlternativeHandler = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))},
+                      Core.CaseAlternative {
+                        Core.caseAlternativeName = (Core.Name "just"),
+                        Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                           Core.lambdaParameter = (Core.Name "x2"),
                           Core.lambdaDomain = Nothing,
                           Core.lambdaBody = (Core.TermVariable (Core.Name "x2"))}))}]}))})))})),

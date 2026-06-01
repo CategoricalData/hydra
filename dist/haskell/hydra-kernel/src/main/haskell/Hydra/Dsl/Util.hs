@@ -143,3 +143,45 @@ precisionBits x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "bits"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+-- | DSL constructor for hydra.util.FileExtension
+fileExtension :: Typed.TypedTerm String -> Typed.TypedTerm Util.FileExtension
+fileExtension x =
+    Typed.TypedTerm (Core.TermWrap (Core.WrappedTerm {
+      Core.wrappedTermTypeName = (Core.Name "hydra.util.FileExtension"),
+      Core.wrappedTermBody = (Typed.unTypedTerm x)}))
+-- | DSL accessor for unwrapping hydra.util.FileExtension
+unFileExtension :: Typed.TypedTerm Util.FileExtension -> Typed.TypedTerm String
+unFileExtension x =
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.util.FileExtension"),
+        Core.projectionFieldName = (Core.Name "")})),
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
+-- | DSL constructor for hydra.util.QualifiedName
+qualifiedName :: Typed.TypedTerm (Maybe Packaging.ModuleName) -> Typed.TypedTerm String -> Typed.TypedTerm Util.QualifiedName
+qualifiedName moduleName local =
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.util.QualifiedName"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "moduleName"),
+          Core.fieldTerm = (Typed.unTypedTerm moduleName)},
+        Core.Field {
+          Core.fieldName = (Core.Name "local"),
+          Core.fieldTerm = (Typed.unTypedTerm local)}]}))
+-- | DSL accessor for the local field of hydra.util.QualifiedName
+qualifiedNameLocal :: Typed.TypedTerm Util.QualifiedName -> Typed.TypedTerm String
+qualifiedNameLocal x =
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.util.QualifiedName"),
+        Core.projectionFieldName = (Core.Name "local")})),
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
+-- | DSL accessor for the moduleName field of hydra.util.QualifiedName
+qualifiedNameModuleName :: Typed.TypedTerm Util.QualifiedName -> Typed.TypedTerm (Maybe Packaging.ModuleName)
+qualifiedNameModuleName x =
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.util.QualifiedName"),
+        Core.projectionFieldName = (Core.Name "moduleName")})),
+      Core.applicationArgument = (Typed.unTypedTerm x)}))

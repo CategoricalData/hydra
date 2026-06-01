@@ -58,10 +58,10 @@ elementReference namespaces name =
           gmod = Syntax.unModuleName (Pairs.second namespacePair)
           namespacesMap = Util.moduleNamesMapping namespaces
           qname = Names.qualifyName name
-          local = Packaging.qualifiedNameLocal qname
+          local = Util.qualifiedNameLocal qname
           escLocal = sanitizeHaskellName local
-          mns = Packaging.qualifiedNameModuleName qname
-      in (Maybes.cases (Packaging.qualifiedNameModuleName qname) (simpleName local) (\ns -> Maybes.cases (Maps.lookup ns namespacesMap) (simpleName local) (\mn ->
+          mns = Util.qualifiedNameModuleName qname
+      in (Maybes.cases (Util.qualifiedNameModuleName qname) (simpleName local) (\ns -> Maybes.cases (Maps.lookup ns namespacesMap) (simpleName local) (\mn ->
         let aliasStr = Syntax.unModuleName mn
         in (Logic.ifElse (Equality.equal ns gname) (simpleName escLocal) (rawName (Strings.cat [
           aliasStr,
@@ -170,15 +170,15 @@ recordFieldReference namespaces sname fname =
 
       let fnameStr = Core.unName fname
           qname = Names.qualifyName sname
-          ns = Packaging.qualifiedNameModuleName qname
+          ns = Util.qualifiedNameModuleName qname
           typeNameStr = typeNameForRecord sname
           decapitalized = Formatting.decapitalize typeNameStr
           capitalized = Formatting.capitalize fnameStr
           nm = Strings.cat2 decapitalized capitalized
           qualName =
-                  Packaging.QualifiedName {
-                    Packaging.qualifiedNameModuleName = ns,
-                    Packaging.qualifiedNameLocal = nm}
+                  Util.QualifiedName {
+                    Util.qualifiedNameModuleName = ns,
+                    Util.qualifiedNameLocal = nm}
           unqualName = Names.unqualifyName qualName
       in (elementReference namespaces unqualName)
 -- | Sanitize a string to be a valid Haskell identifier, escaping reserved words
@@ -227,22 +227,22 @@ unionFieldReference boundNames namespaces sname fname =
 
       let fnameStr = Core.unName fname
           qname = Names.qualifyName sname
-          ns = Packaging.qualifiedNameModuleName qname
+          ns = Util.qualifiedNameModuleName qname
           typeNameStr = typeNameForRecord sname
           capitalizedTypeName = Formatting.capitalize typeNameStr
           capitalizedFieldName = Formatting.capitalize fnameStr
           deconflict =
                   \name ->
                     let tname =
-                            Names.unqualifyName (Packaging.QualifiedName {
-                              Packaging.qualifiedNameModuleName = ns,
-                              Packaging.qualifiedNameLocal = name})
+                            Names.unqualifyName (Util.QualifiedName {
+                              Util.qualifiedNameModuleName = ns,
+                              Util.qualifiedNameLocal = name})
                     in (Logic.ifElse (Sets.member tname boundNames) (deconflict (Strings.cat2 name "_")) name)
           nm = deconflict (Strings.cat2 capitalizedTypeName capitalizedFieldName)
           qualName =
-                  Packaging.QualifiedName {
-                    Packaging.qualifiedNameModuleName = ns,
-                    Packaging.qualifiedNameLocal = nm}
+                  Util.QualifiedName {
+                    Util.qualifiedNameModuleName = ns,
+                    Util.qualifiedNameLocal = nm}
           unqualName = Names.unqualifyName qualName
       in (elementReference namespaces unqualName)
 -- | Unpack nested forall types into a list of type variables and the inner type

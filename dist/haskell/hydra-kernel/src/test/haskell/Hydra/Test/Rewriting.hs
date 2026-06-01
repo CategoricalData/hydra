@@ -508,22 +508,22 @@ allTests =
                   Core.caseStatementTypeName = (Core.Name "Result"),
                   Core.caseStatementDefault = Nothing,
                   Core.caseStatementCases = [
-                    Core.Field {
-                      Core.fieldName = (Core.Name "success"),
-                      Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "foo"))},
-                    Core.Field {
-                      Core.fieldName = (Core.Name "error"),
-                      Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "baz"))}]})))),
+                    Core.CaseAlternative {
+                      Core.caseAlternativeName = (Core.Name "success"),
+                      Core.caseAlternativeHandler = (Core.TermLiteral (Core.LiteralString "foo"))},
+                    Core.CaseAlternative {
+                      Core.caseAlternativeName = (Core.Name "error"),
+                      Core.caseAlternativeHandler = (Core.TermLiteral (Core.LiteralString "baz"))}]})))),
                 Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermCases (Core.CaseStatement {
                   Core.caseStatementTypeName = (Core.Name "Result"),
                   Core.caseStatementDefault = Nothing,
                   Core.caseStatementCases = [
-                    Core.Field {
-                      Core.fieldName = (Core.Name "success"),
-                      Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "bar"))},
-                    Core.Field {
-                      Core.fieldName = (Core.Name "error"),
-                      Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "baz"))}]})))})),
+                    Core.CaseAlternative {
+                      Core.caseAlternativeName = (Core.Name "success"),
+                      Core.caseAlternativeHandler = (Core.TermLiteral (Core.LiteralString "bar"))},
+                    Core.CaseAlternative {
+                      Core.caseAlternativeName = (Core.Name "error"),
+                      Core.caseAlternativeHandler = (Core.TermLiteral (Core.LiteralString "baz"))}]})))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
@@ -533,22 +533,22 @@ allTests =
                   Core.caseStatementTypeName = (Core.Name "Result"),
                   Core.caseStatementDefault = Nothing,
                   Core.caseStatementCases = [
-                    Core.Field {
-                      Core.fieldName = (Core.Name "success"),
-                      Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "baz"))},
-                    Core.Field {
-                      Core.fieldName = (Core.Name "error"),
-                      Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "foo"))}]})))),
+                    Core.CaseAlternative {
+                      Core.caseAlternativeName = (Core.Name "success"),
+                      Core.caseAlternativeHandler = (Core.TermLiteral (Core.LiteralString "baz"))},
+                    Core.CaseAlternative {
+                      Core.caseAlternativeName = (Core.Name "error"),
+                      Core.caseAlternativeHandler = (Core.TermLiteral (Core.LiteralString "foo"))}]})))),
                 Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermCases (Core.CaseStatement {
                   Core.caseStatementTypeName = (Core.Name "Result"),
                   Core.caseStatementDefault = Nothing,
                   Core.caseStatementCases = [
-                    Core.Field {
-                      Core.fieldName = (Core.Name "success"),
-                      Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "baz"))},
-                    Core.Field {
-                      Core.fieldName = (Core.Name "error"),
-                      Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "bar"))}]})))})),
+                    Core.CaseAlternative {
+                      Core.caseAlternativeName = (Core.Name "success"),
+                      Core.caseAlternativeHandler = (Core.TermLiteral (Core.LiteralString "baz"))},
+                    Core.CaseAlternative {
+                      Core.caseAlternativeName = (Core.Name "error"),
+                      Core.caseAlternativeHandler = (Core.TermLiteral (Core.LiteralString "bar"))}]})))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
@@ -558,22 +558,22 @@ allTests =
                   Core.caseStatementTypeName = (Core.Name "Result"),
                   Core.caseStatementDefault = (Just (Core.TermLiteral (Core.LiteralString "foo"))),
                   Core.caseStatementCases = [
-                    Core.Field {
-                      Core.fieldName = (Core.Name "success"),
-                      Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "baz"))},
-                    Core.Field {
-                      Core.fieldName = (Core.Name "error"),
-                      Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "baz"))}]})))),
+                    Core.CaseAlternative {
+                      Core.caseAlternativeName = (Core.Name "success"),
+                      Core.caseAlternativeHandler = (Core.TermLiteral (Core.LiteralString "baz"))},
+                    Core.CaseAlternative {
+                      Core.caseAlternativeName = (Core.Name "error"),
+                      Core.caseAlternativeHandler = (Core.TermLiteral (Core.LiteralString "baz"))}]})))),
                 Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermCases (Core.CaseStatement {
                   Core.caseStatementTypeName = (Core.Name "Result"),
                   Core.caseStatementDefault = (Just (Core.TermLiteral (Core.LiteralString "bar"))),
                   Core.caseStatementCases = [
-                    Core.Field {
-                      Core.fieldName = (Core.Name "success"),
-                      Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "baz"))},
-                    Core.Field {
-                      Core.fieldName = (Core.Name "error"),
-                      Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "baz"))}]})))})),
+                    Core.CaseAlternative {
+                      Core.caseAlternativeName = (Core.Name "success"),
+                      Core.caseAlternativeHandler = (Core.TermLiteral (Core.LiteralString "baz"))},
+                    Core.CaseAlternative {
+                      Core.caseAlternativeName = (Core.Name "error"),
+                      Core.caseAlternativeHandler = (Core.TermLiteral (Core.LiteralString "baz"))}]})))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
@@ -776,12 +776,12 @@ allTests =
                         Core.caseStatementTypeName = (Core.Name "Result"),
                         Core.caseStatementDefault = Nothing,
                         Core.caseStatementCases = [
-                          Core.Field {
-                            Core.fieldName = (Core.Name "ok"),
-                            Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "foo"))},
-                          Core.Field {
-                            Core.fieldName = (Core.Name "err"),
-                            Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "baz"))}]})),
+                          Core.CaseAlternative {
+                            Core.caseAlternativeName = (Core.Name "ok"),
+                            Core.caseAlternativeHandler = (Core.TermLiteral (Core.LiteralString "foo"))},
+                          Core.CaseAlternative {
+                            Core.caseAlternativeName = (Core.Name "err"),
+                            Core.caseAlternativeHandler = (Core.TermLiteral (Core.LiteralString "baz"))}]})),
                       Core.bindingTypeScheme = Nothing}],
                   Core.letBody = (Core.TermVariable (Core.Name "handler"))})))),
                 Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermLet (Core.Let {
@@ -792,12 +792,12 @@ allTests =
                         Core.caseStatementTypeName = (Core.Name "Result"),
                         Core.caseStatementDefault = Nothing,
                         Core.caseStatementCases = [
-                          Core.Field {
-                            Core.fieldName = (Core.Name "ok"),
-                            Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "bar"))},
-                          Core.Field {
-                            Core.fieldName = (Core.Name "err"),
-                            Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "baz"))}]})),
+                          Core.CaseAlternative {
+                            Core.caseAlternativeName = (Core.Name "ok"),
+                            Core.caseAlternativeHandler = (Core.TermLiteral (Core.LiteralString "bar"))},
+                          Core.CaseAlternative {
+                            Core.caseAlternativeName = (Core.Name "err"),
+                            Core.caseAlternativeHandler = (Core.TermLiteral (Core.LiteralString "baz"))}]})),
                       Core.bindingTypeScheme = Nothing}],
                   Core.letBody = (Core.TermVariable (Core.Name "handler"))})))})),
               Testing.testCaseWithMetadataDescription = Nothing,
@@ -930,12 +930,12 @@ allTests =
                   Core.caseStatementTypeName = (Core.Name "Result"),
                   Core.caseStatementDefault = Nothing,
                   Core.caseStatementCases = [
-                    Core.Field {
-                      Core.fieldName = (Core.Name "ok"),
-                      Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)))},
-                    Core.Field {
-                      Core.fieldName = (Core.Name "err"),
-                      Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)))}]}))))))),
+                    Core.CaseAlternative {
+                      Core.caseAlternativeName = (Core.Name "ok"),
+                      Core.caseAlternativeHandler = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)))},
+                    Core.CaseAlternative {
+                      Core.caseAlternativeName = (Core.Name "err"),
+                      Core.caseAlternativeHandler = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)))}]}))))))),
                 Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},

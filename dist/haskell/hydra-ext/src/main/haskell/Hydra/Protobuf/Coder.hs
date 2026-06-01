@@ -28,6 +28,7 @@ import qualified Hydra.Haskell.Lib.Sets as Sets
 import qualified Hydra.Haskell.Lib.Strings as Strings
 import qualified Hydra.Names as Names
 import qualified Hydra.Packaging as Packaging
+import qualified Hydra.Util as Util
 import qualified Hydra.Predicates as Predicates
 import qualified Hydra.Protobuf.Environment as ProtobufEnvironment
 import qualified Hydra.Protobuf.Language as Language
@@ -64,14 +65,14 @@ constructModule cx g mod typeDefs =
           toDef =
                   \td ->
                     let name = Packaging.typeDefinitionName td
-                        typ = Core.typeSchemeBody (Packaging.typeDefinitionTypeScheme td)
+                        typ = Core.typeSchemeBody (Packaging.typeDefinitionBody td)
                         encodeDefEither = \n -> \t -> encodeDefinition cx g ns_ n t
                         flatTyp = flattenType typ
                         enc = encodeDefEither name
                     in case (Strip.deannotateType flatTyp) of
                       Core.TypeVariable _ -> enc flatTyp
                       _ -> Eithers.bind (Adapt.adaptTypeForLanguage Language.protobufLanguage flatTyp) (\adaptedType -> enc adaptedType)
-          types = Lists.map (\td -> Core.typeSchemeBody (Packaging.typeDefinitionTypeScheme td)) typeDefs
+          types = Lists.map (\td -> Core.typeSchemeBody (Packaging.typeDefinitionBody td)) typeDefs
           structRefs = collectStructuralTypes types
           javaOptions =
                   [
@@ -295,8 +296,8 @@ encodeTypeReference :: Packaging.ModuleName -> Core.Name -> Proto3.TypeName
 encodeTypeReference localNs name =
 
       let qn = Names.qualifyName name
-          local = Packaging.qualifiedNameLocal qn
-          ns_ = Packaging.qualifiedNameModuleName qn
+          local = Util.qualifiedNameLocal qn
+          ns_ = Util.qualifiedNameModuleName qn
           localNsParts = Maybes.fromMaybe [] (Lists.maybeInit (Strings.splitOn "." (Packaging.unModuleName localNs)))
       in (Proto3.TypeName (Maybes.maybe local (\nsVal ->
         let nsParts = Maybes.fromMaybe [] (Lists.maybeInit (Strings.splitOn "." (Packaging.unModuleName nsVal)))

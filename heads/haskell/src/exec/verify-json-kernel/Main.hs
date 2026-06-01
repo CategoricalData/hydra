@@ -236,7 +236,7 @@ stripTypeAnnotations m = m {
   moduleDefinitions = fmap stripDef (moduleDefinitions m) }
   where
     stripDef (DefinitionTerm td) = DefinitionTerm td {
-      termDefinitionTerm = Strip.removeTypesFromTerm (termDefinitionTerm td),
+      termDefinitionBody = Strip.removeTypesFromTerm (termDefinitionBody td),
       termDefinitionSignature = Just $ typeSchemeToTermSignature $ TypeScheme [] (TypeVariable $ Name "hydra.core.Unit") Nothing }
     stripDef d = d
 

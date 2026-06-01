@@ -16,7 +16,7 @@ import qualified Data.List                   as L
 -- describing one of Hydra's built-in type classes.
 --
 -- The binding's local name (e.g. "equality") is the marker used in
--- TypeVariableMetadata.classes :: Set Name. The binding's body provides a
+-- TypeVariableConstraints.classes :: Set Name. The binding's body provides a
 -- human-readable description for tooling and documentation.
 --
 -- Adding a new built-in type class is just adding a binding here and updating

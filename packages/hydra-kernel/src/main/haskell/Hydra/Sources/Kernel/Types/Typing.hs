@@ -95,7 +95,7 @@ inferenceResult = define "InferenceResult" $
       typeSubst,
     "classConstraints">:
       doc "Class constraints discovered during inference (e.g., Ord constraints from Map.lookup)" $
-      T.map Core.name Core.typeVariableMetadata,
+      T.map Core.name Core.typeVariableConstraints,
     "context">:
       doc "The updated InferenceContext after inference (carries fresh-variable counter and trace)" $
       inferenceContext]
@@ -151,7 +151,7 @@ typeClass :: TypeDefinition
 typeClass = define "TypeClass" $
   doc ("A type class identifier together with a human-readable description."
     ++ " Type classes are referenced as bare names (e.g. the local name \"equality\") in"
-    ++ " TypeVariableMetadata.classes; the canonical definitions live as term bindings"
+    ++ " TypeVariableConstraints.classes; the canonical definitions live as term bindings"
     ++ " under hydra.classes.") $
   T.record [
     "description">:

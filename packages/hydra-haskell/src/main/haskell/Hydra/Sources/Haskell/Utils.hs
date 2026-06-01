@@ -136,10 +136,10 @@ elementReference = haskellUtilsDefinition "elementReference" $
     "gmod">: unwrap H._ModuleName @@ (Pairs.second $ var "namespacePair"),
     "namespacesMap">: Util.moduleNamesMapping $ var "namespaces",
     "qname">: Names.qualifyName @@ var "name",
-    "local">: Packaging.qualifiedNameLocal $ var "qname",
+    "local">: Util.qualifiedNameLocal $ var "qname",
     "escLocal">: sanitizeHaskellName @@ var "local",
-    "mns">: Packaging.qualifiedNameModuleName $ var "qname"] $
-    Maybes.cases (Packaging.qualifiedNameModuleName $ var "qname")
+    "mns">: Util.qualifiedNameModuleName $ var "qname"] $
+    Maybes.cases (Util.qualifiedNameModuleName $ var "qname")
       (simpleName @@ var "local") $
       "ns" ~>
         Maybes.cases (Maps.lookup (var "ns") (var "namespacesMap"))
@@ -353,7 +353,7 @@ recordFieldReference = haskellUtilsDefinition "recordFieldReference" $
   "namespaces" ~> "sname" ~> "fname" ~> lets [
     "fnameStr">: unwrap _Name @@ var "fname",
     "qname">: Names.qualifyName @@ var "sname",
-    "ns">: Packaging.qualifiedNameModuleName $ var "qname",
+    "ns">: Util.qualifiedNameModuleName $ var "qname",
     "typeNameStr">: typeNameForRecord @@ var "sname",
     "decapitalized">: Formatting.decapitalize @@ var "typeNameStr",
     "capitalized">: Formatting.capitalize @@ var "fnameStr",
@@ -423,7 +423,7 @@ unionFieldReference = haskellUtilsDefinition "unionFieldReference" $
   "boundNames" ~> "namespaces" ~> "sname" ~> "fname" ~> lets [
     "fnameStr">: unwrap _Name @@ var "fname",
     "qname">: Names.qualifyName @@ var "sname",
-    "ns">: Packaging.qualifiedNameModuleName $ var "qname",
+    "ns">: Util.qualifiedNameModuleName $ var "qname",
     "typeNameStr">: typeNameForRecord @@ var "sname",
     "capitalizedTypeName">: Formatting.capitalize @@ var "typeNameStr",
     "capitalizedFieldName">: Formatting.capitalize @@ var "fnameStr",

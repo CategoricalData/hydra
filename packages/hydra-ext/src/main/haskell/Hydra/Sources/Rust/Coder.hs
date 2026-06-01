@@ -405,7 +405,7 @@ encodeTermDefinition :: TypedTermDefinition (InferenceContext -> Graph -> TermDe
 encodeTermDefinition = def "encodeTermDefinition" $
   "cx" ~> "g" ~> lambda "tdef" $
     "name" <~ Packaging.termDefinitionName (var "tdef") $
-    "term" <~ Packaging.termDefinitionTerm (var "tdef") $
+    "term" <~ Packaging.termDefinitionBody (var "tdef") $
     "lname" <~ (Formatting.convertCaseCamelToLowerSnake @@ (Names.localNameOf @@ var "name")) $
     "typ" <~ Maybes.maybe
       (Core.typeVariable (wrap _Name (string "hydra.core.Unit")))
@@ -509,7 +509,7 @@ encodeTypeDefinition :: TypedTermDefinition (InferenceContext -> Graph -> TypeDe
 encodeTypeDefinition = def "encodeTypeDefinition" $
   "cx" ~> "g" ~> lambda "tdef" $
     "name" <~ Packaging.typeDefinitionName (var "tdef") $
-    "typ" <~ (Core.typeSchemeBody $ Packaging.typeDefinitionTypeScheme (var "tdef")) $
+    "typ" <~ (Core.typeSchemeBody $ Packaging.typeDefinitionBody (var "tdef")) $
     "lname" <~ (Formatting.capitalize @@ (Names.localNameOf @@ var "name")) $
     -- Filter free type variables to unqualified names only (type parameters, not type references)
     "freeVars" <~ (Lists.filter
@@ -586,8 +586,8 @@ encodeUnionElim = def "encodeUnionElim" $
         "defCase" <~ Core.caseStatementDefault (var "cs") $
         "arms" <<~ (Eithers.mapList
           (lambda "cf" $
-            "cfname" <~ (Formatting.capitalize @@ Core.unName (Core.fieldName (var "cf"))) $
-            "cfterm" <~ Core.fieldTerm (var "cf") $
+            "cfname" <~ (Formatting.capitalize @@ Core.unName (Core.caseAlternativeName (var "cf"))) $
+            "cfterm" <~ Core.caseAlternativeHandler (var "cf") $
             "armBody" <<~ (encodeTerm @@ var "cx" @@ var "g" @@ (Core.termApplication (Core.application (var "cfterm") (Core.termVariable (wrap _Name (string "v")))))) $
               right (record R._MatchArm [
                 R._MatchArm_pattern>>:

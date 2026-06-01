@@ -410,15 +410,15 @@ allTests =
                       Core.caseStatementTypeName = (Core.Name "Optional"),
                       Core.caseStatementDefault = (Just (Core.TermVariable (Core.Name "x"))),
                       Core.caseStatementCases = [
-                        Core.Field {
-                          Core.fieldName = (Core.Name "just"),
-                          Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                        Core.CaseAlternative {
+                          Core.caseAlternativeName = (Core.Name "just"),
+                          Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                             Core.lambdaParameter = (Core.Name "y"),
                             Core.lambdaDomain = Nothing,
                             Core.lambdaBody = (Core.TermVariable (Core.Name "y"))}))},
-                        Core.Field {
-                          Core.fieldName = (Core.Name "nothing"),
-                          Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]}))}))})))),
+                        Core.CaseAlternative {
+                          Core.caseAlternativeName = (Core.Name "nothing"),
+                          Core.caseAlternativeHandler = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]}))}))})))),
                 Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
@@ -433,15 +433,15 @@ allTests =
                           Core.caseStatementTypeName = (Core.Name "Optional"),
                           Core.caseStatementDefault = (Just (Core.TermVariable (Core.Name "x"))),
                           Core.caseStatementCases = [
-                            Core.Field {
-                              Core.fieldName = (Core.Name "just"),
-                              Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                            Core.CaseAlternative {
+                              Core.caseAlternativeName = (Core.Name "just"),
+                              Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                                 Core.lambdaParameter = (Core.Name "y"),
                                 Core.lambdaDomain = Nothing,
                                 Core.lambdaBody = (Core.TermVariable (Core.Name "y"))}))},
-                            Core.Field {
-                              Core.fieldName = (Core.Name "nothing"),
-                              Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]})),
+                            Core.CaseAlternative {
+                              Core.caseAlternativeName = (Core.Name "nothing"),
+                              Core.caseAlternativeHandler = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]})),
                         Core.bindingTypeScheme = Nothing}],
                     Core.letBody = (Core.TermApplication (Core.Application {
                       Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
@@ -464,12 +464,12 @@ allTests =
                       Core.caseStatementTypeName = (Core.Name "Result"),
                       Core.caseStatementDefault = (Just (Core.TermVariable (Core.Name "y"))),
                       Core.caseStatementCases = [
-                        Core.Field {
-                          Core.fieldName = (Core.Name "ok"),
-                          Core.fieldTerm = (Core.TermVariable (Core.Name "x"))},
-                        Core.Field {
-                          Core.fieldName = (Core.Name "err"),
-                          Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]})])})))),
+                        Core.CaseAlternative {
+                          Core.caseAlternativeName = (Core.Name "ok"),
+                          Core.caseAlternativeHandler = (Core.TermVariable (Core.Name "x"))},
+                        Core.CaseAlternative {
+                          Core.caseAlternativeName = (Core.Name "err"),
+                          Core.caseAlternativeHandler = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]})])})))),
                 Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
@@ -484,12 +484,12 @@ allTests =
                           Core.caseStatementTypeName = (Core.Name "Result"),
                           Core.caseStatementDefault = (Just (Core.TermVariable (Core.Name "y"))),
                           Core.caseStatementCases = [
-                            Core.Field {
-                              Core.fieldName = (Core.Name "ok"),
-                              Core.fieldTerm = (Core.TermVariable (Core.Name "x"))},
-                            Core.Field {
-                              Core.fieldName = (Core.Name "err"),
-                              Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]})),
+                            Core.CaseAlternative {
+                              Core.caseAlternativeName = (Core.Name "ok"),
+                              Core.caseAlternativeHandler = (Core.TermVariable (Core.Name "x"))},
+                            Core.CaseAlternative {
+                              Core.caseAlternativeName = (Core.Name "err"),
+                              Core.caseAlternativeHandler = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]})),
                         Core.bindingTypeScheme = Nothing}],
                     Core.letBody = (Core.TermList [
                       Core.TermVariable (Core.Name "_hoist_x_body_1")])}))})))})),
@@ -971,15 +971,15 @@ allTests =
                     Core.caseStatementTypeName = (Core.Name "Optional"),
                     Core.caseStatementDefault = (Just (Core.TermVariable (Core.Name "x"))),
                     Core.caseStatementCases = [
-                      Core.Field {
-                        Core.fieldName = (Core.Name "just"),
-                        Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                      Core.CaseAlternative {
+                        Core.caseAlternativeName = (Core.Name "just"),
+                        Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                           Core.lambdaParameter = (Core.Name "y"),
                           Core.lambdaDomain = Nothing,
                           Core.lambdaBody = (Core.TermVariable (Core.Name "y"))}))},
-                      Core.Field {
-                        Core.fieldName = (Core.Name "nothing"),
-                        Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]}))})))),
+                      Core.CaseAlternative {
+                        Core.caseAlternativeName = (Core.Name "nothing"),
+                        Core.caseAlternativeHandler = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]}))})))),
                 Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
@@ -990,15 +990,15 @@ allTests =
                     Core.caseStatementTypeName = (Core.Name "Optional"),
                     Core.caseStatementDefault = (Just (Core.TermVariable (Core.Name "x"))),
                     Core.caseStatementCases = [
-                      Core.Field {
-                        Core.fieldName = (Core.Name "just"),
-                        Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                      Core.CaseAlternative {
+                        Core.caseAlternativeName = (Core.Name "just"),
+                        Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                           Core.lambdaParameter = (Core.Name "y"),
                           Core.lambdaDomain = Nothing,
                           Core.lambdaBody = (Core.TermVariable (Core.Name "y"))}))},
-                      Core.Field {
-                        Core.fieldName = (Core.Name "nothing"),
-                        Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]}))})))})),
+                      Core.CaseAlternative {
+                        Core.caseAlternativeName = (Core.Name "nothing"),
+                        Core.caseAlternativeHandler = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]}))})))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
@@ -1012,15 +1012,15 @@ allTests =
                         Core.caseStatementTypeName = (Core.Name "Optional"),
                         Core.caseStatementDefault = (Just (Core.TermVariable (Core.Name "y"))),
                         Core.caseStatementCases = [
-                          Core.Field {
-                            Core.fieldName = (Core.Name "just"),
-                            Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                          Core.CaseAlternative {
+                            Core.caseAlternativeName = (Core.Name "just"),
+                            Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                               Core.lambdaParameter = (Core.Name "z"),
                               Core.lambdaDomain = Nothing,
                               Core.lambdaBody = (Core.TermVariable (Core.Name "z"))}))},
-                          Core.Field {
-                            Core.fieldName = (Core.Name "nothing"),
-                            Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]})),
+                          Core.CaseAlternative {
+                            Core.caseAlternativeName = (Core.Name "nothing"),
+                            Core.caseAlternativeHandler = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]})),
                       Core.bindingTypeScheme = Nothing}],
                   Core.letBody = (Core.TermVariable (Core.Name "x"))})))),
                 Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermLet (Core.Let {
@@ -1031,15 +1031,15 @@ allTests =
                         Core.caseStatementTypeName = (Core.Name "Optional"),
                         Core.caseStatementDefault = (Just (Core.TermVariable (Core.Name "y"))),
                         Core.caseStatementCases = [
-                          Core.Field {
-                            Core.fieldName = (Core.Name "just"),
-                            Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                          Core.CaseAlternative {
+                            Core.caseAlternativeName = (Core.Name "just"),
+                            Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                               Core.lambdaParameter = (Core.Name "z"),
                               Core.lambdaDomain = Nothing,
                               Core.lambdaBody = (Core.TermVariable (Core.Name "z"))}))},
-                          Core.Field {
-                            Core.fieldName = (Core.Name "nothing"),
-                            Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]})),
+                          Core.CaseAlternative {
+                            Core.caseAlternativeName = (Core.Name "nothing"),
+                            Core.caseAlternativeHandler = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]})),
                       Core.bindingTypeScheme = Nothing}],
                   Core.letBody = (Core.TermVariable (Core.Name "x"))})))})),
               Testing.testCaseWithMetadataDescription = Nothing,
@@ -1058,15 +1058,15 @@ allTests =
                           Core.caseStatementTypeName = (Core.Name "Optional"),
                           Core.caseStatementDefault = (Just (Core.TermVariable (Core.Name "a"))),
                           Core.caseStatementCases = [
-                            Core.Field {
-                              Core.fieldName = (Core.Name "just"),
-                              Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                            Core.CaseAlternative {
+                              Core.caseAlternativeName = (Core.Name "just"),
+                              Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                                 Core.lambdaParameter = (Core.Name "y"),
                                 Core.lambdaDomain = Nothing,
                                 Core.lambdaBody = (Core.TermVariable (Core.Name "y"))}))},
-                            Core.Field {
-                              Core.fieldName = (Core.Name "nothing"),
-                              Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]}))})),
+                            Core.CaseAlternative {
+                              Core.caseAlternativeName = (Core.Name "nothing"),
+                              Core.caseAlternativeHandler = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]}))})),
                       Core.bindingTypeScheme = Nothing}],
                   Core.letBody = (Core.TermApplication (Core.Application {
                     Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
@@ -1082,15 +1082,15 @@ allTests =
                           Core.caseStatementTypeName = (Core.Name "Optional"),
                           Core.caseStatementDefault = (Just (Core.TermVariable (Core.Name "a"))),
                           Core.caseStatementCases = [
-                            Core.Field {
-                              Core.fieldName = (Core.Name "just"),
-                              Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                            Core.CaseAlternative {
+                              Core.caseAlternativeName = (Core.Name "just"),
+                              Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                                 Core.lambdaParameter = (Core.Name "y"),
                                 Core.lambdaDomain = Nothing,
                                 Core.lambdaBody = (Core.TermVariable (Core.Name "y"))}))},
-                            Core.Field {
-                              Core.fieldName = (Core.Name "nothing"),
-                              Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]}))})),
+                            Core.CaseAlternative {
+                              Core.caseAlternativeName = (Core.Name "nothing"),
+                              Core.caseAlternativeHandler = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]}))})),
                       Core.bindingTypeScheme = Nothing}],
                   Core.letBody = (Core.TermApplication (Core.Application {
                     Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
@@ -1114,12 +1114,12 @@ allTests =
                             Core.caseStatementTypeName = (Core.Name "Result"),
                             Core.caseStatementDefault = (Just (Core.TermVariable (Core.Name "a"))),
                             Core.caseStatementCases = [
-                              Core.Field {
-                                Core.fieldName = (Core.Name "ok"),
-                                Core.fieldTerm = (Core.TermVariable (Core.Name "b"))},
-                              Core.Field {
-                                Core.fieldName = (Core.Name "err"),
-                                Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]}))}))})),
+                              Core.CaseAlternative {
+                                Core.caseAlternativeName = (Core.Name "ok"),
+                                Core.caseAlternativeHandler = (Core.TermVariable (Core.Name "b"))},
+                              Core.CaseAlternative {
+                                Core.caseAlternativeName = (Core.Name "err"),
+                                Core.caseAlternativeHandler = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]}))}))})),
                       Core.bindingTypeScheme = Nothing}],
                   Core.letBody = (Core.TermVariable (Core.Name "f"))})))),
                 Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermLet (Core.Let {
@@ -1136,12 +1136,12 @@ allTests =
                             Core.caseStatementTypeName = (Core.Name "Result"),
                             Core.caseStatementDefault = (Just (Core.TermVariable (Core.Name "a"))),
                             Core.caseStatementCases = [
-                              Core.Field {
-                                Core.fieldName = (Core.Name "ok"),
-                                Core.fieldTerm = (Core.TermVariable (Core.Name "b"))},
-                              Core.Field {
-                                Core.fieldName = (Core.Name "err"),
-                                Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]}))}))})),
+                              Core.CaseAlternative {
+                                Core.caseAlternativeName = (Core.Name "ok"),
+                                Core.caseAlternativeHandler = (Core.TermVariable (Core.Name "b"))},
+                              Core.CaseAlternative {
+                                Core.caseAlternativeName = (Core.Name "err"),
+                                Core.caseAlternativeHandler = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]}))}))})),
                       Core.bindingTypeScheme = Nothing}],
                   Core.letBody = (Core.TermVariable (Core.Name "f"))})))})),
               Testing.testCaseWithMetadataDescription = Nothing,
@@ -1158,15 +1158,15 @@ allTests =
                           Core.caseStatementTypeName = (Core.Name "Optional"),
                           Core.caseStatementDefault = Nothing,
                           Core.caseStatementCases = [
-                            Core.Field {
-                              Core.fieldName = (Core.Name "just"),
-                              Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                            Core.CaseAlternative {
+                              Core.caseAlternativeName = (Core.Name "just"),
+                              Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                                 Core.lambdaParameter = (Core.Name "y"),
                                 Core.lambdaDomain = Nothing,
                                 Core.lambdaBody = (Core.TermVariable (Core.Name "y"))}))},
-                            Core.Field {
-                              Core.fieldName = (Core.Name "nothing"),
-                              Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]})),
+                            Core.CaseAlternative {
+                              Core.caseAlternativeName = (Core.Name "nothing"),
+                              Core.caseAlternativeHandler = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]})),
                         Core.applicationArgument = (Core.TermVariable (Core.Name "x"))})),
                       Core.bindingTypeScheme = Nothing}],
                   Core.letBody = (Core.TermVariable (Core.Name "f"))})))),
@@ -1179,15 +1179,15 @@ allTests =
                           Core.caseStatementTypeName = (Core.Name "Optional"),
                           Core.caseStatementDefault = Nothing,
                           Core.caseStatementCases = [
-                            Core.Field {
-                              Core.fieldName = (Core.Name "just"),
-                              Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                            Core.CaseAlternative {
+                              Core.caseAlternativeName = (Core.Name "just"),
+                              Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                                 Core.lambdaParameter = (Core.Name "y"),
                                 Core.lambdaDomain = Nothing,
                                 Core.lambdaBody = (Core.TermVariable (Core.Name "y"))}))},
-                            Core.Field {
-                              Core.fieldName = (Core.Name "nothing"),
-                              Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]})),
+                            Core.CaseAlternative {
+                              Core.caseAlternativeName = (Core.Name "nothing"),
+                              Core.caseAlternativeHandler = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]})),
                         Core.applicationArgument = (Core.TermVariable (Core.Name "x"))})),
                       Core.bindingTypeScheme = Nothing}],
                   Core.letBody = (Core.TermVariable (Core.Name "f"))})))})),
@@ -1205,15 +1205,15 @@ allTests =
                           Core.caseStatementTypeName = (Core.Name "Optional"),
                           Core.caseStatementDefault = Nothing,
                           Core.caseStatementCases = [
-                            Core.Field {
-                              Core.fieldName = (Core.Name "just"),
-                              Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                            Core.CaseAlternative {
+                              Core.caseAlternativeName = (Core.Name "just"),
+                              Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                                 Core.lambdaParameter = (Core.Name "y"),
                                 Core.lambdaDomain = Nothing,
                                 Core.lambdaBody = (Core.TermVariable (Core.Name "y"))}))},
-                            Core.Field {
-                              Core.fieldName = (Core.Name "nothing"),
-                              Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]})),
+                            Core.CaseAlternative {
+                              Core.caseAlternativeName = (Core.Name "nothing"),
+                              Core.caseAlternativeHandler = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]})),
                         Core.annotatedTermAnnotation = M.empty})),
                       Core.bindingTypeScheme = Nothing}],
                   Core.letBody = (Core.TermVariable (Core.Name "f"))})))),
@@ -1226,15 +1226,15 @@ allTests =
                           Core.caseStatementTypeName = (Core.Name "Optional"),
                           Core.caseStatementDefault = Nothing,
                           Core.caseStatementCases = [
-                            Core.Field {
-                              Core.fieldName = (Core.Name "just"),
-                              Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                            Core.CaseAlternative {
+                              Core.caseAlternativeName = (Core.Name "just"),
+                              Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                                 Core.lambdaParameter = (Core.Name "y"),
                                 Core.lambdaDomain = Nothing,
                                 Core.lambdaBody = (Core.TermVariable (Core.Name "y"))}))},
-                            Core.Field {
-                              Core.fieldName = (Core.Name "nothing"),
-                              Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]})),
+                            Core.CaseAlternative {
+                              Core.caseAlternativeName = (Core.Name "nothing"),
+                              Core.caseAlternativeHandler = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]})),
                         Core.annotatedTermAnnotation = M.empty})),
                       Core.bindingTypeScheme = Nothing}],
                   Core.letBody = (Core.TermVariable (Core.Name "f"))})))})),
@@ -1255,15 +1255,15 @@ allTests =
                             Core.caseStatementTypeName = (Core.Name "Optional"),
                             Core.caseStatementDefault = Nothing,
                             Core.caseStatementCases = [
-                              Core.Field {
-                                Core.fieldName = (Core.Name "just"),
-                                Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                              Core.CaseAlternative {
+                                Core.caseAlternativeName = (Core.Name "just"),
+                                Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                                   Core.lambdaParameter = (Core.Name "y"),
                                   Core.lambdaDomain = Nothing,
                                   Core.lambdaBody = (Core.TermVariable (Core.Name "y"))}))},
-                              Core.Field {
-                                Core.fieldName = (Core.Name "nothing"),
-                                Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]})),
+                              Core.CaseAlternative {
+                                Core.caseAlternativeName = (Core.Name "nothing"),
+                                Core.caseAlternativeHandler = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]})),
                           Core.applicationArgument = (Core.TermVariable (Core.Name "a"))}))})),
                       Core.bindingTypeScheme = Nothing}],
                   Core.letBody = (Core.TermVariable (Core.Name "f"))})))),
@@ -1279,15 +1279,15 @@ allTests =
                             Core.caseStatementTypeName = (Core.Name "Optional"),
                             Core.caseStatementDefault = Nothing,
                             Core.caseStatementCases = [
-                              Core.Field {
-                                Core.fieldName = (Core.Name "just"),
-                                Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                              Core.CaseAlternative {
+                                Core.caseAlternativeName = (Core.Name "just"),
+                                Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                                   Core.lambdaParameter = (Core.Name "y"),
                                   Core.lambdaDomain = Nothing,
                                   Core.lambdaBody = (Core.TermVariable (Core.Name "y"))}))},
-                              Core.Field {
-                                Core.fieldName = (Core.Name "nothing"),
-                                Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]})),
+                              Core.CaseAlternative {
+                                Core.caseAlternativeName = (Core.Name "nothing"),
+                                Core.caseAlternativeHandler = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]})),
                           Core.applicationArgument = (Core.TermVariable (Core.Name "a"))}))})),
                       Core.bindingTypeScheme = Nothing}],
                   Core.letBody = (Core.TermVariable (Core.Name "f"))})))})),
@@ -1306,15 +1306,15 @@ allTests =
                           Core.caseStatementTypeName = (Core.Name "Optional"),
                           Core.caseStatementDefault = Nothing,
                           Core.caseStatementCases = [
-                            Core.Field {
-                              Core.fieldName = (Core.Name "just"),
-                              Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                            Core.CaseAlternative {
+                              Core.caseAlternativeName = (Core.Name "just"),
+                              Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                                 Core.lambdaParameter = (Core.Name "y"),
                                 Core.lambdaDomain = Nothing,
                                 Core.lambdaBody = (Core.TermVariable (Core.Name "y"))}))},
-                            Core.Field {
-                              Core.fieldName = (Core.Name "nothing"),
-                              Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]}))})),
+                            Core.CaseAlternative {
+                              Core.caseAlternativeName = (Core.Name "nothing"),
+                              Core.caseAlternativeHandler = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]}))})),
                       Core.bindingTypeScheme = Nothing}],
                   Core.letBody = (Core.TermVariable (Core.Name "f"))})))),
                 Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermLet (Core.Let {
@@ -1329,15 +1329,15 @@ allTests =
                               Core.caseStatementTypeName = (Core.Name "Optional"),
                               Core.caseStatementDefault = Nothing,
                               Core.caseStatementCases = [
-                                Core.Field {
-                                  Core.fieldName = (Core.Name "just"),
-                                  Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                                Core.CaseAlternative {
+                                  Core.caseAlternativeName = (Core.Name "just"),
+                                  Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                                     Core.lambdaParameter = (Core.Name "y"),
                                     Core.lambdaDomain = Nothing,
                                     Core.lambdaBody = (Core.TermVariable (Core.Name "y"))}))},
-                                Core.Field {
-                                  Core.fieldName = (Core.Name "nothing"),
-                                  Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]})),
+                                Core.CaseAlternative {
+                                  Core.caseAlternativeName = (Core.Name "nothing"),
+                                  Core.caseAlternativeHandler = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]})),
                             Core.bindingTypeScheme = Nothing}],
                         Core.letBody = (Core.TermApplication (Core.Application {
                           Core.applicationFunction = (Core.TermVariable (Core.Name "g")),
@@ -1359,18 +1359,18 @@ allTests =
                             Core.caseStatementTypeName = (Core.Name "Optional"),
                             Core.caseStatementDefault = Nothing,
                             Core.caseStatementCases = [
-                              Core.Field {
-                                Core.fieldName = (Core.Name "just"),
-                                Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                              Core.CaseAlternative {
+                                Core.caseAlternativeName = (Core.Name "just"),
+                                Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                                   Core.lambdaParameter = (Core.Name "z"),
                                   Core.lambdaDomain = Nothing,
                                   Core.lambdaBody = (Core.TermLambda (Core.Lambda {
                                     Core.lambdaParameter = (Core.Name "w"),
                                     Core.lambdaDomain = Nothing,
                                     Core.lambdaBody = (Core.TermVariable (Core.Name "z"))}))}))},
-                              Core.Field {
-                                Core.fieldName = (Core.Name "nothing"),
-                                Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                              Core.CaseAlternative {
+                                Core.caseAlternativeName = (Core.Name "nothing"),
+                                Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                                   Core.lambdaParameter = (Core.Name "w"),
                                   Core.lambdaDomain = Nothing,
                                   Core.lambdaBody = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}))}]})),
@@ -1390,18 +1390,18 @@ allTests =
                               Core.caseStatementTypeName = (Core.Name "Optional"),
                               Core.caseStatementDefault = Nothing,
                               Core.caseStatementCases = [
-                                Core.Field {
-                                  Core.fieldName = (Core.Name "just"),
-                                  Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                                Core.CaseAlternative {
+                                  Core.caseAlternativeName = (Core.Name "just"),
+                                  Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                                     Core.lambdaParameter = (Core.Name "z"),
                                     Core.lambdaDomain = Nothing,
                                     Core.lambdaBody = (Core.TermLambda (Core.Lambda {
                                       Core.lambdaParameter = (Core.Name "w"),
                                       Core.lambdaDomain = Nothing,
                                       Core.lambdaBody = (Core.TermVariable (Core.Name "z"))}))}))},
-                                Core.Field {
-                                  Core.fieldName = (Core.Name "nothing"),
-                                  Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                                Core.CaseAlternative {
+                                  Core.caseAlternativeName = (Core.Name "nothing"),
+                                  Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                                     Core.lambdaParameter = (Core.Name "w"),
                                     Core.lambdaDomain = Nothing,
                                     Core.lambdaBody = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}))}]})),
@@ -1427,15 +1427,15 @@ allTests =
                           Core.caseStatementTypeName = (Core.Name "Optional"),
                           Core.caseStatementDefault = Nothing,
                           Core.caseStatementCases = [
-                            Core.Field {
-                              Core.fieldName = (Core.Name "just"),
-                              Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                            Core.CaseAlternative {
+                              Core.caseAlternativeName = (Core.Name "just"),
+                              Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                                 Core.lambdaParameter = (Core.Name "y"),
                                 Core.lambdaDomain = Nothing,
                                 Core.lambdaBody = (Core.TermVariable (Core.Name "y"))}))},
-                            Core.Field {
-                              Core.fieldName = (Core.Name "nothing"),
-                              Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]})]),
+                            Core.CaseAlternative {
+                              Core.caseAlternativeName = (Core.Name "nothing"),
+                              Core.caseAlternativeHandler = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]})]),
                       Core.bindingTypeScheme = Nothing}],
                   Core.letBody = (Core.TermVariable (Core.Name "f"))})))),
                 Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermLet (Core.Let {
@@ -1450,15 +1450,15 @@ allTests =
                               Core.caseStatementTypeName = (Core.Name "Optional"),
                               Core.caseStatementDefault = Nothing,
                               Core.caseStatementCases = [
-                                Core.Field {
-                                  Core.fieldName = (Core.Name "just"),
-                                  Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                                Core.CaseAlternative {
+                                  Core.caseAlternativeName = (Core.Name "just"),
+                                  Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                                     Core.lambdaParameter = (Core.Name "y"),
                                     Core.lambdaDomain = Nothing,
                                     Core.lambdaBody = (Core.TermVariable (Core.Name "y"))}))},
-                                Core.Field {
-                                  Core.fieldName = (Core.Name "nothing"),
-                                  Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]})),
+                                Core.CaseAlternative {
+                                  Core.caseAlternativeName = (Core.Name "nothing"),
+                                  Core.caseAlternativeHandler = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]})),
                             Core.bindingTypeScheme = Nothing}],
                         Core.letBody = (Core.TermList [
                           Core.TermVariable (Core.Name "_hoist_f_1")])})),
@@ -1481,15 +1481,15 @@ allTests =
                             Core.caseStatementTypeName = (Core.Name "Optional"),
                             Core.caseStatementDefault = (Just (Core.TermVariable (Core.Name "a"))),
                             Core.caseStatementCases = [
-                              Core.Field {
-                                Core.fieldName = (Core.Name "just"),
-                                Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                              Core.CaseAlternative {
+                                Core.caseAlternativeName = (Core.Name "just"),
+                                Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                                   Core.lambdaParameter = (Core.Name "y"),
                                   Core.lambdaDomain = Nothing,
                                   Core.lambdaBody = (Core.TermVariable (Core.Name "y"))}))},
-                              Core.Field {
-                                Core.fieldName = (Core.Name "nothing"),
-                                Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]}))})]),
+                              Core.CaseAlternative {
+                                Core.caseAlternativeName = (Core.Name "nothing"),
+                                Core.caseAlternativeHandler = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]}))})]),
                       Core.bindingTypeScheme = Nothing}],
                   Core.letBody = (Core.TermVariable (Core.Name "f"))})))),
                 Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermLet (Core.Let {
@@ -1507,15 +1507,15 @@ allTests =
                                 Core.caseStatementTypeName = (Core.Name "Optional"),
                                 Core.caseStatementDefault = (Just (Core.TermVariable (Core.Name "a"))),
                                 Core.caseStatementCases = [
-                                  Core.Field {
-                                    Core.fieldName = (Core.Name "just"),
-                                    Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                                  Core.CaseAlternative {
+                                    Core.caseAlternativeName = (Core.Name "just"),
+                                    Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                                       Core.lambdaParameter = (Core.Name "y"),
                                       Core.lambdaDomain = Nothing,
                                       Core.lambdaBody = (Core.TermVariable (Core.Name "y"))}))},
-                                  Core.Field {
-                                    Core.fieldName = (Core.Name "nothing"),
-                                    Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]}))})),
+                                  Core.CaseAlternative {
+                                    Core.caseAlternativeName = (Core.Name "nothing"),
+                                    Core.caseAlternativeHandler = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]}))})),
                             Core.bindingTypeScheme = Nothing}],
                         Core.letBody = (Core.TermList [
                           Core.TermLambda (Core.Lambda {
@@ -1574,15 +1574,15 @@ allTests =
                         Core.caseStatementTypeName = (Core.Name "Optional"),
                         Core.caseStatementDefault = (Just (Core.TermVariable (Core.Name "a"))),
                         Core.caseStatementCases = [
-                          Core.Field {
-                            Core.fieldName = (Core.Name "just"),
-                            Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                          Core.CaseAlternative {
+                            Core.caseAlternativeName = (Core.Name "just"),
+                            Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                               Core.lambdaParameter = (Core.Name "z"),
                               Core.lambdaDomain = Nothing,
                               Core.lambdaBody = (Core.TermVariable (Core.Name "z"))}))},
-                          Core.Field {
-                            Core.fieldName = (Core.Name "nothing"),
-                            Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]})),
+                          Core.CaseAlternative {
+                            Core.caseAlternativeName = (Core.Name "nothing"),
+                            Core.caseAlternativeHandler = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]})),
                       Core.bindingTypeScheme = Nothing}],
                   Core.letBody = (Core.TermApplication (Core.Application {
                     Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
@@ -1590,15 +1590,15 @@ allTests =
                       Core.caseStatementTypeName = (Core.Name "Optional"),
                       Core.caseStatementDefault = (Just (Core.TermVariable (Core.Name "b"))),
                       Core.caseStatementCases = [
-                        Core.Field {
-                          Core.fieldName = (Core.Name "just"),
-                          Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                        Core.CaseAlternative {
+                          Core.caseAlternativeName = (Core.Name "just"),
+                          Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                             Core.lambdaParameter = (Core.Name "w"),
                             Core.lambdaDomain = Nothing,
                             Core.lambdaBody = (Core.TermVariable (Core.Name "w"))}))},
-                        Core.Field {
-                          Core.fieldName = (Core.Name "nothing"),
-                          Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]}))}))})))),
+                        Core.CaseAlternative {
+                          Core.caseAlternativeName = (Core.Name "nothing"),
+                          Core.caseAlternativeHandler = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]}))}))})))),
                 Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
@@ -1607,15 +1607,15 @@ allTests =
                         Core.caseStatementTypeName = (Core.Name "Optional"),
                         Core.caseStatementDefault = (Just (Core.TermVariable (Core.Name "a"))),
                         Core.caseStatementCases = [
-                          Core.Field {
-                            Core.fieldName = (Core.Name "just"),
-                            Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                          Core.CaseAlternative {
+                            Core.caseAlternativeName = (Core.Name "just"),
+                            Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                               Core.lambdaParameter = (Core.Name "z"),
                               Core.lambdaDomain = Nothing,
                               Core.lambdaBody = (Core.TermVariable (Core.Name "z"))}))},
-                          Core.Field {
-                            Core.fieldName = (Core.Name "nothing"),
-                            Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]})),
+                          Core.CaseAlternative {
+                            Core.caseAlternativeName = (Core.Name "nothing"),
+                            Core.caseAlternativeHandler = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]})),
                       Core.bindingTypeScheme = Nothing}],
                   Core.letBody = (Core.TermLet (Core.Let {
                     Core.letBindings = [
@@ -1625,15 +1625,15 @@ allTests =
                           Core.caseStatementTypeName = (Core.Name "Optional"),
                           Core.caseStatementDefault = (Just (Core.TermVariable (Core.Name "b"))),
                           Core.caseStatementCases = [
-                            Core.Field {
-                              Core.fieldName = (Core.Name "just"),
-                              Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                            Core.CaseAlternative {
+                              Core.caseAlternativeName = (Core.Name "just"),
+                              Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                                 Core.lambdaParameter = (Core.Name "w"),
                                 Core.lambdaDomain = Nothing,
                                 Core.lambdaBody = (Core.TermVariable (Core.Name "w"))}))},
-                            Core.Field {
-                              Core.fieldName = (Core.Name "nothing"),
-                              Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]})),
+                            Core.CaseAlternative {
+                              Core.caseAlternativeName = (Core.Name "nothing"),
+                              Core.caseAlternativeHandler = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]})),
                         Core.bindingTypeScheme = Nothing}],
                     Core.letBody = (Core.TermApplication (Core.Application {
                       Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
@@ -1659,15 +1659,15 @@ allTests =
                       Core.caseStatementTypeName = (Core.Name "Optional"),
                       Core.caseStatementDefault = (Just (Core.TermVariable (Core.Name "z"))),
                       Core.caseStatementCases = [
-                        Core.Field {
-                          Core.fieldName = (Core.Name "just"),
-                          Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                        Core.CaseAlternative {
+                          Core.caseAlternativeName = (Core.Name "just"),
+                          Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                             Core.lambdaParameter = (Core.Name "w"),
                             Core.lambdaDomain = Nothing,
                             Core.lambdaBody = (Core.TermVariable (Core.Name "w"))}))},
-                        Core.Field {
-                          Core.fieldName = (Core.Name "nothing"),
-                          Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]}))}))})))),
+                        Core.CaseAlternative {
+                          Core.caseAlternativeName = (Core.Name "nothing"),
+                          Core.caseAlternativeHandler = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]}))}))})))),
                 Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
@@ -1684,15 +1684,15 @@ allTests =
                       Core.caseStatementTypeName = (Core.Name "Optional"),
                       Core.caseStatementDefault = (Just (Core.TermVariable (Core.Name "z"))),
                       Core.caseStatementCases = [
-                        Core.Field {
-                          Core.fieldName = (Core.Name "just"),
-                          Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                        Core.CaseAlternative {
+                          Core.caseAlternativeName = (Core.Name "just"),
+                          Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                             Core.lambdaParameter = (Core.Name "w"),
                             Core.lambdaDomain = Nothing,
                             Core.lambdaBody = (Core.TermVariable (Core.Name "w"))}))},
-                        Core.Field {
-                          Core.fieldName = (Core.Name "nothing"),
-                          Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]}))}))})))})),
+                        Core.CaseAlternative {
+                          Core.caseAlternativeName = (Core.Name "nothing"),
+                          Core.caseAlternativeHandler = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]}))}))})))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
@@ -1715,15 +1715,15 @@ allTests =
                             Core.caseStatementTypeName = (Core.Name "Optional"),
                             Core.caseStatementDefault = (Just (Core.TermVariable (Core.Name "a"))),
                             Core.caseStatementCases = [
-                              Core.Field {
-                                Core.fieldName = (Core.Name "just"),
-                                Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                              Core.CaseAlternative {
+                                Core.caseAlternativeName = (Core.Name "just"),
+                                Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                                   Core.lambdaParameter = (Core.Name "y"),
                                   Core.lambdaDomain = Nothing,
                                   Core.lambdaBody = (Core.TermVariable (Core.Name "y"))}))},
-                              Core.Field {
-                                Core.fieldName = (Core.Name "nothing"),
-                                Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]}))}))})),
+                              Core.CaseAlternative {
+                                Core.caseAlternativeName = (Core.Name "nothing"),
+                                Core.caseAlternativeHandler = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]}))}))})),
                       Core.bindingTypeScheme = Nothing}],
                   Core.letBody = (Core.TermVariable (Core.Name "f"))})))),
                 Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermLet (Core.Let {
@@ -1743,15 +1743,15 @@ allTests =
                             Core.caseStatementTypeName = (Core.Name "Optional"),
                             Core.caseStatementDefault = (Just (Core.TermVariable (Core.Name "a"))),
                             Core.caseStatementCases = [
-                              Core.Field {
-                                Core.fieldName = (Core.Name "just"),
-                                Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                              Core.CaseAlternative {
+                                Core.caseAlternativeName = (Core.Name "just"),
+                                Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                                   Core.lambdaParameter = (Core.Name "y"),
                                   Core.lambdaDomain = Nothing,
                                   Core.lambdaBody = (Core.TermVariable (Core.Name "y"))}))},
-                              Core.Field {
-                                Core.fieldName = (Core.Name "nothing"),
-                                Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]}))}))})),
+                              Core.CaseAlternative {
+                                Core.caseAlternativeName = (Core.Name "nothing"),
+                                Core.caseAlternativeHandler = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]}))}))})),
                       Core.bindingTypeScheme = Nothing}],
                   Core.letBody = (Core.TermVariable (Core.Name "f"))})))})),
               Testing.testCaseWithMetadataDescription = Nothing,
@@ -1772,15 +1772,15 @@ allTests =
                       Core.caseStatementTypeName = (Core.Name "Optional"),
                       Core.caseStatementDefault = (Just (Core.TermVariable (Core.Name "a"))),
                       Core.caseStatementCases = [
-                        Core.Field {
-                          Core.fieldName = (Core.Name "just"),
-                          Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                        Core.CaseAlternative {
+                          Core.caseAlternativeName = (Core.Name "just"),
+                          Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                             Core.lambdaParameter = (Core.Name "y"),
                             Core.lambdaDomain = Nothing,
                             Core.lambdaBody = (Core.TermVariable (Core.Name "y"))}))},
-                        Core.Field {
-                          Core.fieldName = (Core.Name "nothing"),
-                          Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]}))}))})))),
+                        Core.CaseAlternative {
+                          Core.caseAlternativeName = (Core.Name "nothing"),
+                          Core.caseAlternativeHandler = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]}))}))})))),
                 Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
@@ -1794,15 +1794,15 @@ allTests =
                       Core.caseStatementTypeName = (Core.Name "Optional"),
                       Core.caseStatementDefault = (Just (Core.TermVariable (Core.Name "a"))),
                       Core.caseStatementCases = [
-                        Core.Field {
-                          Core.fieldName = (Core.Name "just"),
-                          Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                        Core.CaseAlternative {
+                          Core.caseAlternativeName = (Core.Name "just"),
+                          Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                             Core.lambdaParameter = (Core.Name "y"),
                             Core.lambdaDomain = Nothing,
                             Core.lambdaBody = (Core.TermVariable (Core.Name "y"))}))},
-                        Core.Field {
-                          Core.fieldName = (Core.Name "nothing"),
-                          Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]}))}))})))})),
+                        Core.CaseAlternative {
+                          Core.caseAlternativeName = (Core.Name "nothing"),
+                          Core.caseAlternativeHandler = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]}))}))})))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
@@ -1826,15 +1826,15 @@ allTests =
                               Core.caseStatementTypeName = (Core.Name "Optional"),
                               Core.caseStatementDefault = Nothing,
                               Core.caseStatementCases = [
-                                Core.Field {
-                                  Core.fieldName = (Core.Name "just"),
-                                  Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                                Core.CaseAlternative {
+                                  Core.caseAlternativeName = (Core.Name "just"),
+                                  Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                                     Core.lambdaParameter = (Core.Name "y"),
                                     Core.lambdaDomain = Nothing,
                                     Core.lambdaBody = (Core.TermVariable (Core.Name "y"))}))},
-                                Core.Field {
-                                  Core.fieldName = (Core.Name "nothing"),
-                                  Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]})),
+                                Core.CaseAlternative {
+                                  Core.caseAlternativeName = (Core.Name "nothing"),
+                                  Core.caseAlternativeHandler = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]})),
                             Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))})),
                       Core.bindingTypeScheme = Nothing}],
                   Core.letBody = (Core.TermVariable (Core.Name "f"))})))),
@@ -1856,15 +1856,15 @@ allTests =
                               Core.caseStatementTypeName = (Core.Name "Optional"),
                               Core.caseStatementDefault = Nothing,
                               Core.caseStatementCases = [
-                                Core.Field {
-                                  Core.fieldName = (Core.Name "just"),
-                                  Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                                Core.CaseAlternative {
+                                  Core.caseAlternativeName = (Core.Name "just"),
+                                  Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                                     Core.lambdaParameter = (Core.Name "y"),
                                     Core.lambdaDomain = Nothing,
                                     Core.lambdaBody = (Core.TermVariable (Core.Name "y"))}))},
-                                Core.Field {
-                                  Core.fieldName = (Core.Name "nothing"),
-                                  Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]})),
+                                Core.CaseAlternative {
+                                  Core.caseAlternativeName = (Core.Name "nothing"),
+                                  Core.caseAlternativeHandler = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]})),
                             Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))})),
                       Core.bindingTypeScheme = Nothing}],
                   Core.letBody = (Core.TermVariable (Core.Name "f"))})))})),
@@ -1884,9 +1884,9 @@ allTests =
                               Core.caseStatementTypeName = (Core.Name "Optional"),
                               Core.caseStatementDefault = Nothing,
                               Core.caseStatementCases = [
-                                Core.Field {
-                                  Core.fieldName = (Core.Name "just"),
-                                  Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                                Core.CaseAlternative {
+                                  Core.caseAlternativeName = (Core.Name "just"),
+                                  Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                                     Core.lambdaParameter = (Core.Name "a"),
                                     Core.lambdaDomain = Nothing,
                                     Core.lambdaBody = (Core.TermLambda (Core.Lambda {
@@ -1896,9 +1896,9 @@ allTests =
                                         Core.lambdaParameter = (Core.Name "c"),
                                         Core.lambdaDomain = Nothing,
                                         Core.lambdaBody = (Core.TermVariable (Core.Name "a"))}))}))}))},
-                                Core.Field {
-                                  Core.fieldName = (Core.Name "nothing"),
-                                  Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                                Core.CaseAlternative {
+                                  Core.caseAlternativeName = (Core.Name "nothing"),
+                                  Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                                     Core.lambdaParameter = (Core.Name "b"),
                                     Core.lambdaDomain = Nothing,
                                     Core.lambdaBody = (Core.TermLambda (Core.Lambda {
@@ -1922,9 +1922,9 @@ allTests =
                               Core.caseStatementTypeName = (Core.Name "Optional"),
                               Core.caseStatementDefault = Nothing,
                               Core.caseStatementCases = [
-                                Core.Field {
-                                  Core.fieldName = (Core.Name "just"),
-                                  Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                                Core.CaseAlternative {
+                                  Core.caseAlternativeName = (Core.Name "just"),
+                                  Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                                     Core.lambdaParameter = (Core.Name "a"),
                                     Core.lambdaDomain = Nothing,
                                     Core.lambdaBody = (Core.TermLambda (Core.Lambda {
@@ -1934,9 +1934,9 @@ allTests =
                                         Core.lambdaParameter = (Core.Name "c"),
                                         Core.lambdaDomain = Nothing,
                                         Core.lambdaBody = (Core.TermVariable (Core.Name "a"))}))}))}))},
-                                Core.Field {
-                                  Core.fieldName = (Core.Name "nothing"),
-                                  Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                                Core.CaseAlternative {
+                                  Core.caseAlternativeName = (Core.Name "nothing"),
+                                  Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                                     Core.lambdaParameter = (Core.Name "b"),
                                     Core.lambdaDomain = Nothing,
                                     Core.lambdaBody = (Core.TermLambda (Core.Lambda {
@@ -1970,15 +1970,15 @@ allTests =
                           Core.caseStatementTypeName = (Core.Name "Optional"),
                           Core.caseStatementDefault = Nothing,
                           Core.caseStatementCases = [
-                            Core.Field {
-                              Core.fieldName = (Core.Name "just"),
-                              Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                            Core.CaseAlternative {
+                              Core.caseAlternativeName = (Core.Name "just"),
+                              Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                                 Core.lambdaParameter = (Core.Name "y"),
                                 Core.lambdaDomain = Nothing,
                                 Core.lambdaBody = (Core.TermVariable (Core.Name "y"))}))},
-                            Core.Field {
-                              Core.fieldName = (Core.Name "nothing"),
-                              Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]}))})),
+                            Core.CaseAlternative {
+                              Core.caseAlternativeName = (Core.Name "nothing"),
+                              Core.caseAlternativeHandler = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]}))})),
                       Core.bindingTypeScheme = Nothing}],
                   Core.letBody = (Core.TermVariable (Core.Name "f"))})))),
                 Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermLet (Core.Let {
@@ -1993,15 +1993,15 @@ allTests =
                               Core.caseStatementTypeName = (Core.Name "Optional"),
                               Core.caseStatementDefault = Nothing,
                               Core.caseStatementCases = [
-                                Core.Field {
-                                  Core.fieldName = (Core.Name "just"),
-                                  Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                                Core.CaseAlternative {
+                                  Core.caseAlternativeName = (Core.Name "just"),
+                                  Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                                     Core.lambdaParameter = (Core.Name "y"),
                                     Core.lambdaDomain = Nothing,
                                     Core.lambdaBody = (Core.TermVariable (Core.Name "y"))}))},
-                                Core.Field {
-                                  Core.fieldName = (Core.Name "nothing"),
-                                  Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]})),
+                                Core.CaseAlternative {
+                                  Core.caseAlternativeName = (Core.Name "nothing"),
+                                  Core.caseAlternativeHandler = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]})),
                             Core.bindingTypeScheme = Nothing}],
                         Core.letBody = (Core.TermApplication (Core.Application {
                           Core.applicationFunction = (Core.TermApplication (Core.Application {
@@ -2026,28 +2026,28 @@ allTests =
                             Core.caseStatementTypeName = (Core.Name "Optional"),
                             Core.caseStatementDefault = (Just (Core.TermVariable (Core.Name "a"))),
                             Core.caseStatementCases = [
-                              Core.Field {
-                                Core.fieldName = (Core.Name "just"),
-                                Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                              Core.CaseAlternative {
+                                Core.caseAlternativeName = (Core.Name "just"),
+                                Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                                   Core.lambdaParameter = (Core.Name "x"),
                                   Core.lambdaDomain = Nothing,
                                   Core.lambdaBody = (Core.TermVariable (Core.Name "x"))}))},
-                              Core.Field {
-                                Core.fieldName = (Core.Name "nothing"),
-                                Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]}))})),
+                              Core.CaseAlternative {
+                                Core.caseAlternativeName = (Core.Name "nothing"),
+                                Core.caseAlternativeHandler = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]}))})),
                         Core.applicationArgument = (Core.TermCases (Core.CaseStatement {
                           Core.caseStatementTypeName = (Core.Name "Optional"),
                           Core.caseStatementDefault = (Just (Core.TermVariable (Core.Name "b"))),
                           Core.caseStatementCases = [
-                            Core.Field {
-                              Core.fieldName = (Core.Name "just"),
-                              Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                            Core.CaseAlternative {
+                              Core.caseAlternativeName = (Core.Name "just"),
+                              Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                                 Core.lambdaParameter = (Core.Name "y"),
                                 Core.lambdaDomain = Nothing,
                                 Core.lambdaBody = (Core.TermVariable (Core.Name "y"))}))},
-                            Core.Field {
-                              Core.fieldName = (Core.Name "nothing"),
-                              Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)))}]}))})),
+                            Core.CaseAlternative {
+                              Core.caseAlternativeName = (Core.Name "nothing"),
+                              Core.caseAlternativeHandler = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)))}]}))})),
                       Core.bindingTypeScheme = Nothing}],
                   Core.letBody = (Core.TermVariable (Core.Name "f"))})))),
                 Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermLet (Core.Let {
@@ -2062,15 +2062,15 @@ allTests =
                               Core.caseStatementTypeName = (Core.Name "Optional"),
                               Core.caseStatementDefault = (Just (Core.TermVariable (Core.Name "a"))),
                               Core.caseStatementCases = [
-                                Core.Field {
-                                  Core.fieldName = (Core.Name "just"),
-                                  Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                                Core.CaseAlternative {
+                                  Core.caseAlternativeName = (Core.Name "just"),
+                                  Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                                     Core.lambdaParameter = (Core.Name "x"),
                                     Core.lambdaDomain = Nothing,
                                     Core.lambdaBody = (Core.TermVariable (Core.Name "x"))}))},
-                                Core.Field {
-                                  Core.fieldName = (Core.Name "nothing"),
-                                  Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]})),
+                                Core.CaseAlternative {
+                                  Core.caseAlternativeName = (Core.Name "nothing"),
+                                  Core.caseAlternativeHandler = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]})),
                             Core.bindingTypeScheme = Nothing},
                           Core.Binding {
                             Core.bindingName = (Core.Name "_hoist_f_2"),
@@ -2078,15 +2078,15 @@ allTests =
                               Core.caseStatementTypeName = (Core.Name "Optional"),
                               Core.caseStatementDefault = (Just (Core.TermVariable (Core.Name "b"))),
                               Core.caseStatementCases = [
-                                Core.Field {
-                                  Core.fieldName = (Core.Name "just"),
-                                  Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                                Core.CaseAlternative {
+                                  Core.caseAlternativeName = (Core.Name "just"),
+                                  Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                                     Core.lambdaParameter = (Core.Name "y"),
                                     Core.lambdaDomain = Nothing,
                                     Core.lambdaBody = (Core.TermVariable (Core.Name "y"))}))},
-                                Core.Field {
-                                  Core.fieldName = (Core.Name "nothing"),
-                                  Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)))}]})),
+                                Core.CaseAlternative {
+                                  Core.caseAlternativeName = (Core.Name "nothing"),
+                                  Core.caseAlternativeHandler = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)))}]})),
                             Core.bindingTypeScheme = Nothing}],
                         Core.letBody = (Core.TermApplication (Core.Application {
                           Core.applicationFunction = (Core.TermApplication (Core.Application {
@@ -2110,15 +2110,15 @@ allTests =
                           Core.caseStatementTypeName = (Core.Name "Optional"),
                           Core.caseStatementDefault = Nothing,
                           Core.caseStatementCases = [
-                            Core.Field {
-                              Core.fieldName = (Core.Name "just"),
-                              Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                            Core.CaseAlternative {
+                              Core.caseAlternativeName = (Core.Name "just"),
+                              Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                                 Core.lambdaParameter = (Core.Name "y"),
                                 Core.lambdaDomain = Nothing,
                                 Core.lambdaBody = (Core.TermVariable (Core.Name "y"))}))},
-                            Core.Field {
-                              Core.fieldName = (Core.Name "nothing"),
-                              Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]}))]),
+                            Core.CaseAlternative {
+                              Core.caseAlternativeName = (Core.Name "nothing"),
+                              Core.caseAlternativeHandler = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]}))]),
                       Core.bindingTypeScheme = Nothing}],
                   Core.letBody = (Core.TermVariable (Core.Name "f"))})))),
                 Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermLet (Core.Let {
@@ -2133,15 +2133,15 @@ allTests =
                               Core.caseStatementTypeName = (Core.Name "Optional"),
                               Core.caseStatementDefault = Nothing,
                               Core.caseStatementCases = [
-                                Core.Field {
-                                  Core.fieldName = (Core.Name "just"),
-                                  Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                                Core.CaseAlternative {
+                                  Core.caseAlternativeName = (Core.Name "just"),
+                                  Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                                     Core.lambdaParameter = (Core.Name "y"),
                                     Core.lambdaDomain = Nothing,
                                     Core.lambdaBody = (Core.TermVariable (Core.Name "y"))}))},
-                                Core.Field {
-                                  Core.fieldName = (Core.Name "nothing"),
-                                  Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]})),
+                                Core.CaseAlternative {
+                                  Core.caseAlternativeName = (Core.Name "nothing"),
+                                  Core.caseAlternativeHandler = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]})),
                             Core.bindingTypeScheme = Nothing}],
                         Core.letBody = (Core.TermList [
                           Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
@@ -2162,28 +2162,28 @@ allTests =
                           Core.caseStatementTypeName = (Core.Name "Optional"),
                           Core.caseStatementDefault = (Just (Core.TermVariable (Core.Name "a"))),
                           Core.caseStatementCases = [
-                            Core.Field {
-                              Core.fieldName = (Core.Name "just"),
-                              Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                            Core.CaseAlternative {
+                              Core.caseAlternativeName = (Core.Name "just"),
+                              Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                                 Core.lambdaParameter = (Core.Name "x"),
                                 Core.lambdaDomain = Nothing,
                                 Core.lambdaBody = (Core.TermVariable (Core.Name "x"))}))},
-                            Core.Field {
-                              Core.fieldName = (Core.Name "nothing"),
-                              Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]}),
+                            Core.CaseAlternative {
+                              Core.caseAlternativeName = (Core.Name "nothing"),
+                              Core.caseAlternativeHandler = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]}),
                         (Core.TermCases (Core.CaseStatement {
                           Core.caseStatementTypeName = (Core.Name "Optional"),
                           Core.caseStatementDefault = (Just (Core.TermVariable (Core.Name "b"))),
                           Core.caseStatementCases = [
-                            Core.Field {
-                              Core.fieldName = (Core.Name "just"),
-                              Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                            Core.CaseAlternative {
+                              Core.caseAlternativeName = (Core.Name "just"),
+                              Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                                 Core.lambdaParameter = (Core.Name "y"),
                                 Core.lambdaDomain = Nothing,
                                 Core.lambdaBody = (Core.TermVariable (Core.Name "y"))}))},
-                            Core.Field {
-                              Core.fieldName = (Core.Name "nothing"),
-                              Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)))}]}))]),
+                            Core.CaseAlternative {
+                              Core.caseAlternativeName = (Core.Name "nothing"),
+                              Core.caseAlternativeHandler = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)))}]}))]),
                       Core.bindingTypeScheme = Nothing}],
                   Core.letBody = (Core.TermVariable (Core.Name "f"))})))),
                 Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermLet (Core.Let {
@@ -2198,15 +2198,15 @@ allTests =
                               Core.caseStatementTypeName = (Core.Name "Optional"),
                               Core.caseStatementDefault = (Just (Core.TermVariable (Core.Name "a"))),
                               Core.caseStatementCases = [
-                                Core.Field {
-                                  Core.fieldName = (Core.Name "just"),
-                                  Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                                Core.CaseAlternative {
+                                  Core.caseAlternativeName = (Core.Name "just"),
+                                  Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                                     Core.lambdaParameter = (Core.Name "x"),
                                     Core.lambdaDomain = Nothing,
                                     Core.lambdaBody = (Core.TermVariable (Core.Name "x"))}))},
-                                Core.Field {
-                                  Core.fieldName = (Core.Name "nothing"),
-                                  Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]})),
+                                Core.CaseAlternative {
+                                  Core.caseAlternativeName = (Core.Name "nothing"),
+                                  Core.caseAlternativeHandler = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]})),
                             Core.bindingTypeScheme = Nothing},
                           Core.Binding {
                             Core.bindingName = (Core.Name "_hoist_f_2"),
@@ -2214,15 +2214,15 @@ allTests =
                               Core.caseStatementTypeName = (Core.Name "Optional"),
                               Core.caseStatementDefault = (Just (Core.TermVariable (Core.Name "b"))),
                               Core.caseStatementCases = [
-                                Core.Field {
-                                  Core.fieldName = (Core.Name "just"),
-                                  Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                                Core.CaseAlternative {
+                                  Core.caseAlternativeName = (Core.Name "just"),
+                                  Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                                     Core.lambdaParameter = (Core.Name "y"),
                                     Core.lambdaDomain = Nothing,
                                     Core.lambdaBody = (Core.TermVariable (Core.Name "y"))}))},
-                                Core.Field {
-                                  Core.fieldName = (Core.Name "nothing"),
-                                  Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)))}]})),
+                                Core.CaseAlternative {
+                                  Core.caseAlternativeName = (Core.Name "nothing"),
+                                  Core.caseAlternativeHandler = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)))}]})),
                             Core.bindingTypeScheme = Nothing}],
                         Core.letBody = (Core.TermList [
                           Core.TermVariable (Core.Name "_hoist_f_1"),
@@ -2243,15 +2243,15 @@ allTests =
                           Core.caseStatementTypeName = (Core.Name "Optional"),
                           Core.caseStatementDefault = Nothing,
                           Core.caseStatementCases = [
-                            Core.Field {
-                              Core.fieldName = (Core.Name "just"),
-                              Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                            Core.CaseAlternative {
+                              Core.caseAlternativeName = (Core.Name "just"),
+                              Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                                 Core.lambdaParameter = (Core.Name "y"),
                                 Core.lambdaDomain = Nothing,
                                 Core.lambdaBody = (Core.TermVariable (Core.Name "y"))}))},
-                            Core.Field {
-                              Core.fieldName = (Core.Name "nothing"),
-                              Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]}),
+                            Core.CaseAlternative {
+                              Core.caseAlternativeName = (Core.Name "nothing"),
+                              Core.caseAlternativeHandler = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]}),
                         (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1))))),
                       Core.bindingTypeScheme = Nothing}],
                   Core.letBody = (Core.TermVariable (Core.Name "f"))})))),
@@ -2267,15 +2267,15 @@ allTests =
                               Core.caseStatementTypeName = (Core.Name "Optional"),
                               Core.caseStatementDefault = Nothing,
                               Core.caseStatementCases = [
-                                Core.Field {
-                                  Core.fieldName = (Core.Name "just"),
-                                  Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                                Core.CaseAlternative {
+                                  Core.caseAlternativeName = (Core.Name "just"),
+                                  Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                                     Core.lambdaParameter = (Core.Name "y"),
                                     Core.lambdaDomain = Nothing,
                                     Core.lambdaBody = (Core.TermVariable (Core.Name "y"))}))},
-                                Core.Field {
-                                  Core.fieldName = (Core.Name "nothing"),
-                                  Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]})),
+                                Core.CaseAlternative {
+                                  Core.caseAlternativeName = (Core.Name "nothing"),
+                                  Core.caseAlternativeHandler = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]})),
                             Core.bindingTypeScheme = Nothing}],
                         Core.letBody = (Core.TermPair (Core.TermVariable (Core.Name "_hoist_f_1"), (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)))))})),
                       Core.bindingTypeScheme = Nothing}],
@@ -2295,15 +2295,15 @@ allTests =
                           Core.caseStatementTypeName = (Core.Name "Optional"),
                           Core.caseStatementDefault = Nothing,
                           Core.caseStatementCases = [
-                            Core.Field {
-                              Core.fieldName = (Core.Name "just"),
-                              Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                            Core.CaseAlternative {
+                              Core.caseAlternativeName = (Core.Name "just"),
+                              Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                                 Core.lambdaParameter = (Core.Name "y"),
                                 Core.lambdaDomain = Nothing,
                                 Core.lambdaBody = (Core.TermVariable (Core.Name "y"))}))},
-                            Core.Field {
-                              Core.fieldName = (Core.Name "nothing"),
-                              Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]})))),
+                            Core.CaseAlternative {
+                              Core.caseAlternativeName = (Core.Name "nothing"),
+                              Core.caseAlternativeHandler = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]})))),
                       Core.bindingTypeScheme = Nothing}],
                   Core.letBody = (Core.TermVariable (Core.Name "f"))})))),
                 Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermLet (Core.Let {
@@ -2318,15 +2318,15 @@ allTests =
                               Core.caseStatementTypeName = (Core.Name "Optional"),
                               Core.caseStatementDefault = Nothing,
                               Core.caseStatementCases = [
-                                Core.Field {
-                                  Core.fieldName = (Core.Name "just"),
-                                  Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                                Core.CaseAlternative {
+                                  Core.caseAlternativeName = (Core.Name "just"),
+                                  Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                                     Core.lambdaParameter = (Core.Name "y"),
                                     Core.lambdaDomain = Nothing,
                                     Core.lambdaBody = (Core.TermVariable (Core.Name "y"))}))},
-                                Core.Field {
-                                  Core.fieldName = (Core.Name "nothing"),
-                                  Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]})),
+                                Core.CaseAlternative {
+                                  Core.caseAlternativeName = (Core.Name "nothing"),
+                                  Core.caseAlternativeHandler = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]})),
                             Core.bindingTypeScheme = Nothing}],
                         Core.letBody = (Core.TermPair (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)), (Core.TermVariable (Core.Name "_hoist_f_1"))))})),
                       Core.bindingTypeScheme = Nothing}],
@@ -2350,15 +2350,15 @@ allTests =
                                 Core.caseStatementTypeName = (Core.Name "Optional"),
                                 Core.caseStatementDefault = Nothing,
                                 Core.caseStatementCases = [
-                                  Core.Field {
-                                    Core.fieldName = (Core.Name "just"),
-                                    Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                                  Core.CaseAlternative {
+                                    Core.caseAlternativeName = (Core.Name "just"),
+                                    Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                                       Core.lambdaParameter = (Core.Name "y"),
                                       Core.lambdaDomain = Nothing,
                                       Core.lambdaBody = (Core.TermVariable (Core.Name "y"))}))},
-                                  Core.Field {
-                                    Core.fieldName = (Core.Name "nothing"),
-                                    Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]}))})),
+                                  Core.CaseAlternative {
+                                    Core.caseAlternativeName = (Core.Name "nothing"),
+                                    Core.caseAlternativeHandler = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]}))})),
                             Core.bindingTypeScheme = Nothing}],
                         Core.letBody = (Core.TermVariable (Core.Name "inner"))})),
                       Core.bindingTypeScheme = Nothing}],
@@ -2379,15 +2379,15 @@ allTests =
                                     Core.caseStatementTypeName = (Core.Name "Optional"),
                                     Core.caseStatementDefault = Nothing,
                                     Core.caseStatementCases = [
-                                      Core.Field {
-                                        Core.fieldName = (Core.Name "just"),
-                                        Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                                      Core.CaseAlternative {
+                                        Core.caseAlternativeName = (Core.Name "just"),
+                                        Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                                           Core.lambdaParameter = (Core.Name "y"),
                                           Core.lambdaDomain = Nothing,
                                           Core.lambdaBody = (Core.TermVariable (Core.Name "y"))}))},
-                                      Core.Field {
-                                        Core.fieldName = (Core.Name "nothing"),
-                                        Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]})),
+                                      Core.CaseAlternative {
+                                        Core.caseAlternativeName = (Core.Name "nothing"),
+                                        Core.caseAlternativeHandler = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]})),
                                   Core.bindingTypeScheme = Nothing}],
                               Core.letBody = (Core.TermApplication (Core.Application {
                                 Core.applicationFunction = (Core.TermVariable (Core.Name "g")),
@@ -2417,15 +2417,15 @@ allTests =
                             Core.caseStatementTypeName = (Core.Name "Optional"),
                             Core.caseStatementDefault = Nothing,
                             Core.caseStatementCases = [
-                              Core.Field {
-                                Core.fieldName = (Core.Name "just"),
-                                Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                              Core.CaseAlternative {
+                                Core.caseAlternativeName = (Core.Name "just"),
+                                Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                                   Core.lambdaParameter = (Core.Name "y"),
                                   Core.lambdaDomain = Nothing,
                                   Core.lambdaBody = (Core.TermVariable (Core.Name "y"))}))},
-                              Core.Field {
-                                Core.fieldName = (Core.Name "nothing"),
-                                Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]}))}))})),
+                              Core.CaseAlternative {
+                                Core.caseAlternativeName = (Core.Name "nothing"),
+                                Core.caseAlternativeHandler = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]}))}))})),
                       Core.bindingTypeScheme = Nothing}],
                   Core.letBody = (Core.TermVariable (Core.Name "outer"))})))),
                 Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermLet (Core.Let {
@@ -2446,15 +2446,15 @@ allTests =
                                 Core.caseStatementTypeName = (Core.Name "Optional"),
                                 Core.caseStatementDefault = Nothing,
                                 Core.caseStatementCases = [
-                                  Core.Field {
-                                    Core.fieldName = (Core.Name "just"),
-                                    Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                                  Core.CaseAlternative {
+                                    Core.caseAlternativeName = (Core.Name "just"),
+                                    Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                                       Core.lambdaParameter = (Core.Name "y"),
                                       Core.lambdaDomain = Nothing,
                                       Core.lambdaBody = (Core.TermVariable (Core.Name "y"))}))},
-                                  Core.Field {
-                                    Core.fieldName = (Core.Name "nothing"),
-                                    Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]})),
+                                  Core.CaseAlternative {
+                                    Core.caseAlternativeName = (Core.Name "nothing"),
+                                    Core.caseAlternativeHandler = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]})),
                               Core.bindingTypeScheme = Nothing}],
                           Core.letBody = (Core.TermApplication (Core.Application {
                             Core.applicationFunction = (Core.TermVariable (Core.Name "g")),
@@ -2478,15 +2478,15 @@ allTests =
                               Core.caseStatementTypeName = (Core.Name "Optional"),
                               Core.caseStatementDefault = Nothing,
                               Core.caseStatementCases = [
-                                Core.Field {
-                                  Core.fieldName = (Core.Name "just"),
-                                  Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                                Core.CaseAlternative {
+                                  Core.caseAlternativeName = (Core.Name "just"),
+                                  Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                                     Core.lambdaParameter = (Core.Name "y"),
                                     Core.lambdaDomain = Nothing,
                                     Core.lambdaBody = (Core.TermVariable (Core.Name "y"))}))},
-                                Core.Field {
-                                  Core.fieldName = (Core.Name "nothing"),
-                                  Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]})),
+                                Core.CaseAlternative {
+                                  Core.caseAlternativeName = (Core.Name "nothing"),
+                                  Core.caseAlternativeHandler = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]})),
                             Core.bindingTypeScheme = Nothing}],
                         Core.letBody = (Core.TermVariable (Core.Name "inner"))})),
                       Core.bindingTypeScheme = Nothing}],
@@ -2503,15 +2503,15 @@ allTests =
                               Core.caseStatementTypeName = (Core.Name "Optional"),
                               Core.caseStatementDefault = Nothing,
                               Core.caseStatementCases = [
-                                Core.Field {
-                                  Core.fieldName = (Core.Name "just"),
-                                  Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                                Core.CaseAlternative {
+                                  Core.caseAlternativeName = (Core.Name "just"),
+                                  Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                                     Core.lambdaParameter = (Core.Name "y"),
                                     Core.lambdaDomain = Nothing,
                                     Core.lambdaBody = (Core.TermVariable (Core.Name "y"))}))},
-                                Core.Field {
-                                  Core.fieldName = (Core.Name "nothing"),
-                                  Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]})),
+                                Core.CaseAlternative {
+                                  Core.caseAlternativeName = (Core.Name "nothing"),
+                                  Core.caseAlternativeHandler = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]})),
                             Core.bindingTypeScheme = Nothing}],
                         Core.letBody = (Core.TermVariable (Core.Name "inner"))})),
                       Core.bindingTypeScheme = Nothing}],
@@ -2532,15 +2532,15 @@ allTests =
                             Core.caseStatementTypeName = (Core.Name "Optional"),
                             Core.caseStatementDefault = (Just (Core.TermVariable (Core.Name "a"))),
                             Core.caseStatementCases = [
-                              Core.Field {
-                                Core.fieldName = (Core.Name "just"),
-                                Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                              Core.CaseAlternative {
+                                Core.caseAlternativeName = (Core.Name "just"),
+                                Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                                   Core.lambdaParameter = (Core.Name "x"),
                                   Core.lambdaDomain = Nothing,
                                   Core.lambdaBody = (Core.TermVariable (Core.Name "x"))}))},
-                              Core.Field {
-                                Core.fieldName = (Core.Name "nothing"),
-                                Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]}))})),
+                              Core.CaseAlternative {
+                                Core.caseAlternativeName = (Core.Name "nothing"),
+                                Core.caseAlternativeHandler = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]}))})),
                         Core.applicationArgument = (Core.TermLet (Core.Let {
                           Core.letBindings = [
                             Core.Binding {
@@ -2551,15 +2551,15 @@ allTests =
                                   Core.caseStatementTypeName = (Core.Name "Optional"),
                                   Core.caseStatementDefault = (Just (Core.TermVariable (Core.Name "b"))),
                                   Core.caseStatementCases = [
-                                    Core.Field {
-                                      Core.fieldName = (Core.Name "just"),
-                                      Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                                    Core.CaseAlternative {
+                                      Core.caseAlternativeName = (Core.Name "just"),
+                                      Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                                         Core.lambdaParameter = (Core.Name "y"),
                                         Core.lambdaDomain = Nothing,
                                         Core.lambdaBody = (Core.TermVariable (Core.Name "y"))}))},
-                                    Core.Field {
-                                      Core.fieldName = (Core.Name "nothing"),
-                                      Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)))}]}))})),
+                                    Core.CaseAlternative {
+                                      Core.caseAlternativeName = (Core.Name "nothing"),
+                                      Core.caseAlternativeHandler = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)))}]}))})),
                               Core.bindingTypeScheme = Nothing}],
                           Core.letBody = (Core.TermVariable (Core.Name "inner"))}))})),
                       Core.bindingTypeScheme = Nothing}],
@@ -2576,15 +2576,15 @@ allTests =
                               Core.caseStatementTypeName = (Core.Name "Optional"),
                               Core.caseStatementDefault = (Just (Core.TermVariable (Core.Name "a"))),
                               Core.caseStatementCases = [
-                                Core.Field {
-                                  Core.fieldName = (Core.Name "just"),
-                                  Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                                Core.CaseAlternative {
+                                  Core.caseAlternativeName = (Core.Name "just"),
+                                  Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                                     Core.lambdaParameter = (Core.Name "x"),
                                     Core.lambdaDomain = Nothing,
                                     Core.lambdaBody = (Core.TermVariable (Core.Name "x"))}))},
-                                Core.Field {
-                                  Core.fieldName = (Core.Name "nothing"),
-                                  Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]})),
+                                Core.CaseAlternative {
+                                  Core.caseAlternativeName = (Core.Name "nothing"),
+                                  Core.caseAlternativeHandler = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]})),
                             Core.bindingTypeScheme = Nothing}],
                         Core.letBody = (Core.TermApplication (Core.Application {
                           Core.applicationFunction = (Core.TermApplication (Core.Application {
@@ -2602,15 +2602,15 @@ allTests =
                                         Core.caseStatementTypeName = (Core.Name "Optional"),
                                         Core.caseStatementDefault = (Just (Core.TermVariable (Core.Name "b"))),
                                         Core.caseStatementCases = [
-                                          Core.Field {
-                                            Core.fieldName = (Core.Name "just"),
-                                            Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                                          Core.CaseAlternative {
+                                            Core.caseAlternativeName = (Core.Name "just"),
+                                            Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                                               Core.lambdaParameter = (Core.Name "y"),
                                               Core.lambdaDomain = Nothing,
                                               Core.lambdaBody = (Core.TermVariable (Core.Name "y"))}))},
-                                          Core.Field {
-                                            Core.fieldName = (Core.Name "nothing"),
-                                            Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)))}]})),
+                                          Core.CaseAlternative {
+                                            Core.caseAlternativeName = (Core.Name "nothing"),
+                                            Core.caseAlternativeHandler = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)))}]})),
                                       Core.bindingTypeScheme = Nothing}],
                                   Core.letBody = (Core.TermApplication (Core.Application {
                                     Core.applicationFunction = (Core.TermVariable (Core.Name "g")),
@@ -2636,15 +2636,15 @@ allTests =
                             Core.caseStatementTypeName = (Core.Name "Optional"),
                             Core.caseStatementDefault = (Just (Core.TermVariable (Core.Name "a"))),
                             Core.caseStatementCases = [
-                              Core.Field {
-                                Core.fieldName = (Core.Name "just"),
-                                Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                              Core.CaseAlternative {
+                                Core.caseAlternativeName = (Core.Name "just"),
+                                Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                                   Core.lambdaParameter = (Core.Name "y"),
                                   Core.lambdaDomain = Nothing,
                                   Core.lambdaBody = (Core.TermVariable (Core.Name "y"))}))},
-                              Core.Field {
-                                Core.fieldName = (Core.Name "nothing"),
-                                Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]}))})),
+                              Core.CaseAlternative {
+                                Core.caseAlternativeName = (Core.Name "nothing"),
+                                Core.caseAlternativeHandler = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]}))})),
                         Core.applicationArgument = (Core.TermVariable (Core.Name "x"))})),
                       Core.bindingTypeScheme = Nothing}],
                   Core.letBody = (Core.TermVariable (Core.Name "f"))})))),
@@ -2663,15 +2663,15 @@ allTests =
                                 Core.caseStatementTypeName = (Core.Name "Optional"),
                                 Core.caseStatementDefault = (Just (Core.TermVariable (Core.Name "a"))),
                                 Core.caseStatementCases = [
-                                  Core.Field {
-                                    Core.fieldName = (Core.Name "just"),
-                                    Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                                  Core.CaseAlternative {
+                                    Core.caseAlternativeName = (Core.Name "just"),
+                                    Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                                       Core.lambdaParameter = (Core.Name "y"),
                                       Core.lambdaDomain = Nothing,
                                       Core.lambdaBody = (Core.TermVariable (Core.Name "y"))}))},
-                                  Core.Field {
-                                    Core.fieldName = (Core.Name "nothing"),
-                                    Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]}))})),
+                                  Core.CaseAlternative {
+                                    Core.caseAlternativeName = (Core.Name "nothing"),
+                                    Core.caseAlternativeHandler = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]}))})),
                             Core.bindingTypeScheme = Nothing}],
                         Core.letBody = (Core.TermApplication (Core.Application {
                           Core.applicationFunction = (Core.TermLambda (Core.Lambda {
@@ -2696,27 +2696,27 @@ allTests =
                         Core.caseStatementTypeName = (Core.Name "Optional"),
                         Core.caseStatementDefault = (Just (Core.TermVariable (Core.Name "x"))),
                         Core.caseStatementCases = [
-                          Core.Field {
-                            Core.fieldName = (Core.Name "just"),
-                            Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                          Core.CaseAlternative {
+                            Core.caseAlternativeName = (Core.Name "just"),
+                            Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                               Core.lambdaParameter = (Core.Name "a"),
                               Core.lambdaDomain = Nothing,
                               Core.lambdaBody = (Core.TermCases (Core.CaseStatement {
                                 Core.caseStatementTypeName = (Core.Name "Optional"),
                                 Core.caseStatementDefault = (Just (Core.TermVariable (Core.Name "a"))),
                                 Core.caseStatementCases = [
-                                  Core.Field {
-                                    Core.fieldName = (Core.Name "just"),
-                                    Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                                  Core.CaseAlternative {
+                                    Core.caseAlternativeName = (Core.Name "just"),
+                                    Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                                       Core.lambdaParameter = (Core.Name "b"),
                                       Core.lambdaDomain = Nothing,
                                       Core.lambdaBody = (Core.TermVariable (Core.Name "b"))}))},
-                                  Core.Field {
-                                    Core.fieldName = (Core.Name "nothing"),
-                                    Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]}))}))},
-                          Core.Field {
-                            Core.fieldName = (Core.Name "nothing"),
-                            Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]})),
+                                  Core.CaseAlternative {
+                                    Core.caseAlternativeName = (Core.Name "nothing"),
+                                    Core.caseAlternativeHandler = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]}))}))},
+                          Core.CaseAlternative {
+                            Core.caseAlternativeName = (Core.Name "nothing"),
+                            Core.caseAlternativeHandler = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]})),
                       Core.bindingTypeScheme = Nothing}],
                   Core.letBody = (Core.TermVariable (Core.Name "f"))})))),
                 Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermLet (Core.Let {
@@ -2727,27 +2727,27 @@ allTests =
                         Core.caseStatementTypeName = (Core.Name "Optional"),
                         Core.caseStatementDefault = (Just (Core.TermVariable (Core.Name "x"))),
                         Core.caseStatementCases = [
-                          Core.Field {
-                            Core.fieldName = (Core.Name "just"),
-                            Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                          Core.CaseAlternative {
+                            Core.caseAlternativeName = (Core.Name "just"),
+                            Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                               Core.lambdaParameter = (Core.Name "a"),
                               Core.lambdaDomain = Nothing,
                               Core.lambdaBody = (Core.TermCases (Core.CaseStatement {
                                 Core.caseStatementTypeName = (Core.Name "Optional"),
                                 Core.caseStatementDefault = (Just (Core.TermVariable (Core.Name "a"))),
                                 Core.caseStatementCases = [
-                                  Core.Field {
-                                    Core.fieldName = (Core.Name "just"),
-                                    Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                                  Core.CaseAlternative {
+                                    Core.caseAlternativeName = (Core.Name "just"),
+                                    Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                                       Core.lambdaParameter = (Core.Name "b"),
                                       Core.lambdaDomain = Nothing,
                                       Core.lambdaBody = (Core.TermVariable (Core.Name "b"))}))},
-                                  Core.Field {
-                                    Core.fieldName = (Core.Name "nothing"),
-                                    Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]}))}))},
-                          Core.Field {
-                            Core.fieldName = (Core.Name "nothing"),
-                            Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]})),
+                                  Core.CaseAlternative {
+                                    Core.caseAlternativeName = (Core.Name "nothing"),
+                                    Core.caseAlternativeHandler = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]}))}))},
+                          Core.CaseAlternative {
+                            Core.caseAlternativeName = (Core.Name "nothing"),
+                            Core.caseAlternativeHandler = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]})),
                       Core.bindingTypeScheme = Nothing}],
                   Core.letBody = (Core.TermVariable (Core.Name "f"))})))})),
               Testing.testCaseWithMetadataDescription = Nothing,
@@ -2763,27 +2763,27 @@ allTests =
                         Core.caseStatementTypeName = (Core.Name "Optional"),
                         Core.caseStatementDefault = (Just (Core.TermVariable (Core.Name "x"))),
                         Core.caseStatementCases = [
-                          Core.Field {
-                            Core.fieldName = (Core.Name "just"),
-                            Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                          Core.CaseAlternative {
+                            Core.caseAlternativeName = (Core.Name "just"),
+                            Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                               Core.lambdaParameter = (Core.Name "a"),
                               Core.lambdaDomain = Nothing,
                               Core.lambdaBody = (Core.TermVariable (Core.Name "a"))}))},
-                          Core.Field {
-                            Core.fieldName = (Core.Name "nothing"),
-                            Core.fieldTerm = (Core.TermCases (Core.CaseStatement {
+                          Core.CaseAlternative {
+                            Core.caseAlternativeName = (Core.Name "nothing"),
+                            Core.caseAlternativeHandler = (Core.TermCases (Core.CaseStatement {
                               Core.caseStatementTypeName = (Core.Name "Optional"),
                               Core.caseStatementDefault = (Just (Core.TermVariable (Core.Name "y"))),
                               Core.caseStatementCases = [
-                                Core.Field {
-                                  Core.fieldName = (Core.Name "just"),
-                                  Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                                Core.CaseAlternative {
+                                  Core.caseAlternativeName = (Core.Name "just"),
+                                  Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                                     Core.lambdaParameter = (Core.Name "b"),
                                     Core.lambdaDomain = Nothing,
                                     Core.lambdaBody = (Core.TermVariable (Core.Name "b"))}))},
-                                Core.Field {
-                                  Core.fieldName = (Core.Name "nothing"),
-                                  Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]}))}]})),
+                                Core.CaseAlternative {
+                                  Core.caseAlternativeName = (Core.Name "nothing"),
+                                  Core.caseAlternativeHandler = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]}))}]})),
                       Core.bindingTypeScheme = Nothing}],
                   Core.letBody = (Core.TermVariable (Core.Name "f"))})))),
                 Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermLet (Core.Let {
@@ -2794,27 +2794,27 @@ allTests =
                         Core.caseStatementTypeName = (Core.Name "Optional"),
                         Core.caseStatementDefault = (Just (Core.TermVariable (Core.Name "x"))),
                         Core.caseStatementCases = [
-                          Core.Field {
-                            Core.fieldName = (Core.Name "just"),
-                            Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                          Core.CaseAlternative {
+                            Core.caseAlternativeName = (Core.Name "just"),
+                            Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                               Core.lambdaParameter = (Core.Name "a"),
                               Core.lambdaDomain = Nothing,
                               Core.lambdaBody = (Core.TermVariable (Core.Name "a"))}))},
-                          Core.Field {
-                            Core.fieldName = (Core.Name "nothing"),
-                            Core.fieldTerm = (Core.TermCases (Core.CaseStatement {
+                          Core.CaseAlternative {
+                            Core.caseAlternativeName = (Core.Name "nothing"),
+                            Core.caseAlternativeHandler = (Core.TermCases (Core.CaseStatement {
                               Core.caseStatementTypeName = (Core.Name "Optional"),
                               Core.caseStatementDefault = (Just (Core.TermVariable (Core.Name "y"))),
                               Core.caseStatementCases = [
-                                Core.Field {
-                                  Core.fieldName = (Core.Name "just"),
-                                  Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                                Core.CaseAlternative {
+                                  Core.caseAlternativeName = (Core.Name "just"),
+                                  Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                                     Core.lambdaParameter = (Core.Name "b"),
                                     Core.lambdaDomain = Nothing,
                                     Core.lambdaBody = (Core.TermVariable (Core.Name "b"))}))},
-                                Core.Field {
-                                  Core.fieldName = (Core.Name "nothing"),
-                                  Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]}))}]})),
+                                Core.CaseAlternative {
+                                  Core.caseAlternativeName = (Core.Name "nothing"),
+                                  Core.caseAlternativeHandler = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]}))}]})),
                       Core.bindingTypeScheme = Nothing}],
                   Core.letBody = (Core.TermVariable (Core.Name "f"))})))})),
               Testing.testCaseWithMetadataDescription = Nothing,
@@ -2830,9 +2830,9 @@ allTests =
                         Core.caseStatementTypeName = (Core.Name "Optional"),
                         Core.caseStatementDefault = (Just (Core.TermVariable (Core.Name "x"))),
                         Core.caseStatementCases = [
-                          Core.Field {
-                            Core.fieldName = (Core.Name "just"),
-                            Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                          Core.CaseAlternative {
+                            Core.caseAlternativeName = (Core.Name "just"),
+                            Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                               Core.lambdaParameter = (Core.Name "a"),
                               Core.lambdaDomain = Nothing,
                               Core.lambdaBody = (Core.TermApplication (Core.Application {
@@ -2841,18 +2841,18 @@ allTests =
                                   Core.caseStatementTypeName = (Core.Name "Optional"),
                                   Core.caseStatementDefault = (Just (Core.TermVariable (Core.Name "a"))),
                                   Core.caseStatementCases = [
-                                    Core.Field {
-                                      Core.fieldName = (Core.Name "just"),
-                                      Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                                    Core.CaseAlternative {
+                                      Core.caseAlternativeName = (Core.Name "just"),
+                                      Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                                         Core.lambdaParameter = (Core.Name "b"),
                                         Core.lambdaDomain = Nothing,
                                         Core.lambdaBody = (Core.TermVariable (Core.Name "b"))}))},
-                                    Core.Field {
-                                      Core.fieldName = (Core.Name "nothing"),
-                                      Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]}))}))}))},
-                          Core.Field {
-                            Core.fieldName = (Core.Name "nothing"),
-                            Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]})),
+                                    Core.CaseAlternative {
+                                      Core.caseAlternativeName = (Core.Name "nothing"),
+                                      Core.caseAlternativeHandler = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]}))}))}))},
+                          Core.CaseAlternative {
+                            Core.caseAlternativeName = (Core.Name "nothing"),
+                            Core.caseAlternativeHandler = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]})),
                       Core.bindingTypeScheme = Nothing}],
                   Core.letBody = (Core.TermVariable (Core.Name "f"))})))),
                 Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermLet (Core.Let {
@@ -2870,23 +2870,23 @@ allTests =
                                 Core.caseStatementTypeName = (Core.Name "Optional"),
                                 Core.caseStatementDefault = (Just (Core.TermVariable (Core.Name "a"))),
                                 Core.caseStatementCases = [
-                                  Core.Field {
-                                    Core.fieldName = (Core.Name "just"),
-                                    Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                                  Core.CaseAlternative {
+                                    Core.caseAlternativeName = (Core.Name "just"),
+                                    Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                                       Core.lambdaParameter = (Core.Name "b"),
                                       Core.lambdaDomain = Nothing,
                                       Core.lambdaBody = (Core.TermVariable (Core.Name "b"))}))},
-                                  Core.Field {
-                                    Core.fieldName = (Core.Name "nothing"),
-                                    Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]}))})),
+                                  Core.CaseAlternative {
+                                    Core.caseAlternativeName = (Core.Name "nothing"),
+                                    Core.caseAlternativeHandler = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]}))})),
                             Core.bindingTypeScheme = Nothing}],
                         Core.letBody = (Core.TermCases (Core.CaseStatement {
                           Core.caseStatementTypeName = (Core.Name "Optional"),
                           Core.caseStatementDefault = (Just (Core.TermVariable (Core.Name "x"))),
                           Core.caseStatementCases = [
-                            Core.Field {
-                              Core.fieldName = (Core.Name "just"),
-                              Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                            Core.CaseAlternative {
+                              Core.caseAlternativeName = (Core.Name "just"),
+                              Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                                 Core.lambdaParameter = (Core.Name "a"),
                                 Core.lambdaDomain = Nothing,
                                 Core.lambdaBody = (Core.TermApplication (Core.Application {
@@ -2894,9 +2894,9 @@ allTests =
                                   Core.applicationArgument = (Core.TermApplication (Core.Application {
                                     Core.applicationFunction = (Core.TermVariable (Core.Name "_hoist_f_1")),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "a"))}))}))}))},
-                            Core.Field {
-                              Core.fieldName = (Core.Name "nothing"),
-                              Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]}))})),
+                            Core.CaseAlternative {
+                              Core.caseAlternativeName = (Core.Name "nothing"),
+                              Core.caseAlternativeHandler = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]}))})),
                       Core.bindingTypeScheme = Nothing}],
                   Core.letBody = (Core.TermVariable (Core.Name "f"))})))})),
               Testing.testCaseWithMetadataDescription = Nothing,
@@ -2913,15 +2913,15 @@ allTests =
                           Core.caseStatementTypeName = (Core.Name "Optional"),
                           Core.caseStatementDefault = Nothing,
                           Core.caseStatementCases = [
-                            Core.Field {
-                              Core.fieldName = (Core.Name "just"),
-                              Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                            Core.CaseAlternative {
+                              Core.caseAlternativeName = (Core.Name "just"),
+                              Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                                 Core.lambdaParameter = (Core.Name "a"),
                                 Core.lambdaDomain = Nothing,
                                 Core.lambdaBody = (Core.TermVariable (Core.Name "a"))}))},
-                            Core.Field {
-                              Core.fieldName = (Core.Name "nothing"),
-                              Core.fieldTerm = (Core.TermLet (Core.Let {
+                            Core.CaseAlternative {
+                              Core.caseAlternativeName = (Core.Name "nothing"),
+                              Core.caseAlternativeHandler = (Core.TermLet (Core.Let {
                                 Core.letBindings = [
                                   Core.Binding {
                                     Core.bindingName = (Core.Name "b"),
@@ -2934,15 +2934,15 @@ allTests =
                                     Core.caseStatementTypeName = (Core.Name "Result"),
                                     Core.caseStatementDefault = Nothing,
                                     Core.caseStatementCases = [
-                                      Core.Field {
-                                        Core.fieldName = (Core.Name "ok"),
-                                        Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                                      Core.CaseAlternative {
+                                        Core.caseAlternativeName = (Core.Name "ok"),
+                                        Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                                           Core.lambdaParameter = (Core.Name "y"),
                                           Core.lambdaDomain = Nothing,
                                           Core.lambdaBody = (Core.TermVariable (Core.Name "y"))}))},
-                                      Core.Field {
-                                        Core.fieldName = (Core.Name "err"),
-                                        Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]})),
+                                      Core.CaseAlternative {
+                                        Core.caseAlternativeName = (Core.Name "err"),
+                                        Core.caseAlternativeHandler = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]})),
                                   Core.applicationArgument = (Core.TermVariable (Core.Name "b"))}))}))}]})),
                         Core.applicationArgument = (Core.TermVariable (Core.Name "x"))})),
                       Core.bindingTypeScheme = Nothing}],
@@ -2956,15 +2956,15 @@ allTests =
                           Core.caseStatementTypeName = (Core.Name "Optional"),
                           Core.caseStatementDefault = Nothing,
                           Core.caseStatementCases = [
-                            Core.Field {
-                              Core.fieldName = (Core.Name "just"),
-                              Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                            Core.CaseAlternative {
+                              Core.caseAlternativeName = (Core.Name "just"),
+                              Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                                 Core.lambdaParameter = (Core.Name "a"),
                                 Core.lambdaDomain = Nothing,
                                 Core.lambdaBody = (Core.TermVariable (Core.Name "a"))}))},
-                            Core.Field {
-                              Core.fieldName = (Core.Name "nothing"),
-                              Core.fieldTerm = (Core.TermLet (Core.Let {
+                            Core.CaseAlternative {
+                              Core.caseAlternativeName = (Core.Name "nothing"),
+                              Core.caseAlternativeHandler = (Core.TermLet (Core.Let {
                                 Core.letBindings = [
                                   Core.Binding {
                                     Core.bindingName = (Core.Name "b"),
@@ -2980,15 +2980,15 @@ allTests =
                                         Core.caseStatementTypeName = (Core.Name "Result"),
                                         Core.caseStatementDefault = Nothing,
                                         Core.caseStatementCases = [
-                                          Core.Field {
-                                            Core.fieldName = (Core.Name "ok"),
-                                            Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                                          Core.CaseAlternative {
+                                            Core.caseAlternativeName = (Core.Name "ok"),
+                                            Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                                               Core.lambdaParameter = (Core.Name "y"),
                                               Core.lambdaDomain = Nothing,
                                               Core.lambdaBody = (Core.TermVariable (Core.Name "y"))}))},
-                                          Core.Field {
-                                            Core.fieldName = (Core.Name "err"),
-                                            Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]})),
+                                          Core.CaseAlternative {
+                                            Core.caseAlternativeName = (Core.Name "err"),
+                                            Core.caseAlternativeHandler = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]})),
                                       Core.bindingTypeScheme = Nothing}],
                                   Core.letBody = (Core.TermApplication (Core.Application {
                                     Core.applicationFunction = (Core.TermVariable (Core.Name "_hoist_b_body_1")),
@@ -3010,9 +3010,9 @@ allTests =
                           Core.caseStatementTypeName = (Core.Name "Optional"),
                           Core.caseStatementDefault = Nothing,
                           Core.caseStatementCases = [
-                            Core.Field {
-                              Core.fieldName = (Core.Name "just"),
-                              Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                            Core.CaseAlternative {
+                              Core.caseAlternativeName = (Core.Name "just"),
+                              Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                                 Core.lambdaParameter = (Core.Name "a"),
                                 Core.lambdaDomain = Nothing,
                                 Core.lambdaBody = (Core.TermLet (Core.Let {
@@ -3028,19 +3028,19 @@ allTests =
                                       Core.caseStatementTypeName = (Core.Name "Result"),
                                       Core.caseStatementDefault = Nothing,
                                       Core.caseStatementCases = [
-                                        Core.Field {
-                                          Core.fieldName = (Core.Name "ok"),
-                                          Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                                        Core.CaseAlternative {
+                                          Core.caseAlternativeName = (Core.Name "ok"),
+                                          Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                                             Core.lambdaParameter = (Core.Name "y"),
                                             Core.lambdaDomain = Nothing,
                                             Core.lambdaBody = (Core.TermVariable (Core.Name "y"))}))},
-                                        Core.Field {
-                                          Core.fieldName = (Core.Name "err"),
-                                          Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]})),
+                                        Core.CaseAlternative {
+                                          Core.caseAlternativeName = (Core.Name "err"),
+                                          Core.caseAlternativeHandler = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]})),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "b"))}))}))}))},
-                            Core.Field {
-                              Core.fieldName = (Core.Name "nothing"),
-                              Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]})),
+                            Core.CaseAlternative {
+                              Core.caseAlternativeName = (Core.Name "nothing"),
+                              Core.caseAlternativeHandler = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]})),
                         Core.applicationArgument = (Core.TermVariable (Core.Name "x"))})),
                       Core.bindingTypeScheme = Nothing}],
                   Core.letBody = (Core.TermVariable (Core.Name "f"))})))),
@@ -3053,9 +3053,9 @@ allTests =
                           Core.caseStatementTypeName = (Core.Name "Optional"),
                           Core.caseStatementDefault = Nothing,
                           Core.caseStatementCases = [
-                            Core.Field {
-                              Core.fieldName = (Core.Name "just"),
-                              Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                            Core.CaseAlternative {
+                              Core.caseAlternativeName = (Core.Name "just"),
+                              Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                                 Core.lambdaParameter = (Core.Name "a"),
                                 Core.lambdaDomain = Nothing,
                                 Core.lambdaBody = (Core.TermLet (Core.Let {
@@ -3074,22 +3074,22 @@ allTests =
                                           Core.caseStatementTypeName = (Core.Name "Result"),
                                           Core.caseStatementDefault = Nothing,
                                           Core.caseStatementCases = [
-                                            Core.Field {
-                                              Core.fieldName = (Core.Name "ok"),
-                                              Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                                            Core.CaseAlternative {
+                                              Core.caseAlternativeName = (Core.Name "ok"),
+                                              Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                                                 Core.lambdaParameter = (Core.Name "y"),
                                                 Core.lambdaDomain = Nothing,
                                                 Core.lambdaBody = (Core.TermVariable (Core.Name "y"))}))},
-                                            Core.Field {
-                                              Core.fieldName = (Core.Name "err"),
-                                              Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]})),
+                                            Core.CaseAlternative {
+                                              Core.caseAlternativeName = (Core.Name "err"),
+                                              Core.caseAlternativeHandler = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]})),
                                         Core.bindingTypeScheme = Nothing}],
                                     Core.letBody = (Core.TermApplication (Core.Application {
                                       Core.applicationFunction = (Core.TermVariable (Core.Name "_hoist_b_body_1")),
                                       Core.applicationArgument = (Core.TermVariable (Core.Name "b"))}))}))}))}))},
-                            Core.Field {
-                              Core.fieldName = (Core.Name "nothing"),
-                              Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]})),
+                            Core.CaseAlternative {
+                              Core.caseAlternativeName = (Core.Name "nothing"),
+                              Core.caseAlternativeHandler = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]})),
                         Core.applicationArgument = (Core.TermVariable (Core.Name "x"))})),
                       Core.bindingTypeScheme = Nothing}],
                   Core.letBody = (Core.TermVariable (Core.Name "f"))})))})),
@@ -3107,15 +3107,15 @@ allTests =
                           Core.caseStatementTypeName = (Core.Name "Optional"),
                           Core.caseStatementDefault = Nothing,
                           Core.caseStatementCases = [
-                            Core.Field {
-                              Core.fieldName = (Core.Name "just"),
-                              Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                            Core.CaseAlternative {
+                              Core.caseAlternativeName = (Core.Name "just"),
+                              Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                                 Core.lambdaParameter = (Core.Name "y"),
                                 Core.lambdaDomain = Nothing,
                                 Core.lambdaBody = (Core.TermVariable (Core.Name "y"))}))},
-                            Core.Field {
-                              Core.fieldName = (Core.Name "nothing"),
-                              Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]})),
+                            Core.CaseAlternative {
+                              Core.caseAlternativeName = (Core.Name "nothing"),
+                              Core.caseAlternativeHandler = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]})),
                         Core.applicationArgument = (Core.TermVariable (Core.Name "x"))})),
                       Core.bindingTypeScheme = Nothing}],
                   Core.letBody = (Core.TermVariable (Core.Name "f"))})))),
@@ -3128,15 +3128,15 @@ allTests =
                           Core.caseStatementTypeName = (Core.Name "Optional"),
                           Core.caseStatementDefault = Nothing,
                           Core.caseStatementCases = [
-                            Core.Field {
-                              Core.fieldName = (Core.Name "just"),
-                              Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                            Core.CaseAlternative {
+                              Core.caseAlternativeName = (Core.Name "just"),
+                              Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                                 Core.lambdaParameter = (Core.Name "y"),
                                 Core.lambdaDomain = Nothing,
                                 Core.lambdaBody = (Core.TermVariable (Core.Name "y"))}))},
-                            Core.Field {
-                              Core.fieldName = (Core.Name "nothing"),
-                              Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]})),
+                            Core.CaseAlternative {
+                              Core.caseAlternativeName = (Core.Name "nothing"),
+                              Core.caseAlternativeHandler = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]})),
                         Core.applicationArgument = (Core.TermVariable (Core.Name "x"))})),
                       Core.bindingTypeScheme = Nothing}],
                   Core.letBody = (Core.TermVariable (Core.Name "f"))})))})),
@@ -3156,15 +3156,15 @@ allTests =
                             Core.caseStatementTypeName = (Core.Name "Optional"),
                             Core.caseStatementDefault = Nothing,
                             Core.caseStatementCases = [
-                              Core.Field {
-                                Core.fieldName = (Core.Name "just"),
-                                Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                              Core.CaseAlternative {
+                                Core.caseAlternativeName = (Core.Name "just"),
+                                Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                                   Core.lambdaParameter = (Core.Name "y"),
                                   Core.lambdaDomain = Nothing,
                                   Core.lambdaBody = (Core.TermVariable (Core.Name "y"))}))},
-                              Core.Field {
-                                Core.fieldName = (Core.Name "nothing"),
-                                Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]})),
+                              Core.CaseAlternative {
+                                Core.caseAlternativeName = (Core.Name "nothing"),
+                                Core.caseAlternativeHandler = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]})),
                           Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))})),
                       Core.bindingTypeScheme = Nothing}],
                   Core.letBody = (Core.TermVariable (Core.Name "f"))})))),
@@ -3180,15 +3180,15 @@ allTests =
                               Core.caseStatementTypeName = (Core.Name "Optional"),
                               Core.caseStatementDefault = Nothing,
                               Core.caseStatementCases = [
-                                Core.Field {
-                                  Core.fieldName = (Core.Name "just"),
-                                  Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                                Core.CaseAlternative {
+                                  Core.caseAlternativeName = (Core.Name "just"),
+                                  Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                                     Core.lambdaParameter = (Core.Name "y"),
                                     Core.lambdaDomain = Nothing,
                                     Core.lambdaBody = (Core.TermVariable (Core.Name "y"))}))},
-                                Core.Field {
-                                  Core.fieldName = (Core.Name "nothing"),
-                                  Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]})),
+                                Core.CaseAlternative {
+                                  Core.caseAlternativeName = (Core.Name "nothing"),
+                                  Core.caseAlternativeHandler = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]})),
                             Core.bindingTypeScheme = Nothing}],
                         Core.letBody = (Core.TermApplication (Core.Application {
                           Core.applicationFunction = (Core.TermVariable (Core.Name "g")),
@@ -3215,15 +3215,15 @@ allTests =
                               Core.caseStatementTypeName = (Core.Name "Optional"),
                               Core.caseStatementDefault = Nothing,
                               Core.caseStatementCases = [
-                                Core.Field {
-                                  Core.fieldName = (Core.Name "just"),
-                                  Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                                Core.CaseAlternative {
+                                  Core.caseAlternativeName = (Core.Name "just"),
+                                  Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                                     Core.lambdaParameter = (Core.Name "y"),
                                     Core.lambdaDomain = Nothing,
                                     Core.lambdaBody = (Core.TermVariable (Core.Name "y"))}))},
-                                Core.Field {
-                                  Core.fieldName = (Core.Name "nothing"),
-                                  Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]})),
+                                Core.CaseAlternative {
+                                  Core.caseAlternativeName = (Core.Name "nothing"),
+                                  Core.caseAlternativeHandler = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]})),
                             Core.applicationArgument = (Core.TermVariable (Core.Name "a"))}))})),
                         Core.applicationArgument = (Core.TermVariable (Core.Name "x"))})),
                       Core.bindingTypeScheme = Nothing}],
@@ -3240,15 +3240,15 @@ allTests =
                               Core.caseStatementTypeName = (Core.Name "Optional"),
                               Core.caseStatementDefault = Nothing,
                               Core.caseStatementCases = [
-                                Core.Field {
-                                  Core.fieldName = (Core.Name "just"),
-                                  Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                                Core.CaseAlternative {
+                                  Core.caseAlternativeName = (Core.Name "just"),
+                                  Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                                     Core.lambdaParameter = (Core.Name "y"),
                                     Core.lambdaDomain = Nothing,
                                     Core.lambdaBody = (Core.TermVariable (Core.Name "y"))}))},
-                                Core.Field {
-                                  Core.fieldName = (Core.Name "nothing"),
-                                  Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]})),
+                                Core.CaseAlternative {
+                                  Core.caseAlternativeName = (Core.Name "nothing"),
+                                  Core.caseAlternativeHandler = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]})),
                             Core.bindingTypeScheme = Nothing}],
                         Core.letBody = (Core.TermApplication (Core.Application {
                           Core.applicationFunction = (Core.TermLambda (Core.Lambda {
@@ -3277,15 +3277,15 @@ allTests =
                             Core.caseStatementTypeName = (Core.Name "Optional"),
                             Core.caseStatementDefault = Nothing,
                             Core.caseStatementCases = [
-                              Core.Field {
-                                Core.fieldName = (Core.Name "just"),
-                                Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                              Core.CaseAlternative {
+                                Core.caseAlternativeName = (Core.Name "just"),
+                                Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                                   Core.lambdaParameter = (Core.Name "y"),
                                   Core.lambdaDomain = Nothing,
                                   Core.lambdaBody = (Core.TermVariable (Core.Name "y"))}))},
-                              Core.Field {
-                                Core.fieldName = (Core.Name "nothing"),
-                                Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]})),
+                              Core.CaseAlternative {
+                                Core.caseAlternativeName = (Core.Name "nothing"),
+                                Core.caseAlternativeHandler = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]})),
                           Core.applicationArgument = (Core.TermVariable (Core.Name "a"))}))})),
                       Core.bindingTypeScheme = Nothing}],
                   Core.letBody = (Core.TermVariable (Core.Name "f"))})))),
@@ -3301,15 +3301,15 @@ allTests =
                             Core.caseStatementTypeName = (Core.Name "Optional"),
                             Core.caseStatementDefault = Nothing,
                             Core.caseStatementCases = [
-                              Core.Field {
-                                Core.fieldName = (Core.Name "just"),
-                                Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                              Core.CaseAlternative {
+                                Core.caseAlternativeName = (Core.Name "just"),
+                                Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                                   Core.lambdaParameter = (Core.Name "y"),
                                   Core.lambdaDomain = Nothing,
                                   Core.lambdaBody = (Core.TermVariable (Core.Name "y"))}))},
-                              Core.Field {
-                                Core.fieldName = (Core.Name "nothing"),
-                                Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]})),
+                              Core.CaseAlternative {
+                                Core.caseAlternativeName = (Core.Name "nothing"),
+                                Core.caseAlternativeHandler = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]})),
                           Core.applicationArgument = (Core.TermVariable (Core.Name "a"))}))})),
                       Core.bindingTypeScheme = Nothing}],
                   Core.letBody = (Core.TermVariable (Core.Name "f"))})))})),

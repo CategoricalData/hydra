@@ -61,15 +61,15 @@ testGroupForCaseStatements =
               Core.caseStatementTypeName = TestTypes.testTypeSimpleNumberName,
               Core.caseStatementDefault = Nothing,
               Core.caseStatementCases = [
-                Core.Field {
-                  Core.fieldName = (Core.Name "int"),
-                  Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                Core.CaseAlternative {
+                  Core.caseAlternativeName = (Core.Name "int"),
+                  Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "x"),
                     Core.lambdaDomain = Nothing,
                     Core.lambdaBody = (Core.TermVariable (Core.Name "x"))}))},
-                Core.Field {
-                  Core.fieldName = (Core.Name "float"),
-                  Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                Core.CaseAlternative {
+                  Core.caseAlternativeName = (Core.Name "float"),
+                  Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "x"),
                     Core.lambdaDomain = Nothing,
                     Core.lambdaBody = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))}))}]})))),
@@ -89,21 +89,21 @@ testGroupForCaseStatements =
               Core.caseStatementTypeName = TestTypes.testTypeUnionMonomorphicName,
               Core.caseStatementDefault = Nothing,
               Core.caseStatementCases = [
-                Core.Field {
-                  Core.fieldName = (Core.Name "bool"),
-                  Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                Core.CaseAlternative {
+                  Core.caseAlternativeName = (Core.Name "bool"),
+                  Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "_"),
                     Core.lambdaDomain = Nothing,
                     Core.lambdaBody = (Core.TermLiteral (Core.LiteralBoolean True))}))},
-                Core.Field {
-                  Core.fieldName = (Core.Name "string"),
-                  Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                Core.CaseAlternative {
+                  Core.caseAlternativeName = (Core.Name "string"),
+                  Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "_"),
                     Core.lambdaDomain = Nothing,
                     Core.lambdaBody = (Core.TermLiteral (Core.LiteralBoolean False))}))},
-                Core.Field {
-                  Core.fieldName = (Core.Name "unit"),
-                  Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                Core.CaseAlternative {
+                  Core.caseAlternativeName = (Core.Name "unit"),
+                  Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "_"),
                     Core.lambdaDomain = Nothing,
                     Core.lambdaBody = (Core.TermLiteral (Core.LiteralBoolean False))}))}]})))),

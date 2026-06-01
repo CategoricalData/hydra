@@ -173,13 +173,13 @@ encodeType cx g prefixes typ =
       _ -> Left (Errors.ErrorOther (Errors.OtherError (Strings.cat2 "Expected GraphQL-compatible type, found: " (ShowCore.type_ typ))))
 encodeTypeDefinition :: t0 -> Graph.Graph -> M.Map Packaging.ModuleName String -> Packaging.TypeDefinition -> Either Errors.Error Syntax.TypeDefinition
 encodeTypeDefinition cx g prefixes tdef =
-    encodeNamedType cx g prefixes (Packaging.typeDefinitionName tdef) (Core.typeSchemeBody (Packaging.typeDefinitionTypeScheme tdef))
+    encodeNamedType cx g prefixes (Packaging.typeDefinitionName tdef) (Core.typeSchemeBody (Packaging.typeDefinitionBody tdef))
 encodeTypeName :: M.Map Packaging.ModuleName String -> Core.Name -> Syntax.Name
 encodeTypeName prefixes name =
 
       let qualName = Names.qualifyName name
-          local = Packaging.qualifiedNameLocal qualName
-          mns = Packaging.qualifiedNameModuleName qualName
+          local = Util.qualifiedNameLocal qualName
+          mns = Util.qualifiedNameModuleName qualName
           prefix = Maybes.maybe "" (\ns_ -> Maybes.maybe "" (\p -> p) (Maps.lookup ns_ prefixes)) mns
       in (Syntax.Name (Strings.cat2 prefix (sanitize local)))
 encodeUnionFieldType :: t0 -> Graph.Graph -> M.Map Packaging.ModuleName String -> Core.FieldType -> Either Errors.Error Syntax.FieldDefinition
@@ -206,7 +206,7 @@ moduleToGraphql mod defs cx g =
                       ns_,
                       (Logic.ifElse (Equality.equal ns_ modNs) "" (Strings.cat2 (Formatting.sanitizeWithUnderscores Sets.empty (Packaging.unModuleName ns_)) "_")))) namespaces))) (Packaging.moduleName mod) typeDefs
           filePath =
-                  Names.moduleNameToFilePath Util.CaseConventionCamel (Packaging.FileExtension "graphql") (Packaging.moduleName mod)
+                  Names.moduleNameToFilePath Util.CaseConventionCamel (Util.FileExtension "graphql") (Packaging.moduleName mod)
       in (Eithers.bind (Eithers.mapList (\td -> encodeTypeDefinition cx g prefixes td) typeDefs) (\gtdefs -> Right (Maps.fromList (Lists.pure (
         filePath,
         (Serialization.printExpr (Serialization.parenthesize (Serde.documentToExpr (Syntax.Document (Lists.map (\gtdef -> Syntax.DefinitionTypeSystem (Syntax.TypeSystemDefinitionOrExtensionDefinition (Syntax.TypeSystemDefinitionType gtdef))) gtdefs))))))))))

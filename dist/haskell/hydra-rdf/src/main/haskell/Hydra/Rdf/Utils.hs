@@ -14,6 +14,7 @@ import qualified Hydra.Haskell.Lib.Sets as Sets
 import qualified Hydra.Haskell.Lib.Strings as Strings
 import qualified Hydra.Names as Names
 import qualified Hydra.Packaging as Packaging
+import qualified Hydra.Util as Util
 import qualified Hydra.Rdf.Syntax as Syntax
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
@@ -122,8 +123,8 @@ propertyIri :: Core.Name -> Core.Name -> Syntax.Iri
 propertyIri rname fname =
 
       let qualName = Names.qualifyName rname
-          gname = Packaging.qualifiedNameModuleName qualName
-          local_ = Packaging.qualifiedNameLocal qualName
+          gname = Util.qualifiedNameModuleName qualName
+          local_ = Util.qualifiedNameLocal qualName
       in (Syntax.Iri (Strings.cat [
         "urn:",
         (Maybes.maybe "" Packaging.unModuleName gname),

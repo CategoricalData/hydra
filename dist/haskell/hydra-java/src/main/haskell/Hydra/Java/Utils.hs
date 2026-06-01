@@ -719,8 +719,8 @@ nameToJavaName :: Environment.Aliases -> Core.Name -> Syntax.Identifier
 nameToJavaName aliases name =
 
       let qn = Names.qualifyName name
-          ns_ = Packaging.qualifiedNameModuleName qn
-          local = Packaging.qualifiedNameLocal qn
+          ns_ = Util.qualifiedNameModuleName qn
+          local = Util.qualifiedNameLocal qn
       in (Logic.ifElse (isEscaped (Core.unName name)) (Syntax.Identifier (sanitizeJavaName local)) (Maybes.cases ns_ (Syntax.Identifier local) (\gname ->
         let parts =
                 Maybes.cases (Maps.lookup gname (Environment.aliasesPackages aliases)) (Strings.splitOn "." (Packaging.unModuleName gname)) (\pkgName -> Lists.map (\i -> Syntax.unIdentifier i) (Syntax.unPackageName pkgName))
@@ -736,8 +736,8 @@ nameToQualifiedJavaName :: Environment.Aliases -> Bool -> Core.Name -> Maybe Str
 nameToQualifiedJavaName aliases qualify name mlocal =
 
       let qn = Names.qualifyName name
-          ns_ = Packaging.qualifiedNameModuleName qn
-          local = Packaging.qualifiedNameLocal qn
+          ns_ = Util.qualifiedNameModuleName qn
+          local = Util.qualifiedNameLocal qn
           alias =
                   Maybes.cases ns_ Nothing (\n -> Just (Maybes.cases (Maps.lookup n (Environment.aliasesPackages aliases)) (JavaNames.javaPackageName (Strings.splitOn "." (Packaging.unModuleName n))) (\id -> id)))
           pkg =
@@ -859,13 +859,13 @@ variantClassName :: Bool -> Core.Name -> Core.Name -> Core.Name
 variantClassName qualify elName fname =
 
       let qn = Names.qualifyName elName
-          ns_ = Packaging.qualifiedNameModuleName qn
-          local = Packaging.qualifiedNameLocal qn
+          ns_ = Util.qualifiedNameModuleName qn
+          local = Util.qualifiedNameLocal qn
           flocal = Formatting.capitalize (Core.unName fname)
           local1 =
                   Logic.ifElse qualify (Strings.cat2 (Strings.cat2 local ".") flocal) (Logic.ifElse (Equality.equal flocal local) (Strings.cat2 flocal "_") flocal)
-      in (Names.unqualifyName (Packaging.QualifiedName {
-        Packaging.qualifiedNameModuleName = ns_,
-        Packaging.qualifiedNameLocal = local1}))
+      in (Names.unqualifyName (Util.QualifiedName {
+        Util.qualifiedNameModuleName = ns_,
+        Util.qualifiedNameLocal = local1}))
 visitorTypeVariable :: Syntax.ReferenceType
 visitorTypeVariable = javaTypeVariable "r"

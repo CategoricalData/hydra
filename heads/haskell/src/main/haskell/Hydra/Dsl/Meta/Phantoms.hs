@@ -411,7 +411,7 @@ toBinding (TypedBinding name (TypedTerm term)) = Binding name term Nothing
 -- | Convert a phantom-typed term definition to a Definition for use in module definition lists
 -- Example: toDefinition functionArity
 toDefinition :: TypedTermDefinition a -> Definition
-toDefinition (TypedTermDefinition name (TypedTerm term)) = DefinitionTerm $ TermDefinition name Nothing term Nothing
+toDefinition (TypedTermDefinition name (TypedTerm term)) = DefinitionTerm $ TermDefinition name Nothing Nothing term
 
 -- | Convert a phantom-typed term definition to a primitive Definition, using the term body as the
 -- declarative default implementation. The TermSignature describes the primitive's logical type.
@@ -422,7 +422,7 @@ toDefinition (TypedTermDefinition name (TypedTerm term)) = DefinitionTerm $ Term
 -- Example: toPrimitive "logical AND" andSig [] and_
 toPrimitive :: String -> TermSignature -> [String] -> TypedTermDefinition a -> Definition
 toPrimitive description sig comments (TypedTermDefinition name (TypedTerm term)) =
-  DefinitionPrimitive $ PrimitiveDefinition name sig (primitiveMetadata description comments) True True (Just term)
+  DefinitionPrimitive $ PrimitiveDefinition name (primitiveMetadata description comments) sig True True (Just term)
 
 -- | Convert a Name to a primitive Definition with no default implementation. Used for primitives
 -- whose meaning is host-native and not expressible as a Hydra term (e.g. currentUnixTimeSeconds).
@@ -430,7 +430,7 @@ toPrimitive description sig comments (TypedTermDefinition name (TypedTerm term))
 -- Example: toPrimitiveNoDefault "Current UNIX time, in seconds" sig (Name "hydra.lib.math.currentUnixTimeSeconds") []
 toPrimitiveNoDefault :: String -> TermSignature -> Name -> [String] -> Definition
 toPrimitiveNoDefault description sig name comments =
-  DefinitionPrimitive $ PrimitiveDefinition name sig (primitiveMetadata description comments) True True Nothing
+  DefinitionPrimitive $ PrimitiveDefinition name (primitiveMetadata description comments) sig True True Nothing
 
 -- | Build the entity metadata for a primitive from its (always-present) one-line description and
 -- long-form comments. Folds the former PrimitiveDefinition.description/comments fields into
@@ -445,7 +445,7 @@ primitiveMetadata description comments =
 -- | Convert a typed binding to a term Definition for use in module definition lists
 -- Example: toTermDefinition functionArity
 toTermDefinition :: TypedBinding a -> Definition
-toTermDefinition (TypedBinding name (TypedTerm term)) = DefinitionTerm $ TermDefinition name Nothing term Nothing
+toTermDefinition (TypedBinding name (TypedTerm term)) = DefinitionTerm $ TermDefinition name Nothing Nothing term
 
 
 triple :: TypedTerm a -> TypedTerm b -> TypedTerm c -> TypedTerm (a, b, c)

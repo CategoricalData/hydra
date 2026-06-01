@@ -167,8 +167,8 @@ encodeName = def "encodeName" $
     "boundVars">: Pairs.second $
       project CppUtils._CppEnvironment CppUtils._CppEnvironment_boundTypeVariables @@ var "env",
     "qualName">: Names.qualifyName @@ var "name",
-    "mns">: Packaging.qualifiedNameModuleName $ var "qualName",
-    "local">: Packaging.qualifiedNameLocal $ var "qualName",
+    "mns">: Util.qualifiedNameModuleName $ var "qualName",
+    "local">: Util.qualifiedNameLocal $ var "qualName",
     "cppLocal">: sanitizeCppName @@ (Formatting.convertCase @@ Util.caseConventionCamel @@ var "conv" @@ var "local"),
     "cppNs">: lambda "nsVal" $ Strings.intercalate (string "::")
       (Lists.map (Formatting.convertCase @@ Util.caseConventionCamel @@ Util.caseConventionLowerSnake)
@@ -194,8 +194,8 @@ encodeNameQualified = def "encodeNameQualified" $
       Util.moduleNamesFocus
         (project CppUtils._CppEnvironment CppUtils._CppEnvironment_namespaces @@ var "env"),
     "qualName">: Names.qualifyName @@ var "name",
-    "mns">: Packaging.qualifiedNameModuleName $ var "qualName",
-    "local">: Packaging.qualifiedNameLocal $ var "qualName"] $
+    "mns">: Util.qualifiedNameModuleName $ var "qualName",
+    "local">: Util.qualifiedNameLocal $ var "qualName"] $
     Maybes.maybe
       (Logic.ifElse (Equality.equal (var "mns") (just $ var "focusNs"))
         (sanitizeCppName @@ var "local")
@@ -227,7 +227,7 @@ fwdHeaderName = def "fwdHeaderName" $
   doc "Get the forward header name for a namespace" $
   lambda "nsVal" $
     Names.unqualifyName @@
-      (Packaging.qualifiedName (just $ var "nsVal") (string "Fwd"))
+      (Util.qualifiedName (just $ var "nsVal") (string "Fwd"))
 
 -- | Create a namespace declaration wrapping inner declarations
 namespaceDecl :: TypedTermDefinition (ModuleName -> [Cpp.Declaration] -> Cpp.Declaration)

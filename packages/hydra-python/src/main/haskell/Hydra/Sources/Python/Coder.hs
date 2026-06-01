@@ -265,12 +265,12 @@ analyzePythonFunction = def "analyzePythonFunction" $
 --   The encodeBody function is passed in to allow different encoding strategies
 --   (inline vs multiline).
 --   Uses withLambda to extend Graph with the case binding variable.
-caseBlockToExpr :: TypedTermDefinition (InferenceContext -> PyHelpers.PythonEnvironment -> Name -> [FieldType] -> Bool -> (PyHelpers.PythonEnvironment -> Term -> Either Error [Py.Statement]) -> Field -> Either Error Py.CaseBlock)
+caseBlockToExpr :: TypedTermDefinition (InferenceContext -> PyHelpers.PythonEnvironment -> Name -> [FieldType] -> Bool -> (PyHelpers.PythonEnvironment -> Term -> Either Error [Py.Statement]) -> CaseAlternative -> Either Error Py.CaseBlock)
 caseBlockToExpr = def "caseBlockToExpr" $
-  doc "Encode a single case (Field) into a CaseBlock for a match statement" $
+  doc "Encode a single case alternative into a CaseBlock for a match statement" $
   "cx" ~> "env" ~> "tname" ~> "rowType" ~> "isEnum" ~> "encodeBody" ~> "field" ~>
-    "fname" <~ Core.fieldName (var "field") $
-    "fterm" <~ Core.fieldTerm (var "field") $
+    "fname" <~ Core.caseAlternativeName (var "field") $
+    "fterm" <~ Core.caseAlternativeHandler (var "field") $
     -- The field term should be a lambda; strip annotations and type wrappers to extract it.
     -- After case-statement hoisting, field terms may be variable references to hoisted functions
     -- instead of inline lambdas. The default case handles this by synthesizing a lambda wrapper.
@@ -400,7 +400,7 @@ deconflictVariantName = def "deconflictVariantName" $
 --   Such case statements are legal in Hydra, but may lead to variable name collision in Python.
 --   For example: cases _Type Nothing [_Type_list>>: "t" ~> ..., _Type_set>>: "t" ~> ...]
 --   In Python, both branches would bind "t", so we rename them to "t1", "t2", etc.
-deduplicateCaseVariables :: TypedTermDefinition ([Field] -> [Field])
+deduplicateCaseVariables :: TypedTermDefinition ([CaseAlternative] -> [CaseAlternative])
 deduplicateCaseVariables = def "deduplicateCaseVariables" $
   doc "Rewrite case statements to avoid variable name collisions" $
   "cases_" ~>
@@ -409,8 +409,8 @@ deduplicateCaseVariables = def "deduplicateCaseVariables" $
       "state" ~> "field" ~>
         "countByName" <~ Pairs.first (var "state") $
         "done" <~ Pairs.second (var "state") $
-        "fname" <~ Core.fieldName (var "field") $
-        "fterm" <~ Core.fieldTerm (var "field") $
+        "fname" <~ Core.caseAlternativeName (var "field") $
+        "fterm" <~ Core.caseAlternativeHandler (var "field") $
         -- Check if term is a lambda (strip annotations and type wrappers)
         cases _Term (Strip.deannotateAndDetypeTerm @@ var "fterm") (Just $ pair (var "countByName") (Lists.cons (var "field") (var "done"))) [
           _Term_lambda>>: "lam" ~>
@@ -429,12 +429,12 @@ deduplicateCaseVariables = def "deduplicateCaseVariables" $
                 "newBody" <~ (Reduction.alphaConvert @@ var "v" @@ var "v2" @@ var "body") $
                 "newLam" <~ (Core.lambda (var "v2") (var "mdom") (var "newBody")) $
                 "newTerm" <~ (inject _Term _Term_lambda $ var "newLam") $
-                "newField" <~ (Core.field (var "fname") (var "newTerm")) $
+                "newField" <~ (Core.caseAlternative (var "fname") (var "newTerm")) $
                 pair (Maps.insert (var "v") (var "count2") (var "countByName"))
                      (Lists.cons (var "newField") (var "done")))]) $
     -- fold with initial state (empty map, empty list)
     "result" <~ Lists.foldl (var "rewriteCase")
-                  (pair (Maps.empty :: TypedTerm (M.Map Name I.Int32)) (list ([] :: [TypedTerm Field])))
+                  (pair (Maps.empty :: TypedTerm (M.Map Name I.Int32)) (list ([] :: [TypedTerm CaseAlternative])))
                   (var "cases_") $
     Lists.reverse (Pairs.second $ var "result")
 
@@ -470,6 +470,9 @@ eliminateUnitVar = def "eliminateUnitVar" $
     "rewriteField" <~ ("rewrite" ~> "fld" ~>
       Core.field (Core.fieldName $ var "fld")
                  (var "rewrite" @@ Core.fieldTerm (var "fld"))) $
+    "rewriteCaseAlternative" <~ ("rewrite" ~> "alt" ~>
+      Core.caseAlternative (Core.caseAlternativeName $ var "alt")
+                 (var "rewrite" @@ Core.caseAlternativeHandler (var "alt"))) $
     "rewriteBinding" <~ ("rewrite" ~> "bnd" ~>
       Core.binding (Core.bindingName $ var "bnd")
                    (var "rewrite" @@ Core.bindingTerm (var "bnd"))
@@ -504,7 +507,7 @@ eliminateUnitVar = def "eliminateUnitVar" $
             Core.caseStatement
               (Core.caseStatementTypeName $ var "cs")
               (Maybes.map (var "recurse") (Core.caseStatementDefault $ var "cs"))
-              (Lists.map (var "rewriteField" @@ var "recurse") (Core.caseStatementCases $ var "cs")),
+              (Lists.map (var "rewriteCaseAlternative" @@ var "recurse") (Core.caseStatementCases $ var "cs")),
         _Term_let>>: "lt" ~>
           Core.termLet $ Core.let_
             (Lists.map (var "rewriteBinding" @@ var "recurse") (Core.letBindings $ var "lt"))
@@ -994,7 +997,7 @@ encodeDefinition = def "encodeDefinition" $
     cases _Definition (var "def_") Nothing [
       _Definition_term>>: "td" ~>
         "name" <~ (project _TermDefinition _TermDefinition_name @@ var "td") $
-        "term" <~ (project _TermDefinition _TermDefinition_term @@ var "td") $
+        "term" <~ (project _TermDefinition _TermDefinition_body @@ var "td") $
         "typ" <~ Maybes.maybe
           (Core.typeScheme (list ([] :: [TypedTerm Name])) (Core.typeVariable (wrap _Name (string "hydra.core.Unit"))) nothing)
           ("x" ~> var "x")
@@ -1007,7 +1010,7 @@ encodeDefinition = def "encodeDefinition" $
         right $ list [list [var "stmt"]],
       _Definition_type>>: "td" ~>
         "name" <~ (project _TypeDefinition _TypeDefinition_name @@ var "td") $
-        "typ" <~ (Core.typeSchemeBody $ project _TypeDefinition _TypeDefinition_typeScheme @@ var "td") $
+        "typ" <~ (Core.typeSchemeBody $ project _TypeDefinition _TypeDefinition_body @@ var "td") $
         "comment" <<~ (Annotations.getTypeDescription @@ var "cx" @@ (pythonEnvironmentGetGraph @@ var "env") @@ var "typ") $
         "normComment" <~ (Maybes.map Formatting.normalizeComment (var "comment")) $
         encodeTypeAssignment @@ var "cx" @@ var "env" @@ var "name" @@ var "typ" @@ var "normComment"]
@@ -1905,8 +1908,8 @@ encodeUnionEliminationInline = def "encodeUnionEliminationInline" $
     -- Then fold them into a chain of Conditional expressions from right to left
     "encodeBranch" <~ (
       "field" ~>
-        "fname" <~ Core.fieldName (var "field") $
-        "fterm" <~ Core.fieldTerm (var "field") $
+        "fname" <~ Core.caseAlternativeName (var "field") $
+        "fterm" <~ Core.caseAlternativeHandler (var "field") $
         -- Is this variant a unit type?
         "isUnitVariant" <~ (isVariantUnitType @@ var "rt" @@ var "fname") $
         -- Get the Python variant class name (deconflicted to avoid collisions)
@@ -2519,7 +2522,7 @@ gatherMetadata = def "gatherMetadata" $
     "addDef" <~ ("meta" ~> "def" ~>
       cases _Definition (var "def") Nothing [
         _Definition_term>>: "termDef" ~>
-          "term" <~ Packaging.termDefinitionTerm (var "termDef") $
+          "term" <~ Packaging.termDefinitionBody (var "termDef") $
           "typ" <~ Maybes.maybe
             (Core.typeVariable (wrap _Name (string "hydra.core.Unit")))
             (reify Core.typeSchemeBody)
@@ -2529,7 +2532,7 @@ gatherMetadata = def "gatherMetadata" $
           -- Then extend for the term body (isTopLevel=True)
           extendMetaForTerm @@ true @@ var "meta2" @@ var "term",
         _Definition_type>>: "typeDef" ~>
-          "typ" <~ (Core.typeSchemeBody $ Packaging.typeDefinitionTypeScheme (var "typeDef")) $
+          "typ" <~ (Core.typeSchemeBody $ Packaging.typeDefinitionBody (var "typeDef")) $
           -- Set usesName=True for type definitions
           "meta2" <~ (setMetaUsesName @@ var "meta" @@ true) $
           -- Fold extendMetaForType over the type (isTypeDef=True, isTermAnnot=False)
@@ -2604,7 +2607,7 @@ initialMetadata = def "initialMetadata" $
 
 -- | Check if a term is a case statement applied to exactly one argument.
 --   Returns Just (tname, dflt, cases, arg) if so, Nothing otherwise.
-isCaseStatementApplication :: TypedTermDefinition (Term -> Maybe (Name, Maybe Term, [Field], Term))
+isCaseStatementApplication :: TypedTermDefinition (Term -> Maybe (Name, Maybe Term, [CaseAlternative], Term))
 isCaseStatementApplication = def "isCaseStatementApplication" $
   doc "Check if a term is a case statement applied to exactly one argument" $
   "term" ~>
@@ -4266,7 +4269,7 @@ withDefinitions = def "withDefinitions" $
           _Definition_term>>: "td" ~>
             just $ Core.binding
               (project _TermDefinition _TermDefinition_name @@ var "td")
-              (project _TermDefinition _TermDefinition_term @@ var "td")
+              (project _TermDefinition _TermDefinition_body @@ var "td")
               (Maybes.map Scoping.termSignatureToTypeScheme (project _TermDefinition _TermDefinition_signature @@ var "td")),
           _Definition_type>>: constant nothing])
       (var "defs")) $

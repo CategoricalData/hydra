@@ -78,13 +78,13 @@ booleanLiteral v =
         Errors.unexpectedShapeErrorExpected = "boolean",
         Errors.unexpectedShapeErrorActual = (ShowCore.literal v)})))
 -- | Extract a specific case handler from a case statement term
-caseField :: Core.Name -> String -> Graph.Graph -> Core.Term -> Either Errors.Error Core.Field
+caseField :: Core.Name -> String -> Graph.Graph -> Core.Term -> Either Errors.Error Core.CaseAlternative
 caseField name n graph term =
 
       let fieldName = Core.Name n
       in (Eithers.bind (cases name graph term) (\cs ->
         let matching =
-                Lists.find (\f -> Equality.equal (Core.unName (Core.fieldName f)) (Core.unName fieldName)) (Core.caseStatementCases cs)
+                Lists.find (\f -> Equality.equal (Core.unName (Core.caseAlternativeName f)) (Core.unName fieldName)) (Core.caseStatementCases cs)
         in (Maybes.maybe (Left (Errors.ErrorExtraction (Errors.ExtractionErrorUnexpectedShape (Errors.UnexpectedShapeError {
           Errors.unexpectedShapeErrorExpected = "matching case",
           Errors.unexpectedShapeErrorActual = "no matching case"})))) (\mf -> Right mf) matching)))

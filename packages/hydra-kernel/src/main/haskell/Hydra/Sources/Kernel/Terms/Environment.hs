@@ -176,7 +176,7 @@ reorderDefs = define "reorderDefs" $
       @@
       ("d" ~> cases _Definition (var "d") (Just (list ([] :: [TypedTerm Name]))) [
         _Definition_term>>: "td" ~>
-          Sets.toList $ Variables.freeVariablesInTerm @@ (project _TermDefinition _TermDefinition_term @@ var "td")])
+          Sets.toList $ Variables.freeVariablesInTerm @@ (project _TermDefinition _TermDefinition_body @@ var "td")])
       @@ var "termDefsWrapped") $
     Lists.concat (list [var "typeDefs", var "sortedTermDefs"])
 
