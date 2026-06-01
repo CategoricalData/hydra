@@ -72,5 +72,5 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "description": "Type checking failure test cases",
+  "metadata": {"comments": [], "description": "Type checking failure test cases", "seeAlso": []},
   "name": "hydra.test.checking.failures"}

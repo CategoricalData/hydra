@@ -875,5 +875,8 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "description": "Reflection functions for working with term, type, and literal type variants, as well as numeric precision.",
+  "metadata": {
+    "comments": [],
+    "description": "Reflection functions for working with term, type, and literal type variants, as well as numeric precision.",
+    "seeAlso": []},
   "name": "hydra.reflect"}

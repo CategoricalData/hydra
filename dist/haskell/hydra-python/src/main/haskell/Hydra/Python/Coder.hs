@@ -814,7 +814,7 @@ encodePythonModule cx g mod defs0 =
             namespaces = PythonEnvironment.pythonModuleMetadataNamespaces meta0
             commentStmts =
                     Maybes.maybe [] (\c -> [
-                      Utils.commentStatement c]) (Maybes.map Formatting.normalizeComment (Packaging.moduleDescription mod))
+                      Utils.commentStatement c]) (Maybes.map Formatting.normalizeComment (Maybes.bind (Packaging.moduleMetadata mod) (\em -> Packaging.entityMetadataDescription em)))
             importStmts = moduleImports namespaces meta
             tvars =
                     Logic.ifElse (Logic.or isTypeMod (Logic.not useInlineTypeParams)) (PythonEnvironment.pythonModuleMetadataTypeVariables meta) Sets.empty

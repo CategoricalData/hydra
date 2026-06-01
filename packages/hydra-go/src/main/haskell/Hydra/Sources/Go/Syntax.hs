@@ -24,8 +24,8 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = (DefinitionType <$> definitions),
             moduleDependencies = unqualifiedDep <$> [Core.ns],
-            moduleDescription = Just ("A Go syntax model, based on the Go Language Specification retrieved on 2025-02-05"
-      ++ " from https://go.dev/ref/spec")}
+            moduleMetadata = descriptionMetadata (Just ("A Go syntax model, based on the Go Language Specification retrieved on 2025-02-05"
+      ++ " from https://go.dev/ref/spec"))}
   where
     definitions = constructs ++ terminals ++ sourceFile ++ declarations ++ types
       ++ expressions ++ statements ++ miscellaneous

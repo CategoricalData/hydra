@@ -2222,5 +2222,5 @@
                     "parameter": "v"}}}},
             "parameter": "t0"}}}}],
   "dependencies": [{"module": "hydra.encode.core"}, {"module": "hydra.pg.model"}],
-  "description": "Term encoders for hydra.pg.model",
+  "metadata": {"comments": [], "description": "Term encoders for hydra.pg.model", "seeAlso": []},
   "name": "hydra.encode.pg.model"}

@@ -1659,5 +1659,8 @@
         "name": "hydra.python.syntax.FuncTypeComment",
         "typeScheme": {"body": {"wrap": {"variable": "hydra.python.syntax.TypeComment"}}, "variables": []}}}],
   "dependencies": [{"module": "hydra.core"}],
-  "description": "A Python syntax model, tracking the Python 3.14 PEG grammar:\n  https://docs.python.org/3.14/reference/grammar.html",
+  "metadata": {
+    "comments": [],
+    "description": "A Python syntax model, tracking the Python 3.14 PEG grammar:\n  https://docs.python.org/3.14/reference/grammar.html",
+    "seeAlso": []},
   "name": "hydra.python.syntax"}

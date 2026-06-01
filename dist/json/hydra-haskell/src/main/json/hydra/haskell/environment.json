@@ -45,5 +45,5 @@
                         "body": {"literal": {"boolean": {}}}}}}]}}},
           "variables": []}}}],
   "dependencies": [],
-  "description": "Environment types for Haskell code generation",
+  "metadata": {"comments": [], "description": "Environment types for Haskell code generation", "seeAlso": []},
   "name": "hydra.haskell.environment"}

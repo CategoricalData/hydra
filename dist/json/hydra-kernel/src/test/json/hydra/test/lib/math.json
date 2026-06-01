@@ -37746,5 +37746,5 @@
     {"module": "hydra.errors"},
     {"module": "hydra.test.testGraph"},
     {"module": "hydra.testing"}],
-  "description": "Test cases for hydra.lib.math primitives",
+  "metadata": {"comments": [], "description": "Test cases for hydra.lib.math primitives", "seeAlso": []},
   "name": "hydra.test.lib.math"}

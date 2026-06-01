@@ -577,5 +577,5 @@
                     "application": {"argument": {"variable": "hydra.shacl.model.Shape"}, "function": {"variable": "hydra.shacl.model.Definition"}}}}}}},
           "variables": []}}}],
   "dependencies": [{"module": "hydra.rdf.syntax"}, {"module": "hydra.core"}],
-  "description": "A SHACL syntax model. See https://www.w3.org/TR/shacl",
+  "metadata": {"comments": [], "description": "A SHACL syntax model. See https://www.w3.org/TR/shacl", "seeAlso": []},
   "name": "hydra.shacl.model"}

@@ -84,7 +84,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> ([Lexical.ns, moduleName DecodeCore.module_, moduleName EncodeCore.module_, Scoping.ns, Sorting.ns, Strip.ns, Variables.ns] L.++ kernelTypesModuleNames),
-            moduleDescription = Just ("Graph to type environment conversions")}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just ("Graph to type environment conversions"))}
   where
     definitions = [
       toDefinition definitionAsTypeApplicationTerm,

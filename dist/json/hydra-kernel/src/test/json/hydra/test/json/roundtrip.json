@@ -7352,5 +7352,5 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "description": "Round-trip test cases for JSON encoding and decoding",
+  "metadata": {"comments": [], "description": "Round-trip test cases for JSON encoding and decoding", "seeAlso": []},
   "name": "hydra.test.json.roundtrip"}

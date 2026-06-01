@@ -5473,5 +5473,5 @@
                     "typeName": "hydra.core.Term"}},
                 "typeName": "hydra.typed.TypedTerm"}}}}}}],
   "dependencies": [{"module": "hydra.paths"}, {"module": "hydra.typed"}, {"module": "hydra.core"}, {"module": "hydra.dsl.core"}],
-  "description": "DSL functions for hydra.paths",
+  "metadata": {"comments": [], "description": "DSL functions for hydra.paths", "seeAlso": []},
   "name": "hydra.dsl.paths"}

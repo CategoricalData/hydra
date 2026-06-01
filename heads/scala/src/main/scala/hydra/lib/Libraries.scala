@@ -201,13 +201,9 @@ object Libraries:
     hydra.packaging.PrimitiveDefinition(
       name,
       hydra.scoping.typeSchemeToTermSignature(ts),
-      "",
       None,
-      List.empty,
       true,
       true,
-      None,
-      None,
       None)
 
   private def mkPrim(name: String, ts: TypeScheme): Primitive =

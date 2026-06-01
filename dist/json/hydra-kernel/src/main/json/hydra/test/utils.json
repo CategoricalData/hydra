@@ -318,5 +318,5 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "description": "Shared utility functions for test code generation codecs",
+  "metadata": {"comments": [], "description": "Shared utility functions for test code generation codecs", "seeAlso": []},
   "name": "hydra.test.utils"}

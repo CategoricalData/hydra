@@ -89,7 +89,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> ([Serialization.ns] L.++ KernelTypes.kernelTypesModuleNames),
-            moduleDescription = Just "JSON serialization functions using the Hydra AST"}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just "JSON serialization functions using the Hydra AST")}
   where
     ns = ModuleName "hydra.json.writer"
     definitions = [

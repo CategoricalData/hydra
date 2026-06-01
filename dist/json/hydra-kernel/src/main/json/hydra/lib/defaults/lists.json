@@ -4205,5 +4205,8 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "description": "Default term-level implementations of List functions for the Hydra interpreter.",
+  "metadata": {
+    "comments": [],
+    "description": "Default term-level implementations of List functions for the Hydra interpreter.",
+    "seeAlso": []},
   "name": "hydra.lib.defaults.lists"}

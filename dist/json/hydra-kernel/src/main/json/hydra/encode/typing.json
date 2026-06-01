@@ -1106,5 +1106,5 @@
                 "domain": {"variable": "hydra.typing.TypeSubst"},
                 "parameter": "x"}}}}}}],
   "dependencies": [{"module": "hydra.encode.core"}, {"module": "hydra.encode.paths"}, {"module": "hydra.typing"}],
-  "description": "Term encoders for hydra.typing",
+  "metadata": {"comments": [], "description": "Term encoders for hydra.typing", "seeAlso": []},
   "name": "hydra.encode.typing"}

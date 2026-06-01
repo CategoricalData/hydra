@@ -96,6 +96,6 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> (defaultLibModuleNames L.++ kernelTypesModuleNames),
-            moduleDescription = Just ("Registry of default term-level library implementations used by the Hydra interpreter when no native primitive is available.")}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just ("Registry of default term-level library implementations used by the Hydra interpreter when no native primitive is available."))}
   where
     definitions = []

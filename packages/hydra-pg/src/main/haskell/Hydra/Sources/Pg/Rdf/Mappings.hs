@@ -107,7 +107,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> (([RdfUtils.ns] L.++ (kernelTypesModuleNames L.++ [PgModel.ns, PgRdfEnvironment.ns, RdfSyntax.ns, ShaclModel.ns]))),
-            moduleDescription = Just "Mappings from property graph schemas to SHACL shapes graphs, and from property graph data to RDF graphs"}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just "Mappings from property graph schemas to SHACL shapes graphs, and from property graph data to RDF graphs")}
   where
     definitions = [
       toDefinition edgeTypesToPropertyShapes,

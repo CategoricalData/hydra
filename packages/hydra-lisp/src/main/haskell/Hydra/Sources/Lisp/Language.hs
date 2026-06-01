@@ -86,7 +86,7 @@ module_ = Module {
             moduleName = (ModuleName "hydra.lisp.language"),
             moduleDefinitions = [toDefinition lispLanguage, toDefinition lispReservedWords],
             moduleDependencies = Bootstrap.unqualifiedDep <$> ([Lexical.ns] L.++ KernelTypes.kernelTypesModuleNames),
-            moduleDescription = Just "Language constraints and reserved words for Lisp (covering Clojure, Emacs Lisp, Common Lisp, and Scheme)"}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just "Language constraints and reserved words for Lisp (covering Clojure, Emacs Lisp, Common Lisp, and Scheme)")}
 -- | Language constraints for Lisp.
 --
 -- Lisp is dynamically typed, so all Hydra types must be represented at the term level
