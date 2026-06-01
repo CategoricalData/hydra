@@ -1225,6 +1225,72 @@ writeDslJsonPackageSplit distJsonRoot universeModules typeModules = do
     -- per-package selfHash and depHashes that drive transitive
     -- invalidation. See finalizePerPackageDigests and #347.
     finalizePerPackageDigests distJsonRoot
+    -- #405: prune orphaned JSON. This is the last JSON-write step in the
+    -- update-json-main run, so every reconciled package's full emission
+    -- set (type/term from the main pass + these DSL wrappers) is now known.
+    -- The keep-set is the union of both passes' intended outputs; anything
+    -- else under the package's src/main/json is an orphan (e.g. a DSL/type
+    -- module dropped from the emission set, like the stale hydra.dsl.classes
+    -- left by the #397 rename — see #405).
+    reconcilePackageJsonOrphans distJsonRoot (writtenMainModules ++ nonEmpty)
+  where
+    -- The main pass writes every universe module EXCEPT native-generator-owned
+    -- hydra.java.*/hydra.python.* (#344). Mirror that exclusion so the keep-set
+    -- matches what was actually written. (Those two packages are skipped by
+    -- the reconcile below anyway, but keeping the keep-set faithful avoids any
+    -- accidental cross-package surprise.)
+    writtenMainModules = filter (not . isNativeOwnedNs) universeModules
+    isNativeOwnedNs m =
+      let ns = unModuleName (moduleName m)
+      in L.isPrefixOf "hydra.java." ns || L.isPrefixOf "hydra.python." ns
+
+-- | Packages whose dist/json tree is written by a NON-Haskell generator and
+-- so must NOT be reconciled by the Haskell JSON write path. hydra-java and
+-- hydra-python receive their canonical hydra.<lang>.* JSON from the native
+-- Java/Python generators (#344); during the transition the Haskell DSL pass
+-- ALSO writes their hydra.dsl.<lang>.* wrappers into the same dir, so neither
+-- generator alone holds the complete keep-set. Rather than coordinate two
+-- generators over one dir, the Haskell side simply skips them; the native
+-- generators own their own reconcile. Once the legacy Haskell DSL sources for
+-- these packages are deleted (before 0.16), they become cleanly single-writer
+-- and this skip can be revisited. See #405.
+jsonReconcileSkipPackages :: S.Set String
+jsonReconcileSkipPackages = S.fromList ["hydra-java", "hydra-python"]
+
+-- | Files (relative to a package's src/main/json) that legitimately live in
+-- the JSON tree but are NOT written by update-json-main, so the #405
+-- reconcile must never delete them. manifest.json is written per package by
+-- the separate update-json-manifest exe (one namespace listing per package);
+-- it has no owning Module and would otherwise look like an orphan.
+jsonReconcileProtect :: S.Set FilePath
+jsonReconcileProtect = S.fromList [FP.normalise "manifest.json"]
+
+-- | Delete orphaned .json files under each reconciled package's src/main/json.
+--
+-- For every package owning at least one written module (other than the
+-- native-owned skip set), the keep-set is the set of files the JSON write
+-- path emitted for it this run: one <moduleNameToPath ns>.json per routed
+-- module across both the type/term and DSL passes. Any other .json under the
+-- package's src/main/json is an orphan and is deleted; emptied directories
+-- are pruned. Reuses the shared keep-set reconcile (Hydra.Digest, #393/#405).
+--
+-- 'writtenModules' must be the UNION of every module the write path emitted
+-- this run (main write-universe + non-empty DSL wrappers), so one pass's
+-- legitimate output is never mistaken for another pass's orphan.
+reconcilePackageJsonOrphans :: FilePath -> [Module] -> IO ()
+reconcilePackageJsonOrphans distJsonRoot writtenModules = do
+    let groups = groupByPackage writtenModules
+    CM.forM_ groups $ \(pkg, pkgMods) ->
+      CM.unless (S.member pkg jsonReconcileSkipPackages) $ do
+        let pkgJsonDir = distJsonRoot FP.</> pkg FP.</> "src" FP.</> "main" FP.</> "json"
+            keepRel = S.fromList
+              [ FP.normalise (CodeGeneration.moduleNameToPath (moduleName m) ++ ".json")
+              | m <- pkgMods ]
+        orphans <- Digest.reconcileOrphans pkgJsonDir keepRel jsonReconcileProtect
+        CM.unless (null orphans) $ do
+          putStrLn $ "  " ++ pkg ++ ": pruned " ++ show (length orphans)
+            ++ " orphaned JSON file(s) (#405)"
+          mapM_ (\p -> putStrLn $ "    - " ++ p) orphans
 
 -- | For each package owning at least one of the given DSL modules, read its
 -- per-package input digest, add an entry per DSL namespace whose value is
