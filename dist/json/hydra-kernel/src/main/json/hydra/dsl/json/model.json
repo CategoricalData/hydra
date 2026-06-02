@@ -2,23 +2,7 @@
   "definitions": [
     {
       "term": {
-        "name": "hydra.dsl.json.model.valueArray",
-        "signature": {
-          "parameters": [
-            {
-              "isLazy": false,
-              "name": "arg0",
-              "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "A JSON array"}}}],
-                      "body": {"list": {"variable": "hydra.json.model.Value"}}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
-          "result": {
-            "type": {"application": {"argument": {"variable": "hydra.json.model.Value"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -58,10 +42,8 @@
                         "annotation": [{"key": "description", "value": {"literal": {"string": "A JSON array"}}}],
                         "body": {"list": {"variable": "hydra.json.model.Value"}}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.json.model.valueBoolean",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.json.model.valueArray",
         "signature": {
           "parameters": [
             {
@@ -71,13 +53,15 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "A boolean value"}}}],
-                      "body": {"literal": {"boolean": {}}}}},
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "A JSON array"}}}],
+                      "body": {"list": {"variable": "hydra.json.model.Value"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {"application": {"argument": {"variable": "hydra.json.model.Value"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -117,16 +101,26 @@
                         "annotation": [{"key": "description", "value": {"literal": {"string": "A boolean value"}}}],
                         "body": {"literal": {"boolean": {}}}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.json.model.valueNull",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.json.model.valueBoolean",
         "signature": {
-          "parameters": [],
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "A boolean value"}}}],
+                      "body": {"literal": {"boolean": {}}}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {"application": {"argument": {"variable": "hydra.json.model.Value"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {"key": "description", "value": {"literal": {"string": "DSL injection for the null variant of hydra.json.model.Value"}}}],
@@ -152,26 +146,16 @@
                                   "typeName": "hydra.core.Field"}}}],
                           "typeName": "hydra.core.Injection"}}},
                     "typeName": "hydra.core.Term"}},
-                "typeName": "hydra.typed.TypedTerm"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.json.model.valueNumber",
+                "typeName": "hydra.typed.TypedTerm"}}}},
+        "name": "hydra.dsl.json.model.valueNull",
         "signature": {
-          "parameters": [
-            {
-              "isLazy": false,
-              "name": "arg0",
-              "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "A numeric value"}}}],
-                      "body": {"literal": {"decimal": {}}}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+          "parameters": [],
           "result": {
             "type": {"application": {"argument": {"variable": "hydra.json.model.Value"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -211,10 +195,8 @@
                         "annotation": [{"key": "description", "value": {"literal": {"string": "A numeric value"}}}],
                         "body": {"literal": {"decimal": {}}}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.json.model.valueObject",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.json.model.valueNumber",
         "signature": {
           "parameters": [
             {
@@ -224,13 +206,15 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "A JSON object as a set of key/value pairs"}}}],
-                      "body": {"map": {"keys": {"literal": {"string": {}}}, "values": {"variable": "hydra.json.model.Value"}}}}},
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "A numeric value"}}}],
+                      "body": {"literal": {"decimal": {}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {"application": {"argument": {"variable": "hydra.json.model.Value"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -270,10 +254,8 @@
                         "annotation": [{"key": "description", "value": {"literal": {"string": "A JSON object as a set of key/value pairs"}}}],
                         "body": {"map": {"keys": {"literal": {"string": {}}}, "values": {"variable": "hydra.json.model.Value"}}}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.json.model.valueString",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.json.model.valueObject",
         "signature": {
           "parameters": [
             {
@@ -283,13 +265,15 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "A string value"}}}],
-                      "body": {"literal": {"string": {}}}}},
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "A JSON object as a set of key/value pairs"}}}],
+                      "body": {"map": {"keys": {"literal": {"string": {}}}, "values": {"variable": "hydra.json.model.Value"}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {"application": {"argument": {"variable": "hydra.json.model.Value"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -329,7 +313,23 @@
                         "annotation": [{"key": "description", "value": {"literal": {"string": "A string value"}}}],
                         "body": {"literal": {"string": {}}}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}}],
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.json.model.valueString",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "A string value"}}}],
+                      "body": {"literal": {"string": {}}}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+          "result": {
+            "type": {"application": {"argument": {"variable": "hydra.json.model.Value"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}}],
   "dependencies": [{"module": "hydra.json.model"}, {"module": "hydra.typed"}, {"module": "hydra.core"}, {"module": "hydra.dsl.core"}],
   "metadata": {"comments": [], "description": "DSL functions for hydra.json.model", "seeAlso": []},
   "name": "hydra.dsl.json.model"}

@@ -2,9 +2,7 @@
   "definitions": [
     {
       "term": {
-        "name": "hydra.test.unification.allTests",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Test cases for type unification operations"}}}],
             "body": {
@@ -1590,7 +1588,7 @@
                                                                                                                       "term": {
                                                                                                                         "typeApplication": {
                                                                                                                           "body": {"maybe": null},
-                                                                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableMetadata"}}}}}}],
+                                                                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}],
                                                                                                                   "typeName": "hydra.core.TypeScheme"}}}},
                                                                                                           "type": {"variable": "hydra.core.Name"}}},
                                                                                                       "type": {"variable": "hydra.core.TypeScheme"}}},
@@ -1836,7 +1834,7 @@
                                                                                                                       "term": {
                                                                                                                         "typeApplication": {
                                                                                                                           "body": {"maybe": null},
-                                                                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableMetadata"}}}}}}],
+                                                                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}],
                                                                                                                   "typeName": "hydra.core.TypeScheme"}}}},
                                                                                                           "type": {"variable": "hydra.core.Name"}}},
                                                                                                       "type": {"variable": "hydra.core.TypeScheme"}}},
@@ -2078,7 +2076,7 @@
                                                                                                                       "term": {
                                                                                                                         "typeApplication": {
                                                                                                                           "body": {"maybe": null},
-                                                                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableMetadata"}}}}}}],
+                                                                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}],
                                                                                                                   "typeName": "hydra.core.TypeScheme"}}}},
                                                                                                           "type": {"variable": "hydra.core.Name"}}},
                                                                                                       "type": {"variable": "hydra.core.TypeScheme"}}},
@@ -2327,7 +2325,7 @@
                                                                                                                       "term": {
                                                                                                                         "typeApplication": {
                                                                                                                           "body": {"maybe": null},
-                                                                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableMetadata"}}}}}}],
+                                                                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}],
                                                                                                                   "typeName": "hydra.core.TypeScheme"}}}},
                                                                                                           "type": {"variable": "hydra.core.Name"}}},
                                                                                                       "type": {"variable": "hydra.core.TypeScheme"}}},
@@ -2587,7 +2585,7 @@
                                                                                                                       "term": {
                                                                                                                         "typeApplication": {
                                                                                                                           "body": {"maybe": null},
-                                                                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableMetadata"}}}}}}],
+                                                                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}],
                                                                                                                   "typeName": "hydra.core.TypeScheme"}}}},
                                                                                                           "type": {"variable": "hydra.core.Name"}}},
                                                                                                       "type": {"variable": "hydra.core.TypeScheme"}}},
@@ -2840,7 +2838,7 @@
                                                                                                                       "term": {
                                                                                                                         "typeApplication": {
                                                                                                                           "body": {"maybe": null},
-                                                                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableMetadata"}}}}}}],
+                                                                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}],
                                                                                                                   "typeName": "hydra.core.TypeScheme"}}}},
                                                                                                           "type": {"variable": "hydra.core.Name"}}},
                                                                                                       "type": {"variable": "hydra.core.TypeScheme"}}},
@@ -3103,7 +3101,7 @@
                                                                                                                       "term": {
                                                                                                                         "typeApplication": {
                                                                                                                           "body": {"maybe": null},
-                                                                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableMetadata"}}}}}}],
+                                                                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}],
                                                                                                                   "typeName": "hydra.core.TypeScheme"}}}},
                                                                                                           "type": {"variable": "hydra.core.Name"}}},
                                                                                                       "type": {"variable": "hydra.core.TypeScheme"}}},
@@ -3370,7 +3368,7 @@
                                                                                                                       "term": {
                                                                                                                         "typeApplication": {
                                                                                                                           "body": {"maybe": null},
-                                                                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableMetadata"}}}}}}],
+                                                                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}],
                                                                                                                   "typeName": "hydra.core.TypeScheme"}}}},
                                                                                                           "type": {"variable": "hydra.core.Name"}}},
                                                                                                       "type": {"variable": "hydra.core.TypeScheme"}}},
@@ -3655,7 +3653,7 @@
                                                                                                                       "term": {
                                                                                                                         "typeApplication": {
                                                                                                                           "body": {"maybe": null},
-                                                                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableMetadata"}}}}}}],
+                                                                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}],
                                                                                                                   "typeName": "hydra.core.TypeScheme"}}}},
                                                                                                           "type": {"variable": "hydra.core.Name"}}},
                                                                                                       "type": {"variable": "hydra.core.TypeScheme"}}},
@@ -3968,7 +3966,7 @@
                                                                                                                       "term": {
                                                                                                                         "typeApplication": {
                                                                                                                           "body": {"maybe": null},
-                                                                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableMetadata"}}}}}}],
+                                                                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}],
                                                                                                                   "typeName": "hydra.core.TypeScheme"}}}},
                                                                                                           "type": {"variable": "hydra.core.Name"}}},
                                                                                                       "type": {"variable": "hydra.core.TypeScheme"}}},
@@ -4227,7 +4225,7 @@
                                                                                                                       "term": {
                                                                                                                         "typeApplication": {
                                                                                                                           "body": {"maybe": null},
-                                                                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableMetadata"}}}}}}],
+                                                                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}],
                                                                                                                   "typeName": "hydra.core.TypeScheme"}}}},
                                                                                                           "type": {"variable": "hydra.core.Name"}}},
                                                                                                       "type": {"variable": "hydra.core.TypeScheme"}}},
@@ -4523,7 +4521,7 @@
                                                                                                                       "term": {
                                                                                                                         "typeApplication": {
                                                                                                                           "body": {"maybe": null},
-                                                                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableMetadata"}}}}}}],
+                                                                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}],
                                                                                                                   "typeName": "hydra.core.TypeScheme"}}}},
                                                                                                           "type": {"variable": "hydra.core.Name"}}},
                                                                                                       "type": {"variable": "hydra.core.TypeScheme"}}},
@@ -4827,7 +4825,7 @@
                                                                                                                       "term": {
                                                                                                                         "typeApplication": {
                                                                                                                           "body": {"maybe": null},
-                                                                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableMetadata"}}}}}}],
+                                                                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}],
                                                                                                                   "typeName": "hydra.core.TypeScheme"}}}},
                                                                                                           "type": {"variable": "hydra.core.Name"}}},
                                                                                                       "type": {"variable": "hydra.core.TypeScheme"}}},
@@ -5131,7 +5129,7 @@
                                                                                                                       "term": {
                                                                                                                         "typeApplication": {
                                                                                                                           "body": {"maybe": null},
-                                                                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableMetadata"}}}}}}],
+                                                                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}],
                                                                                                                   "typeName": "hydra.core.TypeScheme"}}}},
                                                                                                           "type": {"variable": "hydra.core.Name"}}},
                                                                                                       "type": {"variable": "hydra.core.TypeScheme"}}},
@@ -5409,7 +5407,7 @@
                                                                                                                       "term": {
                                                                                                                         "typeApplication": {
                                                                                                                           "body": {"maybe": null},
-                                                                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableMetadata"}}}}}}],
+                                                                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}],
                                                                                                                   "typeName": "hydra.core.TypeScheme"}}}},
                                                                                                           "type": {"variable": "hydra.core.Name"}}},
                                                                                                       "type": {"variable": "hydra.core.TypeScheme"}}},
@@ -5656,7 +5654,7 @@
                                                                                                                       "term": {
                                                                                                                         "typeApplication": {
                                                                                                                           "body": {"maybe": null},
-                                                                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableMetadata"}}}}}}],
+                                                                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}],
                                                                                                                   "typeName": "hydra.core.TypeScheme"}}}},
                                                                                                           "type": {"variable": "hydra.core.Name"}}},
                                                                                                       "type": {"variable": "hydra.core.TypeScheme"}}},
@@ -5907,7 +5905,7 @@
                                                                                                                       "term": {
                                                                                                                         "typeApplication": {
                                                                                                                           "body": {"maybe": null},
-                                                                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableMetadata"}}}}}}],
+                                                                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}],
                                                                                                                   "typeName": "hydra.core.TypeScheme"}}}},
                                                                                                           "type": {"variable": "hydra.core.Name"}}},
                                                                                                       "type": {"variable": "hydra.core.TypeScheme"}}},
@@ -6122,7 +6120,7 @@
                                                                                                                       "term": {
                                                                                                                         "typeApplication": {
                                                                                                                           "body": {"maybe": null},
-                                                                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableMetadata"}}}}}}],
+                                                                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}],
                                                                                                                   "typeName": "hydra.core.TypeScheme"}}}},
                                                                                                           "type": {"variable": "hydra.core.Name"}}},
                                                                                                       "type": {"variable": "hydra.core.TypeScheme"}}},
@@ -6299,7 +6297,7 @@
                                                                                                                       "term": {
                                                                                                                         "typeApplication": {
                                                                                                                           "body": {"maybe": null},
-                                                                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableMetadata"}}}}}}],
+                                                                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}],
                                                                                                                   "typeName": "hydra.core.TypeScheme"}}}},
                                                                                                           "type": {"variable": "hydra.core.Name"}}},
                                                                                                       "type": {"variable": "hydra.core.TypeScheme"}}},
@@ -8950,7 +8948,9 @@
                   {
                     "name": "cases",
                     "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}],
-                "typeName": "hydra.testing.TestGroup"}}}}}}],
+                "typeName": "hydra.testing.TestGroup"}}}},
+        "name": "hydra.test.unification.allTests",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []}}}],
   "dependencies": [
     {"module": "hydra.unification"},
     {"module": "hydra.lexical"},

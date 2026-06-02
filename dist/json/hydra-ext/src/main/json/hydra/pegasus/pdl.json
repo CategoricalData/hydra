@@ -2,8 +2,7 @@
   "definitions": [
     {
       "type": {
-        "name": "hydra.pegasus.pdl.Annotations",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [
@@ -15,58 +14,55 @@
                 "record": [
                   {"name": "doc", "type": {"maybe": {"literal": {"string": {}}}}},
                   {"name": "deprecated", "type": {"literal": {"boolean": {}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.pegasus.pdl.Annotations"}},
     {
       "type": {
-        "name": "hydra.pegasus.pdl.EnumField",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "name", "type": {"variable": "hydra.pegasus.pdl.EnumFieldName"}},
               {"name": "annotations", "type": {"variable": "hydra.pegasus.pdl.Annotations"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.pegasus.pdl.EnumField"}},
+    {
+      "type": {"body": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}, "name": "hydra.pegasus.pdl.EnumFieldName"}},
     {
       "type": {
-        "name": "hydra.pegasus.pdl.EnumFieldName",
-        "typeScheme": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
-    {
-      "type": {
-        "name": "hydra.pegasus.pdl.EnumSchema",
-        "typeScheme": {
+        "body": {
           "body": {"record": [{"name": "fields", "type": {"list": {"variable": "hydra.pegasus.pdl.EnumField"}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.pegasus.pdl.EnumSchema"}},
     {
-      "type": {"name": "hydra.pegasus.pdl.FieldName", "typeScheme": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
+      "type": {"body": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}, "name": "hydra.pegasus.pdl.FieldName"}},
     {
       "type": {
-        "name": "hydra.pegasus.pdl.NamedSchema",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "qualifiedName", "type": {"variable": "hydra.pegasus.pdl.QualifiedName"}},
               {"name": "type", "type": {"variable": "hydra.pegasus.pdl.NamedSchemaType"}},
               {"name": "annotations", "type": {"variable": "hydra.pegasus.pdl.Annotations"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.pegasus.pdl.NamedSchema"}},
     {
       "type": {
-        "name": "hydra.pegasus.pdl.NamedSchemaType",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "record", "type": {"variable": "hydra.pegasus.pdl.RecordSchema"}},
               {"name": "enum", "type": {"variable": "hydra.pegasus.pdl.EnumSchema"}},
               {"name": "typeref", "type": {"variable": "hydra.pegasus.pdl.Schema"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.pegasus.pdl.NamedSchemaType"}},
+    {"type": {"body": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}, "name": "hydra.pegasus.pdl.Name"}},
     {
-      "type": {"name": "hydra.pegasus.pdl.Name", "typeScheme": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
+      "type": {"body": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}, "name": "hydra.pegasus.pdl.Namespace"}},
     {
-      "type": {"name": "hydra.pegasus.pdl.Namespace", "typeScheme": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
-    {
-      "type": {"name": "hydra.pegasus.pdl.Package", "typeScheme": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
+      "type": {"body": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}, "name": "hydra.pegasus.pdl.Package"}},
     {
       "type": {
-        "name": "hydra.pegasus.pdl.PrimitiveType",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "boolean", "type": {"unit": {}}},
@@ -76,33 +72,31 @@
               {"name": "int", "type": {"unit": {}}},
               {"name": "long", "type": {"unit": {}}},
               {"name": "string", "type": {"unit": {}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.pegasus.pdl.PrimitiveType"}},
+    {
+      "type": {"body": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}, "name": "hydra.pegasus.pdl.PropertyKey"}},
     {
       "type": {
-        "name": "hydra.pegasus.pdl.PropertyKey",
-        "typeScheme": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
-    {
-      "type": {
-        "name": "hydra.pegasus.pdl.Property",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "key", "type": {"variable": "hydra.pegasus.pdl.PropertyKey"}},
               {"name": "value", "type": {"maybe": {"variable": "hydra.json.model.Value"}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.pegasus.pdl.Property"}},
     {
       "type": {
-        "name": "hydra.pegasus.pdl.QualifiedName",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "name", "type": {"variable": "hydra.pegasus.pdl.Name"}},
               {"name": "namespace", "type": {"maybe": {"variable": "hydra.pegasus.pdl.Namespace"}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.pegasus.pdl.QualifiedName"}},
     {
       "type": {
-        "name": "hydra.pegasus.pdl.RecordField",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [
@@ -116,11 +110,11 @@
                   {"name": "optional", "type": {"literal": {"boolean": {}}}},
                   {"name": "default", "type": {"maybe": {"variable": "hydra.json.model.Value"}}},
                   {"name": "annotations", "type": {"variable": "hydra.pegasus.pdl.Annotations"}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.pegasus.pdl.RecordField"}},
     {
       "type": {
-        "name": "hydra.pegasus.pdl.RecordSchema",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "Note: all included schemas must be record schemas"}}}],
@@ -128,11 +122,11 @@
                 "record": [
                   {"name": "fields", "type": {"list": {"variable": "hydra.pegasus.pdl.RecordField"}}},
                   {"name": "includes", "type": {"list": {"variable": "hydra.pegasus.pdl.NamedSchema"}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.pegasus.pdl.RecordSchema"}},
     {
       "type": {
-        "name": "hydra.pegasus.pdl.Schema",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "array", "type": {"variable": "hydra.pegasus.pdl.Schema"}},
@@ -143,22 +137,22 @@
               {"name": "null", "type": {"unit": {}}},
               {"name": "primitive", "type": {"variable": "hydra.pegasus.pdl.PrimitiveType"}},
               {"name": "union", "type": {"variable": "hydra.pegasus.pdl.UnionSchema"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.pegasus.pdl.Schema"}},
     {
       "type": {
-        "name": "hydra.pegasus.pdl.SchemaFile",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "namespace", "type": {"variable": "hydra.pegasus.pdl.Namespace"}},
               {"name": "package", "type": {"maybe": {"variable": "hydra.pegasus.pdl.Package"}}},
               {"name": "imports", "type": {"list": {"variable": "hydra.pegasus.pdl.QualifiedName"}}},
               {"name": "schemas", "type": {"list": {"variable": "hydra.pegasus.pdl.NamedSchema"}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.pegasus.pdl.SchemaFile"}},
     {
       "type": {
-        "name": "hydra.pegasus.pdl.UnionMember",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "Note: annotations are only available for aliased members"}}}],
@@ -167,17 +161,18 @@
                   {"name": "alias", "type": {"maybe": {"variable": "hydra.pegasus.pdl.FieldName"}}},
                   {"name": "value", "type": {"variable": "hydra.pegasus.pdl.Schema"}},
                   {"name": "annotations", "type": {"variable": "hydra.pegasus.pdl.Annotations"}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.pegasus.pdl.UnionMember"}},
     {
       "type": {
-        "name": "hydra.pegasus.pdl.UnionSchema",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [
                 {"key": "description", "value": {"literal": {"string": "Note: unions are not allowed as member types of other unions"}}}],
               "body": {"wrap": {"list": {"variable": "hydra.pegasus.pdl.UnionMember"}}}}},
-          "variables": []}}}],
+          "variables": []},
+        "name": "hydra.pegasus.pdl.UnionSchema"}}],
   "dependencies": [{"module": "hydra.json.model"}, {"module": "hydra.core"}],
   "metadata": {
     "comments": [],

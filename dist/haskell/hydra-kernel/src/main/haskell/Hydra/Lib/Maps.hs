@@ -30,6 +30,15 @@ alter :: Packaging.PrimitiveDefinition
 alter =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.maps.alter"),
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "Alter a value at a key using a function which sees the optional current value."),
+        Packaging.entityMetadataComments = [
+          "alter(f, k, m) applies f to Just(v) when m contains key k with value v, or to Nothing when k is absent. If f returns Just(v'), the binding (k, v') is set in the result; if f returns Nothing, k is removed from the result.",
+          "A single primitive that subsumes insert, delete, and adjust.",
+          "Requires an 'ordering' constraint on the key type.",
+          "Total. Corresponds to Haskell's Data.Map.alter :: Ord k => (Maybe v -> Maybe v) -> k -> Map k v -> Map k v."],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [
           Typing.TypeParameter {
@@ -64,15 +73,6 @@ alter =
           Typing.resultType = (Core.TypeMap (Core.MapType {
             Core.mapTypeKeys = (Core.TypeVariable (Core.Name "k")),
             Core.mapTypeValues = (Core.TypeVariable (Core.Name "v"))}))}},
-      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
-        Packaging.entityMetadataDescription = (Just "Alter a value at a key using a function which sees the optional current value."),
-        Packaging.entityMetadataComments = [
-          "alter(f, k, m) applies f to Just(v) when m contains key k with value v, or to Nothing when k is absent. If f returns Just(v'), the binding (k, v') is set in the result; if f returns Nothing, k is removed from the result.",
-          "A single primitive that subsumes insert, delete, and adjust.",
-          "Requires an 'ordering' constraint on the key type.",
-          "Total. Corresponds to Haskell's Data.Map.alter :: Ord k => (Maybe v -> Maybe v) -> k -> Map k v -> Map k v."],
-        Packaging.entityMetadataSeeAlso = [],
-        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
@@ -80,6 +80,15 @@ bimap :: Packaging.PrimitiveDefinition
 bimap =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.maps.bimap"),
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "Map functions over both the keys and values of a map."),
+        Packaging.entityMetadataComments = [
+          "bimap(fk, fv, m) returns a new map with key fk(k) and value fv(v) for each binding (k, v) in m.",
+          "Key collisions after applying fk are resolved by keeping the last binding encountered (host may differ on collision policy if fk is not injective).",
+          "Requires 'ordering' constraints on both the input and output key types.",
+          "Total. Corresponds to a key-and-value lift of Haskell's Data.Map.fromList . map (\\(k,v) -> (fk k, fv v)) . toList."],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [
           Typing.TypeParameter {
@@ -123,15 +132,6 @@ bimap =
           Typing.resultType = (Core.TypeMap (Core.MapType {
             Core.mapTypeKeys = (Core.TypeVariable (Core.Name "k2")),
             Core.mapTypeValues = (Core.TypeVariable (Core.Name "v2"))}))}},
-      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
-        Packaging.entityMetadataDescription = (Just "Map functions over both the keys and values of a map."),
-        Packaging.entityMetadataComments = [
-          "bimap(fk, fv, m) returns a new map with key fk(k) and value fv(v) for each binding (k, v) in m.",
-          "Key collisions after applying fk are resolved by keeping the last binding encountered (host may differ on collision policy if fk is not injective).",
-          "Requires 'ordering' constraints on both the input and output key types.",
-          "Total. Corresponds to a key-and-value lift of Haskell's Data.Map.fromList . map (\\(k,v) -> (fk k, fv v)) . toList."],
-        Packaging.entityMetadataSeeAlso = [],
-        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
@@ -139,6 +139,14 @@ delete :: Packaging.PrimitiveDefinition
 delete =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.maps.delete"),
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "Remove a key from a map."),
+        Packaging.entityMetadataComments = [
+          "delete(k, m) returns m with the binding for k removed; if k is not present, m is returned unchanged.",
+          "Requires an 'ordering' constraint on the key type.",
+          "Total. Corresponds to Haskell's Data.Map.delete :: Ord k => k -> Map k v -> Map k v."],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [
           Typing.TypeParameter {
@@ -166,14 +174,6 @@ delete =
           Typing.resultType = (Core.TypeMap (Core.MapType {
             Core.mapTypeKeys = (Core.TypeVariable (Core.Name "k")),
             Core.mapTypeValues = (Core.TypeVariable (Core.Name "v"))}))}},
-      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
-        Packaging.entityMetadataDescription = (Just "Remove a key from a map."),
-        Packaging.entityMetadataComments = [
-          "delete(k, m) returns m with the binding for k removed; if k is not present, m is returned unchanged.",
-          "Requires an 'ordering' constraint on the key type.",
-          "Total. Corresponds to Haskell's Data.Map.delete :: Ord k => k -> Map k v -> Map k v."],
-        Packaging.entityMetadataSeeAlso = [],
-        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
@@ -181,6 +181,14 @@ elems :: Packaging.PrimitiveDefinition
 elems =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.maps.elems"),
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "Return the values of a map (in key order)."),
+        Packaging.entityMetadataComments = [
+          "elems(m) returns the values of m as a list, ordered by their keys' ascending order.",
+          "Requires an 'ordering' constraint on the key type.",
+          "Total. Corresponds to Haskell's Data.Map.elems :: Map k v -> [v]."],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [
           Typing.TypeParameter {
@@ -201,14 +209,6 @@ elems =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeList (Core.TypeVariable (Core.Name "v")))}},
-      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
-        Packaging.entityMetadataDescription = (Just "Return the values of a map (in key order)."),
-        Packaging.entityMetadataComments = [
-          "elems(m) returns the values of m as a list, ordered by their keys' ascending order.",
-          "Requires an 'ordering' constraint on the key type.",
-          "Total. Corresponds to Haskell's Data.Map.elems :: Map k v -> [v]."],
-        Packaging.entityMetadataSeeAlso = [],
-        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
@@ -216,6 +216,14 @@ empty :: Packaging.PrimitiveDefinition
 empty =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.maps.empty"),
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "The empty map."),
+        Packaging.entityMetadataComments = [
+          "empty is the map with no bindings.",
+          "Requires an 'ordering' constraint on the key type.",
+          "Total. Corresponds to Haskell's Data.Map.empty :: Map k v."],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [
           Typing.TypeParameter {
@@ -231,14 +239,6 @@ empty =
           Typing.resultType = (Core.TypeMap (Core.MapType {
             Core.mapTypeKeys = (Core.TypeVariable (Core.Name "k")),
             Core.mapTypeValues = (Core.TypeVariable (Core.Name "v"))}))}},
-      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
-        Packaging.entityMetadataDescription = (Just "The empty map."),
-        Packaging.entityMetadataComments = [
-          "empty is the map with no bindings.",
-          "Requires an 'ordering' constraint on the key type.",
-          "Total. Corresponds to Haskell's Data.Map.empty :: Map k v."],
-        Packaging.entityMetadataSeeAlso = [],
-        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
@@ -246,6 +246,14 @@ filter :: Packaging.PrimitiveDefinition
 filter =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.maps.filter"),
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "Filter a map by value."),
+        Packaging.entityMetadataComments = [
+          "filter(p, m) returns the submap of m containing exactly the bindings (k, v) for which p(v) is true.",
+          "Requires an 'ordering' constraint on the key type.",
+          "Total. Corresponds to Haskell's Data.Map.filter :: (v -> Bool) -> Map k v -> Map k v."],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [
           Typing.TypeParameter {
@@ -275,14 +283,6 @@ filter =
           Typing.resultType = (Core.TypeMap (Core.MapType {
             Core.mapTypeKeys = (Core.TypeVariable (Core.Name "k")),
             Core.mapTypeValues = (Core.TypeVariable (Core.Name "v"))}))}},
-      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
-        Packaging.entityMetadataDescription = (Just "Filter a map by value."),
-        Packaging.entityMetadataComments = [
-          "filter(p, m) returns the submap of m containing exactly the bindings (k, v) for which p(v) is true.",
-          "Requires an 'ordering' constraint on the key type.",
-          "Total. Corresponds to Haskell's Data.Map.filter :: (v -> Bool) -> Map k v -> Map k v."],
-        Packaging.entityMetadataSeeAlso = [],
-        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
@@ -290,6 +290,14 @@ filterWithKey :: Packaging.PrimitiveDefinition
 filterWithKey =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.maps.filterWithKey"),
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "Filter a map by key and value."),
+        Packaging.entityMetadataComments = [
+          "filterWithKey(p, m) returns the submap of m containing exactly the bindings (k, v) for which p(k, v) is true.",
+          "Requires an 'ordering' constraint on the key type.",
+          "Total. Corresponds to Haskell's Data.Map.filterWithKey :: (k -> v -> Bool) -> Map k v -> Map k v."],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [
           Typing.TypeParameter {
@@ -321,14 +329,6 @@ filterWithKey =
           Typing.resultType = (Core.TypeMap (Core.MapType {
             Core.mapTypeKeys = (Core.TypeVariable (Core.Name "k")),
             Core.mapTypeValues = (Core.TypeVariable (Core.Name "v"))}))}},
-      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
-        Packaging.entityMetadataDescription = (Just "Filter a map by key and value."),
-        Packaging.entityMetadataComments = [
-          "filterWithKey(p, m) returns the submap of m containing exactly the bindings (k, v) for which p(k, v) is true.",
-          "Requires an 'ordering' constraint on the key type.",
-          "Total. Corresponds to Haskell's Data.Map.filterWithKey :: (k -> v -> Bool) -> Map k v -> Map k v."],
-        Packaging.entityMetadataSeeAlso = [],
-        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
@@ -336,6 +336,14 @@ findWithDefault :: Packaging.PrimitiveDefinition
 findWithDefault =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.maps.findWithDefault"),
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "Look up a value with a default if the key is absent."),
+        Packaging.entityMetadataComments = [
+          "findWithDefault(def, k, m) returns the value bound to k in m if k is present, or def otherwise. Equivalent to maybe(def, identity, lookup(k, m)).",
+          "Requires an 'ordering' constraint on the key type.",
+          "Total. Corresponds to Haskell's Data.Map.findWithDefault :: Ord k => v -> k -> Map k v -> v."],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [
           Typing.TypeParameter {
@@ -366,14 +374,6 @@ findWithDefault =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeVariable (Core.Name "v"))}},
-      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
-        Packaging.entityMetadataDescription = (Just "Look up a value with a default if the key is absent."),
-        Packaging.entityMetadataComments = [
-          "findWithDefault(def, k, m) returns the value bound to k in m if k is present, or def otherwise. Equivalent to maybe(def, identity, lookup(k, m)).",
-          "Requires an 'ordering' constraint on the key type.",
-          "Total. Corresponds to Haskell's Data.Map.findWithDefault :: Ord k => v -> k -> Map k v -> v."],
-        Packaging.entityMetadataSeeAlso = [],
-        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
@@ -381,6 +381,14 @@ fromList :: Packaging.PrimitiveDefinition
 fromList =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.maps.fromList"),
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "Build a map from a list of key-value pairs."),
+        Packaging.entityMetadataComments = [
+          "fromList(xs) returns the map containing exactly the bindings in xs. If xs contains multiple entries for the same key, the last one wins (matching Haskell's fromList behavior).",
+          "Requires an 'ordering' constraint on the key type.",
+          "Total. Corresponds to Haskell's Data.Map.fromList :: Ord k => [(k, v)] -> Map k v."],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [
           Typing.TypeParameter {
@@ -403,14 +411,6 @@ fromList =
           Typing.resultType = (Core.TypeMap (Core.MapType {
             Core.mapTypeKeys = (Core.TypeVariable (Core.Name "k")),
             Core.mapTypeValues = (Core.TypeVariable (Core.Name "v"))}))}},
-      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
-        Packaging.entityMetadataDescription = (Just "Build a map from a list of key-value pairs."),
-        Packaging.entityMetadataComments = [
-          "fromList(xs) returns the map containing exactly the bindings in xs. If xs contains multiple entries for the same key, the last one wins (matching Haskell's fromList behavior).",
-          "Requires an 'ordering' constraint on the key type.",
-          "Total. Corresponds to Haskell's Data.Map.fromList :: Ord k => [(k, v)] -> Map k v."],
-        Packaging.entityMetadataSeeAlso = [],
-        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
@@ -418,6 +418,14 @@ insert :: Packaging.PrimitiveDefinition
 insert =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.maps.insert"),
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "Insert a key-value pair into a map."),
+        Packaging.entityMetadataComments = [
+          "insert(k, v, m) returns m with the binding (k, v) added or updated. If k is already present, its value is overwritten.",
+          "Requires an 'ordering' constraint on the key type.",
+          "Total. Corresponds to Haskell's Data.Map.insert :: Ord k => k -> v -> Map k v -> Map k v."],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [
           Typing.TypeParameter {
@@ -450,14 +458,6 @@ insert =
           Typing.resultType = (Core.TypeMap (Core.MapType {
             Core.mapTypeKeys = (Core.TypeVariable (Core.Name "k")),
             Core.mapTypeValues = (Core.TypeVariable (Core.Name "v"))}))}},
-      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
-        Packaging.entityMetadataDescription = (Just "Insert a key-value pair into a map."),
-        Packaging.entityMetadataComments = [
-          "insert(k, v, m) returns m with the binding (k, v) added or updated. If k is already present, its value is overwritten.",
-          "Requires an 'ordering' constraint on the key type.",
-          "Total. Corresponds to Haskell's Data.Map.insert :: Ord k => k -> v -> Map k v -> Map k v."],
-        Packaging.entityMetadataSeeAlso = [],
-        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
@@ -465,6 +465,14 @@ keys :: Packaging.PrimitiveDefinition
 keys =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.maps.keys"),
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "Return the keys of a map (in key order)."),
+        Packaging.entityMetadataComments = [
+          "keys(m) returns the keys of m as a list, in ascending order.",
+          "Requires an 'ordering' constraint on the key type.",
+          "Total. Corresponds to Haskell's Data.Map.keys :: Map k v -> [k]."],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [
           Typing.TypeParameter {
@@ -485,14 +493,6 @@ keys =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeList (Core.TypeVariable (Core.Name "k")))}},
-      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
-        Packaging.entityMetadataDescription = (Just "Return the keys of a map (in key order)."),
-        Packaging.entityMetadataComments = [
-          "keys(m) returns the keys of m as a list, in ascending order.",
-          "Requires an 'ordering' constraint on the key type.",
-          "Total. Corresponds to Haskell's Data.Map.keys :: Map k v -> [k]."],
-        Packaging.entityMetadataSeeAlso = [],
-        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
@@ -500,6 +500,14 @@ lookup :: Packaging.PrimitiveDefinition
 lookup =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.maps.lookup"),
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "Look up a value in a map by key, returning Nothing if absent."),
+        Packaging.entityMetadataComments = [
+          "lookup(k, m) returns Just(v) where v is the value bound to k in m, or Nothing if k is not present.",
+          "Requires an 'ordering' constraint on the key type.",
+          "Total. Corresponds to Haskell's Data.Map.lookup :: Ord k => k -> Map k v -> Maybe v."],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [
           Typing.TypeParameter {
@@ -525,14 +533,6 @@ lookup =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeMaybe (Core.TypeVariable (Core.Name "v")))}},
-      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
-        Packaging.entityMetadataDescription = (Just "Look up a value in a map by key, returning Nothing if absent."),
-        Packaging.entityMetadataComments = [
-          "lookup(k, m) returns Just(v) where v is the value bound to k in m, or Nothing if k is not present.",
-          "Requires an 'ordering' constraint on the key type.",
-          "Total. Corresponds to Haskell's Data.Map.lookup :: Ord k => k -> Map k v -> Maybe v."],
-        Packaging.entityMetadataSeeAlso = [],
-        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
@@ -540,6 +540,14 @@ map :: Packaging.PrimitiveDefinition
 map =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.maps.map"),
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "Map a function over the values of a map."),
+        Packaging.entityMetadataComments = [
+          "map(f, m) returns a map with the same keys as m and value f(v) for each binding (k, v).",
+          "Requires an 'ordering' constraint on the key type.",
+          "Total. Corresponds to Haskell's Data.Map.map :: (v -> w) -> Map k v -> Map k w / fmap on Map."],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [
           Typing.TypeParameter {
@@ -572,14 +580,6 @@ map =
           Typing.resultType = (Core.TypeMap (Core.MapType {
             Core.mapTypeKeys = (Core.TypeVariable (Core.Name "k")),
             Core.mapTypeValues = (Core.TypeVariable (Core.Name "v2"))}))}},
-      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
-        Packaging.entityMetadataDescription = (Just "Map a function over the values of a map."),
-        Packaging.entityMetadataComments = [
-          "map(f, m) returns a map with the same keys as m and value f(v) for each binding (k, v).",
-          "Requires an 'ordering' constraint on the key type.",
-          "Total. Corresponds to Haskell's Data.Map.map :: (v -> w) -> Map k v -> Map k w / fmap on Map."],
-        Packaging.entityMetadataSeeAlso = [],
-        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
@@ -587,6 +587,14 @@ mapKeys :: Packaging.PrimitiveDefinition
 mapKeys =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.maps.mapKeys"),
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "Map a function over the keys of a map."),
+        Packaging.entityMetadataComments = [
+          "mapKeys(f, m) returns a map where each binding (k, v) becomes (f(k), v). If f maps multiple keys to the same image, key collisions are resolved by keeping the binding with the greater original key (matching Haskell's mapKeys behavior).",
+          "Requires 'ordering' constraints on both the input and output key types.",
+          "Total. Corresponds to Haskell's Data.Map.mapKeys :: (Ord k1, Ord k2) => (k1 -> k2) -> Map k1 v -> Map k2 v."],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [
           Typing.TypeParameter {
@@ -620,14 +628,6 @@ mapKeys =
           Typing.resultType = (Core.TypeMap (Core.MapType {
             Core.mapTypeKeys = (Core.TypeVariable (Core.Name "k2")),
             Core.mapTypeValues = (Core.TypeVariable (Core.Name "v"))}))}},
-      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
-        Packaging.entityMetadataDescription = (Just "Map a function over the keys of a map."),
-        Packaging.entityMetadataComments = [
-          "mapKeys(f, m) returns a map where each binding (k, v) becomes (f(k), v). If f maps multiple keys to the same image, key collisions are resolved by keeping the binding with the greater original key (matching Haskell's mapKeys behavior).",
-          "Requires 'ordering' constraints on both the input and output key types.",
-          "Total. Corresponds to Haskell's Data.Map.mapKeys :: (Ord k1, Ord k2) => (k1 -> k2) -> Map k1 v -> Map k2 v."],
-        Packaging.entityMetadataSeeAlso = [],
-        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
@@ -635,6 +635,14 @@ member :: Packaging.PrimitiveDefinition
 member =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.maps.member"),
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "Test whether a key is present in a map."),
+        Packaging.entityMetadataComments = [
+          "member(k, m) returns true iff k is a key in m.",
+          "Requires an 'ordering' constraint on the key type.",
+          "Total. Corresponds to Haskell's Data.Map.member :: Ord k => k -> Map k v -> Bool."],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [
           Typing.TypeParameter {
@@ -660,14 +668,6 @@ member =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeLiteral Core.LiteralTypeBoolean)}},
-      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
-        Packaging.entityMetadataDescription = (Just "Test whether a key is present in a map."),
-        Packaging.entityMetadataComments = [
-          "member(k, m) returns true iff k is a key in m.",
-          "Requires an 'ordering' constraint on the key type.",
-          "Total. Corresponds to Haskell's Data.Map.member :: Ord k => k -> Map k v -> Bool."],
-        Packaging.entityMetadataSeeAlso = [],
-        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
@@ -675,6 +675,14 @@ null :: Packaging.PrimitiveDefinition
 null =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.maps.null"),
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "Test whether a map is empty."),
+        Packaging.entityMetadataComments = [
+          "null(m) returns true iff m has no bindings.",
+          "Requires an 'ordering' constraint on the key type.",
+          "Total. Corresponds to Haskell's Data.Map.null :: Map k v -> Bool."],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [
           Typing.TypeParameter {
@@ -695,14 +703,6 @@ null =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeLiteral Core.LiteralTypeBoolean)}},
-      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
-        Packaging.entityMetadataDescription = (Just "Test whether a map is empty."),
-        Packaging.entityMetadataComments = [
-          "null(m) returns true iff m has no bindings.",
-          "Requires an 'ordering' constraint on the key type.",
-          "Total. Corresponds to Haskell's Data.Map.null :: Map k v -> Bool."],
-        Packaging.entityMetadataSeeAlso = [],
-        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
@@ -710,6 +710,14 @@ singleton :: Packaging.PrimitiveDefinition
 singleton =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.maps.singleton"),
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "Construct a map with a single key-value pair."),
+        Packaging.entityMetadataComments = [
+          "singleton(k, v) returns the map containing exactly the binding (k, v).",
+          "Requires an 'ordering' constraint on the key type.",
+          "Total. Corresponds to Haskell's Data.Map.singleton :: k -> v -> Map k v."],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [
           Typing.TypeParameter {
@@ -735,14 +743,6 @@ singleton =
           Typing.resultType = (Core.TypeMap (Core.MapType {
             Core.mapTypeKeys = (Core.TypeVariable (Core.Name "k")),
             Core.mapTypeValues = (Core.TypeVariable (Core.Name "v"))}))}},
-      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
-        Packaging.entityMetadataDescription = (Just "Construct a map with a single key-value pair."),
-        Packaging.entityMetadataComments = [
-          "singleton(k, v) returns the map containing exactly the binding (k, v).",
-          "Requires an 'ordering' constraint on the key type.",
-          "Total. Corresponds to Haskell's Data.Map.singleton :: k -> v -> Map k v."],
-        Packaging.entityMetadataSeeAlso = [],
-        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
@@ -750,6 +750,14 @@ size :: Packaging.PrimitiveDefinition
 size =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.maps.size"),
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "Return the number of key-value pairs in a map."),
+        Packaging.entityMetadataComments = [
+          "size(m) returns the number of bindings in m as an int32.",
+          "Requires an 'ordering' constraint on the key type.",
+          "Total. Corresponds to Haskell's Data.Map.size :: Map k v -> Int (with narrowing to int32)."],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [
           Typing.TypeParameter {
@@ -770,14 +778,6 @@ size =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}},
-      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
-        Packaging.entityMetadataDescription = (Just "Return the number of key-value pairs in a map."),
-        Packaging.entityMetadataComments = [
-          "size(m) returns the number of bindings in m as an int32.",
-          "Requires an 'ordering' constraint on the key type.",
-          "Total. Corresponds to Haskell's Data.Map.size :: Map k v -> Int (with narrowing to int32)."],
-        Packaging.entityMetadataSeeAlso = [],
-        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
@@ -785,6 +785,14 @@ toList :: Packaging.PrimitiveDefinition
 toList =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.maps.toList"),
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "Convert a map to a list of key-value pairs (in key order)."),
+        Packaging.entityMetadataComments = [
+          "toList(m) returns the bindings of m as a list of (key, value) pairs, in ascending key order.",
+          "Requires an 'ordering' constraint on the key type.",
+          "Total. Corresponds to Haskell's Data.Map.toList :: Map k v -> [(k, v)]."],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [
           Typing.TypeParameter {
@@ -807,14 +815,6 @@ toList =
           Typing.resultType = (Core.TypeList (Core.TypePair (Core.PairType {
             Core.pairTypeFirst = (Core.TypeVariable (Core.Name "k")),
             Core.pairTypeSecond = (Core.TypeVariable (Core.Name "v"))})))}},
-      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
-        Packaging.entityMetadataDescription = (Just "Convert a map to a list of key-value pairs (in key order)."),
-        Packaging.entityMetadataComments = [
-          "toList(m) returns the bindings of m as a list of (key, value) pairs, in ascending key order.",
-          "Requires an 'ordering' constraint on the key type.",
-          "Total. Corresponds to Haskell's Data.Map.toList :: Map k v -> [(k, v)]."],
-        Packaging.entityMetadataSeeAlso = [],
-        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
@@ -822,6 +822,14 @@ union :: Packaging.PrimitiveDefinition
 union =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.maps.union"),
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "Compute the union of two maps; the first map's bindings take precedence on key collision."),
+        Packaging.entityMetadataComments = [
+          "union(m1, m2) returns the map containing all bindings from m1 plus the bindings of m2 whose keys are not in m1. On key collision, the binding from m1 is preferred.",
+          "Requires an 'ordering' constraint on the key type.",
+          "Total. Corresponds to Haskell's Data.Map.union :: Ord k => Map k v -> Map k v -> Map k v."],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [
           Typing.TypeParameter {
@@ -851,14 +859,6 @@ union =
           Typing.resultType = (Core.TypeMap (Core.MapType {
             Core.mapTypeKeys = (Core.TypeVariable (Core.Name "k")),
             Core.mapTypeValues = (Core.TypeVariable (Core.Name "v"))}))}},
-      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
-        Packaging.entityMetadataDescription = (Just "Compute the union of two maps; the first map's bindings take precedence on key collision."),
-        Packaging.entityMetadataComments = [
-          "union(m1, m2) returns the map containing all bindings from m1 plus the bindings of m2 whose keys are not in m1. On key collision, the binding from m1 is preferred.",
-          "Requires an 'ordering' constraint on the key type.",
-          "Total. Corresponds to Haskell's Data.Map.union :: Ord k => Map k v -> Map k v -> Map k v."],
-        Packaging.entityMetadataSeeAlso = [],
-        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}

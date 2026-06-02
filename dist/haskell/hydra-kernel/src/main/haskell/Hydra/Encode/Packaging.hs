@@ -8,7 +8,6 @@ import qualified Hydra.Encode.Typing as Typing
 import qualified Hydra.Haskell.Lib.Lists as Lists
 import qualified Hydra.Haskell.Lib.Maybes as Maybes
 import qualified Hydra.Packaging as Packaging
-import qualified Hydra.Util as Util
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 -- | Encoder for hydra.packaging.Definition
@@ -49,18 +48,6 @@ definitionReference x =
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "primitive"),
           Core.fieldTerm = (EncodeCore.name v0)}})
--- | Encoder for hydra.packaging.LifecycleInfo
-entityLifecycle :: Packaging.LifecycleInfo -> Core.Term
-entityLifecycle x =
-    Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.packaging.LifecycleInfo"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "availableSince"),
-          Core.fieldTerm = ((\opt -> Core.TermMaybe (Maybes.map version opt)) (Packaging.entityLifecycleAvailableSince x))},
-        Core.Field {
-          Core.fieldName = (Core.Name "deprecatedSince"),
-          Core.fieldTerm = ((\opt -> Core.TermMaybe (Maybes.map version opt)) (Packaging.entityLifecycleDeprecatedSince x))}]})
 -- | Encoder for hydra.packaging.EntityMetadata
 entityMetadata :: Packaging.EntityMetadata -> Core.Term
 entityMetadata x =
@@ -78,7 +65,7 @@ entityMetadata x =
           Core.fieldTerm = ((\xs -> Core.TermList (Lists.map entityReference xs)) (Packaging.entityMetadataSeeAlso x))},
         Core.Field {
           Core.fieldName = (Core.Name "lifecycle"),
-          Core.fieldTerm = ((\opt -> Core.TermMaybe (Maybes.map entityLifecycle opt)) (Packaging.entityMetadataLifecycle x))}]})
+          Core.fieldTerm = ((\opt -> Core.TermMaybe (Maybes.map lifecycleInfo opt)) (Packaging.entityMetadataLifecycle x))}]})
 -- | Encoder for hydra.packaging.EntityReference
 entityReference :: Packaging.EntityReference -> Core.Term
 entityReference x =
@@ -98,12 +85,18 @@ entityReference x =
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "definition"),
           Core.fieldTerm = (definitionReference v0)}})
--- | Encoder for hydra.packaging.FileExtension
-fileExtension :: Util.FileExtension -> Core.Term
-fileExtension x =
-    Core.TermWrap (Core.WrappedTerm {
-      Core.wrappedTermTypeName = (Core.Name "hydra.packaging.FileExtension"),
-      Core.wrappedTermBody = ((\x2 -> Core.TermLiteral (Core.LiteralString x2)) (Util.unFileExtension x))})
+-- | Encoder for hydra.packaging.LifecycleInfo
+lifecycleInfo :: Packaging.LifecycleInfo -> Core.Term
+lifecycleInfo x =
+    Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.packaging.LifecycleInfo"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "availableSince"),
+          Core.fieldTerm = ((\opt -> Core.TermMaybe (Maybes.map version opt)) (Packaging.lifecycleInfoAvailableSince x))},
+        Core.Field {
+          Core.fieldName = (Core.Name "deprecatedSince"),
+          Core.fieldTerm = ((\opt -> Core.TermMaybe (Maybes.map version opt)) (Packaging.lifecycleInfoDeprecatedSince x))}]})
 -- | Encoder for hydra.packaging.Module
 module_ :: Packaging.Module -> Core.Term
 module_ x =
@@ -169,22 +162,13 @@ packageDependency x =
           Core.fieldTerm = (packageName (Packaging.packageDependencyName x))},
         Core.Field {
           Core.fieldName = (Core.Name "version"),
-          Core.fieldTerm = (packageVersionSpecifier (Packaging.packageDependencyVersion x))}]})
+          Core.fieldTerm = (versionSpecifier (Packaging.packageDependencyVersion x))}]})
 -- | Encoder for hydra.packaging.PackageName
 packageName :: Packaging.PackageName -> Core.Term
 packageName x =
     Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.packaging.PackageName"),
       Core.wrappedTermBody = ((\x2 -> Core.TermLiteral (Core.LiteralString x2)) (Packaging.unPackageName x))})
--- | Encoder for hydra.packaging.VersionSpecifier
-packageVersionSpecifier :: Packaging.VersionSpecifier -> Core.Term
-packageVersionSpecifier x =
-    case x of
-      Packaging.VersionSpecifierAny -> Core.TermInject (Core.Injection {
-        Core.injectionTypeName = (Core.Name "hydra.packaging.VersionSpecifier"),
-        Core.injectionField = Core.Field {
-          Core.fieldName = (Core.Name "any"),
-          Core.fieldTerm = Core.TermUnit}})
 -- | Encoder for hydra.packaging.PrimitiveDefinition
 primitiveDefinition :: Packaging.PrimitiveDefinition -> Core.Term
 primitiveDefinition x =
@@ -195,11 +179,11 @@ primitiveDefinition x =
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (EncodeCore.name (Packaging.primitiveDefinitionName x))},
         Core.Field {
-          Core.fieldName = (Core.Name "signature"),
-          Core.fieldTerm = (Typing.termSignature (Packaging.primitiveDefinitionSignature x))},
-        Core.Field {
           Core.fieldName = (Core.Name "metadata"),
           Core.fieldTerm = ((\opt -> Core.TermMaybe (Maybes.map entityMetadata opt)) (Packaging.primitiveDefinitionMetadata x))},
+        Core.Field {
+          Core.fieldName = (Core.Name "signature"),
+          Core.fieldTerm = (Typing.termSignature (Packaging.primitiveDefinitionSignature x))},
         Core.Field {
           Core.fieldName = (Core.Name "isPure"),
           Core.fieldTerm = ((\x2 -> Core.TermLiteral (Core.LiteralBoolean x2)) (Packaging.primitiveDefinitionIsPure x))},
@@ -209,18 +193,6 @@ primitiveDefinition x =
         Core.Field {
           Core.fieldName = (Core.Name "defaultImplementation"),
           Core.fieldTerm = ((\opt -> Core.TermMaybe (Maybes.map EncodeCore.term opt)) (Packaging.primitiveDefinitionDefaultImplementation x))}]})
--- | Encoder for hydra.packaging.QualifiedName
-qualifiedName :: Util.QualifiedName -> Core.Term
-qualifiedName x =
-    Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.packaging.QualifiedName"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "moduleName"),
-          Core.fieldTerm = ((\opt -> Core.TermMaybe (Maybes.map moduleName opt)) (Util.qualifiedNameModuleName x))},
-        Core.Field {
-          Core.fieldName = (Core.Name "local"),
-          Core.fieldTerm = ((\x2 -> Core.TermLiteral (Core.LiteralString x2)) (Util.qualifiedNameLocal x))}]})
 -- | Encoder for hydra.packaging.TermDefinition
 termDefinition :: Packaging.TermDefinition -> Core.Term
 termDefinition x =
@@ -234,11 +206,11 @@ termDefinition x =
           Core.fieldName = (Core.Name "metadata"),
           Core.fieldTerm = ((\opt -> Core.TermMaybe (Maybes.map entityMetadata opt)) (Packaging.termDefinitionMetadata x))},
         Core.Field {
-          Core.fieldName = (Core.Name "term"),
-          Core.fieldTerm = (EncodeCore.term (Packaging.termDefinitionBody x))},
-        Core.Field {
           Core.fieldName = (Core.Name "signature"),
-          Core.fieldTerm = ((\opt -> Core.TermMaybe (Maybes.map Typing.termSignature opt)) (Packaging.termDefinitionSignature x))}]})
+          Core.fieldTerm = ((\opt -> Core.TermMaybe (Maybes.map Typing.termSignature opt)) (Packaging.termDefinitionSignature x))},
+        Core.Field {
+          Core.fieldName = (Core.Name "body"),
+          Core.fieldTerm = (EncodeCore.term (Packaging.termDefinitionBody x))}]})
 -- | Encoder for hydra.packaging.TypeDefinition
 typeDefinition :: Packaging.TypeDefinition -> Core.Term
 typeDefinition x =
@@ -252,7 +224,7 @@ typeDefinition x =
           Core.fieldName = (Core.Name "metadata"),
           Core.fieldTerm = ((\opt -> Core.TermMaybe (Maybes.map entityMetadata opt)) (Packaging.typeDefinitionMetadata x))},
         Core.Field {
-          Core.fieldName = (Core.Name "typeScheme"),
+          Core.fieldName = (Core.Name "body"),
           Core.fieldTerm = (EncodeCore.typeScheme (Packaging.typeDefinitionBody x))}]})
 -- | Encoder for hydra.packaging.Version
 version :: Packaging.Version -> Core.Term
@@ -260,3 +232,12 @@ version x =
     Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.packaging.Version"),
       Core.wrappedTermBody = ((\x2 -> Core.TermLiteral (Core.LiteralString x2)) (Packaging.unVersion x))})
+-- | Encoder for hydra.packaging.VersionSpecifier
+versionSpecifier :: Packaging.VersionSpecifier -> Core.Term
+versionSpecifier x =
+    case x of
+      Packaging.VersionSpecifierAny -> Core.TermInject (Core.Injection {
+        Core.injectionTypeName = (Core.Name "hydra.packaging.VersionSpecifier"),
+        Core.injectionField = Core.Field {
+          Core.fieldName = (Core.Name "any"),
+          Core.fieldTerm = Core.TermUnit}})

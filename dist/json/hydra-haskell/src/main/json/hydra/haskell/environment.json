@@ -2,8 +2,7 @@
   "definitions": [
     {
       "type": {
-        "name": "hydra.haskell.environment.HaskellModuleMetadata",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [
@@ -43,7 +42,8 @@
                             "key": "description",
                             "value": {"literal": {"string": "Whether the module uses Data.Set (S.Set, S.fromList, S.empty)"}}}],
                         "body": {"literal": {"boolean": {}}}}}}]}}},
-          "variables": []}}}],
+          "variables": []},
+        "name": "hydra.haskell.environment.HaskellModuleMetadata"}}],
   "dependencies": [],
   "metadata": {"comments": [], "description": "Environment types for Haskell code generation", "seeAlso": []},
   "name": "hydra.haskell.environment"}

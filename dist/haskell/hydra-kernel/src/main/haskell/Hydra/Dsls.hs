@@ -129,8 +129,8 @@ dslModule cx graph mod =
       Packaging.moduleDefinitions = (Lists.map (\b -> Packaging.DefinitionTerm (Packaging.TermDefinition {
         Packaging.termDefinitionName = (Core.bindingName b),
         Packaging.termDefinitionMetadata = Nothing,
-        Packaging.termDefinitionBody = (Core.bindingTerm b),
-        Packaging.termDefinitionSignature = (Maybes.map Scoping.typeSchemeToTermSignature (Core.bindingTypeScheme b))})) (deduplicateBindings (Lists.concat dslBindings)))})))))
+        Packaging.termDefinitionSignature = (Maybes.map Scoping.typeSchemeToTermSignature (Core.bindingTypeScheme b)),
+        Packaging.termDefinitionBody = (Core.bindingTerm b)})) (deduplicateBindings (Lists.concat dslBindings)))})))))
 -- | Generate a DSL module name from a source module name
 dslModuleName :: Packaging.ModuleName -> Packaging.ModuleName
 dslModuleName ns =

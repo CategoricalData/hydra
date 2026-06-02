@@ -2,8 +2,7 @@
   "definitions": [
     {
       "type": {
-        "name": "hydra.workflow.HydraSchemaSpec",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [
@@ -28,11 +27,11 @@
                             "value": {
                               "literal": {"string": "The name of the top-level type; all data which passes through the workflow will be instances of this type"}}}],
                         "body": {"variable": "hydra.core.Name"}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.workflow.HydraSchemaSpec"}},
     {
       "type": {
-        "name": "hydra.workflow.SchemaSpec",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [
@@ -62,11 +61,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "A schema which will be provided within the workflow"}}}],
                         "body": {"unit": {}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.workflow.SchemaSpec"}},
     {
       "type": {
-        "name": "hydra.workflow.TransformWorkflow",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [
@@ -101,7 +100,8 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The destination directory"}}}],
                         "body": {"literal": {"string": {}}}}}}]}}},
-          "variables": []}}}],
+          "variables": []},
+        "name": "hydra.workflow.TransformWorkflow"}}],
   "dependencies": [{"module": "hydra.graph"}, {"module": "hydra.packaging"}, {"module": "hydra.core"}],
   "metadata": {"comments": [], "description": "A model for Hydra transformation workflows", "seeAlso": []},
   "name": "hydra.workflow"}

@@ -472,8 +472,8 @@ public final class Phantoms {
         return new Definition.Term(new TermDefinition(
             tb.name,
             Maybe.<EntityMetadata>nothing(),
-            tb.term.value,
-            Maybe.<TermSignature>nothing()));
+            Maybe.<TermSignature>nothing(),
+            tb.term.value));
     }
 
     /** Build a Definition directly: namespace + localName + term, no TypedBinding. */
@@ -482,8 +482,8 @@ public final class Phantoms {
         return new Definition.Term(new TermDefinition(
             fqName,
             Maybe.<EntityMetadata>nothing(),
-            term.value,
-            Maybe.<TermSignature>nothing()));
+            Maybe.<TermSignature>nothing(),
+            term.value));
     }
 
     /** Build a Definition with a pre-computed TypeScheme (used for hydra.java.coder). */
@@ -493,7 +493,7 @@ public final class Phantoms {
         return new Definition.Term(new TermDefinition(
             fqName,
             Maybe.<EntityMetadata>nothing(),
-            term.value,
-            Maybe.<TermSignature>just(Scoping.typeSchemeToTermSignature(ts))));
+            Maybe.<TermSignature>just(Scoping.typeSchemeToTermSignature(ts)),
+            term.value));
     }
 }

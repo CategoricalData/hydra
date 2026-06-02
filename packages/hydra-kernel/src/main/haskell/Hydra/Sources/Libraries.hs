@@ -677,6 +677,6 @@ standardLibraries = [
 
 standardLibrary :: ModuleName -> [Primitive] -> Library
 standardLibrary ns prims = Library {
-  libraryNamespace = ns,
+  libraryName = ns,
   libraryPrefix = L.drop (L.length ("hydra.lib." :: String)) $ unModuleName ns,
   libraryPrimitives = prims}

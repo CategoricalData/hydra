@@ -67,6 +67,12 @@ comparisonLessThan =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "lessThan"),
         Core.fieldTerm = Core.TermUnit}}))
+-- | DSL constructor for the hydra.util.FileExtension wrapper
+fileExtension :: Typed.TypedTerm String -> Typed.TypedTerm Util.FileExtension
+fileExtension x =
+    Typed.TypedTerm (Core.TermWrap (Core.WrappedTerm {
+      Core.wrappedTermTypeName = (Core.Name "hydra.util.FileExtension"),
+      Core.wrappedTermBody = (Typed.unTypedTerm x)}))
 -- | DSL constructor for hydra.util.ModuleNames
 moduleNames :: Typed.TypedTerm (Packaging.ModuleName, n) -> Typed.TypedTerm (M.Map Packaging.ModuleName n) -> Typed.TypedTerm (Util.ModuleNames n)
 moduleNames focus mapping =
@@ -143,20 +149,6 @@ precisionBits x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "bits"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
--- | DSL constructor for hydra.util.FileExtension
-fileExtension :: Typed.TypedTerm String -> Typed.TypedTerm Util.FileExtension
-fileExtension x =
-    Typed.TypedTerm (Core.TermWrap (Core.WrappedTerm {
-      Core.wrappedTermTypeName = (Core.Name "hydra.util.FileExtension"),
-      Core.wrappedTermBody = (Typed.unTypedTerm x)}))
--- | DSL accessor for unwrapping hydra.util.FileExtension
-unFileExtension :: Typed.TypedTerm Util.FileExtension -> Typed.TypedTerm String
-unFileExtension x =
-    Typed.TypedTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermProject (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.util.FileExtension"),
-        Core.projectionFieldName = (Core.Name "")})),
-      Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL constructor for hydra.util.QualifiedName
 qualifiedName :: Typed.TypedTerm (Maybe Packaging.ModuleName) -> Typed.TypedTerm String -> Typed.TypedTerm Util.QualifiedName
 qualifiedName moduleName local =
@@ -184,4 +176,42 @@ qualifiedNameModuleName x =
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.util.QualifiedName"),
         Core.projectionFieldName = (Core.Name "moduleName")})),
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
+-- | DSL updater for the local field of hydra.util.QualifiedName
+qualifiedNameWithLocal :: Typed.TypedTerm Util.QualifiedName -> Typed.TypedTerm String -> Typed.TypedTerm Util.QualifiedName
+qualifiedNameWithLocal original newVal =
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.util.QualifiedName"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "moduleName"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.util.QualifiedName"),
+              Core.projectionFieldName = (Core.Name "moduleName")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "local"),
+          Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
+-- | DSL updater for the moduleName field of hydra.util.QualifiedName
+qualifiedNameWithModuleName :: Typed.TypedTerm Util.QualifiedName -> Typed.TypedTerm (Maybe Packaging.ModuleName) -> Typed.TypedTerm Util.QualifiedName
+qualifiedNameWithModuleName original newVal =
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.util.QualifiedName"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "moduleName"),
+          Core.fieldTerm = (Typed.unTypedTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "local"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.util.QualifiedName"),
+              Core.projectionFieldName = (Core.Name "local")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+-- | DSL accessor for the body of hydra.util.FileExtension
+unFileExtension :: Typed.TypedTerm Util.FileExtension -> Typed.TypedTerm String
+unFileExtension x =
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.util.FileExtension")),
       Core.applicationArgument = (Typed.unTypedTerm x)}))

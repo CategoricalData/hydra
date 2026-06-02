@@ -206,7 +206,9 @@ inferGraphTypes fcx0 bindings0 g0 =
 inferInGraphContext :: Typing.InferenceContext -> Graph.Graph -> Core.Term -> Either Errors.Error Typing.InferenceResult
 inferInGraphContext fcx cx term = inferTypeOfTerm fcx cx term "single term"
 -- | Infer types for multiple terms, propagating class constraints from sub-expressions
-inferMany :: Typing.InferenceContext -> Graph.Graph -> [(Core.Term, String)] -> Either Errors.Error (([Core.Term], ([Core.Type], (Typing.TypeSubst, (M.Map Core.Name Core.TypeVariableConstraints)))), Typing.InferenceContext)
+inferMany :: Typing.InferenceContext -> Graph.Graph -> [(Core.Term, String)] -> Either Errors.Error (
+  ([Core.Term], ([Core.Type], (Typing.TypeSubst, (M.Map Core.Name Core.TypeVariableConstraints)))),
+  Typing.InferenceContext)
 inferMany fcx cx pairs =
 
       let emptyResult = Right (([], ([], (Substitution.idTypeSubst, Maps.empty))), fcx)
@@ -972,7 +974,9 @@ inferTypeOfWrappedTerm fcx cx wt =
               Typing.typeConstraintRight = ityp,
               Typing.typeConstraintComment = "schema type of wrapper"}]) (\mcResult -> Right mcResult))))))
 -- | Infer types for temporary let bindings (Either version)
-inferTypesOfTemporaryBindings :: Typing.InferenceContext -> Graph.Graph -> [Core.Binding] -> Either Errors.Error (([Core.Term], ([Core.Type], (Typing.TypeSubst, (M.Map Core.Name Core.TypeVariableConstraints)))), Typing.InferenceContext)
+inferTypesOfTemporaryBindings :: Typing.InferenceContext -> Graph.Graph -> [Core.Binding] -> Either Errors.Error (
+  ([Core.Term], ([Core.Type], (Typing.TypeSubst, (M.Map Core.Name Core.TypeVariableConstraints)))),
+  Typing.InferenceContext)
 inferTypesOfTemporaryBindings fcx cx bins =
 
       let emptyResult = Right (([], ([], (Substitution.idTypeSubst, Maps.empty))), fcx)

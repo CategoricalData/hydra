@@ -30,17 +30,6 @@ isAlphaNum :: Packaging.PrimitiveDefinition
 isAlphaNum =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.chars.isAlphaNum"),
-      Packaging.primitiveDefinitionSignature = Typing.TermSignature {
-        Typing.termSignatureTypeParameters = [],
-        Typing.termSignatureParameters = [
-          Typing.Parameter {
-            Typing.parameterName = (Core.Name "arg0"),
-            Typing.parameterDescription = Nothing,
-            Typing.parameterType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
-            Typing.parameterIsLazy = False}],
-        Typing.termSignatureResult = Typing.Result {
-          Typing.resultDescription = Nothing,
-          Typing.resultType = (Core.TypeLiteral Core.LiteralTypeBoolean)}},
       Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
         Packaging.entityMetadataDescription = (Just "Check whether a character is alphanumeric."),
         Packaging.entityMetadataComments = [
@@ -50,13 +39,6 @@ isAlphaNum =
           "Total. Corresponds to Haskell's Data.Char.isAlphaNum :: Char -> Bool."],
         Packaging.entityMetadataSeeAlso = [],
         Packaging.entityMetadataLifecycle = Nothing})),
-      Packaging.primitiveDefinitionIsPure = True,
-      Packaging.primitiveDefinitionIsTotal = True,
-      Packaging.primitiveDefinitionDefaultImplementation = Nothing}
-isLower :: Packaging.PrimitiveDefinition
-isLower =
-    Packaging.PrimitiveDefinition {
-      Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.chars.isLower"),
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [],
         Typing.termSignatureParameters = [
@@ -68,6 +50,13 @@ isLower =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeLiteral Core.LiteralTypeBoolean)}},
+      Packaging.primitiveDefinitionIsPure = True,
+      Packaging.primitiveDefinitionIsTotal = True,
+      Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+isLower :: Packaging.PrimitiveDefinition
+isLower =
+    Packaging.PrimitiveDefinition {
+      Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.chars.isLower"),
       Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
         Packaging.entityMetadataDescription = (Just "Check whether a character is lowercase."),
         Packaging.entityMetadataComments = [
@@ -77,13 +66,6 @@ isLower =
           "Total. Corresponds to Haskell's Data.Char.isLower :: Char -> Bool."],
         Packaging.entityMetadataSeeAlso = [],
         Packaging.entityMetadataLifecycle = Nothing})),
-      Packaging.primitiveDefinitionIsPure = True,
-      Packaging.primitiveDefinitionIsTotal = True,
-      Packaging.primitiveDefinitionDefaultImplementation = Nothing}
-isSpace :: Packaging.PrimitiveDefinition
-isSpace =
-    Packaging.PrimitiveDefinition {
-      Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.chars.isSpace"),
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [],
         Typing.termSignatureParameters = [
@@ -95,6 +77,13 @@ isSpace =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeLiteral Core.LiteralTypeBoolean)}},
+      Packaging.primitiveDefinitionIsPure = True,
+      Packaging.primitiveDefinitionIsTotal = True,
+      Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+isSpace :: Packaging.PrimitiveDefinition
+isSpace =
+    Packaging.PrimitiveDefinition {
+      Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.chars.isSpace"),
       Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
         Packaging.entityMetadataDescription = (Just "Check whether a character is a whitespace character."),
         Packaging.entityMetadataComments = [
@@ -103,13 +92,6 @@ isSpace =
           "Total. Corresponds to Haskell's Data.Char.isSpace :: Char -> Bool."],
         Packaging.entityMetadataSeeAlso = [],
         Packaging.entityMetadataLifecycle = Nothing})),
-      Packaging.primitiveDefinitionIsPure = True,
-      Packaging.primitiveDefinitionIsTotal = True,
-      Packaging.primitiveDefinitionDefaultImplementation = Nothing}
-isUpper :: Packaging.PrimitiveDefinition
-isUpper =
-    Packaging.PrimitiveDefinition {
-      Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.chars.isUpper"),
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [],
         Typing.termSignatureParameters = [
@@ -121,6 +103,13 @@ isUpper =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeLiteral Core.LiteralTypeBoolean)}},
+      Packaging.primitiveDefinitionIsPure = True,
+      Packaging.primitiveDefinitionIsTotal = True,
+      Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+isUpper :: Packaging.PrimitiveDefinition
+isUpper =
+    Packaging.PrimitiveDefinition {
+      Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.chars.isUpper"),
       Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
         Packaging.entityMetadataDescription = (Just "Check whether a character is uppercase."),
         Packaging.entityMetadataComments = [
@@ -130,13 +119,6 @@ isUpper =
           "Total. Corresponds to Haskell's Data.Char.isUpper :: Char -> Bool."],
         Packaging.entityMetadataSeeAlso = [],
         Packaging.entityMetadataLifecycle = Nothing})),
-      Packaging.primitiveDefinitionIsPure = True,
-      Packaging.primitiveDefinitionIsTotal = True,
-      Packaging.primitiveDefinitionDefaultImplementation = Nothing}
-toLower :: Packaging.PrimitiveDefinition
-toLower =
-    Packaging.PrimitiveDefinition {
-      Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.chars.toLower"),
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [],
         Typing.termSignatureParameters = [
@@ -147,7 +129,14 @@ toLower =
             Typing.parameterIsLazy = False}],
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
-          Typing.resultType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}},
+          Typing.resultType = (Core.TypeLiteral Core.LiteralTypeBoolean)}},
+      Packaging.primitiveDefinitionIsPure = True,
+      Packaging.primitiveDefinitionIsTotal = True,
+      Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+toLower :: Packaging.PrimitiveDefinition
+toLower =
+    Packaging.PrimitiveDefinition {
+      Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.chars.toLower"),
       Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
         Packaging.entityMetadataDescription = (Just "Convert a character to lowercase."),
         Packaging.entityMetadataComments = [
@@ -157,13 +146,6 @@ toLower =
           "Total. Corresponds to Haskell's Data.Char.toLower :: Char -> Char."],
         Packaging.entityMetadataSeeAlso = [],
         Packaging.entityMetadataLifecycle = Nothing})),
-      Packaging.primitiveDefinitionIsPure = True,
-      Packaging.primitiveDefinitionIsTotal = True,
-      Packaging.primitiveDefinitionDefaultImplementation = Nothing}
-toUpper :: Packaging.PrimitiveDefinition
-toUpper =
-    Packaging.PrimitiveDefinition {
-      Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.chars.toUpper"),
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [],
         Typing.termSignatureParameters = [
@@ -175,6 +157,13 @@ toUpper =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}},
+      Packaging.primitiveDefinitionIsPure = True,
+      Packaging.primitiveDefinitionIsTotal = True,
+      Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+toUpper :: Packaging.PrimitiveDefinition
+toUpper =
+    Packaging.PrimitiveDefinition {
+      Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.chars.toUpper"),
       Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
         Packaging.entityMetadataDescription = (Just "Convert a character to uppercase."),
         Packaging.entityMetadataComments = [
@@ -184,6 +173,17 @@ toUpper =
           "Total. Corresponds to Haskell's Data.Char.toUpper :: Char -> Char."],
         Packaging.entityMetadataSeeAlso = [],
         Packaging.entityMetadataLifecycle = Nothing})),
+      Packaging.primitiveDefinitionSignature = Typing.TermSignature {
+        Typing.termSignatureTypeParameters = [],
+        Typing.termSignatureParameters = [
+          Typing.Parameter {
+            Typing.parameterName = (Core.Name "arg0"),
+            Typing.parameterDescription = Nothing,
+            Typing.parameterType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
+            Typing.parameterIsLazy = False}],
+        Typing.termSignatureResult = Typing.Result {
+          Typing.resultDescription = Nothing,
+          Typing.resultType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}},
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}

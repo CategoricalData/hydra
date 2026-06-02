@@ -2,16 +2,7 @@
   "definitions": [
     {
       "term": {
-        "name": "hydra.lib.defaults.maybes.apply",
-        "signature": {
-          "parameters": [
-            {"isLazy": false, "name": "arg0", "type": {"variable": "t0"}},
-            {"isLazy": false, "name": "arg1", "type": {"variable": "t1"}},
-            {"isLazy": false, "name": "arg2", "type": {"variable": "hydra.core.Term"}},
-            {"isLazy": false, "name": "arg3", "type": {"variable": "hydra.core.Term"}}],
-          "result": {"type": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "hydra.core.Term"}}}},
-          "typeParameters": [{"constraints": [], "name": "t0"}, {"constraints": [], "name": "t1"}]},
-        "term": {
+        "body": {
           "typeLambda": {
             "body": {
               "typeLambda": {
@@ -33,8 +24,7 @@
                                           "cases": {
                                             "cases": [
                                               {
-                                                "name": "maybe",
-                                                "term": {
+                                                "handler": {
                                                   "lambda": {
                                                     "body": {
                                                       "application": {
@@ -43,8 +33,7 @@
                                                           "cases": {
                                                             "cases": [
                                                               {
-                                                                "name": "maybe",
-                                                                "term": {
+                                                                "handler": {
                                                                   "lambda": {
                                                                     "body": {
                                                                       "typeApplication": {
@@ -95,7 +84,8 @@
                                                                             "type": {"variable": "hydra.errors.Error"}}},
                                                                         "type": {"variable": "hydra.core.Term"}}},
                                                                     "domain": {"maybe": {"variable": "hydra.core.Term"}},
-                                                                    "parameter": "mx"}}}],
+                                                                    "parameter": "mx"}},
+                                                                "name": "maybe"}],
                                                             "default": {
                                                               "typeApplication": {
                                                                 "body": {
@@ -124,7 +114,8 @@
                                                                 "type": {"variable": "hydra.core.Term"}}},
                                                             "typeName": "hydra.core.Term"}}}},
                                                     "domain": {"maybe": {"variable": "hydra.core.Term"}},
-                                                    "parameter": "mf"}}}],
+                                                    "parameter": "mf"}},
+                                                "name": "maybe"}],
                                             "default": {
                                               "typeApplication": {
                                                 "body": {
@@ -161,10 +152,8 @@
                         "domain": {"variable": "t0"},
                         "parameter": "cx"}}}},
                 "parameter": "t1"}},
-            "parameter": "t0"}}}},
-    {
-      "term": {
-        "name": "hydra.lib.defaults.maybes.bind",
+            "parameter": "t0"}},
+        "name": "hydra.lib.defaults.maybes.apply",
         "signature": {
           "parameters": [
             {"isLazy": false, "name": "arg0", "type": {"variable": "t0"}},
@@ -172,8 +161,10 @@
             {"isLazy": false, "name": "arg2", "type": {"variable": "hydra.core.Term"}},
             {"isLazy": false, "name": "arg3", "type": {"variable": "hydra.core.Term"}}],
           "result": {"type": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "hydra.core.Term"}}}},
-          "typeParameters": [{"constraints": [], "name": "t0"}, {"constraints": [], "name": "t1"}]},
-        "term": {
+          "typeParameters": [{"constraints": [], "name": "t0"}, {"constraints": [], "name": "t1"}]}}},
+    {
+      "term": {
+        "body": {
           "typeLambda": {
             "body": {
               "typeLambda": {
@@ -195,8 +186,7 @@
                                           "cases": {
                                             "cases": [
                                               {
-                                                "name": "maybe",
-                                                "term": {
+                                                "handler": {
                                                   "lambda": {
                                                     "body": {
                                                       "typeApplication": {
@@ -235,7 +225,8 @@
                                                             "type": {"variable": "hydra.errors.Error"}}},
                                                         "type": {"variable": "hydra.core.Term"}}},
                                                     "domain": {"maybe": {"variable": "hydra.core.Term"}},
-                                                    "parameter": "m"}}}],
+                                                    "parameter": "m"}},
+                                                "name": "maybe"}],
                                             "default": {
                                               "typeApplication": {
                                                 "body": {
@@ -272,20 +263,19 @@
                         "domain": {"variable": "t0"},
                         "parameter": "cx"}}}},
                 "parameter": "t1"}},
-            "parameter": "t0"}}}},
-    {
-      "term": {
-        "name": "hydra.lib.defaults.maybes.cases",
+            "parameter": "t0"}},
+        "name": "hydra.lib.defaults.maybes.bind",
         "signature": {
           "parameters": [
             {"isLazy": false, "name": "arg0", "type": {"variable": "t0"}},
             {"isLazy": false, "name": "arg1", "type": {"variable": "t1"}},
             {"isLazy": false, "name": "arg2", "type": {"variable": "hydra.core.Term"}},
-            {"isLazy": false, "name": "arg3", "type": {"variable": "hydra.core.Term"}},
-            {"isLazy": false, "name": "arg4", "type": {"variable": "hydra.core.Term"}}],
+            {"isLazy": false, "name": "arg3", "type": {"variable": "hydra.core.Term"}}],
           "result": {"type": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "hydra.core.Term"}}}},
-          "typeParameters": [{"constraints": [], "name": "t0"}, {"constraints": [], "name": "t1"}]},
-        "term": {
+          "typeParameters": [{"constraints": [], "name": "t0"}, {"constraints": [], "name": "t1"}]}}},
+    {
+      "term": {
+        "body": {
           "typeLambda": {
             "body": {
               "typeLambda": {
@@ -312,8 +302,7 @@
                                               "cases": {
                                                 "cases": [
                                                   {
-                                                    "name": "maybe",
-                                                    "term": {
+                                                    "handler": {
                                                       "lambda": {
                                                         "body": {
                                                           "typeApplication": {
@@ -349,7 +338,8 @@
                                                                 "type": {"variable": "hydra.errors.Error"}}},
                                                             "type": {"variable": "hydra.core.Term"}}},
                                                         "domain": {"maybe": {"variable": "hydra.core.Term"}},
-                                                        "parameter": "m"}}}],
+                                                        "parameter": "m"}},
+                                                    "name": "maybe"}],
                                                 "default": {
                                                   "typeApplication": {
                                                     "body": {
@@ -388,18 +378,20 @@
                         "domain": {"variable": "t0"},
                         "parameter": "cx"}}}},
                 "parameter": "t1"}},
-            "parameter": "t0"}}}},
-    {
-      "term": {
-        "name": "hydra.lib.defaults.maybes.cat",
+            "parameter": "t0"}},
+        "name": "hydra.lib.defaults.maybes.cases",
         "signature": {
           "parameters": [
             {"isLazy": false, "name": "arg0", "type": {"variable": "t0"}},
-            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.graph.Graph"}},
-            {"isLazy": false, "name": "arg2", "type": {"variable": "hydra.core.Term"}}],
-          "result": {"type": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"list": {"variable": "hydra.core.Term"}}}}},
-          "typeParameters": [{"constraints": [], "name": "t0"}]},
-        "term": {
+            {"isLazy": false, "name": "arg1", "type": {"variable": "t1"}},
+            {"isLazy": false, "name": "arg2", "type": {"variable": "hydra.core.Term"}},
+            {"isLazy": false, "name": "arg3", "type": {"variable": "hydra.core.Term"}},
+            {"isLazy": false, "name": "arg4", "type": {"variable": "hydra.core.Term"}}],
+          "result": {"type": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "hydra.core.Term"}}}},
+          "typeParameters": [{"constraints": [], "name": "t0"}, {"constraints": [], "name": "t1"}]}}},
+    {
+      "term": {
+        "body": {
           "typeLambda": {
             "body": {
               "annotated": {
@@ -439,8 +431,7 @@
                                                                           "cases": {
                                                                             "cases": [
                                                                               {
-                                                                                "name": "maybe",
-                                                                                "term": {
+                                                                                "handler": {
                                                                                   "lambda": {
                                                                                     "body": {
                                                                                       "application": {
@@ -469,7 +460,8 @@
                                                                                                     "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.maybe"}, "type": {"list": {"variable": "hydra.core.Term"}}}},
                                                                                                     "type": {"variable": "hydra.core.Term"}}}}}}}}},
                                                                                     "domain": {"maybe": {"variable": "hydra.core.Term"}},
-                                                                                    "parameter": "m"}}}],
+                                                                                    "parameter": "m"}},
+                                                                                "name": "maybe"}],
                                                                             "default": {"variable": "acc"},
                                                                             "typeName": "hydra.core.Term"}}}},
                                                                     "domain": {"variable": "hydra.core.Term"},
@@ -503,20 +495,18 @@
                         "parameter": "g"}},
                     "domain": {"variable": "t0"},
                     "parameter": "cx"}}}},
-            "parameter": "t0"}}}},
-    {
-      "term": {
-        "name": "hydra.lib.defaults.maybes.compose",
+            "parameter": "t0"}},
+        "name": "hydra.lib.defaults.maybes.cat",
         "signature": {
           "parameters": [
             {"isLazy": false, "name": "arg0", "type": {"variable": "t0"}},
-            {"isLazy": false, "name": "arg1", "type": {"variable": "t1"}},
-            {"isLazy": false, "name": "arg2", "type": {"variable": "hydra.core.Term"}},
-            {"isLazy": false, "name": "arg3", "type": {"variable": "hydra.core.Term"}},
-            {"isLazy": false, "name": "arg4", "type": {"variable": "hydra.core.Term"}}],
-          "result": {"type": {"either": {"left": {"variable": "t2"}, "right": {"variable": "hydra.core.Term"}}}},
-          "typeParameters": [{"constraints": [], "name": "t0"}, {"constraints": [], "name": "t1"}, {"constraints": [], "name": "t2"}]},
-        "term": {
+            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.graph.Graph"}},
+            {"isLazy": false, "name": "arg2", "type": {"variable": "hydra.core.Term"}}],
+          "result": {"type": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"list": {"variable": "hydra.core.Term"}}}}},
+          "typeParameters": [{"constraints": [], "name": "t0"}]}}},
+    {
+      "term": {
+        "body": {
           "typeLambda": {
             "body": {
               "typeLambda": {
@@ -595,18 +585,20 @@
                             "parameter": "cx"}}}},
                     "parameter": "t2"}},
                 "parameter": "t1"}},
-            "parameter": "t0"}}}},
-    {
-      "term": {
-        "name": "hydra.lib.defaults.maybes.fromJust",
+            "parameter": "t0"}},
+        "name": "hydra.lib.defaults.maybes.compose",
         "signature": {
           "parameters": [
             {"isLazy": false, "name": "arg0", "type": {"variable": "t0"}},
             {"isLazy": false, "name": "arg1", "type": {"variable": "t1"}},
-            {"isLazy": false, "name": "arg2", "type": {"variable": "hydra.core.Term"}}],
-          "result": {"type": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "hydra.core.Term"}}}},
-          "typeParameters": [{"constraints": [], "name": "t0"}, {"constraints": [], "name": "t1"}]},
-        "term": {
+            {"isLazy": false, "name": "arg2", "type": {"variable": "hydra.core.Term"}},
+            {"isLazy": false, "name": "arg3", "type": {"variable": "hydra.core.Term"}},
+            {"isLazy": false, "name": "arg4", "type": {"variable": "hydra.core.Term"}}],
+          "result": {"type": {"either": {"left": {"variable": "t2"}, "right": {"variable": "hydra.core.Term"}}}},
+          "typeParameters": [{"constraints": [], "name": "t0"}, {"constraints": [], "name": "t1"}, {"constraints": [], "name": "t2"}]}}},
+    {
+      "term": {
+        "body": {
           "typeLambda": {
             "body": {
               "typeLambda": {
@@ -626,8 +618,7 @@
                                       "cases": {
                                         "cases": [
                                           {
-                                            "name": "maybe",
-                                            "term": {
+                                            "handler": {
                                               "lambda": {
                                                 "body": {
                                                   "application": {
@@ -678,7 +669,8 @@
                                                                     "type": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "hydra.core.Term"}}}}},
                                                                 "type": {"variable": "hydra.core.Term"}}}}}}}}},
                                                 "domain": {"maybe": {"variable": "hydra.core.Term"}},
-                                                "parameter": "m"}}}],
+                                                "parameter": "m"}},
+                                            "name": "maybe"}],
                                         "default": {
                                           "typeApplication": {
                                             "body": {
@@ -713,19 +705,18 @@
                         "domain": {"variable": "t0"},
                         "parameter": "cx"}}}},
                 "parameter": "t1"}},
-            "parameter": "t0"}}}},
-    {
-      "term": {
-        "name": "hydra.lib.defaults.maybes.fromMaybe",
+            "parameter": "t0"}},
+        "name": "hydra.lib.defaults.maybes.fromJust",
         "signature": {
           "parameters": [
             {"isLazy": false, "name": "arg0", "type": {"variable": "t0"}},
             {"isLazy": false, "name": "arg1", "type": {"variable": "t1"}},
-            {"isLazy": false, "name": "arg2", "type": {"variable": "hydra.core.Term"}},
-            {"isLazy": false, "name": "arg3", "type": {"variable": "hydra.core.Term"}}],
+            {"isLazy": false, "name": "arg2", "type": {"variable": "hydra.core.Term"}}],
           "result": {"type": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "hydra.core.Term"}}}},
-          "typeParameters": [{"constraints": [], "name": "t0"}, {"constraints": [], "name": "t1"}]},
-        "term": {
+          "typeParameters": [{"constraints": [], "name": "t0"}, {"constraints": [], "name": "t1"}]}}},
+    {
+      "term": {
+        "body": {
           "typeLambda": {
             "body": {
               "typeLambda": {
@@ -747,8 +738,7 @@
                                           "cases": {
                                             "cases": [
                                               {
-                                                "name": "maybe",
-                                                "term": {
+                                                "handler": {
                                                   "lambda": {
                                                     "body": {
                                                       "typeApplication": {
@@ -772,7 +762,8 @@
                                                             "type": {"variable": "hydra.errors.Error"}}},
                                                         "type": {"variable": "hydra.core.Term"}}},
                                                     "domain": {"maybe": {"variable": "hydra.core.Term"}},
-                                                    "parameter": "m"}}}],
+                                                    "parameter": "m"}},
+                                                "name": "maybe"}],
                                             "default": {
                                               "typeApplication": {
                                                 "body": {
@@ -809,18 +800,19 @@
                         "domain": {"variable": "t0"},
                         "parameter": "cx"}}}},
                 "parameter": "t1"}},
-            "parameter": "t0"}}}},
-    {
-      "term": {
-        "name": "hydra.lib.defaults.maybes.isJust",
+            "parameter": "t0"}},
+        "name": "hydra.lib.defaults.maybes.fromMaybe",
         "signature": {
           "parameters": [
             {"isLazy": false, "name": "arg0", "type": {"variable": "t0"}},
             {"isLazy": false, "name": "arg1", "type": {"variable": "t1"}},
-            {"isLazy": false, "name": "arg2", "type": {"variable": "hydra.core.Term"}}],
+            {"isLazy": false, "name": "arg2", "type": {"variable": "hydra.core.Term"}},
+            {"isLazy": false, "name": "arg3", "type": {"variable": "hydra.core.Term"}}],
           "result": {"type": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "hydra.core.Term"}}}},
-          "typeParameters": [{"constraints": [], "name": "t0"}, {"constraints": [], "name": "t1"}]},
-        "term": {
+          "typeParameters": [{"constraints": [], "name": "t0"}, {"constraints": [], "name": "t1"}]}}},
+    {
+      "term": {
+        "body": {
           "typeLambda": {
             "body": {
               "typeLambda": {
@@ -840,8 +832,7 @@
                                       "cases": {
                                         "cases": [
                                           {
-                                            "name": "maybe",
-                                            "term": {
+                                            "handler": {
                                               "lambda": {
                                                 "body": {
                                                   "typeApplication": {
@@ -879,7 +870,8 @@
                                                         "type": {"variable": "hydra.errors.Error"}}},
                                                     "type": {"variable": "hydra.core.Term"}}},
                                                 "domain": {"maybe": {"variable": "hydra.core.Term"}},
-                                                "parameter": "m"}}}],
+                                                "parameter": "m"}},
+                                            "name": "maybe"}],
                                         "default": {
                                           "typeApplication": {
                                             "body": {
@@ -914,18 +906,18 @@
                         "domain": {"variable": "t0"},
                         "parameter": "cx"}}}},
                 "parameter": "t1"}},
-            "parameter": "t0"}}}},
-    {
-      "term": {
-        "name": "hydra.lib.defaults.maybes.isNothing",
+            "parameter": "t0"}},
+        "name": "hydra.lib.defaults.maybes.isJust",
         "signature": {
           "parameters": [
             {"isLazy": false, "name": "arg0", "type": {"variable": "t0"}},
             {"isLazy": false, "name": "arg1", "type": {"variable": "t1"}},
             {"isLazy": false, "name": "arg2", "type": {"variable": "hydra.core.Term"}}],
           "result": {"type": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "hydra.core.Term"}}}},
-          "typeParameters": [{"constraints": [], "name": "t0"}, {"constraints": [], "name": "t1"}]},
-        "term": {
+          "typeParameters": [{"constraints": [], "name": "t0"}, {"constraints": [], "name": "t1"}]}}},
+    {
+      "term": {
+        "body": {
           "typeLambda": {
             "body": {
               "typeLambda": {
@@ -945,8 +937,7 @@
                                       "cases": {
                                         "cases": [
                                           {
-                                            "name": "maybe",
-                                            "term": {
+                                            "handler": {
                                               "lambda": {
                                                 "body": {
                                                   "typeApplication": {
@@ -984,7 +975,8 @@
                                                         "type": {"variable": "hydra.errors.Error"}}},
                                                     "type": {"variable": "hydra.core.Term"}}},
                                                 "domain": {"maybe": {"variable": "hydra.core.Term"}},
-                                                "parameter": "m"}}}],
+                                                "parameter": "m"}},
+                                            "name": "maybe"}],
                                         "default": {
                                           "typeApplication": {
                                             "body": {
@@ -1019,19 +1011,18 @@
                         "domain": {"variable": "t0"},
                         "parameter": "cx"}}}},
                 "parameter": "t1"}},
-            "parameter": "t0"}}}},
-    {
-      "term": {
-        "name": "hydra.lib.defaults.maybes.map",
+            "parameter": "t0"}},
+        "name": "hydra.lib.defaults.maybes.isNothing",
         "signature": {
           "parameters": [
             {"isLazy": false, "name": "arg0", "type": {"variable": "t0"}},
             {"isLazy": false, "name": "arg1", "type": {"variable": "t1"}},
-            {"isLazy": false, "name": "arg2", "type": {"variable": "hydra.core.Term"}},
-            {"isLazy": false, "name": "arg3", "type": {"variable": "hydra.core.Term"}}],
+            {"isLazy": false, "name": "arg2", "type": {"variable": "hydra.core.Term"}}],
           "result": {"type": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "hydra.core.Term"}}}},
-          "typeParameters": [{"constraints": [], "name": "t0"}, {"constraints": [], "name": "t1"}]},
-        "term": {
+          "typeParameters": [{"constraints": [], "name": "t0"}, {"constraints": [], "name": "t1"}]}}},
+    {
+      "term": {
+        "body": {
           "typeLambda": {
             "body": {
               "typeLambda": {
@@ -1053,8 +1044,7 @@
                                           "cases": {
                                             "cases": [
                                               {
-                                                "name": "maybe",
-                                                "term": {
+                                                "handler": {
                                                   "lambda": {
                                                     "body": {
                                                       "typeApplication": {
@@ -1092,7 +1082,8 @@
                                                             "type": {"variable": "hydra.errors.Error"}}},
                                                         "type": {"variable": "hydra.core.Term"}}},
                                                     "domain": {"maybe": {"variable": "hydra.core.Term"}},
-                                                    "parameter": "m"}}}],
+                                                    "parameter": "m"}},
+                                                "name": "maybe"}],
                                             "default": {
                                               "typeApplication": {
                                                 "body": {
@@ -1129,19 +1120,19 @@
                         "domain": {"variable": "t0"},
                         "parameter": "cx"}}}},
                 "parameter": "t1"}},
-            "parameter": "t0"}}}},
-    {
-      "term": {
-        "name": "hydra.lib.defaults.maybes.mapMaybe",
+            "parameter": "t0"}},
+        "name": "hydra.lib.defaults.maybes.map",
         "signature": {
           "parameters": [
             {"isLazy": false, "name": "arg0", "type": {"variable": "t0"}},
-            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.graph.Graph"}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "t1"}},
             {"isLazy": false, "name": "arg2", "type": {"variable": "hydra.core.Term"}},
             {"isLazy": false, "name": "arg3", "type": {"variable": "hydra.core.Term"}}],
           "result": {"type": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "hydra.core.Term"}}}},
-          "typeParameters": [{"constraints": [], "name": "t0"}]},
-        "term": {
+          "typeParameters": [{"constraints": [], "name": "t0"}, {"constraints": [], "name": "t1"}]}}},
+    {
+      "term": {
+        "body": {
           "typeLambda": {
             "body": {
               "annotated": {
@@ -1235,20 +1226,19 @@
                         "parameter": "g"}},
                     "domain": {"variable": "t0"},
                     "parameter": "cx"}}}},
-            "parameter": "t0"}}}},
-    {
-      "term": {
-        "name": "hydra.lib.defaults.maybes.maybe",
+            "parameter": "t0"}},
+        "name": "hydra.lib.defaults.maybes.mapMaybe",
         "signature": {
           "parameters": [
             {"isLazy": false, "name": "arg0", "type": {"variable": "t0"}},
-            {"isLazy": false, "name": "arg1", "type": {"variable": "t1"}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.graph.Graph"}},
             {"isLazy": false, "name": "arg2", "type": {"variable": "hydra.core.Term"}},
-            {"isLazy": false, "name": "arg3", "type": {"variable": "hydra.core.Term"}},
-            {"isLazy": false, "name": "arg4", "type": {"variable": "hydra.core.Term"}}],
+            {"isLazy": false, "name": "arg3", "type": {"variable": "hydra.core.Term"}}],
           "result": {"type": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "hydra.core.Term"}}}},
-          "typeParameters": [{"constraints": [], "name": "t0"}, {"constraints": [], "name": "t1"}]},
-        "term": {
+          "typeParameters": [{"constraints": [], "name": "t0"}]}}},
+    {
+      "term": {
+        "body": {
           "typeLambda": {
             "body": {
               "typeLambda": {
@@ -1272,8 +1262,7 @@
                                               "cases": {
                                                 "cases": [
                                                   {
-                                                    "name": "maybe",
-                                                    "term": {
+                                                    "handler": {
                                                       "lambda": {
                                                         "body": {
                                                           "typeApplication": {
@@ -1309,7 +1298,8 @@
                                                                 "type": {"variable": "hydra.errors.Error"}}},
                                                             "type": {"variable": "hydra.core.Term"}}},
                                                         "domain": {"maybe": {"variable": "hydra.core.Term"}},
-                                                        "parameter": "m"}}}],
+                                                        "parameter": "m"}},
+                                                    "name": "maybe"}],
                                                 "default": {
                                                   "typeApplication": {
                                                     "body": {
@@ -1348,18 +1338,20 @@
                         "domain": {"variable": "t0"},
                         "parameter": "cx"}}}},
                 "parameter": "t1"}},
-            "parameter": "t0"}}}},
-    {
-      "term": {
-        "name": "hydra.lib.defaults.maybes.pure",
+            "parameter": "t0"}},
+        "name": "hydra.lib.defaults.maybes.maybe",
         "signature": {
           "parameters": [
             {"isLazy": false, "name": "arg0", "type": {"variable": "t0"}},
             {"isLazy": false, "name": "arg1", "type": {"variable": "t1"}},
-            {"isLazy": false, "name": "arg2", "type": {"variable": "hydra.core.Term"}}],
-          "result": {"type": {"either": {"left": {"variable": "t2"}, "right": {"variable": "hydra.core.Term"}}}},
-          "typeParameters": [{"constraints": [], "name": "t0"}, {"constraints": [], "name": "t1"}, {"constraints": [], "name": "t2"}]},
-        "term": {
+            {"isLazy": false, "name": "arg2", "type": {"variable": "hydra.core.Term"}},
+            {"isLazy": false, "name": "arg3", "type": {"variable": "hydra.core.Term"}},
+            {"isLazy": false, "name": "arg4", "type": {"variable": "hydra.core.Term"}}],
+          "result": {"type": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "hydra.core.Term"}}}},
+          "typeParameters": [{"constraints": [], "name": "t0"}, {"constraints": [], "name": "t1"}]}}},
+    {
+      "term": {
+        "body": {
           "typeLambda": {
             "body": {
               "typeLambda": {
@@ -1390,18 +1382,18 @@
                             "parameter": "cx"}}}},
                     "parameter": "t2"}},
                 "parameter": "t1"}},
-            "parameter": "t0"}}}},
-    {
-      "term": {
-        "name": "hydra.lib.defaults.maybes.toList",
+            "parameter": "t0"}},
+        "name": "hydra.lib.defaults.maybes.pure",
         "signature": {
           "parameters": [
             {"isLazy": false, "name": "arg0", "type": {"variable": "t0"}},
             {"isLazy": false, "name": "arg1", "type": {"variable": "t1"}},
             {"isLazy": false, "name": "arg2", "type": {"variable": "hydra.core.Term"}}],
-          "result": {"type": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "hydra.core.Term"}}}},
-          "typeParameters": [{"constraints": [], "name": "t0"}, {"constraints": [], "name": "t1"}]},
-        "term": {
+          "result": {"type": {"either": {"left": {"variable": "t2"}, "right": {"variable": "hydra.core.Term"}}}},
+          "typeParameters": [{"constraints": [], "name": "t0"}, {"constraints": [], "name": "t1"}, {"constraints": [], "name": "t2"}]}}},
+    {
+      "term": {
+        "body": {
           "typeLambda": {
             "body": {
               "typeLambda": {
@@ -1421,8 +1413,7 @@
                                       "cases": {
                                         "cases": [
                                           {
-                                            "name": "maybe",
-                                            "term": {
+                                            "handler": {
                                               "lambda": {
                                                 "body": {
                                                   "typeApplication": {
@@ -1458,7 +1449,8 @@
                                                         "type": {"variable": "hydra.errors.Error"}}},
                                                     "type": {"variable": "hydra.core.Term"}}},
                                                 "domain": {"maybe": {"variable": "hydra.core.Term"}},
-                                                "parameter": "m"}}}],
+                                                "parameter": "m"}},
+                                            "name": "maybe"}],
                                         "default": {
                                           "typeApplication": {
                                             "body": {
@@ -1493,7 +1485,15 @@
                         "domain": {"variable": "t0"},
                         "parameter": "cx"}}}},
                 "parameter": "t1"}},
-            "parameter": "t0"}}}}],
+            "parameter": "t0"}},
+        "name": "hydra.lib.defaults.maybes.toList",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "t0"}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "t1"}},
+            {"isLazy": false, "name": "arg2", "type": {"variable": "hydra.core.Term"}}],
+          "result": {"type": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "hydra.core.Term"}}}},
+          "typeParameters": [{"constraints": [], "name": "t0"}, {"constraints": [], "name": "t1"}]}}}],
   "dependencies": [
     {"module": "hydra.extract.core"},
     {"module": "hydra.show.core"},

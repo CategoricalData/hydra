@@ -2,207 +2,194 @@
   "definitions": [
     {
       "type": {
-        "name": "hydra.sql.syntax.ApproximateNumericLiteral",
-        "typeScheme": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
-    {
-      "type": {"name": "hydra.sql.syntax.BinaryStringLiteral", "typeScheme": {"body": {"wrap": {"unit": {}}}, "variables": []}}},
-    {
-      "type": {
-        "name": "hydra.sql.syntax.CharacterStringLiteral",
-        "typeScheme": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
-    {
-      "type": {"name": "hydra.sql.syntax.ColumnName", "typeScheme": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
-    {"type": {"name": "hydra.sql.syntax.DateString", "typeScheme": {"body": {"wrap": {"unit": {}}}, "variables": []}}},
-    {
-      "type": {"name": "hydra.sql.syntax.DomainName", "typeScheme": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
+        "body": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []},
+        "name": "hydra.sql.syntax.ApproximateNumericLiteral"}},
+    {"type": {"body": {"body": {"wrap": {"unit": {}}}, "variables": []}, "name": "hydra.sql.syntax.BinaryStringLiteral"}},
     {
       "type": {
-        "name": "hydra.sql.syntax.ExactNumericLiteral",
-        "typeScheme": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
+        "body": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []},
+        "name": "hydra.sql.syntax.CharacterStringLiteral"}},
+    {
+      "type": {"body": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}, "name": "hydra.sql.syntax.ColumnName"}},
+    {"type": {"body": {"body": {"wrap": {"unit": {}}}, "variables": []}, "name": "hydra.sql.syntax.DateString"}},
+    {
+      "type": {"body": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}, "name": "hydra.sql.syntax.DomainName"}},
     {
       "type": {
-        "name": "hydra.sql.syntax.LeftBracketOrTrigraph",
-        "typeScheme": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
+        "body": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []},
+        "name": "hydra.sql.syntax.ExactNumericLiteral"}},
     {
       "type": {
-        "name": "hydra.sql.syntax.RightBracketOrTrigraph",
-        "typeScheme": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
+        "body": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []},
+        "name": "hydra.sql.syntax.LeftBracketOrTrigraph"}},
     {
       "type": {
-        "name": "hydra.sql.syntax.NationalCharacterStringLiteral",
-        "typeScheme": {"body": {"wrap": {"unit": {}}}, "variables": []}}},
+        "body": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []},
+        "name": "hydra.sql.syntax.RightBracketOrTrigraph"}},
+    {
+      "type": {"body": {"body": {"wrap": {"unit": {}}}, "variables": []}, "name": "hydra.sql.syntax.NationalCharacterStringLiteral"}},
     {
       "type": {
-        "name": "hydra.sql.syntax.PathResolvedUserDefinedTypeName",
-        "typeScheme": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
+        "body": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []},
+        "name": "hydra.sql.syntax.PathResolvedUserDefinedTypeName"}},
     {
-      "type": {"name": "hydra.sql.syntax.TableName", "typeScheme": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
-    {"type": {"name": "hydra.sql.syntax.TimeString", "typeScheme": {"body": {"wrap": {"unit": {}}}, "variables": []}}},
-    {"type": {"name": "hydra.sql.syntax.TimestampLiteral", "typeScheme": {"body": {"wrap": {"unit": {}}}, "variables": []}}},
+      "type": {"body": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}, "name": "hydra.sql.syntax.TableName"}},
+    {"type": {"body": {"body": {"wrap": {"unit": {}}}, "variables": []}, "name": "hydra.sql.syntax.TimeString"}},
+    {"type": {"body": {"body": {"wrap": {"unit": {}}}, "variables": []}, "name": "hydra.sql.syntax.TimestampLiteral"}},
     {
-      "type": {
-        "name": "hydra.sql.syntax.UnicodeCharacterStringLiteral",
-        "typeScheme": {"body": {"wrap": {"unit": {}}}, "variables": []}}},
+      "type": {"body": {"body": {"wrap": {"unit": {}}}, "variables": []}, "name": "hydra.sql.syntax.UnicodeCharacterStringLiteral"}},
     {
-      "type": {
-        "name": "hydra.sql.syntax.UnsignedInteger",
-        "typeScheme": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
+      "type": {"body": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}, "name": "hydra.sql.syntax.UnsignedInteger"}},
     {
       "type": {
-        "name": "hydra.sql.syntax.ApproximateNumericType",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "float", "type": {"maybe": {"variable": "hydra.sql.syntax.Precision"}}},
               {"name": "real", "type": {"unit": {}}},
               {"name": "double", "type": {"unit": {}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.sql.syntax.ApproximateNumericType"}},
     {
       "type": {
-        "name": "hydra.sql.syntax.ArrayElement",
-        "typeScheme": {"body": {"wrap": {"variable": "hydra.sql.syntax.ValueExpression"}}, "variables": []}}},
+        "body": {"body": {"wrap": {"variable": "hydra.sql.syntax.ValueExpression"}}, "variables": []},
+        "name": "hydra.sql.syntax.ArrayElement"}},
     {
       "type": {
-        "name": "hydra.sql.syntax.ArrayElementList",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "first", "type": {"variable": "hydra.sql.syntax.ArrayElement"}},
               {"name": "rest", "type": {"list": {"variable": "hydra.sql.syntax.ArrayElement"}}}]},
-          "variables": []}}},
-    {
-      "type": {"name": "hydra.sql.syntax.ArrayElementReference", "typeScheme": {"body": {"wrap": {"unit": {}}}, "variables": []}}},
-    {"type": {"name": "hydra.sql.syntax.ArrayType", "typeScheme": {"body": {"wrap": {"unit": {}}}, "variables": []}}},
+          "variables": []},
+        "name": "hydra.sql.syntax.ArrayElementList"}},
+    {"type": {"body": {"body": {"wrap": {"unit": {}}}, "variables": []}, "name": "hydra.sql.syntax.ArrayElementReference"}},
+    {"type": {"body": {"body": {"wrap": {"unit": {}}}, "variables": []}, "name": "hydra.sql.syntax.ArrayType"}},
     {
       "type": {
-        "name": "hydra.sql.syntax.ArrayValueConstructor",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "enumeration", "type": {"variable": "hydra.sql.syntax.ArrayValueConstructorByEnumeration"}},
               {"name": "query", "type": {"variable": "hydra.sql.syntax.ArrayValueConstructorByQuery"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.sql.syntax.ArrayValueConstructor"}},
+    {
+      "type": {"body": {"body": {"wrap": {"unit": {}}}, "variables": []}, "name": "hydra.sql.syntax.ArrayValueConstructorByQuery"}},
     {
       "type": {
-        "name": "hydra.sql.syntax.ArrayValueConstructorByQuery",
-        "typeScheme": {"body": {"wrap": {"unit": {}}}, "variables": []}}},
-    {
-      "type": {
-        "name": "hydra.sql.syntax.ArrayValueConstructorByEnumeration",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "LeftBracketOrTrigraph", "type": {"variable": "hydra.sql.syntax.LeftBracketOrTrigraph"}},
               {"name": "ArrayElementList", "type": {"variable": "hydra.sql.syntax.ArrayElementList"}},
               {"name": "RightBracketOrTrigraph", "type": {"variable": "hydra.sql.syntax.RightBracketOrTrigraph"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.sql.syntax.ArrayValueConstructorByEnumeration"}},
+    {"type": {"body": {"body": {"wrap": {"unit": {}}}, "variables": []}, "name": "hydra.sql.syntax.ArrayValueExpression"}},
+    {"type": {"body": {"body": {"wrap": {"unit": {}}}, "variables": []}, "name": "hydra.sql.syntax.AsSubqueryClause"}},
     {
-      "type": {"name": "hydra.sql.syntax.ArrayValueExpression", "typeScheme": {"body": {"wrap": {"unit": {}}}, "variables": []}}},
-    {"type": {"name": "hydra.sql.syntax.AsSubqueryClause", "typeScheme": {"body": {"wrap": {"unit": {}}}, "variables": []}}},
-    {
-      "type": {"name": "hydra.sql.syntax.AttributeOrMethodReference", "typeScheme": {"body": {"wrap": {"unit": {}}}, "variables": []}}},
+      "type": {"body": {"body": {"wrap": {"unit": {}}}, "variables": []}, "name": "hydra.sql.syntax.AttributeOrMethodReference"}},
     {
       "type": {
-        "name": "hydra.sql.syntax.BinaryLargeObjectStringType",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "binary", "type": {"maybe": {"variable": "hydra.sql.syntax.LargeObjectLength"}}},
               {"name": "blob", "type": {"maybe": {"variable": "hydra.sql.syntax.LargeObjectLength"}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.sql.syntax.BinaryLargeObjectStringType"}},
     {
       "type": {
-        "name": "hydra.sql.syntax.BooleanFactor",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "NOT", "type": {"maybe": {"unit": {}}}},
               {"name": "BooleanTest", "type": {"variable": "hydra.sql.syntax.BooleanTest"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.sql.syntax.BooleanFactor"}},
     {
       "type": {
-        "name": "hydra.sql.syntax.BooleanLiteral",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "TRUE", "type": {"unit": {}}},
               {"name": "FALSE", "type": {"unit": {}}},
               {"name": "UNKNOWN", "type": {"unit": {}}}]},
-          "variables": []}}},
-    {"type": {"name": "hydra.sql.syntax.BooleanPredicand", "typeScheme": {"body": {"wrap": {"unit": {}}}, "variables": []}}},
+          "variables": []},
+        "name": "hydra.sql.syntax.BooleanLiteral"}},
+    {"type": {"body": {"body": {"wrap": {"unit": {}}}, "variables": []}, "name": "hydra.sql.syntax.BooleanPredicand"}},
     {
       "type": {
-        "name": "hydra.sql.syntax.BooleanPrimary",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "predicate", "type": {"variable": "hydra.sql.syntax.Predicate"}},
               {"name": "predicand", "type": {"variable": "hydra.sql.syntax.BooleanPredicand"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.sql.syntax.BooleanPrimary"}},
     {
       "type": {
-        "name": "hydra.sql.syntax.BooleanTerm",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "factor", "type": {"variable": "hydra.sql.syntax.BooleanFactor"}},
               {"name": "and", "type": {"variable": "hydra.sql.syntax.BooleanTerm_And"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.sql.syntax.BooleanTerm"}},
     {
       "type": {
-        "name": "hydra.sql.syntax.BooleanTerm_And",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "lhs", "type": {"variable": "hydra.sql.syntax.BooleanTerm"}},
               {"name": "rhs", "type": {"variable": "hydra.sql.syntax.BooleanFactor"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.sql.syntax.BooleanTerm_And"}},
     {
       "type": {
-        "name": "hydra.sql.syntax.BooleanTest",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "BooleanPrimary", "type": {"variable": "hydra.sql.syntax.BooleanPrimary"}},
               {"name": "Sequence", "type": {"maybe": {"variable": "hydra.sql.syntax.BooleanTest_Sequence_Option"}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.sql.syntax.BooleanTest"}},
     {
       "type": {
-        "name": "hydra.sql.syntax.BooleanTest_Sequence_Option",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "NOT", "type": {"maybe": {"unit": {}}}},
               {"name": "TruthValue", "type": {"variable": "hydra.sql.syntax.TruthValue"}}]},
-          "variables": []}}},
-    {"type": {"name": "hydra.sql.syntax.BooleanType", "typeScheme": {"body": {"wrap": {"unit": {}}}, "variables": []}}},
+          "variables": []},
+        "name": "hydra.sql.syntax.BooleanTest_Sequence_Option"}},
+    {"type": {"body": {"body": {"wrap": {"unit": {}}}, "variables": []}, "name": "hydra.sql.syntax.BooleanType"}},
     {
       "type": {
-        "name": "hydra.sql.syntax.BooleanValueExpression",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "term", "type": {"variable": "hydra.sql.syntax.BooleanTerm"}},
               {"name": "or", "type": {"variable": "hydra.sql.syntax.BooleanValueExpression_Or"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.sql.syntax.BooleanValueExpression"}},
     {
       "type": {
-        "name": "hydra.sql.syntax.BooleanValueExpression_Or",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "lhs", "type": {"variable": "hydra.sql.syntax.BooleanValueExpression"}},
               {"name": "rhs", "type": {"variable": "hydra.sql.syntax.BooleanTerm"}}]},
-          "variables": []}}},
-    {"type": {"name": "hydra.sql.syntax.CaseExpression", "typeScheme": {"body": {"wrap": {"unit": {}}}, "variables": []}}},
+          "variables": []},
+        "name": "hydra.sql.syntax.BooleanValueExpression_Or"}},
+    {"type": {"body": {"body": {"wrap": {"unit": {}}}, "variables": []}, "name": "hydra.sql.syntax.CaseExpression"}},
+    {"type": {"body": {"body": {"wrap": {"unit": {}}}, "variables": []}, "name": "hydra.sql.syntax.CastSpecification"}},
     {
-      "type": {"name": "hydra.sql.syntax.CastSpecification", "typeScheme": {"body": {"wrap": {"unit": {}}}, "variables": []}}},
-    {
-      "type": {"name": "hydra.sql.syntax.CharacterSetSpecification", "typeScheme": {"body": {"wrap": {"unit": {}}}, "variables": []}}},
+      "type": {"body": {"body": {"wrap": {"unit": {}}}, "variables": []}, "name": "hydra.sql.syntax.CharacterSetSpecification"}},
     {
       "type": {
-        "name": "hydra.sql.syntax.CharacterStringType",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "character", "type": {"maybe": {"variable": "hydra.sql.syntax.Length"}}},
@@ -213,41 +200,41 @@
               {"name": "characterLargeObject", "type": {"maybe": {"variable": "hydra.sql.syntax.LargeObjectLength"}}},
               {"name": "charLargeObject", "type": {"maybe": {"variable": "hydra.sql.syntax.LargeObjectLength"}}},
               {"name": "clob", "type": {"maybe": {"variable": "hydra.sql.syntax.LargeObjectLength"}}}]},
-          "variables": []}}},
-    {"type": {"name": "hydra.sql.syntax.CollateClause", "typeScheme": {"body": {"wrap": {"unit": {}}}, "variables": []}}},
+          "variables": []},
+        "name": "hydra.sql.syntax.CharacterStringType"}},
+    {"type": {"body": {"body": {"wrap": {"unit": {}}}, "variables": []}, "name": "hydra.sql.syntax.CollateClause"}},
     {
       "type": {
-        "name": "hydra.sql.syntax.CollectionType",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "array", "type": {"variable": "hydra.sql.syntax.ArrayType"}},
               {"name": "multiset", "type": {"variable": "hydra.sql.syntax.MultisetType"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.sql.syntax.CollectionType"}},
     {
       "type": {
-        "name": "hydra.sql.syntax.CollectionValueConstructor",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "array", "type": {"variable": "hydra.sql.syntax.ArrayValueConstructor"}},
               {"name": "multiset", "type": {"variable": "hydra.sql.syntax.MultisetValueConstructor"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.sql.syntax.CollectionValueConstructor"}},
     {
       "type": {
-        "name": "hydra.sql.syntax.CollectionValueExpression",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "array", "type": {"variable": "hydra.sql.syntax.ArrayValueExpression"}},
               {"name": "multiset", "type": {"variable": "hydra.sql.syntax.MultisetValueExpression"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.sql.syntax.CollectionValueExpression"}},
     {
-      "type": {"name": "hydra.sql.syntax.ColumnConstraintDefinition", "typeScheme": {"body": {"wrap": {"unit": {}}}, "variables": []}}},
+      "type": {"body": {"body": {"wrap": {"unit": {}}}, "variables": []}, "name": "hydra.sql.syntax.ColumnConstraintDefinition"}},
     {
       "type": {
-        "name": "hydra.sql.syntax.ColumnDefinition",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "name", "type": {"variable": "hydra.sql.syntax.ColumnName"}},
@@ -258,41 +245,41 @@
                 "type": {"maybe": {"variable": "hydra.sql.syntax.ColumnDefinition_DefaultOrIdentityOrGeneration_Option"}}},
               {"name": "constraints", "type": {"list": {"variable": "hydra.sql.syntax.ColumnConstraintDefinition"}}},
               {"name": "collate", "type": {"maybe": {"variable": "hydra.sql.syntax.CollateClause"}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.sql.syntax.ColumnDefinition"}},
     {
       "type": {
-        "name": "hydra.sql.syntax.ColumnDefinition_TypeOrDomain_Option",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "DataType", "type": {"variable": "hydra.sql.syntax.DataType"}},
               {"name": "DomainName", "type": {"variable": "hydra.sql.syntax.DomainName"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.sql.syntax.ColumnDefinition_TypeOrDomain_Option"}},
     {
       "type": {
-        "name": "hydra.sql.syntax.ColumnDefinition_DefaultOrIdentityOrGeneration_Option",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "DefaultClause", "type": {"variable": "hydra.sql.syntax.DefaultClause"}},
               {"name": "IdentityColumnSpecification", "type": {"variable": "hydra.sql.syntax.IdentityColumnSpecification"}},
               {"name": "GenerationClause", "type": {"variable": "hydra.sql.syntax.GenerationClause"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.sql.syntax.ColumnDefinition_DefaultOrIdentityOrGeneration_Option"}},
     {
       "type": {
-        "name": "hydra.sql.syntax.ColumnNameList",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "first", "type": {"variable": "hydra.sql.syntax.ColumnName"}},
               {"name": "rest", "type": {"list": {"variable": "hydra.sql.syntax.ColumnName"}}}]},
-          "variables": []}}},
-    {"type": {"name": "hydra.sql.syntax.ColumnOptions", "typeScheme": {"body": {"wrap": {"unit": {}}}, "variables": []}}},
-    {"type": {"name": "hydra.sql.syntax.ColumnReference", "typeScheme": {"body": {"wrap": {"unit": {}}}, "variables": []}}},
+          "variables": []},
+        "name": "hydra.sql.syntax.ColumnNameList"}},
+    {"type": {"body": {"body": {"wrap": {"unit": {}}}, "variables": []}, "name": "hydra.sql.syntax.ColumnOptions"}},
+    {"type": {"body": {"body": {"wrap": {"unit": {}}}, "variables": []}, "name": "hydra.sql.syntax.ColumnReference"}},
     {
       "type": {
-        "name": "hydra.sql.syntax.CommonValueExpression",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "numeric", "type": {"variable": "hydra.sql.syntax.NumericValueExpression"}},
@@ -302,37 +289,37 @@
               {"name": "userDefined", "type": {"variable": "hydra.sql.syntax.UserDefinedTypeValueExpression"}},
               {"name": "reference", "type": {"variable": "hydra.sql.syntax.ReferenceValueExpression"}},
               {"name": "collection", "type": {"variable": "hydra.sql.syntax.CollectionValueExpression"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.sql.syntax.CommonValueExpression"}},
     {
       "type": {
-        "name": "hydra.sql.syntax.ContextuallyTypedRowValueExpression",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "specialCase", "type": {"variable": "hydra.sql.syntax.RowValueSpecialCase"}},
               {"name": "constructor", "type": {"variable": "hydra.sql.syntax.ContextuallyTypedRowValueConstructor"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.sql.syntax.ContextuallyTypedRowValueExpression"}},
     {
       "type": {
-        "name": "hydra.sql.syntax.ContextuallyTypedRowValueConstructor",
-        "typeScheme": {"body": {"wrap": {"unit": {}}}, "variables": []}}},
+        "body": {"body": {"wrap": {"unit": {}}}, "variables": []},
+        "name": "hydra.sql.syntax.ContextuallyTypedRowValueConstructor"}},
     {
       "type": {
-        "name": "hydra.sql.syntax.ContextuallyTypedRowValueExpressionList",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "first", "type": {"variable": "hydra.sql.syntax.ContextuallyTypedRowValueExpression"}},
               {"name": "rest", "type": {"list": {"variable": "hydra.sql.syntax.ContextuallyTypedRowValueExpression"}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.sql.syntax.ContextuallyTypedRowValueExpressionList"}},
     {
       "type": {
-        "name": "hydra.sql.syntax.ContextuallyTypedTableValueConstructor",
-        "typeScheme": {"body": {"wrap": {"variable": "hydra.sql.syntax.ContextuallyTypedRowValueExpressionList"}}, "variables": []}}},
+        "body": {"body": {"wrap": {"variable": "hydra.sql.syntax.ContextuallyTypedRowValueExpressionList"}}, "variables": []},
+        "name": "hydra.sql.syntax.ContextuallyTypedTableValueConstructor"}},
     {
       "type": {
-        "name": "hydra.sql.syntax.DataType",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "predefined", "type": {"variable": "hydra.sql.syntax.PredefinedType"}},
@@ -340,29 +327,29 @@
               {"name": "named", "type": {"variable": "hydra.sql.syntax.PathResolvedUserDefinedTypeName"}},
               {"name": "reference", "type": {"variable": "hydra.sql.syntax.ReferenceType"}},
               {"name": "collection", "type": {"variable": "hydra.sql.syntax.CollectionType"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.sql.syntax.DataType"}},
     {
       "type": {
-        "name": "hydra.sql.syntax.DateLiteral",
-        "typeScheme": {"body": {"wrap": {"variable": "hydra.sql.syntax.DateString"}}, "variables": []}}},
+        "body": {"body": {"wrap": {"variable": "hydra.sql.syntax.DateString"}}, "variables": []},
+        "name": "hydra.sql.syntax.DateLiteral"}},
     {
       "type": {
-        "name": "hydra.sql.syntax.DatetimeLiteral",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "date", "type": {"variable": "hydra.sql.syntax.DateLiteral"}},
               {"name": "time", "type": {"variable": "hydra.sql.syntax.TimeLiteral"}},
               {"name": "timestamp", "type": {"variable": "hydra.sql.syntax.TimestampLiteral"}}]},
-          "variables": []}}},
-    {"type": {"name": "hydra.sql.syntax.DatetimeType", "typeScheme": {"body": {"wrap": {"unit": {}}}, "variables": []}}},
+          "variables": []},
+        "name": "hydra.sql.syntax.DatetimeLiteral"}},
+    {"type": {"body": {"body": {"wrap": {"unit": {}}}, "variables": []}, "name": "hydra.sql.syntax.DatetimeType"}},
     {
-      "type": {"name": "hydra.sql.syntax.DatetimeValueExpression", "typeScheme": {"body": {"wrap": {"unit": {}}}, "variables": []}}},
-    {"type": {"name": "hydra.sql.syntax.DefaultClause", "typeScheme": {"body": {"wrap": {"unit": {}}}, "variables": []}}},
+      "type": {"body": {"body": {"wrap": {"unit": {}}}, "variables": []}, "name": "hydra.sql.syntax.DatetimeValueExpression"}},
+    {"type": {"body": {"body": {"wrap": {"unit": {}}}, "variables": []}, "name": "hydra.sql.syntax.DefaultClause"}},
     {
       "type": {
-        "name": "hydra.sql.syntax.ExactNumericType",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "numeric", "type": {"maybe": {"variable": "hydra.sql.syntax.ExactNumericType_Numeric_Option"}}},
@@ -372,51 +359,51 @@
               {"name": "integer", "type": {"unit": {}}},
               {"name": "int", "type": {"unit": {}}},
               {"name": "bigint", "type": {"unit": {}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.sql.syntax.ExactNumericType"}},
     {
       "type": {
-        "name": "hydra.sql.syntax.ExactNumericType_Numeric_Option",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "Precision", "type": {"variable": "hydra.sql.syntax.Precision"}},
               {"name": "Sequence", "type": {"maybe": {"variable": "hydra.sql.syntax.Scale"}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.sql.syntax.ExactNumericType_Numeric_Option"}},
     {
       "type": {
-        "name": "hydra.sql.syntax.ExactNumericType_Decimal_Option",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "Precision", "type": {"variable": "hydra.sql.syntax.Precision"}},
               {"name": "Sequence", "type": {"maybe": {"variable": "hydra.sql.syntax.Scale"}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.sql.syntax.ExactNumericType_Decimal_Option"}},
     {
       "type": {
-        "name": "hydra.sql.syntax.ExactNumericType_Dec_Option",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "Precision", "type": {"variable": "hydra.sql.syntax.Precision"}},
               {"name": "Sequence", "type": {"maybe": {"variable": "hydra.sql.syntax.Scale"}}}]},
-          "variables": []}}},
-    {"type": {"name": "hydra.sql.syntax.FieldReference", "typeScheme": {"body": {"wrap": {"unit": {}}}, "variables": []}}},
+          "variables": []},
+        "name": "hydra.sql.syntax.ExactNumericType_Dec_Option"}},
+    {"type": {"body": {"body": {"wrap": {"unit": {}}}, "variables": []}, "name": "hydra.sql.syntax.FieldReference"}},
     {
       "type": {
-        "name": "hydra.sql.syntax.FromConstructor",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "columns", "type": {"maybe": {"variable": "hydra.sql.syntax.InsertColumnList"}}},
               {"name": "override", "type": {"maybe": {"variable": "hydra.sql.syntax.OverrideClause"}}},
               {"name": "values", "type": {"variable": "hydra.sql.syntax.ContextuallyTypedTableValueConstructor"}}]},
-          "variables": []}}},
-    {"type": {"name": "hydra.sql.syntax.FromDefault", "typeScheme": {"body": {"wrap": {"unit": {}}}, "variables": []}}},
-    {"type": {"name": "hydra.sql.syntax.FromSubquery", "typeScheme": {"body": {"wrap": {"unit": {}}}, "variables": []}}},
+          "variables": []},
+        "name": "hydra.sql.syntax.FromConstructor"}},
+    {"type": {"body": {"body": {"wrap": {"unit": {}}}, "variables": []}, "name": "hydra.sql.syntax.FromDefault"}},
+    {"type": {"body": {"body": {"wrap": {"unit": {}}}, "variables": []}, "name": "hydra.sql.syntax.FromSubquery"}},
     {
       "type": {
-        "name": "hydra.sql.syntax.GeneralLiteral",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "string", "type": {"variable": "hydra.sql.syntax.CharacterStringLiteral"}},
@@ -426,106 +413,99 @@
               {"name": "dateTime", "type": {"variable": "hydra.sql.syntax.DatetimeLiteral"}},
               {"name": "interval", "type": {"variable": "hydra.sql.syntax.IntervalLiteral"}},
               {"name": "boolean", "type": {"variable": "hydra.sql.syntax.BooleanLiteral"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.sql.syntax.GeneralLiteral"}},
     {
-      "type": {"name": "hydra.sql.syntax.GeneralValueSpecification", "typeScheme": {"body": {"wrap": {"unit": {}}}, "variables": []}}},
-    {"type": {"name": "hydra.sql.syntax.GenerationClause", "typeScheme": {"body": {"wrap": {"unit": {}}}, "variables": []}}},
+      "type": {"body": {"body": {"wrap": {"unit": {}}}, "variables": []}, "name": "hydra.sql.syntax.GeneralValueSpecification"}},
+    {"type": {"body": {"body": {"wrap": {"unit": {}}}, "variables": []}, "name": "hydra.sql.syntax.GenerationClause"}},
     {
       "type": {
-        "name": "hydra.sql.syntax.GlobalOrLocal",
-        "typeScheme": {
+        "body": {
           "body": {"union": [{"name": "global", "type": {"unit": {}}}, {"name": "local", "type": {"unit": {}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.sql.syntax.GlobalOrLocal"}},
+    {
+      "type": {"body": {"body": {"wrap": {"unit": {}}}, "variables": []}, "name": "hydra.sql.syntax.IdentityColumnSpecification"}},
     {
       "type": {
-        "name": "hydra.sql.syntax.IdentityColumnSpecification",
-        "typeScheme": {"body": {"wrap": {"unit": {}}}, "variables": []}}},
+        "body": {"body": {"wrap": {"variable": "hydra.sql.syntax.ColumnNameList"}}, "variables": []},
+        "name": "hydra.sql.syntax.InsertColumnList"}},
     {
       "type": {
-        "name": "hydra.sql.syntax.InsertColumnList",
-        "typeScheme": {"body": {"wrap": {"variable": "hydra.sql.syntax.ColumnNameList"}}, "variables": []}}},
-    {
-      "type": {
-        "name": "hydra.sql.syntax.InsertColumnsAndSource",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "subquery", "type": {"variable": "hydra.sql.syntax.FromSubquery"}},
               {"name": "constructor", "type": {"variable": "hydra.sql.syntax.FromConstructor"}},
               {"name": "default", "type": {"variable": "hydra.sql.syntax.FromDefault"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.sql.syntax.InsertColumnsAndSource"}},
     {
       "type": {
-        "name": "hydra.sql.syntax.InsertStatement",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "target", "type": {"variable": "hydra.sql.syntax.InsertionTarget"}},
               {"name": "columnsAndSource", "type": {"variable": "hydra.sql.syntax.InsertColumnsAndSource"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.sql.syntax.InsertStatement"}},
     {
       "type": {
-        "name": "hydra.sql.syntax.InsertionTarget",
-        "typeScheme": {"body": {"wrap": {"variable": "hydra.sql.syntax.TableName"}}, "variables": []}}},
-    {"type": {"name": "hydra.sql.syntax.IntervalLiteral", "typeScheme": {"body": {"wrap": {"unit": {}}}, "variables": []}}},
-    {"type": {"name": "hydra.sql.syntax.IntervalType", "typeScheme": {"body": {"wrap": {"unit": {}}}, "variables": []}}},
+        "body": {"body": {"wrap": {"variable": "hydra.sql.syntax.TableName"}}, "variables": []},
+        "name": "hydra.sql.syntax.InsertionTarget"}},
+    {"type": {"body": {"body": {"wrap": {"unit": {}}}, "variables": []}, "name": "hydra.sql.syntax.IntervalLiteral"}},
+    {"type": {"body": {"body": {"wrap": {"unit": {}}}, "variables": []}, "name": "hydra.sql.syntax.IntervalType"}},
     {
-      "type": {"name": "hydra.sql.syntax.IntervalValueExpression", "typeScheme": {"body": {"wrap": {"unit": {}}}, "variables": []}}},
-    {
-      "type": {"name": "hydra.sql.syntax.LargeObjectLength", "typeScheme": {"body": {"wrap": {"unit": {}}}, "variables": []}}},
-    {
-      "type": {
-        "name": "hydra.sql.syntax.Length",
-        "typeScheme": {"body": {"wrap": {"variable": "hydra.sql.syntax.UnsignedInteger"}}, "variables": []}}},
-    {"type": {"name": "hydra.sql.syntax.LikeClause", "typeScheme": {"body": {"wrap": {"unit": {}}}, "variables": []}}},
-    {"type": {"name": "hydra.sql.syntax.MethodInvocation", "typeScheme": {"body": {"wrap": {"unit": {}}}, "variables": []}}},
-    {
-      "type": {"name": "hydra.sql.syntax.MultisetElementReference", "typeScheme": {"body": {"wrap": {"unit": {}}}, "variables": []}}},
+      "type": {"body": {"body": {"wrap": {"unit": {}}}, "variables": []}, "name": "hydra.sql.syntax.IntervalValueExpression"}},
+    {"type": {"body": {"body": {"wrap": {"unit": {}}}, "variables": []}, "name": "hydra.sql.syntax.LargeObjectLength"}},
     {
       "type": {
-        "name": "hydra.sql.syntax.MultisetType",
-        "typeScheme": {"body": {"wrap": {"variable": "hydra.sql.syntax.DataType"}}, "variables": []}}},
+        "body": {"body": {"wrap": {"variable": "hydra.sql.syntax.UnsignedInteger"}}, "variables": []},
+        "name": "hydra.sql.syntax.Length"}},
+    {"type": {"body": {"body": {"wrap": {"unit": {}}}, "variables": []}, "name": "hydra.sql.syntax.LikeClause"}},
+    {"type": {"body": {"body": {"wrap": {"unit": {}}}, "variables": []}, "name": "hydra.sql.syntax.MethodInvocation"}},
     {
-      "type": {"name": "hydra.sql.syntax.MultisetValueConstructor", "typeScheme": {"body": {"wrap": {"unit": {}}}, "variables": []}}},
-    {
-      "type": {"name": "hydra.sql.syntax.MultisetValueExpression", "typeScheme": {"body": {"wrap": {"unit": {}}}, "variables": []}}},
-    {
-      "type": {
-        "name": "hydra.sql.syntax.NationalCharacterStringType",
-        "typeScheme": {"body": {"wrap": {"unit": {}}}, "variables": []}}},
-    {"type": {"name": "hydra.sql.syntax.NewSpecification", "typeScheme": {"body": {"wrap": {"unit": {}}}, "variables": []}}},
-    {
-      "type": {"name": "hydra.sql.syntax.NextValueExpression", "typeScheme": {"body": {"wrap": {"unit": {}}}, "variables": []}}},
+      "type": {"body": {"body": {"wrap": {"unit": {}}}, "variables": []}, "name": "hydra.sql.syntax.MultisetElementReference"}},
     {
       "type": {
-        "name": "hydra.sql.syntax.NumericType",
-        "typeScheme": {
+        "body": {"body": {"wrap": {"variable": "hydra.sql.syntax.DataType"}}, "variables": []},
+        "name": "hydra.sql.syntax.MultisetType"}},
+    {
+      "type": {"body": {"body": {"wrap": {"unit": {}}}, "variables": []}, "name": "hydra.sql.syntax.MultisetValueConstructor"}},
+    {
+      "type": {"body": {"body": {"wrap": {"unit": {}}}, "variables": []}, "name": "hydra.sql.syntax.MultisetValueExpression"}},
+    {
+      "type": {"body": {"body": {"wrap": {"unit": {}}}, "variables": []}, "name": "hydra.sql.syntax.NationalCharacterStringType"}},
+    {"type": {"body": {"body": {"wrap": {"unit": {}}}, "variables": []}, "name": "hydra.sql.syntax.NewSpecification"}},
+    {"type": {"body": {"body": {"wrap": {"unit": {}}}, "variables": []}, "name": "hydra.sql.syntax.NextValueExpression"}},
+    {
+      "type": {
+        "body": {
           "body": {
             "union": [
               {"name": "exact", "type": {"variable": "hydra.sql.syntax.ExactNumericType"}},
               {"name": "approximate", "type": {"variable": "hydra.sql.syntax.ApproximateNumericType"}}]},
-          "variables": []}}},
-    {
-      "type": {"name": "hydra.sql.syntax.NumericValueExpression", "typeScheme": {"body": {"wrap": {"unit": {}}}, "variables": []}}},
+          "variables": []},
+        "name": "hydra.sql.syntax.NumericType"}},
+    {"type": {"body": {"body": {"wrap": {"unit": {}}}, "variables": []}, "name": "hydra.sql.syntax.NumericValueExpression"}},
     {
       "type": {
-        "name": "hydra.sql.syntax.OverrideClause",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [{"name": "OVERRIDINGspUSERspVALUE", "type": {"unit": {}}}, {"name": "OVERRIDINGspSYSTEMspVALUE", "type": {"unit": {}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.sql.syntax.OverrideClause"}},
     {
       "type": {
-        "name": "hydra.sql.syntax.ParenthesizedValueExpression",
-        "typeScheme": {"body": {"wrap": {"variable": "hydra.sql.syntax.ValueExpression"}}, "variables": []}}},
+        "body": {"body": {"wrap": {"variable": "hydra.sql.syntax.ValueExpression"}}, "variables": []},
+        "name": "hydra.sql.syntax.ParenthesizedValueExpression"}},
     {
       "type": {
-        "name": "hydra.sql.syntax.Precision",
-        "typeScheme": {"body": {"wrap": {"variable": "hydra.sql.syntax.UnsignedInteger"}}, "variables": []}}},
+        "body": {"body": {"wrap": {"variable": "hydra.sql.syntax.UnsignedInteger"}}, "variables": []},
+        "name": "hydra.sql.syntax.Precision"}},
     {
       "type": {
-        "name": "hydra.sql.syntax.PredefinedType",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "string", "type": {"variable": "hydra.sql.syntax.PredefinedType_String"}},
@@ -535,40 +515,39 @@
               {"name": "boolean", "type": {"variable": "hydra.sql.syntax.BooleanType"}},
               {"name": "datetime", "type": {"variable": "hydra.sql.syntax.DatetimeType"}},
               {"name": "interval", "type": {"variable": "hydra.sql.syntax.IntervalType"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.sql.syntax.PredefinedType"}},
     {
       "type": {
-        "name": "hydra.sql.syntax.PredefinedType_String",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "type", "type": {"variable": "hydra.sql.syntax.CharacterStringType"}},
               {"name": "characters", "type": {"maybe": {"variable": "hydra.sql.syntax.CharacterSetSpecification"}}},
               {"name": "collate", "type": {"maybe": {"variable": "hydra.sql.syntax.CollateClause"}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.sql.syntax.PredefinedType_String"}},
     {
       "type": {
-        "name": "hydra.sql.syntax.PredefinedType_NationalString",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "type", "type": {"variable": "hydra.sql.syntax.NationalCharacterStringType"}},
               {"name": "collate", "type": {"maybe": {"variable": "hydra.sql.syntax.CollateClause"}}}]},
-          "variables": []}}},
-    {"type": {"name": "hydra.sql.syntax.Predicate", "typeScheme": {"body": {"wrap": {"unit": {}}}, "variables": []}}},
-    {"type": {"name": "hydra.sql.syntax.QueryExpression", "typeScheme": {"body": {"wrap": {"unit": {}}}, "variables": []}}},
-    {
-      "type": {"name": "hydra.sql.syntax.ReferenceScopeCheck", "typeScheme": {"body": {"wrap": {"unit": {}}}, "variables": []}}},
-    {"type": {"name": "hydra.sql.syntax.ReferenceType", "typeScheme": {"body": {"wrap": {"unit": {}}}, "variables": []}}},
-    {"type": {"name": "hydra.sql.syntax.RowType", "typeScheme": {"body": {"wrap": {"unit": {}}}, "variables": []}}},
-    {
-      "type": {
-        "name": "hydra.sql.syntax.RowValueSpecialCase",
-        "typeScheme": {"body": {"wrap": {"variable": "hydra.sql.syntax.NonparenthesizedValueExpressionPrimary"}}, "variables": []}}},
+          "variables": []},
+        "name": "hydra.sql.syntax.PredefinedType_NationalString"}},
+    {"type": {"body": {"body": {"wrap": {"unit": {}}}, "variables": []}, "name": "hydra.sql.syntax.Predicate"}},
+    {"type": {"body": {"body": {"wrap": {"unit": {}}}, "variables": []}, "name": "hydra.sql.syntax.QueryExpression"}},
+    {"type": {"body": {"body": {"wrap": {"unit": {}}}, "variables": []}, "name": "hydra.sql.syntax.ReferenceScopeCheck"}},
+    {"type": {"body": {"body": {"wrap": {"unit": {}}}, "variables": []}, "name": "hydra.sql.syntax.ReferenceType"}},
+    {"type": {"body": {"body": {"wrap": {"unit": {}}}, "variables": []}, "name": "hydra.sql.syntax.RowType"}},
     {
       "type": {
-        "name": "hydra.sql.syntax.NonparenthesizedValueExpressionPrimary",
-        "typeScheme": {
+        "body": {"body": {"wrap": {"variable": "hydra.sql.syntax.NonparenthesizedValueExpressionPrimary"}}, "variables": []},
+        "name": "hydra.sql.syntax.RowValueSpecialCase"}},
+    {
+      "type": {
+        "body": {
           "body": {
             "union": [
               {"name": "unsigned", "type": {"variable": "hydra.sql.syntax.UnsignedValueSpecification"}},
@@ -590,84 +569,79 @@
               {"name": "multisetElement", "type": {"variable": "hydra.sql.syntax.MultisetElementReference"}},
               {"name": "routine", "type": {"variable": "hydra.sql.syntax.RoutineInvocation"}},
               {"name": "next", "type": {"variable": "hydra.sql.syntax.NextValueExpression"}}]},
-          "variables": []}}},
-    {
-      "type": {"name": "hydra.sql.syntax.ReferenceResolution", "typeScheme": {"body": {"wrap": {"unit": {}}}, "variables": []}}},
-    {
-      "type": {
-        "name": "hydra.sql.syntax.ReferenceValueExpression",
-        "typeScheme": {"body": {"wrap": {"variable": "hydra.sql.syntax.ValueExpressionPrimary"}}, "variables": []}}},
-    {
-      "type": {"name": "hydra.sql.syntax.RowValueExpression", "typeScheme": {"body": {"wrap": {"unit": {}}}, "variables": []}}},
-    {
-      "type": {"name": "hydra.sql.syntax.RoutineInvocation", "typeScheme": {"body": {"wrap": {"unit": {}}}, "variables": []}}},
+          "variables": []},
+        "name": "hydra.sql.syntax.NonparenthesizedValueExpressionPrimary"}},
+    {"type": {"body": {"body": {"wrap": {"unit": {}}}, "variables": []}, "name": "hydra.sql.syntax.ReferenceResolution"}},
     {
       "type": {
-        "name": "hydra.sql.syntax.ScalarSubquery",
-        "typeScheme": {"body": {"wrap": {"variable": "hydra.sql.syntax.Subquery"}}, "variables": []}}},
+        "body": {"body": {"wrap": {"variable": "hydra.sql.syntax.ValueExpressionPrimary"}}, "variables": []},
+        "name": "hydra.sql.syntax.ReferenceValueExpression"}},
+    {"type": {"body": {"body": {"wrap": {"unit": {}}}, "variables": []}, "name": "hydra.sql.syntax.RowValueExpression"}},
+    {"type": {"body": {"body": {"wrap": {"unit": {}}}, "variables": []}, "name": "hydra.sql.syntax.RoutineInvocation"}},
     {
       "type": {
-        "name": "hydra.sql.syntax.Scale",
-        "typeScheme": {"body": {"wrap": {"variable": "hydra.sql.syntax.UnsignedInteger"}}, "variables": []}}},
+        "body": {"body": {"wrap": {"variable": "hydra.sql.syntax.Subquery"}}, "variables": []},
+        "name": "hydra.sql.syntax.ScalarSubquery"}},
     {
       "type": {
-        "name": "hydra.sql.syntax.SelfReferencingColumnSpecification",
-        "typeScheme": {"body": {"wrap": {"unit": {}}}, "variables": []}}},
-    {
-      "type": {"name": "hydra.sql.syntax.SetFunctionSpecification", "typeScheme": {"body": {"wrap": {"unit": {}}}, "variables": []}}},
-    {
-      "type": {"name": "hydra.sql.syntax.StaticMethodInvocation", "typeScheme": {"body": {"wrap": {"unit": {}}}, "variables": []}}},
-    {
-      "type": {"name": "hydra.sql.syntax.StringValueExpression", "typeScheme": {"body": {"wrap": {"unit": {}}}, "variables": []}}},
+        "body": {"body": {"wrap": {"variable": "hydra.sql.syntax.UnsignedInteger"}}, "variables": []},
+        "name": "hydra.sql.syntax.Scale"}},
     {
       "type": {
-        "name": "hydra.sql.syntax.Subquery",
-        "typeScheme": {"body": {"wrap": {"variable": "hydra.sql.syntax.QueryExpression"}}, "variables": []}}},
-    {"type": {"name": "hydra.sql.syntax.SubtableClause", "typeScheme": {"body": {"wrap": {"unit": {}}}, "variables": []}}},
-    {"type": {"name": "hydra.sql.syntax.SubtypeTreatment", "typeScheme": {"body": {"wrap": {"unit": {}}}, "variables": []}}},
+        "body": {"body": {"wrap": {"unit": {}}}, "variables": []},
+        "name": "hydra.sql.syntax.SelfReferencingColumnSpecification"}},
+    {
+      "type": {"body": {"body": {"wrap": {"unit": {}}}, "variables": []}, "name": "hydra.sql.syntax.SetFunctionSpecification"}},
+    {"type": {"body": {"body": {"wrap": {"unit": {}}}, "variables": []}, "name": "hydra.sql.syntax.StaticMethodInvocation"}},
+    {"type": {"body": {"body": {"wrap": {"unit": {}}}, "variables": []}, "name": "hydra.sql.syntax.StringValueExpression"}},
     {
       "type": {
-        "name": "hydra.sql.syntax.TableCommitAction",
-        "typeScheme": {
+        "body": {"body": {"wrap": {"variable": "hydra.sql.syntax.QueryExpression"}}, "variables": []},
+        "name": "hydra.sql.syntax.Subquery"}},
+    {"type": {"body": {"body": {"wrap": {"unit": {}}}, "variables": []}, "name": "hydra.sql.syntax.SubtableClause"}},
+    {"type": {"body": {"body": {"wrap": {"unit": {}}}, "variables": []}, "name": "hydra.sql.syntax.SubtypeTreatment"}},
+    {
+      "type": {
+        "body": {
           "body": {"union": [{"name": "preserve", "type": {"unit": {}}}, {"name": "delete", "type": {"unit": {}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.sql.syntax.TableCommitAction"}},
     {
-      "type": {"name": "hydra.sql.syntax.TableConstraintDefinition", "typeScheme": {"body": {"wrap": {"unit": {}}}, "variables": []}}},
+      "type": {"body": {"body": {"wrap": {"unit": {}}}, "variables": []}, "name": "hydra.sql.syntax.TableConstraintDefinition"}},
     {
       "type": {
-        "name": "hydra.sql.syntax.TableContentsSource",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "list", "type": {"variable": "hydra.sql.syntax.TableElementList"}},
               {"name": "subtable", "type": {"variable": "hydra.sql.syntax.TableContentsSource_Subtable"}},
               {"name": "subquery", "type": {"variable": "hydra.sql.syntax.AsSubqueryClause"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.sql.syntax.TableContentsSource"}},
     {
       "type": {
-        "name": "hydra.sql.syntax.TableContentsSource_Subtable",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "type", "type": {"variable": "hydra.sql.syntax.PathResolvedUserDefinedTypeName"}},
               {"name": "subtable", "type": {"maybe": {"variable": "hydra.sql.syntax.SubtableClause"}}},
               {"name": "elements", "type": {"maybe": {"variable": "hydra.sql.syntax.TableElementList"}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.sql.syntax.TableContentsSource_Subtable"}},
     {
       "type": {
-        "name": "hydra.sql.syntax.TableDefinition",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "scope", "type": {"maybe": {"variable": "hydra.sql.syntax.TableScope"}}},
               {"name": "name", "type": {"variable": "hydra.sql.syntax.TableName"}},
               {"name": "source", "type": {"variable": "hydra.sql.syntax.TableContentsSource"}},
               {"name": "commitActions", "type": {"maybe": {"variable": "hydra.sql.syntax.TableCommitAction"}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.sql.syntax.TableDefinition"}},
     {
       "type": {
-        "name": "hydra.sql.syntax.TableElement",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "column", "type": {"variable": "hydra.sql.syntax.ColumnDefinition"}},
@@ -675,85 +649,86 @@
               {"name": "like", "type": {"variable": "hydra.sql.syntax.LikeClause"}},
               {"name": "selfReferencingColumn", "type": {"variable": "hydra.sql.syntax.SelfReferencingColumnSpecification"}},
               {"name": "columOptions", "type": {"variable": "hydra.sql.syntax.ColumnOptions"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.sql.syntax.TableElement"}},
     {
       "type": {
-        "name": "hydra.sql.syntax.TableElementList",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "first", "type": {"variable": "hydra.sql.syntax.TableElement"}},
               {"name": "rest", "type": {"list": {"variable": "hydra.sql.syntax.TableElement"}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.sql.syntax.TableElementList"}},
     {
       "type": {
-        "name": "hydra.sql.syntax.TableScope",
-        "typeScheme": {"body": {"wrap": {"variable": "hydra.sql.syntax.GlobalOrLocal"}}, "variables": []}}},
+        "body": {"body": {"wrap": {"variable": "hydra.sql.syntax.GlobalOrLocal"}}, "variables": []},
+        "name": "hydra.sql.syntax.TableScope"}},
     {
       "type": {
-        "name": "hydra.sql.syntax.TimeLiteral",
-        "typeScheme": {"body": {"wrap": {"variable": "hydra.sql.syntax.TimeString"}}, "variables": []}}},
+        "body": {"body": {"wrap": {"variable": "hydra.sql.syntax.TimeString"}}, "variables": []},
+        "name": "hydra.sql.syntax.TimeLiteral"}},
     {
       "type": {
-        "name": "hydra.sql.syntax.TruthValue",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "TRUE", "type": {"unit": {}}},
               {"name": "FALSE", "type": {"unit": {}}},
               {"name": "UNKNOWN", "type": {"unit": {}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.sql.syntax.TruthValue"}},
     {
       "type": {
-        "name": "hydra.sql.syntax.UnsignedLiteral",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "numeric", "type": {"variable": "hydra.sql.syntax.UnsignedNumericLiteral"}},
               {"name": "general", "type": {"variable": "hydra.sql.syntax.GeneralLiteral"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.sql.syntax.UnsignedLiteral"}},
     {
       "type": {
-        "name": "hydra.sql.syntax.UnsignedNumericLiteral",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "exact", "type": {"variable": "hydra.sql.syntax.ExactNumericLiteral"}},
               {"name": "approximate", "type": {"variable": "hydra.sql.syntax.ApproximateNumericLiteral"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.sql.syntax.UnsignedNumericLiteral"}},
     {
       "type": {
-        "name": "hydra.sql.syntax.UnsignedValueSpecification",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "literal", "type": {"variable": "hydra.sql.syntax.UnsignedLiteral"}},
               {"name": "general", "type": {"variable": "hydra.sql.syntax.GeneralValueSpecification"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.sql.syntax.UnsignedValueSpecification"}},
     {
       "type": {
-        "name": "hydra.sql.syntax.UserDefinedTypeValueExpression",
-        "typeScheme": {"body": {"wrap": {"variable": "hydra.sql.syntax.ValueExpressionPrimary"}}, "variables": []}}},
+        "body": {"body": {"wrap": {"variable": "hydra.sql.syntax.ValueExpressionPrimary"}}, "variables": []},
+        "name": "hydra.sql.syntax.UserDefinedTypeValueExpression"}},
     {
       "type": {
-        "name": "hydra.sql.syntax.ValueExpression",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "common", "type": {"variable": "hydra.sql.syntax.CommonValueExpression"}},
               {"name": "boolean", "type": {"variable": "hydra.sql.syntax.BooleanValueExpression"}},
               {"name": "row", "type": {"variable": "hydra.sql.syntax.RowValueExpression"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.sql.syntax.ValueExpression"}},
     {
       "type": {
-        "name": "hydra.sql.syntax.ValueExpressionPrimary",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "parens", "type": {"variable": "hydra.sql.syntax.ParenthesizedValueExpression"}},
               {"name": "noparens", "type": {"variable": "hydra.sql.syntax.NonparenthesizedValueExpressionPrimary"}}]},
-          "variables": []}}},
-    {"type": {"name": "hydra.sql.syntax.WindowFunction", "typeScheme": {"body": {"wrap": {"unit": {}}}, "variables": []}}}],
+          "variables": []},
+        "name": "hydra.sql.syntax.ValueExpressionPrimary"}},
+    {"type": {"body": {"body": {"wrap": {"unit": {}}}, "variables": []}, "name": "hydra.sql.syntax.WindowFunction"}}],
   "dependencies": [],
   "metadata": {
     "comments": [],
