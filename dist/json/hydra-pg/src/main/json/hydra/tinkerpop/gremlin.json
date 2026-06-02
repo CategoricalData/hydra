@@ -2,65 +2,64 @@
   "definitions": [
     {
       "type": {
-        "name": "hydra.tinkerpop.gremlin.QueryList",
-        "typeScheme": {"body": {"wrap": {"list": {"variable": "hydra.tinkerpop.gremlin.Query"}}}, "variables": []}}},
+        "body": {"body": {"wrap": {"list": {"variable": "hydra.tinkerpop.gremlin.Query"}}}, "variables": []},
+        "name": "hydra.tinkerpop.gremlin.QueryList"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.gremlin.Query",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "traversalSource", "type": {"variable": "hydra.tinkerpop.gremlin.TraversalSourceQuery"}},
               {"name": "rootTraversal", "type": {"variable": "hydra.tinkerpop.gremlin.RootTraversalQuery"}},
               {"name": "toString", "type": {"unit": {}}},
               {"name": "empty", "type": {"unit": {}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.tinkerpop.gremlin.Query"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.gremlin.TraversalSourceQuery",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "source", "type": {"variable": "hydra.tinkerpop.gremlin.TraversalSource"}},
               {"name": "transactionPart", "type": {"maybe": {"variable": "hydra.tinkerpop.gremlin.TransactionPart"}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.tinkerpop.gremlin.TraversalSourceQuery"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.gremlin.RootTraversalQuery",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "root", "type": {"variable": "hydra.tinkerpop.gremlin.RootTraversal"}},
               {"name": "terminalMethod", "type": {"maybe": {"variable": "hydra.tinkerpop.gremlin.TraversalTerminalMethod"}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.tinkerpop.gremlin.RootTraversalQuery"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.gremlin.TraversalSource",
-        "typeScheme": {"body": {"wrap": {"list": {"variable": "hydra.tinkerpop.gremlin.TraversalSourceSelfMethod"}}}, "variables": []}}},
+        "body": {"body": {"wrap": {"list": {"variable": "hydra.tinkerpop.gremlin.TraversalSourceSelfMethod"}}}, "variables": []},
+        "name": "hydra.tinkerpop.gremlin.TraversalSource"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.gremlin.TransactionPart",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "begin", "type": {"unit": {}}},
               {"name": "commit", "type": {"unit": {}}},
               {"name": "rollback", "type": {"unit": {}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.tinkerpop.gremlin.TransactionPart"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.gremlin.RootTraversal",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "source", "type": {"variable": "hydra.tinkerpop.gremlin.TraversalSource"}},
               {"name": "spawnMethod", "type": {"variable": "hydra.tinkerpop.gremlin.TraversalSourceSpawnMethod"}},
               {"name": "chained", "type": {"list": {"variable": "hydra.tinkerpop.gremlin.ChainedTraversalElement"}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.tinkerpop.gremlin.RootTraversal"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.gremlin.TraversalSourceSelfMethod",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "withBulk", "type": {"literal": {"boolean": {}}}},
@@ -72,38 +71,38 @@
               {"name": "withStrategies", "type": {"list": {"variable": "hydra.tinkerpop.gremlin.TraversalStrategy"}}},
               {"name": "withoutStrategies", "type": {"list": {"variable": "hydra.tinkerpop.gremlin.Identifier"}}},
               {"name": "with", "type": {"variable": "hydra.tinkerpop.gremlin.StringArgumentAndOptionalGenericLiteralArgument"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.tinkerpop.gremlin.TraversalSourceSelfMethod"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.gremlin.GenericLiteralArgumentAndOptionalTraversalBiFunctionArgument",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "literal", "type": {"variable": "hydra.tinkerpop.gremlin.GenericLiteralArgument"}},
               {"name": "biFunction", "type": {"maybe": {"variable": "hydra.tinkerpop.gremlin.TraversalBiFunctionArgument"}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.tinkerpop.gremlin.GenericLiteralArgumentAndOptionalTraversalBiFunctionArgument"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.gremlin.StringArgumentAndGenericLiteralArgument",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "string", "type": {"variable": "hydra.tinkerpop.gremlin.StringArgument"}},
               {"name": "literal", "type": {"variable": "hydra.tinkerpop.gremlin.GenericLiteralArgument"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.tinkerpop.gremlin.StringArgumentAndGenericLiteralArgument"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.gremlin.StringArgumentAndOptionalGenericLiteralArgument",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "string", "type": {"variable": "hydra.tinkerpop.gremlin.StringArgument"}},
               {"name": "literal", "type": {"maybe": {"variable": "hydra.tinkerpop.gremlin.GenericLiteralArgument"}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.tinkerpop.gremlin.StringArgumentAndOptionalGenericLiteralArgument"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.gremlin.TraversalSourceSpawnMethod",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "addE", "type": {"variable": "hydra.tinkerpop.gremlin.StringArgumentOrNestedTraversal"}},
@@ -116,75 +115,75 @@
               {"name": "io", "type": {"variable": "hydra.tinkerpop.gremlin.StringArgument"}},
               {"name": "call", "type": {"maybe": {"variable": "hydra.tinkerpop.gremlin.ServiceCall"}}},
               {"name": "union", "type": {"list": {"variable": "hydra.tinkerpop.gremlin.NestedTraversal"}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.tinkerpop.gremlin.TraversalSourceSpawnMethod"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.gremlin.GenericLiteralMapNullableArgumentOrNestedTraversal",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "map", "type": {"variable": "hydra.tinkerpop.gremlin.GenericLiteralMapNullableArgument"}},
               {"name": "traversal", "type": {"variable": "hydra.tinkerpop.gremlin.NestedTraversal"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.tinkerpop.gremlin.GenericLiteralMapNullableArgumentOrNestedTraversal"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.gremlin.ServiceCall",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "service", "type": {"variable": "hydra.tinkerpop.gremlin.StringArgument"}},
               {"name": "arguments", "type": {"variable": "hydra.tinkerpop.gremlin.ServiceArguments"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.tinkerpop.gremlin.ServiceCall"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.gremlin.ServiceArguments",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "map", "type": {"maybe": {"variable": "hydra.tinkerpop.gremlin.GenericLiteralMapArgument"}}},
               {"name": "traversal", "type": {"maybe": {"variable": "hydra.tinkerpop.gremlin.NestedTraversal"}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.tinkerpop.gremlin.ServiceArguments"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.gremlin.ChainedTraversal",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "first", "type": {"variable": "hydra.tinkerpop.gremlin.TraversalMethod"}},
               {"name": "rest", "type": {"variable": "hydra.tinkerpop.gremlin.ChainedTraversalElement"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.tinkerpop.gremlin.ChainedTraversal"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.gremlin.ChainedTraversalElement",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "method", "type": {"variable": "hydra.tinkerpop.gremlin.TraversalMethod"}},
               {"name": "self", "type": {"variable": "hydra.tinkerpop.gremlin.TraversalSelfMethod"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.tinkerpop.gremlin.ChainedTraversalElement"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.gremlin.NestedTraversal",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "root", "type": {"variable": "hydra.tinkerpop.gremlin.RootTraversal"}},
               {"name": "chained", "type": {"variable": "hydra.tinkerpop.gremlin.ChainedTraversal"}},
               {"name": "anonymous", "type": {"variable": "hydra.tinkerpop.gremlin.ChainedTraversal"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.tinkerpop.gremlin.NestedTraversal"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.gremlin.TerminatedTraversal",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "root", "type": {"variable": "hydra.tinkerpop.gremlin.RootTraversal"}},
               {"name": "terminal", "type": {"variable": "hydra.tinkerpop.gremlin.TraversalTerminalMethod"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.tinkerpop.gremlin.TerminatedTraversal"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.gremlin.TraversalMethod",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "v", "type": {"list": {"variable": "hydra.tinkerpop.gremlin.GenericLiteralArgument"}}},
@@ -327,174 +326,174 @@
               {"name": "asDate", "type": {"unit": {}}},
               {"name": "dateAdd", "type": {"variable": "hydra.tinkerpop.gremlin.DateAddArgs"}},
               {"name": "dateDiff", "type": {"variable": "hydra.tinkerpop.gremlin.DateDiffArgs"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.tinkerpop.gremlin.TraversalMethod"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.gremlin.StringArgumentOrNestedTraversal",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "string", "type": {"variable": "hydra.tinkerpop.gremlin.StringArgument"}},
               {"name": "traversal", "type": {"variable": "hydra.tinkerpop.gremlin.NestedTraversal"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.tinkerpop.gremlin.StringArgumentOrNestedTraversal"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.gremlin.OptionalTraversalScopeArgumentAndStringArgument",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "scope", "type": {"maybe": {"variable": "hydra.tinkerpop.gremlin.TraversalScopeArgument"}}},
               {"name": "string", "type": {"variable": "hydra.tinkerpop.gremlin.StringArgument"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.tinkerpop.gremlin.OptionalTraversalScopeArgumentAndStringArgument"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.gremlin.StringArgumentAndOptionalStringLiteralVarargs",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "first", "type": {"variable": "hydra.tinkerpop.gremlin.StringArgument"}},
               {"name": "rest", "type": {"list": {"variable": "hydra.tinkerpop.gremlin.StringNullableArgument"}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.tinkerpop.gremlin.StringArgumentAndOptionalStringLiteralVarargs"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.gremlin.TraversalSackMethodArgumentOrIntegerArgument",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "consumer", "type": {"variable": "hydra.tinkerpop.gremlin.TraversalSackMethodArgument"}},
               {"name": "int", "type": {"variable": "hydra.tinkerpop.gremlin.IntegerArgument"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.tinkerpop.gremlin.TraversalSackMethodArgumentOrIntegerArgument"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.gremlin.ByArgs",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "order", "type": {"variable": "hydra.tinkerpop.gremlin.TraversalOrderArgument"}},
               {"name": "token", "type": {"variable": "hydra.tinkerpop.gremlin.TraversalTokenArgument"}},
               {"name": "other", "type": {"variable": "hydra.tinkerpop.gremlin.ByOtherArgs"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.tinkerpop.gremlin.ByArgs"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.gremlin.ByOtherArgs",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "comparator", "type": {"maybe": {"variable": "hydra.tinkerpop.gremlin.TraversalComparatorArgument"}}},
               {
                 "name": "other",
                 "type": {"maybe": {"variable": "hydra.tinkerpop.gremlin.TraversalFunctionArgumentOrStringArgumentOrNestedTraversal"}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.tinkerpop.gremlin.ByOtherArgs"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.gremlin.TraversalFunctionArgumentOrStringArgumentOrNestedTraversal",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "function", "type": {"variable": "hydra.tinkerpop.gremlin.TraversalFunctionArgument"}},
               {"name": "string", "type": {"variable": "hydra.tinkerpop.gremlin.StringArgument"}},
               {"name": "traversal", "type": {"variable": "hydra.tinkerpop.gremlin.NestedTraversal"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.tinkerpop.gremlin.TraversalFunctionArgumentOrStringArgumentOrNestedTraversal"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.gremlin.ChooseArgs",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "function", "type": {"variable": "hydra.tinkerpop.gremlin.TraversalFunctionArgument"}},
               {"name": "predicateTraversal", "type": {"variable": "hydra.tinkerpop.gremlin.PredicateTraversalArgument"}},
               {"name": "traversal", "type": {"variable": "hydra.tinkerpop.gremlin.NestedTraversalArgument"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.tinkerpop.gremlin.ChooseArgs"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.gremlin.PredicateTraversalArgument",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "predicate", "type": {"variable": "hydra.tinkerpop.gremlin.TraversalPredicate"}},
               {"name": "traversal1", "type": {"variable": "hydra.tinkerpop.gremlin.NestedTraversal"}},
               {"name": "traversal2", "type": {"maybe": {"variable": "hydra.tinkerpop.gremlin.NestedTraversal"}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.tinkerpop.gremlin.PredicateTraversalArgument"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.gremlin.NestedTraversalArgument",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "traversal1", "type": {"variable": "hydra.tinkerpop.gremlin.NestedTraversal"}},
               {"name": "traversal2", "type": {"maybe": {"variable": "hydra.tinkerpop.gremlin.NestedTraversal"}}},
               {"name": "traversal3", "type": {"maybe": {"variable": "hydra.tinkerpop.gremlin.NestedTraversal"}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.tinkerpop.gremlin.NestedTraversalArgument"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.gremlin.DedupArgs",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "scopeString", "type": {"variable": "hydra.tinkerpop.gremlin.ScopeStringArgument"}},
               {"name": "string", "type": {"list": {"variable": "hydra.tinkerpop.gremlin.StringNullableArgument"}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.tinkerpop.gremlin.DedupArgs"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.gremlin.ScopeStringArgument",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "scope", "type": {"variable": "hydra.tinkerpop.gremlin.TraversalScopeArgument"}},
               {"name": "strings", "type": {"list": {"variable": "hydra.tinkerpop.gremlin.StringNullableArgument"}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.tinkerpop.gremlin.ScopeStringArgument"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.gremlin.PredicateOrTraversal",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "predicate", "type": {"variable": "hydra.tinkerpop.gremlin.TraversalPredicate"}},
               {"name": "traversal", "type": {"variable": "hydra.tinkerpop.gremlin.NestedTraversal"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.tinkerpop.gremlin.PredicateOrTraversal"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.gremlin.GenericLiteralArgumentAndTraversalBiFunctionArgument",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "literal", "type": {"variable": "hydra.tinkerpop.gremlin.GenericLiteralArgument"}},
               {"name": "biFunction", "type": {"variable": "hydra.tinkerpop.gremlin.TraversalBiFunctionArgument"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.tinkerpop.gremlin.GenericLiteralArgumentAndTraversalBiFunctionArgument"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.gremlin.FromArgs",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "string", "type": {"variable": "hydra.tinkerpop.gremlin.StringArgument"}},
               {"name": "vertex", "type": {"variable": "hydra.tinkerpop.gremlin.StructureVertexArgument"}},
               {"name": "traversal", "type": {"variable": "hydra.tinkerpop.gremlin.NestedTraversal"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.tinkerpop.gremlin.FromArgs"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.gremlin.HasArgs",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "string", "type": {"variable": "hydra.tinkerpop.gremlin.HasStringArgumentAndOptionalStringLiteralVarargs"}},
               {"name": "traversalToken", "type": {"variable": "hydra.tinkerpop.gremlin.HasTraversalTokenArgs"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.tinkerpop.gremlin.HasArgs"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.gremlin.HasStringArgumentAndOptionalStringLiteralVarargs",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "string", "type": {"variable": "hydra.tinkerpop.gremlin.StringNullableArgument"}},
               {
                 "name": "rest",
                 "type": {"maybe": {"variable": "hydra.tinkerpop.gremlin.HasStringArgumentAndOptionalStringLiteralVarargsRest"}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.tinkerpop.gremlin.HasStringArgumentAndOptionalStringLiteralVarargs"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.gremlin.HasStringArgumentAndOptionalStringLiteralVarargsRest",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "object", "type": {"variable": "hydra.tinkerpop.gremlin.GenericLiteralArgument"}},
@@ -504,75 +503,75 @@
                 "type": {"variable": "hydra.tinkerpop.gremlin.StringNullableArgumentAndGenericLiteralArgument"}},
               {"name": "stringPredicate", "type": {"variable": "hydra.tinkerpop.gremlin.StringNullableArgumentAndTraversalPredicate"}},
               {"name": "traversal", "type": {"variable": "hydra.tinkerpop.gremlin.NestedTraversal"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.tinkerpop.gremlin.HasStringArgumentAndOptionalStringLiteralVarargsRest"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.gremlin.StringNullableArgumentAndGenericLiteralArgument",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "string", "type": {"variable": "hydra.tinkerpop.gremlin.StringNullableArgument"}},
               {"name": "literal", "type": {"variable": "hydra.tinkerpop.gremlin.GenericLiteralArgument"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.tinkerpop.gremlin.StringNullableArgumentAndGenericLiteralArgument"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.gremlin.StringNullableArgumentAndTraversalPredicate",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "string", "type": {"variable": "hydra.tinkerpop.gremlin.StringNullableArgument"}},
               {"name": "predicate", "type": {"variable": "hydra.tinkerpop.gremlin.TraversalPredicate"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.tinkerpop.gremlin.StringNullableArgumentAndTraversalPredicate"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.gremlin.HasTraversalTokenArgs",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "traversalToken", "type": {"variable": "hydra.tinkerpop.gremlin.TraversalTokenArgument"}},
               {"name": "rest", "type": {"variable": "hydra.tinkerpop.gremlin.HasTraversalTokenArgsRest"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.tinkerpop.gremlin.HasTraversalTokenArgs"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.gremlin.HasTraversalTokenArgsRest",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "literal", "type": {"variable": "hydra.tinkerpop.gremlin.GenericLiteralArgument"}},
               {"name": "predicate", "type": {"variable": "hydra.tinkerpop.gremlin.TraversalPredicate"}},
               {"name": "traversal", "type": {"variable": "hydra.tinkerpop.gremlin.NestedTraversal"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.tinkerpop.gremlin.HasTraversalTokenArgsRest"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.gremlin.GenericLiteralArgumentAndTraversalPredicate",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "literal", "type": {"variable": "hydra.tinkerpop.gremlin.GenericLiteralArgument"}},
               {"name": "predicate", "type": {"variable": "hydra.tinkerpop.gremlin.TraversalPredicate"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.tinkerpop.gremlin.GenericLiteralArgumentAndTraversalPredicate"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.gremlin.TraversalPredicateOrStringLiteralVarargs",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "predicate", "type": {"variable": "hydra.tinkerpop.gremlin.TraversalPredicate"}},
               {"name": "string", "type": {"list": {"variable": "hydra.tinkerpop.gremlin.StringNullableArgument"}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.tinkerpop.gremlin.TraversalPredicateOrStringLiteralVarargs"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.gremlin.TraversalPredicateOrGenericLiteralArgument",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "predicate", "type": {"variable": "hydra.tinkerpop.gremlin.TraversalPredicate"}},
               {"name": "literal", "type": {"list": {"variable": "hydra.tinkerpop.gremlin.GenericLiteralArgument"}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.tinkerpop.gremlin.TraversalPredicateOrGenericLiteralArgument"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.gremlin.OptionArgs",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "predicateTraversal", "type": {"variable": "hydra.tinkerpop.gremlin.TraversalPredicateAndNestedTraversal"}},
@@ -582,48 +581,48 @@
               {"name": "mergeTraversal", "type": {"variable": "hydra.tinkerpop.gremlin.TraversalMergeArgumentAndNestedTraversal"}},
               {"name": "objectTraversal", "type": {"variable": "hydra.tinkerpop.gremlin.GenericLiteralArgumentAndNestedTraversal"}},
               {"name": "traversal", "type": {"variable": "hydra.tinkerpop.gremlin.NestedTraversal"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.tinkerpop.gremlin.OptionArgs"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.gremlin.TraversalPredicateAndNestedTraversal",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "predicate", "type": {"variable": "hydra.tinkerpop.gremlin.TraversalPredicate"}},
               {"name": "traversal", "type": {"variable": "hydra.tinkerpop.gremlin.NestedTraversal"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.tinkerpop.gremlin.TraversalPredicateAndNestedTraversal"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.gremlin.TraversalMergeArgumentAndGenericLiteralMapNullableArgument",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "merge", "type": {"variable": "hydra.tinkerpop.gremlin.TraversalMergeArgument"}},
               {"name": "map", "type": {"variable": "hydra.tinkerpop.gremlin.GenericLiteralMapNullableArgument"}},
               {"name": "cardinality", "type": {"maybe": {"variable": "hydra.tinkerpop.gremlin.TraversalCardinality"}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.tinkerpop.gremlin.TraversalMergeArgumentAndGenericLiteralMapNullableArgument"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.gremlin.TraversalMergeArgumentAndNestedTraversal",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "merge", "type": {"variable": "hydra.tinkerpop.gremlin.TraversalMergeArgument"}},
               {"name": "traversal", "type": {"variable": "hydra.tinkerpop.gremlin.NestedTraversal"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.tinkerpop.gremlin.TraversalMergeArgumentAndNestedTraversal"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.gremlin.GenericLiteralArgumentAndNestedTraversal",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "object", "type": {"variable": "hydra.tinkerpop.gremlin.GenericLiteralArgument"}},
               {"name": "traversal", "type": {"variable": "hydra.tinkerpop.gremlin.NestedTraversal"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.tinkerpop.gremlin.GenericLiteralArgumentAndNestedTraversal"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.gremlin.PropertyArgs",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "cardinalityObjects", "type": {"variable": "hydra.tinkerpop.gremlin.TraversalCardinalityArgumentAndObjects"}},
@@ -632,57 +631,57 @@
               {
                 "name": "cardinalityObject",
                 "type": {"variable": "hydra.tinkerpop.gremlin.GenericLiteralMapNullableArgumentAndTraversalCardinalityArgument"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.tinkerpop.gremlin.PropertyArgs"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.gremlin.TraversalCardinalityArgumentAndObjects",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "cardinality", "type": {"variable": "hydra.tinkerpop.gremlin.TraversalCardinalityArgument"}},
               {"name": "objects", "type": {"list": {"variable": "hydra.tinkerpop.gremlin.GenericLiteralArgument"}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.tinkerpop.gremlin.TraversalCardinalityArgumentAndObjects"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.gremlin.GenericLiteralMapNullableArgumentAndTraversalCardinalityArgument",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "cardinality", "type": {"variable": "hydra.tinkerpop.gremlin.TraversalCardinalityArgument"}},
               {"name": "object", "type": {"variable": "hydra.tinkerpop.gremlin.GenericLiteralMapNullableArgument"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.tinkerpop.gremlin.GenericLiteralMapNullableArgumentAndTraversalCardinalityArgument"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.gremlin.RangeArgs",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "scope", "type": {"maybe": {"variable": "hydra.tinkerpop.gremlin.TraversalScopeArgument"}}},
               {"name": "min", "type": {"variable": "hydra.tinkerpop.gremlin.IntegerArgument"}},
               {"name": "max", "type": {"variable": "hydra.tinkerpop.gremlin.IntegerArgument"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.tinkerpop.gremlin.RangeArgs"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.gremlin.OptionalStringArgumentAndNestedTraversal",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "string", "type": {"maybe": {"variable": "hydra.tinkerpop.gremlin.StringArgument"}}},
               {"name": "traversal", "type": {"variable": "hydra.tinkerpop.gremlin.NestedTraversal"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.tinkerpop.gremlin.OptionalStringArgumentAndNestedTraversal"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.gremlin.OptionalTraversalScopeArgumentAndIntegerArgument",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "scope", "type": {"maybe": {"variable": "hydra.tinkerpop.gremlin.TraversalScopeArgument"}}},
               {"name": "long", "type": {"variable": "hydra.tinkerpop.gremlin.IntegerArgument"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.tinkerpop.gremlin.OptionalTraversalScopeArgumentAndIntegerArgument"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.gremlin.SelectArgs",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "column", "type": {"variable": "hydra.tinkerpop.gremlin.TraversalColumnArgument"}},
@@ -690,245 +689,245 @@
               {"name": "popTraversal", "type": {"variable": "hydra.tinkerpop.gremlin.TraversalPopArgumentAndNestedTraversal"}},
               {"name": "strings", "type": {"list": {"variable": "hydra.tinkerpop.gremlin.StringArgument"}}},
               {"name": "traversal", "type": {"variable": "hydra.tinkerpop.gremlin.NestedTraversal"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.tinkerpop.gremlin.SelectArgs"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.gremlin.PopStringsArgument",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "pop", "type": {"variable": "hydra.tinkerpop.gremlin.TraversalPopArgument"}},
               {"name": "string", "type": {"list": {"variable": "hydra.tinkerpop.gremlin.StringArgument"}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.tinkerpop.gremlin.PopStringsArgument"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.gremlin.TraversalPopArgumentAndNestedTraversal",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "pop", "type": {"variable": "hydra.tinkerpop.gremlin.TraversalPopArgument"}},
               {"name": "traversal", "type": {"variable": "hydra.tinkerpop.gremlin.NestedTraversal"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.tinkerpop.gremlin.TraversalPopArgumentAndNestedTraversal"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.gremlin.TailArgs",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "scope", "type": {"maybe": {"variable": "hydra.tinkerpop.gremlin.TraversalScopeArgument"}}},
               {"name": "integer", "type": {"maybe": {"variable": "hydra.tinkerpop.gremlin.IntegerArgument"}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.tinkerpop.gremlin.TailArgs"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.gremlin.ToArgs",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "direction", "type": {"variable": "hydra.tinkerpop.gremlin.DirectionAndVarargs"}},
               {"name": "string", "type": {"variable": "hydra.tinkerpop.gremlin.StringArgument"}},
               {"name": "vertex", "type": {"variable": "hydra.tinkerpop.gremlin.StructureVertexArgument"}},
               {"name": "traversal", "type": {"variable": "hydra.tinkerpop.gremlin.NestedTraversal"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.tinkerpop.gremlin.ToArgs"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.gremlin.DirectionAndVarargs",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "direction", "type": {"variable": "hydra.tinkerpop.gremlin.TraversalDirectionArgument"}},
               {"name": "varargs", "type": {"list": {"variable": "hydra.tinkerpop.gremlin.StringNullableArgument"}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.tinkerpop.gremlin.DirectionAndVarargs"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.gremlin.ValueMapArgs",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "string", "type": {"list": {"variable": "hydra.tinkerpop.gremlin.StringNullableArgument"}}},
               {"name": "boolean", "type": {"variable": "hydra.tinkerpop.gremlin.ValueMapBooleanArgs"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.tinkerpop.gremlin.ValueMapArgs"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.gremlin.ValueMapBooleanArgs",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "value", "type": {"variable": "hydra.tinkerpop.gremlin.BooleanArgument"}},
               {"name": "keys", "type": {"maybe": {"list": {"variable": "hydra.tinkerpop.gremlin.StringNullableArgument"}}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.tinkerpop.gremlin.ValueMapBooleanArgs"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.gremlin.WhereArgs",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "predicate", "type": {"variable": "hydra.tinkerpop.gremlin.WhereWithPredicateArgs"}},
               {"name": "string", "type": {"variable": "hydra.tinkerpop.gremlin.StringArgument"}},
               {"name": "traversal", "type": {"variable": "hydra.tinkerpop.gremlin.NestedTraversal"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.tinkerpop.gremlin.WhereArgs"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.gremlin.WhereWithPredicateArgs",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "leftArg", "type": {"maybe": {"variable": "hydra.tinkerpop.gremlin.StringArgument"}}},
               {"name": "predicate", "type": {"variable": "hydra.tinkerpop.gremlin.TraversalPredicate"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.tinkerpop.gremlin.WhereWithPredicateArgs"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.gremlin.WithArgs",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "keys", "type": {"variable": "hydra.tinkerpop.gremlin.WithArgsKeys"}},
               {"name": "values", "type": {"maybe": {"variable": "hydra.tinkerpop.gremlin.WithArgsValues"}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.tinkerpop.gremlin.WithArgs"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.gremlin.WithArgsKeys",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "withOption", "type": {"variable": "hydra.tinkerpop.gremlin.WithOptionKeys"}},
               {"name": "string", "type": {"variable": "hydra.tinkerpop.gremlin.StringArgument"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.tinkerpop.gremlin.WithArgsKeys"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.gremlin.WithArgsValues",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "withOptions", "type": {"variable": "hydra.tinkerpop.gremlin.WithOptionsValues"}},
               {"name": "io", "type": {"variable": "hydra.tinkerpop.gremlin.IoOptionsValues"}},
               {"name": "object", "type": {"variable": "hydra.tinkerpop.gremlin.GenericLiteralArgument"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.tinkerpop.gremlin.WithArgsValues"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.gremlin.ConcatArgs",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "traversal", "type": {"list": {"variable": "hydra.tinkerpop.gremlin.NestedTraversal"}}},
               {"name": "string", "type": {"list": {"variable": "hydra.tinkerpop.gremlin.StringNullableArgument"}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.tinkerpop.gremlin.ConcatArgs"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.gremlin.ReplaceArgs",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "scope", "type": {"maybe": {"variable": "hydra.tinkerpop.gremlin.TraversalScopeArgument"}}},
               {"name": "from", "type": {"variable": "hydra.tinkerpop.gremlin.StringNullableArgument"}},
               {"name": "to", "type": {"variable": "hydra.tinkerpop.gremlin.StringNullableArgument"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.tinkerpop.gremlin.ReplaceArgs"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.gremlin.SplitArgs",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "scope", "type": {"maybe": {"variable": "hydra.tinkerpop.gremlin.TraversalScopeArgument"}}},
               {"name": "delimiter", "type": {"variable": "hydra.tinkerpop.gremlin.StringNullableArgument"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.tinkerpop.gremlin.SplitArgs"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.gremlin.SubstringArgs",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "scope", "type": {"maybe": {"variable": "hydra.tinkerpop.gremlin.TraversalScopeArgument"}}},
               {"name": "start", "type": {"variable": "hydra.tinkerpop.gremlin.IntegerArgument"}},
               {"name": "end", "type": {"maybe": {"variable": "hydra.tinkerpop.gremlin.IntegerArgument"}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.tinkerpop.gremlin.SubstringArgs"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.gremlin.DateAddArgs",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "unit", "type": {"variable": "hydra.tinkerpop.gremlin.TraversalDTArgument"}},
               {"name": "duration", "type": {"variable": "hydra.tinkerpop.gremlin.IntegerArgument"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.tinkerpop.gremlin.DateAddArgs"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.gremlin.DateDiffArgs",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "traversal", "type": {"variable": "hydra.tinkerpop.gremlin.NestedTraversal"}},
               {"name": "date", "type": {"variable": "hydra.tinkerpop.gremlin.DateArgument"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.tinkerpop.gremlin.DateDiffArgs"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.gremlin.StructureVertex",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "new", "type": {"literal": {"boolean": {}}}},
               {"name": "id", "type": {"variable": "hydra.tinkerpop.gremlin.GenericLiteralArgument"}},
               {"name": "label", "type": {"variable": "hydra.tinkerpop.gremlin.StringArgument"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.tinkerpop.gremlin.StructureVertex"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.gremlin.TraversalStrategy",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "new", "type": {"literal": {"boolean": {}}}},
               {"name": "class", "type": {"variable": "hydra.tinkerpop.gremlin.Identifier"}},
               {"name": "configurations", "type": {"list": {"variable": "hydra.tinkerpop.gremlin.Configuration"}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.tinkerpop.gremlin.TraversalStrategy"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.gremlin.Configuration",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "key", "type": {"variable": "hydra.tinkerpop.gremlin.KeywordOrIdentifier"}},
               {"name": "value", "type": {"variable": "hydra.tinkerpop.gremlin.GenericLiteralArgument"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.tinkerpop.gremlin.Configuration"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.gremlin.KeywordOrIdentifier",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "keyword", "type": {"variable": "hydra.tinkerpop.gremlin.Keyword"}},
               {"name": "identifier", "type": {"variable": "hydra.tinkerpop.gremlin.Identifier"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.tinkerpop.gremlin.KeywordOrIdentifier"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.gremlin.TraversalScope",
-        "typeScheme": {
+        "body": {
           "body": {"union": [{"name": "local", "type": {"unit": {}}}, {"name": "global", "type": {"unit": {}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.tinkerpop.gremlin.TraversalScope"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.gremlin.TraversalToken",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "id", "type": {"unit": {}}},
               {"name": "label", "type": {"unit": {}}},
               {"name": "key", "type": {"unit": {}}},
               {"name": "value", "type": {"unit": {}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.tinkerpop.gremlin.TraversalToken"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.gremlin.TraversalMerge",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "onCreate", "type": {"unit": {}}},
               {"name": "onMatch", "type": {"unit": {}}},
               {"name": "outV", "type": {"unit": {}}},
               {"name": "inV", "type": {"unit": {}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.tinkerpop.gremlin.TraversalMerge"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.gremlin.TraversalOrder",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "incr", "type": {"unit": {}}},
@@ -936,43 +935,43 @@
               {"name": "asc", "type": {"unit": {}}},
               {"name": "desc", "type": {"unit": {}}},
               {"name": "shuffle", "type": {"unit": {}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.tinkerpop.gremlin.TraversalOrder"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.gremlin.TraversalDirection",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [{"name": "in", "type": {"unit": {}}}, {"name": "out", "type": {"unit": {}}}, {"name": "both", "type": {"unit": {}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.tinkerpop.gremlin.TraversalDirection"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.gremlin.TraversalCardinality",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "single", "type": {"variable": "hydra.tinkerpop.gremlin.GenericLiteral"}},
               {"name": "set", "type": {"variable": "hydra.tinkerpop.gremlin.GenericLiteral"}},
               {"name": "list", "type": {"variable": "hydra.tinkerpop.gremlin.GenericLiteral"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.tinkerpop.gremlin.TraversalCardinality"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.gremlin.TraversalColumn",
-        "typeScheme": {"body": {"union": [{"name": "keys", "type": {"unit": {}}}, {"name": "values", "type": {"unit": {}}}]}, "variables": []}}},
+        "body": {"body": {"union": [{"name": "keys", "type": {"unit": {}}}, {"name": "values", "type": {"unit": {}}}]}, "variables": []},
+        "name": "hydra.tinkerpop.gremlin.TraversalColumn"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.gremlin.TraversalPop",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "first", "type": {"unit": {}}},
               {"name": "last", "type": {"unit": {}}},
               {"name": "all", "type": {"unit": {}}},
               {"name": "mixed", "type": {"unit": {}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.tinkerpop.gremlin.TraversalPop"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.gremlin.TraversalOperator",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "addAll", "type": {"unit": {}}},
@@ -986,26 +985,26 @@
               {"name": "or", "type": {"unit": {}}},
               {"name": "sum", "type": {"unit": {}}},
               {"name": "sumLong", "type": {"unit": {}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.tinkerpop.gremlin.TraversalOperator"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.gremlin.TraversalPick",
-        "typeScheme": {"body": {"union": [{"name": "any", "type": {"unit": {}}}, {"name": "none", "type": {"unit": {}}}]}, "variables": []}}},
+        "body": {"body": {"union": [{"name": "any", "type": {"unit": {}}}, {"name": "none", "type": {"unit": {}}}]}, "variables": []},
+        "name": "hydra.tinkerpop.gremlin.TraversalPick"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.gremlin.TraversalDT",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "second", "type": {"unit": {}}},
               {"name": "minute", "type": {"unit": {}}},
               {"name": "hour", "type": {"unit": {}}},
               {"name": "day", "type": {"unit": {}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.tinkerpop.gremlin.TraversalDT"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.gremlin.TraversalPredicate",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "eq", "type": {"variable": "hydra.tinkerpop.gremlin.GenericLiteralArgument"}},
@@ -1031,20 +1030,20 @@
               {"name": "and", "type": {"variable": "hydra.tinkerpop.gremlin.TwoTraversalPredicates"}},
               {"name": "or", "type": {"variable": "hydra.tinkerpop.gremlin.TwoTraversalPredicates"}},
               {"name": "negate", "type": {"variable": "hydra.tinkerpop.gremlin.TraversalPredicate"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.tinkerpop.gremlin.TraversalPredicate"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.gremlin.TwoTraversalPredicates",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "left", "type": {"variable": "hydra.tinkerpop.gremlin.TraversalPredicate"}},
               {"name": "right", "type": {"variable": "hydra.tinkerpop.gremlin.TraversalPredicate"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.tinkerpop.gremlin.TwoTraversalPredicates"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.gremlin.TraversalTerminalMethod",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "explain", "type": {"unit": {}}},
@@ -1055,33 +1054,33 @@
               {"name": "toList", "type": {"unit": {}}},
               {"name": "toSet", "type": {"unit": {}}},
               {"name": "toBulkSet", "type": {"unit": {}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.tinkerpop.gremlin.TraversalTerminalMethod"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.gremlin.TraversalSelfMethod",
-        "typeScheme": {"body": {"union": [{"name": "discard", "type": {"unit": {}}}]}, "variables": []}}},
+        "body": {"body": {"union": [{"name": "discard", "type": {"unit": {}}}]}, "variables": []},
+        "name": "hydra.tinkerpop.gremlin.TraversalSelfMethod"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.gremlin.TraversalFunction",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "token", "type": {"variable": "hydra.tinkerpop.gremlin.TraversalToken"}},
               {"name": "column", "type": {"variable": "hydra.tinkerpop.gremlin.TraversalColumn"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.tinkerpop.gremlin.TraversalFunction"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.gremlin.RangeArgument",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "min", "type": {"variable": "hydra.tinkerpop.gremlin.GenericLiteralArgument"}},
               {"name": "max", "type": {"variable": "hydra.tinkerpop.gremlin.GenericLiteralArgument"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.tinkerpop.gremlin.RangeArgument"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.gremlin.WithOptionKeys",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "shortestPath", "type": {"variable": "hydra.tinkerpop.gremlin.ShortestPathConstants"}},
@@ -1091,41 +1090,41 @@
               {"name": "io", "type": {"variable": "hydra.tinkerpop.gremlin.IoOptionsKeys"}},
               {"name": "withOptionsTokens", "type": {"unit": {}}},
               {"name": "withOptionsIndexer", "type": {"unit": {}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.tinkerpop.gremlin.WithOptionKeys"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.gremlin.ConnectedComponentConstants",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "component", "type": {"unit": {}}},
               {"name": "edges", "type": {"unit": {}}},
               {"name": "propertyName", "type": {"unit": {}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.tinkerpop.gremlin.ConnectedComponentConstants"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.gremlin.PageRankConstants",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "edges", "type": {"unit": {}}},
               {"name": "times", "type": {"unit": {}}},
               {"name": "propertyName", "type": {"unit": {}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.tinkerpop.gremlin.PageRankConstants"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.gremlin.PeerPressureConstants",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "edges", "type": {"unit": {}}},
               {"name": "times", "type": {"unit": {}}},
               {"name": "propertyName", "type": {"unit": {}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.tinkerpop.gremlin.PeerPressureConstants"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.gremlin.ShortestPathConstants",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "target", "type": {"unit": {}}},
@@ -1133,11 +1132,11 @@
               {"name": "distance", "type": {"unit": {}}},
               {"name": "maxDistance", "type": {"unit": {}}},
               {"name": "includeEdges", "type": {"unit": {}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.tinkerpop.gremlin.ShortestPathConstants"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.gremlin.WithOptionsValues",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "tokens", "type": {"unit": {}}},
@@ -1149,280 +1148,280 @@
               {"name": "all", "type": {"unit": {}}},
               {"name": "list", "type": {"unit": {}}},
               {"name": "map", "type": {"unit": {}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.tinkerpop.gremlin.WithOptionsValues"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.gremlin.IoOptionsKeys",
-        "typeScheme": {
+        "body": {
           "body": {"union": [{"name": "reader", "type": {"unit": {}}}, {"name": "writer", "type": {"unit": {}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.tinkerpop.gremlin.IoOptionsKeys"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.gremlin.IoOptionsValues",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "gryo", "type": {"unit": {}}},
               {"name": "graphson", "type": {"unit": {}}},
               {"name": "graphml", "type": {"unit": {}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.tinkerpop.gremlin.IoOptionsValues"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.gremlin.BooleanArgument",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "value", "type": {"literal": {"boolean": {}}}},
               {"name": "variable", "type": {"variable": "hydra.tinkerpop.gremlin.Identifier"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.tinkerpop.gremlin.BooleanArgument"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.gremlin.IntegerArgument",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "value", "type": {"variable": "hydra.tinkerpop.gremlin.IntegerLiteral"}},
               {"name": "variable", "type": {"variable": "hydra.tinkerpop.gremlin.Identifier"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.tinkerpop.gremlin.IntegerArgument"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.gremlin.FloatArgument",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "value", "type": {"variable": "hydra.tinkerpop.gremlin.FloatLiteral"}},
               {"name": "variable", "type": {"variable": "hydra.tinkerpop.gremlin.Identifier"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.tinkerpop.gremlin.FloatArgument"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.gremlin.StringArgument",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "value", "type": {"literal": {"string": {}}}},
               {"name": "variable", "type": {"variable": "hydra.tinkerpop.gremlin.Identifier"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.tinkerpop.gremlin.StringArgument"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.gremlin.StringNullableArgument",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "value", "type": {"maybe": {"literal": {"string": {}}}}},
               {"name": "variable", "type": {"variable": "hydra.tinkerpop.gremlin.Identifier"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.tinkerpop.gremlin.StringNullableArgument"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.gremlin.DateArgument",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "value", "type": {"variable": "hydra.tinkerpop.gremlin.DateLiteral"}},
               {"name": "variable", "type": {"variable": "hydra.tinkerpop.gremlin.Identifier"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.tinkerpop.gremlin.DateArgument"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.gremlin.GenericLiteralArgument",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "value", "type": {"variable": "hydra.tinkerpop.gremlin.GenericLiteral"}},
               {"name": "variable", "type": {"variable": "hydra.tinkerpop.gremlin.Identifier"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.tinkerpop.gremlin.GenericLiteralArgument"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.gremlin.GenericLiteralListArgument",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "value", "type": {"variable": "hydra.tinkerpop.gremlin.GenericLiteralList"}},
               {"name": "variable", "type": {"variable": "hydra.tinkerpop.gremlin.Identifier"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.tinkerpop.gremlin.GenericLiteralListArgument"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.gremlin.GenericLiteralMapArgument",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "value", "type": {"variable": "hydra.tinkerpop.gremlin.GenericLiteralMap"}},
               {"name": "variable", "type": {"variable": "hydra.tinkerpop.gremlin.Identifier"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.tinkerpop.gremlin.GenericLiteralMapArgument"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.gremlin.GenericLiteralMapNullableArgument",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "value", "type": {"maybe": {"variable": "hydra.tinkerpop.gremlin.GenericLiteralMap"}}},
               {"name": "variable", "type": {"variable": "hydra.tinkerpop.gremlin.Identifier"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.tinkerpop.gremlin.GenericLiteralMapNullableArgument"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.gremlin.StructureVertexArgument",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "value", "type": {"variable": "hydra.tinkerpop.gremlin.StructureVertex"}},
               {"name": "variable", "type": {"variable": "hydra.tinkerpop.gremlin.Identifier"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.tinkerpop.gremlin.StructureVertexArgument"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.gremlin.TraversalCardinalityArgument",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "value", "type": {"variable": "hydra.tinkerpop.gremlin.TraversalCardinality"}},
               {"name": "variable", "type": {"variable": "hydra.tinkerpop.gremlin.Identifier"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.tinkerpop.gremlin.TraversalCardinalityArgument"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.gremlin.TraversalColumnArgument",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "value", "type": {"variable": "hydra.tinkerpop.gremlin.TraversalColumn"}},
               {"name": "variable", "type": {"variable": "hydra.tinkerpop.gremlin.Identifier"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.tinkerpop.gremlin.TraversalColumnArgument"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.gremlin.TraversalDirectionArgument",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "value", "type": {"variable": "hydra.tinkerpop.gremlin.TraversalDirection"}},
               {"name": "variable", "type": {"variable": "hydra.tinkerpop.gremlin.Identifier"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.tinkerpop.gremlin.TraversalDirectionArgument"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.gremlin.TraversalMergeArgument",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "value", "type": {"variable": "hydra.tinkerpop.gremlin.TraversalMerge"}},
               {"name": "variable", "type": {"variable": "hydra.tinkerpop.gremlin.Identifier"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.tinkerpop.gremlin.TraversalMergeArgument"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.gremlin.TraversalOrderArgument",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "value", "type": {"variable": "hydra.tinkerpop.gremlin.TraversalOrder"}},
               {"name": "variable", "type": {"variable": "hydra.tinkerpop.gremlin.Identifier"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.tinkerpop.gremlin.TraversalOrderArgument"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.gremlin.TraversalPopArgument",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "value", "type": {"variable": "hydra.tinkerpop.gremlin.TraversalPop"}},
               {"name": "variable", "type": {"variable": "hydra.tinkerpop.gremlin.Identifier"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.tinkerpop.gremlin.TraversalPopArgument"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.gremlin.TraversalSackMethodArgument",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "value", "type": {"unit": {}}},
               {"name": "variable", "type": {"variable": "hydra.tinkerpop.gremlin.Identifier"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.tinkerpop.gremlin.TraversalSackMethodArgument"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.gremlin.TraversalScopeArgument",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "value", "type": {"variable": "hydra.tinkerpop.gremlin.TraversalScope"}},
               {"name": "variable", "type": {"variable": "hydra.tinkerpop.gremlin.Identifier"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.tinkerpop.gremlin.TraversalScopeArgument"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.gremlin.TraversalTokenArgument",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "value", "type": {"variable": "hydra.tinkerpop.gremlin.TraversalToken"}},
               {"name": "variable", "type": {"variable": "hydra.tinkerpop.gremlin.Identifier"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.tinkerpop.gremlin.TraversalTokenArgument"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.gremlin.TraversalComparatorArgument",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "value", "type": {"variable": "hydra.tinkerpop.gremlin.TraversalOrder"}},
               {"name": "variable", "type": {"variable": "hydra.tinkerpop.gremlin.Identifier"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.tinkerpop.gremlin.TraversalComparatorArgument"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.gremlin.TraversalFunctionArgument",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "value", "type": {"variable": "hydra.tinkerpop.gremlin.TraversalFunction"}},
               {"name": "variable", "type": {"variable": "hydra.tinkerpop.gremlin.Identifier"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.tinkerpop.gremlin.TraversalFunctionArgument"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.gremlin.TraversalBiFunctionArgument",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "value", "type": {"variable": "hydra.tinkerpop.gremlin.TraversalOperator"}},
               {"name": "variable", "type": {"variable": "hydra.tinkerpop.gremlin.Identifier"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.tinkerpop.gremlin.TraversalBiFunctionArgument"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.gremlin.TraversalDTArgument",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "value", "type": {"variable": "hydra.tinkerpop.gremlin.TraversalDT"}},
               {"name": "variable", "type": {"variable": "hydra.tinkerpop.gremlin.Identifier"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.tinkerpop.gremlin.TraversalDTArgument"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.gremlin.GenericLiteralList",
-        "typeScheme": {"body": {"wrap": {"list": {"variable": "hydra.tinkerpop.gremlin.GenericLiteral"}}}, "variables": []}}},
+        "body": {"body": {"wrap": {"list": {"variable": "hydra.tinkerpop.gremlin.GenericLiteral"}}}, "variables": []},
+        "name": "hydra.tinkerpop.gremlin.GenericLiteralList"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.gremlin.GenericLiteralRange",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "integer", "type": {"variable": "hydra.tinkerpop.gremlin.IntegerRange"}},
               {"name": "string", "type": {"variable": "hydra.tinkerpop.gremlin.StringRange"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.tinkerpop.gremlin.GenericLiteralRange"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.gremlin.IntegerRange",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "left", "type": {"variable": "hydra.tinkerpop.gremlin.IntegerLiteral"}},
               {"name": "right", "type": {"variable": "hydra.tinkerpop.gremlin.IntegerLiteral"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.tinkerpop.gremlin.IntegerRange"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.gremlin.StringRange",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [{"name": "left", "type": {"literal": {"string": {}}}}, {"name": "right", "type": {"literal": {"string": {}}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.tinkerpop.gremlin.StringRange"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.gremlin.GenericLiteralSet",
-        "typeScheme": {"body": {"wrap": {"list": {"variable": "hydra.tinkerpop.gremlin.GenericLiteral"}}}, "variables": []}}},
+        "body": {"body": {"wrap": {"list": {"variable": "hydra.tinkerpop.gremlin.GenericLiteral"}}}, "variables": []},
+        "name": "hydra.tinkerpop.gremlin.GenericLiteralSet"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.gremlin.GenericLiteralCollection",
-        "typeScheme": {"body": {"wrap": {"list": {"variable": "hydra.tinkerpop.gremlin.GenericLiteral"}}}, "variables": []}}},
+        "body": {"body": {"wrap": {"list": {"variable": "hydra.tinkerpop.gremlin.GenericLiteral"}}}, "variables": []},
+        "name": "hydra.tinkerpop.gremlin.GenericLiteralCollection"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.gremlin.GenericLiteral",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "numeric", "type": {"variable": "hydra.tinkerpop.gremlin.NumericLiteral"}},
@@ -1445,24 +1444,24 @@
               {"name": "nestedTraversal", "type": {"variable": "hydra.tinkerpop.gremlin.NestedTraversal"}},
               {"name": "terminatedTraversal", "type": {"variable": "hydra.tinkerpop.gremlin.TerminatedTraversal"}},
               {"name": "genericLiteralMap", "type": {"variable": "hydra.tinkerpop.gremlin.GenericLiteralMap"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.tinkerpop.gremlin.GenericLiteral"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.gremlin.GenericLiteralMap",
-        "typeScheme": {"body": {"wrap": {"list": {"variable": "hydra.tinkerpop.gremlin.MapEntry"}}}, "variables": []}}},
+        "body": {"body": {"wrap": {"list": {"variable": "hydra.tinkerpop.gremlin.MapEntry"}}}, "variables": []},
+        "name": "hydra.tinkerpop.gremlin.GenericLiteralMap"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.gremlin.MapEntry",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "key", "type": {"variable": "hydra.tinkerpop.gremlin.MapKey"}},
               {"name": "value", "type": {"variable": "hydra.tinkerpop.gremlin.GenericLiteral"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.tinkerpop.gremlin.MapEntry"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.gremlin.MapKey",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "string", "type": {"literal": {"string": {}}}},
@@ -1474,43 +1473,42 @@
               {"name": "map", "type": {"variable": "hydra.tinkerpop.gremlin.GenericLiteralMap"}},
               {"name": "keyword", "type": {"variable": "hydra.tinkerpop.gremlin.Keyword"}},
               {"name": "identifier", "type": {"variable": "hydra.tinkerpop.gremlin.Identifier"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.tinkerpop.gremlin.MapKey"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.gremlin.IntegerLiteral",
-        "typeScheme": {"body": {"wrap": {"literal": {"integer": {"bigint": {}}}}}, "variables": []}}},
+        "body": {"body": {"wrap": {"literal": {"integer": {"bigint": {}}}}}, "variables": []},
+        "name": "hydra.tinkerpop.gremlin.IntegerLiteral"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.gremlin.FloatLiteral",
-        "typeScheme": {"body": {"wrap": {"literal": {"float": {"float64": {}}}}}, "variables": []}}},
+        "body": {"body": {"wrap": {"literal": {"float": {"float64": {}}}}}, "variables": []},
+        "name": "hydra.tinkerpop.gremlin.FloatLiteral"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.gremlin.NumericLiteral",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "integer", "type": {"variable": "hydra.tinkerpop.gremlin.IntegerLiteral"}},
               {"name": "float", "type": {"variable": "hydra.tinkerpop.gremlin.FloatLiteral"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.tinkerpop.gremlin.NumericLiteral"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.gremlin.DateLiteral",
-        "typeScheme": {"body": {"wrap": {"maybe": {"variable": "hydra.tinkerpop.gremlin.StringArgument"}}}, "variables": []}}},
+        "body": {"body": {"wrap": {"maybe": {"variable": "hydra.tinkerpop.gremlin.StringArgument"}}}, "variables": []},
+        "name": "hydra.tinkerpop.gremlin.DateLiteral"}},
     {
       "type": {
-        "name": "hydra.tinkerpop.gremlin.Keyword",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "edges", "type": {"unit": {}}},
               {"name": "keys", "type": {"unit": {}}},
               {"name": "new", "type": {"unit": {}}},
               {"name": "values", "type": {"unit": {}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.tinkerpop.gremlin.Keyword"}},
     {
-      "type": {
-        "name": "hydra.tinkerpop.gremlin.Identifier",
-        "typeScheme": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}}}],
+      "type": {"body": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}, "name": "hydra.tinkerpop.gremlin.Identifier"}}],
   "dependencies": [{"module": "hydra.core"}],
   "metadata": {
     "comments": [],

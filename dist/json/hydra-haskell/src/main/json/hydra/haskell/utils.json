@@ -2,14 +2,7 @@
   "definitions": [
     {
       "term": {
-        "name": "hydra.haskell.utils.applicationPattern",
-        "signature": {
-          "parameters": [
-            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.haskell.syntax.Name"}},
-            {"isLazy": false, "name": "arg1", "type": {"list": {"variable": "hydra.haskell.syntax.Pattern"}}}],
-          "result": {"type": {"variable": "hydra.haskell.syntax.Pattern"}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -31,21 +24,17 @@
                     "domain": {"list": {"variable": "hydra.haskell.syntax.Pattern"}},
                     "parameter": "args"}},
                 "domain": {"variable": "hydra.haskell.syntax.Name"},
-                "parameter": "name"}}}}}},
-    {
-      "term": {
-        "name": "hydra.haskell.utils.elementReference",
+                "parameter": "name"}}}},
+        "name": "hydra.haskell.utils.applicationPattern",
         "signature": {
           "parameters": [
-            {
-              "isLazy": false,
-              "name": "arg0",
-              "type": {
-                "application": {"argument": {"variable": "hydra.haskell.syntax.ModuleName"}, "function": {"variable": "hydra.util.ModuleNames"}}}},
-            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.core.Name"}}],
-          "result": {"type": {"variable": "hydra.haskell.syntax.Name"}},
-          "typeParameters": []},
-        "term": {
+            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.haskell.syntax.Name"}},
+            {"isLazy": false, "name": "arg1", "type": {"list": {"variable": "hydra.haskell.syntax.Pattern"}}}],
+          "result": {"type": {"variable": "hydra.haskell.syntax.Pattern"}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Generate a Haskell name reference for a Hydra element"}}}],
             "body": {
@@ -107,13 +96,13 @@
                           {
                             "name": "qname",
                             "term": {"application": {"argument": {"variable": "name"}, "function": {"variable": "hydra.names.qualifyName"}}},
-                            "typeScheme": {"body": {"variable": "hydra.packaging.QualifiedName"}, "variables": []}},
+                            "typeScheme": {"body": {"variable": "hydra.util.QualifiedName"}, "variables": []}},
                           {
                             "name": "local",
                             "term": {
                               "application": {
                                 "argument": {"variable": "qname"},
-                                "function": {"project": {"fieldName": "local", "typeName": "hydra.packaging.QualifiedName"}}}},
+                                "function": {"project": {"fieldName": "local", "typeName": "hydra.util.QualifiedName"}}}},
                             "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}},
                           {
                             "name": "escLocal",
@@ -125,7 +114,7 @@
                             "term": {
                               "application": {
                                 "argument": {"variable": "qname"},
-                                "function": {"project": {"fieldName": "moduleName", "typeName": "hydra.packaging.QualifiedName"}}}},
+                                "function": {"project": {"fieldName": "moduleName", "typeName": "hydra.util.QualifiedName"}}}},
                             "typeScheme": {"body": {"maybe": {"variable": "hydra.packaging.ModuleName"}}, "variables": []}}],
                         "body": {
                           "application": {
@@ -202,7 +191,7 @@
                                     "argument": {
                                       "application": {
                                         "argument": {"variable": "qname"},
-                                        "function": {"project": {"fieldName": "moduleName", "typeName": "hydra.packaging.QualifiedName"}}}},
+                                        "function": {"project": {"fieldName": "moduleName", "typeName": "hydra.util.QualifiedName"}}}},
                                     "function": {
                                       "typeApplication": {
                                         "body": {
@@ -212,17 +201,21 @@
                     "parameter": "name"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.haskell.syntax.ModuleName"}, "function": {"variable": "hydra.util.ModuleNames"}}},
-                "parameter": "namespaces"}}}}}},
-    {
-      "term": {
-        "name": "hydra.haskell.utils.hsapp",
+                "parameter": "namespaces"}}}},
+        "name": "hydra.haskell.utils.elementReference",
         "signature": {
           "parameters": [
-            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.haskell.syntax.Expression"}},
-            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.haskell.syntax.Expression"}}],
-          "result": {"type": {"variable": "hydra.haskell.syntax.Expression"}},
-          "typeParameters": []},
-        "term": {
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {
+                "application": {"argument": {"variable": "hydra.haskell.syntax.ModuleName"}, "function": {"variable": "hydra.util.ModuleNames"}}}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.core.Name"}}],
+          "result": {"type": {"variable": "hydra.haskell.syntax.Name"}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Create a Haskell function application expression"}}}],
             "body": {
@@ -241,17 +234,17 @@
                     "domain": {"variable": "hydra.haskell.syntax.Expression"},
                     "parameter": "r"}},
                 "domain": {"variable": "hydra.haskell.syntax.Expression"},
-                "parameter": "l"}}}}}},
-    {
-      "term": {
-        "name": "hydra.haskell.utils.hslambda",
+                "parameter": "l"}}}},
+        "name": "hydra.haskell.utils.hsapp",
         "signature": {
           "parameters": [
-            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.haskell.syntax.Name"}},
+            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.haskell.syntax.Expression"}},
             {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.haskell.syntax.Expression"}}],
           "result": {"type": {"variable": "hydra.haskell.syntax.Expression"}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Create a Haskell lambda expression"}}}],
             "body": {
@@ -275,30 +268,32 @@
                     "domain": {"variable": "hydra.haskell.syntax.Expression"},
                     "parameter": "rhs"}},
                 "domain": {"variable": "hydra.haskell.syntax.Name"},
-                "parameter": "name"}}}}}},
+                "parameter": "name"}}}},
+        "name": "hydra.haskell.utils.hslambda",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.haskell.syntax.Name"}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.haskell.syntax.Expression"}}],
+          "result": {"type": {"variable": "hydra.haskell.syntax.Expression"}},
+          "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.haskell.utils.hslit",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.haskell.syntax.Literal"}}],
-          "result": {"type": {"variable": "hydra.haskell.syntax.Expression"}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Create a Haskell literal expression"}}}],
             "body": {
               "lambda": {
                 "body": {"inject": {"field": {"name": "literal", "term": {"variable": "lit"}}, "typeName": "hydra.haskell.syntax.Expression"}},
                 "domain": {"variable": "hydra.haskell.syntax.Literal"},
-                "parameter": "lit"}}}}}},
+                "parameter": "lit"}}}},
+        "name": "hydra.haskell.utils.hslit",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.haskell.syntax.Literal"}}],
+          "result": {"type": {"variable": "hydra.haskell.syntax.Expression"}},
+          "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.haskell.utils.hsvar",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"string": {}}}}],
-          "result": {"type": {"variable": "hydra.haskell.syntax.Expression"}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Create a Haskell variable expression from a string"}}}],
             "body": {
@@ -310,23 +305,15 @@
                       "term": {"application": {"argument": {"variable": "s"}, "function": {"variable": "hydra.haskell.utils.rawName"}}}},
                     "typeName": "hydra.haskell.syntax.Expression"}},
                 "domain": {"literal": {"string": {}}},
-                "parameter": "s"}}}}}},
+                "parameter": "s"}}}},
+        "name": "hydra.haskell.utils.hsvar",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"string": {}}}}],
+          "result": {"type": {"variable": "hydra.haskell.syntax.Expression"}},
+          "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.haskell.utils.namespacesForModule",
-        "signature": {
-          "parameters": [
-            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.packaging.Module"}},
-            {"isLazy": false, "name": "arg1", "type": {"variable": "t0"}},
-            {"isLazy": false, "name": "arg2", "type": {"variable": "hydra.graph.Graph"}}],
-          "result": {
-            "type": {
-              "either": {
-                "left": {"variable": "hydra.errors.Error"},
-                "right": {
-                  "application": {"argument": {"variable": "hydra.haskell.syntax.ModuleName"}, "function": {"variable": "hydra.util.ModuleNames"}}}}}},
-          "typeParameters": [{"constraints": [], "name": "t0"}]},
-        "term": {
+        "body": {
           "typeLambda": {
             "body": {
               "annotated": {
@@ -1747,15 +1734,23 @@
                         "parameter": "cx"}},
                     "domain": {"variable": "hydra.packaging.Module"},
                     "parameter": "mod"}}}},
-            "parameter": "t0"}}}},
+            "parameter": "t0"}},
+        "name": "hydra.haskell.utils.namespacesForModule",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.packaging.Module"}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "t0"}},
+            {"isLazy": false, "name": "arg2", "type": {"variable": "hydra.graph.Graph"}}],
+          "result": {
+            "type": {
+              "either": {
+                "left": {"variable": "hydra.errors.Error"},
+                "right": {
+                  "application": {"argument": {"variable": "hydra.haskell.syntax.ModuleName"}, "function": {"variable": "hydra.util.ModuleNames"}}}}}},
+          "typeParameters": [{"constraints": [], "name": "t0"}]}}},
     {
       "term": {
-        "name": "hydra.haskell.utils.newtypeAccessorName",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.core.Name"}}],
-          "result": {"type": {"literal": {"string": {}}}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -1768,15 +1763,15 @@
                     "argument": {"application": {"argument": {"variable": "name"}, "function": {"variable": "hydra.names.localNameOf"}}},
                     "function": {"application": {"argument": {"literal": {"string": "un"}}, "function": {"variable": "hydra.lib.strings.cat2"}}}}},
                 "domain": {"variable": "hydra.core.Name"},
-                "parameter": "name"}}}}}},
+                "parameter": "name"}}}},
+        "name": "hydra.haskell.utils.newtypeAccessorName",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.core.Name"}}],
+          "result": {"type": {"literal": {"string": {}}}},
+          "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.haskell.utils.rawName",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"string": {}}}}],
-          "result": {"type": {"variable": "hydra.haskell.syntax.Name"}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {"key": "description", "value": {"literal": {"string": "Create a raw Haskell name from a string without sanitization"}}}],
@@ -1796,22 +1791,15 @@
                           "typeName": "hydra.haskell.syntax.QualifiedName"}}},
                     "typeName": "hydra.haskell.syntax.Name"}},
                 "domain": {"literal": {"string": {}}},
-                "parameter": "n"}}}}}},
+                "parameter": "n"}}}},
+        "name": "hydra.haskell.utils.rawName",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"string": {}}}}],
+          "result": {"type": {"variable": "hydra.haskell.syntax.Name"}},
+          "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.haskell.utils.recordFieldReference",
-        "signature": {
-          "parameters": [
-            {
-              "isLazy": false,
-              "name": "arg0",
-              "type": {
-                "application": {"argument": {"variable": "hydra.haskell.syntax.ModuleName"}, "function": {"variable": "hydra.util.ModuleNames"}}}},
-            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.core.Name"}},
-            {"isLazy": false, "name": "arg2", "type": {"variable": "hydra.core.Name"}}],
-          "result": {"type": {"variable": "hydra.haskell.syntax.Name"}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Generate a Haskell name for a record field accessor"}}}],
             "body": {
@@ -1830,13 +1818,13 @@
                               {
                                 "name": "qname",
                                 "term": {"application": {"argument": {"variable": "sname"}, "function": {"variable": "hydra.names.qualifyName"}}},
-                                "typeScheme": {"body": {"variable": "hydra.packaging.QualifiedName"}, "variables": []}},
+                                "typeScheme": {"body": {"variable": "hydra.util.QualifiedName"}, "variables": []}},
                               {
                                 "name": "ns",
                                 "term": {
                                   "application": {
                                     "argument": {"variable": "qname"},
-                                    "function": {"project": {"fieldName": "moduleName", "typeName": "hydra.packaging.QualifiedName"}}}},
+                                    "function": {"project": {"fieldName": "moduleName", "typeName": "hydra.util.QualifiedName"}}}},
                                 "typeScheme": {"body": {"maybe": {"variable": "hydra.packaging.ModuleName"}}, "variables": []}},
                               {
                                 "name": "typeNameStr",
@@ -1862,8 +1850,8 @@
                                 "term": {
                                   "record": {
                                     "fields": [{"name": "moduleName", "term": {"variable": "ns"}}, {"name": "local", "term": {"variable": "nm"}}],
-                                    "typeName": "hydra.packaging.QualifiedName"}},
-                                "typeScheme": {"body": {"variable": "hydra.packaging.QualifiedName"}, "variables": []}},
+                                    "typeName": "hydra.util.QualifiedName"}},
+                                "typeScheme": {"body": {"variable": "hydra.util.QualifiedName"}, "variables": []}},
                               {
                                 "name": "unqualName",
                                 "term": {"application": {"argument": {"variable": "qualName"}, "function": {"variable": "hydra.names.unqualifyName"}}},
@@ -1879,15 +1867,22 @@
                     "parameter": "sname"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.haskell.syntax.ModuleName"}, "function": {"variable": "hydra.util.ModuleNames"}}},
-                "parameter": "namespaces"}}}}}},
+                "parameter": "namespaces"}}}},
+        "name": "hydra.haskell.utils.recordFieldReference",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {
+                "application": {"argument": {"variable": "hydra.haskell.syntax.ModuleName"}, "function": {"variable": "hydra.util.ModuleNames"}}}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.core.Name"}},
+            {"isLazy": false, "name": "arg2", "type": {"variable": "hydra.core.Name"}}],
+          "result": {"type": {"variable": "hydra.haskell.syntax.Name"}},
+          "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.haskell.utils.sanitizeHaskellName",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"string": {}}}}],
-          "result": {"type": {"literal": {"string": {}}}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -1896,15 +1891,15 @@
             "body": {
               "application": {
                 "argument": {"variable": "hydra.haskell.language.reservedWords"},
-                "function": {"variable": "hydra.formatting.sanitizeWithUnderscores"}}}}}}},
-    {
-      "term": {
-        "name": "hydra.haskell.utils.simpleName",
+                "function": {"variable": "hydra.formatting.sanitizeWithUnderscores"}}}}},
+        "name": "hydra.haskell.utils.sanitizeHaskellName",
         "signature": {
           "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"string": {}}}}],
-          "result": {"type": {"variable": "hydra.haskell.syntax.Name"}},
-          "typeParameters": []},
-        "term": {
+          "result": {"type": {"literal": {"string": {}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Create a sanitized Haskell name from a string"}}}],
             "body": {
@@ -1914,18 +1909,15 @@
                     "argument": {"application": {"argument": {"variable": "arg_"}, "function": {"variable": "hydra.haskell.utils.sanitizeHaskellName"}}},
                     "function": {"variable": "hydra.haskell.utils.rawName"}}},
                 "domain": {"literal": {"string": {}}},
-                "parameter": "arg_"}}}}}},
+                "parameter": "arg_"}}}},
+        "name": "hydra.haskell.utils.simpleName",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"string": {}}}}],
+          "result": {"type": {"variable": "hydra.haskell.syntax.Name"}},
+          "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.haskell.utils.simpleValueBinding",
-        "signature": {
-          "parameters": [
-            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.haskell.syntax.Name"}},
-            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.haskell.syntax.Expression"}},
-            {"isLazy": false, "name": "arg2", "type": {"maybe": {"variable": "hydra.haskell.syntax.LocalBindings"}}}],
-          "result": {"type": {"variable": "hydra.haskell.syntax.ValueBinding"}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -1978,15 +1970,18 @@
                     "domain": {"variable": "hydra.haskell.syntax.Expression"},
                     "parameter": "rhs"}},
                 "domain": {"variable": "hydra.haskell.syntax.Name"},
-                "parameter": "hname"}}}}}},
+                "parameter": "hname"}}}},
+        "name": "hydra.haskell.utils.simpleValueBinding",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.haskell.syntax.Name"}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.haskell.syntax.Expression"}},
+            {"isLazy": false, "name": "arg2", "type": {"maybe": {"variable": "hydra.haskell.syntax.LocalBindings"}}}],
+          "result": {"type": {"variable": "hydra.haskell.syntax.ValueBinding"}},
+          "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.haskell.utils.toTypeApplication",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"list": {"variable": "hydra.haskell.syntax.Type"}}}],
-          "result": {"type": {"variable": "hydra.haskell.syntax.Type"}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a list of types into a nested type application"}}}],
             "body": {
@@ -2118,15 +2113,15 @@
                               "typeApplication": {"body": {"variable": "hydra.lib.lists.reverse"}, "type": {"variable": "hydra.haskell.syntax.Type"}}}}},
                         "function": {"variable": "app"}}}}},
                 "domain": {"list": {"variable": "hydra.haskell.syntax.Type"}},
-                "parameter": "types"}}}}}},
+                "parameter": "types"}}}},
+        "name": "hydra.haskell.utils.toTypeApplication",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"list": {"variable": "hydra.haskell.syntax.Type"}}}],
+          "result": {"type": {"variable": "hydra.haskell.syntax.Type"}},
+          "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.haskell.utils.typeNameForRecord",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.core.Name"}}],
-          "result": {"type": {"literal": {"string": {}}}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -2159,23 +2154,15 @@
                             "argument": {"variable": "snameStr"},
                             "function": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.fromMaybe"}, "type": {"literal": {"string": {}}}}}}}}}}},
                 "domain": {"variable": "hydra.core.Name"},
-                "parameter": "sname"}}}}}},
+                "parameter": "sname"}}}},
+        "name": "hydra.haskell.utils.typeNameForRecord",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.core.Name"}}],
+          "result": {"type": {"literal": {"string": {}}}},
+          "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.haskell.utils.unionFieldReference",
-        "signature": {
-          "parameters": [
-            {"isLazy": false, "name": "arg0", "type": {"set": {"variable": "hydra.core.Name"}}},
-            {
-              "isLazy": false,
-              "name": "arg1",
-              "type": {
-                "application": {"argument": {"variable": "hydra.haskell.syntax.ModuleName"}, "function": {"variable": "hydra.util.ModuleNames"}}}},
-            {"isLazy": false, "name": "arg2", "type": {"variable": "hydra.core.Name"}},
-            {"isLazy": false, "name": "arg3", "type": {"variable": "hydra.core.Name"}}],
-          "result": {"type": {"variable": "hydra.haskell.syntax.Name"}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -2199,13 +2186,13 @@
                                   {
                                     "name": "qname",
                                     "term": {"application": {"argument": {"variable": "sname"}, "function": {"variable": "hydra.names.qualifyName"}}},
-                                    "typeScheme": {"body": {"variable": "hydra.packaging.QualifiedName"}, "variables": []}},
+                                    "typeScheme": {"body": {"variable": "hydra.util.QualifiedName"}, "variables": []}},
                                   {
                                     "name": "ns",
                                     "term": {
                                       "application": {
                                         "argument": {"variable": "qname"},
-                                        "function": {"project": {"fieldName": "moduleName", "typeName": "hydra.packaging.QualifiedName"}}}},
+                                        "function": {"project": {"fieldName": "moduleName", "typeName": "hydra.util.QualifiedName"}}}},
                                     "typeScheme": {"body": {"maybe": {"variable": "hydra.packaging.ModuleName"}}, "variables": []}},
                                   {
                                     "name": "typeNameStr",
@@ -2233,7 +2220,7 @@
                                                     "argument": {
                                                       "record": {
                                                         "fields": [{"name": "moduleName", "term": {"variable": "ns"}}, {"name": "local", "term": {"variable": "name"}}],
-                                                        "typeName": "hydra.packaging.QualifiedName"}},
+                                                        "typeName": "hydra.util.QualifiedName"}},
                                                     "function": {"variable": "hydra.names.unqualifyName"}}},
                                                 "typeScheme": {"body": {"variable": "hydra.core.Name"}, "variables": []}}],
                                             "body": {
@@ -2278,8 +2265,8 @@
                                     "term": {
                                       "record": {
                                         "fields": [{"name": "moduleName", "term": {"variable": "ns"}}, {"name": "local", "term": {"variable": "nm"}}],
-                                        "typeName": "hydra.packaging.QualifiedName"}},
-                                    "typeScheme": {"body": {"variable": "hydra.packaging.QualifiedName"}, "variables": []}},
+                                        "typeName": "hydra.util.QualifiedName"}},
+                                    "typeScheme": {"body": {"variable": "hydra.util.QualifiedName"}, "variables": []}},
                                   {
                                     "name": "unqualName",
                                     "term": {"application": {"argument": {"variable": "qualName"}, "function": {"variable": "hydra.names.unqualifyName"}}},
@@ -2297,15 +2284,23 @@
                       "application": {"argument": {"variable": "hydra.haskell.syntax.ModuleName"}, "function": {"variable": "hydra.util.ModuleNames"}}},
                     "parameter": "namespaces"}},
                 "domain": {"set": {"variable": "hydra.core.Name"}},
-                "parameter": "boundNames"}}}}}},
+                "parameter": "boundNames"}}}},
+        "name": "hydra.haskell.utils.unionFieldReference",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"set": {"variable": "hydra.core.Name"}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {
+                "application": {"argument": {"variable": "hydra.haskell.syntax.ModuleName"}, "function": {"variable": "hydra.util.ModuleNames"}}}},
+            {"isLazy": false, "name": "arg2", "type": {"variable": "hydra.core.Name"}},
+            {"isLazy": false, "name": "arg3", "type": {"variable": "hydra.core.Name"}}],
+          "result": {"type": {"variable": "hydra.haskell.syntax.Name"}},
+          "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.haskell.utils.unpackForallType",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.core.Type"}}],
-          "result": {"type": {"pair": {"first": {"list": {"variable": "hydra.core.Name"}}, "second": {"variable": "hydra.core.Type"}}}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -2320,8 +2315,7 @@
                       "cases": {
                         "cases": [
                           {
-                            "name": "forall",
-                            "term": {
+                            "handler": {
                               "lambda": {
                                 "body": {
                                   "let": {
@@ -2381,7 +2375,8 @@
                                             "type": {"list": {"variable": "hydra.core.Name"}}}},
                                         "type": {"variable": "hydra.core.Type"}}}}},
                                 "domain": {"variable": "hydra.core.ForallType"},
-                                "parameter": "fat"}}}],
+                                "parameter": "fat"}},
+                            "name": "forall"}],
                         "default": {
                           "typeApplication": {
                             "body": {
@@ -2394,7 +2389,12 @@
                             "type": {"variable": "hydra.core.Type"}}},
                         "typeName": "hydra.core.Type"}}}},
                 "domain": {"variable": "hydra.core.Type"},
-                "parameter": "t"}}}}}}],
+                "parameter": "t"}}}},
+        "name": "hydra.haskell.utils.unpackForallType",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.core.Type"}}],
+          "result": {"type": {"pair": {"first": {"list": {"variable": "hydra.core.Name"}}, "second": {"variable": "hydra.core.Type"}}}},
+          "typeParameters": []}}}],
   "dependencies": [
     {"module": "hydra.analysis"},
     {"module": "hydra.formatting"},

@@ -2,9 +2,7 @@
   "definitions": [
     {
       "term": {
-        "name": "hydra.haskell.language.haskellLanguage",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.coders.Language"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Language constraints for Haskell"}}}],
             "body": {
@@ -131,12 +129,12 @@
                                 "name": "types",
                                 "term": {"typeApplication": {"body": {"variable": "typePredicate"}, "type": {"variable": "hydra.core.Type"}}}}],
                             "typeName": "hydra.coders.LanguageConstraints"}}}],
-                    "typeName": "hydra.coders.Language"}}}}}}}},
+                    "typeName": "hydra.coders.Language"}}}}}},
+        "name": "hydra.haskell.language.haskellLanguage",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.coders.Language"}}, "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.haskell.language.reservedWords",
-        "signature": {"parameters": [], "result": {"type": {"set": {"literal": {"string": {}}}}}, "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -214,7 +212,9 @@
                           "application": {
                             "argument": {"variable": "keywordSymbols"},
                             "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.concat2"}, "type": {"literal": {"string": {}}}}}}}}},
-                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.sets.fromList"}, "type": {"literal": {"string": {}}}}}}}}}}}}}],
+                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.sets.fromList"}, "type": {"literal": {"string": {}}}}}}}}}}},
+        "name": "hydra.haskell.language.reservedWords",
+        "signature": {"parameters": [], "result": {"type": {"set": {"literal": {"string": {}}}}}, "typeParameters": []}}}],
   "dependencies": [
     {"module": "hydra.paths"},
     {"module": "hydra.ast"},

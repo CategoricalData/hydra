@@ -2,18 +2,7 @@
   "definitions": [
     {
       "term": {
-        "name": "hydra.pg.graphson.utils.elementsToVerticesWithAdjacentEdges",
-        "signature": {
-          "parameters": [
-            {
-              "isLazy": false,
-              "name": "arg0",
-              "type": {"list": {"application": {"argument": {"variable": "t0"}, "function": {"variable": "hydra.pg.model.Element"}}}}}],
-          "result": {
-            "type": {
-              "list": {"application": {"argument": {"variable": "t0"}, "function": {"variable": "hydra.pg.model.VertexWithAdjacentEdges"}}}}},
-          "typeParameters": [{"constraints": [{"simple": "ordering"}], "name": "t0"}]},
-        "term": {
+        "body": {
           "typeLambda": {
             "body": {
               "annotated": {
@@ -64,8 +53,7 @@
                                                           "cases": {
                                                             "cases": [
                                                               {
-                                                                "name": "vertex",
-                                                                "term": {
+                                                                "handler": {
                                                                   "lambda": {
                                                                     "body": {
                                                                       "typeApplication": {
@@ -105,10 +93,10 @@
                                                                             "type": {"list": {"application": {"argument": {"variable": "t0"}, "function": {"variable": "hydra.pg.model.Vertex"}}}}}},
                                                                         "type": {"list": {"application": {"argument": {"variable": "t0"}, "function": {"variable": "hydra.pg.model.Edge"}}}}}},
                                                                     "domain": {"application": {"argument": {"variable": "t0"}, "function": {"variable": "hydra.pg.model.Vertex"}}},
-                                                                    "parameter": "v"}}},
+                                                                    "parameter": "v"}},
+                                                                "name": "vertex"},
                                                               {
-                                                                "name": "edge",
-                                                                "term": {
+                                                                "handler": {
                                                                   "lambda": {
                                                                     "body": {
                                                                       "typeApplication": {
@@ -148,7 +136,8 @@
                                                                             "type": {"list": {"application": {"argument": {"variable": "t0"}, "function": {"variable": "hydra.pg.model.Vertex"}}}}}},
                                                                         "type": {"list": {"application": {"argument": {"variable": "t0"}, "function": {"variable": "hydra.pg.model.Edge"}}}}}},
                                                                     "domain": {"application": {"argument": {"variable": "t0"}, "function": {"variable": "hydra.pg.model.Edge"}}},
-                                                                    "parameter": "e"}}}],
+                                                                    "parameter": "e"}},
+                                                                "name": "edge"}],
                                                             "typeName": "hydra.pg.model.Element"}},
                                                         "type": {"variable": "t0"}}}}},
                                                 "domain": {"application": {"argument": {"variable": "t0"}, "function": {"variable": "hydra.pg.model.Element"}}},
@@ -616,15 +605,21 @@
                                                 "type": {"application": {"argument": {"variable": "t0"}, "function": {"variable": "hydra.pg.model.VertexWithAdjacentEdges"}}}}}}}}}}}}}}}}},
                     "domain": {"list": {"application": {"argument": {"variable": "t0"}, "function": {"variable": "hydra.pg.model.Element"}}}},
                     "parameter": "els"}}}},
-            "parameter": "t0"}}}},
+            "parameter": "t0"}},
+        "name": "hydra.pg.graphson.utils.elementsToVerticesWithAdjacentEdges",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {"list": {"application": {"argument": {"variable": "t0"}, "function": {"variable": "hydra.pg.model.Element"}}}}}],
+          "result": {
+            "type": {
+              "list": {"application": {"argument": {"variable": "t0"}, "function": {"variable": "hydra.pg.model.VertexWithAdjacentEdges"}}}}},
+          "typeParameters": [{"constraints": [{"simple": "ordering"}], "name": "t0"}]}}},
     {
       "term": {
-        "name": "hydra.pg.graphson.utils.encodeStringValue",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"string": {}}}}],
-          "result": {"type": {"either": {"left": {"variable": "t0"}, "right": {"variable": "hydra.pg.graphson.syntax.Value"}}}},
-          "typeParameters": [{"constraints": [], "name": "t0"}]},
-        "term": {
+        "body": {
           "typeLambda": {
             "body": {
               "annotated": {
@@ -642,16 +637,15 @@
                         "type": {"variable": "hydra.pg.graphson.syntax.Value"}}},
                     "domain": {"literal": {"string": {}}},
                     "parameter": "s"}}}},
-            "parameter": "t0"}}}},
+            "parameter": "t0"}},
+        "name": "hydra.pg.graphson.utils.encodeStringValue",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"string": {}}}}],
+          "result": {"type": {"either": {"left": {"variable": "t0"}, "right": {"variable": "hydra.pg.graphson.syntax.Value"}}}},
+          "typeParameters": [{"constraints": [], "name": "t0"}]}}},
     {
       "term": {
-        "name": "hydra.pg.graphson.utils.encodeTermValue",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.core.Term"}}],
-          "result": {
-            "type": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "hydra.pg.graphson.syntax.Value"}}}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -666,8 +660,7 @@
                       "cases": {
                         "cases": [
                           {
-                            "name": "literal",
-                            "term": {
+                            "handler": {
                               "lambda": {
                                 "body": {
                                   "application": {
@@ -676,8 +669,7 @@
                                       "cases": {
                                         "cases": [
                                           {
-                                            "name": "binary",
-                                            "term": {
+                                            "handler": {
                                               "lambda": {
                                                 "body": {
                                                   "typeApplication": {
@@ -694,10 +686,10 @@
                                                         "type": {"variable": "hydra.errors.Error"}}},
                                                     "type": {"variable": "hydra.pg.graphson.syntax.Value"}}},
                                                 "domain": {"literal": {"binary": {}}},
-                                                "parameter": "b"}}},
+                                                "parameter": "b"}},
+                                            "name": "binary"},
                                           {
-                                            "name": "boolean",
-                                            "term": {
+                                            "handler": {
                                               "lambda": {
                                                 "body": {
                                                   "typeApplication": {
@@ -709,10 +701,10 @@
                                                         "type": {"variable": "hydra.errors.Error"}}},
                                                     "type": {"variable": "hydra.pg.graphson.syntax.Value"}}},
                                                 "domain": {"literal": {"boolean": {}}},
-                                                "parameter": "b"}}},
+                                                "parameter": "b"}},
+                                            "name": "boolean"},
                                           {
-                                            "name": "float",
-                                            "term": {
+                                            "handler": {
                                               "lambda": {
                                                 "body": {
                                                   "application": {
@@ -721,8 +713,7 @@
                                                       "cases": {
                                                         "cases": [
                                                           {
-                                                            "name": "float32",
-                                                            "term": {
+                                                            "handler": {
                                                               "lambda": {
                                                                 "body": {
                                                                   "typeApplication": {
@@ -739,10 +730,10 @@
                                                                         "type": {"variable": "hydra.errors.Error"}}},
                                                                     "type": {"variable": "hydra.pg.graphson.syntax.Value"}}},
                                                                 "domain": {"literal": {"float": {"float32": {}}}},
-                                                                "parameter": "f"}}},
+                                                                "parameter": "f"}},
+                                                            "name": "float32"},
                                                           {
-                                                            "name": "float64",
-                                                            "term": {
+                                                            "handler": {
                                                               "lambda": {
                                                                 "body": {
                                                                   "typeApplication": {
@@ -759,7 +750,8 @@
                                                                         "type": {"variable": "hydra.errors.Error"}}},
                                                                     "type": {"variable": "hydra.pg.graphson.syntax.Value"}}},
                                                                 "domain": {"literal": {"float": {"float64": {}}}},
-                                                                "parameter": "f"}}}],
+                                                                "parameter": "f"}},
+                                                            "name": "float64"}],
                                                         "default": {
                                                           "typeApplication": {
                                                             "body": {
@@ -776,10 +768,10 @@
                                                             "type": {"variable": "hydra.pg.graphson.syntax.Value"}}},
                                                         "typeName": "hydra.core.FloatValue"}}}},
                                                 "domain": {"variable": "hydra.core.FloatValue"},
-                                                "parameter": "fv"}}},
+                                                "parameter": "fv"}},
+                                            "name": "float"},
                                           {
-                                            "name": "integer",
-                                            "term": {
+                                            "handler": {
                                               "lambda": {
                                                 "body": {
                                                   "application": {
@@ -788,8 +780,7 @@
                                                       "cases": {
                                                         "cases": [
                                                           {
-                                                            "name": "bigint",
-                                                            "term": {
+                                                            "handler": {
                                                               "lambda": {
                                                                 "body": {
                                                                   "typeApplication": {
@@ -801,10 +792,10 @@
                                                                         "type": {"variable": "hydra.errors.Error"}}},
                                                                     "type": {"variable": "hydra.pg.graphson.syntax.Value"}}},
                                                                 "domain": {"literal": {"integer": {"bigint": {}}}},
-                                                                "parameter": "i"}}},
+                                                                "parameter": "i"}},
+                                                            "name": "bigint"},
                                                           {
-                                                            "name": "int32",
-                                                            "term": {
+                                                            "handler": {
                                                               "lambda": {
                                                                 "body": {
                                                                   "typeApplication": {
@@ -816,10 +807,10 @@
                                                                         "type": {"variable": "hydra.errors.Error"}}},
                                                                     "type": {"variable": "hydra.pg.graphson.syntax.Value"}}},
                                                                 "domain": {"literal": {"integer": {"int32": {}}}},
-                                                                "parameter": "i"}}},
+                                                                "parameter": "i"}},
+                                                            "name": "int32"},
                                                           {
-                                                            "name": "int64",
-                                                            "term": {
+                                                            "handler": {
                                                               "lambda": {
                                                                 "body": {
                                                                   "typeApplication": {
@@ -831,7 +822,8 @@
                                                                         "type": {"variable": "hydra.errors.Error"}}},
                                                                     "type": {"variable": "hydra.pg.graphson.syntax.Value"}}},
                                                                 "domain": {"literal": {"integer": {"int64": {}}}},
-                                                                "parameter": "i"}}}],
+                                                                "parameter": "i"}},
+                                                            "name": "int64"}],
                                                         "default": {
                                                           "typeApplication": {
                                                             "body": {
@@ -848,10 +840,10 @@
                                                             "type": {"variable": "hydra.pg.graphson.syntax.Value"}}},
                                                         "typeName": "hydra.core.IntegerValue"}}}},
                                                 "domain": {"variable": "hydra.core.IntegerValue"},
-                                                "parameter": "iv"}}},
+                                                "parameter": "iv"}},
+                                            "name": "integer"},
                                           {
-                                            "name": "string",
-                                            "term": {
+                                            "handler": {
                                               "lambda": {
                                                 "body": {
                                                   "typeApplication": {
@@ -863,7 +855,8 @@
                                                         "type": {"variable": "hydra.errors.Error"}}},
                                                     "type": {"variable": "hydra.pg.graphson.syntax.Value"}}},
                                                 "domain": {"literal": {"string": {}}},
-                                                "parameter": "s"}}}],
+                                                "parameter": "s"}},
+                                            "name": "string"}],
                                         "default": {
                                           "typeApplication": {
                                             "body": {
@@ -883,10 +876,10 @@
                                             "type": {"variable": "hydra.pg.graphson.syntax.Value"}}},
                                         "typeName": "hydra.core.Literal"}}}},
                                 "domain": {"variable": "hydra.core.Literal"},
-                                "parameter": "lit"}}},
+                                "parameter": "lit"}},
+                            "name": "literal"},
                           {
-                            "name": "unit",
-                            "term": {
+                            "handler": {
                               "lambda": {
                                 "body": {
                                   "typeApplication": {
@@ -897,7 +890,8 @@
                                         "type": {"variable": "hydra.errors.Error"}}},
                                     "type": {"variable": "hydra.pg.graphson.syntax.Value"}}},
                                 "domain": {"unit": {}},
-                                "parameter": "_"}}}],
+                                "parameter": "_"}},
+                            "name": "unit"}],
                         "default": {
                           "typeApplication": {
                             "body": {
@@ -917,26 +911,16 @@
                             "type": {"variable": "hydra.pg.graphson.syntax.Value"}}},
                         "typeName": "hydra.core.Term"}}}},
                 "domain": {"variable": "hydra.core.Term"},
-                "parameter": "term"}}}}}},
+                "parameter": "term"}}}},
+        "name": "hydra.pg.graphson.utils.encodeTermValue",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.core.Term"}}],
+          "result": {
+            "type": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "hydra.pg.graphson.syntax.Value"}}}},
+          "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.pg.graphson.utils.pgElementsToGraphson",
-        "signature": {
-          "parameters": [
-            {
-              "isLazy": false,
-              "name": "arg0",
-              "type": {
-                "function": {
-                  "codomain": {"either": {"left": {"variable": "t1"}, "right": {"variable": "hydra.pg.graphson.syntax.Value"}}},
-                  "domain": {"variable": "t0"}}}},
-            {
-              "isLazy": false,
-              "name": "arg1",
-              "type": {"list": {"application": {"argument": {"variable": "t0"}, "function": {"variable": "hydra.pg.model.Element"}}}}}],
-          "result": {"type": {"either": {"left": {"variable": "t1"}, "right": {"list": {"variable": "hydra.json.model.Value"}}}}},
-          "typeParameters": [{"constraints": [{"simple": "ordering"}], "name": "t0"}, {"constraints": [], "name": "t1"}]},
-        "term": {
+        "body": {
           "typeLambda": {
             "body": {
               "typeLambda": {
@@ -985,7 +969,23 @@
                             "domain": {"variable": "t0"}}},
                         "parameter": "encodeValue"}}}},
                 "parameter": "t1"}},
-            "parameter": "t0"}}}}],
+            "parameter": "t0"}},
+        "name": "hydra.pg.graphson.utils.pgElementsToGraphson",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {
+                "function": {
+                  "codomain": {"either": {"left": {"variable": "t1"}, "right": {"variable": "hydra.pg.graphson.syntax.Value"}}},
+                  "domain": {"variable": "t0"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {"list": {"application": {"argument": {"variable": "t0"}, "function": {"variable": "hydra.pg.model.Element"}}}}}],
+          "result": {"type": {"either": {"left": {"variable": "t1"}, "right": {"list": {"variable": "hydra.json.model.Value"}}}}},
+          "typeParameters": [{"constraints": [{"simple": "ordering"}], "name": "t0"}, {"constraints": [], "name": "t1"}]}}}],
   "dependencies": [
     {"module": "hydra.pg.graphson.construct"},
     {"module": "hydra.strip"},

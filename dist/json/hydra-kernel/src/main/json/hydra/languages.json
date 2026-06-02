@@ -2,9 +2,7 @@
   "definitions": [
     {
       "term": {
-        "name": "hydra.languages.hydraLanguage",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.coders.Language"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Language constraints for Hydra Core, i.e. no constraints."}}}],
             "body": {
@@ -79,7 +77,9 @@
                               {"name": "typeVariants", "term": {"variable": "typeVariants"}},
                               {"name": "types", "term": {"variable": "types"}}],
                             "typeName": "hydra.coders.LanguageConstraints"}}}],
-                    "typeName": "hydra.coders.Language"}}}}}}}}],
+                    "typeName": "hydra.coders.Language"}}}}}},
+        "name": "hydra.languages.hydraLanguage",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.coders.Language"}}, "typeParameters": []}}}],
   "dependencies": [
     {"module": "hydra.reflect"},
     {"module": "hydra.paths"},

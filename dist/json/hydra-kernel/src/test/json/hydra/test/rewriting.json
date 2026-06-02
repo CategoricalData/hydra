@@ -2,9 +2,7 @@
   "definitions": [
     {
       "term": {
-        "name": "hydra.test.rewriting.allTests",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Test cases for core rewrite/fold combinators"}}}],
             "body": {
@@ -99,8 +97,7 @@
                                                                                                               "cases": {
                                                                                                                 "cases": [
                                                                                                                   {
-                                                                                                                    "name": "pair",
-                                                                                                                    "term": {
+                                                                                                                    "handler": {
                                                                                                                       "lambda": {
                                                                                                                         "body": {
                                                                                                                           "application": {
@@ -115,12 +112,13 @@
                                                                                                                               "cases": {
                                                                                                                                 "cases": [
                                                                                                                                   {
-                                                                                                                                    "name": "literal",
-                                                                                                                                    "term": {"lambda": {"body": {"list": [{"variable": "lit"}]}, "domain": {"variable": "hydra.core.Literal"}, "parameter": "lit"}}}],
+                                                                                                                                    "handler": {"lambda": {"body": {"list": [{"variable": "lit"}]}, "domain": {"variable": "hydra.core.Literal"}, "parameter": "lit"}},
+                                                                                                                                    "name": "literal"}],
                                                                                                                                 "default": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Literal"}}},
                                                                                                                                 "typeName": "hydra.core.Term"}}}},
                                                                                                                         "domain": {"pair": {"first": {"variable": "hydra.core.Term"}, "second": {"variable": "hydra.core.Term"}}},
-                                                                                                                        "parameter": "p"}}}],
+                                                                                                                        "parameter": "p"}},
+                                                                                                                    "name": "pair"}],
                                                                                                                 "default": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Literal"}}},
                                                                                                                 "typeName": "hydra.core.Term"}}}}]},
                                                                                                     "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.concat"}, "type": {"variable": "hydra.core.Literal"}}}}},
@@ -321,8 +319,7 @@
                                                                                                               "cases": {
                                                                                                                 "cases": [
                                                                                                                   {
-                                                                                                                    "name": "pair",
-                                                                                                                    "term": {
+                                                                                                                    "handler": {
                                                                                                                       "lambda": {
                                                                                                                         "body": {
                                                                                                                           "application": {
@@ -337,12 +334,13 @@
                                                                                                                               "cases": {
                                                                                                                                 "cases": [
                                                                                                                                   {
-                                                                                                                                    "name": "literal",
-                                                                                                                                    "term": {"lambda": {"body": {"list": [{"variable": "lit"}]}, "domain": {"variable": "hydra.core.Literal"}, "parameter": "lit"}}}],
+                                                                                                                                    "handler": {"lambda": {"body": {"list": [{"variable": "lit"}]}, "domain": {"variable": "hydra.core.Literal"}, "parameter": "lit"}},
+                                                                                                                                    "name": "literal"}],
                                                                                                                                 "default": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Literal"}}},
                                                                                                                                 "typeName": "hydra.core.Term"}}}},
                                                                                                                         "domain": {"pair": {"first": {"variable": "hydra.core.Term"}, "second": {"variable": "hydra.core.Term"}}},
-                                                                                                                        "parameter": "p"}}}],
+                                                                                                                        "parameter": "p"}},
+                                                                                                                    "name": "pair"}],
                                                                                                                 "default": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Literal"}}},
                                                                                                                 "typeName": "hydra.core.Term"}}}}]},
                                                                                                     "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.concat"}, "type": {"variable": "hydra.core.Literal"}}}}},
@@ -486,8 +484,7 @@
                                                                                                               "cases": {
                                                                                                                 "cases": [
                                                                                                                   {
-                                                                                                                    "name": "pair",
-                                                                                                                    "term": {
+                                                                                                                    "handler": {
                                                                                                                       "lambda": {
                                                                                                                         "body": {
                                                                                                                           "application": {
@@ -502,12 +499,13 @@
                                                                                                                               "cases": {
                                                                                                                                 "cases": [
                                                                                                                                   {
-                                                                                                                                    "name": "literal",
-                                                                                                                                    "term": {"lambda": {"body": {"list": [{"variable": "lit"}]}, "domain": {"variable": "hydra.core.Literal"}, "parameter": "lit"}}}],
+                                                                                                                                    "handler": {"lambda": {"body": {"list": [{"variable": "lit"}]}, "domain": {"variable": "hydra.core.Literal"}, "parameter": "lit"}},
+                                                                                                                                    "name": "literal"}],
                                                                                                                                 "default": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Literal"}}},
                                                                                                                                 "typeName": "hydra.core.Term"}}}},
                                                                                                                         "domain": {"pair": {"first": {"variable": "hydra.core.Term"}, "second": {"variable": "hydra.core.Term"}}},
-                                                                                                                        "parameter": "p"}}}],
+                                                                                                                        "parameter": "p"}},
+                                                                                                                    "name": "pair"}],
                                                                                                                 "default": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Literal"}}},
                                                                                                                 "typeName": "hydra.core.Term"}}}}]},
                                                                                                     "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.concat"}, "type": {"variable": "hydra.core.Literal"}}}}},
@@ -708,8 +706,7 @@
                                                                                                               "cases": {
                                                                                                                 "cases": [
                                                                                                                   {
-                                                                                                                    "name": "pair",
-                                                                                                                    "term": {
+                                                                                                                    "handler": {
                                                                                                                       "lambda": {
                                                                                                                         "body": {
                                                                                                                           "application": {
@@ -724,12 +721,13 @@
                                                                                                                               "cases": {
                                                                                                                                 "cases": [
                                                                                                                                   {
-                                                                                                                                    "name": "literal",
-                                                                                                                                    "term": {"lambda": {"body": {"list": [{"variable": "lit"}]}, "domain": {"variable": "hydra.core.Literal"}, "parameter": "lit"}}}],
+                                                                                                                                    "handler": {"lambda": {"body": {"list": [{"variable": "lit"}]}, "domain": {"variable": "hydra.core.Literal"}, "parameter": "lit"}},
+                                                                                                                                    "name": "literal"}],
                                                                                                                                 "default": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Literal"}}},
                                                                                                                                 "typeName": "hydra.core.Term"}}}},
                                                                                                                         "domain": {"pair": {"first": {"variable": "hydra.core.Term"}, "second": {"variable": "hydra.core.Term"}}},
-                                                                                                                        "parameter": "p"}}}],
+                                                                                                                        "parameter": "p"}},
+                                                                                                                    "name": "pair"}],
                                                                                                                 "default": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Literal"}}},
                                                                                                                 "typeName": "hydra.core.Term"}}}}]},
                                                                                                     "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.concat"}, "type": {"variable": "hydra.core.Literal"}}}}},
@@ -914,8 +912,7 @@
                                                                                                                   "cases": {
                                                                                                                     "cases": [
                                                                                                                       {
-                                                                                                                        "name": "literal",
-                                                                                                                        "term": {
+                                                                                                                        "handler": {
                                                                                                                           "lambda": {
                                                                                                                             "body": {
                                                                                                                               "application": {
@@ -924,8 +921,7 @@
                                                                                                                                   "cases": {
                                                                                                                                     "cases": [
                                                                                                                                       {
-                                                                                                                                        "name": "integer",
-                                                                                                                                        "term": {
+                                                                                                                                        "handler": {
                                                                                                                                           "lambda": {
                                                                                                                                             "body": {
                                                                                                                                               "application": {
@@ -934,16 +930,18 @@
                                                                                                                                                   "cases": {
                                                                                                                                                     "cases": [
                                                                                                                                                       {
-                                                                                                                                                        "name": "int32",
-                                                                                                                                                        "term": {"lambda": {"body": {"variable": "n"}, "domain": {"literal": {"integer": {"int32": {}}}}, "parameter": "n"}}}],
+                                                                                                                                                        "handler": {"lambda": {"body": {"variable": "n"}, "domain": {"literal": {"integer": {"int32": {}}}}, "parameter": "n"}},
+                                                                                                                                                        "name": "int32"}],
                                                                                                                                                     "default": {"literal": {"integer": {"int32": 0}}},
                                                                                                                                                     "typeName": "hydra.core.IntegerValue"}}}},
                                                                                                                                             "domain": {"variable": "hydra.core.IntegerValue"},
-                                                                                                                                            "parameter": "intVal"}}}],
+                                                                                                                                            "parameter": "intVal"}},
+                                                                                                                                        "name": "integer"}],
                                                                                                                                     "default": {"literal": {"integer": {"int32": 0}}},
                                                                                                                                     "typeName": "hydra.core.Literal"}}}},
                                                                                                                             "domain": {"variable": "hydra.core.Literal"},
-                                                                                                                            "parameter": "lit"}}}],
+                                                                                                                            "parameter": "lit"}},
+                                                                                                                        "name": "literal"}],
                                                                                                                     "default": {"literal": {"integer": {"int32": 0}}},
                                                                                                                     "typeName": "hydra.core.Term"}}}},
                                                                                                             "function": {"application": {"argument": {"variable": "acc"}, "function": {"variable": "hydra.lib.math.add"}}}}},
@@ -1105,8 +1103,7 @@
                                                                                                               "cases": {
                                                                                                                 "cases": [
                                                                                                                   {
-                                                                                                                    "name": "list",
-                                                                                                                    "term": {
+                                                                                                                    "handler": {
                                                                                                                       "lambda": {
                                                                                                                         "body": {
                                                                                                                           "list": [
@@ -1115,7 +1112,8 @@
                                                                                                                                 "argument": {"variable": "elems"},
                                                                                                                                 "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.length"}, "type": {"variable": "hydra.core.Term"}}}}}]},
                                                                                                                         "domain": {"list": {"variable": "hydra.core.Term"}},
-                                                                                                                        "parameter": "elems"}}}],
+                                                                                                                        "parameter": "elems"}},
+                                                                                                                    "name": "list"}],
                                                                                                                 "default": {"typeApplication": {"body": {"list": []}, "type": {"literal": {"integer": {"int32": {}}}}}},
                                                                                                                 "typeName": "hydra.core.Term"}}}}]},
                                                                                                     "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.concat"}, "type": {"literal": {"integer": {"int32": {}}}}}}}},
@@ -1327,8 +1325,7 @@
                                                                                                               "cases": {
                                                                                                                 "cases": [
                                                                                                                   {
-                                                                                                                    "name": "list",
-                                                                                                                    "term": {
+                                                                                                                    "handler": {
                                                                                                                       "lambda": {
                                                                                                                         "body": {
                                                                                                                           "list": [
@@ -1337,7 +1334,8 @@
                                                                                                                                 "argument": {"variable": "elems"},
                                                                                                                                 "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.length"}, "type": {"variable": "hydra.core.Term"}}}}}]},
                                                                                                                         "domain": {"list": {"variable": "hydra.core.Term"}},
-                                                                                                                        "parameter": "elems"}}}],
+                                                                                                                        "parameter": "elems"}},
+                                                                                                                    "name": "list"}],
                                                                                                                 "default": {"typeApplication": {"body": {"list": []}, "type": {"literal": {"integer": {"int32": {}}}}}},
                                                                                                                 "typeName": "hydra.core.Term"}}}}]},
                                                                                                     "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.concat"}, "type": {"literal": {"integer": {"int32": {}}}}}}}},
@@ -4697,27 +4695,27 @@
                                                                                             "fields": [
                                                                                               {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "success"}}, "typeName": "hydra.core.Name"}}},
                                                                                               {
-                                                                                                "name": "term",
+                                                                                                "name": "handler",
                                                                                                 "term": {
                                                                                                   "inject": {
                                                                                                     "field": {
                                                                                                       "name": "literal",
                                                                                                       "term": {"inject": {"field": {"name": "string", "term": {"literal": {"string": "foo"}}}, "typeName": "hydra.core.Literal"}}},
                                                                                                     "typeName": "hydra.core.Term"}}}],
-                                                                                            "typeName": "hydra.core.Field"}},
+                                                                                            "typeName": "hydra.core.CaseAlternative"}},
                                                                                         {
                                                                                           "record": {
                                                                                             "fields": [
                                                                                               {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "error"}}, "typeName": "hydra.core.Name"}}},
                                                                                               {
-                                                                                                "name": "term",
+                                                                                                "name": "handler",
                                                                                                 "term": {
                                                                                                   "inject": {
                                                                                                     "field": {
                                                                                                       "name": "literal",
                                                                                                       "term": {"inject": {"field": {"name": "string", "term": {"literal": {"string": "baz"}}}, "typeName": "hydra.core.Literal"}}},
                                                                                                     "typeName": "hydra.core.Term"}}}],
-                                                                                            "typeName": "hydra.core.Field"}}]}}],
+                                                                                            "typeName": "hydra.core.CaseAlternative"}}]}}],
                                                                                 "typeName": "hydra.core.CaseStatement"}}},
                                                                           "typeName": "hydra.core.Term"}},
                                                                       "function": {
@@ -4784,27 +4782,27 @@
                                                                                         "fields": [
                                                                                           {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "success"}}, "typeName": "hydra.core.Name"}}},
                                                                                           {
-                                                                                            "name": "term",
+                                                                                            "name": "handler",
                                                                                             "term": {
                                                                                               "inject": {
                                                                                                 "field": {
                                                                                                   "name": "literal",
                                                                                                   "term": {"inject": {"field": {"name": "string", "term": {"literal": {"string": "bar"}}}, "typeName": "hydra.core.Literal"}}},
                                                                                                 "typeName": "hydra.core.Term"}}}],
-                                                                                        "typeName": "hydra.core.Field"}},
+                                                                                        "typeName": "hydra.core.CaseAlternative"}},
                                                                                     {
                                                                                       "record": {
                                                                                         "fields": [
                                                                                           {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "error"}}, "typeName": "hydra.core.Name"}}},
                                                                                           {
-                                                                                            "name": "term",
+                                                                                            "name": "handler",
                                                                                             "term": {
                                                                                               "inject": {
                                                                                                 "field": {
                                                                                                   "name": "literal",
                                                                                                   "term": {"inject": {"field": {"name": "string", "term": {"literal": {"string": "baz"}}}, "typeName": "hydra.core.Literal"}}},
                                                                                                 "typeName": "hydra.core.Term"}}}],
-                                                                                        "typeName": "hydra.core.Field"}}]}}],
+                                                                                        "typeName": "hydra.core.CaseAlternative"}}]}}],
                                                                             "typeName": "hydra.core.CaseStatement"}}},
                                                                       "typeName": "hydra.core.Term"}},
                                                                   "function": {"variable": "hydra.show.core.term"}}},
@@ -4854,27 +4852,27 @@
                                                                                             "fields": [
                                                                                               {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "success"}}, "typeName": "hydra.core.Name"}}},
                                                                                               {
-                                                                                                "name": "term",
+                                                                                                "name": "handler",
                                                                                                 "term": {
                                                                                                   "inject": {
                                                                                                     "field": {
                                                                                                       "name": "literal",
                                                                                                       "term": {"inject": {"field": {"name": "string", "term": {"literal": {"string": "baz"}}}, "typeName": "hydra.core.Literal"}}},
                                                                                                     "typeName": "hydra.core.Term"}}}],
-                                                                                            "typeName": "hydra.core.Field"}},
+                                                                                            "typeName": "hydra.core.CaseAlternative"}},
                                                                                         {
                                                                                           "record": {
                                                                                             "fields": [
                                                                                               {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "error"}}, "typeName": "hydra.core.Name"}}},
                                                                                               {
-                                                                                                "name": "term",
+                                                                                                "name": "handler",
                                                                                                 "term": {
                                                                                                   "inject": {
                                                                                                     "field": {
                                                                                                       "name": "literal",
                                                                                                       "term": {"inject": {"field": {"name": "string", "term": {"literal": {"string": "foo"}}}, "typeName": "hydra.core.Literal"}}},
                                                                                                     "typeName": "hydra.core.Term"}}}],
-                                                                                            "typeName": "hydra.core.Field"}}]}}],
+                                                                                            "typeName": "hydra.core.CaseAlternative"}}]}}],
                                                                                 "typeName": "hydra.core.CaseStatement"}}},
                                                                           "typeName": "hydra.core.Term"}},
                                                                       "function": {
@@ -4941,27 +4939,27 @@
                                                                                         "fields": [
                                                                                           {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "success"}}, "typeName": "hydra.core.Name"}}},
                                                                                           {
-                                                                                            "name": "term",
+                                                                                            "name": "handler",
                                                                                             "term": {
                                                                                               "inject": {
                                                                                                 "field": {
                                                                                                   "name": "literal",
                                                                                                   "term": {"inject": {"field": {"name": "string", "term": {"literal": {"string": "baz"}}}, "typeName": "hydra.core.Literal"}}},
                                                                                                 "typeName": "hydra.core.Term"}}}],
-                                                                                        "typeName": "hydra.core.Field"}},
+                                                                                        "typeName": "hydra.core.CaseAlternative"}},
                                                                                     {
                                                                                       "record": {
                                                                                         "fields": [
                                                                                           {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "error"}}, "typeName": "hydra.core.Name"}}},
                                                                                           {
-                                                                                            "name": "term",
+                                                                                            "name": "handler",
                                                                                             "term": {
                                                                                               "inject": {
                                                                                                 "field": {
                                                                                                   "name": "literal",
                                                                                                   "term": {"inject": {"field": {"name": "string", "term": {"literal": {"string": "bar"}}}, "typeName": "hydra.core.Literal"}}},
                                                                                                 "typeName": "hydra.core.Term"}}}],
-                                                                                        "typeName": "hydra.core.Field"}}]}}],
+                                                                                        "typeName": "hydra.core.CaseAlternative"}}]}}],
                                                                             "typeName": "hydra.core.CaseStatement"}}},
                                                                       "typeName": "hydra.core.Term"}},
                                                                   "function": {"variable": "hydra.show.core.term"}}},
@@ -5019,27 +5017,27 @@
                                                                                             "fields": [
                                                                                               {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "success"}}, "typeName": "hydra.core.Name"}}},
                                                                                               {
-                                                                                                "name": "term",
+                                                                                                "name": "handler",
                                                                                                 "term": {
                                                                                                   "inject": {
                                                                                                     "field": {
                                                                                                       "name": "literal",
                                                                                                       "term": {"inject": {"field": {"name": "string", "term": {"literal": {"string": "baz"}}}, "typeName": "hydra.core.Literal"}}},
                                                                                                     "typeName": "hydra.core.Term"}}}],
-                                                                                            "typeName": "hydra.core.Field"}},
+                                                                                            "typeName": "hydra.core.CaseAlternative"}},
                                                                                         {
                                                                                           "record": {
                                                                                             "fields": [
                                                                                               {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "error"}}, "typeName": "hydra.core.Name"}}},
                                                                                               {
-                                                                                                "name": "term",
+                                                                                                "name": "handler",
                                                                                                 "term": {
                                                                                                   "inject": {
                                                                                                     "field": {
                                                                                                       "name": "literal",
                                                                                                       "term": {"inject": {"field": {"name": "string", "term": {"literal": {"string": "baz"}}}, "typeName": "hydra.core.Literal"}}},
                                                                                                     "typeName": "hydra.core.Term"}}}],
-                                                                                            "typeName": "hydra.core.Field"}}]}}],
+                                                                                            "typeName": "hydra.core.CaseAlternative"}}]}}],
                                                                                 "typeName": "hydra.core.CaseStatement"}}},
                                                                           "typeName": "hydra.core.Term"}},
                                                                       "function": {
@@ -5114,27 +5112,27 @@
                                                                                         "fields": [
                                                                                           {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "success"}}, "typeName": "hydra.core.Name"}}},
                                                                                           {
-                                                                                            "name": "term",
+                                                                                            "name": "handler",
                                                                                             "term": {
                                                                                               "inject": {
                                                                                                 "field": {
                                                                                                   "name": "literal",
                                                                                                   "term": {"inject": {"field": {"name": "string", "term": {"literal": {"string": "baz"}}}, "typeName": "hydra.core.Literal"}}},
                                                                                                 "typeName": "hydra.core.Term"}}}],
-                                                                                        "typeName": "hydra.core.Field"}},
+                                                                                        "typeName": "hydra.core.CaseAlternative"}},
                                                                                     {
                                                                                       "record": {
                                                                                         "fields": [
                                                                                           {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "error"}}, "typeName": "hydra.core.Name"}}},
                                                                                           {
-                                                                                            "name": "term",
+                                                                                            "name": "handler",
                                                                                             "term": {
                                                                                               "inject": {
                                                                                                 "field": {
                                                                                                   "name": "literal",
                                                                                                   "term": {"inject": {"field": {"name": "string", "term": {"literal": {"string": "baz"}}}, "typeName": "hydra.core.Literal"}}},
                                                                                                 "typeName": "hydra.core.Term"}}}],
-                                                                                        "typeName": "hydra.core.Field"}}]}}],
+                                                                                        "typeName": "hydra.core.CaseAlternative"}}]}}],
                                                                             "typeName": "hydra.core.CaseStatement"}}},
                                                                       "typeName": "hydra.core.Term"}},
                                                                   "function": {"variable": "hydra.show.core.term"}}},
@@ -6754,27 +6752,27 @@
                                                                                                                       "fields": [
                                                                                                                         {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "ok"}}, "typeName": "hydra.core.Name"}}},
                                                                                                                         {
-                                                                                                                          "name": "term",
+                                                                                                                          "name": "handler",
                                                                                                                           "term": {
                                                                                                                             "inject": {
                                                                                                                               "field": {
                                                                                                                                 "name": "literal",
                                                                                                                                 "term": {"inject": {"field": {"name": "string", "term": {"literal": {"string": "foo"}}}, "typeName": "hydra.core.Literal"}}},
                                                                                                                               "typeName": "hydra.core.Term"}}}],
-                                                                                                                      "typeName": "hydra.core.Field"}},
+                                                                                                                      "typeName": "hydra.core.CaseAlternative"}},
                                                                                                                   {
                                                                                                                     "record": {
                                                                                                                       "fields": [
                                                                                                                         {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "err"}}, "typeName": "hydra.core.Name"}}},
                                                                                                                         {
-                                                                                                                          "name": "term",
+                                                                                                                          "name": "handler",
                                                                                                                           "term": {
                                                                                                                             "inject": {
                                                                                                                               "field": {
                                                                                                                                 "name": "literal",
                                                                                                                                 "term": {"inject": {"field": {"name": "string", "term": {"literal": {"string": "baz"}}}, "typeName": "hydra.core.Literal"}}},
                                                                                                                               "typeName": "hydra.core.Term"}}}],
-                                                                                                                      "typeName": "hydra.core.Field"}}]}}],
+                                                                                                                      "typeName": "hydra.core.CaseAlternative"}}]}}],
                                                                                                           "typeName": "hydra.core.CaseStatement"}}},
                                                                                                     "typeName": "hydra.core.Term"}}},
                                                                                               {
@@ -6870,27 +6868,27 @@
                                                                                                                   "fields": [
                                                                                                                     {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "ok"}}, "typeName": "hydra.core.Name"}}},
                                                                                                                     {
-                                                                                                                      "name": "term",
+                                                                                                                      "name": "handler",
                                                                                                                       "term": {
                                                                                                                         "inject": {
                                                                                                                           "field": {
                                                                                                                             "name": "literal",
                                                                                                                             "term": {"inject": {"field": {"name": "string", "term": {"literal": {"string": "bar"}}}, "typeName": "hydra.core.Literal"}}},
                                                                                                                           "typeName": "hydra.core.Term"}}}],
-                                                                                                                  "typeName": "hydra.core.Field"}},
+                                                                                                                  "typeName": "hydra.core.CaseAlternative"}},
                                                                                                               {
                                                                                                                 "record": {
                                                                                                                   "fields": [
                                                                                                                     {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "err"}}, "typeName": "hydra.core.Name"}}},
                                                                                                                     {
-                                                                                                                      "name": "term",
+                                                                                                                      "name": "handler",
                                                                                                                       "term": {
                                                                                                                         "inject": {
                                                                                                                           "field": {
                                                                                                                             "name": "literal",
                                                                                                                             "term": {"inject": {"field": {"name": "string", "term": {"literal": {"string": "baz"}}}, "typeName": "hydra.core.Literal"}}},
                                                                                                                           "typeName": "hydra.core.Term"}}}],
-                                                                                                                  "typeName": "hydra.core.Field"}}]}}],
+                                                                                                                  "typeName": "hydra.core.CaseAlternative"}}]}}],
                                                                                                       "typeName": "hydra.core.CaseStatement"}}},
                                                                                                 "typeName": "hydra.core.Term"}}},
                                                                                           {
@@ -7206,8 +7204,7 @@
                                                                                                                   "cases": {
                                                                                                                     "cases": [
                                                                                                                       {
-                                                                                                                        "name": "literal",
-                                                                                                                        "term": {
+                                                                                                                        "handler": {
                                                                                                                           "lambda": {
                                                                                                                             "body": {
                                                                                                                               "application": {
@@ -7216,8 +7213,7 @@
                                                                                                                                   "cases": {
                                                                                                                                     "cases": [
                                                                                                                                       {
-                                                                                                                                        "name": "integer",
-                                                                                                                                        "term": {
+                                                                                                                                        "handler": {
                                                                                                                                           "lambda": {
                                                                                                                                             "body": {
                                                                                                                                               "application": {
@@ -7226,16 +7222,18 @@
                                                                                                                                                   "cases": {
                                                                                                                                                     "cases": [
                                                                                                                                                       {
-                                                                                                                                                        "name": "int32",
-                                                                                                                                                        "term": {"lambda": {"body": {"variable": "n"}, "domain": {"literal": {"integer": {"int32": {}}}}, "parameter": "n"}}}],
+                                                                                                                                                        "handler": {"lambda": {"body": {"variable": "n"}, "domain": {"literal": {"integer": {"int32": {}}}}, "parameter": "n"}},
+                                                                                                                                                        "name": "int32"}],
                                                                                                                                                     "default": {"literal": {"integer": {"int32": 0}}},
                                                                                                                                                     "typeName": "hydra.core.IntegerValue"}}}},
                                                                                                                                             "domain": {"variable": "hydra.core.IntegerValue"},
-                                                                                                                                            "parameter": "intVal"}}}],
+                                                                                                                                            "parameter": "intVal"}},
+                                                                                                                                        "name": "integer"}],
                                                                                                                                     "default": {"literal": {"integer": {"int32": 0}}},
                                                                                                                                     "typeName": "hydra.core.Literal"}}}},
                                                                                                                             "domain": {"variable": "hydra.core.Literal"},
-                                                                                                                            "parameter": "lit"}}}],
+                                                                                                                            "parameter": "lit"}},
+                                                                                                                        "name": "literal"}],
                                                                                                                     "default": {"literal": {"integer": {"int32": 0}}},
                                                                                                                     "typeName": "hydra.core.Term"}}}},
                                                                                                             "function": {"application": {"argument": {"variable": "acc"}, "function": {"variable": "hydra.lib.math.add"}}}}},
@@ -7422,8 +7420,7 @@
                                                                                                                   "cases": {
                                                                                                                     "cases": [
                                                                                                                       {
-                                                                                                                        "name": "literal",
-                                                                                                                        "term": {
+                                                                                                                        "handler": {
                                                                                                                           "lambda": {
                                                                                                                             "body": {
                                                                                                                               "application": {
@@ -7432,8 +7429,7 @@
                                                                                                                                   "cases": {
                                                                                                                                     "cases": [
                                                                                                                                       {
-                                                                                                                                        "name": "integer",
-                                                                                                                                        "term": {
+                                                                                                                                        "handler": {
                                                                                                                                           "lambda": {
                                                                                                                                             "body": {
                                                                                                                                               "application": {
@@ -7442,16 +7438,18 @@
                                                                                                                                                   "cases": {
                                                                                                                                                     "cases": [
                                                                                                                                                       {
-                                                                                                                                                        "name": "int32",
-                                                                                                                                                        "term": {"lambda": {"body": {"variable": "n"}, "domain": {"literal": {"integer": {"int32": {}}}}, "parameter": "n"}}}],
+                                                                                                                                                        "handler": {"lambda": {"body": {"variable": "n"}, "domain": {"literal": {"integer": {"int32": {}}}}, "parameter": "n"}},
+                                                                                                                                                        "name": "int32"}],
                                                                                                                                                     "default": {"literal": {"integer": {"int32": 0}}},
                                                                                                                                                     "typeName": "hydra.core.IntegerValue"}}}},
                                                                                                                                             "domain": {"variable": "hydra.core.IntegerValue"},
-                                                                                                                                            "parameter": "intVal"}}}],
+                                                                                                                                            "parameter": "intVal"}},
+                                                                                                                                        "name": "integer"}],
                                                                                                                                     "default": {"literal": {"integer": {"int32": 0}}},
                                                                                                                                     "typeName": "hydra.core.Literal"}}}},
                                                                                                                             "domain": {"variable": "hydra.core.Literal"},
-                                                                                                                            "parameter": "lit"}}}],
+                                                                                                                            "parameter": "lit"}},
+                                                                                                                        "name": "literal"}],
                                                                                                                     "default": {"literal": {"integer": {"int32": 0}}},
                                                                                                                     "typeName": "hydra.core.Term"}}}},
                                                                                                             "function": {"application": {"argument": {"variable": "acc"}, "function": {"variable": "hydra.lib.math.add"}}}}},
@@ -7607,8 +7605,7 @@
                                                                                                                   "cases": {
                                                                                                                     "cases": [
                                                                                                                       {
-                                                                                                                        "name": "literal",
-                                                                                                                        "term": {
+                                                                                                                        "handler": {
                                                                                                                           "lambda": {
                                                                                                                             "body": {
                                                                                                                               "application": {
@@ -7617,8 +7614,7 @@
                                                                                                                                   "cases": {
                                                                                                                                     "cases": [
                                                                                                                                       {
-                                                                                                                                        "name": "integer",
-                                                                                                                                        "term": {
+                                                                                                                                        "handler": {
                                                                                                                                           "lambda": {
                                                                                                                                             "body": {
                                                                                                                                               "application": {
@@ -7627,16 +7623,18 @@
                                                                                                                                                   "cases": {
                                                                                                                                                     "cases": [
                                                                                                                                                       {
-                                                                                                                                                        "name": "int32",
-                                                                                                                                                        "term": {"lambda": {"body": {"variable": "n"}, "domain": {"literal": {"integer": {"int32": {}}}}, "parameter": "n"}}}],
+                                                                                                                                                        "handler": {"lambda": {"body": {"variable": "n"}, "domain": {"literal": {"integer": {"int32": {}}}}, "parameter": "n"}},
+                                                                                                                                                        "name": "int32"}],
                                                                                                                                                     "default": {"literal": {"integer": {"int32": 0}}},
                                                                                                                                                     "typeName": "hydra.core.IntegerValue"}}}},
                                                                                                                                             "domain": {"variable": "hydra.core.IntegerValue"},
-                                                                                                                                            "parameter": "intVal"}}}],
+                                                                                                                                            "parameter": "intVal"}},
+                                                                                                                                        "name": "integer"}],
                                                                                                                                     "default": {"literal": {"integer": {"int32": 0}}},
                                                                                                                                     "typeName": "hydra.core.Literal"}}}},
                                                                                                                             "domain": {"variable": "hydra.core.Literal"},
-                                                                                                                            "parameter": "lit"}}}],
+                                                                                                                            "parameter": "lit"}},
+                                                                                                                        "name": "literal"}],
                                                                                                                     "default": {"literal": {"integer": {"int32": 0}}},
                                                                                                                     "typeName": "hydra.core.Term"}}}},
                                                                                                             "function": {"application": {"argument": {"variable": "acc"}, "function": {"variable": "hydra.lib.math.add"}}}}},
@@ -7784,8 +7782,7 @@
                                                                                                                   "cases": {
                                                                                                                     "cases": [
                                                                                                                       {
-                                                                                                                        "name": "literal",
-                                                                                                                        "term": {
+                                                                                                                        "handler": {
                                                                                                                           "lambda": {
                                                                                                                             "body": {
                                                                                                                               "application": {
@@ -7794,8 +7791,7 @@
                                                                                                                                   "cases": {
                                                                                                                                     "cases": [
                                                                                                                                       {
-                                                                                                                                        "name": "integer",
-                                                                                                                                        "term": {
+                                                                                                                                        "handler": {
                                                                                                                                           "lambda": {
                                                                                                                                             "body": {
                                                                                                                                               "application": {
@@ -7804,16 +7800,18 @@
                                                                                                                                                   "cases": {
                                                                                                                                                     "cases": [
                                                                                                                                                       {
-                                                                                                                                                        "name": "int32",
-                                                                                                                                                        "term": {"lambda": {"body": {"variable": "n"}, "domain": {"literal": {"integer": {"int32": {}}}}, "parameter": "n"}}}],
+                                                                                                                                                        "handler": {"lambda": {"body": {"variable": "n"}, "domain": {"literal": {"integer": {"int32": {}}}}, "parameter": "n"}},
+                                                                                                                                                        "name": "int32"}],
                                                                                                                                                     "default": {"literal": {"integer": {"int32": 0}}},
                                                                                                                                                     "typeName": "hydra.core.IntegerValue"}}}},
                                                                                                                                             "domain": {"variable": "hydra.core.IntegerValue"},
-                                                                                                                                            "parameter": "intVal"}}}],
+                                                                                                                                            "parameter": "intVal"}},
+                                                                                                                                        "name": "integer"}],
                                                                                                                                     "default": {"literal": {"integer": {"int32": 0}}},
                                                                                                                                     "typeName": "hydra.core.Literal"}}}},
                                                                                                                             "domain": {"variable": "hydra.core.Literal"},
-                                                                                                                            "parameter": "lit"}}}],
+                                                                                                                            "parameter": "lit"}},
+                                                                                                                        "name": "literal"}],
                                                                                                                     "default": {"literal": {"integer": {"int32": 0}}},
                                                                                                                     "typeName": "hydra.core.Term"}}}},
                                                                                                             "function": {"application": {"argument": {"variable": "acc"}, "function": {"variable": "hydra.lib.math.add"}}}}},
@@ -7909,7 +7907,7 @@
                                                                                                               "fields": [
                                                                                                                 {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "ok"}}, "typeName": "hydra.core.Name"}}},
                                                                                                                 {
-                                                                                                                  "name": "term",
+                                                                                                                  "name": "handler",
                                                                                                                   "term": {
                                                                                                                     "inject": {
                                                                                                                       "field": {
@@ -7922,13 +7920,13 @@
                                                                                                                                 "inject": {"field": {"name": "int32", "term": {"literal": {"integer": {"int32": 1}}}}, "typeName": "hydra.core.IntegerValue"}}},
                                                                                                                             "typeName": "hydra.core.Literal"}}},
                                                                                                                       "typeName": "hydra.core.Term"}}}],
-                                                                                                              "typeName": "hydra.core.Field"}},
+                                                                                                              "typeName": "hydra.core.CaseAlternative"}},
                                                                                                           {
                                                                                                             "record": {
                                                                                                               "fields": [
                                                                                                                 {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "err"}}, "typeName": "hydra.core.Name"}}},
                                                                                                                 {
-                                                                                                                  "name": "term",
+                                                                                                                  "name": "handler",
                                                                                                                   "term": {
                                                                                                                     "inject": {
                                                                                                                       "field": {
@@ -7941,7 +7939,7 @@
                                                                                                                                 "inject": {"field": {"name": "int32", "term": {"literal": {"integer": {"int32": 2}}}}, "typeName": "hydra.core.IntegerValue"}}},
                                                                                                                             "typeName": "hydra.core.Literal"}}},
                                                                                                                       "typeName": "hydra.core.Term"}}}],
-                                                                                                              "typeName": "hydra.core.Field"}}]}}],
+                                                                                                              "typeName": "hydra.core.CaseAlternative"}}]}}],
                                                                                                   "typeName": "hydra.core.CaseStatement"}}},
                                                                                             "typeName": "hydra.core.Term"}},
                                                                                         "function": {
@@ -7962,8 +7960,7 @@
                                                                                                                   "cases": {
                                                                                                                     "cases": [
                                                                                                                       {
-                                                                                                                        "name": "literal",
-                                                                                                                        "term": {
+                                                                                                                        "handler": {
                                                                                                                           "lambda": {
                                                                                                                             "body": {
                                                                                                                               "application": {
@@ -7972,8 +7969,7 @@
                                                                                                                                   "cases": {
                                                                                                                                     "cases": [
                                                                                                                                       {
-                                                                                                                                        "name": "integer",
-                                                                                                                                        "term": {
+                                                                                                                                        "handler": {
                                                                                                                                           "lambda": {
                                                                                                                                             "body": {
                                                                                                                                               "application": {
@@ -7982,16 +7978,18 @@
                                                                                                                                                   "cases": {
                                                                                                                                                     "cases": [
                                                                                                                                                       {
-                                                                                                                                                        "name": "int32",
-                                                                                                                                                        "term": {"lambda": {"body": {"variable": "n"}, "domain": {"literal": {"integer": {"int32": {}}}}, "parameter": "n"}}}],
+                                                                                                                                                        "handler": {"lambda": {"body": {"variable": "n"}, "domain": {"literal": {"integer": {"int32": {}}}}, "parameter": "n"}},
+                                                                                                                                                        "name": "int32"}],
                                                                                                                                                     "default": {"literal": {"integer": {"int32": 0}}},
                                                                                                                                                     "typeName": "hydra.core.IntegerValue"}}}},
                                                                                                                                             "domain": {"variable": "hydra.core.IntegerValue"},
-                                                                                                                                            "parameter": "intVal"}}}],
+                                                                                                                                            "parameter": "intVal"}},
+                                                                                                                                        "name": "integer"}],
                                                                                                                                     "default": {"literal": {"integer": {"int32": 0}}},
                                                                                                                                     "typeName": "hydra.core.Literal"}}}},
                                                                                                                             "domain": {"variable": "hydra.core.Literal"},
-                                                                                                                            "parameter": "lit"}}}],
+                                                                                                                            "parameter": "lit"}},
+                                                                                                                        "name": "literal"}],
                                                                                                                     "default": {"literal": {"integer": {"int32": 0}}},
                                                                                                                     "typeName": "hydra.core.Term"}}}},
                                                                                                             "function": {"application": {"argument": {"variable": "acc"}, "function": {"variable": "hydra.lib.math.add"}}}}},
@@ -8124,8 +8122,7 @@
                                                                                                                   "cases": {
                                                                                                                     "cases": [
                                                                                                                       {
-                                                                                                                        "name": "literal",
-                                                                                                                        "term": {
+                                                                                                                        "handler": {
                                                                                                                           "lambda": {
                                                                                                                             "body": {
                                                                                                                               "application": {
@@ -8134,8 +8131,7 @@
                                                                                                                                   "cases": {
                                                                                                                                     "cases": [
                                                                                                                                       {
-                                                                                                                                        "name": "integer",
-                                                                                                                                        "term": {
+                                                                                                                                        "handler": {
                                                                                                                                           "lambda": {
                                                                                                                                             "body": {
                                                                                                                                               "application": {
@@ -8144,16 +8140,18 @@
                                                                                                                                                   "cases": {
                                                                                                                                                     "cases": [
                                                                                                                                                       {
-                                                                                                                                                        "name": "int32",
-                                                                                                                                                        "term": {"lambda": {"body": {"variable": "n"}, "domain": {"literal": {"integer": {"int32": {}}}}, "parameter": "n"}}}],
+                                                                                                                                                        "handler": {"lambda": {"body": {"variable": "n"}, "domain": {"literal": {"integer": {"int32": {}}}}, "parameter": "n"}},
+                                                                                                                                                        "name": "int32"}],
                                                                                                                                                     "default": {"literal": {"integer": {"int32": 0}}},
                                                                                                                                                     "typeName": "hydra.core.IntegerValue"}}}},
                                                                                                                                             "domain": {"variable": "hydra.core.IntegerValue"},
-                                                                                                                                            "parameter": "intVal"}}}],
+                                                                                                                                            "parameter": "intVal"}},
+                                                                                                                                        "name": "integer"}],
                                                                                                                                     "default": {"literal": {"integer": {"int32": 0}}},
                                                                                                                                     "typeName": "hydra.core.Literal"}}}},
                                                                                                                             "domain": {"variable": "hydra.core.Literal"},
-                                                                                                                            "parameter": "lit"}}}],
+                                                                                                                            "parameter": "lit"}},
+                                                                                                                        "name": "literal"}],
                                                                                                                     "default": {"literal": {"integer": {"int32": 0}}},
                                                                                                                     "typeName": "hydra.core.Term"}}}},
                                                                                                             "function": {"application": {"argument": {"variable": "acc"}, "function": {"variable": "hydra.lib.math.add"}}}}},
@@ -8267,8 +8265,7 @@
                                                                                                                   "cases": {
                                                                                                                     "cases": [
                                                                                                                       {
-                                                                                                                        "name": "literal",
-                                                                                                                        "term": {
+                                                                                                                        "handler": {
                                                                                                                           "lambda": {
                                                                                                                             "body": {
                                                                                                                               "application": {
@@ -8277,8 +8274,7 @@
                                                                                                                                   "cases": {
                                                                                                                                     "cases": [
                                                                                                                                       {
-                                                                                                                                        "name": "integer",
-                                                                                                                                        "term": {
+                                                                                                                                        "handler": {
                                                                                                                                           "lambda": {
                                                                                                                                             "body": {
                                                                                                                                               "application": {
@@ -8287,16 +8283,18 @@
                                                                                                                                                   "cases": {
                                                                                                                                                     "cases": [
                                                                                                                                                       {
-                                                                                                                                                        "name": "int32",
-                                                                                                                                                        "term": {"lambda": {"body": {"variable": "n"}, "domain": {"literal": {"integer": {"int32": {}}}}, "parameter": "n"}}}],
+                                                                                                                                                        "handler": {"lambda": {"body": {"variable": "n"}, "domain": {"literal": {"integer": {"int32": {}}}}, "parameter": "n"}},
+                                                                                                                                                        "name": "int32"}],
                                                                                                                                                     "default": {"literal": {"integer": {"int32": 0}}},
                                                                                                                                                     "typeName": "hydra.core.IntegerValue"}}}},
                                                                                                                                             "domain": {"variable": "hydra.core.IntegerValue"},
-                                                                                                                                            "parameter": "intVal"}}}],
+                                                                                                                                            "parameter": "intVal"}},
+                                                                                                                                        "name": "integer"}],
                                                                                                                                     "default": {"literal": {"integer": {"int32": 0}}},
                                                                                                                                     "typeName": "hydra.core.Literal"}}}},
                                                                                                                             "domain": {"variable": "hydra.core.Literal"},
-                                                                                                                            "parameter": "lit"}}}],
+                                                                                                                            "parameter": "lit"}},
+                                                                                                                        "name": "literal"}],
                                                                                                                     "default": {"literal": {"integer": {"int32": 0}}},
                                                                                                                     "typeName": "hydra.core.Term"}}}},
                                                                                                             "function": {"application": {"argument": {"variable": "acc"}, "function": {"variable": "hydra.lib.math.add"}}}}},
@@ -8416,8 +8414,7 @@
                                                                                                                   "cases": {
                                                                                                                     "cases": [
                                                                                                                       {
-                                                                                                                        "name": "literal",
-                                                                                                                        "term": {
+                                                                                                                        "handler": {
                                                                                                                           "lambda": {
                                                                                                                             "body": {
                                                                                                                               "application": {
@@ -8426,8 +8423,7 @@
                                                                                                                                   "cases": {
                                                                                                                                     "cases": [
                                                                                                                                       {
-                                                                                                                                        "name": "integer",
-                                                                                                                                        "term": {
+                                                                                                                                        "handler": {
                                                                                                                                           "lambda": {
                                                                                                                                             "body": {
                                                                                                                                               "application": {
@@ -8436,16 +8432,18 @@
                                                                                                                                                   "cases": {
                                                                                                                                                     "cases": [
                                                                                                                                                       {
-                                                                                                                                                        "name": "int32",
-                                                                                                                                                        "term": {"lambda": {"body": {"variable": "n"}, "domain": {"literal": {"integer": {"int32": {}}}}, "parameter": "n"}}}],
+                                                                                                                                                        "handler": {"lambda": {"body": {"variable": "n"}, "domain": {"literal": {"integer": {"int32": {}}}}, "parameter": "n"}},
+                                                                                                                                                        "name": "int32"}],
                                                                                                                                                     "default": {"literal": {"integer": {"int32": 0}}},
                                                                                                                                                     "typeName": "hydra.core.IntegerValue"}}}},
                                                                                                                                             "domain": {"variable": "hydra.core.IntegerValue"},
-                                                                                                                                            "parameter": "intVal"}}}],
+                                                                                                                                            "parameter": "intVal"}},
+                                                                                                                                        "name": "integer"}],
                                                                                                                                     "default": {"literal": {"integer": {"int32": 0}}},
                                                                                                                                     "typeName": "hydra.core.Literal"}}}},
                                                                                                                             "domain": {"variable": "hydra.core.Literal"},
-                                                                                                                            "parameter": "lit"}}}],
+                                                                                                                            "parameter": "lit"}},
+                                                                                                                        "name": "literal"}],
                                                                                                                     "default": {"literal": {"integer": {"int32": 0}}},
                                                                                                                     "typeName": "hydra.core.Term"}}}},
                                                                                                             "function": {"application": {"argument": {"variable": "acc"}, "function": {"variable": "hydra.lib.math.add"}}}}},
@@ -8565,8 +8563,7 @@
                                                                                                                   "cases": {
                                                                                                                     "cases": [
                                                                                                                       {
-                                                                                                                        "name": "literal",
-                                                                                                                        "term": {
+                                                                                                                        "handler": {
                                                                                                                           "lambda": {
                                                                                                                             "body": {
                                                                                                                               "application": {
@@ -8575,8 +8572,7 @@
                                                                                                                                   "cases": {
                                                                                                                                     "cases": [
                                                                                                                                       {
-                                                                                                                                        "name": "integer",
-                                                                                                                                        "term": {
+                                                                                                                                        "handler": {
                                                                                                                                           "lambda": {
                                                                                                                                             "body": {
                                                                                                                                               "application": {
@@ -8585,16 +8581,18 @@
                                                                                                                                                   "cases": {
                                                                                                                                                     "cases": [
                                                                                                                                                       {
-                                                                                                                                                        "name": "int32",
-                                                                                                                                                        "term": {"lambda": {"body": {"variable": "n"}, "domain": {"literal": {"integer": {"int32": {}}}}, "parameter": "n"}}}],
+                                                                                                                                                        "handler": {"lambda": {"body": {"variable": "n"}, "domain": {"literal": {"integer": {"int32": {}}}}, "parameter": "n"}},
+                                                                                                                                                        "name": "int32"}],
                                                                                                                                                     "default": {"literal": {"integer": {"int32": 0}}},
                                                                                                                                                     "typeName": "hydra.core.IntegerValue"}}}},
                                                                                                                                             "domain": {"variable": "hydra.core.IntegerValue"},
-                                                                                                                                            "parameter": "intVal"}}}],
+                                                                                                                                            "parameter": "intVal"}},
+                                                                                                                                        "name": "integer"}],
                                                                                                                                     "default": {"literal": {"integer": {"int32": 0}}},
                                                                                                                                     "typeName": "hydra.core.Literal"}}}},
                                                                                                                             "domain": {"variable": "hydra.core.Literal"},
-                                                                                                                            "parameter": "lit"}}}],
+                                                                                                                            "parameter": "lit"}},
+                                                                                                                        "name": "literal"}],
                                                                                                                     "default": {"literal": {"integer": {"int32": 0}}},
                                                                                                                     "typeName": "hydra.core.Term"}}}},
                                                                                                             "function": {"application": {"argument": {"variable": "acc"}, "function": {"variable": "hydra.lib.math.add"}}}}},
@@ -8721,8 +8719,7 @@
                                                                                                                   "cases": {
                                                                                                                     "cases": [
                                                                                                                       {
-                                                                                                                        "name": "literal",
-                                                                                                                        "term": {
+                                                                                                                        "handler": {
                                                                                                                           "lambda": {
                                                                                                                             "body": {
                                                                                                                               "application": {
@@ -8731,8 +8728,7 @@
                                                                                                                                   "cases": {
                                                                                                                                     "cases": [
                                                                                                                                       {
-                                                                                                                                        "name": "integer",
-                                                                                                                                        "term": {
+                                                                                                                                        "handler": {
                                                                                                                                           "lambda": {
                                                                                                                                             "body": {
                                                                                                                                               "application": {
@@ -8741,16 +8737,18 @@
                                                                                                                                                   "cases": {
                                                                                                                                                     "cases": [
                                                                                                                                                       {
-                                                                                                                                                        "name": "int32",
-                                                                                                                                                        "term": {"lambda": {"body": {"variable": "n"}, "domain": {"literal": {"integer": {"int32": {}}}}, "parameter": "n"}}}],
+                                                                                                                                                        "handler": {"lambda": {"body": {"variable": "n"}, "domain": {"literal": {"integer": {"int32": {}}}}, "parameter": "n"}},
+                                                                                                                                                        "name": "int32"}],
                                                                                                                                                     "default": {"literal": {"integer": {"int32": 0}}},
                                                                                                                                                     "typeName": "hydra.core.IntegerValue"}}}},
                                                                                                                                             "domain": {"variable": "hydra.core.IntegerValue"},
-                                                                                                                                            "parameter": "intVal"}}}],
+                                                                                                                                            "parameter": "intVal"}},
+                                                                                                                                        "name": "integer"}],
                                                                                                                                     "default": {"literal": {"integer": {"int32": 0}}},
                                                                                                                                     "typeName": "hydra.core.Literal"}}}},
                                                                                                                             "domain": {"variable": "hydra.core.Literal"},
-                                                                                                                            "parameter": "lit"}}}],
+                                                                                                                            "parameter": "lit"}},
+                                                                                                                        "name": "literal"}],
                                                                                                                     "default": {"literal": {"integer": {"int32": 0}}},
                                                                                                                     "typeName": "hydra.core.Term"}}}},
                                                                                                             "function": {"application": {"argument": {"variable": "acc"}, "function": {"variable": "hydra.lib.math.add"}}}}},
@@ -8889,8 +8887,7 @@
                                                                                                                   "cases": {
                                                                                                                     "cases": [
                                                                                                                       {
-                                                                                                                        "name": "literal",
-                                                                                                                        "term": {
+                                                                                                                        "handler": {
                                                                                                                           "lambda": {
                                                                                                                             "body": {
                                                                                                                               "application": {
@@ -8899,8 +8896,7 @@
                                                                                                                                   "cases": {
                                                                                                                                     "cases": [
                                                                                                                                       {
-                                                                                                                                        "name": "integer",
-                                                                                                                                        "term": {
+                                                                                                                                        "handler": {
                                                                                                                                           "lambda": {
                                                                                                                                             "body": {
                                                                                                                                               "application": {
@@ -8909,16 +8905,18 @@
                                                                                                                                                   "cases": {
                                                                                                                                                     "cases": [
                                                                                                                                                       {
-                                                                                                                                                        "name": "int32",
-                                                                                                                                                        "term": {"lambda": {"body": {"variable": "n"}, "domain": {"literal": {"integer": {"int32": {}}}}, "parameter": "n"}}}],
+                                                                                                                                                        "handler": {"lambda": {"body": {"variable": "n"}, "domain": {"literal": {"integer": {"int32": {}}}}, "parameter": "n"}},
+                                                                                                                                                        "name": "int32"}],
                                                                                                                                                     "default": {"literal": {"integer": {"int32": 0}}},
                                                                                                                                                     "typeName": "hydra.core.IntegerValue"}}}},
                                                                                                                                             "domain": {"variable": "hydra.core.IntegerValue"},
-                                                                                                                                            "parameter": "intVal"}}}],
+                                                                                                                                            "parameter": "intVal"}},
+                                                                                                                                        "name": "integer"}],
                                                                                                                                     "default": {"literal": {"integer": {"int32": 0}}},
                                                                                                                                     "typeName": "hydra.core.Literal"}}}},
                                                                                                                             "domain": {"variable": "hydra.core.Literal"},
-                                                                                                                            "parameter": "lit"}}}],
+                                                                                                                            "parameter": "lit"}},
+                                                                                                                        "name": "literal"}],
                                                                                                                     "default": {"literal": {"integer": {"int32": 0}}},
                                                                                                                     "typeName": "hydra.core.Term"}}}},
                                                                                                             "function": {"application": {"argument": {"variable": "acc"}, "function": {"variable": "hydra.lib.math.add"}}}}},
@@ -9093,8 +9091,7 @@
                                                                                                                   "cases": {
                                                                                                                     "cases": [
                                                                                                                       {
-                                                                                                                        "name": "literal",
-                                                                                                                        "term": {
+                                                                                                                        "handler": {
                                                                                                                           "lambda": {
                                                                                                                             "body": {
                                                                                                                               "application": {
@@ -9103,8 +9100,7 @@
                                                                                                                                   "cases": {
                                                                                                                                     "cases": [
                                                                                                                                       {
-                                                                                                                                        "name": "integer",
-                                                                                                                                        "term": {
+                                                                                                                                        "handler": {
                                                                                                                                           "lambda": {
                                                                                                                                             "body": {
                                                                                                                                               "application": {
@@ -9113,16 +9109,18 @@
                                                                                                                                                   "cases": {
                                                                                                                                                     "cases": [
                                                                                                                                                       {
-                                                                                                                                                        "name": "int32",
-                                                                                                                                                        "term": {"lambda": {"body": {"variable": "n"}, "domain": {"literal": {"integer": {"int32": {}}}}, "parameter": "n"}}}],
+                                                                                                                                                        "handler": {"lambda": {"body": {"variable": "n"}, "domain": {"literal": {"integer": {"int32": {}}}}, "parameter": "n"}},
+                                                                                                                                                        "name": "int32"}],
                                                                                                                                                     "default": {"literal": {"integer": {"int32": 0}}},
                                                                                                                                                     "typeName": "hydra.core.IntegerValue"}}}},
                                                                                                                                             "domain": {"variable": "hydra.core.IntegerValue"},
-                                                                                                                                            "parameter": "intVal"}}}],
+                                                                                                                                            "parameter": "intVal"}},
+                                                                                                                                        "name": "integer"}],
                                                                                                                                     "default": {"literal": {"integer": {"int32": 0}}},
                                                                                                                                     "typeName": "hydra.core.Literal"}}}},
                                                                                                                             "domain": {"variable": "hydra.core.Literal"},
-                                                                                                                            "parameter": "lit"}}}],
+                                                                                                                            "parameter": "lit"}},
+                                                                                                                        "name": "literal"}],
                                                                                                                     "default": {"literal": {"integer": {"int32": 0}}},
                                                                                                                     "typeName": "hydra.core.Term"}}}},
                                                                                                             "function": {"application": {"argument": {"variable": "acc"}, "function": {"variable": "hydra.lib.math.add"}}}}},
@@ -9272,8 +9270,7 @@
                                                                                                               "cases": {
                                                                                                                 "cases": [
                                                                                                                   {
-                                                                                                                    "name": "list",
-                                                                                                                    "term": {
+                                                                                                                    "handler": {
                                                                                                                       "lambda": {
                                                                                                                         "body": {
                                                                                                                           "list": [
@@ -9282,7 +9279,8 @@
                                                                                                                                 "argument": {"variable": "elems"},
                                                                                                                                 "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.length"}, "type": {"variable": "hydra.core.Term"}}}}}]},
                                                                                                                         "domain": {"list": {"variable": "hydra.core.Term"}},
-                                                                                                                        "parameter": "elems"}}}],
+                                                                                                                        "parameter": "elems"}},
+                                                                                                                    "name": "list"}],
                                                                                                                 "default": {"typeApplication": {"body": {"list": []}, "type": {"literal": {"integer": {"int32": {}}}}}},
                                                                                                                 "typeName": "hydra.core.Term"}}}}]},
                                                                                                     "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.concat"}, "type": {"literal": {"integer": {"int32": {}}}}}}}},
@@ -9500,8 +9498,7 @@
                                                                                                               "cases": {
                                                                                                                 "cases": [
                                                                                                                   {
-                                                                                                                    "name": "list",
-                                                                                                                    "term": {
+                                                                                                                    "handler": {
                                                                                                                       "lambda": {
                                                                                                                         "body": {
                                                                                                                           "list": [
@@ -9510,7 +9507,8 @@
                                                                                                                                 "argument": {"variable": "elems"},
                                                                                                                                 "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.length"}, "type": {"variable": "hydra.core.Term"}}}}}]},
                                                                                                                         "domain": {"list": {"variable": "hydra.core.Term"}},
-                                                                                                                        "parameter": "elems"}}}],
+                                                                                                                        "parameter": "elems"}},
+                                                                                                                    "name": "list"}],
                                                                                                                 "default": {"typeApplication": {"body": {"list": []}, "type": {"literal": {"integer": {"int32": {}}}}}},
                                                                                                                 "typeName": "hydra.core.Term"}}}}]},
                                                                                                     "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.concat"}, "type": {"literal": {"integer": {"int32": {}}}}}}}},
@@ -9597,7 +9595,9 @@
                   {
                     "name": "cases",
                     "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}],
-                "typeName": "hydra.testing.TestGroup"}}}}}}],
+                "typeName": "hydra.testing.TestGroup"}}}},
+        "name": "hydra.test.rewriting.allTests",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []}}}],
   "dependencies": [
     {"module": "hydra.show.core"},
     {"module": "hydra.rewriting"},

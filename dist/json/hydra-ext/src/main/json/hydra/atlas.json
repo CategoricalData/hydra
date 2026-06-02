@@ -2,8 +2,7 @@
   "definitions": [
     {
       "type": {
-        "name": "hydra.atlas.AtlasAttributeDef",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "class that captures details of a struct-attribute."}}}],
@@ -25,27 +24,27 @@
                   {"name": "constraints", "type": {"list": {"variable": "hydra.atlas.AtlasConstraintDef"}}},
                   {"name": "options", "type": {"map": {"keys": {"literal": {"string": {}}}, "values": {"literal": {"string": {}}}}}},
                   {"name": "displayName", "type": {"maybe": {"literal": {"string": {}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.atlas.AtlasAttributeDef"}},
     {
       "type": {
-        "name": "hydra.atlas.AtlasAttributeDef_Cardinality",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "single", "type": {"unit": {}}},
               {"name": "list", "type": {"unit": {}}},
               {"name": "set", "type": {"unit": {}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.atlas.AtlasAttributeDef_Cardinality"}},
     {
       "type": {
-        "name": "hydra.atlas.AtlasAttributeDef_IndexType",
-        "typeScheme": {
+        "body": {
           "body": {"union": [{"name": "default", "type": {"unit": {}}}, {"name": "string", "type": {"unit": {}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.atlas.AtlasAttributeDef_IndexType"}},
     {
       "type": {
-        "name": "hydra.atlas.AtlasBaseTypeDef",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [
@@ -66,11 +65,11 @@
                   {"name": "typeVersion", "type": {"maybe": {"literal": {"string": {}}}}},
                   {"name": "serviceType", "type": {"maybe": {"literal": {"string": {}}}}},
                   {"name": "options", "type": {"map": {"keys": {"literal": {"string": {}}}, "values": {"literal": {"string": {}}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.atlas.AtlasBaseTypeDef"}},
     {
       "type": {
-        "name": "hydra.atlas.AtlasConstraintDef",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "class that captures details of a constraint."}}}],
@@ -78,11 +77,11 @@
                 "record": [
                   {"name": "type", "type": {"maybe": {"literal": {"string": {}}}}},
                   {"name": "params", "type": {"map": {"keys": {"literal": {"string": {}}}, "values": {"literal": {"string": {}}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.atlas.AtlasConstraintDef"}},
     {
       "type": {
-        "name": "hydra.atlas.AtlasEntityDef",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "class that captures details of a entity-type."}}}],
@@ -119,11 +118,11 @@
                             "value": {
                               "literal": {"string": "the value of this field is derived from all the businessMetadataDefs this entityType is referenced in"}}}],
                         "body": {"map": {"keys": {"literal": {"string": {}}}, "values": {"list": {"variable": "hydra.atlas.AtlasAttributeDef"}}}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.atlas.AtlasEntityDef"}},
     {
       "type": {
-        "name": "hydra.atlas.AtlasRelationshipAttributeDef",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "class that captures details of a struct-attribute."}}}],
@@ -132,11 +131,11 @@
                   {"name": "asAtlasAttribute", "type": {"variable": "hydra.atlas.AtlasAttributeDef"}},
                   {"name": "relationshipTypeName", "type": {"maybe": {"literal": {"string": {}}}}},
                   {"name": "isLegacyAttribute", "type": {"literal": {"boolean": {}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.atlas.AtlasRelationshipAttributeDef"}},
     {
       "type": {
-        "name": "hydra.atlas.AtlasStructDef",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "class that captures details of a struct-type."}}}],
@@ -144,11 +143,11 @@
                 "record": [
                   {"name": "asAtlasBaseType", "type": {"variable": "hydra.atlas.AtlasBaseTypeDef"}},
                   {"name": "attributeDefs", "type": {"list": {"variable": "hydra.atlas.AtlasAttributeDef"}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.atlas.AtlasStructDef"}},
     {
       "type": {
-        "name": "hydra.atlas.TypeCategory",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "primitive", "type": {"unit": {}}},
@@ -161,7 +160,8 @@
               {"name": "map", "type": {"unit": {}}},
               {"name": "relationship", "type": {"unit": {}}},
               {"name": "businessMetadata", "type": {"unit": {}}}]},
-          "variables": []}}}],
+          "variables": []},
+        "name": "hydra.atlas.TypeCategory"}}],
   "dependencies": [{"module": "hydra.xml.schema"}],
   "metadata": {
     "comments": [],

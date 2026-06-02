@@ -2,24 +2,7 @@
   "definitions": [
     {
       "term": {
-        "name": "hydra.dsl.error.checking.checkingErrorIncorrectUnification",
-        "signature": {
-          "parameters": [
-            {
-              "isLazy": false,
-              "name": "arg0",
-              "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "A post-unification consistency check failure"}}}],
-                      "body": {"variable": "hydra.error.checking.IncorrectUnificationError"}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
-          "result": {
-            "type": {
-              "application": {"argument": {"variable": "hydra.error.checking.CheckingError"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -61,10 +44,8 @@
                         "annotation": [{"key": "description", "value": {"literal": {"string": "A post-unification consistency check failure"}}}],
                         "body": {"variable": "hydra.error.checking.IncorrectUnificationError"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.error.checking.checkingErrorNotAForallType",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.error.checking.checkingErrorIncorrectUnification",
         "signature": {
           "parameters": [
             {
@@ -74,14 +55,16 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "A type that is not a forall type when one was expected"}}}],
-                      "body": {"variable": "hydra.error.checking.NotAForallTypeError"}}},
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "A post-unification consistency check failure"}}}],
+                      "body": {"variable": "hydra.error.checking.IncorrectUnificationError"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {"argument": {"variable": "hydra.error.checking.CheckingError"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -121,10 +104,8 @@
                         "annotation": [{"key": "description", "value": {"literal": {"string": "A type that is not a forall type when one was expected"}}}],
                         "body": {"variable": "hydra.error.checking.NotAForallTypeError"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.error.checking.checkingErrorNotAFunctionType",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.error.checking.checkingErrorNotAForallType",
         "signature": {
           "parameters": [
             {
@@ -134,14 +115,16 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "A type that is not a function type when one was expected"}}}],
-                      "body": {"variable": "hydra.error.checking.NotAFunctionTypeError"}}},
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "A type that is not a forall type when one was expected"}}}],
+                      "body": {"variable": "hydra.error.checking.NotAForallTypeError"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {"argument": {"variable": "hydra.error.checking.CheckingError"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -181,10 +164,8 @@
                         "annotation": [{"key": "description", "value": {"literal": {"string": "A type that is not a function type when one was expected"}}}],
                         "body": {"variable": "hydra.error.checking.NotAFunctionTypeError"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.error.checking.checkingErrorOther",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.error.checking.checkingErrorNotAFunctionType",
         "signature": {
           "parameters": [
             {
@@ -194,14 +175,16 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "A generic checking error"}}}],
-                      "body": {"variable": "hydra.error.checking.OtherCheckingError"}}},
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "A type that is not a function type when one was expected"}}}],
+                      "body": {"variable": "hydra.error.checking.NotAFunctionTypeError"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {"argument": {"variable": "hydra.error.checking.CheckingError"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -241,10 +224,8 @@
                         "annotation": [{"key": "description", "value": {"literal": {"string": "A generic checking error"}}}],
                         "body": {"variable": "hydra.error.checking.OtherCheckingError"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.error.checking.checkingErrorTypeArityMismatch",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.error.checking.checkingErrorOther",
         "signature": {
           "parameters": [
             {
@@ -254,15 +235,16 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {"key": "description", "value": {"literal": {"string": "A type constructor applied to the wrong number of arguments"}}}],
-                      "body": {"variable": "hydra.error.checking.TypeArityMismatchError"}}},
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "A generic checking error"}}}],
+                      "body": {"variable": "hydra.error.checking.OtherCheckingError"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {"argument": {"variable": "hydra.error.checking.CheckingError"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -305,10 +287,8 @@
                           {"key": "description", "value": {"literal": {"string": "A type constructor applied to the wrong number of arguments"}}}],
                         "body": {"variable": "hydra.error.checking.TypeArityMismatchError"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.error.checking.checkingErrorTypeMismatch",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.error.checking.checkingErrorTypeArityMismatch",
         "signature": {
           "parameters": [
             {
@@ -318,14 +298,17 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "A type mismatch between expected and actual types"}}}],
-                      "body": {"variable": "hydra.error.checking.TypeMismatchError"}}},
+                      "annotation": [
+                        {"key": "description", "value": {"literal": {"string": "A type constructor applied to the wrong number of arguments"}}}],
+                      "body": {"variable": "hydra.error.checking.TypeArityMismatchError"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {"argument": {"variable": "hydra.error.checking.CheckingError"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -365,10 +348,8 @@
                         "annotation": [{"key": "description", "value": {"literal": {"string": "A type mismatch between expected and actual types"}}}],
                         "body": {"variable": "hydra.error.checking.TypeMismatchError"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.error.checking.checkingErrorUnboundTypeVariables",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.error.checking.checkingErrorTypeMismatch",
         "signature": {
           "parameters": [
             {
@@ -378,14 +359,16 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "Type variables that are not bound in scope"}}}],
-                      "body": {"variable": "hydra.error.checking.UnboundTypeVariablesError"}}},
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "A type mismatch between expected and actual types"}}}],
+                      "body": {"variable": "hydra.error.checking.TypeMismatchError"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {"argument": {"variable": "hydra.error.checking.CheckingError"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -427,10 +410,8 @@
                         "annotation": [{"key": "description", "value": {"literal": {"string": "Type variables that are not bound in scope"}}}],
                         "body": {"variable": "hydra.error.checking.UnboundTypeVariablesError"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.error.checking.checkingErrorUndefinedTermVariable",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.error.checking.checkingErrorUnboundTypeVariables",
         "signature": {
           "parameters": [
             {
@@ -440,17 +421,16 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "A reference to a term variable that is not bound in scope, encountered during checking"}}}],
-                      "body": {"variable": "hydra.error.checking.UndefinedTermVariableCheckingError"}}},
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "Type variables that are not bound in scope"}}}],
+                      "body": {"variable": "hydra.error.checking.UnboundTypeVariablesError"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {"argument": {"variable": "hydra.error.checking.CheckingError"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -495,10 +475,8 @@
                             "value": {"literal": {"string": "A reference to a term variable that is not bound in scope, encountered during checking"}}}],
                         "body": {"variable": "hydra.error.checking.UndefinedTermVariableCheckingError"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.error.checking.checkingErrorUnequalTypes",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.error.checking.checkingErrorUndefinedTermVariable",
         "signature": {
           "parameters": [
             {
@@ -508,14 +486,19 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "Multiple types that should be equal but are not"}}}],
-                      "body": {"variable": "hydra.error.checking.UnequalTypesError"}}},
+                      "annotation": [
+                        {
+                          "key": "description",
+                          "value": {"literal": {"string": "A reference to a term variable that is not bound in scope, encountered during checking"}}}],
+                      "body": {"variable": "hydra.error.checking.UndefinedTermVariableCheckingError"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {"argument": {"variable": "hydra.error.checking.CheckingError"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -555,10 +538,8 @@
                         "annotation": [{"key": "description", "value": {"literal": {"string": "Multiple types that should be equal but are not"}}}],
                         "body": {"variable": "hydra.error.checking.UnequalTypesError"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.error.checking.checkingErrorUnsupportedTermVariant",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.error.checking.checkingErrorUnequalTypes",
         "signature": {
           "parameters": [
             {
@@ -568,14 +549,16 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "A term variant that the type checker does not support"}}}],
-                      "body": {"variable": "hydra.error.checking.UnsupportedTermVariantError"}}},
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "Multiple types that should be equal but are not"}}}],
+                      "body": {"variable": "hydra.error.checking.UnequalTypesError"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {"argument": {"variable": "hydra.error.checking.CheckingError"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -617,10 +600,8 @@
                         "annotation": [{"key": "description", "value": {"literal": {"string": "A term variant that the type checker does not support"}}}],
                         "body": {"variable": "hydra.error.checking.UnsupportedTermVariantError"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.error.checking.checkingErrorUntypedLambda",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.error.checking.checkingErrorUnsupportedTermVariant",
         "signature": {
           "parameters": [
             {
@@ -630,17 +611,16 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "A lambda expression without a type annotation on its parameter"}}}],
-                      "body": {"variable": "hydra.error.checking.UntypedLambdaError"}}},
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "A term variant that the type checker does not support"}}}],
+                      "body": {"variable": "hydra.error.checking.UnsupportedTermVariantError"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {"argument": {"variable": "hydra.error.checking.CheckingError"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -683,10 +663,8 @@
                             "value": {"literal": {"string": "A lambda expression without a type annotation on its parameter"}}}],
                         "body": {"variable": "hydra.error.checking.UntypedLambdaError"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.error.checking.checkingErrorUntypedLetBinding",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.error.checking.checkingErrorUntypedLambda",
         "signature": {
           "parameters": [
             {
@@ -696,14 +674,19 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "A let binding without a type annotation"}}}],
-                      "body": {"variable": "hydra.error.checking.UntypedLetBindingError"}}},
+                      "annotation": [
+                        {
+                          "key": "description",
+                          "value": {"literal": {"string": "A lambda expression without a type annotation on its parameter"}}}],
+                      "body": {"variable": "hydra.error.checking.UntypedLambdaError"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {"argument": {"variable": "hydra.error.checking.CheckingError"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -745,10 +728,8 @@
                         "annotation": [{"key": "description", "value": {"literal": {"string": "A let binding without a type annotation"}}}],
                         "body": {"variable": "hydra.error.checking.UntypedLetBindingError"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.error.checking.checkingErrorUntypedTermVariable",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.error.checking.checkingErrorUntypedLetBinding",
         "signature": {
           "parameters": [
             {
@@ -758,17 +739,16 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "A reference to a term variable whose type is not known, encountered during checking"}}}],
-                      "body": {"variable": "hydra.error.checking.UntypedTermVariableCheckingError"}}},
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "A let binding without a type annotation"}}}],
+                      "body": {"variable": "hydra.error.checking.UntypedLetBindingError"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {"argument": {"variable": "hydra.error.checking.CheckingError"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -813,10 +793,8 @@
                             "value": {"literal": {"string": "A reference to a term variable whose type is not known, encountered during checking"}}}],
                         "body": {"variable": "hydra.error.checking.UntypedTermVariableCheckingError"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.error.checking.incorrectUnificationError",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.error.checking.checkingErrorUntypedTermVariable",
         "signature": {
           "parameters": [
             {
@@ -826,16 +804,19 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The substitution that failed the consistency check"}}}],
-                      "body": {"variable": "hydra.typing.TypeSubst"}}},
+                      "annotation": [
+                        {
+                          "key": "description",
+                          "value": {"literal": {"string": "A reference to a term variable whose type is not known, encountered during checking"}}}],
+                      "body": {"variable": "hydra.error.checking.UntypedTermVariableCheckingError"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
-              "application": {
-                "argument": {"variable": "hydra.error.checking.IncorrectUnificationError"},
-                "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+              "application": {"argument": {"variable": "hydra.error.checking.CheckingError"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -878,10 +859,8 @@
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The substitution that failed the consistency check"}}}],
                         "body": {"variable": "hydra.typing.TypeSubst"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "substitution"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.error.checking.incorrectUnificationErrorSubstitution",
+                "parameter": "substitution"}}}},
+        "name": "hydra.dsl.error.checking.incorrectUnificationError",
         "signature": {
           "parameters": [
             {
@@ -889,18 +868,20 @@
               "name": "arg0",
               "type": {
                 "application": {
-                  "argument": {"variable": "hydra.error.checking.IncorrectUnificationError"},
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The substitution that failed the consistency check"}}}],
+                      "body": {"variable": "hydra.typing.TypeSubst"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {
-                "argument": {
-                  "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The substitution that failed the consistency check"}}}],
-                    "body": {"variable": "hydra.typing.TypeSubst"}}},
+                "argument": {"variable": "hydra.error.checking.IncorrectUnificationError"},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -945,10 +926,8 @@
                   "application": {
                     "argument": {"variable": "hydra.error.checking.IncorrectUnificationError"},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.error.checking.incorrectUnificationErrorWithSubstitution",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.error.checking.incorrectUnificationErrorSubstitution",
         "signature": {
           "parameters": [
             {
@@ -957,24 +936,19 @@
               "type": {
                 "application": {
                   "argument": {"variable": "hydra.error.checking.IncorrectUnificationError"},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
-            {
-              "isLazy": false,
-              "name": "arg1",
-              "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The substitution that failed the consistency check"}}}],
-                      "body": {"variable": "hydra.typing.TypeSubst"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {
-                "argument": {"variable": "hydra.error.checking.IncorrectUnificationError"},
+                "argument": {
+                  "annotated": {
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "The substitution that failed the consistency check"}}}],
+                    "body": {"variable": "hydra.typing.TypeSubst"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -1024,10 +998,8 @@
                   "application": {
                     "argument": {"variable": "hydra.error.checking.IncorrectUnificationError"},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.error.checking.notAForallTypeError",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.error.checking.incorrectUnificationErrorWithSubstitution",
         "signature": {
           "parameters": [
             {
@@ -1035,10 +1007,7 @@
               "name": "arg0",
               "type": {
                 "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The actual type encountered"}}}],
-                      "body": {"variable": "hydra.core.Type"}}},
+                  "argument": {"variable": "hydra.error.checking.IncorrectUnificationError"},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
               "isLazy": false,
@@ -1047,16 +1016,18 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The type arguments that were being applied"}}}],
-                      "body": {"list": {"variable": "hydra.core.Type"}}}},
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The substitution that failed the consistency check"}}}],
+                      "body": {"variable": "hydra.typing.TypeSubst"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {
-                "argument": {"variable": "hydra.error.checking.NotAForallTypeError"},
+                "argument": {"variable": "hydra.error.checking.IncorrectUnificationError"},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {"key": "description", "value": {"literal": {"string": "DSL constructor for hydra.error.checking.NotAForallTypeError"}}}],
@@ -1114,10 +1085,8 @@
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The actual type encountered"}}}],
                         "body": {"variable": "hydra.core.Type"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "type"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.error.checking.notAForallTypeErrorType",
+                "parameter": "type"}}}},
+        "name": "hydra.dsl.error.checking.notAForallTypeError",
         "signature": {
           "parameters": [
             {
@@ -1125,18 +1094,30 @@
               "name": "arg0",
               "type": {
                 "application": {
-                  "argument": {"variable": "hydra.error.checking.NotAForallTypeError"},
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The actual type encountered"}}}],
+                      "body": {"variable": "hydra.core.Type"}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The type arguments that were being applied"}}}],
+                      "body": {"list": {"variable": "hydra.core.Type"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {
-                "argument": {
-                  "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The actual type encountered"}}}],
-                    "body": {"variable": "hydra.core.Type"}}},
+                "argument": {"variable": "hydra.error.checking.NotAForallTypeError"},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -1178,10 +1159,8 @@
                   "application": {
                     "argument": {"variable": "hydra.error.checking.NotAForallTypeError"},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.error.checking.notAForallTypeErrorTypeArguments",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.error.checking.notAForallTypeErrorType",
         "signature": {
           "parameters": [
             {
@@ -1196,11 +1175,13 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The type arguments that were being applied"}}}],
-                    "body": {"list": {"variable": "hydra.core.Type"}}}},
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "The actual type encountered"}}}],
+                    "body": {"variable": "hydra.core.Type"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -1244,10 +1225,8 @@
                   "application": {
                     "argument": {"variable": "hydra.error.checking.NotAForallTypeError"},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.error.checking.notAForallTypeErrorWithType",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.error.checking.notAForallTypeErrorTypeArguments",
         "signature": {
           "parameters": [
             {
@@ -1256,24 +1235,19 @@
               "type": {
                 "application": {
                   "argument": {"variable": "hydra.error.checking.NotAForallTypeError"},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
-            {
-              "isLazy": false,
-              "name": "arg1",
-              "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The actual type encountered"}}}],
-                      "body": {"variable": "hydra.core.Type"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {
-                "argument": {"variable": "hydra.error.checking.NotAForallTypeError"},
+                "argument": {
+                  "annotated": {
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "The type arguments that were being applied"}}}],
+                    "body": {"list": {"variable": "hydra.core.Type"}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -1358,10 +1332,8 @@
                   "application": {
                     "argument": {"variable": "hydra.error.checking.NotAForallTypeError"},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.error.checking.notAForallTypeErrorWithTypeArguments",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.error.checking.notAForallTypeErrorWithType",
         "signature": {
           "parameters": [
             {
@@ -1378,16 +1350,18 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The type arguments that were being applied"}}}],
-                      "body": {"list": {"variable": "hydra.core.Type"}}}},
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The actual type encountered"}}}],
+                      "body": {"variable": "hydra.core.Type"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {
                 "argument": {"variable": "hydra.error.checking.NotAForallTypeError"},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -1470,10 +1444,8 @@
                   "application": {
                     "argument": {"variable": "hydra.error.checking.NotAForallTypeError"},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.error.checking.notAFunctionTypeError",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.error.checking.notAForallTypeErrorWithTypeArguments",
         "signature": {
           "parameters": [
             {
@@ -1481,18 +1453,27 @@
               "name": "arg0",
               "type": {
                 "application": {
+                  "argument": {"variable": "hydra.error.checking.NotAForallTypeError"},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {
+                "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The actual type encountered"}}}],
-                      "body": {"variable": "hydra.core.Type"}}},
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The type arguments that were being applied"}}}],
+                      "body": {"list": {"variable": "hydra.core.Type"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {
-                "argument": {"variable": "hydra.error.checking.NotAFunctionTypeError"},
+                "argument": {"variable": "hydra.error.checking.NotAForallTypeError"},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -1534,10 +1515,8 @@
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The actual type encountered"}}}],
                         "body": {"variable": "hydra.core.Type"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "type"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.error.checking.notAFunctionTypeErrorType",
+                "parameter": "type"}}}},
+        "name": "hydra.dsl.error.checking.notAFunctionTypeError",
         "signature": {
           "parameters": [
             {
@@ -1545,18 +1524,20 @@
               "name": "arg0",
               "type": {
                 "application": {
-                  "argument": {"variable": "hydra.error.checking.NotAFunctionTypeError"},
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The actual type encountered"}}}],
+                      "body": {"variable": "hydra.core.Type"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {
-                "argument": {
-                  "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The actual type encountered"}}}],
-                    "body": {"variable": "hydra.core.Type"}}},
+                "argument": {"variable": "hydra.error.checking.NotAFunctionTypeError"},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -1598,10 +1579,8 @@
                   "application": {
                     "argument": {"variable": "hydra.error.checking.NotAFunctionTypeError"},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.error.checking.notAFunctionTypeErrorWithType",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.error.checking.notAFunctionTypeErrorType",
         "signature": {
           "parameters": [
             {
@@ -1610,24 +1589,19 @@
               "type": {
                 "application": {
                   "argument": {"variable": "hydra.error.checking.NotAFunctionTypeError"},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
-            {
-              "isLazy": false,
-              "name": "arg1",
-              "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The actual type encountered"}}}],
-                      "body": {"variable": "hydra.core.Type"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {
-                "argument": {"variable": "hydra.error.checking.NotAFunctionTypeError"},
+                "argument": {
+                  "annotated": {
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "The actual type encountered"}}}],
+                    "body": {"variable": "hydra.core.Type"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -1676,10 +1650,8 @@
                   "application": {
                     "argument": {"variable": "hydra.error.checking.NotAFunctionTypeError"},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.error.checking.otherCheckingError",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.error.checking.notAFunctionTypeErrorWithType",
         "signature": {
           "parameters": [
             {
@@ -1687,10 +1659,7 @@
               "name": "arg0",
               "type": {
                 "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The subterm path at which the error was observed"}}}],
-                      "body": {"variable": "hydra.paths.SubtermPath"}}},
+                  "argument": {"variable": "hydra.error.checking.NotAFunctionTypeError"},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
               "isLazy": false,
@@ -1699,14 +1668,18 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "A human-readable error message"}}}],
-                      "body": {"literal": {"string": {}}}}},
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The actual type encountered"}}}],
+                      "body": {"variable": "hydra.core.Type"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.error.checking.OtherCheckingError"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+              "application": {
+                "argument": {"variable": "hydra.error.checking.NotAFunctionTypeError"},
+                "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {"key": "description", "value": {"literal": {"string": "DSL constructor for hydra.error.checking.OtherCheckingError"}}}],
@@ -1764,27 +1737,37 @@
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The subterm path at which the error was observed"}}}],
                         "body": {"variable": "hydra.paths.SubtermPath"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "path"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.error.checking.otherCheckingErrorPath",
+                "parameter": "path"}}}},
+        "name": "hydra.dsl.error.checking.otherCheckingError",
         "signature": {
           "parameters": [
             {
               "isLazy": false,
               "name": "arg0",
               "type": {
-                "application": {"argument": {"variable": "hydra.error.checking.OtherCheckingError"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The subterm path at which the error was observed"}}}],
+                      "body": {"variable": "hydra.paths.SubtermPath"}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "A human-readable error message"}}}],
+                      "body": {"literal": {"string": {}}}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
-              "application": {
-                "argument": {
-                  "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The subterm path at which the error was observed"}}}],
-                    "body": {"variable": "hydra.paths.SubtermPath"}}},
-                "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+              "application": {"argument": {"variable": "hydra.error.checking.OtherCheckingError"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -1824,10 +1807,8 @@
                     "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.error.checking.OtherCheckingError"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.error.checking.otherCheckingErrorMessage",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.error.checking.otherCheckingErrorPath",
         "signature": {
           "parameters": [
             {
@@ -1840,11 +1821,13 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "A human-readable error message"}}}],
-                    "body": {"literal": {"string": {}}}}},
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "The subterm path at which the error was observed"}}}],
+                    "body": {"variable": "hydra.paths.SubtermPath"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -1884,32 +1867,27 @@
                     "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.error.checking.OtherCheckingError"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.error.checking.otherCheckingErrorWithPath",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.error.checking.otherCheckingErrorMessage",
         "signature": {
           "parameters": [
             {
               "isLazy": false,
               "name": "arg0",
               "type": {
-                "application": {"argument": {"variable": "hydra.error.checking.OtherCheckingError"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-            {
-              "isLazy": false,
-              "name": "arg1",
-              "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The subterm path at which the error was observed"}}}],
-                      "body": {"variable": "hydra.paths.SubtermPath"}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+                "application": {"argument": {"variable": "hydra.error.checking.OtherCheckingError"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.error.checking.OtherCheckingError"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+              "application": {
+                "argument": {
+                  "annotated": {
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "A human-readable error message"}}}],
+                    "body": {"literal": {"string": {}}}}},
+                "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -1990,10 +1968,8 @@
                     "parameter": "newVal"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.error.checking.OtherCheckingError"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.error.checking.otherCheckingErrorWithMessage",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.error.checking.otherCheckingErrorWithPath",
         "signature": {
           "parameters": [
             {
@@ -2008,14 +1984,16 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "A human-readable error message"}}}],
-                      "body": {"literal": {"string": {}}}}},
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The subterm path at which the error was observed"}}}],
+                      "body": {"variable": "hydra.paths.SubtermPath"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {"argument": {"variable": "hydra.error.checking.OtherCheckingError"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -2096,22 +2074,15 @@
                     "parameter": "newVal"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.error.checking.OtherCheckingError"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.error.checking.typeArityMismatchError",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.error.checking.otherCheckingErrorWithMessage",
         "signature": {
           "parameters": [
             {
               "isLazy": false,
               "name": "arg0",
               "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The type being checked"}}}],
-                      "body": {"variable": "hydra.core.Type"}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
+                "application": {"argument": {"variable": "hydra.error.checking.OtherCheckingError"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
               "isLazy": false,
               "name": "arg1",
@@ -2119,36 +2090,16 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The expected number of type arguments"}}}],
-                      "body": {"literal": {"integer": {"int32": {}}}}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
-            {
-              "isLazy": false,
-              "name": "arg2",
-              "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The actual number of type arguments provided"}}}],
-                      "body": {"literal": {"integer": {"int32": {}}}}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
-            {
-              "isLazy": false,
-              "name": "arg3",
-              "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The type arguments that were provided"}}}],
-                      "body": {"list": {"variable": "hydra.core.Type"}}}},
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "A human-readable error message"}}}],
+                      "body": {"literal": {"string": {}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
-              "application": {
-                "argument": {"variable": "hydra.error.checking.TypeArityMismatchError"},
-                "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+              "application": {"argument": {"variable": "hydra.error.checking.OtherCheckingError"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -2245,10 +2196,8 @@
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The type being checked"}}}],
                         "body": {"variable": "hydra.core.Type"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "type"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.error.checking.typeArityMismatchErrorType",
+                "parameter": "type"}}}},
+        "name": "hydra.dsl.error.checking.typeArityMismatchError",
         "signature": {
           "parameters": [
             {
@@ -2256,18 +2205,50 @@
               "name": "arg0",
               "type": {
                 "application": {
-                  "argument": {"variable": "hydra.error.checking.TypeArityMismatchError"},
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The type being checked"}}}],
+                      "body": {"variable": "hydra.core.Type"}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The expected number of type arguments"}}}],
+                      "body": {"literal": {"integer": {"int32": {}}}}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg2",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The actual number of type arguments provided"}}}],
+                      "body": {"literal": {"integer": {"int32": {}}}}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg3",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The type arguments that were provided"}}}],
+                      "body": {"list": {"variable": "hydra.core.Type"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {
-                "argument": {
-                  "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The type being checked"}}}],
-                    "body": {"variable": "hydra.core.Type"}}},
+                "argument": {"variable": "hydra.error.checking.TypeArityMismatchError"},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -2310,10 +2291,8 @@
                   "application": {
                     "argument": {"variable": "hydra.error.checking.TypeArityMismatchError"},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.error.checking.typeArityMismatchErrorExpectedArity",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.error.checking.typeArityMismatchErrorType",
         "signature": {
           "parameters": [
             {
@@ -2328,11 +2307,13 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The expected number of type arguments"}}}],
-                    "body": {"literal": {"integer": {"int32": {}}}}}},
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "The type being checked"}}}],
+                    "body": {"variable": "hydra.core.Type"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -2377,10 +2358,8 @@
                   "application": {
                     "argument": {"variable": "hydra.error.checking.TypeArityMismatchError"},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.error.checking.typeArityMismatchErrorActualArity",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.error.checking.typeArityMismatchErrorExpectedArity",
         "signature": {
           "parameters": [
             {
@@ -2395,11 +2374,13 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The actual number of type arguments provided"}}}],
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "The expected number of type arguments"}}}],
                     "body": {"literal": {"integer": {"int32": {}}}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -2442,10 +2423,8 @@
                   "application": {
                     "argument": {"variable": "hydra.error.checking.TypeArityMismatchError"},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.error.checking.typeArityMismatchErrorTypeArguments",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.error.checking.typeArityMismatchErrorActualArity",
         "signature": {
           "parameters": [
             {
@@ -2460,11 +2439,13 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The type arguments that were provided"}}}],
-                    "body": {"list": {"variable": "hydra.core.Type"}}}},
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "The actual number of type arguments provided"}}}],
+                    "body": {"literal": {"integer": {"int32": {}}}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -2509,10 +2490,8 @@
                   "application": {
                     "argument": {"variable": "hydra.error.checking.TypeArityMismatchError"},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.error.checking.typeArityMismatchErrorWithType",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.error.checking.typeArityMismatchErrorTypeArguments",
         "signature": {
           "parameters": [
             {
@@ -2521,24 +2500,19 @@
               "type": {
                 "application": {
                   "argument": {"variable": "hydra.error.checking.TypeArityMismatchError"},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
-            {
-              "isLazy": false,
-              "name": "arg1",
-              "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The type being checked"}}}],
-                      "body": {"variable": "hydra.core.Type"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {
-                "argument": {"variable": "hydra.error.checking.TypeArityMismatchError"},
+                "argument": {
+                  "annotated": {
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "The type arguments that were provided"}}}],
+                    "body": {"list": {"variable": "hydra.core.Type"}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -2697,10 +2671,8 @@
                   "application": {
                     "argument": {"variable": "hydra.error.checking.TypeArityMismatchError"},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.error.checking.typeArityMismatchErrorWithExpectedArity",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.error.checking.typeArityMismatchErrorWithType",
         "signature": {
           "parameters": [
             {
@@ -2717,16 +2689,18 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The expected number of type arguments"}}}],
-                      "body": {"literal": {"integer": {"int32": {}}}}}},
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The type being checked"}}}],
+                      "body": {"variable": "hydra.core.Type"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {
                 "argument": {"variable": "hydra.error.checking.TypeArityMismatchError"},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -2883,10 +2857,8 @@
                   "application": {
                     "argument": {"variable": "hydra.error.checking.TypeArityMismatchError"},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.error.checking.typeArityMismatchErrorWithActualArity",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.error.checking.typeArityMismatchErrorWithExpectedArity",
         "signature": {
           "parameters": [
             {
@@ -2903,7 +2875,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The actual number of type arguments provided"}}}],
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The expected number of type arguments"}}}],
                       "body": {"literal": {"integer": {"int32": {}}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -2911,8 +2883,10 @@
               "application": {
                 "argument": {"variable": "hydra.error.checking.TypeArityMismatchError"},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -3071,10 +3045,8 @@
                   "application": {
                     "argument": {"variable": "hydra.error.checking.TypeArityMismatchError"},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.error.checking.typeArityMismatchErrorWithTypeArguments",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.error.checking.typeArityMismatchErrorWithActualArity",
         "signature": {
           "parameters": [
             {
@@ -3091,16 +3063,18 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The type arguments that were provided"}}}],
-                      "body": {"list": {"variable": "hydra.core.Type"}}}},
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The actual number of type arguments provided"}}}],
+                      "body": {"literal": {"integer": {"int32": {}}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {
                 "argument": {"variable": "hydra.error.checking.TypeArityMismatchError"},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -3257,10 +3231,8 @@
                   "application": {
                     "argument": {"variable": "hydra.error.checking.TypeArityMismatchError"},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.error.checking.typeMismatchError",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.error.checking.typeArityMismatchErrorWithTypeArguments",
         "signature": {
           "parameters": [
             {
@@ -3268,10 +3240,7 @@
               "name": "arg0",
               "type": {
                 "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The expected type"}}}],
-                      "body": {"variable": "hydra.core.Type"}}},
+                  "argument": {"variable": "hydra.error.checking.TypeArityMismatchError"},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
               "isLazy": false,
@@ -3280,14 +3249,18 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The actual type encountered"}}}],
-                      "body": {"variable": "hydra.core.Type"}}},
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The type arguments that were provided"}}}],
+                      "body": {"list": {"variable": "hydra.core.Type"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.error.checking.TypeMismatchError"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+              "application": {
+                "argument": {"variable": "hydra.error.checking.TypeArityMismatchError"},
+                "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for hydra.error.checking.TypeMismatchError"}}}],
             "body": {
@@ -3344,27 +3317,37 @@
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The expected type"}}}],
                         "body": {"variable": "hydra.core.Type"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "expectedType"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.error.checking.typeMismatchErrorExpectedType",
+                "parameter": "expectedType"}}}},
+        "name": "hydra.dsl.error.checking.typeMismatchError",
         "signature": {
           "parameters": [
             {
               "isLazy": false,
               "name": "arg0",
               "type": {
-                "application": {"argument": {"variable": "hydra.error.checking.TypeMismatchError"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The expected type"}}}],
+                      "body": {"variable": "hydra.core.Type"}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The actual type encountered"}}}],
+                      "body": {"variable": "hydra.core.Type"}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
-              "application": {
-                "argument": {
-                  "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The expected type"}}}],
-                    "body": {"variable": "hydra.core.Type"}}},
-                "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+              "application": {"argument": {"variable": "hydra.error.checking.TypeMismatchError"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -3406,10 +3389,8 @@
                     "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.error.checking.TypeMismatchError"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.error.checking.typeMismatchErrorActualType",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.error.checking.typeMismatchErrorExpectedType",
         "signature": {
           "parameters": [
             {
@@ -3422,11 +3403,13 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The actual type encountered"}}}],
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "The expected type"}}}],
                     "body": {"variable": "hydra.core.Type"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -3466,32 +3449,27 @@
                     "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.error.checking.TypeMismatchError"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.error.checking.typeMismatchErrorWithExpectedType",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.error.checking.typeMismatchErrorActualType",
         "signature": {
           "parameters": [
             {
               "isLazy": false,
               "name": "arg0",
               "type": {
-                "application": {"argument": {"variable": "hydra.error.checking.TypeMismatchError"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-            {
-              "isLazy": false,
-              "name": "arg1",
-              "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The expected type"}}}],
-                      "body": {"variable": "hydra.core.Type"}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+                "application": {"argument": {"variable": "hydra.error.checking.TypeMismatchError"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.error.checking.TypeMismatchError"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+              "application": {
+                "argument": {
+                  "annotated": {
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "The actual type encountered"}}}],
+                    "body": {"variable": "hydra.core.Type"}}},
+                "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -3572,10 +3550,8 @@
                     "parameter": "newVal"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.error.checking.TypeMismatchError"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.error.checking.typeMismatchErrorWithActualType",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.error.checking.typeMismatchErrorWithExpectedType",
         "signature": {
           "parameters": [
             {
@@ -3590,14 +3566,16 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The actual type encountered"}}}],
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The expected type"}}}],
                       "body": {"variable": "hydra.core.Type"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {"argument": {"variable": "hydra.error.checking.TypeMismatchError"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -3680,22 +3658,15 @@
                     "parameter": "newVal"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.error.checking.TypeMismatchError"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.error.checking.unboundTypeVariablesError",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.error.checking.typeMismatchErrorWithActualType",
         "signature": {
           "parameters": [
             {
               "isLazy": false,
               "name": "arg0",
               "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The set of unbound type variable names"}}}],
-                      "body": {"set": {"variable": "hydra.core.Name"}}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
+                "application": {"argument": {"variable": "hydra.error.checking.TypeMismatchError"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
               "isLazy": false,
               "name": "arg1",
@@ -3703,16 +3674,16 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The type containing the unbound variables"}}}],
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The actual type encountered"}}}],
                       "body": {"variable": "hydra.core.Type"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
-              "application": {
-                "argument": {"variable": "hydra.error.checking.UnboundTypeVariablesError"},
-                "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+              "application": {"argument": {"variable": "hydra.error.checking.TypeMismatchError"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -3773,10 +3744,8 @@
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The set of unbound type variable names"}}}],
                         "body": {"set": {"variable": "hydra.core.Name"}}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "variables"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.error.checking.unboundTypeVariablesErrorVariables",
+                "parameter": "variables"}}}},
+        "name": "hydra.dsl.error.checking.unboundTypeVariablesError",
         "signature": {
           "parameters": [
             {
@@ -3784,18 +3753,30 @@
               "name": "arg0",
               "type": {
                 "application": {
-                  "argument": {"variable": "hydra.error.checking.UnboundTypeVariablesError"},
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The set of unbound type variable names"}}}],
+                      "body": {"set": {"variable": "hydra.core.Name"}}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The type containing the unbound variables"}}}],
+                      "body": {"variable": "hydra.core.Type"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {
-                "argument": {
-                  "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The set of unbound type variable names"}}}],
-                    "body": {"set": {"variable": "hydra.core.Name"}}}},
+                "argument": {"variable": "hydra.error.checking.UnboundTypeVariablesError"},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -3838,10 +3819,8 @@
                   "application": {
                     "argument": {"variable": "hydra.error.checking.UnboundTypeVariablesError"},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.error.checking.unboundTypeVariablesErrorType",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.error.checking.unboundTypeVariablesErrorVariables",
         "signature": {
           "parameters": [
             {
@@ -3856,11 +3835,13 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The type containing the unbound variables"}}}],
-                    "body": {"variable": "hydra.core.Type"}}},
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "The set of unbound type variable names"}}}],
+                    "body": {"set": {"variable": "hydra.core.Name"}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -3903,10 +3884,8 @@
                   "application": {
                     "argument": {"variable": "hydra.error.checking.UnboundTypeVariablesError"},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.error.checking.unboundTypeVariablesErrorWithVariables",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.error.checking.unboundTypeVariablesErrorType",
         "signature": {
           "parameters": [
             {
@@ -3915,24 +3894,19 @@
               "type": {
                 "application": {
                   "argument": {"variable": "hydra.error.checking.UnboundTypeVariablesError"},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
-            {
-              "isLazy": false,
-              "name": "arg1",
-              "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The set of unbound type variable names"}}}],
-                      "body": {"set": {"variable": "hydra.core.Name"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {
-                "argument": {"variable": "hydra.error.checking.UnboundTypeVariablesError"},
+                "argument": {
+                  "annotated": {
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "The type containing the unbound variables"}}}],
+                    "body": {"variable": "hydra.core.Type"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -4017,10 +3991,8 @@
                   "application": {
                     "argument": {"variable": "hydra.error.checking.UnboundTypeVariablesError"},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.error.checking.unboundTypeVariablesErrorWithType",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.error.checking.unboundTypeVariablesErrorWithVariables",
         "signature": {
           "parameters": [
             {
@@ -4037,16 +4009,18 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The type containing the unbound variables"}}}],
-                      "body": {"variable": "hydra.core.Type"}}},
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The set of unbound type variable names"}}}],
+                      "body": {"set": {"variable": "hydra.core.Name"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {
                 "argument": {"variable": "hydra.error.checking.UnboundTypeVariablesError"},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -4131,10 +4105,8 @@
                   "application": {
                     "argument": {"variable": "hydra.error.checking.UnboundTypeVariablesError"},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.error.checking.undefinedTermVariableCheckingError",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.error.checking.unboundTypeVariablesErrorWithType",
         "signature": {
           "parameters": [
             {
@@ -4142,10 +4114,7 @@
               "name": "arg0",
               "type": {
                 "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The subterm path at which the variable was referenced"}}}],
-                      "body": {"variable": "hydra.paths.SubtermPath"}}},
+                  "argument": {"variable": "hydra.error.checking.UnboundTypeVariablesError"},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
               "isLazy": false,
@@ -4154,16 +4123,18 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the undefined variable"}}}],
-                      "body": {"variable": "hydra.core.Name"}}},
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The type containing the unbound variables"}}}],
+                      "body": {"variable": "hydra.core.Type"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {
-                "argument": {"variable": "hydra.error.checking.UndefinedTermVariableCheckingError"},
+                "argument": {"variable": "hydra.error.checking.UnboundTypeVariablesError"},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -4226,10 +4197,8 @@
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The subterm path at which the variable was referenced"}}}],
                         "body": {"variable": "hydra.paths.SubtermPath"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "path"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.error.checking.undefinedTermVariableCheckingErrorPath",
+                "parameter": "path"}}}},
+        "name": "hydra.dsl.error.checking.undefinedTermVariableCheckingError",
         "signature": {
           "parameters": [
             {
@@ -4237,18 +4206,30 @@
               "name": "arg0",
               "type": {
                 "application": {
-                  "argument": {"variable": "hydra.error.checking.UndefinedTermVariableCheckingError"},
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The subterm path at which the variable was referenced"}}}],
+                      "body": {"variable": "hydra.paths.SubtermPath"}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the undefined variable"}}}],
+                      "body": {"variable": "hydra.core.Name"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {
-                "argument": {
-                  "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The subterm path at which the variable was referenced"}}}],
-                    "body": {"variable": "hydra.paths.SubtermPath"}}},
+                "argument": {"variable": "hydra.error.checking.UndefinedTermVariableCheckingError"},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -4293,10 +4274,8 @@
                   "application": {
                     "argument": {"variable": "hydra.error.checking.UndefinedTermVariableCheckingError"},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.error.checking.undefinedTermVariableCheckingErrorName",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.error.checking.undefinedTermVariableCheckingErrorPath",
         "signature": {
           "parameters": [
             {
@@ -4311,11 +4290,13 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the undefined variable"}}}],
-                    "body": {"variable": "hydra.core.Name"}}},
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "The subterm path at which the variable was referenced"}}}],
+                    "body": {"variable": "hydra.paths.SubtermPath"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -4360,10 +4341,8 @@
                   "application": {
                     "argument": {"variable": "hydra.error.checking.UndefinedTermVariableCheckingError"},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.error.checking.undefinedTermVariableCheckingErrorWithPath",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.error.checking.undefinedTermVariableCheckingErrorName",
         "signature": {
           "parameters": [
             {
@@ -4372,24 +4351,19 @@
               "type": {
                 "application": {
                   "argument": {"variable": "hydra.error.checking.UndefinedTermVariableCheckingError"},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
-            {
-              "isLazy": false,
-              "name": "arg1",
-              "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The subterm path at which the variable was referenced"}}}],
-                      "body": {"variable": "hydra.paths.SubtermPath"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {
-                "argument": {"variable": "hydra.error.checking.UndefinedTermVariableCheckingError"},
+                "argument": {
+                  "annotated": {
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the undefined variable"}}}],
+                    "body": {"variable": "hydra.core.Name"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -4478,10 +4452,8 @@
                   "application": {
                     "argument": {"variable": "hydra.error.checking.UndefinedTermVariableCheckingError"},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.error.checking.undefinedTermVariableCheckingErrorWithName",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.error.checking.undefinedTermVariableCheckingErrorWithPath",
         "signature": {
           "parameters": [
             {
@@ -4498,16 +4470,18 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the undefined variable"}}}],
-                      "body": {"variable": "hydra.core.Name"}}},
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The subterm path at which the variable was referenced"}}}],
+                      "body": {"variable": "hydra.paths.SubtermPath"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {
                 "argument": {"variable": "hydra.error.checking.UndefinedTermVariableCheckingError"},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -4596,10 +4570,8 @@
                   "application": {
                     "argument": {"variable": "hydra.error.checking.UndefinedTermVariableCheckingError"},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.error.checking.unequalTypesError",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.error.checking.undefinedTermVariableCheckingErrorWithName",
         "signature": {
           "parameters": [
             {
@@ -4607,10 +4579,7 @@
               "name": "arg0",
               "type": {
                 "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The list of types that are not all equal"}}}],
-                      "body": {"list": {"variable": "hydra.core.Type"}}}},
+                  "argument": {"variable": "hydra.error.checking.UndefinedTermVariableCheckingError"},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
               "isLazy": false,
@@ -4619,17 +4588,18 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "A description of the context in which the types were expected to be equal"}}}],
-                      "body": {"literal": {"string": {}}}}},
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the undefined variable"}}}],
+                      "body": {"variable": "hydra.core.Name"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.error.checking.UnequalTypesError"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+              "application": {
+                "argument": {"variable": "hydra.error.checking.UndefinedTermVariableCheckingError"},
+                "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for hydra.error.checking.UnequalTypesError"}}}],
             "body": {
@@ -4689,27 +4659,40 @@
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The list of types that are not all equal"}}}],
                         "body": {"list": {"variable": "hydra.core.Type"}}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "types"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.error.checking.unequalTypesErrorTypes",
+                "parameter": "types"}}}},
+        "name": "hydra.dsl.error.checking.unequalTypesError",
         "signature": {
           "parameters": [
             {
               "isLazy": false,
               "name": "arg0",
               "type": {
-                "application": {"argument": {"variable": "hydra.error.checking.UnequalTypesError"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The list of types that are not all equal"}}}],
+                      "body": {"list": {"variable": "hydra.core.Type"}}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "key": "description",
+                          "value": {"literal": {"string": "A description of the context in which the types were expected to be equal"}}}],
+                      "body": {"literal": {"string": {}}}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
-              "application": {
-                "argument": {
-                  "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The list of types that are not all equal"}}}],
-                    "body": {"list": {"variable": "hydra.core.Type"}}}},
-                "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+              "application": {"argument": {"variable": "hydra.error.checking.UnequalTypesError"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -4749,10 +4732,8 @@
                     "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.error.checking.UnequalTypesError"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.error.checking.unequalTypesErrorDescription",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.error.checking.unequalTypesErrorTypes",
         "signature": {
           "parameters": [
             {
@@ -4765,14 +4746,13 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {"literal": {"string": "A description of the context in which the types were expected to be equal"}}}],
-                    "body": {"literal": {"string": {}}}}},
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "The list of types that are not all equal"}}}],
+                    "body": {"list": {"variable": "hydra.core.Type"}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -4812,32 +4792,30 @@
                     "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.error.checking.UnequalTypesError"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.error.checking.unequalTypesErrorWithTypes",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.error.checking.unequalTypesErrorDescription",
         "signature": {
           "parameters": [
             {
               "isLazy": false,
               "name": "arg0",
               "type": {
-                "application": {"argument": {"variable": "hydra.error.checking.UnequalTypesError"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-            {
-              "isLazy": false,
-              "name": "arg1",
-              "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The list of types that are not all equal"}}}],
-                      "body": {"list": {"variable": "hydra.core.Type"}}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+                "application": {"argument": {"variable": "hydra.error.checking.UnequalTypesError"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.error.checking.UnequalTypesError"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+              "application": {
+                "argument": {
+                  "annotated": {
+                    "annotation": [
+                      {
+                        "key": "description",
+                        "value": {"literal": {"string": "A description of the context in which the types were expected to be equal"}}}],
+                    "body": {"literal": {"string": {}}}}},
+                "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -4918,10 +4896,8 @@
                     "parameter": "newVal"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.error.checking.UnequalTypesError"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.error.checking.unequalTypesErrorWithDescription",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.error.checking.unequalTypesErrorWithTypes",
         "signature": {
           "parameters": [
             {
@@ -4936,17 +4912,16 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "A description of the context in which the types were expected to be equal"}}}],
-                      "body": {"literal": {"string": {}}}}},
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The list of types that are not all equal"}}}],
+                      "body": {"list": {"variable": "hydra.core.Type"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {"argument": {"variable": "hydra.error.checking.UnequalTypesError"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -5030,29 +5005,35 @@
                     "parameter": "newVal"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.error.checking.UnequalTypesError"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.error.checking.unsupportedTermVariantError",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.error.checking.unequalTypesErrorWithDescription",
         "signature": {
           "parameters": [
             {
               "isLazy": false,
               "name": "arg0",
               "type": {
+                "application": {"argument": {"variable": "hydra.error.checking.UnequalTypesError"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The unsupported term variant"}}}],
-                      "body": {"variable": "hydra.variants.TermVariant"}}},
+                      "annotation": [
+                        {
+                          "key": "description",
+                          "value": {"literal": {"string": "A description of the context in which the types were expected to be equal"}}}],
+                      "body": {"literal": {"string": {}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
-              "application": {
-                "argument": {"variable": "hydra.error.checking.UnsupportedTermVariantError"},
-                "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+              "application": {"argument": {"variable": "hydra.error.checking.UnequalTypesError"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -5095,10 +5076,8 @@
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The unsupported term variant"}}}],
                         "body": {"variable": "hydra.variants.TermVariant"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "termVariant"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.error.checking.unsupportedTermVariantErrorTermVariant",
+                "parameter": "termVariant"}}}},
+        "name": "hydra.dsl.error.checking.unsupportedTermVariantError",
         "signature": {
           "parameters": [
             {
@@ -5106,18 +5085,20 @@
               "name": "arg0",
               "type": {
                 "application": {
-                  "argument": {"variable": "hydra.error.checking.UnsupportedTermVariantError"},
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The unsupported term variant"}}}],
+                      "body": {"variable": "hydra.variants.TermVariant"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {
-                "argument": {
-                  "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The unsupported term variant"}}}],
-                    "body": {"variable": "hydra.variants.TermVariant"}}},
+                "argument": {"variable": "hydra.error.checking.UnsupportedTermVariantError"},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -5160,10 +5141,8 @@
                   "application": {
                     "argument": {"variable": "hydra.error.checking.UnsupportedTermVariantError"},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.error.checking.unsupportedTermVariantErrorWithTermVariant",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.error.checking.unsupportedTermVariantErrorTermVariant",
         "signature": {
           "parameters": [
             {
@@ -5172,24 +5151,19 @@
               "type": {
                 "application": {
                   "argument": {"variable": "hydra.error.checking.UnsupportedTermVariantError"},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
-            {
-              "isLazy": false,
-              "name": "arg1",
-              "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The unsupported term variant"}}}],
-                      "body": {"variable": "hydra.variants.TermVariant"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {
-                "argument": {"variable": "hydra.error.checking.UnsupportedTermVariantError"},
+                "argument": {
+                  "annotated": {
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "The unsupported term variant"}}}],
+                    "body": {"variable": "hydra.variants.TermVariant"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -5239,17 +5213,36 @@
                   "application": {
                     "argument": {"variable": "hydra.error.checking.UnsupportedTermVariantError"},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.error.checking.untypedLambdaError",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.error.checking.unsupportedTermVariantErrorWithTermVariant",
         "signature": {
-          "parameters": [],
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {
+                "application": {
+                  "argument": {"variable": "hydra.error.checking.UnsupportedTermVariantError"},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The unsupported term variant"}}}],
+                      "body": {"variable": "hydra.variants.TermVariant"}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.error.checking.UntypedLambdaError"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+              "application": {
+                "argument": {"variable": "hydra.error.checking.UnsupportedTermVariantError"},
+                "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {"key": "description", "value": {"literal": {"string": "DSL constructor for hydra.error.checking.UntypedLambdaError"}}}],
@@ -5268,29 +5261,17 @@
                             {"name": "fields", "term": {"list": []}}],
                           "typeName": "hydra.core.Record"}}},
                     "typeName": "hydra.core.Term"}},
-                "typeName": "hydra.typed.TypedTerm"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.error.checking.untypedLetBindingError",
+                "typeName": "hydra.typed.TypedTerm"}}}},
+        "name": "hydra.dsl.error.checking.untypedLambdaError",
         "signature": {
-          "parameters": [
-            {
-              "isLazy": false,
-              "name": "arg0",
-              "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The untyped binding"}}}],
-                      "body": {"variable": "hydra.core.Binding"}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+          "parameters": [],
           "result": {
             "type": {
-              "application": {
-                "argument": {"variable": "hydra.error.checking.UntypedLetBindingError"},
-                "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+              "application": {"argument": {"variable": "hydra.error.checking.UntypedLambdaError"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -5333,10 +5314,8 @@
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The untyped binding"}}}],
                         "body": {"variable": "hydra.core.Binding"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "binding"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.error.checking.untypedLetBindingErrorBinding",
+                "parameter": "binding"}}}},
+        "name": "hydra.dsl.error.checking.untypedLetBindingError",
         "signature": {
           "parameters": [
             {
@@ -5344,18 +5323,20 @@
               "name": "arg0",
               "type": {
                 "application": {
-                  "argument": {"variable": "hydra.error.checking.UntypedLetBindingError"},
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The untyped binding"}}}],
+                      "body": {"variable": "hydra.core.Binding"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {
-                "argument": {
-                  "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The untyped binding"}}}],
-                    "body": {"variable": "hydra.core.Binding"}}},
+                "argument": {"variable": "hydra.error.checking.UntypedLetBindingError"},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -5398,10 +5379,8 @@
                   "application": {
                     "argument": {"variable": "hydra.error.checking.UntypedLetBindingError"},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.error.checking.untypedLetBindingErrorWithBinding",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.error.checking.untypedLetBindingErrorBinding",
         "signature": {
           "parameters": [
             {
@@ -5410,24 +5389,19 @@
               "type": {
                 "application": {
                   "argument": {"variable": "hydra.error.checking.UntypedLetBindingError"},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
-            {
-              "isLazy": false,
-              "name": "arg1",
-              "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The untyped binding"}}}],
-                      "body": {"variable": "hydra.core.Binding"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {
-                "argument": {"variable": "hydra.error.checking.UntypedLetBindingError"},
+                "argument": {
+                  "annotated": {
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "The untyped binding"}}}],
+                    "body": {"variable": "hydra.core.Binding"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -5477,10 +5451,8 @@
                   "application": {
                     "argument": {"variable": "hydra.error.checking.UntypedLetBindingError"},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.error.checking.untypedTermVariableCheckingError",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.error.checking.untypedLetBindingErrorWithBinding",
         "signature": {
           "parameters": [
             {
@@ -5488,10 +5460,7 @@
               "name": "arg0",
               "type": {
                 "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The subterm path at which the variable was referenced"}}}],
-                      "body": {"variable": "hydra.paths.SubtermPath"}}},
+                  "argument": {"variable": "hydra.error.checking.UntypedLetBindingError"},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
               "isLazy": false,
@@ -5500,16 +5469,18 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the untyped variable"}}}],
-                      "body": {"variable": "hydra.core.Name"}}},
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The untyped binding"}}}],
+                      "body": {"variable": "hydra.core.Binding"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {
-                "argument": {"variable": "hydra.error.checking.UntypedTermVariableCheckingError"},
+                "argument": {"variable": "hydra.error.checking.UntypedLetBindingError"},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -5572,10 +5543,8 @@
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The subterm path at which the variable was referenced"}}}],
                         "body": {"variable": "hydra.paths.SubtermPath"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "path"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.error.checking.untypedTermVariableCheckingErrorPath",
+                "parameter": "path"}}}},
+        "name": "hydra.dsl.error.checking.untypedTermVariableCheckingError",
         "signature": {
           "parameters": [
             {
@@ -5583,18 +5552,30 @@
               "name": "arg0",
               "type": {
                 "application": {
-                  "argument": {"variable": "hydra.error.checking.UntypedTermVariableCheckingError"},
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The subterm path at which the variable was referenced"}}}],
+                      "body": {"variable": "hydra.paths.SubtermPath"}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the untyped variable"}}}],
+                      "body": {"variable": "hydra.core.Name"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {
-                "argument": {
-                  "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The subterm path at which the variable was referenced"}}}],
-                    "body": {"variable": "hydra.paths.SubtermPath"}}},
+                "argument": {"variable": "hydra.error.checking.UntypedTermVariableCheckingError"},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -5639,10 +5620,8 @@
                   "application": {
                     "argument": {"variable": "hydra.error.checking.UntypedTermVariableCheckingError"},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.error.checking.untypedTermVariableCheckingErrorName",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.error.checking.untypedTermVariableCheckingErrorPath",
         "signature": {
           "parameters": [
             {
@@ -5657,11 +5636,13 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the untyped variable"}}}],
-                    "body": {"variable": "hydra.core.Name"}}},
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "The subterm path at which the variable was referenced"}}}],
+                    "body": {"variable": "hydra.paths.SubtermPath"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -5706,10 +5687,8 @@
                   "application": {
                     "argument": {"variable": "hydra.error.checking.UntypedTermVariableCheckingError"},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.error.checking.untypedTermVariableCheckingErrorWithPath",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.error.checking.untypedTermVariableCheckingErrorName",
         "signature": {
           "parameters": [
             {
@@ -5718,24 +5697,19 @@
               "type": {
                 "application": {
                   "argument": {"variable": "hydra.error.checking.UntypedTermVariableCheckingError"},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
-            {
-              "isLazy": false,
-              "name": "arg1",
-              "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The subterm path at which the variable was referenced"}}}],
-                      "body": {"variable": "hydra.paths.SubtermPath"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {
-                "argument": {"variable": "hydra.error.checking.UntypedTermVariableCheckingError"},
+                "argument": {
+                  "annotated": {
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the untyped variable"}}}],
+                    "body": {"variable": "hydra.core.Name"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -5824,10 +5798,8 @@
                   "application": {
                     "argument": {"variable": "hydra.error.checking.UntypedTermVariableCheckingError"},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.error.checking.untypedTermVariableCheckingErrorWithName",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.error.checking.untypedTermVariableCheckingErrorWithPath",
         "signature": {
           "parameters": [
             {
@@ -5844,16 +5816,18 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the untyped variable"}}}],
-                      "body": {"variable": "hydra.core.Name"}}},
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The subterm path at which the variable was referenced"}}}],
+                      "body": {"variable": "hydra.paths.SubtermPath"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {
                 "argument": {"variable": "hydra.error.checking.UntypedTermVariableCheckingError"},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -5942,7 +5916,33 @@
                   "application": {
                     "argument": {"variable": "hydra.error.checking.UntypedTermVariableCheckingError"},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}}],
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.error.checking.untypedTermVariableCheckingErrorWithName",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {
+                "application": {
+                  "argument": {"variable": "hydra.error.checking.UntypedTermVariableCheckingError"},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the untyped variable"}}}],
+                      "body": {"variable": "hydra.core.Name"}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+          "result": {
+            "type": {
+              "application": {
+                "argument": {"variable": "hydra.error.checking.UntypedTermVariableCheckingError"},
+                "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}}],
   "dependencies": [
     {"module": "hydra.error.checking"},
     {"module": "hydra.typed"},

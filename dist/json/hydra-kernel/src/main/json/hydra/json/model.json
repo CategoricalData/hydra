@@ -2,8 +2,7 @@
   "definitions": [
     {
       "type": {
-        "name": "hydra.json.model.Value",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A JSON value"}}}],
@@ -43,7 +42,8 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "A string value"}}}],
                         "body": {"literal": {"string": {}}}}}}]}}},
-          "variables": []}}}],
+          "variables": []},
+        "name": "hydra.json.model.Value"}}],
   "dependencies": [{"module": "hydra.core"}],
   "metadata": {"comments": [], "description": "A JSON syntax model. See the BNF at https://www.json.org", "seeAlso": []},
   "name": "hydra.json.model"}

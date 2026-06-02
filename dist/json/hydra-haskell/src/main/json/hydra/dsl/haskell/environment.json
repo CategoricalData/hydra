@@ -2,63 +2,7 @@
   "definitions": [
     {
       "term": {
-        "name": "hydra.dsl.haskell.environment.haskellModuleMetadata",
-        "signature": {
-          "parameters": [
-            {
-              "isLazy": false,
-              "name": "arg0",
-              "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "Whether the module uses Data.ByteString (B.ByteString)"}}}],
-                      "body": {"literal": {"boolean": {}}}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
-            {
-              "isLazy": false,
-              "name": "arg1",
-              "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [
-                        {"key": "description", "value": {"literal": {"string": "Whether the module uses Data.Int (I.Int8, I.Int16, I.Int64)"}}}],
-                      "body": {"literal": {"boolean": {}}}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
-            {
-              "isLazy": false,
-              "name": "arg2",
-              "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "Whether the module uses Data.Map (M.Map, M.fromList, M.empty)"}}}],
-                      "body": {"literal": {"boolean": {}}}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
-            {
-              "isLazy": false,
-              "name": "arg3",
-              "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "Whether the module uses Data.Set (S.Set, S.fromList, S.empty)"}}}],
-                      "body": {"literal": {"boolean": {}}}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
-          "result": {
-            "type": {
-              "application": {
-                "argument": {"variable": "hydra.haskell.environment.HaskellModuleMetadata"},
-                "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -162,10 +106,8 @@
                         "annotation": [{"key": "description", "value": {"literal": {"string": "Whether the module uses Data.ByteString (B.ByteString)"}}}],
                         "body": {"literal": {"boolean": {}}}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "usesByteString"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.haskell.environment.haskellModuleMetadataUsesByteString",
+                "parameter": "usesByteString"}}}},
+        "name": "hydra.dsl.haskell.environment.haskellModuleMetadata",
         "signature": {
           "parameters": [
             {
@@ -173,18 +115,57 @@
               "name": "arg0",
               "type": {
                 "application": {
-                  "argument": {"variable": "hydra.haskell.environment.HaskellModuleMetadata"},
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "Whether the module uses Data.ByteString (B.ByteString)"}}}],
+                      "body": {"literal": {"boolean": {}}}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [
+                        {"key": "description", "value": {"literal": {"string": "Whether the module uses Data.Int (I.Int8, I.Int16, I.Int64)"}}}],
+                      "body": {"literal": {"boolean": {}}}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg2",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "key": "description",
+                          "value": {"literal": {"string": "Whether the module uses Data.Map (M.Map, M.fromList, M.empty)"}}}],
+                      "body": {"literal": {"boolean": {}}}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg3",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "key": "description",
+                          "value": {"literal": {"string": "Whether the module uses Data.Set (S.Set, S.fromList, S.empty)"}}}],
+                      "body": {"literal": {"boolean": {}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {
-                "argument": {
-                  "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "Whether the module uses Data.ByteString (B.ByteString)"}}}],
-                    "body": {"literal": {"boolean": {}}}}},
+                "argument": {"variable": "hydra.haskell.environment.HaskellModuleMetadata"},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -229,10 +210,8 @@
                   "application": {
                     "argument": {"variable": "hydra.haskell.environment.HaskellModuleMetadata"},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.haskell.environment.haskellModuleMetadataUsesInt",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.haskell.environment.haskellModuleMetadataUsesByteString",
         "signature": {
           "parameters": [
             {
@@ -247,12 +226,13 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [
-                      {"key": "description", "value": {"literal": {"string": "Whether the module uses Data.Int (I.Int8, I.Int16, I.Int64)"}}}],
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "Whether the module uses Data.ByteString (B.ByteString)"}}}],
                     "body": {"literal": {"boolean": {}}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -295,10 +275,8 @@
                   "application": {
                     "argument": {"variable": "hydra.haskell.environment.HaskellModuleMetadata"},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.haskell.environment.haskellModuleMetadataUsesMap",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.haskell.environment.haskellModuleMetadataUsesInt",
         "signature": {
           "parameters": [
             {
@@ -314,13 +292,13 @@
                 "argument": {
                   "annotated": {
                     "annotation": [
-                      {
-                        "key": "description",
-                        "value": {"literal": {"string": "Whether the module uses Data.Map (M.Map, M.fromList, M.empty)"}}}],
+                      {"key": "description", "value": {"literal": {"string": "Whether the module uses Data.Int (I.Int8, I.Int16, I.Int64)"}}}],
                     "body": {"literal": {"boolean": {}}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -363,10 +341,8 @@
                   "application": {
                     "argument": {"variable": "hydra.haskell.environment.HaskellModuleMetadata"},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.haskell.environment.haskellModuleMetadataUsesSet",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.haskell.environment.haskellModuleMetadataUsesMap",
         "signature": {
           "parameters": [
             {
@@ -384,11 +360,13 @@
                     "annotation": [
                       {
                         "key": "description",
-                        "value": {"literal": {"string": "Whether the module uses Data.Set (S.Set, S.fromList, S.empty)"}}}],
+                        "value": {"literal": {"string": "Whether the module uses Data.Map (M.Map, M.fromList, M.empty)"}}}],
                     "body": {"literal": {"boolean": {}}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -431,10 +409,8 @@
                   "application": {
                     "argument": {"variable": "hydra.haskell.environment.HaskellModuleMetadata"},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.haskell.environment.haskellModuleMetadataWithUsesByteString",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.haskell.environment.haskellModuleMetadataUsesSet",
         "signature": {
           "parameters": [
             {
@@ -443,24 +419,22 @@
               "type": {
                 "application": {
                   "argument": {"variable": "hydra.haskell.environment.HaskellModuleMetadata"},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
-            {
-              "isLazy": false,
-              "name": "arg1",
-              "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "Whether the module uses Data.ByteString (B.ByteString)"}}}],
-                      "body": {"literal": {"boolean": {}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {
-                "argument": {"variable": "hydra.haskell.environment.HaskellModuleMetadata"},
+                "argument": {
+                  "annotated": {
+                    "annotation": [
+                      {
+                        "key": "description",
+                        "value": {"literal": {"string": "Whether the module uses Data.Set (S.Set, S.fromList, S.empty)"}}}],
+                    "body": {"literal": {"boolean": {}}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -615,10 +589,8 @@
                   "application": {
                     "argument": {"variable": "hydra.haskell.environment.HaskellModuleMetadata"},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.haskell.environment.haskellModuleMetadataWithUsesInt",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.haskell.environment.haskellModuleMetadataWithUsesByteString",
         "signature": {
           "parameters": [
             {
@@ -635,8 +607,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {"key": "description", "value": {"literal": {"string": "Whether the module uses Data.Int (I.Int8, I.Int16, I.Int64)"}}}],
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "Whether the module uses Data.ByteString (B.ByteString)"}}}],
                       "body": {"literal": {"boolean": {}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -644,8 +615,10 @@
               "application": {
                 "argument": {"variable": "hydra.haskell.environment.HaskellModuleMetadata"},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -803,10 +776,8 @@
                   "application": {
                     "argument": {"variable": "hydra.haskell.environment.HaskellModuleMetadata"},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.haskell.environment.haskellModuleMetadataWithUsesMap",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.haskell.environment.haskellModuleMetadataWithUsesInt",
         "signature": {
           "parameters": [
             {
@@ -824,9 +795,7 @@
                   "argument": {
                     "annotated": {
                       "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "Whether the module uses Data.Map (M.Map, M.fromList, M.empty)"}}}],
+                        {"key": "description", "value": {"literal": {"string": "Whether the module uses Data.Int (I.Int8, I.Int16, I.Int64)"}}}],
                       "body": {"literal": {"boolean": {}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -834,8 +803,10 @@
               "application": {
                 "argument": {"variable": "hydra.haskell.environment.HaskellModuleMetadata"},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -995,10 +966,8 @@
                   "application": {
                     "argument": {"variable": "hydra.haskell.environment.HaskellModuleMetadata"},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.haskell.environment.haskellModuleMetadataWithUsesSet",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.haskell.environment.haskellModuleMetadataWithUsesMap",
         "signature": {
           "parameters": [
             {
@@ -1018,7 +987,7 @@
                       "annotation": [
                         {
                           "key": "description",
-                          "value": {"literal": {"string": "Whether the module uses Data.Set (S.Set, S.fromList, S.empty)"}}}],
+                          "value": {"literal": {"string": "Whether the module uses Data.Map (M.Map, M.fromList, M.empty)"}}}],
                       "body": {"literal": {"boolean": {}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -1026,8 +995,10 @@
               "application": {
                 "argument": {"variable": "hydra.haskell.environment.HaskellModuleMetadata"},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -1187,7 +1158,36 @@
                   "application": {
                     "argument": {"variable": "hydra.haskell.environment.HaskellModuleMetadata"},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}}],
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.haskell.environment.haskellModuleMetadataWithUsesSet",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {
+                "application": {
+                  "argument": {"variable": "hydra.haskell.environment.HaskellModuleMetadata"},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "key": "description",
+                          "value": {"literal": {"string": "Whether the module uses Data.Set (S.Set, S.fromList, S.empty)"}}}],
+                      "body": {"literal": {"boolean": {}}}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+          "result": {
+            "type": {
+              "application": {
+                "argument": {"variable": "hydra.haskell.environment.HaskellModuleMetadata"},
+                "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}}],
   "dependencies": [{"module": "hydra.haskell.environment"}, {"module": "hydra.typed"}],
   "metadata": {"comments": [], "description": "DSL functions for hydra.haskell.environment", "seeAlso": []},
   "name": "hydra.dsl.haskell.environment"}

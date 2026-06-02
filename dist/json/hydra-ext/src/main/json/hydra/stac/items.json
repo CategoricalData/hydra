@@ -2,8 +2,7 @@
   "definitions": [
     {
       "type": {
-        "name": "hydra.stac.items.Asset",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [
@@ -60,11 +59,11 @@
                             "key": "description",
                             "value": {"literal": {"string": "The semantic roles of the asset, similar to the use of rel in links."}}}],
                         "body": {"list": {"variable": "hydra.stac.items.Role"}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.stac.items.Asset"}},
     {
       "type": {
-        "name": "hydra.stac.items.Item",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [
@@ -119,11 +118,11 @@
                               "literal": {
                                 "string": "The id of the STAC Collection this Item references to (see collection relation type). This field is required if such a relation type is present and is not allowed otherwise. This field provides an easy way for a user to search for any Items that belong in a specified Collection. Must be a non-empty string."}}}],
                         "body": {"maybe": {"variable": "hydra.geojson.model.Id"}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.stac.items.Item"}},
     {
       "type": {
-        "name": "hydra.stac.items.Link",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [
@@ -169,13 +168,13 @@
                             "key": "description",
                             "value": {"literal": {"string": "A human readable title to be used in rendered displays of the link."}}}],
                         "body": {"maybe": {"literal": {"string": {}}}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.stac.items.Link"}},
     {
-      "type": {"name": "hydra.stac.items.MediaType", "typeScheme": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
+      "type": {"body": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}, "name": "hydra.stac.items.MediaType"}},
     {
       "type": {
-        "name": "hydra.stac.items.RelationType",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [
@@ -189,11 +188,11 @@
                   {"name": "iana", "type": {"variable": "hydra.iana.linkrelations.LinkRelationType"}},
                   {"name": "stac", "type": {"variable": "hydra.stac.items.StacRelationType"}},
                   {"name": "other", "type": {"literal": {"string": {}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.stac.items.RelationType"}},
     {
       "type": {
-        "name": "hydra.stac.items.Role",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [
@@ -247,11 +246,11 @@
                             "value": {"literal": {"string": "A metadata sidecar file describing the data in this Item, for example the Landsat-8 MTL file."}}}],
                         "body": {"unit": {}}}}},
                   {"name": "other", "type": {"literal": {"string": {}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.stac.items.Role"}},
     {
       "type": {
-        "name": "hydra.stac.items.StacRelationType",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {
@@ -297,13 +296,12 @@
                         "key": "description",
                         "value": {"literal": {"string": "URL to a STAC Item that was used as input data in the creation of this Item."}}}],
                     "body": {"unit": {}}}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.stac.items.StacRelationType"}},
     {
-      "type": {"name": "hydra.stac.items.StacVersion", "typeScheme": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
-    {
-      "type": {"name": "hydra.stac.items.Uri", "typeScheme": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
-    {
-      "type": {"name": "hydra.stac.items.Url", "typeScheme": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}}}],
+      "type": {"body": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}, "name": "hydra.stac.items.StacVersion"}},
+    {"type": {"body": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}, "name": "hydra.stac.items.Uri"}},
+    {"type": {"body": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}, "name": "hydra.stac.items.Url"}}],
   "dependencies": [{"module": "hydra.geojson.model"}, {"module": "hydra.iana.linkrelations"}, {"module": "hydra.core"}],
   "metadata": {
     "comments": [],

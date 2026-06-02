@@ -7,7 +7,7 @@
             [hydra.scoping :refer [hydra_scoping_type_scheme_to_term_signature]])
   (:import [hydra.core hydra_core_function_type hydra_core_type_scheme
                        hydra_core_application hydra_core_injection hydra_core_field
-                       hydra_core_type_variable_metadata]
+                       hydra_core_type_variable_constraints]
            [hydra.graph hydra_graph_primitive hydra_graph_term_coder]
            [hydra.packaging hydra_packaging_primitive_definition]
            [hydra.errors hydra_errors_other_error]))
@@ -81,11 +81,11 @@
          ;; Exclude qualified names (containing dots) — those are nominal type references, not parameters.
          detected-vars (filterv #(not (.contains ^String % ".")) (collect-type-vars-ordered fun-type))
          vars (if (seq variables) (vec variables) (vec detected-vars))
-         ;; Build constraints map: {name -> TypeVariableMetadata}. Wrap each class name
+         ;; Build constraints map: {name -> TypeVariableConstraints}. Wrap each class name
          ;; into a TypeClassConstraint.simple variant per #156.
          constraint-map (when (seq constraints)
                           (into {} (map (fn [[k v]]
-                                         [k (->hydra_core_type_variable_metadata (wrap-constraints v))])
+                                         [k (->hydra_core_type_variable_constraints (wrap-constraints v))])
                                        constraints)))
          ;; TypeScheme.constraints is Maybe(Map): wrap as (:just m) or (:nothing).
          maybe-constraints (if constraint-map

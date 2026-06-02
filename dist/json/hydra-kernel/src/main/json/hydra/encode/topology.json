@@ -2,16 +2,7 @@
   "definitions": [
     {
       "term": {
-        "name": "hydra.encode.topology.graph",
-        "signature": {
-          "parameters": [
-            {
-              "isLazy": false,
-              "name": "arg0",
-              "type": {"map": {"keys": {"literal": {"integer": {"int32": {}}}}, "values": {"list": {"literal": {"integer": {"int32": {}}}}}}}}],
-          "result": {"type": {"variable": "hydra.core.Term"}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Encoder for hydra.topology.Graph"}}}],
             "body": {
@@ -59,15 +50,19 @@
                                       "type": {"variable": "hydra.core.Term"}}}}}}}}}},
                     "typeName": "hydra.core.Term"}},
                 "domain": {"map": {"keys": {"literal": {"integer": {"int32": {}}}}, "values": {"list": {"literal": {"integer": {"int32": {}}}}}}},
-                "parameter": "m"}}}}}},
+                "parameter": "m"}}}},
+        "name": "hydra.encode.topology.graph",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {"map": {"keys": {"literal": {"integer": {"int32": {}}}}, "values": {"list": {"literal": {"integer": {"int32": {}}}}}}}}],
+          "result": {"type": {"variable": "hydra.core.Term"}},
+          "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.encode.topology.tarjanState",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.topology.TarjanState"}}],
-          "result": {"type": {"variable": "hydra.core.Term"}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Encoder for hydra.topology.TarjanState"}}}],
             "body": {
@@ -342,15 +337,15 @@
                           "typeName": "hydra.core.Record"}}},
                     "typeName": "hydra.core.Term"}},
                 "domain": {"variable": "hydra.topology.TarjanState"},
-                "parameter": "x"}}}}}},
+                "parameter": "x"}}}},
+        "name": "hydra.encode.topology.tarjanState",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.topology.TarjanState"}}],
+          "result": {"type": {"variable": "hydra.core.Term"}},
+          "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.encode.topology.vertex",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"integer": {"int32": {}}}}}],
-          "result": {"type": {"variable": "hydra.core.Term"}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Encoder for hydra.topology.Vertex"}}}],
             "body": {
@@ -367,7 +362,12 @@
                           "typeName": "hydra.core.Literal"}}},
                     "typeName": "hydra.core.Term"}},
                 "domain": {"literal": {"integer": {"int32": {}}}},
-                "parameter": "x"}}}}}}],
+                "parameter": "x"}}}},
+        "name": "hydra.encode.topology.vertex",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"integer": {"int32": {}}}}}],
+          "result": {"type": {"variable": "hydra.core.Term"}},
+          "typeParameters": []}}}],
   "dependencies": [{"module": "hydra.encode.core"}, {"module": "hydra.topology"}],
   "metadata": {"comments": [], "description": "Term encoders for hydra.topology", "seeAlso": []},
   "name": "hydra.encode.topology"}

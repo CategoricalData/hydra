@@ -2,12 +2,7 @@
   "definitions": [
     {
       "term": {
-        "name": "hydra.show.typing.typeConstraint",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.typing.TypeConstraint"}}],
-          "result": {"type": {"literal": {"string": {}}}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Show a type constraint as a string"}}}],
             "body": {
@@ -38,15 +33,15 @@
                             {"application": {"argument": {"variable": "rtyp"}, "function": {"variable": "hydra.show.core.type"}}}]},
                         "function": {"variable": "hydra.lib.strings.cat"}}}}},
                 "domain": {"variable": "hydra.typing.TypeConstraint"},
-                "parameter": "tc"}}}}}},
+                "parameter": "tc"}}}},
+        "name": "hydra.show.typing.typeConstraint",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.typing.TypeConstraint"}}],
+          "result": {"type": {"literal": {"string": {}}}},
+          "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.show.typing.typeSubst",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.typing.TypeSubst"}}],
-          "result": {"type": {"literal": {"string": {}}}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Show a type substitution as a string"}}}],
             "body": {
@@ -144,7 +139,12 @@
                             {"literal": {"string": "}"}}]},
                         "function": {"variable": "hydra.lib.strings.cat"}}}}},
                 "domain": {"variable": "hydra.typing.TypeSubst"},
-                "parameter": "ts"}}}}}}],
+                "parameter": "ts"}}}},
+        "name": "hydra.show.typing.typeSubst",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.typing.TypeSubst"}}],
+          "result": {"type": {"literal": {"string": {}}}},
+          "typeParameters": []}}}],
   "dependencies": [
     {"module": "hydra.show.core"},
     {"module": "hydra.paths"},

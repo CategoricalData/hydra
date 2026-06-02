@@ -2,15 +2,7 @@
   "definitions": [
     {
       "term": {
-        "name": "hydra.extract.util.comparison",
-        "signature": {
-          "parameters": [
-            {"isLazy": false, "name": "arg0", "type": {"variable": "t0"}},
-            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.graph.Graph"}},
-            {"isLazy": false, "name": "arg2", "type": {"variable": "hydra.core.Term"}}],
-          "result": {"type": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "hydra.util.Comparison"}}}},
-          "typeParameters": [{"constraints": [], "name": "t0"}]},
-        "term": {
+        "body": {
           "typeLambda": {
             "body": {
               "annotated": {
@@ -153,7 +145,15 @@
                         "parameter": "graph"}},
                     "domain": {"variable": "t0"},
                     "parameter": "cx"}}}},
-            "parameter": "t0"}}}}],
+            "parameter": "t0"}},
+        "name": "hydra.extract.util.comparison",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "t0"}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.graph.Graph"}},
+            {"isLazy": false, "name": "arg2", "type": {"variable": "hydra.core.Term"}}],
+          "result": {"type": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "hydra.util.Comparison"}}}},
+          "typeParameters": [{"constraints": [], "name": "t0"}]}}}],
   "dependencies": [
     {"module": "hydra.extract.core"},
     {"module": "hydra.show.errors"},

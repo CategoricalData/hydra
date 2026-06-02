@@ -2,17 +2,7 @@
   "definitions": [
     {
       "term": {
-        "name": "hydra.dsl.testing.tag",
-        "signature": {
-          "parameters": [
-            {
-              "isLazy": false,
-              "name": "arg0",
-              "type": {"application": {"argument": {"literal": {"string": {}}}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
-          "result": {
-            "type": {"application": {"argument": {"variable": "hydra.testing.Tag"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for the hydra.testing.Tag wrapper"}}}],
             "body": {
@@ -36,19 +26,20 @@
                         "typeName": "hydra.core.Term"}},
                     "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {"application": {"argument": {"literal": {"string": {}}}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.testing.unTag",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.testing.tag",
         "signature": {
           "parameters": [
             {
               "isLazy": false,
               "name": "arg0",
-              "type": {"application": {"argument": {"variable": "hydra.testing.Tag"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
-          "result": {"type": {"application": {"argument": {"literal": {"string": {}}}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+              "type": {"application": {"argument": {"literal": {"string": {}}}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+          "result": {
+            "type": {"application": {"argument": {"variable": "hydra.testing.Tag"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL accessor for the body of hydra.testing.Tag"}}}],
             "body": {
@@ -77,26 +68,19 @@
                         "typeName": "hydra.core.Term"}},
                     "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {"application": {"argument": {"variable": "hydra.testing.Tag"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.testing.testCaseUniversal",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.testing.unTag",
         "signature": {
           "parameters": [
             {
               "isLazy": false,
               "name": "arg0",
-              "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "A universal test case (string comparison)"}}}],
-                      "body": {"variable": "hydra.testing.UniversalTestCase"}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
-          "result": {
-            "type": {"application": {"argument": {"variable": "hydra.testing.TestCase"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+              "type": {"application": {"argument": {"variable": "hydra.testing.Tag"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+          "result": {"type": {"application": {"argument": {"literal": {"string": {}}}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -136,10 +120,8 @@
                         "annotation": [{"key": "description", "value": {"literal": {"string": "A universal test case (string comparison)"}}}],
                         "body": {"variable": "hydra.testing.UniversalTestCase"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.testing.testCaseWithMetadata",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.testing.testCaseUniversal",
         "signature": {
           "parameters": [
             {
@@ -149,44 +131,15 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "A short name for the test case"}}}],
-                      "body": {"literal": {"string": {}}}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
-            {
-              "isLazy": false,
-              "name": "arg1",
-              "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The test case itself"}}}],
-                      "body": {"variable": "hydra.testing.TestCase"}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
-            {
-              "isLazy": false,
-              "name": "arg2",
-              "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "An optional longer description of the test case"}}}],
-                      "body": {"maybe": {"literal": {"string": {}}}}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
-            {
-              "isLazy": false,
-              "name": "arg3",
-              "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "Zero or more tags for the test case"}}}],
-                      "body": {"list": {"variable": "hydra.testing.Tag"}}}},
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "A universal test case (string comparison)"}}}],
+                      "body": {"variable": "hydra.testing.UniversalTestCase"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
-            "type": {
-              "application": {"argument": {"variable": "hydra.testing.TestCaseWithMetadata"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+            "type": {"application": {"argument": {"variable": "hydra.testing.TestCase"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for hydra.testing.TestCaseWithMetadata"}}}],
             "body": {
@@ -279,27 +232,57 @@
                         "annotation": [{"key": "description", "value": {"literal": {"string": "A short name for the test case"}}}],
                         "body": {"literal": {"string": {}}}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "name"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.testing.testCaseWithMetadataName",
+                "parameter": "name"}}}},
+        "name": "hydra.dsl.testing.testCaseWithMetadata",
         "signature": {
           "parameters": [
             {
               "isLazy": false,
               "name": "arg0",
               "type": {
-                "application": {"argument": {"variable": "hydra.testing.TestCaseWithMetadata"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "A short name for the test case"}}}],
+                      "body": {"literal": {"string": {}}}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The test case itself"}}}],
+                      "body": {"variable": "hydra.testing.TestCase"}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg2",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "An optional longer description of the test case"}}}],
+                      "body": {"maybe": {"literal": {"string": {}}}}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg3",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "Zero or more tags for the test case"}}}],
+                      "body": {"list": {"variable": "hydra.testing.Tag"}}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
-              "application": {
-                "argument": {
-                  "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "A short name for the test case"}}}],
-                    "body": {"literal": {"string": {}}}}},
-                "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+              "application": {"argument": {"variable": "hydra.testing.TestCaseWithMetadata"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -339,10 +322,8 @@
                     "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.testing.TestCaseWithMetadata"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.testing.testCaseWithMetadataCase",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.testing.testCaseWithMetadataName",
         "signature": {
           "parameters": [
             {
@@ -355,11 +336,13 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The test case itself"}}}],
-                    "body": {"variable": "hydra.testing.TestCase"}}},
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "A short name for the test case"}}}],
+                    "body": {"literal": {"string": {}}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -399,10 +382,8 @@
                     "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.testing.TestCaseWithMetadata"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.testing.testCaseWithMetadataDescription",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.testing.testCaseWithMetadataCase",
         "signature": {
           "parameters": [
             {
@@ -415,11 +396,13 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "An optional longer description of the test case"}}}],
-                    "body": {"maybe": {"literal": {"string": {}}}}}},
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "The test case itself"}}}],
+                    "body": {"variable": "hydra.testing.TestCase"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -459,10 +442,8 @@
                     "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.testing.TestCaseWithMetadata"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.testing.testCaseWithMetadataTags",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.testing.testCaseWithMetadataDescription",
         "signature": {
           "parameters": [
             {
@@ -475,11 +456,13 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "Zero or more tags for the test case"}}}],
-                    "body": {"list": {"variable": "hydra.testing.Tag"}}}},
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "An optional longer description of the test case"}}}],
+                    "body": {"maybe": {"literal": {"string": {}}}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -519,32 +502,27 @@
                     "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.testing.TestCaseWithMetadata"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.testing.testCaseWithMetadataWithName",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.testing.testCaseWithMetadataTags",
         "signature": {
           "parameters": [
             {
               "isLazy": false,
               "name": "arg0",
               "type": {
-                "application": {"argument": {"variable": "hydra.testing.TestCaseWithMetadata"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-            {
-              "isLazy": false,
-              "name": "arg1",
-              "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "A short name for the test case"}}}],
-                      "body": {"literal": {"string": {}}}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+                "application": {"argument": {"variable": "hydra.testing.TestCaseWithMetadata"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.testing.TestCaseWithMetadata"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+              "application": {
+                "argument": {
+                  "annotated": {
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "Zero or more tags for the test case"}}}],
+                    "body": {"list": {"variable": "hydra.testing.Tag"}}}},
+                "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -693,10 +671,8 @@
                     "parameter": "newVal"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.testing.TestCaseWithMetadata"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.testing.testCaseWithMetadataWithCase",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.testing.testCaseWithMetadataWithName",
         "signature": {
           "parameters": [
             {
@@ -711,14 +687,16 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The test case itself"}}}],
-                      "body": {"variable": "hydra.testing.TestCase"}}},
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "A short name for the test case"}}}],
+                      "body": {"literal": {"string": {}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {"argument": {"variable": "hydra.testing.TestCaseWithMetadata"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -867,10 +845,8 @@
                     "parameter": "newVal"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.testing.TestCaseWithMetadata"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.testing.testCaseWithMetadataWithDescription",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.testing.testCaseWithMetadataWithCase",
         "signature": {
           "parameters": [
             {
@@ -885,14 +861,16 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "An optional longer description of the test case"}}}],
-                      "body": {"maybe": {"literal": {"string": {}}}}}},
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The test case itself"}}}],
+                      "body": {"variable": "hydra.testing.TestCase"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {"argument": {"variable": "hydra.testing.TestCaseWithMetadata"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -1041,10 +1019,8 @@
                     "parameter": "newVal"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.testing.TestCaseWithMetadata"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.testing.testCaseWithMetadataWithTags",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.testing.testCaseWithMetadataWithDescription",
         "signature": {
           "parameters": [
             {
@@ -1059,14 +1035,16 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "Zero or more tags for the test case"}}}],
-                      "body": {"list": {"variable": "hydra.testing.Tag"}}}},
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "An optional longer description of the test case"}}}],
+                      "body": {"maybe": {"literal": {"string": {}}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {"argument": {"variable": "hydra.testing.TestCaseWithMetadata"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -1215,22 +1193,15 @@
                     "parameter": "newVal"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.testing.TestCaseWithMetadata"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.testing.testGroup",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.testing.testCaseWithMetadataWithTags",
         "signature": {
           "parameters": [
             {
               "isLazy": false,
               "name": "arg0",
               "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "A short name for the test group"}}}],
-                      "body": {"literal": {"string": {}}}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
+                "application": {"argument": {"variable": "hydra.testing.TestCaseWithMetadata"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
               "isLazy": false,
               "name": "arg1",
@@ -1238,34 +1209,16 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "An optional longer description of the test group"}}}],
-                      "body": {"maybe": {"literal": {"string": {}}}}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
-            {
-              "isLazy": false,
-              "name": "arg2",
-              "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "Zero or more subgroups"}}}],
-                      "body": {"list": {"variable": "hydra.testing.TestGroup"}}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
-            {
-              "isLazy": false,
-              "name": "arg3",
-              "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "Zero or more test cases"}}}],
-                      "body": {"list": {"variable": "hydra.testing.TestCaseWithMetadata"}}}},
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "Zero or more tags for the test case"}}}],
+                      "body": {"list": {"variable": "hydra.testing.Tag"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.testing.TestGroup"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+              "application": {"argument": {"variable": "hydra.testing.TestCaseWithMetadata"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for hydra.testing.TestGroup"}}}],
             "body": {
@@ -1358,27 +1311,57 @@
                         "annotation": [{"key": "description", "value": {"literal": {"string": "A short name for the test group"}}}],
                         "body": {"literal": {"string": {}}}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "name"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.testing.testGroupName",
+                "parameter": "name"}}}},
+        "name": "hydra.dsl.testing.testGroup",
         "signature": {
           "parameters": [
             {
               "isLazy": false,
               "name": "arg0",
               "type": {
-                "application": {"argument": {"variable": "hydra.testing.TestGroup"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "A short name for the test group"}}}],
+                      "body": {"literal": {"string": {}}}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "An optional longer description of the test group"}}}],
+                      "body": {"maybe": {"literal": {"string": {}}}}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg2",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "Zero or more subgroups"}}}],
+                      "body": {"list": {"variable": "hydra.testing.TestGroup"}}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg3",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "Zero or more test cases"}}}],
+                      "body": {"list": {"variable": "hydra.testing.TestCaseWithMetadata"}}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
-              "application": {
-                "argument": {
-                  "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "A short name for the test group"}}}],
-                    "body": {"literal": {"string": {}}}}},
-                "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+              "application": {"argument": {"variable": "hydra.testing.TestGroup"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL accessor for the name field of hydra.testing.TestGroup"}}}],
             "body": {
@@ -1415,10 +1398,8 @@
                     "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.testing.TestGroup"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.testing.testGroupDescription",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.testing.testGroupName",
         "signature": {
           "parameters": [
             {
@@ -1431,11 +1412,13 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "An optional longer description of the test group"}}}],
-                    "body": {"maybe": {"literal": {"string": {}}}}}},
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "A short name for the test group"}}}],
+                    "body": {"literal": {"string": {}}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -1475,10 +1458,8 @@
                     "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.testing.TestGroup"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.testing.testGroupSubgroups",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.testing.testGroupDescription",
         "signature": {
           "parameters": [
             {
@@ -1491,11 +1472,13 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "Zero or more subgroups"}}}],
-                    "body": {"list": {"variable": "hydra.testing.TestGroup"}}}},
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "An optional longer description of the test group"}}}],
+                    "body": {"maybe": {"literal": {"string": {}}}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -1535,10 +1518,8 @@
                     "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.testing.TestGroup"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.testing.testGroupCases",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.testing.testGroupSubgroups",
         "signature": {
           "parameters": [
             {
@@ -1551,11 +1532,13 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "Zero or more test cases"}}}],
-                    "body": {"list": {"variable": "hydra.testing.TestCaseWithMetadata"}}}},
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "Zero or more subgroups"}}}],
+                    "body": {"list": {"variable": "hydra.testing.TestGroup"}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {"key": "description", "value": {"literal": {"string": "DSL accessor for the cases field of hydra.testing.TestGroup"}}}],
@@ -1593,32 +1576,27 @@
                     "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.testing.TestGroup"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.testing.testGroupWithName",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.testing.testGroupCases",
         "signature": {
           "parameters": [
             {
               "isLazy": false,
               "name": "arg0",
               "type": {
-                "application": {"argument": {"variable": "hydra.testing.TestGroup"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-            {
-              "isLazy": false,
-              "name": "arg1",
-              "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "A short name for the test group"}}}],
-                      "body": {"literal": {"string": {}}}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+                "application": {"argument": {"variable": "hydra.testing.TestGroup"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.testing.TestGroup"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+              "application": {
+                "argument": {
+                  "annotated": {
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "Zero or more test cases"}}}],
+                    "body": {"list": {"variable": "hydra.testing.TestCaseWithMetadata"}}}},
+                "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL updater for the name field of hydra.testing.TestGroup"}}}],
             "body": {
@@ -1764,10 +1742,8 @@
                     "parameter": "newVal"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.testing.TestGroup"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.testing.testGroupWithDescription",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.testing.testGroupWithName",
         "signature": {
           "parameters": [
             {
@@ -1782,14 +1758,16 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "An optional longer description of the test group"}}}],
-                      "body": {"maybe": {"literal": {"string": {}}}}}},
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "A short name for the test group"}}}],
+                      "body": {"literal": {"string": {}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {"argument": {"variable": "hydra.testing.TestGroup"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -1938,10 +1916,8 @@
                     "parameter": "newVal"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.testing.TestGroup"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.testing.testGroupWithSubgroups",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.testing.testGroupWithDescription",
         "signature": {
           "parameters": [
             {
@@ -1956,14 +1932,16 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "Zero or more subgroups"}}}],
-                      "body": {"list": {"variable": "hydra.testing.TestGroup"}}}},
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "An optional longer description of the test group"}}}],
+                      "body": {"maybe": {"literal": {"string": {}}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {"argument": {"variable": "hydra.testing.TestGroup"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -2112,10 +2090,8 @@
                     "parameter": "newVal"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.testing.TestGroup"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.testing.testGroupWithCases",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.testing.testGroupWithSubgroups",
         "signature": {
           "parameters": [
             {
@@ -2130,14 +2106,16 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "Zero or more test cases"}}}],
-                      "body": {"list": {"variable": "hydra.testing.TestCaseWithMetadata"}}}},
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "Zero or more subgroups"}}}],
+                      "body": {"list": {"variable": "hydra.testing.TestGroup"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {"argument": {"variable": "hydra.testing.TestGroup"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL updater for the cases field of hydra.testing.TestGroup"}}}],
             "body": {
@@ -2283,27 +2261,15 @@
                     "parameter": "newVal"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.testing.TestGroup"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.testing.universalTestCase",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.testing.testGroupWithCases",
         "signature": {
           "parameters": [
             {
               "isLazy": false,
               "name": "arg0",
               "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {
-                            "literal": {
-                              "string": "A thunk producing the actual result string. Wrapping in a thunk defers expression evaluation until the test runner forces it, so eagerly-evaluated hosts measure expression cost inside their timing bracket rather than at test-data load time."}}}],
-                      "body": {"function": {"codomain": {"literal": {"string": {}}}, "domain": {"unit": {}}}}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
+                "application": {"argument": {"variable": "hydra.testing.TestGroup"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
               "isLazy": false,
               "name": "arg1",
@@ -2311,14 +2277,16 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "A thunk producing the expected result string."}}}],
-                      "body": {"function": {"codomain": {"literal": {"string": {}}}, "domain": {"unit": {}}}}}},
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "Zero or more test cases"}}}],
+                      "body": {"list": {"variable": "hydra.testing.TestCaseWithMetadata"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.testing.UniversalTestCase"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+              "application": {"argument": {"variable": "hydra.testing.TestGroup"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for hydra.testing.UniversalTestCase"}}}],
             "body": {
@@ -2380,32 +2348,42 @@
                                 "string": "A thunk producing the actual result string. Wrapping in a thunk defers expression evaluation until the test runner forces it, so eagerly-evaluated hosts measure expression cost inside their timing bracket rather than at test-data load time."}}}],
                         "body": {"function": {"codomain": {"literal": {"string": {}}}, "domain": {"unit": {}}}}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "actual"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.testing.universalTestCaseActual",
+                "parameter": "actual"}}}},
+        "name": "hydra.dsl.testing.universalTestCase",
         "signature": {
           "parameters": [
             {
               "isLazy": false,
               "name": "arg0",
               "type": {
-                "application": {"argument": {"variable": "hydra.testing.UniversalTestCase"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "key": "description",
+                          "value": {
+                            "literal": {
+                              "string": "A thunk producing the actual result string. Wrapping in a thunk defers expression evaluation until the test runner forces it, so eagerly-evaluated hosts measure expression cost inside their timing bracket rather than at test-data load time."}}}],
+                      "body": {"function": {"codomain": {"literal": {"string": {}}}, "domain": {"unit": {}}}}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "A thunk producing the expected result string."}}}],
+                      "body": {"function": {"codomain": {"literal": {"string": {}}}, "domain": {"unit": {}}}}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
-              "application": {
-                "argument": {
-                  "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {
-                          "literal": {
-                            "string": "A thunk producing the actual result string. Wrapping in a thunk defers expression evaluation until the test runner forces it, so eagerly-evaluated hosts measure expression cost inside their timing bracket rather than at test-data load time."}}}],
-                    "body": {"function": {"codomain": {"literal": {"string": {}}}, "domain": {"unit": {}}}}}},
-                "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+              "application": {"argument": {"variable": "hydra.testing.UniversalTestCase"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -2445,10 +2423,8 @@
                     "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.testing.UniversalTestCase"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.testing.universalTestCaseExpected",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.testing.universalTestCaseActual",
         "signature": {
           "parameters": [
             {
@@ -2461,11 +2437,18 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "A thunk producing the expected result string."}}}],
+                    "annotation": [
+                      {
+                        "key": "description",
+                        "value": {
+                          "literal": {
+                            "string": "A thunk producing the actual result string. Wrapping in a thunk defers expression evaluation until the test runner forces it, so eagerly-evaluated hosts measure expression cost inside their timing bracket rather than at test-data load time."}}}],
                     "body": {"function": {"codomain": {"literal": {"string": {}}}, "domain": {"unit": {}}}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -2505,37 +2488,27 @@
                     "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.testing.UniversalTestCase"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.testing.universalTestCaseWithActual",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.testing.universalTestCaseExpected",
         "signature": {
           "parameters": [
             {
               "isLazy": false,
               "name": "arg0",
               "type": {
-                "application": {"argument": {"variable": "hydra.testing.UniversalTestCase"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-            {
-              "isLazy": false,
-              "name": "arg1",
-              "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {
-                            "literal": {
-                              "string": "A thunk producing the actual result string. Wrapping in a thunk defers expression evaluation until the test runner forces it, so eagerly-evaluated hosts measure expression cost inside their timing bracket rather than at test-data load time."}}}],
-                      "body": {"function": {"codomain": {"literal": {"string": {}}}, "domain": {"unit": {}}}}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+                "application": {"argument": {"variable": "hydra.testing.UniversalTestCase"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.testing.UniversalTestCase"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+              "application": {
+                "argument": {
+                  "annotated": {
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "A thunk producing the expected result string."}}}],
+                    "body": {"function": {"codomain": {"literal": {"string": {}}}, "domain": {"unit": {}}}}}},
+                "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -2621,10 +2594,8 @@
                     "parameter": "newVal"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.testing.UniversalTestCase"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.testing.universalTestCaseWithExpected",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.testing.universalTestCaseWithActual",
         "signature": {
           "parameters": [
             {
@@ -2639,14 +2610,21 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "A thunk producing the expected result string."}}}],
+                      "annotation": [
+                        {
+                          "key": "description",
+                          "value": {
+                            "literal": {
+                              "string": "A thunk producing the actual result string. Wrapping in a thunk defers expression evaluation until the test runner forces it, so eagerly-evaluated hosts measure expression cost inside their timing bracket rather than at test-data load time."}}}],
                       "body": {"function": {"codomain": {"literal": {"string": {}}}, "domain": {"unit": {}}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {"argument": {"variable": "hydra.testing.UniversalTestCase"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -2727,7 +2705,29 @@
                     "parameter": "newVal"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.testing.UniversalTestCase"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}}],
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.testing.universalTestCaseWithExpected",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {
+                "application": {"argument": {"variable": "hydra.testing.UniversalTestCase"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "A thunk producing the expected result string."}}}],
+                      "body": {"function": {"codomain": {"literal": {"string": {}}}, "domain": {"unit": {}}}}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+          "result": {
+            "type": {
+              "application": {"argument": {"variable": "hydra.testing.UniversalTestCase"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}}],
   "dependencies": [{"module": "hydra.testing"}, {"module": "hydra.typed"}, {"module": "hydra.core"}, {"module": "hydra.dsl.core"}],
   "metadata": {"comments": [], "description": "DSL functions for hydra.testing", "seeAlso": []},
   "name": "hydra.dsl.testing"}

@@ -2,8 +2,7 @@
   "definitions": [
     {
       "type": {
-        "name": "hydra.tabular.ColumnType",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A column type, consisting of a name and a value type"}}}],
@@ -11,31 +10,31 @@
                 "record": [
                   {"name": "name", "type": {"variable": "hydra.relational.ColumnName"}},
                   {"name": "type", "type": {"variable": "hydra.core.Type"}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.tabular.ColumnType"}},
     {
       "type": {
-        "name": "hydra.tabular.DataRow",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [
                 {"key": "description", "value": {"literal": {"string": "A data row, containing optional-valued cells; one per column"}}}],
               "body": {"forall": {"body": {"wrap": {"list": {"maybe": {"variable": "v"}}}}, "parameter": "v"}}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.tabular.DataRow"}},
     {
       "type": {
-        "name": "hydra.tabular.HeaderRow",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [
                 {"key": "description", "value": {"literal": {"string": "A header row, containing column names (but no types or data)"}}}],
               "body": {"wrap": {"list": {"literal": {"string": {}}}}}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.tabular.HeaderRow"}},
     {
       "type": {
-        "name": "hydra.tabular.Table",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [
@@ -67,11 +66,11 @@
                                 "value": {"literal": {"string": "The data rows of the table. Each row must have the same number of cells."}}}],
                             "body": {"list": {"application": {"argument": {"variable": "v"}, "function": {"variable": "hydra.tabular.DataRow"}}}}}}}]},
                   "parameter": "v"}}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.tabular.Table"}},
     {
       "type": {
-        "name": "hydra.tabular.TableType",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [
@@ -82,7 +81,8 @@
                 "record": [
                   {"name": "name", "type": {"variable": "hydra.relational.RelationName"}},
                   {"name": "columns", "type": {"list": {"variable": "hydra.tabular.ColumnType"}}}]}}},
-          "variables": []}}}],
+          "variables": []},
+        "name": "hydra.tabular.TableType"}}],
   "dependencies": [{"module": "hydra.core"}, {"module": "hydra.relational"}],
   "metadata": {"comments": [], "description": "A simple, untyped tabular data model, suitable for CSVs and TSVs", "seeAlso": []},
   "name": "hydra.tabular"}

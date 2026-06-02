@@ -2,9 +2,7 @@
   "definitions": [
     {
       "term": {
-        "name": "hydra.json.schema.language.jsonSchemaLanguage",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.coders.Language"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Language constraints for JSON Schema"}}}],
             "body": {
@@ -95,7 +93,9 @@
                                 "name": "types",
                                 "term": {"typeApplication": {"body": {"variable": "typePredicate"}, "type": {"variable": "hydra.core.Type"}}}}],
                             "typeName": "hydra.coders.LanguageConstraints"}}}],
-                    "typeName": "hydra.coders.Language"}}}}}}}}],
+                    "typeName": "hydra.coders.Language"}}}}}},
+        "name": "hydra.json.schema.language.jsonSchemaLanguage",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.coders.Language"}}, "typeParameters": []}}}],
   "dependencies": [
     {"module": "hydra.reflect"},
     {"module": "hydra.paths"},

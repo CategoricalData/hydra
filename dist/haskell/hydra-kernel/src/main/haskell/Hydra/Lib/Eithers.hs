@@ -31,6 +31,13 @@ bimap :: Packaging.PrimitiveDefinition
 bimap =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.eithers.bimap"),
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "Map over both sides of an either value."),
+        Packaging.entityMetadataComments = [
+          "bimap(f, g, e) applies f to the contained value if e is a Left, or g if e is a Right; the result retains the same Left/Right variant.",
+          "Total. Corresponds to Haskell's Data.Bifunctor.bimap :: (a -> c) -> (b -> d) -> Either a b -> Either c d."],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [
           Typing.TypeParameter {
@@ -72,13 +79,6 @@ bimap =
           Typing.resultType = (Core.TypeEither (Core.EitherType {
             Core.eitherTypeLeft = (Core.TypeVariable (Core.Name "z")),
             Core.eitherTypeRight = (Core.TypeVariable (Core.Name "w"))}))}},
-      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
-        Packaging.entityMetadataDescription = (Just "Map over both sides of an either value."),
-        Packaging.entityMetadataComments = [
-          "bimap(f, g, e) applies f to the contained value if e is a Left, or g if e is a Right; the result retains the same Left/Right variant.",
-          "Total. Corresponds to Haskell's Data.Bifunctor.bimap :: (a -> c) -> (b -> d) -> Either a b -> Either c d."],
-        Packaging.entityMetadataSeeAlso = [],
-        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = (Just (Core.TermAnnotated (Core.AnnotatedTerm {
@@ -116,6 +116,14 @@ bind :: Packaging.PrimitiveDefinition
 bind =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.eithers.bind"),
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "Bind (flatMap) for either: if Right, apply the function; if Left, return unchanged."),
+        Packaging.entityMetadataComments = [
+          "bind(e, f) is the monadic bind for either with a fixed Left type: if e is Right v, the result is f(v); if e is Left x, the result is Left x with the Left type preserved.",
+          "Used to chain computations that may fail with a common error type.",
+          "Total. Corresponds to Haskell's (>>=) :: Either a b -> (b -> Either a c) -> Either a c."],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [
           Typing.TypeParameter {
@@ -149,14 +157,6 @@ bind =
           Typing.resultType = (Core.TypeEither (Core.EitherType {
             Core.eitherTypeLeft = (Core.TypeVariable (Core.Name "x")),
             Core.eitherTypeRight = (Core.TypeVariable (Core.Name "z"))}))}},
-      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
-        Packaging.entityMetadataDescription = (Just "Bind (flatMap) for either: if Right, apply the function; if Left, return unchanged."),
-        Packaging.entityMetadataComments = [
-          "bind(e, f) is the monadic bind for either with a fixed Left type: if e is Right v, the result is f(v); if e is Left x, the result is Left x with the Left type preserved.",
-          "Used to chain computations that may fail with a common error type.",
-          "Total. Corresponds to Haskell's (>>=) :: Either a b -> (b -> Either a c) -> Either a c."],
-        Packaging.entityMetadataSeeAlso = [],
-        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = (Just (Core.TermAnnotated (Core.AnnotatedTerm {
@@ -182,6 +182,14 @@ either :: Packaging.PrimitiveDefinition
 either =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.eithers.either"),
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "Eliminate an either value by applying one of two functions."),
+        Packaging.entityMetadataComments = [
+          "either(f, g, e) returns f(x) if e is Left x and g(y) if e is Right y.",
+          "The fundamental eliminator for the either type; every other primitive in this namespace can be derived from it.",
+          "Total. Corresponds to Haskell's either :: (a -> c) -> (b -> c) -> Either a b -> c."],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [
           Typing.TypeParameter {
@@ -218,14 +226,6 @@ either =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeVariable (Core.Name "z"))}},
-      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
-        Packaging.entityMetadataDescription = (Just "Eliminate an either value by applying one of two functions."),
-        Packaging.entityMetadataComments = [
-          "either(f, g, e) returns f(x) if e is Left x and g(y) if e is Right y.",
-          "The fundamental eliminator for the either type; every other primitive in this namespace can be derived from it.",
-          "Total. Corresponds to Haskell's either :: (a -> c) -> (b -> c) -> Either a b -> c."],
-        Packaging.entityMetadataSeeAlso = [],
-        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
@@ -233,6 +233,14 @@ foldl :: Packaging.PrimitiveDefinition
 foldl =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.eithers.foldl"),
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "Left-fold over a list with an Either-returning function, short-circuiting on Left."),
+        Packaging.entityMetadataComments = [
+          "foldl(f, acc0, xs) folds f over xs from the left, threading an accumulator of type a, where each application may fail with Left e: foldl iterates while f returns Right, propagates Left on the first failure, and returns Right (final accumulator) if all elements were processed. Equivalent to chaining bind over the list.",
+          "Total in the sense that it terminates on finite inputs; the result is a Left whenever any application of f returns one.",
+          "Corresponds to a short-circuiting variant of Haskell's foldM specialised to Either."],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [
           Typing.TypeParameter {
@@ -271,14 +279,6 @@ foldl =
           Typing.resultType = (Core.TypeEither (Core.EitherType {
             Core.eitherTypeLeft = (Core.TypeVariable (Core.Name "z")),
             Core.eitherTypeRight = (Core.TypeVariable (Core.Name "x"))}))}},
-      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
-        Packaging.entityMetadataDescription = (Just "Left-fold over a list with an Either-returning function, short-circuiting on Left."),
-        Packaging.entityMetadataComments = [
-          "foldl(f, acc0, xs) folds f over xs from the left, threading an accumulator of type a, where each application may fail with Left e: foldl iterates while f returns Right, propagates Left on the first failure, and returns Right (final accumulator) if all elements were processed. Equivalent to chaining bind over the list.",
-          "Total in the sense that it terminates on finite inputs; the result is a Left whenever any application of f returns one.",
-          "Corresponds to a short-circuiting variant of Haskell's foldM specialised to Either."],
-        Packaging.entityMetadataSeeAlso = [],
-        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
@@ -286,6 +286,13 @@ fromLeft :: Packaging.PrimitiveDefinition
 fromLeft =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.eithers.fromLeft"),
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "Extract the Left value, or return a default."),
+        Packaging.entityMetadataComments = [
+          "fromLeft(def, e) returns the contained Left value if e is a Left, or def if e is a Right.",
+          "Total. Corresponds to Haskell's Data.Either.fromLeft :: a -> Either a b -> a."],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [
           Typing.TypeParameter {
@@ -310,13 +317,6 @@ fromLeft =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeVariable (Core.Name "x"))}},
-      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
-        Packaging.entityMetadataDescription = (Just "Extract the Left value, or return a default."),
-        Packaging.entityMetadataComments = [
-          "fromLeft(def, e) returns the contained Left value if e is a Left, or def if e is a Right.",
-          "Total. Corresponds to Haskell's Data.Either.fromLeft :: a -> Either a b -> a."],
-        Packaging.entityMetadataSeeAlso = [],
-        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = (Just (Core.TermAnnotated (Core.AnnotatedTerm {
@@ -347,6 +347,13 @@ fromRight :: Packaging.PrimitiveDefinition
 fromRight =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.eithers.fromRight"),
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "Extract the Right value, or return a default."),
+        Packaging.entityMetadataComments = [
+          "fromRight(def, e) returns the contained Right value if e is a Right, or def if e is a Left.",
+          "Total. Corresponds to Haskell's Data.Either.fromRight :: b -> Either a b -> b."],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [
           Typing.TypeParameter {
@@ -371,13 +378,6 @@ fromRight =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeVariable (Core.Name "y"))}},
-      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
-        Packaging.entityMetadataDescription = (Just "Extract the Right value, or return a default."),
-        Packaging.entityMetadataComments = [
-          "fromRight(def, e) returns the contained Right value if e is a Right, or def if e is a Left.",
-          "Total. Corresponds to Haskell's Data.Either.fromRight :: b -> Either a b -> b."],
-        Packaging.entityMetadataSeeAlso = [],
-        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = (Just (Core.TermAnnotated (Core.AnnotatedTerm {
@@ -408,6 +408,13 @@ isLeft :: Packaging.PrimitiveDefinition
 isLeft =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.eithers.isLeft"),
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "Check whether an either is a Left value."),
+        Packaging.entityMetadataComments = [
+          "True if the argument is a Left variant, false if a Right.",
+          "Total. Corresponds to Haskell's Data.Either.isLeft :: Either a b -> Bool."],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [
           Typing.TypeParameter {
@@ -427,13 +434,6 @@ isLeft =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeLiteral Core.LiteralTypeBoolean)}},
-      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
-        Packaging.entityMetadataDescription = (Just "Check whether an either is a Left value."),
-        Packaging.entityMetadataComments = [
-          "True if the argument is a Left variant, false if a Right.",
-          "Total. Corresponds to Haskell's Data.Either.isLeft :: Either a b -> Bool."],
-        Packaging.entityMetadataSeeAlso = [],
-        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = (Just (Core.TermAnnotated (Core.AnnotatedTerm {
@@ -461,6 +461,13 @@ isRight :: Packaging.PrimitiveDefinition
 isRight =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.eithers.isRight"),
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "Check whether an either is a Right value."),
+        Packaging.entityMetadataComments = [
+          "True if the argument is a Right variant, false if a Left.",
+          "Total. Corresponds to Haskell's Data.Either.isRight :: Either a b -> Bool."],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [
           Typing.TypeParameter {
@@ -480,13 +487,6 @@ isRight =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeLiteral Core.LiteralTypeBoolean)}},
-      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
-        Packaging.entityMetadataDescription = (Just "Check whether an either is a Right value."),
-        Packaging.entityMetadataComments = [
-          "True if the argument is a Right variant, false if a Left.",
-          "Total. Corresponds to Haskell's Data.Either.isRight :: Either a b -> Bool."],
-        Packaging.entityMetadataSeeAlso = [],
-        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = (Just (Core.TermAnnotated (Core.AnnotatedTerm {
@@ -514,6 +514,13 @@ lefts :: Packaging.PrimitiveDefinition
 lefts =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.eithers.lefts"),
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "Extract all Left values from a list of either values."),
+        Packaging.entityMetadataComments = [
+          "lefts(xs) returns a list containing every Left value in xs, in original order, with Right values discarded.",
+          "Total. Corresponds to Haskell's Data.Either.lefts :: [Either a b] -> [a]."],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [
           Typing.TypeParameter {
@@ -533,13 +540,6 @@ lefts =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeList (Core.TypeVariable (Core.Name "x")))}},
-      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
-        Packaging.entityMetadataDescription = (Just "Extract all Left values from a list of either values."),
-        Packaging.entityMetadataComments = [
-          "lefts(xs) returns a list containing every Left value in xs, in original order, with Right values discarded.",
-          "Total. Corresponds to Haskell's Data.Either.lefts :: [Either a b] -> [a]."],
-        Packaging.entityMetadataSeeAlso = [],
-        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
@@ -547,6 +547,14 @@ map :: Packaging.PrimitiveDefinition
 map =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.eithers.map"),
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "Map a function over the Right side of an either (standard functor map)."),
+        Packaging.entityMetadataComments = [
+          "map(f, e) returns Right (f y) if e is Right y, or Left x unchanged if e is Left x.",
+          "The functor instance for either; treats the Right variant as the focus and leaves the Left variant alone.",
+          "Total. Corresponds to Haskell's fmap :: (a -> b) -> Either e a -> Either e b."],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [
           Typing.TypeParameter {
@@ -578,14 +586,6 @@ map =
           Typing.resultType = (Core.TypeEither (Core.EitherType {
             Core.eitherTypeLeft = (Core.TypeVariable (Core.Name "z")),
             Core.eitherTypeRight = (Core.TypeVariable (Core.Name "y"))}))}},
-      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
-        Packaging.entityMetadataDescription = (Just "Map a function over the Right side of an either (standard functor map)."),
-        Packaging.entityMetadataComments = [
-          "map(f, e) returns Right (f y) if e is Right y, or Left x unchanged if e is Left x.",
-          "The functor instance for either; treats the Right variant as the focus and leaves the Left variant alone.",
-          "Total. Corresponds to Haskell's fmap :: (a -> b) -> Either e a -> Either e b."],
-        Packaging.entityMetadataSeeAlso = [],
-        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = (Just (Core.TermAnnotated (Core.AnnotatedTerm {
@@ -618,6 +618,13 @@ mapList :: Packaging.PrimitiveDefinition
 mapList =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.eithers.mapList"),
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "Map a function returning either over a list, collecting results or short-circuiting on Left."),
+        Packaging.entityMetadataComments = [
+          "mapList(f, xs) applies f to each element of xs. If every application returns Right, the result is Right of the list of contained values, in original order. The first application that returns Left short-circuits the whole result to that Left.",
+          "Total. Corresponds to Haskell's traverse :: (a -> Either e b) -> [a] -> Either e [b]."],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [
           Typing.TypeParameter {
@@ -649,13 +656,6 @@ mapList =
           Typing.resultType = (Core.TypeEither (Core.EitherType {
             Core.eitherTypeLeft = (Core.TypeVariable (Core.Name "z")),
             Core.eitherTypeRight = (Core.TypeList (Core.TypeVariable (Core.Name "y")))}))}},
-      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
-        Packaging.entityMetadataDescription = (Just "Map a function returning either over a list, collecting results or short-circuiting on Left."),
-        Packaging.entityMetadataComments = [
-          "mapList(f, xs) applies f to each element of xs. If every application returns Right, the result is Right of the list of contained values, in original order. The first application that returns Left short-circuits the whole result to that Left.",
-          "Total. Corresponds to Haskell's traverse :: (a -> Either e b) -> [a] -> Either e [b]."],
-        Packaging.entityMetadataSeeAlso = [],
-        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
@@ -663,6 +663,13 @@ mapMaybe :: Packaging.PrimitiveDefinition
 mapMaybe =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.eithers.mapMaybe"),
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "Map a function returning either over a maybe, or return Right Nothing if Nothing."),
+        Packaging.entityMetadataComments = [
+          "mapMaybe(f, m) returns Right Nothing if m is Nothing; otherwise applies f to the contained value and returns the result with Right wrapped around Just.",
+          "Total. Corresponds to Haskell's traverse :: (a -> Either e b) -> Maybe a -> Either e (Maybe b)."],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [
           Typing.TypeParameter {
@@ -694,13 +701,6 @@ mapMaybe =
           Typing.resultType = (Core.TypeEither (Core.EitherType {
             Core.eitherTypeLeft = (Core.TypeVariable (Core.Name "z")),
             Core.eitherTypeRight = (Core.TypeMaybe (Core.TypeVariable (Core.Name "y")))}))}},
-      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
-        Packaging.entityMetadataDescription = (Just "Map a function returning either over a maybe, or return Right Nothing if Nothing."),
-        Packaging.entityMetadataComments = [
-          "mapMaybe(f, m) returns Right Nothing if m is Nothing; otherwise applies f to the contained value and returns the result with Right wrapped around Just.",
-          "Total. Corresponds to Haskell's traverse :: (a -> Either e b) -> Maybe a -> Either e (Maybe b)."],
-        Packaging.entityMetadataSeeAlso = [],
-        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
@@ -708,6 +708,13 @@ mapSet :: Packaging.PrimitiveDefinition
 mapSet =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.eithers.mapSet"),
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "Map a function returning either over a set, collecting results or short-circuiting on Left."),
+        Packaging.entityMetadataComments = [
+          "mapSet(f, s) applies f to each element of s in unspecified order. If every application returns Right, the result is Right of the set of contained values (deduplicated by the result type's ordering); the first application returning Left short-circuits the whole result to that Left.",
+          "Total. Corresponds to Haskell's traverse-style operation specialised to Set."],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [
           Typing.TypeParameter {
@@ -739,13 +746,6 @@ mapSet =
           Typing.resultType = (Core.TypeEither (Core.EitherType {
             Core.eitherTypeLeft = (Core.TypeVariable (Core.Name "z")),
             Core.eitherTypeRight = (Core.TypeSet (Core.TypeVariable (Core.Name "y")))}))}},
-      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
-        Packaging.entityMetadataDescription = (Just "Map a function returning either over a set, collecting results or short-circuiting on Left."),
-        Packaging.entityMetadataComments = [
-          "mapSet(f, s) applies f to each element of s in unspecified order. If every application returns Right, the result is Right of the set of contained values (deduplicated by the result type's ordering); the first application returning Left short-circuits the whole result to that Left.",
-          "Total. Corresponds to Haskell's traverse-style operation specialised to Set."],
-        Packaging.entityMetadataSeeAlso = [],
-        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
@@ -753,6 +753,13 @@ partitionEithers :: Packaging.PrimitiveDefinition
 partitionEithers =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.eithers.partitionEithers"),
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "Partition a list of either values into lefts and rights."),
+        Packaging.entityMetadataComments = [
+          "partitionEithers(xs) returns a pair (lefts, rights) where lefts contains every Left value from xs in original order and rights contains every Right value from xs in original order.",
+          "Total. Corresponds to Haskell's Data.Either.partitionEithers :: [Either a b] -> ([a], [b])."],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [
           Typing.TypeParameter {
@@ -774,13 +781,6 @@ partitionEithers =
           Typing.resultType = (Core.TypePair (Core.PairType {
             Core.pairTypeFirst = (Core.TypeList (Core.TypeVariable (Core.Name "x"))),
             Core.pairTypeSecond = (Core.TypeList (Core.TypeVariable (Core.Name "y")))}))}},
-      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
-        Packaging.entityMetadataDescription = (Just "Partition a list of either values into lefts and rights."),
-        Packaging.entityMetadataComments = [
-          "partitionEithers(xs) returns a pair (lefts, rights) where lefts contains every Left value from xs in original order and rights contains every Right value from xs in original order.",
-          "Total. Corresponds to Haskell's Data.Either.partitionEithers :: [Either a b] -> ([a], [b])."],
-        Packaging.entityMetadataSeeAlso = [],
-        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
@@ -788,6 +788,13 @@ rights :: Packaging.PrimitiveDefinition
 rights =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.eithers.rights"),
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "Extract all Right values from a list of either values."),
+        Packaging.entityMetadataComments = [
+          "rights(xs) returns a list containing every Right value in xs, in original order, with Left values discarded.",
+          "Total. Corresponds to Haskell's Data.Either.rights :: [Either a b] -> [b]."],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [
           Typing.TypeParameter {
@@ -807,13 +814,6 @@ rights =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeList (Core.TypeVariable (Core.Name "y")))}},
-      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
-        Packaging.entityMetadataDescription = (Just "Extract all Right values from a list of either values."),
-        Packaging.entityMetadataComments = [
-          "rights(xs) returns a list containing every Right value in xs, in original order, with Left values discarded.",
-          "Total. Corresponds to Haskell's Data.Either.rights :: [Either a b] -> [b]."],
-        Packaging.entityMetadataSeeAlso = [],
-        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}

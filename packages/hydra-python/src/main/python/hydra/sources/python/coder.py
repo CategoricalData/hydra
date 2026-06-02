@@ -289,8 +289,8 @@ def _case_block_to_expr():
         ["cx", "env", "tname", "rowType", "isEnum", "encodeBody", "field"],
         let_chain(
             [
-                ("fname", Core.field_name(var("field"))),
-                ("fterm", Core.field_term(var("field"))),
+                ("fname", Core.case_alternative_name(var("field"))),
+                ("fterm", Core.case_alternative_handler(var("field"))),
                 (
                     "stripped",
                     _kref.strip_deannotate_and_detype_term(var("fterm")),
@@ -571,7 +571,7 @@ def _deduplicate_case_variables():
                         ),
                         (
                             "newField",
-                            Core.field(var("fname"), var("newTerm")),
+                            Core.case_alternative(var("fname"), var("newTerm")),
                         ),
                     ],
                     pair(
@@ -593,8 +593,8 @@ def _deduplicate_case_variables():
             [
                 ("countByName", Pairs.first(var("state"))),
                 ("done", Pairs.second(var("state"))),
-                ("fname", Core.field_name(var("field"))),
-                ("fterm", Core.field_term(var("field"))),
+                ("fname", Core.case_alternative_name(var("field"))),
+                ("fterm", Core.case_alternative_handler(var("field"))),
             ],
             cases_with_default("hydra.core.Term", _kref.strip_deannotate_and_detype_term(var("fterm")), pair(
                         var("countByName"),
@@ -662,6 +662,13 @@ def _eliminate_unit_var():
         Core.field(
             Core.field_name(var("fld")),
             var("rewrite")(Core.field_term(var("fld"))),
+        ),
+    )
+    rewrite_case_alternative = lambdas(
+        ["rewrite", "alt"],
+        Core.case_alternative(
+            Core.case_alternative_name(var("alt")),
+            var("rewrite")(Core.case_alternative_handler(var("alt"))),
         ),
     )
     rewrite_binding = lambdas(
@@ -734,7 +741,7 @@ def _eliminate_unit_var():
                             Core.case_statement_default(var("cs")),
                         ),
                         Lists.map(
-                            var("rewriteField")(var("recurse")),
+                            var("rewriteCaseAlternative")(var("recurse")),
                             Core.case_statement_cases(var("cs")),
                         ),
                     )
@@ -893,6 +900,7 @@ def _eliminate_unit_var():
         let_chain(
             [
                 ("rewriteField", rewrite_field),
+                ("rewriteCaseAlternative", rewrite_case_alternative),
                 ("rewriteBinding", rewrite_binding),
                 ("rewrite", rewrite),
                 (
@@ -2073,7 +2081,7 @@ def _encode_definition():
     term_branch = let_chain(
         [
             ("name", _proj("hydra.packaging.TermDefinition", "name", "td")),
-            ("term", _proj("hydra.packaging.TermDefinition", "term", "td")),
+            ("term", _proj("hydra.packaging.TermDefinition", "body", "td")),
             (
                 "typ",
                 Maybes.maybe(
@@ -2126,7 +2134,7 @@ def _encode_definition():
             (
                 "typ",
                 Core.type_scheme_body(
-                    _proj("hydra.packaging.TypeDefinition", "typeScheme", "td")
+                    _proj("hydra.packaging.TypeDefinition", "body", "td")
                 ),
             ),
         ],
@@ -4421,8 +4429,8 @@ def _encode_union_elimination_inline():
         "field",
         let_chain(
             [
-                ("fname", Core.field_name(var("field"))),
-                ("fterm", Core.field_term(var("field"))),
+                ("fname", Core.case_alternative_name(var("field"))),
+                ("fterm", Core.case_alternative_handler(var("field"))),
                 (
                     "isUnitVariant",
                     _local("isVariantUnitType")(var("rt"), var("fname")),
@@ -6491,7 +6499,7 @@ def _gather_metadata():
                             [
                                 (
                                     "term",
-                                    Pkg.term_definition_term(var("termDef")),
+                                    Pkg.term_definition_body(var("termDef")),
                                 ),
                                 (
                                     "typ",
@@ -6528,7 +6536,7 @@ def _gather_metadata():
                                 (
                                     "typ",
                                     Core.type_scheme_body(
-                                        Pkg.type_definition_type_scheme(
+                                        Pkg.type_definition_body(
                                             var("typeDef")
                                         )
                                     ),
@@ -7195,7 +7203,7 @@ def _module_to_python():
                         ),
                         (
                             "path",
-                            var("hydra.names.moduleNameToFilePath")(_kref.util_case_convention_lower_snake, wrap("hydra.packaging.FileExtension",
+                            var("hydra.names.moduleNameToFilePath")(_kref.util_case_convention_lower_snake, wrap("hydra.util.FileExtension",
                                     string("py"),
                                 ), Pkg.module_name(var("mod"))),
                         ),
@@ -7745,7 +7753,7 @@ def _with_definitions():
                                                         ),
                                                         _proj(
                                                             "hydra.packaging.TermDefinition",
-                                                            "term",
+                                                            "body",
                                                             "td",
                                                         ),
                                                         Maybes.map(

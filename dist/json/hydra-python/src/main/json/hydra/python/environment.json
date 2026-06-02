@@ -2,17 +2,16 @@
   "definitions": [
     {
       "type": {
-        "name": "hydra.python.environment.PythonVersion",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "Target Python version for code generation"}}}],
               "body": {"union": [{"name": "python310", "type": {"unit": {}}}, {"name": "python312", "type": {"unit": {}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.environment.PythonVersion"}},
     {
       "type": {
-        "name": "hydra.python.environment.PythonEnvironment",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "Environment for Python code generation"}}}],
@@ -67,11 +66,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "Variables that are inline let bindings (walrus operators)"}}}],
                         "body": {"set": {"variable": "hydra.core.Name"}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.environment.PythonEnvironment"}},
     {
       "type": {
-        "name": "hydra.python.environment.PythonModuleMetadata",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [
@@ -114,11 +113,11 @@
                   {"name": "usesNothing", "type": {"literal": {"boolean": {}}}},
                   {"name": "usesRight", "type": {"literal": {"boolean": {}}}},
                   {"name": "usesTypeVar", "type": {"literal": {"boolean": {}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.environment.PythonModuleMetadata"}},
     {
       "type": {
-        "name": "hydra.python.environment.PyGraph",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [
@@ -137,7 +136,8 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "Accumulated module metadata"}}}],
                         "body": {"variable": "hydra.python.environment.PythonModuleMetadata"}}}}]}}},
-          "variables": []}}}],
+          "variables": []},
+        "name": "hydra.python.environment.PyGraph"}}],
   "dependencies": [
     {"module": "hydra.python.syntax"},
     {"module": "hydra.util"},

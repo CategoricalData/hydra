@@ -2,8 +2,7 @@
   "definitions": [
     {
       "type": {
-        "name": "hydra.azure.dtld.Command",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [
@@ -106,11 +105,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "A description of the output of the Command"}}}],
                         "body": {"maybe": {"variable": "hydra.azure.dtld.CommandPayload"}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.azure.dtld.Command"}},
     {
       "type": {
-        "name": "hydra.azure.dtld.CommandPayload",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [
@@ -190,11 +189,11 @@
                                 {"key": "maxLength", "value": {"literal": {"integer": {"int32": 64}}}},
                                 {"key": "minLength", "value": {"literal": {"integer": {"int32": 64}}}}],
                               "body": {"literal": {"string": {}}}}}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.azure.dtld.CommandPayload"}},
     {
       "type": {
-        "name": "hydra.azure.dtld.CommandType",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [
@@ -204,11 +203,11 @@
                     "literal": {
                       "string": "CommandType is deprecated. Either value, synchronous or asynchronous, has the same meaning: a command that starts execution within a configurable time and that completes execution within a configurable time."}}}],
               "body": {"union": [{"name": "synchronous", "type": {"unit": {}}}, {"name": "asynchronous", "type": {"unit": {}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.azure.dtld.CommandType"}},
     {
       "type": {
-        "name": "hydra.azure.dtld.Component",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [
@@ -296,20 +295,20 @@
                                 {"key": "maxLength", "value": {"literal": {"integer": {"int32": 64}}}},
                                 {"key": "minLength", "value": {"literal": {"integer": {"int32": 64}}}}],
                               "body": {"literal": {"string": {}}}}}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.azure.dtld.Component"}},
     {
       "type": {
-        "name": "hydra.azure.dtld.Dtmi",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A digital twin model identifier"}}}],
               "body": {"wrap": {"literal": {"string": {}}}}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.azure.dtld.Dtmi"}},
     {
       "type": {
-        "name": "hydra.azure.dtld.EnumValue",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "An EnumValue describes an element of an Enum."}}}],
@@ -391,11 +390,11 @@
                                 {"key": "maxLength", "value": {"literal": {"integer": {"int32": 64}}}},
                                 {"key": "minLength", "value": {"literal": {"integer": {"int32": 64}}}}],
                               "body": {"literal": {"string": {}}}}}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.azure.dtld.EnumValue"}},
     {
       "type": {
-        "name": "hydra.azure.dtld.Field",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A Field describes a field in an Object."}}}],
@@ -472,20 +471,20 @@
                                 {"key": "maxLength", "value": {"literal": {"integer": {"int32": 64}}}},
                                 {"key": "minLength", "value": {"literal": {"integer": {"int32": 64}}}}],
                               "body": {"literal": {"string": {}}}}}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.azure.dtld.Field"}},
     {
       "type": {
-        "name": "hydra.azure.dtld.IntegerOrString",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "integer", "type": {"literal": {"integer": {"int32": {}}}}},
               {"name": "string", "type": {"literal": {"string": {}}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.azure.dtld.IntegerOrString"}},
     {
       "type": {
-        "name": "hydra.azure.dtld.Interface",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {
@@ -593,11 +592,11 @@
                         "key": "description",
                         "value": {"literal": {"string": "A set of IRIs or objects that refer to the reusable schemas within this interface."}}}],
                     "body": {"maybe": {"set": {"variable": "hydra.azure.dtld.Schema_Interface"}}}}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.azure.dtld.Interface"}},
     {
       "type": {
-        "name": "hydra.azure.dtld.Interface_Contents",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "command", "type": {"variable": "hydra.azure.dtld.Command"}},
@@ -605,13 +604,12 @@
               {"name": "property", "type": {"variable": "hydra.azure.dtld.Property"}},
               {"name": "relationship", "type": {"variable": "hydra.azure.dtld.Relationship"}},
               {"name": "telemetry", "type": {"variable": "hydra.azure.dtld.Telemetry"}}]},
-          "variables": []}}},
-    {
-      "type": {"name": "hydra.azure.dtld.Iri", "typeScheme": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
+          "variables": []},
+        "name": "hydra.azure.dtld.Interface_Contents"}},
+    {"type": {"body": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}, "name": "hydra.azure.dtld.Iri"}},
     {
       "type": {
-        "name": "hydra.azure.dtld.MapKey",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [
@@ -691,11 +689,11 @@
                                 {"key": "maxLength", "value": {"literal": {"integer": {"int32": 64}}}},
                                 {"key": "minLength", "value": {"literal": {"integer": {"int32": 64}}}}],
                               "body": {"literal": {"string": {}}}}}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.azure.dtld.MapKey"}},
     {
       "type": {
-        "name": "hydra.azure.dtld.MapValue",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A MapValue describes the values in a Map."}}}],
@@ -772,11 +770,11 @@
                                 {"key": "maxLength", "value": {"literal": {"integer": {"int32": 64}}}},
                                 {"key": "minLength", "value": {"literal": {"integer": {"int32": 64}}}}],
                               "body": {"literal": {"string": {}}}}}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.azure.dtld.MapValue"}},
     {
       "type": {
-        "name": "hydra.azure.dtld.Property",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [
@@ -888,11 +886,11 @@
                               "literal": {
                                 "string": "A boolean value that indicates whether the property is writable by an external source, such as an application, or not. The default value is false (read-only)."}}}],
                         "body": {"maybe": {"literal": {"boolean": {}}}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.azure.dtld.Property"}},
     {
       "type": {
-        "name": "hydra.azure.dtld.Relationship",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1031,11 +1029,11 @@
                               "literal": {
                                 "string": "A boolean value that indicates whether the relationship is writable by an external source, such as an application, or not. The default value is false (read-only)."}}}],
                         "body": {"maybe": {"literal": {"boolean": {}}}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.azure.dtld.Relationship"}},
     {
       "type": {
-        "name": "hydra.azure.dtld.Schema",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1048,11 +1046,11 @@
                 "union": [
                   {"name": "primitive", "type": {"variable": "hydra.azure.dtld.Schema_Primitive"}},
                   {"name": "complex", "type": {"variable": "hydra.azure.dtld.Schema_Complex"}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.azure.dtld.Schema"}},
     {
       "type": {
-        "name": "hydra.azure.dtld.Schema_Array",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1127,11 +1125,11 @@
                                 {"key": "maxLength", "value": {"literal": {"integer": {"int32": 64}}}},
                                 {"key": "minLength", "value": {"literal": {"integer": {"int32": 64}}}}],
                               "body": {"literal": {"string": {}}}}}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.azure.dtld.Schema_Array"}},
     {
       "type": {
-        "name": "hydra.azure.dtld.Schema_Complex",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1146,11 +1144,11 @@
                   {"name": "enum", "type": {"variable": "hydra.azure.dtld.Schema_Enum"}},
                   {"name": "map", "type": {"variable": "hydra.azure.dtld.Schema_Map"}},
                   {"name": "object", "type": {"variable": "hydra.azure.dtld.Schema_Object"}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.azure.dtld.Schema_Complex"}},
     {
       "type": {
-        "name": "hydra.azure.dtld.Schema_Enum",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1234,11 +1232,11 @@
                                 {"key": "maxLength", "value": {"literal": {"integer": {"int32": 64}}}},
                                 {"key": "minLength", "value": {"literal": {"integer": {"int32": 64}}}}],
                               "body": {"literal": {"string": {}}}}}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.azure.dtld.Schema_Enum"}},
     {
       "type": {
-        "name": "hydra.azure.dtld.Schema_Interface",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1305,22 +1303,22 @@
                                 {"key": "maxLength", "value": {"literal": {"integer": {"int32": 64}}}},
                                 {"key": "minLength", "value": {"literal": {"integer": {"int32": 64}}}}],
                               "body": {"literal": {"string": {}}}}}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.azure.dtld.Schema_Interface"}},
     {
       "type": {
-        "name": "hydra.azure.dtld.Schema_Interface_Type",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "array", "type": {"variable": "hydra.azure.dtld.Schema_Array"}},
               {"name": "enum", "type": {"variable": "hydra.azure.dtld.Schema_Enum"}},
               {"name": "map", "type": {"variable": "hydra.azure.dtld.Schema_Map"}},
               {"name": "object", "type": {"variable": "hydra.azure.dtld.Schema_Object"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.azure.dtld.Schema_Interface_Type"}},
     {
       "type": {
-        "name": "hydra.azure.dtld.Schema_Map",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1401,11 +1399,11 @@
                                 {"key": "maxLength", "value": {"literal": {"integer": {"int32": 64}}}},
                                 {"key": "minLength", "value": {"literal": {"integer": {"int32": 64}}}}],
                               "body": {"literal": {"string": {}}}}}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.azure.dtld.Schema_Map"}},
     {
       "type": {
-        "name": "hydra.azure.dtld.Schema_Object",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1485,11 +1483,11 @@
                                 {"key": "maxLength", "value": {"literal": {"integer": {"int32": 64}}}},
                                 {"key": "minLength", "value": {"literal": {"integer": {"int32": 64}}}}],
                               "body": {"literal": {"string": {}}}}}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.azure.dtld.Schema_Object"}},
     {
       "type": {
-        "name": "hydra.azure.dtld.Schema_Primitive",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1556,11 +1554,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "A full-time as defined in section 5.6 of RFC 3339"}}}],
                         "body": {"unit": {}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.azure.dtld.Schema_Primitive"}},
     {
       "type": {
-        "name": "hydra.azure.dtld.Telemetry",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1661,8 +1659,9 @@
                             "value": {
                               "literal": {"string": "The unit type of the Telemetry. A semantic type is required for the unit property to be available."}}}],
                         "body": {"maybe": {"variable": "hydra.azure.dtld.Unit"}}}}}]}}},
-          "variables": []}}},
-    {"type": {"name": "hydra.azure.dtld.Unit", "typeScheme": {"body": {"wrap": {"unit": {}}}, "variables": []}}}],
+          "variables": []},
+        "name": "hydra.azure.dtld.Telemetry"}},
+    {"type": {"body": {"body": {"wrap": {"unit": {}}}, "variables": []}, "name": "hydra.azure.dtld.Unit"}}],
   "dependencies": [{"module": "hydra.core"}],
   "metadata": {
     "comments": [],

@@ -6,6 +6,7 @@ import qualified Hydra.Core as Core
 import qualified Hydra.Encode.Core as EncodeCore
 import qualified Hydra.Encode.Packaging as Packaging
 import qualified Hydra.Haskell.Lib.Maps as Maps
+import qualified Hydra.Haskell.Lib.Maybes as Maybes
 import qualified Hydra.Haskell.Lib.Pairs as Pairs
 import qualified Hydra.Util as Util
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
@@ -53,6 +54,12 @@ comparison x =
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "greaterThan"),
           Core.fieldTerm = Core.TermUnit}})
+-- | Encoder for hydra.util.FileExtension
+fileExtension :: Util.FileExtension -> Core.Term
+fileExtension x =
+    Core.TermWrap (Core.WrappedTerm {
+      Core.wrappedTermTypeName = (Core.Name "hydra.util.FileExtension"),
+      Core.wrappedTermBody = ((\x2 -> Core.TermLiteral (Core.LiteralString x2)) (Util.unFileExtension x))})
 -- | Encoder for hydra.util.ModuleNames
 moduleNames :: (t0 -> Core.Term) -> Util.ModuleNames t0 -> Core.Term
 moduleNames n x =
@@ -79,3 +86,15 @@ precision x =
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "bits"),
           Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 v0)))}})
+-- | Encoder for hydra.util.QualifiedName
+qualifiedName :: Util.QualifiedName -> Core.Term
+qualifiedName x =
+    Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.util.QualifiedName"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "moduleName"),
+          Core.fieldTerm = ((\opt -> Core.TermMaybe (Maybes.map Packaging.moduleName opt)) (Util.qualifiedNameModuleName x))},
+        Core.Field {
+          Core.fieldName = (Core.Name "local"),
+          Core.fieldTerm = ((\x2 -> Core.TermLiteral (Core.LiteralString x2)) (Util.qualifiedNameLocal x))}]})

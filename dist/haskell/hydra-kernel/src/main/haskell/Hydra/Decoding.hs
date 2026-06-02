@@ -1101,8 +1101,8 @@ decodeModule cx graph mod =
         Packaging.moduleDefinitions = (Lists.map (\b -> Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.bindingName b),
           Packaging.termDefinitionMetadata = Nothing,
-          Packaging.termDefinitionBody = (Core.bindingTerm b),
-          Packaging.termDefinitionSignature = (Maybes.map Scoping.typeSchemeToTermSignature (Core.bindingTypeScheme b))})) decodedBindings)}))))))
+          Packaging.termDefinitionSignature = (Maybes.map Scoping.typeSchemeToTermSignature (Core.bindingTypeScheme b)),
+          Packaging.termDefinitionBody = (Core.bindingTerm b)})) decodedBindings)}))))))
 -- | Generate a decoder module name from a source module name
 decodeModuleName :: Packaging.ModuleName -> Packaging.ModuleName
 decodeModuleName ns =

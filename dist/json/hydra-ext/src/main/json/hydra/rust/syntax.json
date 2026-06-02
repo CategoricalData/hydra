@@ -2,8 +2,7 @@
   "definitions": [
     {
       "type": {
-        "name": "hydra.rust.syntax.Crate",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [
@@ -16,11 +15,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The top-level items in the crate"}}}],
                         "body": {"list": {"variable": "hydra.rust.syntax.ItemWithComments"}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.rust.syntax.Crate"}},
     {
       "type": {
-        "name": "hydra.rust.syntax.Item",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A top-level item in a Rust module or crate"}}}],
@@ -92,11 +91,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "A macro invocation as an item"}}}],
                         "body": {"variable": "hydra.rust.syntax.MacroInvocation"}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.rust.syntax.Item"}},
     {
       "type": {
-        "name": "hydra.rust.syntax.ItemWithComments",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "An item together with optional doc comments and visibility"}}}],
@@ -120,11 +119,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The item itself"}}}],
                         "body": {"variable": "hydra.rust.syntax.Item"}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.rust.syntax.ItemWithComments"}},
     {
       "type": {
-        "name": "hydra.rust.syntax.UseDeclaration",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A use declaration (e.g., use std::collections::BTreeMap;)"}}}],
@@ -142,11 +141,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The use tree describing what is imported"}}}],
                         "body": {"variable": "hydra.rust.syntax.UseTree"}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.rust.syntax.UseDeclaration"}},
     {
       "type": {
-        "name": "hydra.rust.syntax.UseTree",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A use tree, representing the structure of a use path"}}}],
@@ -176,11 +175,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "A grouped import (e.g., {BTreeMap, BTreeSet})"}}}],
                         "body": {"variable": "hydra.rust.syntax.UseGroup"}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.rust.syntax.UseTree"}},
     {
       "type": {
-        "name": "hydra.rust.syntax.UsePath",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A simple path import within a use tree"}}}],
@@ -192,11 +191,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The path segments"}}}],
                         "body": {"list": {"literal": {"string": {}}}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.rust.syntax.UsePath"}},
     {
       "type": {
-        "name": "hydra.rust.syntax.UseRename",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A renamed import (e.g., BTreeMap as Map)"}}}],
@@ -214,11 +213,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The alias name"}}}],
                         "body": {"literal": {"string": {}}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.rust.syntax.UseRename"}},
     {
       "type": {
-        "name": "hydra.rust.syntax.UseGroup",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [
@@ -239,11 +238,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The individual subtrees within the group"}}}],
                         "body": {"list": {"variable": "hydra.rust.syntax.UseTree"}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.rust.syntax.UseGroup"}},
     {
       "type": {
-        "name": "hydra.rust.syntax.StructDef",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A struct definition (e.g., struct Foo<T> { bar: T })"}}}],
@@ -291,11 +290,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "Optional doc comment"}}}],
                         "body": {"maybe": {"literal": {"string": {}}}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.rust.syntax.StructDef"}},
     {
       "type": {
-        "name": "hydra.rust.syntax.StructBody",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "The body of a struct definition"}}}],
@@ -317,11 +316,11 @@
                     "name": "unit",
                     "type": {
                       "annotated": {"annotation": [{"key": "description", "value": {"literal": {"string": "A unit struct"}}}], "body": {"unit": {}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.rust.syntax.StructBody"}},
     {
       "type": {
-        "name": "hydra.rust.syntax.StructField",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A named field within a struct definition"}}}],
@@ -351,11 +350,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "Optional doc comment for the field"}}}],
                         "body": {"maybe": {"literal": {"string": {}}}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.rust.syntax.StructField"}},
     {
       "type": {
-        "name": "hydra.rust.syntax.TupleField",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A positional field within a tuple struct"}}}],
@@ -373,11 +372,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "Whether the field is public"}}}],
                         "body": {"literal": {"boolean": {}}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.rust.syntax.TupleField"}},
     {
       "type": {
-        "name": "hydra.rust.syntax.EnumDef",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [
@@ -428,11 +427,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "Optional doc comment"}}}],
                         "body": {"maybe": {"literal": {"string": {}}}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.rust.syntax.EnumDef"}},
     {
       "type": {
-        "name": "hydra.rust.syntax.EnumVariant",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A variant of an enum definition"}}}],
@@ -456,11 +455,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "Optional doc comment for the variant"}}}],
                         "body": {"maybe": {"literal": {"string": {}}}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.rust.syntax.EnumVariant"}},
     {
       "type": {
-        "name": "hydra.rust.syntax.EnumVariantBody",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "The body of an enum variant"}}}],
@@ -484,11 +483,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "A struct variant (e.g., Foo { x: i32 })"}}}],
                         "body": {"list": {"variable": "hydra.rust.syntax.StructField"}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.rust.syntax.EnumVariantBody"}},
     {
       "type": {
-        "name": "hydra.rust.syntax.FnDef",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [
@@ -563,11 +562,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "Optional doc comment"}}}],
                         "body": {"maybe": {"literal": {"string": {}}}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.rust.syntax.FnDef"}},
     {
       "type": {
-        "name": "hydra.rust.syntax.FnParam",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A function parameter"}}}],
@@ -585,11 +584,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The parameter type"}}}],
                         "body": {"variable": "hydra.rust.syntax.Type"}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.rust.syntax.FnParam"}},
     {
       "type": {
-        "name": "hydra.rust.syntax.SelfParam",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A self parameter in a method"}}}],
@@ -598,11 +597,11 @@
                   {"name": "owned", "type": {"unit": {}}},
                   {"name": "ref", "type": {"unit": {}}},
                   {"name": "refMut", "type": {"unit": {}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.rust.syntax.SelfParam"}},
     {
       "type": {
-        "name": "hydra.rust.syntax.MethodParam",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [
@@ -621,11 +620,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "A regular function parameter"}}}],
                         "body": {"variable": "hydra.rust.syntax.FnParam"}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.rust.syntax.MethodParam"}},
     {
       "type": {
-        "name": "hydra.rust.syntax.TypeAlias",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A type alias definition (e.g., type Foo<T> = Bar<T>;)"}}}],
@@ -661,11 +660,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "Optional doc comment"}}}],
                         "body": {"maybe": {"literal": {"string": {}}}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.rust.syntax.TypeAlias"}},
     {
       "type": {
-        "name": "hydra.rust.syntax.ConstDef",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A constant item (e.g., const FOO: u32 = 42;)"}}}],
@@ -701,11 +700,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "Optional doc comment"}}}],
                         "body": {"maybe": {"literal": {"string": {}}}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.rust.syntax.ConstDef"}},
     {
       "type": {
-        "name": "hydra.rust.syntax.StaticDef",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A static item (e.g., static FOO: u32 = 42;)"}}}],
@@ -747,11 +746,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "Optional doc comment"}}}],
                         "body": {"maybe": {"literal": {"string": {}}}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.rust.syntax.StaticDef"}},
     {
       "type": {
-        "name": "hydra.rust.syntax.ModDef",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A module definition (either inline or external)"}}}],
@@ -781,11 +780,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "Optional doc comment"}}}],
                         "body": {"maybe": {"literal": {"string": {}}}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.rust.syntax.ModDef"}},
     {
       "type": {
-        "name": "hydra.rust.syntax.ImplBlock",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "An impl block (e.g., impl<T> Trait for Foo<T> { ... })"}}}],
@@ -827,11 +826,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The items within the impl block"}}}],
                         "body": {"list": {"variable": "hydra.rust.syntax.ImplItem"}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.rust.syntax.ImplBlock"}},
     {
       "type": {
-        "name": "hydra.rust.syntax.ImplItem",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "An item within an impl block"}}}],
@@ -855,11 +854,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "An associated constant"}}}],
                         "body": {"variable": "hydra.rust.syntax.ConstDef"}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.rust.syntax.ImplItem"}},
     {
       "type": {
-        "name": "hydra.rust.syntax.ImplMethod",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A method within an impl block"}}}],
@@ -919,11 +918,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "Optional doc comment"}}}],
                         "body": {"maybe": {"literal": {"string": {}}}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.rust.syntax.ImplMethod"}},
     {
       "type": {
-        "name": "hydra.rust.syntax.TraitDef",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A trait definition (e.g., trait Foo<T>: Bar + Baz { ... })"}}}],
@@ -977,11 +976,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "Optional doc comment"}}}],
                         "body": {"maybe": {"literal": {"string": {}}}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.rust.syntax.TraitDef"}},
     {
       "type": {
-        "name": "hydra.rust.syntax.TraitItem",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "An item within a trait definition"}}}],
@@ -1005,11 +1004,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "An associated constant"}}}],
                         "body": {"variable": "hydra.rust.syntax.TraitConst"}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.rust.syntax.TraitItem"}},
     {
       "type": {
-        "name": "hydra.rust.syntax.TraitMethod",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A method signature or default method within a trait"}}}],
@@ -1057,11 +1056,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "Optional doc comment"}}}],
                         "body": {"maybe": {"literal": {"string": {}}}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.rust.syntax.TraitMethod"}},
     {
       "type": {
-        "name": "hydra.rust.syntax.TraitType",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "An associated type within a trait"}}}],
@@ -1091,11 +1090,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "Optional doc comment"}}}],
                         "body": {"maybe": {"literal": {"string": {}}}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.rust.syntax.TraitType"}},
     {
       "type": {
-        "name": "hydra.rust.syntax.TraitConst",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "An associated constant within a trait"}}}],
@@ -1125,11 +1124,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "Optional doc comment"}}}],
                         "body": {"maybe": {"literal": {"string": {}}}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.rust.syntax.TraitConst"}},
     {
       "type": {
-        "name": "hydra.rust.syntax.GenericParam",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A generic type parameter (e.g., T: Clone + Debug)"}}}],
@@ -1147,11 +1146,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "Trait bounds on the parameter"}}}],
                         "body": {"list": {"variable": "hydra.rust.syntax.TypeParamBound"}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.rust.syntax.GenericParam"}},
     {
       "type": {
-        "name": "hydra.rust.syntax.TypeParamBound",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A bound on a type parameter"}}}],
@@ -1169,11 +1168,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "A lifetime bound"}}}],
                         "body": {"variable": "hydra.rust.syntax.Lifetime"}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.rust.syntax.TypeParamBound"}},
     {
       "type": {
-        "name": "hydra.rust.syntax.Lifetime",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A lifetime (e.g., 'a, 'static)"}}}],
@@ -1185,11 +1184,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The lifetime name (without the leading quote)"}}}],
                         "body": {"literal": {"string": {}}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.rust.syntax.Lifetime"}},
     {
       "type": {
-        "name": "hydra.rust.syntax.WhereClause",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A where clause (e.g., where T: Clone, U: Debug)"}}}],
@@ -1201,11 +1200,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The predicates in the where clause"}}}],
                         "body": {"list": {"variable": "hydra.rust.syntax.WherePredicate"}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.rust.syntax.WhereClause"}},
     {
       "type": {
-        "name": "hydra.rust.syntax.WherePredicate",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A single predicate in a where clause"}}}],
@@ -1223,11 +1222,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The bounds on the type"}}}],
                         "body": {"list": {"variable": "hydra.rust.syntax.TypeParamBound"}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.rust.syntax.WherePredicate"}},
     {
       "type": {
-        "name": "hydra.rust.syntax.Type",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A Rust type expression"}}}],
@@ -1307,11 +1306,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "A macro invocation in type position"}}}],
                         "body": {"variable": "hydra.rust.syntax.MacroInvocation"}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.rust.syntax.Type"}},
     {
       "type": {
-        "name": "hydra.rust.syntax.TypePath",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A path-based type, possibly with generic arguments"}}}],
@@ -1329,11 +1328,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The segments of the path"}}}],
                         "body": {"list": {"variable": "hydra.rust.syntax.PathSegment"}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.rust.syntax.TypePath"}},
     {
       "type": {
-        "name": "hydra.rust.syntax.PathSegment",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A segment within a type path"}}}],
@@ -1351,11 +1350,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "Generic arguments, if any"}}}],
                         "body": {"variable": "hydra.rust.syntax.GenericArguments"}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.rust.syntax.PathSegment"}},
     {
       "type": {
-        "name": "hydra.rust.syntax.GenericArguments",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "Generic arguments to a path segment"}}}],
@@ -1377,11 +1376,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "Parenthesized arguments for Fn traits"}}}],
                         "body": {"variable": "hydra.rust.syntax.ParenthesizedArgs"}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.rust.syntax.GenericArguments"}},
     {
       "type": {
-        "name": "hydra.rust.syntax.AngleBracketedArgs",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "Angle-bracketed generic arguments"}}}],
@@ -1393,11 +1392,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The generic arguments"}}}],
                         "body": {"list": {"variable": "hydra.rust.syntax.GenericArg"}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.rust.syntax.AngleBracketedArgs"}},
     {
       "type": {
-        "name": "hydra.rust.syntax.GenericArg",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A single generic argument"}}}],
@@ -1427,11 +1426,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "An associated type binding"}}}],
                         "body": {"variable": "hydra.rust.syntax.TypeBinding"}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.rust.syntax.GenericArg"}},
     {
       "type": {
-        "name": "hydra.rust.syntax.TypeBinding",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "An associated type binding within generic arguments"}}}],
@@ -1449,11 +1448,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The bound type"}}}],
                         "body": {"variable": "hydra.rust.syntax.Type"}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.rust.syntax.TypeBinding"}},
     {
       "type": {
-        "name": "hydra.rust.syntax.ParenthesizedArgs",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "Parenthesized generic arguments for Fn traits"}}}],
@@ -1471,11 +1470,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The output type"}}}],
                         "body": {"maybe": {"variable": "hydra.rust.syntax.Type"}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.rust.syntax.ParenthesizedArgs"}},
     {
       "type": {
-        "name": "hydra.rust.syntax.ReferenceType",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A reference type (e.g., &T, &mut T, &'a T)"}}}],
@@ -1499,11 +1498,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The referenced type"}}}],
                         "body": {"variable": "hydra.rust.syntax.Type"}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.rust.syntax.ReferenceType"}},
     {
       "type": {
-        "name": "hydra.rust.syntax.ArrayType",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "An array type with a fixed size (e.g., [T; 3])"}}}],
@@ -1521,11 +1520,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The array length (as a constant expression)"}}}],
                         "body": {"variable": "hydra.rust.syntax.Expression"}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.rust.syntax.ArrayType"}},
     {
       "type": {
-        "name": "hydra.rust.syntax.FnPointerType",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A function pointer type (e.g., fn(i32, i32) -> i32)"}}}],
@@ -1543,11 +1542,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The return type"}}}],
                         "body": {"variable": "hydra.rust.syntax.Type"}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.rust.syntax.FnPointerType"}},
     {
       "type": {
-        "name": "hydra.rust.syntax.RawPointerType",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A raw pointer type (e.g., *const T, *mut T)"}}}],
@@ -1565,11 +1564,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The pointed-to type"}}}],
                         "body": {"variable": "hydra.rust.syntax.Type"}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.rust.syntax.RawPointerType"}},
     {
       "type": {
-        "name": "hydra.rust.syntax.Expression",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A Rust expression"}}}],
@@ -1773,11 +1772,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "A parenthesized expression"}}}],
                         "body": {"variable": "hydra.rust.syntax.Expression"}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.rust.syntax.Expression"}},
     {
       "type": {
-        "name": "hydra.rust.syntax.ExprPath",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A path used as an expression"}}}],
@@ -1795,11 +1794,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The path segments"}}}],
                         "body": {"list": {"variable": "hydra.rust.syntax.PathSegment"}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.rust.syntax.ExprPath"}},
     {
       "type": {
-        "name": "hydra.rust.syntax.CallExpr",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A function call expression"}}}],
@@ -1817,11 +1816,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The arguments"}}}],
                         "body": {"list": {"variable": "hydra.rust.syntax.Expression"}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.rust.syntax.CallExpr"}},
     {
       "type": {
-        "name": "hydra.rust.syntax.MethodCallExpr",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A method call expression"}}}],
@@ -1851,11 +1850,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The arguments (excluding the receiver)"}}}],
                         "body": {"list": {"variable": "hydra.rust.syntax.Expression"}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.rust.syntax.MethodCallExpr"}},
     {
       "type": {
-        "name": "hydra.rust.syntax.FieldAccessExpr",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A field access expression"}}}],
@@ -1873,11 +1872,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The field name"}}}],
                         "body": {"literal": {"string": {}}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.rust.syntax.FieldAccessExpr"}},
     {
       "type": {
-        "name": "hydra.rust.syntax.TupleIndexExpr",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A tuple index expression"}}}],
@@ -1895,11 +1894,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The index (0-based)"}}}],
                         "body": {"literal": {"integer": {"int32": {}}}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.rust.syntax.TupleIndexExpr"}},
     {
       "type": {
-        "name": "hydra.rust.syntax.ClosureExpr",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A closure expression"}}}],
@@ -1929,11 +1928,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The closure body"}}}],
                         "body": {"variable": "hydra.rust.syntax.Expression"}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.rust.syntax.ClosureExpr"}},
     {
       "type": {
-        "name": "hydra.rust.syntax.ClosureParam",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A closure parameter"}}}],
@@ -1951,11 +1950,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "Optional type annotation"}}}],
                         "body": {"maybe": {"variable": "hydra.rust.syntax.Type"}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.rust.syntax.ClosureParam"}},
     {
       "type": {
-        "name": "hydra.rust.syntax.IfExpr",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "An if expression, optionally with if let"}}}],
@@ -1979,11 +1978,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "An optional else branch"}}}],
                         "body": {"maybe": {"variable": "hydra.rust.syntax.Expression"}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.rust.syntax.IfExpr"}},
     {
       "type": {
-        "name": "hydra.rust.syntax.IfCondition",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "The condition of an if expression"}}}],
@@ -2001,11 +2000,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "A let condition"}}}],
                         "body": {"variable": "hydra.rust.syntax.LetCondition"}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.rust.syntax.IfCondition"}},
     {
       "type": {
-        "name": "hydra.rust.syntax.MatchExpr",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A match expression"}}}],
@@ -2023,11 +2022,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The match arms"}}}],
                         "body": {"list": {"variable": "hydra.rust.syntax.MatchArm"}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.rust.syntax.MatchExpr"}},
     {
       "type": {
-        "name": "hydra.rust.syntax.MatchArm",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A single arm in a match expression"}}}],
@@ -2051,11 +2050,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The body expression"}}}],
                         "body": {"variable": "hydra.rust.syntax.Expression"}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.rust.syntax.MatchArm"}},
     {
       "type": {
-        "name": "hydra.rust.syntax.LoopExpr",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A loop expression"}}}],
@@ -2073,11 +2072,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The loop body"}}}],
                         "body": {"variable": "hydra.rust.syntax.Block"}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.rust.syntax.LoopExpr"}},
     {
       "type": {
-        "name": "hydra.rust.syntax.WhileExpr",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A while expression, optionally with while let"}}}],
@@ -2101,11 +2100,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The loop body"}}}],
                         "body": {"variable": "hydra.rust.syntax.Block"}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.rust.syntax.WhileExpr"}},
     {
       "type": {
-        "name": "hydra.rust.syntax.ForExpr",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A for expression"}}}],
@@ -2135,11 +2134,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The loop body"}}}],
                         "body": {"variable": "hydra.rust.syntax.Block"}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.rust.syntax.ForExpr"}},
     {
       "type": {
-        "name": "hydra.rust.syntax.BinaryExpr",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A binary operation"}}}],
@@ -2163,11 +2162,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The right-hand operand"}}}],
                         "body": {"variable": "hydra.rust.syntax.Expression"}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.rust.syntax.BinaryExpr"}},
     {
       "type": {
-        "name": "hydra.rust.syntax.BinaryOp",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A binary operator"}}}],
@@ -2191,11 +2190,11 @@
                   {"name": "le", "type": {"unit": {}}},
                   {"name": "gt", "type": {"unit": {}}},
                   {"name": "ge", "type": {"unit": {}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.rust.syntax.BinaryOp"}},
     {
       "type": {
-        "name": "hydra.rust.syntax.UnaryExpr",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A unary operation"}}}],
@@ -2213,20 +2212,20 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The operand"}}}],
                         "body": {"variable": "hydra.rust.syntax.Expression"}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.rust.syntax.UnaryExpr"}},
     {
       "type": {
-        "name": "hydra.rust.syntax.UnaryOp",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A unary operator"}}}],
               "body": {"union": [{"name": "neg", "type": {"unit": {}}}, {"name": "not", "type": {"unit": {}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.rust.syntax.UnaryOp"}},
     {
       "type": {
-        "name": "hydra.rust.syntax.RefExpr",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A reference expression"}}}],
@@ -2244,11 +2243,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The expression being referenced"}}}],
                         "body": {"variable": "hydra.rust.syntax.Expression"}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.rust.syntax.RefExpr"}},
     {
       "type": {
-        "name": "hydra.rust.syntax.StructExpr",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A struct literal expression"}}}],
@@ -2272,11 +2271,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "Optional base expression for struct update syntax"}}}],
                         "body": {"maybe": {"variable": "hydra.rust.syntax.Expression"}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.rust.syntax.StructExpr"}},
     {
       "type": {
-        "name": "hydra.rust.syntax.FieldValue",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A field-value pair in a struct literal"}}}],
@@ -2294,11 +2293,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The field value (None for shorthand syntax)"}}}],
                         "body": {"maybe": {"variable": "hydra.rust.syntax.Expression"}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.rust.syntax.FieldValue"}},
     {
       "type": {
-        "name": "hydra.rust.syntax.ArrayExpr",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "An array expression"}}}],
@@ -2316,11 +2315,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "An array repeat expression"}}}],
                         "body": {"variable": "hydra.rust.syntax.ArrayRepeat"}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.rust.syntax.ArrayExpr"}},
     {
       "type": {
-        "name": "hydra.rust.syntax.IndexExpr",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "An index expression"}}}],
@@ -2338,11 +2337,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The index expression"}}}],
                         "body": {"variable": "hydra.rust.syntax.Expression"}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.rust.syntax.IndexExpr"}},
     {
       "type": {
-        "name": "hydra.rust.syntax.RangeExpr",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A range expression"}}}],
@@ -2366,11 +2365,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "Whether the range is inclusive"}}}],
                         "body": {"literal": {"boolean": {}}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.rust.syntax.RangeExpr"}},
     {
       "type": {
-        "name": "hydra.rust.syntax.CastExpr",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A type cast expression"}}}],
@@ -2388,11 +2387,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The target type"}}}],
                         "body": {"variable": "hydra.rust.syntax.Type"}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.rust.syntax.CastExpr"}},
     {
       "type": {
-        "name": "hydra.rust.syntax.TypeAscriptionExpr",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A type ascription expression"}}}],
@@ -2410,11 +2409,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The ascribed type"}}}],
                         "body": {"variable": "hydra.rust.syntax.Type"}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.rust.syntax.TypeAscriptionExpr"}},
     {
       "type": {
-        "name": "hydra.rust.syntax.AssignExpr",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "An assignment expression"}}}],
@@ -2432,11 +2431,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The right-hand side (value)"}}}],
                         "body": {"variable": "hydra.rust.syntax.Expression"}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.rust.syntax.AssignExpr"}},
     {
       "type": {
-        "name": "hydra.rust.syntax.CompoundAssignExpr",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A compound assignment expression"}}}],
@@ -2460,11 +2459,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The right-hand side (value)"}}}],
                         "body": {"variable": "hydra.rust.syntax.Expression"}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.rust.syntax.CompoundAssignExpr"}},
     {
       "type": {
-        "name": "hydra.rust.syntax.CompoundAssignOp",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A compound assignment operator"}}}],
@@ -2480,11 +2479,11 @@
                   {"name": "bitXorAssign", "type": {"unit": {}}},
                   {"name": "shlAssign", "type": {"unit": {}}},
                   {"name": "shrAssign", "type": {"unit": {}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.rust.syntax.CompoundAssignOp"}},
     {
       "type": {
-        "name": "hydra.rust.syntax.MacroInvocation",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A macro invocation"}}}],
@@ -2508,11 +2507,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The token stream as a raw string"}}}],
                         "body": {"literal": {"string": {}}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.rust.syntax.MacroInvocation"}},
     {
       "type": {
-        "name": "hydra.rust.syntax.MacroDelimiter",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "The delimiter style for a macro invocation"}}}],
@@ -2521,11 +2520,11 @@
                   {"name": "paren", "type": {"unit": {}}},
                   {"name": "bracket", "type": {"unit": {}}},
                   {"name": "brace", "type": {"unit": {}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.rust.syntax.MacroDelimiter"}},
     {
       "type": {
-        "name": "hydra.rust.syntax.Statement",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A statement within a block"}}}],
@@ -2553,11 +2552,11 @@
                     "name": "empty",
                     "type": {
                       "annotated": {"annotation": [{"key": "description", "value": {"literal": {"string": "An empty statement"}}}], "body": {"unit": {}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.rust.syntax.Statement"}},
     {
       "type": {
-        "name": "hydra.rust.syntax.LetStatement",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A let statement"}}}],
@@ -2587,11 +2586,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "Optional initializer expression"}}}],
                         "body": {"maybe": {"variable": "hydra.rust.syntax.Expression"}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.rust.syntax.LetStatement"}},
     {
       "type": {
-        "name": "hydra.rust.syntax.Block",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A block expression"}}}],
@@ -2609,11 +2608,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "An optional trailing expression"}}}],
                         "body": {"maybe": {"variable": "hydra.rust.syntax.Expression"}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.rust.syntax.Block"}},
     {
       "type": {
-        "name": "hydra.rust.syntax.Pattern",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [
@@ -2698,11 +2697,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "A parenthesized pattern"}}}],
                         "body": {"variable": "hydra.rust.syntax.Pattern"}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.rust.syntax.Pattern"}},
     {
       "type": {
-        "name": "hydra.rust.syntax.IdentifierPattern",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "An identifier pattern"}}}],
@@ -2726,11 +2725,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "Optional sub-pattern (e.g., x @ Some(_))"}}}],
                         "body": {"maybe": {"variable": "hydra.rust.syntax.Pattern"}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.rust.syntax.IdentifierPattern"}},
     {
       "type": {
-        "name": "hydra.rust.syntax.RefPattern",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A reference pattern"}}}],
@@ -2748,11 +2747,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The inner pattern"}}}],
                         "body": {"variable": "hydra.rust.syntax.Pattern"}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.rust.syntax.RefPattern"}},
     {
       "type": {
-        "name": "hydra.rust.syntax.StructPattern",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A struct pattern"}}}],
@@ -2776,11 +2775,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "Whether the pattern has a rest (..) at the end"}}}],
                         "body": {"literal": {"boolean": {}}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.rust.syntax.StructPattern"}},
     {
       "type": {
-        "name": "hydra.rust.syntax.FieldPattern",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A field pattern within a struct pattern"}}}],
@@ -2798,11 +2797,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The field pattern (None for shorthand)"}}}],
                         "body": {"maybe": {"variable": "hydra.rust.syntax.Pattern"}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.rust.syntax.FieldPattern"}},
     {
       "type": {
-        "name": "hydra.rust.syntax.TupleStructPattern",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A tuple struct pattern"}}}],
@@ -2820,11 +2819,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The element patterns"}}}],
                         "body": {"list": {"variable": "hydra.rust.syntax.Pattern"}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.rust.syntax.TupleStructPattern"}},
     {
       "type": {
-        "name": "hydra.rust.syntax.RangePattern",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A range pattern"}}}],
@@ -2848,11 +2847,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "Whether the range is inclusive"}}}],
                         "body": {"literal": {"boolean": {}}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.rust.syntax.RangePattern"}},
     {
       "type": {
-        "name": "hydra.rust.syntax.Literal",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A literal value"}}}],
@@ -2906,11 +2905,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "A boolean literal"}}}],
                         "body": {"literal": {"boolean": {}}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.rust.syntax.Literal"}},
     {
       "type": {
-        "name": "hydra.rust.syntax.IntegerLiteral",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "An integer literal with optional suffix"}}}],
@@ -2928,11 +2927,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "Optional type suffix"}}}],
                         "body": {"maybe": {"literal": {"string": {}}}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.rust.syntax.IntegerLiteral"}},
     {
       "type": {
-        "name": "hydra.rust.syntax.FloatLiteral",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A floating-point literal with optional suffix"}}}],
@@ -2950,11 +2949,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "Optional type suffix"}}}],
                         "body": {"maybe": {"literal": {"string": {}}}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.rust.syntax.FloatLiteral"}},
     {
       "type": {
-        "name": "hydra.rust.syntax.Attribute",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "An attribute (e.g., #[derive(Clone)], #[cfg(test)])"}}}],
@@ -2981,11 +2980,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The attribute arguments as a raw token string"}}}],
                         "body": {"maybe": {"literal": {"string": {}}}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.rust.syntax.Attribute"}},
     {
       "type": {
-        "name": "hydra.rust.syntax.Visibility",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A visibility qualifier"}}}],
@@ -3011,11 +3010,11 @@
                     "name": "private",
                     "type": {
                       "annotated": {"annotation": [{"key": "description", "value": {"literal": {"string": "Private (default)"}}}], "body": {"unit": {}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.rust.syntax.Visibility"}},
     {
       "type": {
-        "name": "hydra.rust.syntax.LetCondition",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A let condition (e.g., let Some(x) = opt)"}}}],
@@ -3033,11 +3032,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The expression being matched"}}}],
                         "body": {"variable": "hydra.rust.syntax.Expression"}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.rust.syntax.LetCondition"}},
     {
       "type": {
-        "name": "hydra.rust.syntax.ArrayRepeat",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "An array repeat expression (e.g., [0; 10])"}}}],
@@ -3055,7 +3054,8 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The length expression"}}}],
                         "body": {"variable": "hydra.rust.syntax.Expression"}}}}]}}},
-          "variables": []}}}],
+          "variables": []},
+        "name": "hydra.rust.syntax.ArrayRepeat"}}],
   "dependencies": [{"module": "hydra.core"}],
   "metadata": {
     "comments": [],

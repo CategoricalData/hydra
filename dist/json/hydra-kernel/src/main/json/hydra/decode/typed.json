@@ -2,19 +2,7 @@
   "definitions": [
     {
       "term": {
-        "name": "hydra.decode.typed.typedBinding",
-        "signature": {
-          "parameters": [
-            {"isLazy": false, "name": "arg0", "type": {"variable": "t0"}},
-            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.graph.Graph"}},
-            {"isLazy": false, "name": "arg2", "type": {"variable": "hydra.core.Term"}}],
-          "result": {
-            "type": {
-              "either": {
-                "left": {"variable": "hydra.errors.DecodingError"},
-                "right": {"application": {"argument": {"variable": "t1"}, "function": {"variable": "hydra.typed.TypedBinding"}}}}}},
-          "typeParameters": [{"constraints": [], "name": "t0"}, {"constraints": [], "name": "t1"}]},
-        "term": {
+        "body": {
           "typeLambda": {
             "body": {
               "typeLambda": {
@@ -44,8 +32,7 @@
                                                   "cases": {
                                                     "cases": [
                                                       {
-                                                        "name": "record",
-                                                        "term": {
+                                                        "handler": {
                                                           "lambda": {
                                                             "body": {
                                                               "let": {
@@ -148,7 +135,8 @@
                                                                                 "type": {"variable": "hydra.core.Name"}}},
                                                                             "type": {"application": {"argument": {"variable": "t1"}, "function": {"variable": "hydra.typed.TypedBinding"}}}}}}}}}}},
                                                             "domain": {"variable": "hydra.core.Record"},
-                                                            "parameter": "record"}}}],
+                                                            "parameter": "record"}},
+                                                        "name": "record"}],
                                                     "default": {
                                                       "typeApplication": {
                                                         "body": {
@@ -189,10 +177,8 @@
                         "domain": {"variable": "t0"},
                         "parameter": "a"}}}},
                 "parameter": "t1"}},
-            "parameter": "t0"}}}},
-    {
-      "term": {
-        "name": "hydra.decode.typed.typedTerm",
+            "parameter": "t0"}},
+        "name": "hydra.decode.typed.typedBinding",
         "signature": {
           "parameters": [
             {"isLazy": false, "name": "arg0", "type": {"variable": "t0"}},
@@ -202,9 +188,11 @@
             "type": {
               "either": {
                 "left": {"variable": "hydra.errors.DecodingError"},
-                "right": {"application": {"argument": {"variable": "t1"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}}},
-          "typeParameters": [{"constraints": [], "name": "t0"}, {"constraints": [], "name": "t1"}]},
-        "term": {
+                "right": {"application": {"argument": {"variable": "t1"}, "function": {"variable": "hydra.typed.TypedBinding"}}}}}},
+          "typeParameters": [{"constraints": [], "name": "t0"}, {"constraints": [], "name": "t1"}]}}},
+    {
+      "term": {
+        "body": {
           "typeLambda": {
             "body": {
               "typeLambda": {
@@ -234,8 +222,7 @@
                                                   "cases": {
                                                     "cases": [
                                                       {
-                                                        "name": "wrap",
-                                                        "term": {
+                                                        "handler": {
                                                           "lambda": {
                                                             "body": {
                                                               "application": {
@@ -262,7 +249,8 @@
                                                                             "type": {"application": {"argument": {"variable": "t1"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}},
                                                                         "type": {"variable": "hydra.errors.DecodingError"}}}}}}},
                                                             "domain": {"variable": "hydra.core.WrappedTerm"},
-                                                            "parameter": "wrappedTerm"}}}],
+                                                            "parameter": "wrappedTerm"}},
+                                                        "name": "wrap"}],
                                                     "default": {
                                                       "typeApplication": {
                                                         "body": {
@@ -303,10 +291,8 @@
                         "domain": {"variable": "t0"},
                         "parameter": "a"}}}},
                 "parameter": "t1"}},
-            "parameter": "t0"}}}},
-    {
-      "term": {
-        "name": "hydra.decode.typed.typedTermDefinition",
+            "parameter": "t0"}},
+        "name": "hydra.decode.typed.typedTerm",
         "signature": {
           "parameters": [
             {"isLazy": false, "name": "arg0", "type": {"variable": "t0"}},
@@ -316,9 +302,11 @@
             "type": {
               "either": {
                 "left": {"variable": "hydra.errors.DecodingError"},
-                "right": {"application": {"argument": {"variable": "t1"}, "function": {"variable": "hydra.typed.TypedTermDefinition"}}}}}},
-          "typeParameters": [{"constraints": [], "name": "t0"}, {"constraints": [], "name": "t1"}]},
-        "term": {
+                "right": {"application": {"argument": {"variable": "t1"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}}},
+          "typeParameters": [{"constraints": [], "name": "t0"}, {"constraints": [], "name": "t1"}]}}},
+    {
+      "term": {
+        "body": {
           "typeLambda": {
             "body": {
               "typeLambda": {
@@ -348,8 +336,7 @@
                                                   "cases": {
                                                     "cases": [
                                                       {
-                                                        "name": "record",
-                                                        "term": {
+                                                        "handler": {
                                                           "lambda": {
                                                             "body": {
                                                               "let": {
@@ -452,7 +439,8 @@
                                                                                 "type": {"variable": "hydra.core.Name"}}},
                                                                             "type": {"application": {"argument": {"variable": "t1"}, "function": {"variable": "hydra.typed.TypedTermDefinition"}}}}}}}}}}},
                                                             "domain": {"variable": "hydra.core.Record"},
-                                                            "parameter": "record"}}}],
+                                                            "parameter": "record"}},
+                                                        "name": "record"}],
                                                     "default": {
                                                       "typeApplication": {
                                                         "body": {
@@ -493,7 +481,19 @@
                         "domain": {"variable": "t0"},
                         "parameter": "a"}}}},
                 "parameter": "t1"}},
-            "parameter": "t0"}}}}],
+            "parameter": "t0"}},
+        "name": "hydra.decode.typed.typedTermDefinition",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "t0"}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.graph.Graph"}},
+            {"isLazy": false, "name": "arg2", "type": {"variable": "hydra.core.Term"}}],
+          "result": {
+            "type": {
+              "either": {
+                "left": {"variable": "hydra.errors.DecodingError"},
+                "right": {"application": {"argument": {"variable": "t1"}, "function": {"variable": "hydra.typed.TypedTermDefinition"}}}}}},
+          "typeParameters": [{"constraints": [], "name": "t0"}, {"constraints": [], "name": "t1"}]}}}],
   "dependencies": [
     {"module": "hydra.extract.core"},
     {"module": "hydra.lexical"},

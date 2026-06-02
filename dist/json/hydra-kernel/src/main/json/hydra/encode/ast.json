@@ -2,20 +2,14 @@
   "definitions": [
     {
       "term": {
-        "name": "hydra.encode.ast.associativity",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.ast.Associativity"}}],
-          "result": {"type": {"variable": "hydra.core.Term"}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Encoder for hydra.ast.Associativity"}}}],
             "body": {
               "cases": {
                 "cases": [
                   {
-                    "name": "none",
-                    "term": {
+                    "handler": {
                       "lambda": {
                         "body": {
                           "inject": {
@@ -47,10 +41,10 @@
                                   "typeName": "hydra.core.Injection"}}},
                             "typeName": "hydra.core.Term"}},
                         "domain": {"unit": {}},
-                        "parameter": "y"}}},
+                        "parameter": "y"}},
+                    "name": "none"},
                   {
-                    "name": "left",
-                    "term": {
+                    "handler": {
                       "lambda": {
                         "body": {
                           "inject": {
@@ -82,10 +76,10 @@
                                   "typeName": "hydra.core.Injection"}}},
                             "typeName": "hydra.core.Term"}},
                         "domain": {"unit": {}},
-                        "parameter": "y"}}},
+                        "parameter": "y"}},
+                    "name": "left"},
                   {
-                    "name": "right",
-                    "term": {
+                    "handler": {
                       "lambda": {
                         "body": {
                           "inject": {
@@ -117,10 +111,10 @@
                                   "typeName": "hydra.core.Injection"}}},
                             "typeName": "hydra.core.Term"}},
                         "domain": {"unit": {}},
-                        "parameter": "y"}}},
+                        "parameter": "y"}},
+                    "name": "right"},
                   {
-                    "name": "both",
-                    "term": {
+                    "handler": {
                       "lambda": {
                         "body": {
                           "inject": {
@@ -152,16 +146,17 @@
                                   "typeName": "hydra.core.Injection"}}},
                             "typeName": "hydra.core.Term"}},
                         "domain": {"unit": {}},
-                        "parameter": "y"}}}],
-                "typeName": "hydra.ast.Associativity"}}}}}},
+                        "parameter": "y"}},
+                    "name": "both"}],
+                "typeName": "hydra.ast.Associativity"}}}},
+        "name": "hydra.encode.ast.associativity",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.ast.Associativity"}}],
+          "result": {"type": {"variable": "hydra.core.Term"}},
+          "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.encode.ast.blockStyle",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.ast.BlockStyle"}}],
-          "result": {"type": {"variable": "hydra.core.Term"}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Encoder for hydra.ast.BlockStyle"}}}],
             "body": {
@@ -272,15 +267,15 @@
                           "typeName": "hydra.core.Record"}}},
                     "typeName": "hydra.core.Term"}},
                 "domain": {"variable": "hydra.ast.BlockStyle"},
-                "parameter": "x"}}}}}},
+                "parameter": "x"}}}},
+        "name": "hydra.encode.ast.blockStyle",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.ast.BlockStyle"}}],
+          "result": {"type": {"variable": "hydra.core.Term"}},
+          "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.encode.ast.bracketExpr",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.ast.BracketExpr"}}],
-          "result": {"type": {"variable": "hydra.core.Term"}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Encoder for hydra.ast.BracketExpr"}}}],
             "body": {
@@ -338,15 +333,15 @@
                           "typeName": "hydra.core.Record"}}},
                     "typeName": "hydra.core.Term"}},
                 "domain": {"variable": "hydra.ast.BracketExpr"},
-                "parameter": "x"}}}}}},
+                "parameter": "x"}}}},
+        "name": "hydra.encode.ast.bracketExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.ast.BracketExpr"}}],
+          "result": {"type": {"variable": "hydra.core.Term"}},
+          "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.encode.ast.brackets",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.ast.Brackets"}}],
-          "result": {"type": {"variable": "hydra.core.Term"}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Encoder for hydra.ast.Brackets"}}}],
             "body": {
@@ -392,23 +387,22 @@
                           "typeName": "hydra.core.Record"}}},
                     "typeName": "hydra.core.Term"}},
                 "domain": {"variable": "hydra.ast.Brackets"},
-                "parameter": "x"}}}}}},
+                "parameter": "x"}}}},
+        "name": "hydra.encode.ast.brackets",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.ast.Brackets"}}],
+          "result": {"type": {"variable": "hydra.core.Term"}},
+          "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.encode.ast.expr",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.ast.Expr"}}],
-          "result": {"type": {"variable": "hydra.core.Term"}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Encoder for hydra.ast.Expr"}}}],
             "body": {
               "cases": {
                 "cases": [
                   {
-                    "name": "const",
-                    "term": {
+                    "handler": {
                       "lambda": {
                         "body": {
                           "inject": {
@@ -433,10 +427,10 @@
                                   "typeName": "hydra.core.Injection"}}},
                             "typeName": "hydra.core.Term"}},
                         "domain": {"variable": "hydra.ast.Symbol"},
-                        "parameter": "y"}}},
+                        "parameter": "y"}},
+                    "name": "const"},
                   {
-                    "name": "indent",
-                    "term": {
+                    "handler": {
                       "lambda": {
                         "body": {
                           "inject": {
@@ -461,10 +455,10 @@
                                   "typeName": "hydra.core.Injection"}}},
                             "typeName": "hydra.core.Term"}},
                         "domain": {"variable": "hydra.ast.IndentedExpression"},
-                        "parameter": "y"}}},
+                        "parameter": "y"}},
+                    "name": "indent"},
                   {
-                    "name": "op",
-                    "term": {
+                    "handler": {
                       "lambda": {
                         "body": {
                           "inject": {
@@ -489,10 +483,10 @@
                                   "typeName": "hydra.core.Injection"}}},
                             "typeName": "hydra.core.Term"}},
                         "domain": {"variable": "hydra.ast.OpExpr"},
-                        "parameter": "y"}}},
+                        "parameter": "y"}},
+                    "name": "op"},
                   {
-                    "name": "brackets",
-                    "term": {
+                    "handler": {
                       "lambda": {
                         "body": {
                           "inject": {
@@ -517,10 +511,10 @@
                                   "typeName": "hydra.core.Injection"}}},
                             "typeName": "hydra.core.Term"}},
                         "domain": {"variable": "hydra.ast.BracketExpr"},
-                        "parameter": "y"}}},
+                        "parameter": "y"}},
+                    "name": "brackets"},
                   {
-                    "name": "seq",
-                    "term": {
+                    "handler": {
                       "lambda": {
                         "body": {
                           "inject": {
@@ -545,24 +539,24 @@
                                   "typeName": "hydra.core.Injection"}}},
                             "typeName": "hydra.core.Term"}},
                         "domain": {"variable": "hydra.ast.SeqExpr"},
-                        "parameter": "y"}}}],
-                "typeName": "hydra.ast.Expr"}}}}}},
+                        "parameter": "y"}},
+                    "name": "seq"}],
+                "typeName": "hydra.ast.Expr"}}}},
+        "name": "hydra.encode.ast.expr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.ast.Expr"}}],
+          "result": {"type": {"variable": "hydra.core.Term"}},
+          "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.encode.ast.indentStyle",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.ast.IndentStyle"}}],
-          "result": {"type": {"variable": "hydra.core.Term"}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Encoder for hydra.ast.IndentStyle"}}}],
             "body": {
               "cases": {
                 "cases": [
                   {
-                    "name": "allLines",
-                    "term": {
+                    "handler": {
                       "lambda": {
                         "body": {
                           "inject": {
@@ -599,10 +593,10 @@
                                   "typeName": "hydra.core.Injection"}}},
                             "typeName": "hydra.core.Term"}},
                         "domain": {"literal": {"string": {}}},
-                        "parameter": "y"}}},
+                        "parameter": "y"}},
+                    "name": "allLines"},
                   {
-                    "name": "subsequentLines",
-                    "term": {
+                    "handler": {
                       "lambda": {
                         "body": {
                           "inject": {
@@ -639,16 +633,17 @@
                                   "typeName": "hydra.core.Injection"}}},
                             "typeName": "hydra.core.Term"}},
                         "domain": {"literal": {"string": {}}},
-                        "parameter": "y"}}}],
-                "typeName": "hydra.ast.IndentStyle"}}}}}},
+                        "parameter": "y"}},
+                    "name": "subsequentLines"}],
+                "typeName": "hydra.ast.IndentStyle"}}}},
+        "name": "hydra.encode.ast.indentStyle",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.ast.IndentStyle"}}],
+          "result": {"type": {"variable": "hydra.core.Term"}},
+          "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.encode.ast.indentedExpression",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.ast.IndentedExpression"}}],
-          "result": {"type": {"variable": "hydra.core.Term"}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Encoder for hydra.ast.IndentedExpression"}}}],
             "body": {
@@ -698,15 +693,15 @@
                           "typeName": "hydra.core.Record"}}},
                     "typeName": "hydra.core.Term"}},
                 "domain": {"variable": "hydra.ast.IndentedExpression"},
-                "parameter": "x"}}}}}},
+                "parameter": "x"}}}},
+        "name": "hydra.encode.ast.indentedExpression",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.ast.IndentedExpression"}}],
+          "result": {"type": {"variable": "hydra.core.Term"}},
+          "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.encode.ast.op",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.ast.Op"}}],
-          "result": {"type": {"variable": "hydra.core.Term"}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Encoder for hydra.ast.Op"}}}],
             "body": {
@@ -774,15 +769,15 @@
                           "typeName": "hydra.core.Record"}}},
                     "typeName": "hydra.core.Term"}},
                 "domain": {"variable": "hydra.ast.Op"},
-                "parameter": "x"}}}}}},
+                "parameter": "x"}}}},
+        "name": "hydra.encode.ast.op",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.ast.Op"}}],
+          "result": {"type": {"variable": "hydra.core.Term"}},
+          "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.encode.ast.opExpr",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.ast.OpExpr"}}],
-          "result": {"type": {"variable": "hydra.core.Term"}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Encoder for hydra.ast.OpExpr"}}}],
             "body": {
@@ -840,15 +835,15 @@
                           "typeName": "hydra.core.Record"}}},
                     "typeName": "hydra.core.Term"}},
                 "domain": {"variable": "hydra.ast.OpExpr"},
-                "parameter": "x"}}}}}},
+                "parameter": "x"}}}},
+        "name": "hydra.encode.ast.opExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.ast.OpExpr"}}],
+          "result": {"type": {"variable": "hydra.core.Term"}},
+          "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.encode.ast.padding",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.ast.Padding"}}],
-          "result": {"type": {"variable": "hydra.core.Term"}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Encoder for hydra.ast.Padding"}}}],
             "body": {
@@ -894,15 +889,15 @@
                           "typeName": "hydra.core.Record"}}},
                     "typeName": "hydra.core.Term"}},
                 "domain": {"variable": "hydra.ast.Padding"},
-                "parameter": "x"}}}}}},
+                "parameter": "x"}}}},
+        "name": "hydra.encode.ast.padding",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.ast.Padding"}}],
+          "result": {"type": {"variable": "hydra.core.Term"}},
+          "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.encode.ast.precedence",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.ast.Precedence"}}],
-          "result": {"type": {"variable": "hydra.core.Term"}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Encoder for hydra.ast.Precedence"}}}],
             "body": {
@@ -940,15 +935,15 @@
                           "typeName": "hydra.core.WrappedTerm"}}},
                     "typeName": "hydra.core.Term"}},
                 "domain": {"variable": "hydra.ast.Precedence"},
-                "parameter": "x"}}}}}},
+                "parameter": "x"}}}},
+        "name": "hydra.encode.ast.precedence",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.ast.Precedence"}}],
+          "result": {"type": {"variable": "hydra.core.Term"}},
+          "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.encode.ast.seqExpr",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.ast.SeqExpr"}}],
-          "result": {"type": {"variable": "hydra.core.Term"}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Encoder for hydra.ast.SeqExpr"}}}],
             "body": {
@@ -1012,15 +1007,15 @@
                           "typeName": "hydra.core.Record"}}},
                     "typeName": "hydra.core.Term"}},
                 "domain": {"variable": "hydra.ast.SeqExpr"},
-                "parameter": "x"}}}}}},
+                "parameter": "x"}}}},
+        "name": "hydra.encode.ast.seqExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.ast.SeqExpr"}}],
+          "result": {"type": {"variable": "hydra.core.Term"}},
+          "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.encode.ast.symbol",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.ast.Symbol"}}],
-          "result": {"type": {"variable": "hydra.core.Term"}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Encoder for hydra.ast.Symbol"}}}],
             "body": {
@@ -1053,23 +1048,22 @@
                           "typeName": "hydra.core.WrappedTerm"}}},
                     "typeName": "hydra.core.Term"}},
                 "domain": {"variable": "hydra.ast.Symbol"},
-                "parameter": "x"}}}}}},
+                "parameter": "x"}}}},
+        "name": "hydra.encode.ast.symbol",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.ast.Symbol"}}],
+          "result": {"type": {"variable": "hydra.core.Term"}},
+          "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.encode.ast.ws",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.ast.Ws"}}],
-          "result": {"type": {"variable": "hydra.core.Term"}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Encoder for hydra.ast.Ws"}}}],
             "body": {
               "cases": {
                 "cases": [
                   {
-                    "name": "none",
-                    "term": {
+                    "handler": {
                       "lambda": {
                         "body": {
                           "inject": {
@@ -1099,10 +1093,10 @@
                                   "typeName": "hydra.core.Injection"}}},
                             "typeName": "hydra.core.Term"}},
                         "domain": {"unit": {}},
-                        "parameter": "y"}}},
+                        "parameter": "y"}},
+                    "name": "none"},
                   {
-                    "name": "space",
-                    "term": {
+                    "handler": {
                       "lambda": {
                         "body": {
                           "inject": {
@@ -1132,10 +1126,10 @@
                                   "typeName": "hydra.core.Injection"}}},
                             "typeName": "hydra.core.Term"}},
                         "domain": {"unit": {}},
-                        "parameter": "y"}}},
+                        "parameter": "y"}},
+                    "name": "space"},
                   {
-                    "name": "break",
-                    "term": {
+                    "handler": {
                       "lambda": {
                         "body": {
                           "inject": {
@@ -1165,10 +1159,10 @@
                                   "typeName": "hydra.core.Injection"}}},
                             "typeName": "hydra.core.Term"}},
                         "domain": {"unit": {}},
-                        "parameter": "y"}}},
+                        "parameter": "y"}},
+                    "name": "break"},
                   {
-                    "name": "breakAndIndent",
-                    "term": {
+                    "handler": {
                       "lambda": {
                         "body": {
                           "inject": {
@@ -1203,10 +1197,10 @@
                                   "typeName": "hydra.core.Injection"}}},
                             "typeName": "hydra.core.Term"}},
                         "domain": {"literal": {"string": {}}},
-                        "parameter": "y"}}},
+                        "parameter": "y"}},
+                    "name": "breakAndIndent"},
                   {
-                    "name": "doubleBreak",
-                    "term": {
+                    "handler": {
                       "lambda": {
                         "body": {
                           "inject": {
@@ -1236,8 +1230,14 @@
                                   "typeName": "hydra.core.Injection"}}},
                             "typeName": "hydra.core.Term"}},
                         "domain": {"unit": {}},
-                        "parameter": "y"}}}],
-                "typeName": "hydra.ast.Ws"}}}}}}],
+                        "parameter": "y"}},
+                    "name": "doubleBreak"}],
+                "typeName": "hydra.ast.Ws"}}}},
+        "name": "hydra.encode.ast.ws",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.ast.Ws"}}],
+          "result": {"type": {"variable": "hydra.core.Term"}},
+          "typeParameters": []}}}],
   "dependencies": [{"module": "hydra.encode.core"}, {"module": "hydra.ast"}],
   "metadata": {"comments": [], "description": "Term encoders for hydra.ast", "seeAlso": []},
   "name": "hydra.encode.ast"}

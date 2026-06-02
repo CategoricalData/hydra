@@ -17,7 +17,7 @@ import hydra.core.Term;
 import hydra.core.Type;
 import hydra.core.TypeClassConstraint;
 import hydra.core.TypeScheme;
-import hydra.core.TypeVariableMetadata;
+import hydra.core.TypeVariableConstraints;
 import hydra.util.ConsList;
 import hydra.util.Maybe;
 import hydra.util.PersistentMap;
@@ -447,7 +447,7 @@ public interface Types {
 
     /**
      * Convert a set of class identifier names into a list of TypeClassConstraint.Simple values,
-     * as expected by TypeVariableMetadata.classes (per #156).
+     * as expected by TypeVariableConstraints.classes (per #156).
      */
     static List<TypeClassConstraint> toConstraints(Set<Name> classes) {
         List<TypeClassConstraint> result = new java.util.ArrayList<>();
@@ -467,12 +467,12 @@ public interface Types {
      */
     static TypeScheme polyConstrained(Map<String, Set<Name>> vsWithConstraints, Type body) {
         ConsList<Name> varsRev = ConsList.empty();
-        PersistentMap<Name, TypeVariableMetadata> constraintMap = PersistentMap.<Name, TypeVariableMetadata>empty();
+        PersistentMap<Name, TypeVariableConstraints> constraintMap = PersistentMap.<Name, TypeVariableConstraints>empty();
         for (Map.Entry<String, Set<Name>> entry : vsWithConstraints.entrySet()) {
             Name varName = name(entry.getKey());
             varsRev = ConsList.cons(varName, varsRev);
             if (!entry.getValue().isEmpty()) {
-                constraintMap = constraintMap.insert(varName, new TypeVariableMetadata(toConstraints(entry.getValue())));
+                constraintMap = constraintMap.insert(varName, new TypeVariableConstraints(toConstraints(entry.getValue())));
             }
         }
         return new TypeScheme(varsRev.reverse(), body, Maybe.just(constraintMap));
@@ -500,8 +500,8 @@ public interface Types {
      * Create a constrained type scheme with one variable.
      */
     static TypeScheme constrained1(String v1, Set<Name> c1, Type body) {
-        PersistentMap<Name, TypeVariableMetadata> cm = PersistentMap.<Name, TypeVariableMetadata>empty();
-        if (!c1.isEmpty()) cm = cm.insert(name(v1), new TypeVariableMetadata(toConstraints(c1)));
+        PersistentMap<Name, TypeVariableConstraints> cm = PersistentMap.<Name, TypeVariableConstraints>empty();
+        if (!c1.isEmpty()) cm = cm.insert(name(v1), new TypeVariableConstraints(toConstraints(c1)));
         return new TypeScheme(ConsList.of(name(v1)), body, Maybe.just(cm));
     }
 
@@ -509,9 +509,9 @@ public interface Types {
      * Create a constrained type scheme with two ordered variables.
      */
     static TypeScheme constrained2(String v1, Set<Name> c1, String v2, Set<Name> c2, Type body) {
-        PersistentMap<Name, TypeVariableMetadata> cm = PersistentMap.<Name, TypeVariableMetadata>empty();
-        if (!c1.isEmpty()) cm = cm.insert(name(v1), new TypeVariableMetadata(toConstraints(c1)));
-        if (!c2.isEmpty()) cm = cm.insert(name(v2), new TypeVariableMetadata(toConstraints(c2)));
+        PersistentMap<Name, TypeVariableConstraints> cm = PersistentMap.<Name, TypeVariableConstraints>empty();
+        if (!c1.isEmpty()) cm = cm.insert(name(v1), new TypeVariableConstraints(toConstraints(c1)));
+        if (!c2.isEmpty()) cm = cm.insert(name(v2), new TypeVariableConstraints(toConstraints(c2)));
         return new TypeScheme(ConsList.of(name(v1), name(v2)), body, Maybe.just(cm));
     }
 
@@ -519,10 +519,10 @@ public interface Types {
      * Create a constrained type scheme with three ordered variables.
      */
     static TypeScheme constrained3(String v1, Set<Name> c1, String v2, Set<Name> c2, String v3, Set<Name> c3, Type body) {
-        PersistentMap<Name, TypeVariableMetadata> cm = PersistentMap.<Name, TypeVariableMetadata>empty();
-        if (!c1.isEmpty()) cm = cm.insert(name(v1), new TypeVariableMetadata(toConstraints(c1)));
-        if (!c2.isEmpty()) cm = cm.insert(name(v2), new TypeVariableMetadata(toConstraints(c2)));
-        if (!c3.isEmpty()) cm = cm.insert(name(v3), new TypeVariableMetadata(toConstraints(c3)));
+        PersistentMap<Name, TypeVariableConstraints> cm = PersistentMap.<Name, TypeVariableConstraints>empty();
+        if (!c1.isEmpty()) cm = cm.insert(name(v1), new TypeVariableConstraints(toConstraints(c1)));
+        if (!c2.isEmpty()) cm = cm.insert(name(v2), new TypeVariableConstraints(toConstraints(c2)));
+        if (!c3.isEmpty()) cm = cm.insert(name(v3), new TypeVariableConstraints(toConstraints(c3)));
         return new TypeScheme(ConsList.of(name(v1), name(v2), name(v3)), body, Maybe.just(cm));
     }
 
@@ -531,11 +531,11 @@ public interface Types {
      */
     static TypeScheme constrained4(String v1, Set<Name> c1, String v2, Set<Name> c2,
                                     String v3, Set<Name> c3, String v4, Set<Name> c4, Type body) {
-        PersistentMap<Name, TypeVariableMetadata> cm = PersistentMap.<Name, TypeVariableMetadata>empty();
-        if (!c1.isEmpty()) cm = cm.insert(name(v1), new TypeVariableMetadata(toConstraints(c1)));
-        if (!c2.isEmpty()) cm = cm.insert(name(v2), new TypeVariableMetadata(toConstraints(c2)));
-        if (!c3.isEmpty()) cm = cm.insert(name(v3), new TypeVariableMetadata(toConstraints(c3)));
-        if (!c4.isEmpty()) cm = cm.insert(name(v4), new TypeVariableMetadata(toConstraints(c4)));
+        PersistentMap<Name, TypeVariableConstraints> cm = PersistentMap.<Name, TypeVariableConstraints>empty();
+        if (!c1.isEmpty()) cm = cm.insert(name(v1), new TypeVariableConstraints(toConstraints(c1)));
+        if (!c2.isEmpty()) cm = cm.insert(name(v2), new TypeVariableConstraints(toConstraints(c2)));
+        if (!c3.isEmpty()) cm = cm.insert(name(v3), new TypeVariableConstraints(toConstraints(c3)));
+        if (!c4.isEmpty()) cm = cm.insert(name(v4), new TypeVariableConstraints(toConstraints(c4)));
         return new TypeScheme(ConsList.of(name(v1), name(v2), name(v3), name(v4)), body, Maybe.just(cm));
     }
 

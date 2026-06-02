@@ -2,9 +2,7 @@
   "definitions": [
     {
       "term": {
-        "name": "hydra.test.differentiation.allTests",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Test cases for automatic differentiation"}}}],
             "body": {
@@ -7943,7 +7941,9 @@
                   {
                     "name": "cases",
                     "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}],
-                "typeName": "hydra.testing.TestGroup"}}}}}}],
+                "typeName": "hydra.testing.TestGroup"}}}},
+        "name": "hydra.test.differentiation.allTests",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []}}}],
   "dependencies": [
     {"module": "hydra.differentiation"},
     {"module": "hydra.variables"},

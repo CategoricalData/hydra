@@ -2,8 +2,7 @@
   "definitions": [
     {
       "type": {
-        "name": "hydra.java.environment.JavaSymbolClass",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "Classification of a Java symbol for code generation"}}}],
@@ -38,11 +37,11 @@
                     "name": "localVariable",
                     "type": {
                       "annotated": {"annotation": [{"key": "description", "value": {"literal": {"string": "A local variable"}}}], "body": {"unit": {}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.java.environment.JavaSymbolClass"}},
     {
       "type": {
-        "name": "hydra.java.environment.JavaFeatures",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "Feature flags for the target Java version"}}}],
@@ -54,11 +53,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "Whether the diamond operator (<>) is supported (Java 7+)"}}}],
                         "body": {"literal": {"boolean": {}}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.java.environment.JavaFeatures"}},
     {
       "type": {
-        "name": "hydra.java.environment.Aliases",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "Aliases and context for Java code generation"}}}],
@@ -170,11 +169,11 @@
                             "key": "description",
                             "value": {"literal": {"string": "Variables that have been thunked (wrapped in Supplier) for lazy evaluation"}}}],
                         "body": {"set": {"variable": "hydra.core.Name"}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.java.environment.Aliases"}},
     {
       "type": {
-        "name": "hydra.java.environment.JavaEnvironment",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "Environment for Java code generation"}}}],
@@ -192,7 +191,8 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "Graph context for type inference"}}}],
                         "body": {"variable": "hydra.graph.Graph"}}}}]}}},
-          "variables": []}}}],
+          "variables": []},
+        "name": "hydra.java.environment.JavaEnvironment"}}],
   "dependencies": [
     {"module": "hydra.java.syntax"},
     {"module": "hydra.core"},

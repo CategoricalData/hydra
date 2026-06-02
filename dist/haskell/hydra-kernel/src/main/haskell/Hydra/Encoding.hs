@@ -298,8 +298,8 @@ encodeModule cx graph mod =
       Packaging.moduleDefinitions = (Lists.map (\b -> Packaging.DefinitionTerm (Packaging.TermDefinition {
         Packaging.termDefinitionName = (Core.bindingName b),
         Packaging.termDefinitionMetadata = Nothing,
-        Packaging.termDefinitionBody = (Core.bindingTerm b),
-        Packaging.termDefinitionSignature = (Maybes.map Scoping.typeSchemeToTermSignature (Core.bindingTypeScheme b))})) encodedBindings)})))))
+        Packaging.termDefinitionSignature = (Maybes.map Scoping.typeSchemeToTermSignature (Core.bindingTypeScheme b)),
+        Packaging.termDefinitionBody = (Core.bindingTerm b)})) encodedBindings)})))))
 -- | Generate an encoder module name from a source module name
 encodeModuleName :: Packaging.ModuleName -> Packaging.ModuleName
 encodeModuleName ns =

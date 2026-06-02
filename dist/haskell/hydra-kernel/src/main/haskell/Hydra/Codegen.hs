@@ -256,8 +256,8 @@ generateSourceFiles printDefinitions lang doInfer doExpand doHoistCaseStatements
                           Packaging.DefinitionTerm v0 -> Maybes.map (\b -> Packaging.DefinitionTerm (Packaging.TermDefinition {
                             Packaging.termDefinitionName = (Core.bindingName b),
                             Packaging.termDefinitionMetadata = Nothing,
-                            Packaging.termDefinitionBody = (Core.bindingTerm b),
-                            Packaging.termDefinitionSignature = (Maybes.map Scoping.typeSchemeToTermSignature (Core.bindingTypeScheme b))})) (Lists.find (\b -> Equality.equal (Core.bindingName b) (Packaging.termDefinitionName v0)) els)
+                            Packaging.termDefinitionSignature = (Maybes.map Scoping.typeSchemeToTermSignature (Core.bindingTypeScheme b)),
+                            Packaging.termDefinitionBody = (Core.bindingTerm b)})) (Lists.find (\b -> Equality.equal (Core.bindingName b) (Packaging.termDefinitionName v0)) els)
                           Packaging.DefinitionPrimitive v0 -> Just (Packaging.DefinitionPrimitive v0)) (Packaging.moduleDefinitions m)))}
               allBindings = Lexical.graphToBindings g1
               refreshedMods = Lists.map (\m -> refreshModule allBindings m) termModulesToGenerate
@@ -367,8 +367,8 @@ lowerPrimitiveDefinitions m =
                   Packaging.DefinitionPrimitive v0 -> Packaging.DefinitionTerm (Packaging.TermDefinition {
                     Packaging.termDefinitionName = (Packaging.primitiveDefinitionName v0),
                     Packaging.termDefinitionMetadata = Nothing,
-                    Packaging.termDefinitionBody = (EncodePackaging.primitiveDefinition v0),
-                    Packaging.termDefinitionSignature = (Just primDefSig)})
+                    Packaging.termDefinitionSignature = (Just primDefSig),
+                    Packaging.termDefinitionBody = (EncodePackaging.primitiveDefinition v0)})
                   _ -> d) origDefs
             currentDeps = Packaging.moduleDependencies m
             filteredDeps =
@@ -414,11 +414,11 @@ moduleToSourceModule m =
                   Packaging.DefinitionTerm (Packaging.TermDefinition {
                     Packaging.termDefinitionName = (Core.Name (Strings.cat2 (Packaging.unModuleName sourceNs) ".module_")),
                     Packaging.termDefinitionMetadata = Nothing,
-                    Packaging.termDefinitionBody = (EncodePackaging.module_ m),
                     Packaging.termDefinitionSignature = (Just (Scoping.typeSchemeToTermSignature (Core.TypeScheme {
                       Core.typeSchemeVariables = [],
                       Core.typeSchemeBody = (Core.TypeVariable (Core.Name "hydra.packaging.Module")),
-                      Core.typeSchemeConstraints = Nothing})))})
+                      Core.typeSchemeConstraints = Nothing}))),
+                    Packaging.termDefinitionBody = (EncodePackaging.module_ m)})
       in Packaging.Module {
         Packaging.moduleName = sourceNs,
         Packaging.moduleMetadata = (Just (Packaging.EntityMetadata {
@@ -500,8 +500,8 @@ refreshModule inferredElements m =
         Packaging.DefinitionTerm v0 -> Maybes.map (\b -> Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.bindingName b),
           Packaging.termDefinitionMetadata = Nothing,
-          Packaging.termDefinitionBody = (Core.bindingTerm b),
-          Packaging.termDefinitionSignature = (Maybes.map Scoping.typeSchemeToTermSignature (Core.bindingTypeScheme b))})) (Lists.find (\b -> Equality.equal (Core.bindingName b) (Packaging.termDefinitionName v0)) inferredElements)
+          Packaging.termDefinitionSignature = (Maybes.map Scoping.typeSchemeToTermSignature (Core.bindingTypeScheme b)),
+          Packaging.termDefinitionBody = (Core.bindingTerm b)})) (Lists.find (\b -> Equality.equal (Core.bindingName b) (Packaging.termDefinitionName v0)) inferredElements)
         Packaging.DefinitionPrimitive v0 -> Just (Packaging.DefinitionPrimitive v0)) (Packaging.moduleDefinitions m)))})
 -- | Compute transitive closure of module dependencies
 transitiveDeps :: (Packaging.Module -> [Packaging.ModuleName]) -> M.Map Packaging.ModuleName Packaging.Module -> [Packaging.Module] -> S.Set Packaging.ModuleName

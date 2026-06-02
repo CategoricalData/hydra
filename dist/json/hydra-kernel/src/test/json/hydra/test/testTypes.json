@@ -2,9 +2,7 @@
   "definitions": [
     {
       "term": {
-        "name": "hydra.test.testTypes.testTypeBuddyListA",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.core.Type"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "firstClassType", "value": {"literal": {"boolean": true}}}],
             "body": {
@@ -69,17 +67,17 @@
                                         "typeName": "hydra.core.FieldType"}}]}},
                               "typeName": "hydra.core.Type"}}}],
                       "typeName": "hydra.core.ForallType"}}},
-                "typeName": "hydra.core.Type"}}}}}},
+                "typeName": "hydra.core.Type"}}}},
+        "name": "hydra.test.testTypes.testTypeBuddyListA",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.core.Type"}}, "typeParameters": []}}},
     {
       "term": {
+        "body": {"wrap": {"body": {"literal": {"string": "BuddyListA"}}, "typeName": "hydra.core.Name"}},
         "name": "hydra.test.testTypes.testTypeBuddyListAName",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.core.Name"}}, "typeParameters": []},
-        "term": {"wrap": {"body": {"literal": {"string": "BuddyListA"}}, "typeName": "hydra.core.Name"}}}},
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.core.Name"}}, "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.test.testTypes.testTypeBuddyListB",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.core.Type"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "firstClassType", "value": {"literal": {"boolean": true}}}],
             "body": {
@@ -144,17 +142,17 @@
                                         "typeName": "hydra.core.FieldType"}}]}},
                               "typeName": "hydra.core.Type"}}}],
                       "typeName": "hydra.core.ForallType"}}},
-                "typeName": "hydra.core.Type"}}}}}},
+                "typeName": "hydra.core.Type"}}}},
+        "name": "hydra.test.testTypes.testTypeBuddyListB",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.core.Type"}}, "typeParameters": []}}},
     {
       "term": {
+        "body": {"wrap": {"body": {"literal": {"string": "BuddyListB"}}, "typeName": "hydra.core.Name"}},
         "name": "hydra.test.testTypes.testTypeBuddyListBName",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.core.Name"}}, "typeParameters": []},
-        "term": {"wrap": {"body": {"literal": {"string": "BuddyListB"}}, "typeName": "hydra.core.Name"}}}},
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.core.Name"}}, "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.test.testTypes.testTypeComparison",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.core.Type"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "firstClassType", "value": {"literal": {"boolean": true}}}],
             "body": {
@@ -181,17 +179,17 @@
                             {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "greaterThan"}}, "typeName": "hydra.core.Name"}}},
                             {"name": "type", "term": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.core.Type"}}}],
                           "typeName": "hydra.core.FieldType"}}]}},
-                "typeName": "hydra.core.Type"}}}}}},
+                "typeName": "hydra.core.Type"}}}},
+        "name": "hydra.test.testTypes.testTypeComparison",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.core.Type"}}, "typeParameters": []}}},
     {
       "term": {
+        "body": {"wrap": {"body": {"literal": {"string": "Comparison"}}, "typeName": "hydra.core.Name"}},
         "name": "hydra.test.testTypes.testTypeComparisonName",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.core.Name"}}, "typeParameters": []},
-        "term": {"wrap": {"body": {"literal": {"string": "Comparison"}}, "typeName": "hydra.core.Name"}}}},
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.core.Name"}}, "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.test.testTypes.testTypeEither",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.core.Type"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "firstClassType", "value": {"literal": {"boolean": true}}}],
             "body": {
@@ -246,17 +244,17 @@
                                     "typeName": "hydra.core.ForallType"}}},
                               "typeName": "hydra.core.Type"}}}],
                       "typeName": "hydra.core.ForallType"}}},
-                "typeName": "hydra.core.Type"}}}}}},
+                "typeName": "hydra.core.Type"}}}},
+        "name": "hydra.test.testTypes.testTypeEither",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.core.Type"}}, "typeParameters": []}}},
     {
       "term": {
+        "body": {"wrap": {"body": {"literal": {"string": "Either"}}, "typeName": "hydra.core.Name"}},
         "name": "hydra.test.testTypes.testTypeEitherName",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.core.Name"}}, "typeParameters": []},
-        "term": {"wrap": {"body": {"literal": {"string": "Either"}}, "typeName": "hydra.core.Name"}}}},
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.core.Name"}}, "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.test.testTypes.testTypeHydraLiteralType",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.core.Type"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "firstClassType", "value": {"literal": {"boolean": true}}}],
             "body": {
@@ -291,17 +289,17 @@
                                     "term": {"inject": {"field": {"name": "string", "term": {"unit": {}}}, "typeName": "hydra.core.LiteralType"}}},
                                   "typeName": "hydra.core.Type"}}}],
                           "typeName": "hydra.core.FieldType"}}]}},
-                "typeName": "hydra.core.Type"}}}}}},
+                "typeName": "hydra.core.Type"}}}},
+        "name": "hydra.test.testTypes.testTypeHydraLiteralType",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.core.Type"}}, "typeParameters": []}}},
     {
       "term": {
+        "body": {"wrap": {"body": {"literal": {"string": "HydraLiteralType"}}, "typeName": "hydra.core.Name"}},
         "name": "hydra.test.testTypes.testTypeHydraLiteralTypeName",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.core.Name"}}, "typeParameters": []},
-        "term": {"wrap": {"body": {"literal": {"string": "HydraLiteralType"}}, "typeName": "hydra.core.Name"}}}},
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.core.Name"}}, "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.test.testTypes.testTypeHydraType",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.core.Type"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "firstClassType", "value": {"literal": {"boolean": true}}}],
             "body": {
@@ -332,17 +330,17 @@
                                   "field": {"name": "variable", "term": {"variable": "hydra.test.testTypes.testTypeHydraTypeName"}},
                                   "typeName": "hydra.core.Type"}}}],
                           "typeName": "hydra.core.FieldType"}}]}},
-                "typeName": "hydra.core.Type"}}}}}},
+                "typeName": "hydra.core.Type"}}}},
+        "name": "hydra.test.testTypes.testTypeHydraType",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.core.Type"}}, "typeParameters": []}}},
     {
       "term": {
+        "body": {"wrap": {"body": {"literal": {"string": "HydraType"}}, "typeName": "hydra.core.Name"}},
         "name": "hydra.test.testTypes.testTypeHydraTypeName",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.core.Name"}}, "typeParameters": []},
-        "term": {"wrap": {"body": {"literal": {"string": "HydraType"}}, "typeName": "hydra.core.Name"}}}},
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.core.Name"}}, "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.test.testTypes.testTypeIntList",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.core.Type"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "firstClassType", "value": {"literal": {"boolean": true}}}],
             "body": {
@@ -385,17 +383,17 @@
                                         "typeName": "hydra.core.Type"}}},
                                   "typeName": "hydra.core.Type"}}}],
                           "typeName": "hydra.core.FieldType"}}]}},
-                "typeName": "hydra.core.Type"}}}}}},
+                "typeName": "hydra.core.Type"}}}},
+        "name": "hydra.test.testTypes.testTypeIntList",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.core.Type"}}, "typeParameters": []}}},
     {
       "term": {
+        "body": {"wrap": {"body": {"literal": {"string": "IntList"}}, "typeName": "hydra.core.Name"}},
         "name": "hydra.test.testTypes.testTypeIntListName",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.core.Name"}}, "typeParameters": []},
-        "term": {"wrap": {"body": {"literal": {"string": "IntList"}}, "typeName": "hydra.core.Name"}}}},
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.core.Name"}}, "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.test.testTypes.testTypeLatLon",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.core.Type"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "firstClassType", "value": {"literal": {"boolean": true}}}],
             "body": {
@@ -440,17 +438,17 @@
                                         "typeName": "hydra.core.LiteralType"}}},
                                   "typeName": "hydra.core.Type"}}}],
                           "typeName": "hydra.core.FieldType"}}]}},
-                "typeName": "hydra.core.Type"}}}}}},
+                "typeName": "hydra.core.Type"}}}},
+        "name": "hydra.test.testTypes.testTypeLatLon",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.core.Type"}}, "typeParameters": []}}},
     {
       "term": {
+        "body": {"wrap": {"body": {"literal": {"string": "LatLon"}}, "typeName": "hydra.core.Name"}},
         "name": "hydra.test.testTypes.testTypeLatLonName",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.core.Name"}}, "typeParameters": []},
-        "term": {"wrap": {"body": {"literal": {"string": "LatLon"}}, "typeName": "hydra.core.Name"}}}},
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.core.Name"}}, "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.test.testTypes.testTypeLatLonPoly",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.core.Type"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "firstClassType", "value": {"literal": {"boolean": true}}}],
             "body": {
@@ -493,17 +491,17 @@
                                         "typeName": "hydra.core.FieldType"}}]}},
                               "typeName": "hydra.core.Type"}}}],
                       "typeName": "hydra.core.ForallType"}}},
-                "typeName": "hydra.core.Type"}}}}}},
+                "typeName": "hydra.core.Type"}}}},
+        "name": "hydra.test.testTypes.testTypeLatLonPoly",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.core.Type"}}, "typeParameters": []}}},
     {
       "term": {
+        "body": {"wrap": {"body": {"literal": {"string": "LatLonPoly"}}, "typeName": "hydra.core.Name"}},
         "name": "hydra.test.testTypes.testTypeLatLonPolyName",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.core.Name"}}, "typeParameters": []},
-        "term": {"wrap": {"body": {"literal": {"string": "LatLonPoly"}}, "typeName": "hydra.core.Name"}}}},
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.core.Name"}}, "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.test.testTypes.testTypeList",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.core.Type"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "firstClassType", "value": {"literal": {"boolean": true}}}],
             "body": {
@@ -568,17 +566,17 @@
                                         "typeName": "hydra.core.FieldType"}}]}},
                               "typeName": "hydra.core.Type"}}}],
                       "typeName": "hydra.core.ForallType"}}},
-                "typeName": "hydra.core.Type"}}}}}},
+                "typeName": "hydra.core.Type"}}}},
+        "name": "hydra.test.testTypes.testTypeList",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.core.Type"}}, "typeParameters": []}}},
     {
       "term": {
+        "body": {"wrap": {"body": {"literal": {"string": "List"}}, "typeName": "hydra.core.Name"}},
         "name": "hydra.test.testTypes.testTypeListName",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.core.Name"}}, "typeParameters": []},
-        "term": {"wrap": {"body": {"literal": {"string": "List"}}, "typeName": "hydra.core.Name"}}}},
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.core.Name"}}, "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.test.testTypes.testTypeNumber",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.core.Type"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "firstClassType", "value": {"literal": {"boolean": true}}}],
             "body": {
@@ -623,17 +621,17 @@
                                         "typeName": "hydra.core.LiteralType"}}},
                                   "typeName": "hydra.core.Type"}}}],
                           "typeName": "hydra.core.FieldType"}}]}},
-                "typeName": "hydra.core.Type"}}}}}},
+                "typeName": "hydra.core.Type"}}}},
+        "name": "hydra.test.testTypes.testTypeNumber",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.core.Type"}}, "typeParameters": []}}},
     {
       "term": {
+        "body": {"wrap": {"body": {"literal": {"string": "Number"}}, "typeName": "hydra.core.Name"}},
         "name": "hydra.test.testTypes.testTypeNumberName",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.core.Name"}}, "typeParameters": []},
-        "term": {"wrap": {"body": {"literal": {"string": "Number"}}, "typeName": "hydra.core.Name"}}}},
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.core.Name"}}, "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.test.testTypes.testTypePerson",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.core.Type"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "firstClassType", "value": {"literal": {"boolean": true}}}],
             "body": {
@@ -686,17 +684,17 @@
                                         "typeName": "hydra.core.LiteralType"}}},
                                   "typeName": "hydra.core.Type"}}}],
                           "typeName": "hydra.core.FieldType"}}]}},
-                "typeName": "hydra.core.Type"}}}}}},
+                "typeName": "hydra.core.Type"}}}},
+        "name": "hydra.test.testTypes.testTypePerson",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.core.Type"}}, "typeParameters": []}}},
     {
       "term": {
+        "body": {"wrap": {"body": {"literal": {"string": "Person"}}, "typeName": "hydra.core.Name"}},
         "name": "hydra.test.testTypes.testTypePersonName",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.core.Name"}}, "typeParameters": []},
-        "term": {"wrap": {"body": {"literal": {"string": "Person"}}, "typeName": "hydra.core.Name"}}}},
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.core.Name"}}, "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.test.testTypes.testTypePersonOrSomething",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.core.Type"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "firstClassType", "value": {"literal": {"boolean": true}}}],
             "body": {
@@ -739,17 +737,17 @@
                                         "typeName": "hydra.core.FieldType"}}]}},
                               "typeName": "hydra.core.Type"}}}],
                       "typeName": "hydra.core.ForallType"}}},
-                "typeName": "hydra.core.Type"}}}}}},
+                "typeName": "hydra.core.Type"}}}},
+        "name": "hydra.test.testTypes.testTypePersonOrSomething",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.core.Type"}}, "typeParameters": []}}},
     {
       "term": {
+        "body": {"wrap": {"body": {"literal": {"string": "PersonOrSomething"}}, "typeName": "hydra.core.Name"}},
         "name": "hydra.test.testTypes.testTypePersonOrSomethingName",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.core.Name"}}, "typeParameters": []},
-        "term": {"wrap": {"body": {"literal": {"string": "PersonOrSomething"}}, "typeName": "hydra.core.Name"}}}},
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.core.Name"}}, "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.test.testTypes.testTypePolymorphicWrapper",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.core.Type"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "firstClassType", "value": {"literal": {"boolean": true}}}],
             "body": {
@@ -777,17 +775,17 @@
                                     "typeName": "hydra.core.Type"}}},
                               "typeName": "hydra.core.Type"}}}],
                       "typeName": "hydra.core.ForallType"}}},
-                "typeName": "hydra.core.Type"}}}}}},
+                "typeName": "hydra.core.Type"}}}},
+        "name": "hydra.test.testTypes.testTypePolymorphicWrapper",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.core.Type"}}, "typeParameters": []}}},
     {
       "term": {
+        "body": {"wrap": {"body": {"literal": {"string": "PolymorphicWrapper"}}, "typeName": "hydra.core.Name"}},
         "name": "hydra.test.testTypes.testTypePolymorphicWrapperName",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.core.Name"}}, "typeParameters": []},
-        "term": {"wrap": {"body": {"literal": {"string": "PolymorphicWrapper"}}, "typeName": "hydra.core.Name"}}}},
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.core.Name"}}, "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.test.testTypes.testTypeSimpleNumber",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.core.Type"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "firstClassType", "value": {"literal": {"boolean": true}}}],
             "body": {
@@ -832,17 +830,17 @@
                                         "typeName": "hydra.core.LiteralType"}}},
                                   "typeName": "hydra.core.Type"}}}],
                           "typeName": "hydra.core.FieldType"}}]}},
-                "typeName": "hydra.core.Type"}}}}}},
+                "typeName": "hydra.core.Type"}}}},
+        "name": "hydra.test.testTypes.testTypeSimpleNumber",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.core.Type"}}, "typeParameters": []}}},
     {
       "term": {
+        "body": {"wrap": {"body": {"literal": {"string": "SimpleNumber"}}, "typeName": "hydra.core.Name"}},
         "name": "hydra.test.testTypes.testTypeSimpleNumberName",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.core.Name"}}, "typeParameters": []},
-        "term": {"wrap": {"body": {"literal": {"string": "SimpleNumber"}}, "typeName": "hydra.core.Name"}}}},
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.core.Name"}}, "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.test.testTypes.testTypeStringAlias",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.core.Type"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "firstClassType", "value": {"literal": {"boolean": true}}}],
             "body": {
@@ -855,17 +853,17 @@
                         "name": "literal",
                         "term": {"inject": {"field": {"name": "string", "term": {"unit": {}}}, "typeName": "hydra.core.LiteralType"}}},
                       "typeName": "hydra.core.Type"}}},
-                "typeName": "hydra.core.Type"}}}}}},
+                "typeName": "hydra.core.Type"}}}},
+        "name": "hydra.test.testTypes.testTypeStringAlias",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.core.Type"}}, "typeParameters": []}}},
     {
       "term": {
+        "body": {"wrap": {"body": {"literal": {"string": "StringAlias"}}, "typeName": "hydra.core.Name"}},
         "name": "hydra.test.testTypes.testTypeStringAliasName",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.core.Name"}}, "typeParameters": []},
-        "term": {"wrap": {"body": {"literal": {"string": "StringAlias"}}, "typeName": "hydra.core.Name"}}}},
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.core.Name"}}, "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.test.testTypes.testTypeSymmetricTriple",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.core.Type"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "firstClassType", "value": {"literal": {"boolean": true}}}],
             "body": {
@@ -951,17 +949,17 @@
                                     "typeName": "hydra.core.ForallType"}}},
                               "typeName": "hydra.core.Type"}}}],
                       "typeName": "hydra.core.ForallType"}}},
-                "typeName": "hydra.core.Type"}}}}}},
+                "typeName": "hydra.core.Type"}}}},
+        "name": "hydra.test.testTypes.testTypeSymmetricTriple",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.core.Type"}}, "typeParameters": []}}},
     {
       "term": {
+        "body": {"wrap": {"body": {"literal": {"string": "SymmetricTriple"}}, "typeName": "hydra.core.Name"}},
         "name": "hydra.test.testTypes.testTypeSymmetricTripleName",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.core.Name"}}, "typeParameters": []},
-        "term": {"wrap": {"body": {"literal": {"string": "SymmetricTriple"}}, "typeName": "hydra.core.Name"}}}},
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.core.Name"}}, "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.test.testTypes.testTypeTimestamp",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.core.Type"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "firstClassType", "value": {"literal": {"boolean": true}}}],
             "body": {
@@ -1001,17 +999,17 @@
                                     "term": {"inject": {"field": {"name": "string", "term": {"unit": {}}}, "typeName": "hydra.core.LiteralType"}}},
                                   "typeName": "hydra.core.Type"}}}],
                           "typeName": "hydra.core.FieldType"}}]}},
-                "typeName": "hydra.core.Type"}}}}}},
+                "typeName": "hydra.core.Type"}}}},
+        "name": "hydra.test.testTypes.testTypeTimestamp",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.core.Type"}}, "typeParameters": []}}},
     {
       "term": {
+        "body": {"wrap": {"body": {"literal": {"string": "Timestamp"}}, "typeName": "hydra.core.Name"}},
         "name": "hydra.test.testTypes.testTypeTimestampName",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.core.Name"}}, "typeParameters": []},
-        "term": {"wrap": {"body": {"literal": {"string": "Timestamp"}}, "typeName": "hydra.core.Name"}}}},
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.core.Name"}}, "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.test.testTypes.testTypeTriple",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.core.Type"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "firstClassType", "value": {"literal": {"boolean": true}}}],
             "body": {
@@ -1089,17 +1087,17 @@
                                     "typeName": "hydra.core.ForallType"}}},
                               "typeName": "hydra.core.Type"}}}],
                       "typeName": "hydra.core.ForallType"}}},
-                "typeName": "hydra.core.Type"}}}}}},
+                "typeName": "hydra.core.Type"}}}},
+        "name": "hydra.test.testTypes.testTypeTriple",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.core.Type"}}, "typeParameters": []}}},
     {
       "term": {
+        "body": {"wrap": {"body": {"literal": {"string": "Triple"}}, "typeName": "hydra.core.Name"}},
         "name": "hydra.test.testTypes.testTypeTripleName",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.core.Name"}}, "typeParameters": []},
-        "term": {"wrap": {"body": {"literal": {"string": "Triple"}}, "typeName": "hydra.core.Name"}}}},
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.core.Name"}}, "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.test.testTypes.testTypeUnionMonomorphic",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.core.Type"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "firstClassType", "value": {"literal": {"boolean": true}}}],
             "body": {
@@ -1140,17 +1138,17 @@
                             {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "unit"}}, "typeName": "hydra.core.Name"}}},
                             {"name": "type", "term": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.core.Type"}}}],
                           "typeName": "hydra.core.FieldType"}}]}},
-                "typeName": "hydra.core.Type"}}}}}},
+                "typeName": "hydra.core.Type"}}}},
+        "name": "hydra.test.testTypes.testTypeUnionMonomorphic",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.core.Type"}}, "typeParameters": []}}},
     {
       "term": {
+        "body": {"wrap": {"body": {"literal": {"string": "UnionMonomorphic"}}, "typeName": "hydra.core.Name"}},
         "name": "hydra.test.testTypes.testTypeUnionMonomorphicName",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.core.Name"}}, "typeParameters": []},
-        "term": {"wrap": {"body": {"literal": {"string": "UnionMonomorphic"}}, "typeName": "hydra.core.Name"}}}},
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.core.Name"}}, "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.test.testTypes.testTypeUnionPolymorphicRecursive",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.core.Type"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "firstClassType", "value": {"literal": {"boolean": true}}}],
             "body": {
@@ -1223,33 +1221,33 @@
                                         "typeName": "hydra.core.FieldType"}}]}},
                               "typeName": "hydra.core.Type"}}}],
                       "typeName": "hydra.core.ForallType"}}},
-                "typeName": "hydra.core.Type"}}}}}},
+                "typeName": "hydra.core.Type"}}}},
+        "name": "hydra.test.testTypes.testTypeUnionPolymorphicRecursive",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.core.Type"}}, "typeParameters": []}}},
     {
       "term": {
+        "body": {"wrap": {"body": {"literal": {"string": "UnionPolymorphicRecursive"}}, "typeName": "hydra.core.Name"}},
         "name": "hydra.test.testTypes.testTypeUnionPolymorphicRecursiveName",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.core.Name"}}, "typeParameters": []},
-        "term": {"wrap": {"body": {"literal": {"string": "UnionPolymorphicRecursive"}}, "typeName": "hydra.core.Name"}}}},
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.core.Name"}}, "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.test.testTypes.testTypeUnit",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.core.Type"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "firstClassType", "value": {"literal": {"boolean": true}}}],
             "body": {
               "inject": {
                 "field": {"name": "record", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.FieldType"}}}},
-                "typeName": "hydra.core.Type"}}}}}},
+                "typeName": "hydra.core.Type"}}}},
+        "name": "hydra.test.testTypes.testTypeUnit",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.core.Type"}}, "typeParameters": []}}},
     {
       "term": {
+        "body": {"wrap": {"body": {"literal": {"string": "Unit"}}, "typeName": "hydra.core.Name"}},
         "name": "hydra.test.testTypes.testTypeUnitName",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.core.Name"}}, "typeParameters": []},
-        "term": {"wrap": {"body": {"literal": {"string": "Unit"}}, "typeName": "hydra.core.Name"}}}},
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.core.Name"}}, "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.test.testTypes.concatType",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.core.Type"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "firstClassType", "value": {"literal": {"boolean": true}}}],
             "body": {
@@ -1295,12 +1293,12 @@
                                     "typeName": "hydra.core.FunctionType"}}},
                               "typeName": "hydra.core.Type"}}}],
                       "typeName": "hydra.core.FunctionType"}}},
-                "typeName": "hydra.core.Type"}}}}}},
+                "typeName": "hydra.core.Type"}}}},
+        "name": "hydra.test.testTypes.concatType",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.core.Type"}}, "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.test.testTypes.compareStringsType",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.core.Type"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "firstClassType", "value": {"literal": {"boolean": true}}}],
             "body": {
@@ -1327,17 +1325,17 @@
                                 "term": {"inject": {"field": {"name": "string", "term": {"unit": {}}}, "typeName": "hydra.core.LiteralType"}}},
                               "typeName": "hydra.core.Type"}}}],
                       "typeName": "hydra.core.FunctionType"}}},
-                "typeName": "hydra.core.Type"}}}}}},
+                "typeName": "hydra.core.Type"}}}},
+        "name": "hydra.test.testTypes.compareStringsType",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.core.Type"}}, "typeParameters": []}}},
     {
       "term": {
+        "body": {"wrap": {"body": {"literal": {"string": "EitherStringOrInt8"}}, "typeName": "hydra.core.Name"}},
         "name": "hydra.test.testTypes.eitherStringOrInt8TypeName",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.core.Name"}}, "typeParameters": []},
-        "term": {"wrap": {"body": {"literal": {"string": "EitherStringOrInt8"}}, "typeName": "hydra.core.Name"}}}},
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.core.Name"}}, "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.test.testTypes.eitherStringOrInt8Type",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.core.Type"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "firstClassType", "value": {"literal": {"boolean": true}}}],
             "body": {
@@ -1377,12 +1375,12 @@
                                         "typeName": "hydra.core.LiteralType"}}},
                                   "typeName": "hydra.core.Type"}}}],
                           "typeName": "hydra.core.FieldType"}}]}},
-                "typeName": "hydra.core.Type"}}}}}},
+                "typeName": "hydra.core.Type"}}}},
+        "name": "hydra.test.testTypes.eitherStringOrInt8Type",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.core.Type"}}, "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.test.testTypes.exampleProjectionType",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.core.Type"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "firstClassType", "value": {"literal": {"boolean": true}}}],
             "body": {
@@ -1407,12 +1405,12 @@
                                 "term": {"inject": {"field": {"name": "string", "term": {"unit": {}}}, "typeName": "hydra.core.LiteralType"}}},
                               "typeName": "hydra.core.Type"}}}],
                       "typeName": "hydra.core.FunctionType"}}},
-                "typeName": "hydra.core.Type"}}}}}},
+                "typeName": "hydra.core.Type"}}}},
+        "name": "hydra.test.testTypes.exampleProjectionType",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.core.Type"}}, "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.test.testTypes.listOfInt8sType",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.core.Type"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "firstClassType", "value": {"literal": {"boolean": true}}}],
             "body": {
@@ -1430,12 +1428,12 @@
                               "term": {"inject": {"field": {"name": "int8", "term": {"unit": {}}}, "typeName": "hydra.core.IntegerType"}}},
                             "typeName": "hydra.core.LiteralType"}}},
                       "typeName": "hydra.core.Type"}}},
-                "typeName": "hydra.core.Type"}}}}}},
+                "typeName": "hydra.core.Type"}}}},
+        "name": "hydra.test.testTypes.listOfInt8sType",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.core.Type"}}, "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.test.testTypes.listOfInt16sType",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.core.Type"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "firstClassType", "value": {"literal": {"boolean": true}}}],
             "body": {
@@ -1453,12 +1451,12 @@
                               "term": {"inject": {"field": {"name": "int16", "term": {"unit": {}}}, "typeName": "hydra.core.IntegerType"}}},
                             "typeName": "hydra.core.LiteralType"}}},
                       "typeName": "hydra.core.Type"}}},
-                "typeName": "hydra.core.Type"}}}}}},
+                "typeName": "hydra.core.Type"}}}},
+        "name": "hydra.test.testTypes.listOfInt16sType",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.core.Type"}}, "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.test.testTypes.listOfListsOfStringsType",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.core.Type"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "firstClassType", "value": {"literal": {"boolean": true}}}],
             "body": {
@@ -1476,12 +1474,12 @@
                               "term": {"inject": {"field": {"name": "string", "term": {"unit": {}}}, "typeName": "hydra.core.LiteralType"}}},
                             "typeName": "hydra.core.Type"}}},
                       "typeName": "hydra.core.Type"}}},
-                "typeName": "hydra.core.Type"}}}}}},
+                "typeName": "hydra.core.Type"}}}},
+        "name": "hydra.test.testTypes.listOfListsOfStringsType",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.core.Type"}}, "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.test.testTypes.listOfSetOfStringsType",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.core.Type"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "firstClassType", "value": {"literal": {"boolean": true}}}],
             "body": {
@@ -1499,12 +1497,12 @@
                               "term": {"inject": {"field": {"name": "string", "term": {"unit": {}}}, "typeName": "hydra.core.LiteralType"}}},
                             "typeName": "hydra.core.Type"}}},
                       "typeName": "hydra.core.Type"}}},
-                "typeName": "hydra.core.Type"}}}}}},
+                "typeName": "hydra.core.Type"}}}},
+        "name": "hydra.test.testTypes.listOfSetOfStringsType",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.core.Type"}}, "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.test.testTypes.listOfStringsType",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.core.Type"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "firstClassType", "value": {"literal": {"boolean": true}}}],
             "body": {
@@ -1517,12 +1515,12 @@
                         "name": "literal",
                         "term": {"inject": {"field": {"name": "string", "term": {"unit": {}}}, "typeName": "hydra.core.LiteralType"}}},
                       "typeName": "hydra.core.Type"}}},
-                "typeName": "hydra.core.Type"}}}}}},
+                "typeName": "hydra.core.Type"}}}},
+        "name": "hydra.test.testTypes.listOfStringsType",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.core.Type"}}, "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.test.testTypes.mapOfStringsToIntsType",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.core.Type"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "firstClassType", "value": {"literal": {"boolean": true}}}],
             "body": {
@@ -1554,12 +1552,12 @@
                                     "typeName": "hydra.core.LiteralType"}}},
                               "typeName": "hydra.core.Type"}}}],
                       "typeName": "hydra.core.MapType"}}},
-                "typeName": "hydra.core.Type"}}}}}},
+                "typeName": "hydra.core.Type"}}}},
+        "name": "hydra.test.testTypes.mapOfStringsToIntsType",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.core.Type"}}, "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.test.testTypes.optionalInt8Type",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.core.Type"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "firstClassType", "value": {"literal": {"boolean": true}}}],
             "body": {
@@ -1577,12 +1575,12 @@
                               "term": {"inject": {"field": {"name": "int8", "term": {"unit": {}}}, "typeName": "hydra.core.IntegerType"}}},
                             "typeName": "hydra.core.LiteralType"}}},
                       "typeName": "hydra.core.Type"}}},
-                "typeName": "hydra.core.Type"}}}}}},
+                "typeName": "hydra.core.Type"}}}},
+        "name": "hydra.test.testTypes.optionalInt8Type",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.core.Type"}}, "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.test.testTypes.optionalInt16Type",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.core.Type"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "firstClassType", "value": {"literal": {"boolean": true}}}],
             "body": {
@@ -1600,12 +1598,12 @@
                               "term": {"inject": {"field": {"name": "int16", "term": {"unit": {}}}, "typeName": "hydra.core.IntegerType"}}},
                             "typeName": "hydra.core.LiteralType"}}},
                       "typeName": "hydra.core.Type"}}},
-                "typeName": "hydra.core.Type"}}}}}},
+                "typeName": "hydra.core.Type"}}}},
+        "name": "hydra.test.testTypes.optionalInt16Type",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.core.Type"}}, "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.test.testTypes.optionalStringType",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.core.Type"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "firstClassType", "value": {"literal": {"boolean": true}}}],
             "body": {
@@ -1618,12 +1616,12 @@
                         "name": "literal",
                         "term": {"inject": {"field": {"name": "string", "term": {"unit": {}}}, "typeName": "hydra.core.LiteralType"}}},
                       "typeName": "hydra.core.Type"}}},
-                "typeName": "hydra.core.Type"}}}}}},
+                "typeName": "hydra.core.Type"}}}},
+        "name": "hydra.test.testTypes.optionalStringType",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.core.Type"}}, "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.test.testTypes.setOfStringsType",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.core.Type"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "firstClassType", "value": {"literal": {"boolean": true}}}],
             "body": {
@@ -1636,17 +1634,17 @@
                         "name": "literal",
                         "term": {"inject": {"field": {"name": "string", "term": {"unit": {}}}, "typeName": "hydra.core.LiteralType"}}},
                       "typeName": "hydra.core.Type"}}},
-                "typeName": "hydra.core.Type"}}}}}},
+                "typeName": "hydra.core.Type"}}}},
+        "name": "hydra.test.testTypes.setOfStringsType",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.core.Type"}}, "typeParameters": []}}},
     {
       "term": {
+        "body": {"wrap": {"body": {"literal": {"string": "StringOrInt"}}, "typeName": "hydra.core.Name"}},
         "name": "hydra.test.testTypes.stringOrIntName",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.core.Name"}}, "typeParameters": []},
-        "term": {"wrap": {"body": {"literal": {"string": "StringOrInt"}}, "typeName": "hydra.core.Name"}}}},
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.core.Name"}}, "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.test.testTypes.stringOrIntType",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.core.Type"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "firstClassType", "value": {"literal": {"boolean": true}}}],
             "body": {
@@ -1686,12 +1684,14 @@
                                         "typeName": "hydra.core.LiteralType"}}},
                                   "typeName": "hydra.core.Type"}}}],
                           "typeName": "hydra.core.FieldType"}}]}},
-                "typeName": "hydra.core.Type"}}}}}},
+                "typeName": "hydra.core.Type"}}}},
+        "name": "hydra.test.testTypes.stringOrIntType",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.core.Type"}}, "typeParameters": []}}},
     {
       "term": {
+        "body": {"wrap": {"body": {"literal": {"string": "Test"}}, "typeName": "hydra.core.Name"}},
         "name": "hydra.test.testTypes.testTypeName",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.core.Name"}}, "typeParameters": []},
-        "term": {"wrap": {"body": {"literal": {"string": "Test"}}, "typeName": "hydra.core.Name"}}}}],
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.core.Name"}}, "typeParameters": []}}}],
   "dependencies": [
     {"module": "hydra.paths"},
     {"module": "hydra.ast"},

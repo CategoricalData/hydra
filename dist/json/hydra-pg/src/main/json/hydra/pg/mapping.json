@@ -2,8 +2,7 @@
   "definitions": [
     {
       "type": {
-        "name": "hydra.pg.mapping.AnnotationSchema",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [
@@ -27,11 +26,11 @@
                   {"name": "inEdge", "type": {"literal": {"string": {}}}},
                   {"name": "inEdgeLabel", "type": {"literal": {"string": {}}}},
                   {"name": "ignore", "type": {"literal": {"string": {}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.pg.mapping.AnnotationSchema"}},
     {
       "type": {
-        "name": "hydra.pg.mapping.EdgeSpec",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [
@@ -80,11 +79,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "Zero or more property specifications for each target edge"}}}],
                         "body": {"list": {"variable": "hydra.pg.mapping.PropertySpec"}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.pg.mapping.EdgeSpec"}},
     {
       "type": {
-        "name": "hydra.pg.mapping.ElementSpec",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "Either a vertex specification or an edge specification"}}}],
@@ -92,11 +91,11 @@
                 "union": [
                   {"name": "vertex", "type": {"variable": "hydra.pg.mapping.VertexSpec"}},
                   {"name": "edge", "type": {"variable": "hydra.pg.mapping.EdgeSpec"}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.pg.mapping.ElementSpec"}},
     {
       "type": {
-        "name": "hydra.pg.mapping.PropertySpec",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [
@@ -123,11 +122,11 @@
                               "literal": {
                                 "string": "A specification of the value of each target property, which must conform to the type associated with the property key"}}}],
                         "body": {"variable": "hydra.pg.mapping.ValueSpec"}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.pg.mapping.PropertySpec"}},
     {
       "type": {
-        "name": "hydra.pg.mapping.Schema",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [
@@ -186,11 +185,11 @@
                           "parameter": "v"}},
                       "parameter": "t"}},
                   "parameter": "s"}}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.pg.mapping.Schema"}},
     {
       "type": {
-        "name": "hydra.pg.mapping.ValueSpec",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [
@@ -216,11 +215,11 @@
                             "key": "description",
                             "value": {"literal": {"string": "A compact path representing the function, e.g. engine-${engineInfo/model/name}"}}}],
                         "body": {"literal": {"string": {}}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.pg.mapping.ValueSpec"}},
     {
       "type": {
-        "name": "hydra.pg.mapping.VertexSpec",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [
@@ -252,7 +251,8 @@
                         "annotation": [
                           {"key": "description", "value": {"literal": {"string": "Zero or more property specifications for each target vertex"}}}],
                         "body": {"list": {"variable": "hydra.pg.mapping.PropertySpec"}}}}}]}}},
-          "variables": []}}}],
+          "variables": []},
+        "name": "hydra.pg.mapping.VertexSpec"}}],
   "dependencies": [{"module": "hydra.pg.model"}, {"module": "hydra.coders"}, {"module": "hydra.core"}],
   "metadata": {
     "comments": [],

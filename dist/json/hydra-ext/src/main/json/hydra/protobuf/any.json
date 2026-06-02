@@ -2,8 +2,7 @@
   "definitions": [
     {
       "type": {
-        "name": "hydra.protobuf.any.Any",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [
@@ -33,7 +32,8 @@
                             "key": "description",
                             "value": {"literal": {"string": "Must be a valid serialized protocol buffer of the above specified type."}}}],
                         "body": {"literal": {"binary": {}}}}}}]}}},
-          "variables": []}}}],
+          "variables": []},
+        "name": "hydra.protobuf.any.Any"}}],
   "dependencies": [{"module": "hydra.core"}],
   "metadata": {
     "comments": [],

@@ -62,7 +62,7 @@
       "Build a TypeScheme from TermCoder types. Uses the actual types from
        the TermCoders to construct proper function types for inference.
        Auto-detects type variables from the types.
-       Optional constraints: alist of (varname . TypeVariableMetadata)."
+       Optional constraints: alist of (varname . TypeVariableConstraints)."
       (let* ((constraints (if (and (pair? rest) (car rest)) (car rest) '()))
              (out-type (let ((t (hydra_graph_term_coder-type output)))
                          (if (or (not t) (null? t)) (list 'unit '()) t)))
@@ -96,8 +96,8 @@
              (sig (hydra_scoping_type_scheme_to_term_signature ts)))
         (make-hydra_packaging_primitive_definition pname sig (list 'nothing) #t #t (list 'nothing))))
 
-    ;; Convert an alist of (varname . TypeVariableMetadata) into the wrapped
-    ;; Option[Map[Name, TypeVariableMetadata]] shape that TypeScheme expects.
+    ;; Convert an alist of (varname . TypeVariableConstraints) into the wrapped
+    ;; Option[Map[Name, TypeVariableConstraints]] shape that TypeScheme expects.
     ;; Returns (nothing) for no constraints or (just <map>).
     (define (alist->maybe-constraints alist)
       (if (or (not alist) (null? alist))

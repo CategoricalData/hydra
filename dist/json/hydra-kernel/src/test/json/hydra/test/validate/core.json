@@ -2,9 +2,7 @@
   "definitions": [
     {
       "term": {
-        "name": "hydra.test.validate.core.allTests",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Test cases for core term and type validation"}}}],
             "body": {
@@ -25,12 +23,12 @@
                   {
                     "name": "cases",
                     "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}],
-                "typeName": "hydra.testing.TestGroup"}}}}}},
+                "typeName": "hydra.testing.TestGroup"}}}},
+        "name": "hydra.test.validate.core.allTests",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.test.validate.core.duplicateBindingsTests",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "record": {
             "fields": [
               {"name": "name", "term": {"literal": {"string": "duplicate bindings"}}},
@@ -1316,12 +1314,12 @@
                           {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
-            "typeName": "hydra.testing.TestGroup"}}}},
+            "typeName": "hydra.testing.TestGroup"}},
+        "name": "hydra.test.validate.core.duplicateBindingsTests",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.test.validate.core.duplicateFieldsTests",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "record": {
             "fields": [
               {"name": "name", "term": {"literal": {"string": "duplicate fields"}}},
@@ -2076,12 +2074,12 @@
                           {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
-            "typeName": "hydra.testing.TestGroup"}}}},
+            "typeName": "hydra.testing.TestGroup"}},
+        "name": "hydra.test.validate.core.duplicateFieldsTests",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.test.validate.core.emptyLetBindingsTests",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "record": {
             "fields": [
               {"name": "name", "term": {"literal": {"string": "empty let bindings"}}},
@@ -2343,12 +2341,12 @@
                           {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
-            "typeName": "hydra.testing.TestGroup"}}}},
+            "typeName": "hydra.testing.TestGroup"}},
+        "name": "hydra.test.validate.core.emptyLetBindingsTests",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.test.validate.core.identityApplicationTests",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "record": {
             "fields": [
               {"name": "name", "term": {"literal": {"string": "identity application"}}},
@@ -2637,12 +2635,12 @@
                           {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
-            "typeName": "hydra.testing.TestGroup"}}}},
+            "typeName": "hydra.testing.TestGroup"}},
+        "name": "hydra.test.validate.core.identityApplicationTests",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.test.validate.core.profileBehaviourTests",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "record": {
             "fields": [
               {"name": "name", "term": {"literal": {"string": "profile-aware behaviour"}}},
@@ -4108,12 +4106,12 @@
                           {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
-            "typeName": "hydra.testing.TestGroup"}}}},
+            "typeName": "hydra.testing.TestGroup"}},
+        "name": "hydra.test.validate.core.profileBehaviourTests",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.test.validate.core.variableShadowingTests",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "record": {
             "fields": [
               {"name": "name", "term": {"literal": {"string": "variable shadowing"}}},
@@ -4481,7 +4479,9 @@
                           {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
-            "typeName": "hydra.testing.TestGroup"}}}}],
+            "typeName": "hydra.testing.TestGroup"}},
+        "name": "hydra.test.validate.core.variableShadowingTests",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []}}}],
   "dependencies": [
     {"module": "hydra.validate.core"},
     {"module": "hydra.show.error.core"},

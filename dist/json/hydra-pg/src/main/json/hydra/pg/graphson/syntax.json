@@ -2,59 +2,52 @@
   "definitions": [
     {
       "type": {
-        "name": "hydra.pg.graphson.syntax.BigDecimalValue",
-        "typeScheme": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
+        "body": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []},
+        "name": "hydra.pg.graphson.syntax.BigDecimalValue"}},
     {
       "type": {
-        "name": "hydra.pg.graphson.syntax.CompositeTypedValue",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "type", "type": {"variable": "hydra.pg.graphson.syntax.TypeName"}},
               {"name": "fields", "type": {"variable": "hydra.pg.graphson.syntax.Map"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.pg.graphson.syntax.CompositeTypedValue"}},
+    {
+      "type": {"body": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}, "name": "hydra.pg.graphson.syntax.DateTime"}},
     {
       "type": {
-        "name": "hydra.pg.graphson.syntax.DateTime",
-        "typeScheme": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
-    {
-      "type": {
-        "name": "hydra.pg.graphson.syntax.DoubleValue",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "finite", "type": {"literal": {"float": {"float64": {}}}}},
               {"name": "infinity", "type": {"unit": {}}},
               {"name": "negativeInfinity", "type": {"unit": {}}},
               {"name": "notANumber", "type": {"unit": {}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.pg.graphson.syntax.DoubleValue"}},
+    {
+      "type": {"body": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}, "name": "hydra.pg.graphson.syntax.Duration"}},
+    {
+      "type": {"body": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}, "name": "hydra.pg.graphson.syntax.EdgeLabel"}},
     {
       "type": {
-        "name": "hydra.pg.graphson.syntax.Duration",
-        "typeScheme": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
-    {
-      "type": {
-        "name": "hydra.pg.graphson.syntax.EdgeLabel",
-        "typeScheme": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
-    {
-      "type": {
-        "name": "hydra.pg.graphson.syntax.FloatValue",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "finite", "type": {"literal": {"float": {"float32": {}}}}},
               {"name": "infinity", "type": {"unit": {}}},
               {"name": "negativeInfinity", "type": {"unit": {}}},
               {"name": "notANumber", "type": {"unit": {}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.pg.graphson.syntax.FloatValue"}},
     {
       "type": {
-        "name": "hydra.pg.graphson.syntax.Map",
-        "typeScheme": {"body": {"wrap": {"list": {"variable": "hydra.pg.graphson.syntax.ValuePair"}}}, "variables": []}}},
+        "body": {"body": {"wrap": {"list": {"variable": "hydra.pg.graphson.syntax.ValuePair"}}}, "variables": []},
+        "name": "hydra.pg.graphson.syntax.Map"}},
     {
       "type": {
-        "name": "hydra.pg.graphson.syntax.AdjacentEdge",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "id", "type": {"variable": "hydra.pg.graphson.syntax.Value"}},
@@ -63,32 +56,28 @@
                 "name": "properties",
                 "type": {
                   "map": {"keys": {"variable": "hydra.pg.graphson.syntax.PropertyKey"}, "values": {"variable": "hydra.pg.graphson.syntax.Value"}}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.pg.graphson.syntax.AdjacentEdge"}},
     {
       "type": {
-        "name": "hydra.pg.graphson.syntax.PrimitiveTypedValue",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "type", "type": {"variable": "hydra.pg.graphson.syntax.TypeName"}},
               {"name": "value", "type": {"literal": {"string": {}}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.pg.graphson.syntax.PrimitiveTypedValue"}},
     {
       "type": {
-        "name": "hydra.pg.graphson.syntax.PropertyKey",
-        "typeScheme": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
+        "body": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []},
+        "name": "hydra.pg.graphson.syntax.PropertyKey"}},
+    {
+      "type": {"body": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}, "name": "hydra.pg.graphson.syntax.TypeName"}},
+    {
+      "type": {"body": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}, "name": "hydra.pg.graphson.syntax.Uuid"}},
     {
       "type": {
-        "name": "hydra.pg.graphson.syntax.TypeName",
-        "typeScheme": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
-    {
-      "type": {
-        "name": "hydra.pg.graphson.syntax.Uuid",
-        "typeScheme": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
-    {
-      "type": {
-        "name": "hydra.pg.graphson.syntax.Value",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "bigDecimal", "type": {"variable": "hydra.pg.graphson.syntax.BigDecimalValue"}},
@@ -112,20 +101,20 @@
               {"name": "short", "type": {"literal": {"integer": {"int16": {}}}}},
               {"name": "string", "type": {"literal": {"string": {}}}},
               {"name": "uuid", "type": {"variable": "hydra.pg.graphson.syntax.Uuid"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.pg.graphson.syntax.Value"}},
     {
       "type": {
-        "name": "hydra.pg.graphson.syntax.ValuePair",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "first", "type": {"variable": "hydra.pg.graphson.syntax.Value"}},
               {"name": "second", "type": {"variable": "hydra.pg.graphson.syntax.Value"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.pg.graphson.syntax.ValuePair"}},
     {
       "type": {
-        "name": "hydra.pg.graphson.syntax.Vertex",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "id", "type": {"variable": "hydra.pg.graphson.syntax.Value"}},
@@ -148,20 +137,21 @@
                   "map": {
                     "keys": {"variable": "hydra.pg.graphson.syntax.PropertyKey"},
                     "values": {"list": {"variable": "hydra.pg.graphson.syntax.VertexPropertyValue"}}}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.pg.graphson.syntax.Vertex"}},
     {
       "type": {
-        "name": "hydra.pg.graphson.syntax.VertexLabel",
-        "typeScheme": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
+        "body": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []},
+        "name": "hydra.pg.graphson.syntax.VertexLabel"}},
     {
       "type": {
-        "name": "hydra.pg.graphson.syntax.VertexPropertyValue",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "id", "type": {"maybe": {"variable": "hydra.pg.graphson.syntax.Value"}}},
               {"name": "value", "type": {"variable": "hydra.pg.graphson.syntax.Value"}}]},
-          "variables": []}}}],
+          "variables": []},
+        "name": "hydra.pg.graphson.syntax.VertexPropertyValue"}}],
   "dependencies": [{"module": "hydra.core"}],
   "metadata": {
     "comments": [],

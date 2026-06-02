@@ -2,8 +2,7 @@
   "definitions": [
     {
       "type": {
-        "name": "hydra.pg.model.AdjacentEdge",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [
@@ -39,11 +38,11 @@
                             "annotation": [{"key": "description", "value": {"literal": {"string": "A key/value map of edge properties"}}}],
                             "body": {"map": {"keys": {"variable": "hydra.pg.model.PropertyKey"}, "values": {"variable": "v"}}}}}}]},
                   "parameter": "v"}}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.pg.model.AdjacentEdge"}},
     {
       "type": {
-        "name": "hydra.pg.model.Direction",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "The direction of an edge or edge pattern"}}}],
@@ -53,11 +52,11 @@
                   {"name": "in", "type": {"unit": {}}},
                   {"name": "both", "type": {"unit": {}}},
                   {"name": "undirected", "type": {"unit": {}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.pg.model.Direction"}},
     {
       "type": {
-        "name": "hydra.pg.model.Edge",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "An edge"}}}],
@@ -96,20 +95,20 @@
                             "annotation": [{"key": "description", "value": {"literal": {"string": "A key/value map of edge properties"}}}],
                             "body": {"map": {"keys": {"variable": "hydra.pg.model.PropertyKey"}, "values": {"variable": "v"}}}}}}]},
                   "parameter": "v"}}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.pg.model.Edge"}},
     {
       "type": {
-        "name": "hydra.pg.model.EdgeLabel",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "The label of an edge"}}}],
               "body": {"wrap": {"literal": {"string": {}}}}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.pg.model.EdgeLabel"}},
     {
       "type": {
-        "name": "hydra.pg.model.EdgeType",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "The type of an edge"}}}],
@@ -159,11 +158,11 @@
                                     "string": "A list of property types. The types are ordered for the sake of applications in which property order is significant."}}}],
                             "body": {"list": {"application": {"argument": {"variable": "t"}, "function": {"variable": "hydra.pg.model.PropertyType"}}}}}}}]},
                   "parameter": "t"}}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.pg.model.EdgeType"}},
     {
       "type": {
-        "name": "hydra.pg.model.Element",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "Either a vertex or an edge"}}}],
@@ -178,20 +177,20 @@
                         "name": "edge",
                         "type": {"application": {"argument": {"variable": "v"}, "function": {"variable": "hydra.pg.model.Edge"}}}}]},
                   "parameter": "v"}}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.pg.model.Element"}},
     {
       "type": {
-        "name": "hydra.pg.model.ElementKind",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "The kind of an element: vertex or edge"}}}],
               "body": {"union": [{"name": "vertex", "type": {"unit": {}}}, {"name": "edge", "type": {"unit": {}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.pg.model.ElementKind"}},
     {
       "type": {
-        "name": "hydra.pg.model.ElementTree",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "An element together with its dependencies in some context"}}}],
@@ -206,11 +205,11 @@
                         "name": "dependencies",
                         "type": {"list": {"application": {"argument": {"variable": "v"}, "function": {"variable": "hydra.pg.model.ElementTree"}}}}}]},
                   "parameter": "v"}}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.pg.model.ElementTree"}},
     {
       "type": {
-        "name": "hydra.pg.model.ElementType",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "The type of a vertex or edge"}}}],
@@ -225,11 +224,11 @@
                         "name": "edge",
                         "type": {"application": {"argument": {"variable": "t"}, "function": {"variable": "hydra.pg.model.EdgeType"}}}}]},
                   "parameter": "t"}}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.pg.model.ElementType"}},
     {
       "type": {
-        "name": "hydra.pg.model.ElementTypeTree",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [
@@ -247,11 +246,11 @@
                         "name": "dependencies",
                         "type": {"list": {"application": {"argument": {"variable": "t"}, "function": {"variable": "hydra.pg.model.ElementTypeTree"}}}}}]},
                   "parameter": "t"}}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.pg.model.ElementTypeTree"}},
     {
       "type": {
-        "name": "hydra.pg.model.Graph",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A graph; a self-contained collection of vertices and edges"}}}],
@@ -272,11 +271,11 @@
                             "keys": {"variable": "v"},
                             "values": {"application": {"argument": {"variable": "v"}, "function": {"variable": "hydra.pg.model.Edge"}}}}}}]},
                   "parameter": "v"}}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.pg.model.Graph"}},
     {
       "type": {
-        "name": "hydra.pg.model.GraphSchema",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [
@@ -313,11 +312,11 @@
                                 "keys": {"variable": "hydra.pg.model.EdgeLabel"},
                                 "values": {"application": {"argument": {"variable": "t"}, "function": {"variable": "hydra.pg.model.EdgeType"}}}}}}}}]},
                   "parameter": "t"}}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.pg.model.GraphSchema"}},
     {
       "type": {
-        "name": "hydra.pg.model.Label",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "Either a vertex or edge label"}}}],
@@ -325,11 +324,11 @@
                 "union": [
                   {"name": "vertex", "type": {"variable": "hydra.pg.model.VertexLabel"}},
                   {"name": "edge", "type": {"variable": "hydra.pg.model.EdgeLabel"}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.pg.model.Label"}},
     {
       "type": {
-        "name": "hydra.pg.model.LazyGraph",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [
@@ -349,11 +348,11 @@
                         "name": "edges",
                         "type": {"list": {"application": {"argument": {"variable": "v"}, "function": {"variable": "hydra.pg.model.Edge"}}}}}]},
                   "parameter": "v"}}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.pg.model.LazyGraph"}},
     {
       "type": {
-        "name": "hydra.pg.model.Property",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A key/value property"}}}],
@@ -374,20 +373,20 @@
                             "annotation": [{"key": "description", "value": {"literal": {"string": "The value of the property"}}}],
                             "body": {"variable": "v"}}}}]},
                   "parameter": "v"}}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.pg.model.Property"}},
     {
       "type": {
-        "name": "hydra.pg.model.PropertyKey",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A property key"}}}],
               "body": {"wrap": {"literal": {"string": {}}}}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.pg.model.PropertyKey"}},
     {
       "type": {
-        "name": "hydra.pg.model.PropertyType",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "The type of a property"}}}],
@@ -417,11 +416,11 @@
                                 "value": {"literal": {"string": "Whether the property is required; values may be omitted from a property map otherwise"}}}],
                             "body": {"literal": {"boolean": {}}}}}}]},
                   "parameter": "t"}}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.pg.model.PropertyType"}},
     {
       "type": {
-        "name": "hydra.pg.model.Vertex",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A vertex"}}}],
@@ -448,11 +447,11 @@
                             "annotation": [{"key": "description", "value": {"literal": {"string": "A key/value map of vertex properties"}}}],
                             "body": {"map": {"keys": {"variable": "hydra.pg.model.PropertyKey"}, "values": {"variable": "v"}}}}}}]},
                   "parameter": "v"}}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.pg.model.Vertex"}},
     {
       "type": {
-        "name": "hydra.pg.model.VertexLabel",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [
@@ -460,11 +459,11 @@
                   "key": "description",
                   "value": {"literal": {"string": "The label of a vertex. The default (null) vertex is represented by the empty string"}}}],
               "body": {"wrap": {"literal": {"string": {}}}}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.pg.model.VertexLabel"}},
     {
       "type": {
-        "name": "hydra.pg.model.VertexType",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "The type of a vertex"}}}],
@@ -496,11 +495,11 @@
                                     "string": "A list of property types. The types are ordered for the sake of applications in which property order is significant."}}}],
                             "body": {"list": {"application": {"argument": {"variable": "t"}, "function": {"variable": "hydra.pg.model.PropertyType"}}}}}}}]},
                   "parameter": "t"}}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.pg.model.VertexType"}},
     {
       "type": {
-        "name": "hydra.pg.model.VertexWithAdjacentEdges",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [
@@ -536,7 +535,8 @@
                                 "value": {"literal": {"string": "An adjacency list of edges in which the focus vertex is the tail (out-vertex) of the edge"}}}],
                             "body": {"list": {"application": {"argument": {"variable": "v"}, "function": {"variable": "hydra.pg.model.AdjacentEdge"}}}}}}}]},
                   "parameter": "v"}}}},
-          "variables": []}}}],
+          "variables": []},
+        "name": "hydra.pg.model.VertexWithAdjacentEdges"}}],
   "dependencies": [{"module": "hydra.core"}],
   "metadata": {
     "comments": [],

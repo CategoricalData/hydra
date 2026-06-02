@@ -2,9 +2,7 @@
   "definitions": [
     {
       "term": {
-        "name": "hydra.scala.serde.dotOp",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.ast.Op"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "The dot operator for member access"}}}],
             "body": {
@@ -25,12 +23,12 @@
                   {
                     "name": "associativity",
                     "term": {"inject": {"field": {"name": "left", "term": {"unit": {}}}, "typeName": "hydra.ast.Associativity"}}}],
-                "typeName": "hydra.ast.Op"}}}}}},
+                "typeName": "hydra.ast.Op"}}}},
+        "name": "hydra.scala.serde.dotOp",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.ast.Op"}}, "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.scala.serde.functionArrowOp",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.ast.Op"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "The function arrow operator (=>)"}}}],
             "body": {
@@ -39,12 +37,12 @@
                 "function": {
                   "application": {
                     "argument": {"application": {"argument": {"literal": {"integer": {"int32": 1}}}, "function": {"variable": "hydra.lib.math.negate"}}},
-                    "function": {"application": {"argument": {"literal": {"string": "=>"}}, "function": {"variable": "hydra.serialization.op"}}}}}}}}}}},
+                    "function": {"application": {"argument": {"literal": {"string": "=>"}}, "function": {"variable": "hydra.serialization.op"}}}}}}}}},
+        "name": "hydra.scala.serde.functionArrowOp",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.ast.Op"}}, "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.scala.serde.matchOp",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.ast.Op"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "The match operator"}}}],
             "body": {
@@ -67,18 +65,12 @@
                   {
                     "name": "associativity",
                     "term": {"inject": {"field": {"name": "none", "term": {"unit": {}}}, "typeName": "hydra.ast.Associativity"}}}],
-                "typeName": "hydra.ast.Op"}}}}}},
+                "typeName": "hydra.ast.Op"}}}},
+        "name": "hydra.scala.serde.matchOp",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.ast.Op"}}, "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.scala.serde.scalaFloatLiteralText",
-        "signature": {
-          "parameters": [
-            {"isLazy": false, "name": "arg0", "type": {"literal": {"string": {}}}},
-            {"isLazy": false, "name": "arg1", "type": {"literal": {"string": {}}}},
-            {"isLazy": false, "name": "arg2", "type": {"literal": {"string": {}}}}],
-          "result": {"type": {"literal": {"string": {}}}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "lambda": {
             "body": {
               "lambda": {
@@ -147,15 +139,18 @@
                 "domain": {"literal": {"string": {}}},
                 "parameter": "suffix"}},
             "domain": {"literal": {"string": {}}},
-            "parameter": "prefix"}}}},
+            "parameter": "prefix"}},
+        "name": "hydra.scala.serde.scalaFloatLiteralText",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"literal": {"string": {}}}},
+            {"isLazy": false, "name": "arg1", "type": {"literal": {"string": {}}}},
+            {"isLazy": false, "name": "arg2", "type": {"literal": {"string": {}}}}],
+          "result": {"type": {"literal": {"string": {}}}},
+          "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.scala.serde.caseToExpr",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.scala.syntax.Case"}}],
-          "result": {"type": {"variable": "hydra.ast.Expr"}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a case clause to an expression"}}}],
             "body": {
@@ -183,15 +178,15 @@
                             {"application": {"argument": {"variable": "term"}, "function": {"variable": "hydra.scala.serde.termToExpr"}}}]},
                         "function": {"variable": "hydra.serialization.spaceSep"}}}}},
                 "domain": {"variable": "hydra.scala.syntax.Case"},
-                "parameter": "c"}}}}}},
+                "parameter": "c"}}}},
+        "name": "hydra.scala.serde.caseToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.scala.syntax.Case"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.scala.serde.dataFunctionToExpr",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.scala.syntax.FunctionData"}}],
-          "result": {"type": {"variable": "hydra.ast.Expr"}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a function-data lambda to an expression"}}}],
             "body": {
@@ -277,15 +272,15 @@
                                         "function": {"typeApplication": {"body": {"variable": "hydra.lib.equality.gt"}, "type": {"literal": {"integer": {"int32": {}}}}}}}}}},
                                 "function": {"typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"variable": "hydra.ast.Expr"}}}}}}}}}}},
                 "domain": {"variable": "hydra.scala.syntax.FunctionData"},
-                "parameter": "f"}}}}}},
+                "parameter": "f"}}}},
+        "name": "hydra.scala.serde.dataFunctionToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.scala.syntax.FunctionData"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.scala.serde.dataNameToExpr",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.scala.syntax.NameData"}}],
-          "result": {"type": {"variable": "hydra.ast.Expr"}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a data name to an expression"}}}],
             "body": {
@@ -301,15 +296,15 @@
                         "function": {"unwrap": "hydra.scala.syntax.PredefString"}}},
                     "function": {"variable": "hydra.serialization.cst"}}},
                 "domain": {"variable": "hydra.scala.syntax.NameData"},
-                "parameter": "dn"}}}}}},
+                "parameter": "dn"}}}},
+        "name": "hydra.scala.serde.dataNameToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.scala.syntax.NameData"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.scala.serde.dataParamToExpr",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.scala.syntax.ParamData"}}],
-          "result": {"type": {"variable": "hydra.ast.Expr"}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a data parameter to an expression"}}}],
             "body": {
@@ -364,15 +359,15 @@
                             "function": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.cat"}, "type": {"variable": "hydra.ast.Expr"}}}}},
                         "function": {"variable": "hydra.serialization.noSep"}}}}},
                 "domain": {"variable": "hydra.scala.syntax.ParamData"},
-                "parameter": "dp"}}}}}},
+                "parameter": "dp"}}}},
+        "name": "hydra.scala.serde.dataParamToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.scala.syntax.ParamData"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.scala.serde.dataRefToExpr",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.scala.syntax.RefData"}}],
-          "result": {"type": {"variable": "hydra.ast.Expr"}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a data reference to an expression"}}}],
             "body": {
@@ -384,30 +379,30 @@
                       "cases": {
                         "cases": [
                           {
-                            "name": "name",
-                            "term": {
+                            "handler": {
                               "lambda": {
                                 "body": {"application": {"argument": {"variable": "name"}, "function": {"variable": "hydra.scala.serde.dataNameToExpr"}}},
                                 "domain": {"variable": "hydra.scala.syntax.NameData"},
-                                "parameter": "name"}}},
+                                "parameter": "name"}},
+                            "name": "name"},
                           {
-                            "name": "select",
-                            "term": {
+                            "handler": {
                               "lambda": {
                                 "body": {"application": {"argument": {"variable": "sel"}, "function": {"variable": "hydra.scala.serde.dataSelectToExpr"}}},
                                 "domain": {"variable": "hydra.scala.syntax.SelectData"},
-                                "parameter": "sel"}}}],
+                                "parameter": "sel"}},
+                            "name": "select"}],
                         "typeName": "hydra.scala.syntax.RefData"}}}},
                 "domain": {"variable": "hydra.scala.syntax.RefData"},
-                "parameter": "ref"}}}}}},
+                "parameter": "ref"}}}},
+        "name": "hydra.scala.serde.dataRefToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.scala.syntax.RefData"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.scala.serde.dataSelectToExpr",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.scala.syntax.SelectData"}}],
-          "result": {"type": {"variable": "hydra.ast.Expr"}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a data select to an expression"}}}],
             "body": {
@@ -446,15 +441,15 @@
                             "function": {
                               "application": {"argument": {"variable": "hydra.scala.serde.dotOp"}, "function": {"variable": "hydra.serialization.ifx"}}}}}}}}},
                 "domain": {"variable": "hydra.scala.syntax.SelectData"},
-                "parameter": "sel"}}}}}},
+                "parameter": "sel"}}}},
+        "name": "hydra.scala.serde.dataSelectToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.scala.syntax.SelectData"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.scala.serde.defnToExpr",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.scala.syntax.Defn"}}],
-          "result": {"type": {"variable": "hydra.ast.Expr"}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a definition to an expression"}}}],
             "body": {
@@ -466,8 +461,7 @@
                       "cases": {
                         "cases": [
                           {
-                            "name": "def",
-                            "term": {
+                            "handler": {
                               "lambda": {
                                 "body": {
                                   "let": {
@@ -690,10 +684,10 @@
                                                                     "function": {"typeApplication": {"body": {"variable": "hydra.lib.equality.gt"}, "type": {"literal": {"integer": {"int32": {}}}}}}}}}},
                                                             "function": {"typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"variable": "hydra.ast.Expr"}}}}}}}}}}}}}}}}},
                                 "domain": {"variable": "hydra.scala.syntax.DefDefn"},
-                                "parameter": "dd"}}},
+                                "parameter": "dd"}},
+                            "name": "def"},
                           {
-                            "name": "type",
-                            "term": {
+                            "handler": {
                               "lambda": {
                                 "body": {
                                   "let": {
@@ -776,10 +770,10 @@
                                             "function": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.cat"}, "type": {"variable": "hydra.ast.Expr"}}}}},
                                         "function": {"variable": "hydra.serialization.spaceSep"}}}}},
                                 "domain": {"variable": "hydra.scala.syntax.TypeDefn"},
-                                "parameter": "dt"}}},
+                                "parameter": "dt"}},
+                            "name": "type"},
                           {
-                            "name": "val",
-                            "term": {
+                            "handler": {
                               "lambda": {
                                 "body": {
                                   "let": {
@@ -838,15 +832,15 @@
                                                                       "cases": {
                                                                         "cases": [
                                                                           {
-                                                                            "name": "var",
-                                                                            "term": {
+                                                                            "handler": {
                                                                               "lambda": {
                                                                                 "body": {
                                                                                   "application": {
                                                                                     "argument": {"variable": "pv"},
                                                                                     "function": {"project": {"fieldName": "name", "typeName": "hydra.scala.syntax.VarPat"}}}},
                                                                                 "domain": {"variable": "hydra.scala.syntax.VarPat"},
-                                                                                "parameter": "pv"}}}],
+                                                                                "parameter": "pv"}},
+                                                                            "name": "var"}],
                                                                         "typeName": "hydra.scala.syntax.Pat"}}}},
                                                                 "typeScheme": {"body": {"variable": "hydra.scala.syntax.NameData"}, "variables": []}}],
                                                             "body": {
@@ -925,10 +919,10 @@
                                             {"application": {"argument": {"variable": "rhs"}, "function": {"variable": "hydra.scala.serde.termToExpr"}}}]},
                                         "function": {"variable": "hydra.serialization.spaceSep"}}}}},
                                 "domain": {"variable": "hydra.scala.syntax.ValDefn"},
-                                "parameter": "dv"}}},
+                                "parameter": "dv"}},
+                            "name": "val"},
                           {
-                            "name": "class",
-                            "term": {
+                            "handler": {
                               "lambda": {
                                 "body": {
                                   "let": {
@@ -1079,10 +1073,10 @@
                                             "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.concat"}, "type": {"variable": "hydra.ast.Expr"}}}}},
                                         "function": {"variable": "hydra.serialization.spaceSep"}}}}},
                                 "domain": {"variable": "hydra.scala.syntax.ClassDefn"},
-                                "parameter": "dc"}}},
+                                "parameter": "dc"}},
+                            "name": "class"},
                           {
-                            "name": "enum",
-                            "term": {
+                            "handler": {
                               "lambda": {
                                 "body": {
                                   "let": {
@@ -1200,10 +1194,10 @@
                                             "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.concat"}, "type": {"variable": "hydra.ast.Expr"}}}}},
                                         "function": {"variable": "hydra.serialization.newlineSep"}}}}},
                                 "domain": {"variable": "hydra.scala.syntax.EnumDefn"},
-                                "parameter": "de"}}},
+                                "parameter": "de"}},
+                            "name": "enum"},
                           {
-                            "name": "enumCase",
-                            "term": {
+                            "handler": {
                               "lambda": {
                                 "body": {
                                   "let": {
@@ -1323,18 +1317,19 @@
                                             {"variable": "extendsClause"}]},
                                         "function": {"variable": "hydra.serialization.spaceSep"}}}}},
                                 "domain": {"variable": "hydra.scala.syntax.EnumCaseDefn"},
-                                "parameter": "dec"}}}],
+                                "parameter": "dec"}},
+                            "name": "enumCase"}],
                         "typeName": "hydra.scala.syntax.Defn"}}}},
                 "domain": {"variable": "hydra.scala.syntax.Defn"},
-                "parameter": "def"}}}}}},
+                "parameter": "def"}}}},
+        "name": "hydra.scala.serde.defnToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.scala.syntax.Defn"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.scala.serde.importExportStatToExpr",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.scala.syntax.ImportExportStat"}}],
-          "result": {"type": {"variable": "hydra.ast.Expr"}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert an import/export statement to an expression"}}}],
             "body": {
@@ -1346,8 +1341,7 @@
                       "cases": {
                         "cases": [
                           {
-                            "name": "import",
-                            "term": {
+                            "handler": {
                               "lambda": {
                                 "body": {
                                   "let": {
@@ -1373,18 +1367,19 @@
                                                     "type": {"variable": "hydra.ast.Expr"}}}}}}},
                                         "function": {"variable": "hydra.serialization.newlineSep"}}}}},
                                 "domain": {"variable": "hydra.scala.syntax.Import"},
-                                "parameter": "imp"}}}],
+                                "parameter": "imp"}},
+                            "name": "import"}],
                         "typeName": "hydra.scala.syntax.ImportExportStat"}}}},
                 "domain": {"variable": "hydra.scala.syntax.ImportExportStat"},
-                "parameter": "ie"}}}}}},
+                "parameter": "ie"}}}},
+        "name": "hydra.scala.serde.importExportStatToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.scala.syntax.ImportExportStat"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.scala.serde.importerToExpr",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.scala.syntax.Importer"}}],
-          "result": {"type": {"variable": "hydra.ast.Expr"}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert an importer to an expression"}}}],
             "body": {
@@ -1415,8 +1410,7 @@
                               "cases": {
                                 "cases": [
                                   {
-                                    "name": "name",
-                                    "term": {
+                                    "handler": {
                                       "lambda": {
                                         "body": {
                                           "application": {
@@ -1426,7 +1420,8 @@
                                                 "function": {"project": {"fieldName": "value", "typeName": "hydra.scala.syntax.NameData"}}}},
                                             "function": {"unwrap": "hydra.scala.syntax.PredefString"}}},
                                         "domain": {"variable": "hydra.scala.syntax.NameData"},
-                                        "parameter": "dn"}}}],
+                                        "parameter": "dn"}},
+                                    "name": "name"}],
                                 "typeName": "hydra.scala.syntax.RefData"}}}},
                         "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}},
                       {
@@ -1456,15 +1451,14 @@
                                                               "cases": {
                                                                 "cases": [
                                                                   {
-                                                                    "name": "wildcard",
-                                                                    "term": {
+                                                                    "handler": {
                                                                       "lambda": {
                                                                         "body": {"application": {"argument": {"literal": {"string": "*"}}, "function": {"variable": "hydra.serialization.cst"}}},
                                                                         "domain": {"unit": {}},
-                                                                        "parameter": "_"}}},
+                                                                        "parameter": "_"}},
+                                                                    "name": "wildcard"},
                                                                   {
-                                                                    "name": "name",
-                                                                    "term": {
+                                                                    "handler": {
                                                                       "lambda": {
                                                                         "body": {
                                                                           "application": {
@@ -1478,12 +1472,13 @@
                                                                                   "cases": {
                                                                                     "cases": [
                                                                                       {
-                                                                                        "name": "value",
-                                                                                        "term": {"lambda": {"body": {"variable": "s"}, "domain": {"literal": {"string": {}}}, "parameter": "s"}}}],
+                                                                                        "handler": {"lambda": {"body": {"variable": "s"}, "domain": {"literal": {"string": {}}}, "parameter": "s"}},
+                                                                                        "name": "value"}],
                                                                                     "typeName": "hydra.scala.syntax.Name"}}}},
                                                                             "function": {"variable": "hydra.serialization.cst"}}},
                                                                         "domain": {"variable": "hydra.scala.syntax.NameImportee"},
-                                                                        "parameter": "in"}}}],
+                                                                        "parameter": "in"}},
+                                                                    "name": "name"}],
                                                                 "typeName": "hydra.scala.syntax.Importee"}}}},
                                                         "domain": {"variable": "hydra.scala.syntax.Importee"},
                                                         "parameter": "it"}},
@@ -1526,15 +1521,14 @@
                                                                   "cases": {
                                                                     "cases": [
                                                                       {
-                                                                        "name": "wildcard",
-                                                                        "term": {
+                                                                        "handler": {
                                                                           "lambda": {
                                                                             "body": {"application": {"argument": {"literal": {"string": "*"}}, "function": {"variable": "hydra.serialization.cst"}}},
                                                                             "domain": {"unit": {}},
-                                                                            "parameter": "_"}}},
+                                                                            "parameter": "_"}},
+                                                                        "name": "wildcard"},
                                                                       {
-                                                                        "name": "name",
-                                                                        "term": {
+                                                                        "handler": {
                                                                           "lambda": {
                                                                             "body": {
                                                                               "application": {
@@ -1548,12 +1542,13 @@
                                                                                       "cases": {
                                                                                         "cases": [
                                                                                           {
-                                                                                            "name": "value",
-                                                                                            "term": {"lambda": {"body": {"variable": "s"}, "domain": {"literal": {"string": {}}}, "parameter": "s"}}}],
+                                                                                            "handler": {"lambda": {"body": {"variable": "s"}, "domain": {"literal": {"string": {}}}, "parameter": "s"}},
+                                                                                            "name": "value"}],
                                                                                         "typeName": "hydra.scala.syntax.Name"}}}},
                                                                                 "function": {"variable": "hydra.serialization.cst"}}},
                                                                             "domain": {"variable": "hydra.scala.syntax.NameImportee"},
-                                                                            "parameter": "in"}}}],
+                                                                            "parameter": "in"}},
+                                                                        "name": "name"}],
                                                                     "typeName": "hydra.scala.syntax.Importee"}}}}]},
                                                         "function": {"variable": "hydra.serialization.noSep"}}},
                                                     "domain": {"variable": "hydra.scala.syntax.Importee"},
@@ -1605,15 +1600,15 @@
                                 "function": {"variable": "hydra.serialization.noSep"}}}]},
                         "function": {"variable": "hydra.serialization.spaceSep"}}}}},
                 "domain": {"variable": "hydra.scala.syntax.Importer"},
-                "parameter": "imp"}}}}}},
+                "parameter": "imp"}}}},
+        "name": "hydra.scala.serde.importerToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.scala.syntax.Importer"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.scala.serde.initToExpr",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.scala.syntax.Init"}}],
-          "result": {"type": {"variable": "hydra.ast.Expr"}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert an init to an expression"}}}],
             "body": {
@@ -1624,15 +1619,15 @@
                       "application": {"argument": {"variable": "init"}, "function": {"project": {"fieldName": "tpe", "typeName": "hydra.scala.syntax.Init"}}}},
                     "function": {"variable": "hydra.scala.serde.typeToExpr"}}},
                 "domain": {"variable": "hydra.scala.syntax.Init"},
-                "parameter": "init"}}}}}},
+                "parameter": "init"}}}},
+        "name": "hydra.scala.serde.initToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.scala.syntax.Init"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.scala.serde.litToExpr",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.scala.syntax.Lit"}}],
-          "result": {"type": {"variable": "hydra.ast.Expr"}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a literal to an expression"}}}],
             "body": {
@@ -1644,8 +1639,7 @@
                       "cases": {
                         "cases": [
                           {
-                            "name": "boolean",
-                            "term": {
+                            "handler": {
                               "lambda": {
                                 "body": {
                                   "application": {
@@ -1661,10 +1655,10 @@
                                                 "function": {"typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"literal": {"string": {}}}}}}}}}}},
                                     "function": {"variable": "hydra.serialization.cst"}}},
                                 "domain": {"literal": {"boolean": {}}},
-                                "parameter": "b"}}},
+                                "parameter": "b"}},
+                            "name": "boolean"},
                           {
-                            "name": "byte",
-                            "term": {
+                            "handler": {
                               "lambda": {
                                 "body": {
                                   "application": {
@@ -1677,10 +1671,10 @@
                                             "function": {"variable": "hydra.lib.strings.cat2"}}}}},
                                     "function": {"variable": "hydra.serialization.cst"}}},
                                 "domain": {"literal": {"integer": {"int8": {}}}},
-                                "parameter": "i"}}},
+                                "parameter": "i"}},
+                            "name": "byte"},
                           {
-                            "name": "short",
-                            "term": {
+                            "handler": {
                               "lambda": {
                                 "body": {
                                   "application": {
@@ -1693,20 +1687,20 @@
                                             "function": {"variable": "hydra.lib.strings.cat2"}}}}},
                                     "function": {"variable": "hydra.serialization.cst"}}},
                                 "domain": {"literal": {"integer": {"int16": {}}}},
-                                "parameter": "i"}}},
+                                "parameter": "i"}},
+                            "name": "short"},
                           {
-                            "name": "int",
-                            "term": {
+                            "handler": {
                               "lambda": {
                                 "body": {
                                   "application": {
                                     "argument": {"application": {"argument": {"variable": "i"}, "function": {"variable": "hydra.lib.literals.showInt32"}}},
                                     "function": {"variable": "hydra.serialization.cst"}}},
                                 "domain": {"literal": {"integer": {"int32": {}}}},
-                                "parameter": "i"}}},
+                                "parameter": "i"}},
+                            "name": "int"},
                           {
-                            "name": "long",
-                            "term": {
+                            "handler": {
                               "lambda": {
                                 "body": {
                                   "application": {
@@ -1719,10 +1713,10 @@
                                             "function": {"variable": "hydra.lib.strings.cat2"}}}}},
                                     "function": {"variable": "hydra.serialization.cst"}}},
                                 "domain": {"literal": {"integer": {"int64": {}}}},
-                                "parameter": "i"}}},
+                                "parameter": "i"}},
+                            "name": "long"},
                           {
-                            "name": "float",
-                            "term": {
+                            "handler": {
                               "lambda": {
                                 "body": {
                                   "application": {
@@ -1736,10 +1730,10 @@
                                               "application": {"argument": {"literal": {"string": "Float"}}, "function": {"variable": "hydra.scala.serde.scalaFloatLiteralText"}}}}}}},
                                     "function": {"variable": "hydra.serialization.cst"}}},
                                 "domain": {"literal": {"float": {"float32": {}}}},
-                                "parameter": "f"}}},
+                                "parameter": "f"}},
+                            "name": "float"},
                           {
-                            "name": "double",
-                            "term": {
+                            "handler": {
                               "lambda": {
                                 "body": {
                                   "application": {
@@ -1753,17 +1747,17 @@
                                               "application": {"argument": {"literal": {"string": "Double"}}, "function": {"variable": "hydra.scala.serde.scalaFloatLiteralText"}}}}}}},
                                     "function": {"variable": "hydra.serialization.cst"}}},
                                 "domain": {"literal": {"float": {"float64": {}}}},
-                                "parameter": "f"}}},
+                                "parameter": "f"}},
+                            "name": "double"},
                           {
-                            "name": "unit",
-                            "term": {
+                            "handler": {
                               "lambda": {
                                 "body": {"application": {"argument": {"literal": {"string": "()"}}, "function": {"variable": "hydra.serialization.cst"}}},
                                 "domain": {"unit": {}},
-                                "parameter": "_"}}},
+                                "parameter": "_"}},
+                            "name": "unit"},
                           {
-                            "name": "string",
-                            "term": {
+                            "handler": {
                               "lambda": {
                                 "body": {
                                   "application": {
@@ -1779,10 +1773,10 @@
                                         "function": {"application": {"argument": {"literal": {"string": "\""}}, "function": {"variable": "hydra.lib.strings.cat2"}}}}},
                                     "function": {"variable": "hydra.serialization.cst"}}},
                                 "domain": {"literal": {"string": {}}},
-                                "parameter": "s"}}},
+                                "parameter": "s"}},
+                            "name": "string"},
                           {
-                            "name": "bytes",
-                            "term": {
+                            "handler": {
                               "lambda": {
                                 "body": {
                                   "application": {
@@ -1821,20 +1815,21 @@
                                           "application": {"argument": {"literal": {"string": "Array[Byte]("}}, "function": {"variable": "hydra.lib.strings.cat2"}}}}},
                                     "function": {"variable": "hydra.serialization.cst"}}},
                                 "domain": {"list": {"literal": {"integer": {"int32": {}}}}},
-                                "parameter": "bs"}}}],
+                                "parameter": "bs"}},
+                            "name": "bytes"}],
                         "default": {
                           "application": {"argument": {"literal": {"string": "TODO:literal"}}, "function": {"variable": "hydra.serialization.cst"}}},
                         "typeName": "hydra.scala.syntax.Lit"}}}},
                 "domain": {"variable": "hydra.scala.syntax.Lit"},
-                "parameter": "lit"}}}}}},
+                "parameter": "lit"}}}},
+        "name": "hydra.scala.serde.litToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.scala.syntax.Lit"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.scala.serde.modToExpr",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.scala.syntax.Mod"}}],
-          "result": {"type": {"variable": "hydra.ast.Expr"}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a modifier to an expression"}}}],
             "body": {
@@ -1846,79 +1841,79 @@
                       "cases": {
                         "cases": [
                           {
-                            "name": "case",
-                            "term": {
+                            "handler": {
                               "lambda": {
                                 "body": {"application": {"argument": {"literal": {"string": "case"}}, "function": {"variable": "hydra.serialization.cst"}}},
                                 "domain": {"unit": {}},
-                                "parameter": "_"}}},
+                                "parameter": "_"}},
+                            "name": "case"},
                           {
-                            "name": "sealed",
-                            "term": {
+                            "handler": {
                               "lambda": {
                                 "body": {"application": {"argument": {"literal": {"string": "sealed"}}, "function": {"variable": "hydra.serialization.cst"}}},
                                 "domain": {"unit": {}},
-                                "parameter": "_"}}},
+                                "parameter": "_"}},
+                            "name": "sealed"},
                           {
-                            "name": "abstract",
-                            "term": {
+                            "handler": {
                               "lambda": {
                                 "body": {"application": {"argument": {"literal": {"string": "abstract"}}, "function": {"variable": "hydra.serialization.cst"}}},
                                 "domain": {"unit": {}},
-                                "parameter": "_"}}},
+                                "parameter": "_"}},
+                            "name": "abstract"},
                           {
-                            "name": "final",
-                            "term": {
+                            "handler": {
                               "lambda": {
                                 "body": {"application": {"argument": {"literal": {"string": "final"}}, "function": {"variable": "hydra.serialization.cst"}}},
                                 "domain": {"unit": {}},
-                                "parameter": "_"}}},
+                                "parameter": "_"}},
+                            "name": "final"},
                           {
-                            "name": "override",
-                            "term": {
+                            "handler": {
                               "lambda": {
                                 "body": {"application": {"argument": {"literal": {"string": "override"}}, "function": {"variable": "hydra.serialization.cst"}}},
                                 "domain": {"unit": {}},
-                                "parameter": "_"}}},
+                                "parameter": "_"}},
+                            "name": "override"},
                           {
-                            "name": "implicit",
-                            "term": {
+                            "handler": {
                               "lambda": {
                                 "body": {"application": {"argument": {"literal": {"string": "implicit"}}, "function": {"variable": "hydra.serialization.cst"}}},
                                 "domain": {"unit": {}},
-                                "parameter": "_"}}},
+                                "parameter": "_"}},
+                            "name": "implicit"},
                           {
-                            "name": "lazy",
-                            "term": {
+                            "handler": {
                               "lambda": {
                                 "body": {"application": {"argument": {"literal": {"string": "lazy"}}, "function": {"variable": "hydra.serialization.cst"}}},
                                 "domain": {"unit": {}},
-                                "parameter": "_"}}},
+                                "parameter": "_"}},
+                            "name": "lazy"},
                           {
-                            "name": "private",
-                            "term": {
+                            "handler": {
                               "lambda": {
                                 "body": {"application": {"argument": {"literal": {"string": "private"}}, "function": {"variable": "hydra.serialization.cst"}}},
                                 "domain": {"variable": "hydra.scala.syntax.PrivateMod"},
-                                "parameter": "_"}}},
+                                "parameter": "_"}},
+                            "name": "private"},
                           {
-                            "name": "protected",
-                            "term": {
+                            "handler": {
                               "lambda": {
                                 "body": {"application": {"argument": {"literal": {"string": "protected"}}, "function": {"variable": "hydra.serialization.cst"}}},
                                 "domain": {"variable": "hydra.scala.syntax.ProtectedMod"},
-                                "parameter": "_"}}}],
+                                "parameter": "_"}},
+                            "name": "protected"}],
                         "typeName": "hydra.scala.syntax.Mod"}}}},
                 "domain": {"variable": "hydra.scala.syntax.Mod"},
-                "parameter": "m"}}}}}},
+                "parameter": "m"}}}},
+        "name": "hydra.scala.serde.modToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.scala.syntax.Mod"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.scala.serde.nameToExpr",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.scala.syntax.Name"}}],
-          "result": {"type": {"variable": "hydra.ast.Expr"}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a name to an expression"}}}],
             "body": {
@@ -1930,23 +1925,23 @@
                       "cases": {
                         "cases": [
                           {
-                            "name": "value",
-                            "term": {
+                            "handler": {
                               "lambda": {
                                 "body": {"application": {"argument": {"variable": "s"}, "function": {"variable": "hydra.serialization.cst"}}},
                                 "domain": {"literal": {"string": {}}},
-                                "parameter": "s"}}}],
+                                "parameter": "s"}},
+                            "name": "value"}],
                         "typeName": "hydra.scala.syntax.Name"}}}},
                 "domain": {"variable": "hydra.scala.syntax.Name"},
-                "parameter": "name"}}}}}},
+                "parameter": "name"}}}},
+        "name": "hydra.scala.serde.nameToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.scala.syntax.Name"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.scala.serde.patToExpr",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.scala.syntax.Pat"}}],
-          "result": {"type": {"variable": "hydra.ast.Expr"}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a pattern to an expression"}}}],
             "body": {
@@ -1958,8 +1953,7 @@
                       "cases": {
                         "cases": [
                           {
-                            "name": "extract",
-                            "term": {
+                            "handler": {
                               "lambda": {
                                 "body": {
                                   "let": {
@@ -2010,10 +2004,10 @@
                                                     "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.null"}, "type": {"variable": "hydra.scala.syntax.Pat"}}}}},
                                                 "function": {"typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"variable": "hydra.ast.Expr"}}}}}}}}}}},
                                 "domain": {"variable": "hydra.scala.syntax.ExtractPat"},
-                                "parameter": "pe"}}},
+                                "parameter": "pe"}},
+                            "name": "extract"},
                           {
-                            "name": "var",
-                            "term": {
+                            "handler": {
                               "lambda": {
                                 "body": {
                                   "application": {
@@ -2023,25 +2017,26 @@
                                         "function": {"project": {"fieldName": "name", "typeName": "hydra.scala.syntax.VarPat"}}}},
                                     "function": {"variable": "hydra.scala.serde.dataNameToExpr"}}},
                                 "domain": {"variable": "hydra.scala.syntax.VarPat"},
-                                "parameter": "pv"}}},
+                                "parameter": "pv"}},
+                            "name": "var"},
                           {
-                            "name": "wildcard",
-                            "term": {
+                            "handler": {
                               "lambda": {
                                 "body": {"application": {"argument": {"literal": {"string": "_"}}, "function": {"variable": "hydra.serialization.cst"}}},
                                 "domain": {"unit": {}},
-                                "parameter": "_"}}}],
+                                "parameter": "_"}},
+                            "name": "wildcard"}],
                         "typeName": "hydra.scala.syntax.Pat"}}}},
                 "domain": {"variable": "hydra.scala.syntax.Pat"},
-                "parameter": "pat"}}}}}},
+                "parameter": "pat"}}}},
+        "name": "hydra.scala.serde.patToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.scala.syntax.Pat"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.scala.serde.pkgToExpr",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.scala.syntax.Pkg"}}],
-          "result": {"type": {"variable": "hydra.ast.Expr"}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a package to an expression"}}}],
             "body": {
@@ -2089,15 +2084,15 @@
                             "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.concat"}, "type": {"variable": "hydra.ast.Expr"}}}}},
                         "function": {"variable": "hydra.serialization.doubleNewlineSep"}}}}},
                 "domain": {"variable": "hydra.scala.syntax.Pkg"},
-                "parameter": "pkg"}}}}}},
+                "parameter": "pkg"}}}},
+        "name": "hydra.scala.serde.pkgToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.scala.syntax.Pkg"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.scala.serde.statToExpr",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.scala.syntax.Stat"}}],
-          "result": {"type": {"variable": "hydra.ast.Expr"}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a statement to an expression"}}}],
             "body": {
@@ -2109,37 +2104,37 @@
                       "cases": {
                         "cases": [
                           {
-                            "name": "term",
-                            "term": {
+                            "handler": {
                               "lambda": {
                                 "body": {"application": {"argument": {"variable": "t"}, "function": {"variable": "hydra.scala.serde.termToExpr"}}},
                                 "domain": {"variable": "hydra.scala.syntax.Data"},
-                                "parameter": "t"}}},
+                                "parameter": "t"}},
+                            "name": "term"},
                           {
-                            "name": "defn",
-                            "term": {
+                            "handler": {
                               "lambda": {
                                 "body": {"application": {"argument": {"variable": "def"}, "function": {"variable": "hydra.scala.serde.defnToExpr"}}},
                                 "domain": {"variable": "hydra.scala.syntax.Defn"},
-                                "parameter": "def"}}},
+                                "parameter": "def"}},
+                            "name": "defn"},
                           {
-                            "name": "importExport",
-                            "term": {
+                            "handler": {
                               "lambda": {
                                 "body": {"application": {"argument": {"variable": "ie"}, "function": {"variable": "hydra.scala.serde.importExportStatToExpr"}}},
                                 "domain": {"variable": "hydra.scala.syntax.ImportExportStat"},
-                                "parameter": "ie"}}}],
+                                "parameter": "ie"}},
+                            "name": "importExport"}],
                         "typeName": "hydra.scala.syntax.Stat"}}}},
                 "domain": {"variable": "hydra.scala.syntax.Stat"},
-                "parameter": "stat"}}}}}},
+                "parameter": "stat"}}}},
+        "name": "hydra.scala.serde.statToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.scala.syntax.Stat"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.scala.serde.termToExpr",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.scala.syntax.Data"}}],
-          "result": {"type": {"variable": "hydra.ast.Expr"}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a term to an expression"}}}],
             "body": {
@@ -2151,22 +2146,21 @@
                       "cases": {
                         "cases": [
                           {
-                            "name": "lit",
-                            "term": {
+                            "handler": {
                               "lambda": {
                                 "body": {"application": {"argument": {"variable": "lit"}, "function": {"variable": "hydra.scala.serde.litToExpr"}}},
                                 "domain": {"variable": "hydra.scala.syntax.Lit"},
-                                "parameter": "lit"}}},
+                                "parameter": "lit"}},
+                            "name": "lit"},
                           {
-                            "name": "ref",
-                            "term": {
+                            "handler": {
                               "lambda": {
                                 "body": {"application": {"argument": {"variable": "ref"}, "function": {"variable": "hydra.scala.serde.dataRefToExpr"}}},
                                 "domain": {"variable": "hydra.scala.syntax.RefData"},
-                                "parameter": "ref"}}},
+                                "parameter": "ref"}},
+                            "name": "ref"},
                           {
-                            "name": "apply",
-                            "term": {
+                            "handler": {
                               "lambda": {
                                 "body": {
                                   "let": {
@@ -2205,10 +2199,10 @@
                                                 "function": {"variable": "hydra.serialization.parenListAdaptive"}}}]},
                                         "function": {"variable": "hydra.serialization.noSep"}}}}},
                                 "domain": {"variable": "hydra.scala.syntax.ApplyData"},
-                                "parameter": "app"}}},
+                                "parameter": "app"}},
+                            "name": "apply"},
                           {
-                            "name": "assign",
-                            "term": {
+                            "handler": {
                               "lambda": {
                                 "body": {
                                   "let": {
@@ -2236,10 +2230,10 @@
                                             {"application": {"argument": {"variable": "rhs"}, "function": {"variable": "hydra.scala.serde.termToExpr"}}}]},
                                         "function": {"variable": "hydra.serialization.spaceSep"}}}}},
                                 "domain": {"variable": "hydra.scala.syntax.AssignData"},
-                                "parameter": "a"}}},
+                                "parameter": "a"}},
+                            "name": "assign"},
                           {
-                            "name": "tuple",
-                            "term": {
+                            "handler": {
                               "lambda": {
                                 "body": {
                                   "application": {
@@ -2258,10 +2252,10 @@
                                                 "type": {"variable": "hydra.ast.Expr"}}}}}}},
                                     "function": {"variable": "hydra.serialization.parenListAdaptive"}}},
                                 "domain": {"variable": "hydra.scala.syntax.TupleData"},
-                                "parameter": "tup"}}},
+                                "parameter": "tup"}},
+                            "name": "tuple"},
                           {
-                            "name": "match",
-                            "term": {
+                            "handler": {
                               "lambda": {
                                 "body": {
                                   "let": {
@@ -2301,17 +2295,17 @@
                                             "function": {
                                               "application": {"argument": {"variable": "hydra.scala.serde.matchOp"}, "function": {"variable": "hydra.serialization.ifx"}}}}}}}}},
                                 "domain": {"variable": "hydra.scala.syntax.MatchData"},
-                                "parameter": "m"}}},
+                                "parameter": "m"}},
+                            "name": "match"},
                           {
-                            "name": "function",
-                            "term": {
+                            "handler": {
                               "lambda": {
                                 "body": {"application": {"argument": {"variable": "f"}, "function": {"variable": "hydra.scala.serde.dataFunctionToExpr"}}},
                                 "domain": {"variable": "hydra.scala.syntax.FunctionData"},
-                                "parameter": "f"}}},
+                                "parameter": "f"}},
+                            "name": "function"},
                           {
-                            "name": "block",
-                            "term": {
+                            "handler": {
                               "lambda": {
                                 "body": {
                                   "let": {
@@ -2343,18 +2337,19 @@
                                             "argument": {"variable": "hydra.serialization.fullBlockStyle"},
                                             "function": {"variable": "hydra.serialization.curlyBlock"}}}}}}},
                                 "domain": {"variable": "hydra.scala.syntax.BlockData"},
-                                "parameter": "blk"}}}],
+                                "parameter": "blk"}},
+                            "name": "block"}],
                         "typeName": "hydra.scala.syntax.Data"}}}},
                 "domain": {"variable": "hydra.scala.syntax.Data"},
-                "parameter": "term"}}}}}},
+                "parameter": "term"}}}},
+        "name": "hydra.scala.serde.termToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.scala.syntax.Data"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.scala.serde.typeToExpr",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.scala.syntax.Type"}}],
-          "result": {"type": {"variable": "hydra.ast.Expr"}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a type to an expression"}}}],
             "body": {
@@ -2366,8 +2361,7 @@
                       "cases": {
                         "cases": [
                           {
-                            "name": "ref",
-                            "term": {
+                            "handler": {
                               "lambda": {
                                 "body": {
                                   "application": {
@@ -2376,18 +2370,18 @@
                                       "cases": {
                                         "cases": [
                                           {
-                                            "name": "name",
-                                            "term": {
+                                            "handler": {
                                               "lambda": {
                                                 "body": {"application": {"argument": {"variable": "name"}, "function": {"variable": "hydra.scala.serde.typeNameToExpr"}}},
                                                 "domain": {"variable": "hydra.scala.syntax.NameType"},
-                                                "parameter": "name"}}}],
+                                                "parameter": "name"}},
+                                            "name": "name"}],
                                         "typeName": "hydra.scala.syntax.RefType"}}}},
                                 "domain": {"variable": "hydra.scala.syntax.RefType"},
-                                "parameter": "tr"}}},
+                                "parameter": "tr"}},
+                            "name": "ref"},
                           {
-                            "name": "apply",
-                            "term": {
+                            "handler": {
                               "lambda": {
                                 "body": {
                                   "let": {
@@ -2429,10 +2423,10 @@
                                                     "function": {"variable": "hydra.serialization.bracketList"}}}}}]},
                                         "function": {"variable": "hydra.serialization.noSep"}}}}},
                                 "domain": {"variable": "hydra.scala.syntax.ApplyType"},
-                                "parameter": "ta"}}},
+                                "parameter": "ta"}},
+                            "name": "apply"},
                           {
-                            "name": "function",
-                            "term": {
+                            "handler": {
                               "lambda": {
                                 "body": {
                                   "let": {
@@ -2471,10 +2465,10 @@
                                             "function": {
                                               "application": {"argument": {"variable": "hydra.scala.serde.functionArrowOp"}, "function": {"variable": "hydra.serialization.ifx"}}}}}}}}},
                                 "domain": {"variable": "hydra.scala.syntax.FunctionType"},
-                                "parameter": "tf"}}},
+                                "parameter": "tf"}},
+                            "name": "function"},
                           {
-                            "name": "lambda",
-                            "term": {
+                            "handler": {
                               "lambda": {
                                 "body": {
                                   "let": {
@@ -2516,10 +2510,10 @@
                                                     "function": {"variable": "hydra.serialization.bracketList"}}}}}]},
                                         "function": {"variable": "hydra.serialization.noSep"}}}}},
                                 "domain": {"variable": "hydra.scala.syntax.LambdaType"},
-                                "parameter": "tl"}}},
+                                "parameter": "tl"}},
+                            "name": "lambda"},
                           {
-                            "name": "var",
-                            "term": {
+                            "handler": {
                               "lambda": {
                                 "body": {
                                   "application": {
@@ -2529,18 +2523,19 @@
                                         "function": {"project": {"fieldName": "name", "typeName": "hydra.scala.syntax.VarType"}}}},
                                     "function": {"variable": "hydra.scala.serde.typeNameToExpr"}}},
                                 "domain": {"variable": "hydra.scala.syntax.VarType"},
-                                "parameter": "tv"}}}],
+                                "parameter": "tv"}},
+                            "name": "var"}],
                         "typeName": "hydra.scala.syntax.Type"}}}},
                 "domain": {"variable": "hydra.scala.syntax.Type"},
-                "parameter": "typ"}}}}}},
+                "parameter": "typ"}}}},
+        "name": "hydra.scala.serde.typeToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.scala.syntax.Type"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.scala.serde.typeNameToExpr",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.scala.syntax.NameType"}}],
-          "result": {"type": {"variable": "hydra.ast.Expr"}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a type name to an expression"}}}],
             "body": {
@@ -2553,15 +2548,15 @@
                         "function": {"project": {"fieldName": "value", "typeName": "hydra.scala.syntax.NameType"}}}},
                     "function": {"variable": "hydra.serialization.cst"}}},
                 "domain": {"variable": "hydra.scala.syntax.NameType"},
-                "parameter": "tn"}}}}}},
+                "parameter": "tn"}}}},
+        "name": "hydra.scala.serde.typeNameToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.scala.syntax.NameType"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.scala.serde.typeParamToExpr",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.scala.syntax.ParamType"}}],
-          "result": {"type": {"variable": "hydra.ast.Expr"}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a type parameter to an expression"}}}],
             "body": {
@@ -2574,7 +2569,12 @@
                         "function": {"project": {"fieldName": "name", "typeName": "hydra.scala.syntax.ParamType"}}}},
                     "function": {"variable": "hydra.scala.serde.nameToExpr"}}},
                 "domain": {"variable": "hydra.scala.syntax.ParamType"},
-                "parameter": "tp"}}}}}}],
+                "parameter": "tp"}}}},
+        "name": "hydra.scala.serde.typeParamToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.scala.syntax.ParamType"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []}}}],
   "dependencies": [
     {"module": "hydra.serialization"},
     {"module": "hydra.java.serde"},

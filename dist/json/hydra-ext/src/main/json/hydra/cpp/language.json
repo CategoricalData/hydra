@@ -2,9 +2,7 @@
   "definitions": [
     {
       "term": {
-        "name": "hydra.cpp.language.cppLanguage",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.coders.Language"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Language constraints for C++"}}}],
             "body": {
@@ -125,12 +123,12 @@
                                 "name": "types",
                                 "term": {"typeApplication": {"body": {"variable": "typePredicate"}, "type": {"variable": "hydra.core.Type"}}}}],
                             "typeName": "hydra.coders.LanguageConstraints"}}}],
-                    "typeName": "hydra.coders.Language"}}}}}}}},
+                    "typeName": "hydra.coders.Language"}}}}}},
+        "name": "hydra.cpp.language.cppLanguage",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.coders.Language"}}, "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.cpp.language.cppReservedWords",
-        "signature": {"parameters": [], "result": {"type": {"set": {"literal": {"string": {}}}}}, "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "A set of reserved words in C++"}}}],
             "body": {
@@ -314,7 +312,9 @@
                             {"variable": "cppStlTypes"},
                             {"typeApplication": {"body": {"variable": "hydraCppKeywords"}, "type": {"literal": {"string": {}}}}}]},
                         "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.concat"}, "type": {"literal": {"string": {}}}}}}},
-                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.sets.fromList"}, "type": {"literal": {"string": {}}}}}}}}}}}}}],
+                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.sets.fromList"}, "type": {"literal": {"string": {}}}}}}}}}}},
+        "name": "hydra.cpp.language.cppReservedWords",
+        "signature": {"parameters": [], "result": {"type": {"set": {"literal": {"string": {}}}}}, "typeParameters": []}}}],
   "dependencies": [
     {"module": "hydra.lexical"},
     {"module": "hydra.paths"},

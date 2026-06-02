@@ -2,12 +2,7 @@
   "definitions": [
     {
       "term": {
-        "name": "hydra.show.graph.graph",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"list": {"variable": "hydra.core.Binding"}}}],
-          "result": {"type": {"literal": {"string": {}}}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Show a list of bindings as a string"}}}],
             "body": {
@@ -40,7 +35,12 @@
                             {"literal": {"string": "}"}}]},
                         "function": {"variable": "hydra.lib.strings.cat"}}}}},
                 "domain": {"list": {"variable": "hydra.core.Binding"}},
-                "parameter": "elements"}}}}}}],
+                "parameter": "elements"}}}},
+        "name": "hydra.show.graph.graph",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"list": {"variable": "hydra.core.Binding"}}}],
+          "result": {"type": {"literal": {"string": {}}}},
+          "typeParameters": []}}}],
   "dependencies": [
     {"module": "hydra.show.core"},
     {"module": "hydra.paths"},

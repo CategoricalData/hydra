@@ -2,9 +2,7 @@
   "definitions": [
     {
       "term": {
-        "name": "hydra.test.checking.algebraicTypes.allTests",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "record": {
             "fields": [
               {"name": "name", "term": {"literal": {"string": "Algebraic types"}}},
@@ -20,12 +18,12 @@
               {
                 "name": "cases",
                 "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}],
-            "typeName": "hydra.testing.TestGroup"}}}},
+            "typeName": "hydra.testing.TestGroup"}},
+        "name": "hydra.test.checking.algebraicTypes.allTests",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.test.checking.algebraicTypes.unitTests",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "record": {
             "fields": [
               {"name": "name", "term": {"literal": {"string": "Unit"}}},
@@ -39,12 +37,12 @@
               {
                 "name": "cases",
                 "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}],
-            "typeName": "hydra.testing.TestGroup"}}}},
+            "typeName": "hydra.testing.TestGroup"}},
+        "name": "hydra.test.checking.algebraicTypes.unitTests",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.test.checking.algebraicTypes.unitTermTests",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "record": {
             "fields": [
               {"name": "name", "term": {"literal": {"string": "Unit term"}}},
@@ -145,12 +143,12 @@
                           {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
-            "typeName": "hydra.testing.TestGroup"}}}},
+            "typeName": "hydra.testing.TestGroup"}},
+        "name": "hydra.test.checking.algebraicTypes.unitTermTests",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.test.checking.algebraicTypes.unitTermInPolymorphicContextTests",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "record": {
             "fields": [
               {"name": "name", "term": {"literal": {"string": "Unit term in polymorphic context"}}},
@@ -291,12 +289,12 @@
                           {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
-            "typeName": "hydra.testing.TestGroup"}}}},
+            "typeName": "hydra.testing.TestGroup"}},
+        "name": "hydra.test.checking.algebraicTypes.unitTermInPolymorphicContextTests",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.test.checking.algebraicTypes.pairsTests",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "record": {
             "fields": [
               {"name": "name", "term": {"literal": {"string": "Pairs"}}},
@@ -313,12 +311,12 @@
               {
                 "name": "cases",
                 "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}],
-            "typeName": "hydra.testing.TestGroup"}}}},
+            "typeName": "hydra.testing.TestGroup"}},
+        "name": "hydra.test.checking.algebraicTypes.pairsTests",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.test.checking.algebraicTypes.basicPairsTests",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "record": {
             "fields": [
               {"name": "name", "term": {"literal": {"string": "Basic pairs"}}},
@@ -763,12 +761,12 @@
                           {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
-            "typeName": "hydra.testing.TestGroup"}}}},
+            "typeName": "hydra.testing.TestGroup"}},
+        "name": "hydra.test.checking.algebraicTypes.basicPairsTests",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.test.checking.algebraicTypes.polymorphicPairsTests",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "record": {
             "fields": [
               {"name": "name", "term": {"literal": {"string": "Polymorphic pairs"}}},
@@ -1514,12 +1512,12 @@
                           {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
-            "typeName": "hydra.testing.TestGroup"}}}},
+            "typeName": "hydra.testing.TestGroup"}},
+        "name": "hydra.test.checking.algebraicTypes.polymorphicPairsTests",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.test.checking.algebraicTypes.pairsInComplexContextsTests",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "record": {
             "fields": [
               {"name": "name", "term": {"literal": {"string": "Pairs in complex contexts"}}},
@@ -1899,12 +1897,12 @@
                           {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
-            "typeName": "hydra.testing.TestGroup"}}}},
+            "typeName": "hydra.testing.TestGroup"}},
+        "name": "hydra.test.checking.algebraicTypes.pairsInComplexContextsTests",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.test.checking.algebraicTypes.nestedPairsTests",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "record": {
             "fields": [
               {"name": "name", "term": {"literal": {"string": "Nested pairs"}}},
@@ -2514,12 +2512,12 @@
                           {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
-            "typeName": "hydra.testing.TestGroup"}}}},
+            "typeName": "hydra.testing.TestGroup"}},
+        "name": "hydra.test.checking.algebraicTypes.nestedPairsTests",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.test.checking.algebraicTypes.pairsWithComplexTypesTests",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "record": {
             "fields": [
               {"name": "name", "term": {"literal": {"string": "Pairs with complex types"}}},
@@ -2918,12 +2916,12 @@
                           {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
-            "typeName": "hydra.testing.TestGroup"}}}},
+            "typeName": "hydra.testing.TestGroup"}},
+        "name": "hydra.test.checking.algebraicTypes.pairsWithComplexTypesTests",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.test.checking.algebraicTypes.eithersTests",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "record": {
             "fields": [
               {"name": "name", "term": {"literal": {"string": "Eithers"}}},
@@ -2941,12 +2939,12 @@
               {
                 "name": "cases",
                 "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}],
-            "typeName": "hydra.testing.TestGroup"}}}},
+            "typeName": "hydra.testing.TestGroup"}},
+        "name": "hydra.test.checking.algebraicTypes.eithersTests",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.test.checking.algebraicTypes.leftValuesTests",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "record": {
             "fields": [
               {"name": "name", "term": {"literal": {"string": "Left values"}}},
@@ -3392,12 +3390,12 @@
                           {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
-            "typeName": "hydra.testing.TestGroup"}}}},
+            "typeName": "hydra.testing.TestGroup"}},
+        "name": "hydra.test.checking.algebraicTypes.leftValuesTests",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.test.checking.algebraicTypes.rightValuesTests",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "record": {
             "fields": [
               {"name": "name", "term": {"literal": {"string": "Right values"}}},
@@ -3843,12 +3841,12 @@
                           {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
-            "typeName": "hydra.testing.TestGroup"}}}},
+            "typeName": "hydra.testing.TestGroup"}},
+        "name": "hydra.test.checking.algebraicTypes.rightValuesTests",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.test.checking.algebraicTypes.polymorphicEithersTests",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "record": {
             "fields": [
               {"name": "name", "term": {"literal": {"string": "Polymorphic eithers"}}},
@@ -4483,12 +4481,12 @@
                           {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
-            "typeName": "hydra.testing.TestGroup"}}}},
+            "typeName": "hydra.testing.TestGroup"}},
+        "name": "hydra.test.checking.algebraicTypes.polymorphicEithersTests",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.test.checking.algebraicTypes.eithersInComplexContextsTests",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "record": {
             "fields": [
               {"name": "name", "term": {"literal": {"string": "Eithers in complex contexts"}}},
@@ -4854,12 +4852,12 @@
                           {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
-            "typeName": "hydra.testing.TestGroup"}}}},
+            "typeName": "hydra.testing.TestGroup"}},
+        "name": "hydra.test.checking.algebraicTypes.eithersInComplexContextsTests",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.test.checking.algebraicTypes.nestedEithersTests",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "record": {
             "fields": [
               {"name": "name", "term": {"literal": {"string": "Nested eithers"}}},
@@ -5757,12 +5755,12 @@
                           {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
-            "typeName": "hydra.testing.TestGroup"}}}},
+            "typeName": "hydra.testing.TestGroup"}},
+        "name": "hydra.test.checking.algebraicTypes.nestedEithersTests",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.test.checking.algebraicTypes.eithersWithComplexTypesTests",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "record": {
             "fields": [
               {"name": "name", "term": {"literal": {"string": "Eithers with complex types"}}},
@@ -6158,12 +6156,12 @@
                           {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
-            "typeName": "hydra.testing.TestGroup"}}}},
+            "typeName": "hydra.testing.TestGroup"}},
+        "name": "hydra.test.checking.algebraicTypes.eithersWithComplexTypesTests",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.test.checking.algebraicTypes.optionalsTests",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "record": {
             "fields": [
               {"name": "name", "term": {"literal": {"string": "Optionals"}}},
@@ -6180,12 +6178,12 @@
               {
                 "name": "cases",
                 "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}],
-            "typeName": "hydra.testing.TestGroup"}}}},
+            "typeName": "hydra.testing.TestGroup"}},
+        "name": "hydra.test.checking.algebraicTypes.optionalsTests",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.test.checking.algebraicTypes.monomorphicOptionalsTests",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "record": {
             "fields": [
               {"name": "name", "term": {"literal": {"string": "Monomorphic optionals"}}},
@@ -6650,12 +6648,12 @@
                           {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
-            "typeName": "hydra.testing.TestGroup"}}}},
+            "typeName": "hydra.testing.TestGroup"}},
+        "name": "hydra.test.checking.algebraicTypes.monomorphicOptionalsTests",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.test.checking.algebraicTypes.polymorphicOptionalsTests",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "record": {
             "fields": [
               {"name": "name", "term": {"literal": {"string": "Polymorphic optionals"}}},
@@ -7202,12 +7200,12 @@
                           {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
-            "typeName": "hydra.testing.TestGroup"}}}},
+            "typeName": "hydra.testing.TestGroup"}},
+        "name": "hydra.test.checking.algebraicTypes.polymorphicOptionalsTests",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.test.checking.algebraicTypes.optionalsInComplexContextsTests",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "record": {
             "fields": [
               {"name": "name", "term": {"literal": {"string": "Optionals in complex contexts"}}},
@@ -7557,12 +7555,12 @@
                           {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
-            "typeName": "hydra.testing.TestGroup"}}}},
+            "typeName": "hydra.testing.TestGroup"}},
+        "name": "hydra.test.checking.algebraicTypes.optionalsInComplexContextsTests",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.test.checking.algebraicTypes.nestedOptionalsTests",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "record": {
             "fields": [
               {"name": "name", "term": {"literal": {"string": "Nested optionals"}}},
@@ -7990,12 +7988,12 @@
                           {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
-            "typeName": "hydra.testing.TestGroup"}}}},
+            "typeName": "hydra.testing.TestGroup"}},
+        "name": "hydra.test.checking.algebraicTypes.nestedOptionalsTests",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.test.checking.algebraicTypes.optionalsWithComplexTypesTests",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "record": {
             "fields": [
               {"name": "name", "term": {"literal": {"string": "Optionals with complex types"}}},
@@ -8161,7 +8159,9 @@
                           {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
-            "typeName": "hydra.testing.TestGroup"}}}}],
+            "typeName": "hydra.testing.TestGroup"}},
+        "name": "hydra.test.checking.algebraicTypes.optionalsWithComplexTypesTests",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []}}}],
   "dependencies": [
     {"module": "hydra.test.testGraph"},
     {"module": "hydra.rewriting"},

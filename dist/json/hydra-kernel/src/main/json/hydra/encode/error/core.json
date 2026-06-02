@@ -2,12 +2,7 @@
   "definitions": [
     {
       "term": {
-        "name": "hydra.encode.error.core.constantConditionError",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.error.core.ConstantConditionError"}}],
-          "result": {"type": {"variable": "hydra.core.Term"}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Encoder for hydra.error.core.ConstantConditionError"}}}],
             "body": {
@@ -66,15 +61,15 @@
                           "typeName": "hydra.core.Record"}}},
                     "typeName": "hydra.core.Term"}},
                 "domain": {"variable": "hydra.error.core.ConstantConditionError"},
-                "parameter": "x"}}}}}},
+                "parameter": "x"}}}},
+        "name": "hydra.encode.error.core.constantConditionError",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.error.core.ConstantConditionError"}}],
+          "result": {"type": {"variable": "hydra.core.Term"}},
+          "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.encode.error.core.duplicateBindingError",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.error.core.DuplicateBindingError"}}],
-          "result": {"type": {"variable": "hydra.core.Term"}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Encoder for hydra.error.core.DuplicateBindingError"}}}],
             "body": {
@@ -124,15 +119,15 @@
                           "typeName": "hydra.core.Record"}}},
                     "typeName": "hydra.core.Term"}},
                 "domain": {"variable": "hydra.error.core.DuplicateBindingError"},
-                "parameter": "x"}}}}}},
+                "parameter": "x"}}}},
+        "name": "hydra.encode.error.core.duplicateBindingError",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.error.core.DuplicateBindingError"}}],
+          "result": {"type": {"variable": "hydra.core.Term"}},
+          "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.encode.error.core.duplicateFieldError",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.error.core.DuplicateFieldError"}}],
-          "result": {"type": {"variable": "hydra.core.Term"}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Encoder for hydra.error.core.DuplicateFieldError"}}}],
             "body": {
@@ -182,15 +177,15 @@
                           "typeName": "hydra.core.Record"}}},
                     "typeName": "hydra.core.Term"}},
                 "domain": {"variable": "hydra.error.core.DuplicateFieldError"},
-                "parameter": "x"}}}}}},
+                "parameter": "x"}}}},
+        "name": "hydra.encode.error.core.duplicateFieldError",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.error.core.DuplicateFieldError"}}],
+          "result": {"type": {"variable": "hydra.core.Term"}},
+          "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.encode.error.core.duplicateRecordTypeFieldNamesError",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.error.core.DuplicateRecordTypeFieldNamesError"}}],
-          "result": {"type": {"variable": "hydra.core.Term"}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -244,15 +239,15 @@
                           "typeName": "hydra.core.Record"}}},
                     "typeName": "hydra.core.Term"}},
                 "domain": {"variable": "hydra.error.core.DuplicateRecordTypeFieldNamesError"},
-                "parameter": "x"}}}}}},
+                "parameter": "x"}}}},
+        "name": "hydra.encode.error.core.duplicateRecordTypeFieldNamesError",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.error.core.DuplicateRecordTypeFieldNamesError"}}],
+          "result": {"type": {"variable": "hydra.core.Term"}},
+          "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.encode.error.core.duplicateUnionTypeFieldNamesError",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.error.core.DuplicateUnionTypeFieldNamesError"}}],
-          "result": {"type": {"variable": "hydra.core.Term"}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -306,15 +301,15 @@
                           "typeName": "hydra.core.Record"}}},
                     "typeName": "hydra.core.Term"}},
                 "domain": {"variable": "hydra.error.core.DuplicateUnionTypeFieldNamesError"},
-                "parameter": "x"}}}}}},
+                "parameter": "x"}}}},
+        "name": "hydra.encode.error.core.duplicateUnionTypeFieldNamesError",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.error.core.DuplicateUnionTypeFieldNamesError"}}],
+          "result": {"type": {"variable": "hydra.core.Term"}},
+          "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.encode.error.core.emptyCaseStatementError",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.error.core.EmptyCaseStatementError"}}],
-          "result": {"type": {"variable": "hydra.core.Term"}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Encoder for hydra.error.core.EmptyCaseStatementError"}}}],
             "body": {
@@ -364,15 +359,15 @@
                           "typeName": "hydra.core.Record"}}},
                     "typeName": "hydra.core.Term"}},
                 "domain": {"variable": "hydra.error.core.EmptyCaseStatementError"},
-                "parameter": "x"}}}}}},
+                "parameter": "x"}}}},
+        "name": "hydra.encode.error.core.emptyCaseStatementError",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.error.core.EmptyCaseStatementError"}}],
+          "result": {"type": {"variable": "hydra.core.Term"}},
+          "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.encode.error.core.emptyLetBindingsError",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.error.core.EmptyLetBindingsError"}}],
-          "result": {"type": {"variable": "hydra.core.Term"}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Encoder for hydra.error.core.EmptyLetBindingsError"}}}],
             "body": {
@@ -408,15 +403,15 @@
                           "typeName": "hydra.core.Record"}}},
                     "typeName": "hydra.core.Term"}},
                 "domain": {"variable": "hydra.error.core.EmptyLetBindingsError"},
-                "parameter": "x"}}}}}},
+                "parameter": "x"}}}},
+        "name": "hydra.encode.error.core.emptyLetBindingsError",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.error.core.EmptyLetBindingsError"}}],
+          "result": {"type": {"variable": "hydra.core.Term"}},
+          "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.encode.error.core.emptyRecordTypeError",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.error.core.EmptyRecordTypeError"}}],
-          "result": {"type": {"variable": "hydra.core.Term"}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Encoder for hydra.error.core.EmptyRecordTypeError"}}}],
             "body": {
@@ -452,15 +447,15 @@
                           "typeName": "hydra.core.Record"}}},
                     "typeName": "hydra.core.Term"}},
                 "domain": {"variable": "hydra.error.core.EmptyRecordTypeError"},
-                "parameter": "x"}}}}}},
+                "parameter": "x"}}}},
+        "name": "hydra.encode.error.core.emptyRecordTypeError",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.error.core.EmptyRecordTypeError"}}],
+          "result": {"type": {"variable": "hydra.core.Term"}},
+          "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.encode.error.core.emptyTermAnnotationError",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.error.core.EmptyTermAnnotationError"}}],
-          "result": {"type": {"variable": "hydra.core.Term"}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Encoder for hydra.error.core.EmptyTermAnnotationError"}}}],
             "body": {
@@ -496,15 +491,15 @@
                           "typeName": "hydra.core.Record"}}},
                     "typeName": "hydra.core.Term"}},
                 "domain": {"variable": "hydra.error.core.EmptyTermAnnotationError"},
-                "parameter": "x"}}}}}},
+                "parameter": "x"}}}},
+        "name": "hydra.encode.error.core.emptyTermAnnotationError",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.error.core.EmptyTermAnnotationError"}}],
+          "result": {"type": {"variable": "hydra.core.Term"}},
+          "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.encode.error.core.emptyTypeAnnotationError",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.error.core.EmptyTypeAnnotationError"}}],
-          "result": {"type": {"variable": "hydra.core.Term"}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Encoder for hydra.error.core.EmptyTypeAnnotationError"}}}],
             "body": {
@@ -540,15 +535,15 @@
                           "typeName": "hydra.core.Record"}}},
                     "typeName": "hydra.core.Term"}},
                 "domain": {"variable": "hydra.error.core.EmptyTypeAnnotationError"},
-                "parameter": "x"}}}}}},
+                "parameter": "x"}}}},
+        "name": "hydra.encode.error.core.emptyTypeAnnotationError",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.error.core.EmptyTypeAnnotationError"}}],
+          "result": {"type": {"variable": "hydra.core.Term"}},
+          "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.encode.error.core.emptyTypeNameInTermError",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.error.core.EmptyTypeNameInTermError"}}],
-          "result": {"type": {"variable": "hydra.core.Term"}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Encoder for hydra.error.core.EmptyTypeNameInTermError"}}}],
             "body": {
@@ -584,15 +579,15 @@
                           "typeName": "hydra.core.Record"}}},
                     "typeName": "hydra.core.Term"}},
                 "domain": {"variable": "hydra.error.core.EmptyTypeNameInTermError"},
-                "parameter": "x"}}}}}},
+                "parameter": "x"}}}},
+        "name": "hydra.encode.error.core.emptyTypeNameInTermError",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.error.core.EmptyTypeNameInTermError"}}],
+          "result": {"type": {"variable": "hydra.core.Term"}},
+          "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.encode.error.core.emptyUnionTypeError",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.error.core.EmptyUnionTypeError"}}],
-          "result": {"type": {"variable": "hydra.core.Term"}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Encoder for hydra.error.core.EmptyUnionTypeError"}}}],
             "body": {
@@ -628,15 +623,15 @@
                           "typeName": "hydra.core.Record"}}},
                     "typeName": "hydra.core.Term"}},
                 "domain": {"variable": "hydra.error.core.EmptyUnionTypeError"},
-                "parameter": "x"}}}}}},
+                "parameter": "x"}}}},
+        "name": "hydra.encode.error.core.emptyUnionTypeError",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.error.core.EmptyUnionTypeError"}}],
+          "result": {"type": {"variable": "hydra.core.Term"}},
+          "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.encode.error.core.invalidForallParameterNameError",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.error.core.InvalidForallParameterNameError"}}],
-          "result": {"type": {"variable": "hydra.core.Term"}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {"key": "description", "value": {"literal": {"string": "Encoder for hydra.error.core.InvalidForallParameterNameError"}}}],
@@ -688,15 +683,15 @@
                           "typeName": "hydra.core.Record"}}},
                     "typeName": "hydra.core.Term"}},
                 "domain": {"variable": "hydra.error.core.InvalidForallParameterNameError"},
-                "parameter": "x"}}}}}},
+                "parameter": "x"}}}},
+        "name": "hydra.encode.error.core.invalidForallParameterNameError",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.error.core.InvalidForallParameterNameError"}}],
+          "result": {"type": {"variable": "hydra.core.Term"}},
+          "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.encode.error.core.invalidLambdaParameterNameError",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.error.core.InvalidLambdaParameterNameError"}}],
-          "result": {"type": {"variable": "hydra.core.Term"}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {"key": "description", "value": {"literal": {"string": "Encoder for hydra.error.core.InvalidLambdaParameterNameError"}}}],
@@ -748,15 +743,15 @@
                           "typeName": "hydra.core.Record"}}},
                     "typeName": "hydra.core.Term"}},
                 "domain": {"variable": "hydra.error.core.InvalidLambdaParameterNameError"},
-                "parameter": "x"}}}}}},
+                "parameter": "x"}}}},
+        "name": "hydra.encode.error.core.invalidLambdaParameterNameError",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.error.core.InvalidLambdaParameterNameError"}}],
+          "result": {"type": {"variable": "hydra.core.Term"}},
+          "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.encode.error.core.invalidLetBindingNameError",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.error.core.InvalidLetBindingNameError"}}],
-          "result": {"type": {"variable": "hydra.core.Term"}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Encoder for hydra.error.core.InvalidLetBindingNameError"}}}],
             "body": {
@@ -807,23 +802,22 @@
                           "typeName": "hydra.core.Record"}}},
                     "typeName": "hydra.core.Term"}},
                 "domain": {"variable": "hydra.error.core.InvalidLetBindingNameError"},
-                "parameter": "x"}}}}}},
+                "parameter": "x"}}}},
+        "name": "hydra.encode.error.core.invalidLetBindingNameError",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.error.core.InvalidLetBindingNameError"}}],
+          "result": {"type": {"variable": "hydra.core.Term"}},
+          "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.encode.error.core.invalidLiteralError",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.error.core.InvalidLiteralError"}}],
-          "result": {"type": {"variable": "hydra.core.Term"}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Encoder for hydra.error.core.InvalidLiteralError"}}}],
             "body": {
               "cases": {
                 "cases": [
                   {
-                    "name": "typeMismatch",
-                    "term": {
+                    "handler": {
                       "lambda": {
                         "body": {
                           "inject": {
@@ -849,24 +843,24 @@
                                   "typeName": "hydra.core.Injection"}}},
                             "typeName": "hydra.core.Term"}},
                         "domain": {"variable": "hydra.error.core.LiteralTypeMismatchError"},
-                        "parameter": "y"}}}],
-                "typeName": "hydra.error.core.InvalidLiteralError"}}}}}},
+                        "parameter": "y"}},
+                    "name": "typeMismatch"}],
+                "typeName": "hydra.error.core.InvalidLiteralError"}}}},
+        "name": "hydra.encode.error.core.invalidLiteralError",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.error.core.InvalidLiteralError"}}],
+          "result": {"type": {"variable": "hydra.core.Term"}},
+          "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.encode.error.core.invalidTermError",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.error.core.InvalidTermError"}}],
-          "result": {"type": {"variable": "hydra.core.Term"}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Encoder for hydra.error.core.InvalidTermError"}}}],
             "body": {
               "cases": {
                 "cases": [
                   {
-                    "name": "constantCondition",
-                    "term": {
+                    "handler": {
                       "lambda": {
                         "body": {
                           "inject": {
@@ -894,10 +888,10 @@
                                   "typeName": "hydra.core.Injection"}}},
                             "typeName": "hydra.core.Term"}},
                         "domain": {"variable": "hydra.error.core.ConstantConditionError"},
-                        "parameter": "y"}}},
+                        "parameter": "y"}},
+                    "name": "constantCondition"},
                   {
-                    "name": "duplicateBinding",
-                    "term": {
+                    "handler": {
                       "lambda": {
                         "body": {
                           "inject": {
@@ -923,10 +917,10 @@
                                   "typeName": "hydra.core.Injection"}}},
                             "typeName": "hydra.core.Term"}},
                         "domain": {"variable": "hydra.error.core.DuplicateBindingError"},
-                        "parameter": "y"}}},
+                        "parameter": "y"}},
+                    "name": "duplicateBinding"},
                   {
-                    "name": "duplicateField",
-                    "term": {
+                    "handler": {
                       "lambda": {
                         "body": {
                           "inject": {
@@ -952,10 +946,10 @@
                                   "typeName": "hydra.core.Injection"}}},
                             "typeName": "hydra.core.Term"}},
                         "domain": {"variable": "hydra.error.core.DuplicateFieldError"},
-                        "parameter": "y"}}},
+                        "parameter": "y"}},
+                    "name": "duplicateField"},
                   {
-                    "name": "emptyCaseStatement",
-                    "term": {
+                    "handler": {
                       "lambda": {
                         "body": {
                           "inject": {
@@ -983,10 +977,10 @@
                                   "typeName": "hydra.core.Injection"}}},
                             "typeName": "hydra.core.Term"}},
                         "domain": {"variable": "hydra.error.core.EmptyCaseStatementError"},
-                        "parameter": "y"}}},
+                        "parameter": "y"}},
+                    "name": "emptyCaseStatement"},
                   {
-                    "name": "emptyLetBindings",
-                    "term": {
+                    "handler": {
                       "lambda": {
                         "body": {
                           "inject": {
@@ -1012,10 +1006,10 @@
                                   "typeName": "hydra.core.Injection"}}},
                             "typeName": "hydra.core.Term"}},
                         "domain": {"variable": "hydra.error.core.EmptyLetBindingsError"},
-                        "parameter": "y"}}},
+                        "parameter": "y"}},
+                    "name": "emptyLetBindings"},
                   {
-                    "name": "emptyTermAnnotation",
-                    "term": {
+                    "handler": {
                       "lambda": {
                         "body": {
                           "inject": {
@@ -1043,10 +1037,10 @@
                                   "typeName": "hydra.core.Injection"}}},
                             "typeName": "hydra.core.Term"}},
                         "domain": {"variable": "hydra.error.core.EmptyTermAnnotationError"},
-                        "parameter": "y"}}},
+                        "parameter": "y"}},
+                    "name": "emptyTermAnnotation"},
                   {
-                    "name": "emptyTypeNameInTerm",
-                    "term": {
+                    "handler": {
                       "lambda": {
                         "body": {
                           "inject": {
@@ -1074,10 +1068,10 @@
                                   "typeName": "hydra.core.Injection"}}},
                             "typeName": "hydra.core.Term"}},
                         "domain": {"variable": "hydra.error.core.EmptyTypeNameInTermError"},
-                        "parameter": "y"}}},
+                        "parameter": "y"}},
+                    "name": "emptyTypeNameInTerm"},
                   {
-                    "name": "invalidLambdaParameterName",
-                    "term": {
+                    "handler": {
                       "lambda": {
                         "body": {
                           "inject": {
@@ -1105,10 +1099,10 @@
                                   "typeName": "hydra.core.Injection"}}},
                             "typeName": "hydra.core.Term"}},
                         "domain": {"variable": "hydra.error.core.InvalidLambdaParameterNameError"},
-                        "parameter": "y"}}},
+                        "parameter": "y"}},
+                    "name": "invalidLambdaParameterName"},
                   {
-                    "name": "invalidLetBindingName",
-                    "term": {
+                    "handler": {
                       "lambda": {
                         "body": {
                           "inject": {
@@ -1136,10 +1130,10 @@
                                   "typeName": "hydra.core.Injection"}}},
                             "typeName": "hydra.core.Term"}},
                         "domain": {"variable": "hydra.error.core.InvalidLetBindingNameError"},
-                        "parameter": "y"}}},
+                        "parameter": "y"}},
+                    "name": "invalidLetBindingName"},
                   {
-                    "name": "invalidTypeLambdaParameterName",
-                    "term": {
+                    "handler": {
                       "lambda": {
                         "body": {
                           "inject": {
@@ -1167,10 +1161,10 @@
                                   "typeName": "hydra.core.Injection"}}},
                             "typeName": "hydra.core.Term"}},
                         "domain": {"variable": "hydra.error.core.InvalidTypeLambdaParameterNameError"},
-                        "parameter": "y"}}},
+                        "parameter": "y"}},
+                    "name": "invalidTypeLambdaParameterName"},
                   {
-                    "name": "nestedTermAnnotation",
-                    "term": {
+                    "handler": {
                       "lambda": {
                         "body": {
                           "inject": {
@@ -1198,10 +1192,10 @@
                                   "typeName": "hydra.core.Injection"}}},
                             "typeName": "hydra.core.Term"}},
                         "domain": {"variable": "hydra.error.core.NestedTermAnnotationError"},
-                        "parameter": "y"}}},
+                        "parameter": "y"}},
+                    "name": "nestedTermAnnotation"},
                   {
-                    "name": "redundantWrapUnwrap",
-                    "term": {
+                    "handler": {
                       "lambda": {
                         "body": {
                           "inject": {
@@ -1229,10 +1223,10 @@
                                   "typeName": "hydra.core.Injection"}}},
                             "typeName": "hydra.core.Term"}},
                         "domain": {"variable": "hydra.error.core.RedundantWrapUnwrapError"},
-                        "parameter": "y"}}},
+                        "parameter": "y"}},
+                    "name": "redundantWrapUnwrap"},
                   {
-                    "name": "selfApplication",
-                    "term": {
+                    "handler": {
                       "lambda": {
                         "body": {
                           "inject": {
@@ -1258,10 +1252,10 @@
                                   "typeName": "hydra.core.Injection"}}},
                             "typeName": "hydra.core.Term"}},
                         "domain": {"variable": "hydra.error.core.SelfApplicationError"},
-                        "parameter": "y"}}},
+                        "parameter": "y"}},
+                    "name": "selfApplication"},
                   {
-                    "name": "termVariableShadowing",
-                    "term": {
+                    "handler": {
                       "lambda": {
                         "body": {
                           "inject": {
@@ -1289,10 +1283,10 @@
                                   "typeName": "hydra.core.Injection"}}},
                             "typeName": "hydra.core.Term"}},
                         "domain": {"variable": "hydra.error.core.TermVariableShadowingError"},
-                        "parameter": "y"}}},
+                        "parameter": "y"}},
+                    "name": "termVariableShadowing"},
                   {
-                    "name": "typeVariableShadowingInTypeLambda",
-                    "term": {
+                    "handler": {
                       "lambda": {
                         "body": {
                           "inject": {
@@ -1322,10 +1316,10 @@
                                   "typeName": "hydra.core.Injection"}}},
                             "typeName": "hydra.core.Term"}},
                         "domain": {"variable": "hydra.error.core.TypeVariableShadowingInTypeLambdaError"},
-                        "parameter": "y"}}},
+                        "parameter": "y"}},
+                    "name": "typeVariableShadowingInTypeLambda"},
                   {
-                    "name": "undefinedTermVariable",
-                    "term": {
+                    "handler": {
                       "lambda": {
                         "body": {
                           "inject": {
@@ -1353,10 +1347,10 @@
                                   "typeName": "hydra.core.Injection"}}},
                             "typeName": "hydra.core.Term"}},
                         "domain": {"variable": "hydra.error.core.UndefinedTermVariableError"},
-                        "parameter": "y"}}},
+                        "parameter": "y"}},
+                    "name": "undefinedTermVariable"},
                   {
-                    "name": "undefinedTypeVariableInBindingType",
-                    "term": {
+                    "handler": {
                       "lambda": {
                         "body": {
                           "inject": {
@@ -1386,10 +1380,10 @@
                                   "typeName": "hydra.core.Injection"}}},
                             "typeName": "hydra.core.Term"}},
                         "domain": {"variable": "hydra.error.core.UndefinedTypeVariableInBindingTypeError"},
-                        "parameter": "y"}}},
+                        "parameter": "y"}},
+                    "name": "undefinedTypeVariableInBindingType"},
                   {
-                    "name": "undefinedTypeVariableInLambdaDomain",
-                    "term": {
+                    "handler": {
                       "lambda": {
                         "body": {
                           "inject": {
@@ -1419,10 +1413,10 @@
                                   "typeName": "hydra.core.Injection"}}},
                             "typeName": "hydra.core.Term"}},
                         "domain": {"variable": "hydra.error.core.UndefinedTypeVariableInLambdaDomainError"},
-                        "parameter": "y"}}},
+                        "parameter": "y"}},
+                    "name": "undefinedTypeVariableInLambdaDomain"},
                   {
-                    "name": "undefinedTypeVariableInTypeApplication",
-                    "term": {
+                    "handler": {
                       "lambda": {
                         "body": {
                           "inject": {
@@ -1452,10 +1446,10 @@
                                   "typeName": "hydra.core.Injection"}}},
                             "typeName": "hydra.core.Term"}},
                         "domain": {"variable": "hydra.error.core.UndefinedTypeVariableInTypeApplicationError"},
-                        "parameter": "y"}}},
+                        "parameter": "y"}},
+                    "name": "undefinedTypeVariableInTypeApplication"},
                   {
-                    "name": "unknownPrimitiveName",
-                    "term": {
+                    "handler": {
                       "lambda": {
                         "body": {
                           "inject": {
@@ -1483,10 +1477,10 @@
                                   "typeName": "hydra.core.Injection"}}},
                             "typeName": "hydra.core.Term"}},
                         "domain": {"variable": "hydra.error.core.UnknownPrimitiveNameError"},
-                        "parameter": "y"}}},
+                        "parameter": "y"}},
+                    "name": "unknownPrimitiveName"},
                   {
-                    "name": "unnecessaryIdentityApplication",
-                    "term": {
+                    "handler": {
                       "lambda": {
                         "body": {
                           "inject": {
@@ -1514,10 +1508,10 @@
                                   "typeName": "hydra.core.Injection"}}},
                             "typeName": "hydra.core.Term"}},
                         "domain": {"variable": "hydra.error.core.UnnecessaryIdentityApplicationError"},
-                        "parameter": "y"}}},
+                        "parameter": "y"}},
+                    "name": "unnecessaryIdentityApplication"},
                   {
-                    "name": "untypedTermVariable",
-                    "term": {
+                    "handler": {
                       "lambda": {
                         "body": {
                           "inject": {
@@ -1545,24 +1539,24 @@
                                   "typeName": "hydra.core.Injection"}}},
                             "typeName": "hydra.core.Term"}},
                         "domain": {"variable": "hydra.error.core.UntypedTermVariableError"},
-                        "parameter": "y"}}}],
-                "typeName": "hydra.error.core.InvalidTermError"}}}}}},
+                        "parameter": "y"}},
+                    "name": "untypedTermVariable"}],
+                "typeName": "hydra.error.core.InvalidTermError"}}}},
+        "name": "hydra.encode.error.core.invalidTermError",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.error.core.InvalidTermError"}}],
+          "result": {"type": {"variable": "hydra.core.Term"}},
+          "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.encode.error.core.invalidTypeError",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.error.core.InvalidTypeError"}}],
-          "result": {"type": {"variable": "hydra.core.Term"}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Encoder for hydra.error.core.InvalidTypeError"}}}],
             "body": {
               "cases": {
                 "cases": [
                   {
-                    "name": "duplicateRecordTypeFieldNames",
-                    "term": {
+                    "handler": {
                       "lambda": {
                         "body": {
                           "inject": {
@@ -1590,10 +1584,10 @@
                                   "typeName": "hydra.core.Injection"}}},
                             "typeName": "hydra.core.Term"}},
                         "domain": {"variable": "hydra.error.core.DuplicateRecordTypeFieldNamesError"},
-                        "parameter": "y"}}},
+                        "parameter": "y"}},
+                    "name": "duplicateRecordTypeFieldNames"},
                   {
-                    "name": "duplicateUnionTypeFieldNames",
-                    "term": {
+                    "handler": {
                       "lambda": {
                         "body": {
                           "inject": {
@@ -1621,10 +1615,10 @@
                                   "typeName": "hydra.core.Injection"}}},
                             "typeName": "hydra.core.Term"}},
                         "domain": {"variable": "hydra.error.core.DuplicateUnionTypeFieldNamesError"},
-                        "parameter": "y"}}},
+                        "parameter": "y"}},
+                    "name": "duplicateUnionTypeFieldNames"},
                   {
-                    "name": "emptyRecordType",
-                    "term": {
+                    "handler": {
                       "lambda": {
                         "body": {
                           "inject": {
@@ -1650,10 +1644,10 @@
                                   "typeName": "hydra.core.Injection"}}},
                             "typeName": "hydra.core.Term"}},
                         "domain": {"variable": "hydra.error.core.EmptyRecordTypeError"},
-                        "parameter": "y"}}},
+                        "parameter": "y"}},
+                    "name": "emptyRecordType"},
                   {
-                    "name": "emptyTypeAnnotation",
-                    "term": {
+                    "handler": {
                       "lambda": {
                         "body": {
                           "inject": {
@@ -1681,10 +1675,10 @@
                                   "typeName": "hydra.core.Injection"}}},
                             "typeName": "hydra.core.Term"}},
                         "domain": {"variable": "hydra.error.core.EmptyTypeAnnotationError"},
-                        "parameter": "y"}}},
+                        "parameter": "y"}},
+                    "name": "emptyTypeAnnotation"},
                   {
-                    "name": "emptyUnionType",
-                    "term": {
+                    "handler": {
                       "lambda": {
                         "body": {
                           "inject": {
@@ -1710,10 +1704,10 @@
                                   "typeName": "hydra.core.Injection"}}},
                             "typeName": "hydra.core.Term"}},
                         "domain": {"variable": "hydra.error.core.EmptyUnionTypeError"},
-                        "parameter": "y"}}},
+                        "parameter": "y"}},
+                    "name": "emptyUnionType"},
                   {
-                    "name": "invalidForallParameterName",
-                    "term": {
+                    "handler": {
                       "lambda": {
                         "body": {
                           "inject": {
@@ -1741,10 +1735,10 @@
                                   "typeName": "hydra.core.Injection"}}},
                             "typeName": "hydra.core.Term"}},
                         "domain": {"variable": "hydra.error.core.InvalidForallParameterNameError"},
-                        "parameter": "y"}}},
+                        "parameter": "y"}},
+                    "name": "invalidForallParameterName"},
                   {
-                    "name": "invalidTypeSchemeVariableName",
-                    "term": {
+                    "handler": {
                       "lambda": {
                         "body": {
                           "inject": {
@@ -1772,10 +1766,10 @@
                                   "typeName": "hydra.core.Injection"}}},
                             "typeName": "hydra.core.Term"}},
                         "domain": {"variable": "hydra.error.core.InvalidTypeSchemeVariableNameError"},
-                        "parameter": "y"}}},
+                        "parameter": "y"}},
+                    "name": "invalidTypeSchemeVariableName"},
                   {
-                    "name": "nestedTypeAnnotation",
-                    "term": {
+                    "handler": {
                       "lambda": {
                         "body": {
                           "inject": {
@@ -1803,10 +1797,10 @@
                                   "typeName": "hydra.core.Injection"}}},
                             "typeName": "hydra.core.Term"}},
                         "domain": {"variable": "hydra.error.core.NestedTypeAnnotationError"},
-                        "parameter": "y"}}},
+                        "parameter": "y"}},
+                    "name": "nestedTypeAnnotation"},
                   {
-                    "name": "nonComparableMapKeyType",
-                    "term": {
+                    "handler": {
                       "lambda": {
                         "body": {
                           "inject": {
@@ -1834,10 +1828,10 @@
                                   "typeName": "hydra.core.Injection"}}},
                             "typeName": "hydra.core.Term"}},
                         "domain": {"variable": "hydra.error.core.NonComparableMapKeyTypeError"},
-                        "parameter": "y"}}},
+                        "parameter": "y"}},
+                    "name": "nonComparableMapKeyType"},
                   {
-                    "name": "nonComparableSetElementType",
-                    "term": {
+                    "handler": {
                       "lambda": {
                         "body": {
                           "inject": {
@@ -1865,10 +1859,10 @@
                                   "typeName": "hydra.core.Injection"}}},
                             "typeName": "hydra.core.Term"}},
                         "domain": {"variable": "hydra.error.core.NonComparableSetElementTypeError"},
-                        "parameter": "y"}}},
+                        "parameter": "y"}},
+                    "name": "nonComparableSetElementType"},
                   {
-                    "name": "singleVariantUnion",
-                    "term": {
+                    "handler": {
                       "lambda": {
                         "body": {
                           "inject": {
@@ -1896,10 +1890,10 @@
                                   "typeName": "hydra.core.Injection"}}},
                             "typeName": "hydra.core.Term"}},
                         "domain": {"variable": "hydra.error.core.SingleVariantUnionError"},
-                        "parameter": "y"}}},
+                        "parameter": "y"}},
+                    "name": "singleVariantUnion"},
                   {
-                    "name": "typeVariableShadowingInForall",
-                    "term": {
+                    "handler": {
                       "lambda": {
                         "body": {
                           "inject": {
@@ -1927,10 +1921,10 @@
                                   "typeName": "hydra.core.Injection"}}},
                             "typeName": "hydra.core.Term"}},
                         "domain": {"variable": "hydra.error.core.TypeVariableShadowingInForallError"},
-                        "parameter": "y"}}},
+                        "parameter": "y"}},
+                    "name": "typeVariableShadowingInForall"},
                   {
-                    "name": "undefinedTypeVariable",
-                    "term": {
+                    "handler": {
                       "lambda": {
                         "body": {
                           "inject": {
@@ -1958,10 +1952,10 @@
                                   "typeName": "hydra.core.Injection"}}},
                             "typeName": "hydra.core.Term"}},
                         "domain": {"variable": "hydra.error.core.UndefinedTypeVariableError"},
-                        "parameter": "y"}}},
+                        "parameter": "y"}},
+                    "name": "undefinedTypeVariable"},
                   {
-                    "name": "voidInNonBottomPosition",
-                    "term": {
+                    "handler": {
                       "lambda": {
                         "body": {
                           "inject": {
@@ -1989,16 +1983,17 @@
                                   "typeName": "hydra.core.Injection"}}},
                             "typeName": "hydra.core.Term"}},
                         "domain": {"variable": "hydra.error.core.VoidInNonBottomPositionError"},
-                        "parameter": "y"}}}],
-                "typeName": "hydra.error.core.InvalidTypeError"}}}}}},
+                        "parameter": "y"}},
+                    "name": "voidInNonBottomPosition"}],
+                "typeName": "hydra.error.core.InvalidTypeError"}}}},
+        "name": "hydra.encode.error.core.invalidTypeError",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.error.core.InvalidTypeError"}}],
+          "result": {"type": {"variable": "hydra.core.Term"}},
+          "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.encode.error.core.invalidTypeLambdaParameterNameError",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.error.core.InvalidTypeLambdaParameterNameError"}}],
-          "result": {"type": {"variable": "hydra.core.Term"}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -2052,15 +2047,15 @@
                           "typeName": "hydra.core.Record"}}},
                     "typeName": "hydra.core.Term"}},
                 "domain": {"variable": "hydra.error.core.InvalidTypeLambdaParameterNameError"},
-                "parameter": "x"}}}}}},
+                "parameter": "x"}}}},
+        "name": "hydra.encode.error.core.invalidTypeLambdaParameterNameError",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.error.core.InvalidTypeLambdaParameterNameError"}}],
+          "result": {"type": {"variable": "hydra.core.Term"}},
+          "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.encode.error.core.invalidTypeSchemeVariableNameError",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.error.core.InvalidTypeSchemeVariableNameError"}}],
-          "result": {"type": {"variable": "hydra.core.Term"}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -2114,15 +2109,15 @@
                           "typeName": "hydra.core.Record"}}},
                     "typeName": "hydra.core.Term"}},
                 "domain": {"variable": "hydra.error.core.InvalidTypeSchemeVariableNameError"},
-                "parameter": "x"}}}}}},
+                "parameter": "x"}}}},
+        "name": "hydra.encode.error.core.invalidTypeSchemeVariableNameError",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.error.core.InvalidTypeSchemeVariableNameError"}}],
+          "result": {"type": {"variable": "hydra.core.Term"}},
+          "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.encode.error.core.literalTypeMismatchError",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.error.core.LiteralTypeMismatchError"}}],
-          "result": {"type": {"variable": "hydra.core.Term"}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Encoder for hydra.error.core.LiteralTypeMismatchError"}}}],
             "body": {
@@ -2172,15 +2167,15 @@
                           "typeName": "hydra.core.Record"}}},
                     "typeName": "hydra.core.Term"}},
                 "domain": {"variable": "hydra.error.core.LiteralTypeMismatchError"},
-                "parameter": "x"}}}}}},
+                "parameter": "x"}}}},
+        "name": "hydra.encode.error.core.literalTypeMismatchError",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.error.core.LiteralTypeMismatchError"}}],
+          "result": {"type": {"variable": "hydra.core.Term"}},
+          "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.encode.error.core.nestedTermAnnotationError",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.error.core.NestedTermAnnotationError"}}],
-          "result": {"type": {"variable": "hydra.core.Term"}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Encoder for hydra.error.core.NestedTermAnnotationError"}}}],
             "body": {
@@ -2216,15 +2211,15 @@
                           "typeName": "hydra.core.Record"}}},
                     "typeName": "hydra.core.Term"}},
                 "domain": {"variable": "hydra.error.core.NestedTermAnnotationError"},
-                "parameter": "x"}}}}}},
+                "parameter": "x"}}}},
+        "name": "hydra.encode.error.core.nestedTermAnnotationError",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.error.core.NestedTermAnnotationError"}}],
+          "result": {"type": {"variable": "hydra.core.Term"}},
+          "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.encode.error.core.nestedTypeAnnotationError",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.error.core.NestedTypeAnnotationError"}}],
-          "result": {"type": {"variable": "hydra.core.Term"}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Encoder for hydra.error.core.NestedTypeAnnotationError"}}}],
             "body": {
@@ -2260,15 +2255,15 @@
                           "typeName": "hydra.core.Record"}}},
                     "typeName": "hydra.core.Term"}},
                 "domain": {"variable": "hydra.error.core.NestedTypeAnnotationError"},
-                "parameter": "x"}}}}}},
+                "parameter": "x"}}}},
+        "name": "hydra.encode.error.core.nestedTypeAnnotationError",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.error.core.NestedTypeAnnotationError"}}],
+          "result": {"type": {"variable": "hydra.core.Term"}},
+          "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.encode.error.core.nonComparableMapKeyTypeError",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.error.core.NonComparableMapKeyTypeError"}}],
-          "result": {"type": {"variable": "hydra.core.Term"}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Encoder for hydra.error.core.NonComparableMapKeyTypeError"}}}],
             "body": {
@@ -2319,15 +2314,15 @@
                           "typeName": "hydra.core.Record"}}},
                     "typeName": "hydra.core.Term"}},
                 "domain": {"variable": "hydra.error.core.NonComparableMapKeyTypeError"},
-                "parameter": "x"}}}}}},
+                "parameter": "x"}}}},
+        "name": "hydra.encode.error.core.nonComparableMapKeyTypeError",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.error.core.NonComparableMapKeyTypeError"}}],
+          "result": {"type": {"variable": "hydra.core.Term"}},
+          "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.encode.error.core.nonComparableSetElementTypeError",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.error.core.NonComparableSetElementTypeError"}}],
-          "result": {"type": {"variable": "hydra.core.Term"}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -2381,15 +2376,15 @@
                           "typeName": "hydra.core.Record"}}},
                     "typeName": "hydra.core.Term"}},
                 "domain": {"variable": "hydra.error.core.NonComparableSetElementTypeError"},
-                "parameter": "x"}}}}}},
+                "parameter": "x"}}}},
+        "name": "hydra.encode.error.core.nonComparableSetElementTypeError",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.error.core.NonComparableSetElementTypeError"}}],
+          "result": {"type": {"variable": "hydra.core.Term"}},
+          "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.encode.error.core.redundantWrapUnwrapError",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.error.core.RedundantWrapUnwrapError"}}],
-          "result": {"type": {"variable": "hydra.core.Term"}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Encoder for hydra.error.core.RedundantWrapUnwrapError"}}}],
             "body": {
@@ -2439,15 +2434,15 @@
                           "typeName": "hydra.core.Record"}}},
                     "typeName": "hydra.core.Term"}},
                 "domain": {"variable": "hydra.error.core.RedundantWrapUnwrapError"},
-                "parameter": "x"}}}}}},
+                "parameter": "x"}}}},
+        "name": "hydra.encode.error.core.redundantWrapUnwrapError",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.error.core.RedundantWrapUnwrapError"}}],
+          "result": {"type": {"variable": "hydra.core.Term"}},
+          "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.encode.error.core.selfApplicationError",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.error.core.SelfApplicationError"}}],
-          "result": {"type": {"variable": "hydra.core.Term"}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Encoder for hydra.error.core.SelfApplicationError"}}}],
             "body": {
@@ -2497,15 +2492,15 @@
                           "typeName": "hydra.core.Record"}}},
                     "typeName": "hydra.core.Term"}},
                 "domain": {"variable": "hydra.error.core.SelfApplicationError"},
-                "parameter": "x"}}}}}},
+                "parameter": "x"}}}},
+        "name": "hydra.encode.error.core.selfApplicationError",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.error.core.SelfApplicationError"}}],
+          "result": {"type": {"variable": "hydra.core.Term"}},
+          "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.encode.error.core.singleVariantUnionError",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.error.core.SingleVariantUnionError"}}],
-          "result": {"type": {"variable": "hydra.core.Term"}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Encoder for hydra.error.core.SingleVariantUnionError"}}}],
             "body": {
@@ -2555,15 +2550,15 @@
                           "typeName": "hydra.core.Record"}}},
                     "typeName": "hydra.core.Term"}},
                 "domain": {"variable": "hydra.error.core.SingleVariantUnionError"},
-                "parameter": "x"}}}}}},
+                "parameter": "x"}}}},
+        "name": "hydra.encode.error.core.singleVariantUnionError",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.error.core.SingleVariantUnionError"}}],
+          "result": {"type": {"variable": "hydra.core.Term"}},
+          "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.encode.error.core.termVariableShadowingError",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.error.core.TermVariableShadowingError"}}],
-          "result": {"type": {"variable": "hydra.core.Term"}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Encoder for hydra.error.core.TermVariableShadowingError"}}}],
             "body": {
@@ -2614,15 +2609,15 @@
                           "typeName": "hydra.core.Record"}}},
                     "typeName": "hydra.core.Term"}},
                 "domain": {"variable": "hydra.error.core.TermVariableShadowingError"},
-                "parameter": "x"}}}}}},
+                "parameter": "x"}}}},
+        "name": "hydra.encode.error.core.termVariableShadowingError",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.error.core.TermVariableShadowingError"}}],
+          "result": {"type": {"variable": "hydra.core.Term"}},
+          "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.encode.error.core.typeVariableShadowingInForallError",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.error.core.TypeVariableShadowingInForallError"}}],
-          "result": {"type": {"variable": "hydra.core.Term"}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -2676,15 +2671,15 @@
                           "typeName": "hydra.core.Record"}}},
                     "typeName": "hydra.core.Term"}},
                 "domain": {"variable": "hydra.error.core.TypeVariableShadowingInForallError"},
-                "parameter": "x"}}}}}},
+                "parameter": "x"}}}},
+        "name": "hydra.encode.error.core.typeVariableShadowingInForallError",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.error.core.TypeVariableShadowingInForallError"}}],
+          "result": {"type": {"variable": "hydra.core.Term"}},
+          "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.encode.error.core.typeVariableShadowingInTypeLambdaError",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.error.core.TypeVariableShadowingInTypeLambdaError"}}],
-          "result": {"type": {"variable": "hydra.core.Term"}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -2740,15 +2735,15 @@
                           "typeName": "hydra.core.Record"}}},
                     "typeName": "hydra.core.Term"}},
                 "domain": {"variable": "hydra.error.core.TypeVariableShadowingInTypeLambdaError"},
-                "parameter": "x"}}}}}},
+                "parameter": "x"}}}},
+        "name": "hydra.encode.error.core.typeVariableShadowingInTypeLambdaError",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.error.core.TypeVariableShadowingInTypeLambdaError"}}],
+          "result": {"type": {"variable": "hydra.core.Term"}},
+          "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.encode.error.core.undefinedFieldError",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.error.core.UndefinedFieldError"}}],
-          "result": {"type": {"variable": "hydra.core.Term"}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Encoder for hydra.error.core.UndefinedFieldError"}}}],
             "body": {
@@ -2798,15 +2793,15 @@
                           "typeName": "hydra.core.Record"}}},
                     "typeName": "hydra.core.Term"}},
                 "domain": {"variable": "hydra.error.core.UndefinedFieldError"},
-                "parameter": "x"}}}}}},
+                "parameter": "x"}}}},
+        "name": "hydra.encode.error.core.undefinedFieldError",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.error.core.UndefinedFieldError"}}],
+          "result": {"type": {"variable": "hydra.core.Term"}},
+          "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.encode.error.core.undefinedTermVariableError",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.error.core.UndefinedTermVariableError"}}],
-          "result": {"type": {"variable": "hydra.core.Term"}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Encoder for hydra.error.core.UndefinedTermVariableError"}}}],
             "body": {
@@ -2857,15 +2852,15 @@
                           "typeName": "hydra.core.Record"}}},
                     "typeName": "hydra.core.Term"}},
                 "domain": {"variable": "hydra.error.core.UndefinedTermVariableError"},
-                "parameter": "x"}}}}}},
+                "parameter": "x"}}}},
+        "name": "hydra.encode.error.core.undefinedTermVariableError",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.error.core.UndefinedTermVariableError"}}],
+          "result": {"type": {"variable": "hydra.core.Term"}},
+          "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.encode.error.core.undefinedTypeVariableError",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.error.core.UndefinedTypeVariableError"}}],
-          "result": {"type": {"variable": "hydra.core.Term"}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Encoder for hydra.error.core.UndefinedTypeVariableError"}}}],
             "body": {
@@ -2916,15 +2911,15 @@
                           "typeName": "hydra.core.Record"}}},
                     "typeName": "hydra.core.Term"}},
                 "domain": {"variable": "hydra.error.core.UndefinedTypeVariableError"},
-                "parameter": "x"}}}}}},
+                "parameter": "x"}}}},
+        "name": "hydra.encode.error.core.undefinedTypeVariableError",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.error.core.UndefinedTypeVariableError"}}],
+          "result": {"type": {"variable": "hydra.core.Term"}},
+          "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.encode.error.core.undefinedTypeVariableInBindingTypeError",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.error.core.UndefinedTypeVariableInBindingTypeError"}}],
-          "result": {"type": {"variable": "hydra.core.Term"}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -2980,15 +2975,15 @@
                           "typeName": "hydra.core.Record"}}},
                     "typeName": "hydra.core.Term"}},
                 "domain": {"variable": "hydra.error.core.UndefinedTypeVariableInBindingTypeError"},
-                "parameter": "x"}}}}}},
+                "parameter": "x"}}}},
+        "name": "hydra.encode.error.core.undefinedTypeVariableInBindingTypeError",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.error.core.UndefinedTypeVariableInBindingTypeError"}}],
+          "result": {"type": {"variable": "hydra.core.Term"}},
+          "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.encode.error.core.undefinedTypeVariableInLambdaDomainError",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.error.core.UndefinedTypeVariableInLambdaDomainError"}}],
-          "result": {"type": {"variable": "hydra.core.Term"}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -3044,16 +3039,15 @@
                           "typeName": "hydra.core.Record"}}},
                     "typeName": "hydra.core.Term"}},
                 "domain": {"variable": "hydra.error.core.UndefinedTypeVariableInLambdaDomainError"},
-                "parameter": "x"}}}}}},
+                "parameter": "x"}}}},
+        "name": "hydra.encode.error.core.undefinedTypeVariableInLambdaDomainError",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.error.core.UndefinedTypeVariableInLambdaDomainError"}}],
+          "result": {"type": {"variable": "hydra.core.Term"}},
+          "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.encode.error.core.undefinedTypeVariableInTypeApplicationError",
-        "signature": {
-          "parameters": [
-            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.error.core.UndefinedTypeVariableInTypeApplicationError"}}],
-          "result": {"type": {"variable": "hydra.core.Term"}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -3109,15 +3103,16 @@
                           "typeName": "hydra.core.Record"}}},
                     "typeName": "hydra.core.Term"}},
                 "domain": {"variable": "hydra.error.core.UndefinedTypeVariableInTypeApplicationError"},
-                "parameter": "x"}}}}}},
+                "parameter": "x"}}}},
+        "name": "hydra.encode.error.core.undefinedTypeVariableInTypeApplicationError",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.error.core.UndefinedTypeVariableInTypeApplicationError"}}],
+          "result": {"type": {"variable": "hydra.core.Term"}},
+          "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.encode.error.core.unexpectedTermVariantError",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.error.core.UnexpectedTermVariantError"}}],
-          "result": {"type": {"variable": "hydra.core.Term"}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Encoder for hydra.error.core.UnexpectedTermVariantError"}}}],
             "body": {
@@ -3168,15 +3163,15 @@
                           "typeName": "hydra.core.Record"}}},
                     "typeName": "hydra.core.Term"}},
                 "domain": {"variable": "hydra.error.core.UnexpectedTermVariantError"},
-                "parameter": "x"}}}}}},
+                "parameter": "x"}}}},
+        "name": "hydra.encode.error.core.unexpectedTermVariantError",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.error.core.UnexpectedTermVariantError"}}],
+          "result": {"type": {"variable": "hydra.core.Term"}},
+          "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.encode.error.core.unexpectedTypeVariantError",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.error.core.UnexpectedTypeVariantError"}}],
-          "result": {"type": {"variable": "hydra.core.Term"}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Encoder for hydra.error.core.UnexpectedTypeVariantError"}}}],
             "body": {
@@ -3227,15 +3222,15 @@
                           "typeName": "hydra.core.Record"}}},
                     "typeName": "hydra.core.Term"}},
                 "domain": {"variable": "hydra.error.core.UnexpectedTypeVariantError"},
-                "parameter": "x"}}}}}},
+                "parameter": "x"}}}},
+        "name": "hydra.encode.error.core.unexpectedTypeVariantError",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.error.core.UnexpectedTypeVariantError"}}],
+          "result": {"type": {"variable": "hydra.core.Term"}},
+          "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.encode.error.core.unknownPrimitiveNameError",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.error.core.UnknownPrimitiveNameError"}}],
-          "result": {"type": {"variable": "hydra.core.Term"}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Encoder for hydra.error.core.UnknownPrimitiveNameError"}}}],
             "body": {
@@ -3285,15 +3280,15 @@
                           "typeName": "hydra.core.Record"}}},
                     "typeName": "hydra.core.Term"}},
                 "domain": {"variable": "hydra.error.core.UnknownPrimitiveNameError"},
-                "parameter": "x"}}}}}},
+                "parameter": "x"}}}},
+        "name": "hydra.encode.error.core.unknownPrimitiveNameError",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.error.core.UnknownPrimitiveNameError"}}],
+          "result": {"type": {"variable": "hydra.core.Term"}},
+          "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.encode.error.core.unnecessaryIdentityApplicationError",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.error.core.UnnecessaryIdentityApplicationError"}}],
-          "result": {"type": {"variable": "hydra.core.Term"}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -3333,15 +3328,15 @@
                           "typeName": "hydra.core.Record"}}},
                     "typeName": "hydra.core.Term"}},
                 "domain": {"variable": "hydra.error.core.UnnecessaryIdentityApplicationError"},
-                "parameter": "x"}}}}}},
+                "parameter": "x"}}}},
+        "name": "hydra.encode.error.core.unnecessaryIdentityApplicationError",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.error.core.UnnecessaryIdentityApplicationError"}}],
+          "result": {"type": {"variable": "hydra.core.Term"}},
+          "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.encode.error.core.untypedTermVariableError",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.error.core.UntypedTermVariableError"}}],
-          "result": {"type": {"variable": "hydra.core.Term"}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Encoder for hydra.error.core.UntypedTermVariableError"}}}],
             "body": {
@@ -3391,15 +3386,15 @@
                           "typeName": "hydra.core.Record"}}},
                     "typeName": "hydra.core.Term"}},
                 "domain": {"variable": "hydra.error.core.UntypedTermVariableError"},
-                "parameter": "x"}}}}}},
+                "parameter": "x"}}}},
+        "name": "hydra.encode.error.core.untypedTermVariableError",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.error.core.UntypedTermVariableError"}}],
+          "result": {"type": {"variable": "hydra.core.Term"}},
+          "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.encode.error.core.voidInNonBottomPositionError",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.error.core.VoidInNonBottomPositionError"}}],
-          "result": {"type": {"variable": "hydra.core.Term"}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Encoder for hydra.error.core.VoidInNonBottomPositionError"}}}],
             "body": {
@@ -3436,7 +3431,12 @@
                           "typeName": "hydra.core.Record"}}},
                     "typeName": "hydra.core.Term"}},
                 "domain": {"variable": "hydra.error.core.VoidInNonBottomPositionError"},
-                "parameter": "x"}}}}}}],
+                "parameter": "x"}}}},
+        "name": "hydra.encode.error.core.voidInNonBottomPositionError",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.error.core.VoidInNonBottomPositionError"}}],
+          "result": {"type": {"variable": "hydra.core.Term"}},
+          "typeParameters": []}}}],
   "dependencies": [
     {"module": "hydra.encode.paths"},
     {"module": "hydra.encode.core"},

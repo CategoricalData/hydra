@@ -2,19 +2,12 @@
   "definitions": [
     {
       "term": {
+        "body": {"variable": "hydra.lexical.emptyInferenceContext"},
         "name": "hydra.test.testEnv.testContext",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.typing.InferenceContext"}}, "typeParameters": []},
-        "term": {"variable": "hydra.lexical.emptyInferenceContext"}}},
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.typing.InferenceContext"}}, "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.test.testEnv.testGraph",
-        "signature": {
-          "parameters": [
-            {"isLazy": false, "name": "arg0", "type": {"variable": "t0"}},
-            {"isLazy": false, "name": "arg1", "type": {"variable": "t1"}}],
-          "result": {"type": {"variable": "hydra.graph.Graph"}},
-          "typeParameters": [{"constraints": [], "name": "t0"}, {"constraints": [], "name": "t1"}]},
-        "term": {
+        "body": {
           "typeLambda": {
             "body": {
               "typeLambda": {
@@ -24,7 +17,14 @@
                     "domain": {"variable": "t0"},
                     "parameter": "tys"}},
                 "parameter": "t1"}},
-            "parameter": "t0"}}}}],
+            "parameter": "t0"}},
+        "name": "hydra.test.testEnv.testGraph",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "t0"}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "t1"}}],
+          "result": {"type": {"variable": "hydra.graph.Graph"}},
+          "typeParameters": [{"constraints": [], "name": "t0"}, {"constraints": [], "name": "t1"}]}}}],
   "dependencies": [
     {"module": "hydra.lexical"},
     {"module": "hydra.paths"},

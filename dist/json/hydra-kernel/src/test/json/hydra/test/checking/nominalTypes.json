@@ -2,9 +2,7 @@
   "definitions": [
     {
       "term": {
-        "name": "hydra.test.checking.nominalTypes.allTests",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "record": {
             "fields": [
               {"name": "name", "term": {"literal": {"string": "Nominal types"}}},
@@ -20,12 +18,12 @@
               {
                 "name": "cases",
                 "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}],
-            "typeName": "hydra.testing.TestGroup"}}}},
+            "typeName": "hydra.testing.TestGroup"}},
+        "name": "hydra.test.checking.nominalTypes.allTests",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.test.checking.nominalTypes.recordsTests",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "record": {
             "fields": [
               {"name": "name", "term": {"literal": {"string": "Records"}}},
@@ -41,12 +39,12 @@
               {
                 "name": "cases",
                 "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}],
-            "typeName": "hydra.testing.TestGroup"}}}},
+            "typeName": "hydra.testing.TestGroup"}},
+        "name": "hydra.test.checking.nominalTypes.recordsTests",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.test.checking.nominalTypes.monomorphicRecordsTests",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "record": {
             "fields": [
               {"name": "name", "term": {"literal": {"string": "Monomorphic records"}}},
@@ -840,12 +838,12 @@
                           {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
-            "typeName": "hydra.testing.TestGroup"}}}},
+            "typeName": "hydra.testing.TestGroup"}},
+        "name": "hydra.test.checking.nominalTypes.monomorphicRecordsTests",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.test.checking.nominalTypes.polymorphicRecordsTests",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "record": {
             "fields": [
               {"name": "name", "term": {"literal": {"string": "Polymorphic records"}}},
@@ -1719,12 +1717,12 @@
                           {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
-            "typeName": "hydra.testing.TestGroup"}}}},
+            "typeName": "hydra.testing.TestGroup"}},
+        "name": "hydra.test.checking.nominalTypes.polymorphicRecordsTests",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.test.checking.nominalTypes.recordsInComplexContextsTests",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "record": {
             "fields": [
               {"name": "name", "term": {"literal": {"string": "Records in complex contexts"}}},
@@ -2403,12 +2401,12 @@
                           {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
-            "typeName": "hydra.testing.TestGroup"}}}},
+            "typeName": "hydra.testing.TestGroup"}},
+        "name": "hydra.test.checking.nominalTypes.recordsInComplexContextsTests",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.test.checking.nominalTypes.multiParameterPolymorphicRecordsTests",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "record": {
             "fields": [
               {"name": "name", "term": {"literal": {"string": "Multi-parameter polymorphic records"}}},
@@ -2991,12 +2989,12 @@
                           {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
-            "typeName": "hydra.testing.TestGroup"}}}},
+            "typeName": "hydra.testing.TestGroup"}},
+        "name": "hydra.test.checking.nominalTypes.multiParameterPolymorphicRecordsTests",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.test.checking.nominalTypes.recordEliminationsTests",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "record": {
             "fields": [
               {"name": "name", "term": {"literal": {"string": "Record eliminations"}}},
@@ -3019,12 +3017,12 @@
               {
                 "name": "cases",
                 "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}],
-            "typeName": "hydra.testing.TestGroup"}}}},
+            "typeName": "hydra.testing.TestGroup"}},
+        "name": "hydra.test.checking.nominalTypes.recordEliminationsTests",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.test.checking.nominalTypes.simpleRecordProjectionsTests",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "record": {
             "fields": [
               {"name": "name", "term": {"literal": {"string": "Simple record projections"}}},
@@ -3656,12 +3654,12 @@
                           {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
-            "typeName": "hydra.testing.TestGroup"}}}},
+            "typeName": "hydra.testing.TestGroup"}},
+        "name": "hydra.test.checking.nominalTypes.simpleRecordProjectionsTests",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.test.checking.nominalTypes.recordProjectionsAppliedToRecordsTests",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "record": {
             "fields": [
               {"name": "name", "term": {"literal": {"string": "Record projections applied to records"}}},
@@ -4208,12 +4206,12 @@
                           {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
-            "typeName": "hydra.testing.TestGroup"}}}},
+            "typeName": "hydra.testing.TestGroup"}},
+        "name": "hydra.test.checking.nominalTypes.recordProjectionsAppliedToRecordsTests",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.test.checking.nominalTypes.polymorphicRecordProjectionsTests",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "record": {
             "fields": [
               {"name": "name", "term": {"literal": {"string": "Polymorphic record projections"}}},
@@ -4839,12 +4837,12 @@
                           {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
-            "typeName": "hydra.testing.TestGroup"}}}},
+            "typeName": "hydra.testing.TestGroup"}},
+        "name": "hydra.test.checking.nominalTypes.polymorphicRecordProjectionsTests",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.test.checking.nominalTypes.polymorphicRecordProjectionsAppliedTests",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "record": {
             "fields": [
               {"name": "name", "term": {"literal": {"string": "Polymorphic record projections applied"}}},
@@ -5363,12 +5361,12 @@
                           {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
-            "typeName": "hydra.testing.TestGroup"}}}},
+            "typeName": "hydra.testing.TestGroup"}},
+        "name": "hydra.test.checking.nominalTypes.polymorphicRecordProjectionsAppliedTests",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.test.checking.nominalTypes.recordProjectionsWithVariablesTests",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "record": {
             "fields": [
               {"name": "name", "term": {"literal": {"string": "Record projections with variables"}}},
@@ -5920,12 +5918,12 @@
                           {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
-            "typeName": "hydra.testing.TestGroup"}}}},
+            "typeName": "hydra.testing.TestGroup"}},
+        "name": "hydra.test.checking.nominalTypes.recordProjectionsWithVariablesTests",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.test.checking.nominalTypes.recordProjectionsInComplexContextsTests",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "record": {
             "fields": [
               {"name": "name", "term": {"literal": {"string": "Record projections in complex contexts"}}},
@@ -6486,12 +6484,12 @@
                           {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
-            "typeName": "hydra.testing.TestGroup"}}}},
+            "typeName": "hydra.testing.TestGroup"}},
+        "name": "hydra.test.checking.nominalTypes.recordProjectionsInComplexContextsTests",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.test.checking.nominalTypes.multiParameterPolymorphicProjectionsTests",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "record": {
             "fields": [
               {"name": "name", "term": {"literal": {"string": "Multi-parameter polymorphic projections"}}},
@@ -6957,7 +6955,7 @@
                                                                                                                       "fields": [
                                                                                                                         {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "person"}}, "typeName": "hydra.core.Name"}}},
                                                                                                                         {
-                                                                                                                          "name": "term",
+                                                                                                                          "name": "handler",
                                                                                                                           "term": {
                                                                                                                             "inject": {
                                                                                                                               "field": {
@@ -6975,13 +6973,13 @@
                                                                                                                                             "typeName": "hydra.core.Term"}}}],
                                                                                                                                     "typeName": "hydra.core.Lambda"}}},
                                                                                                                               "typeName": "hydra.core.Term"}}}],
-                                                                                                                      "typeName": "hydra.core.Field"}},
+                                                                                                                      "typeName": "hydra.core.CaseAlternative"}},
                                                                                                                   {
                                                                                                                     "record": {
                                                                                                                       "fields": [
                                                                                                                         {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "other"}}, "typeName": "hydra.core.Name"}}},
                                                                                                                         {
-                                                                                                                          "name": "term",
+                                                                                                                          "name": "handler",
                                                                                                                           "term": {
                                                                                                                             "inject": {
                                                                                                                               "field": {
@@ -7035,7 +7033,7 @@
                                                                                                                                             "typeName": "hydra.core.Term"}}}],
                                                                                                                                     "typeName": "hydra.core.Lambda"}}},
                                                                                                                               "typeName": "hydra.core.Term"}}}],
-                                                                                                                      "typeName": "hydra.core.Field"}}]}}],
+                                                                                                                      "typeName": "hydra.core.CaseAlternative"}}]}}],
                                                                                                           "typeName": "hydra.core.CaseStatement"}}},
                                                                                                     "typeName": "hydra.core.Term"}}},
                                                                                               {
@@ -7316,12 +7314,12 @@
                           {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
-            "typeName": "hydra.testing.TestGroup"}}}},
+            "typeName": "hydra.testing.TestGroup"}},
+        "name": "hydra.test.checking.nominalTypes.multiParameterPolymorphicProjectionsTests",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.test.checking.nominalTypes.higherOrderRecordProjectionsTests",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "record": {
             "fields": [
               {"name": "name", "term": {"literal": {"string": "Higher-order record projections"}}},
@@ -8194,12 +8192,12 @@
                           {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
-            "typeName": "hydra.testing.TestGroup"}}}},
+            "typeName": "hydra.testing.TestGroup"}},
+        "name": "hydra.test.checking.nominalTypes.higherOrderRecordProjectionsTests",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.test.checking.nominalTypes.recursiveRecordProjectionsTests",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "record": {
             "fields": [
               {"name": "name", "term": {"literal": {"string": "Recursive record projections"}}},
@@ -8435,12 +8433,12 @@
                           {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
-            "typeName": "hydra.testing.TestGroup"}}}},
+            "typeName": "hydra.testing.TestGroup"}},
+        "name": "hydra.test.checking.nominalTypes.recursiveRecordProjectionsTests",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.test.checking.nominalTypes.recordProjectionsWithMutualRecursionTests",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "record": {
             "fields": [
               {"name": "name", "term": {"literal": {"string": "Record projections with mutual recursion"}}},
@@ -9120,12 +9118,12 @@
                           {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
-            "typeName": "hydra.testing.TestGroup"}}}},
+            "typeName": "hydra.testing.TestGroup"}},
+        "name": "hydra.test.checking.nominalTypes.recordProjectionsWithMutualRecursionTests",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.test.checking.nominalTypes.unionsTests",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "record": {
             "fields": [
               {"name": "name", "term": {"literal": {"string": "Unions"}}},
@@ -9144,12 +9142,12 @@
               {
                 "name": "cases",
                 "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}],
-            "typeName": "hydra.testing.TestGroup"}}}},
+            "typeName": "hydra.testing.TestGroup"}},
+        "name": "hydra.test.checking.nominalTypes.unionsTests",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.test.checking.nominalTypes.simpleUnionInjectionsTests",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "record": {
             "fields": [
               {"name": "name", "term": {"literal": {"string": "Simple union injections"}}},
@@ -9488,12 +9486,12 @@
                           {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
-            "typeName": "hydra.testing.TestGroup"}}}},
+            "typeName": "hydra.testing.TestGroup"}},
+        "name": "hydra.test.checking.nominalTypes.simpleUnionInjectionsTests",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.test.checking.nominalTypes.unionInjectionsWithDataTests",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "record": {
             "fields": [
               {"name": "name", "term": {"literal": {"string": "Union injections with data"}}},
@@ -9990,12 +9988,12 @@
                           {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
-            "typeName": "hydra.testing.TestGroup"}}}},
+            "typeName": "hydra.testing.TestGroup"}},
+        "name": "hydra.test.checking.nominalTypes.unionInjectionsWithDataTests",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.test.checking.nominalTypes.polymorphicUnionInjectionsTests",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "record": {
             "fields": [
               {"name": "name", "term": {"literal": {"string": "Polymorphic union injections"}}},
@@ -10487,12 +10485,12 @@
                           {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
-            "typeName": "hydra.testing.TestGroup"}}}},
+            "typeName": "hydra.testing.TestGroup"}},
+        "name": "hydra.test.checking.nominalTypes.polymorphicUnionInjectionsTests",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.test.checking.nominalTypes.polymorphicRecursiveUnionInjectionsTests",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "record": {
             "fields": [
               {"name": "name", "term": {"literal": {"string": "Polymorphic recursive union injections"}}},
@@ -10930,12 +10928,12 @@
                           {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
-            "typeName": "hydra.testing.TestGroup"}}}},
+            "typeName": "hydra.testing.TestGroup"}},
+        "name": "hydra.test.checking.nominalTypes.polymorphicRecursiveUnionInjectionsTests",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.test.checking.nominalTypes.polymorphicUnionsFromLambdaTests",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "record": {
             "fields": [
               {"name": "name", "term": {"literal": {"string": "Polymorphic unions from lambda"}}},
@@ -11293,12 +11291,12 @@
                           {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
-            "typeName": "hydra.testing.TestGroup"}}}},
+            "typeName": "hydra.testing.TestGroup"}},
+        "name": "hydra.test.checking.nominalTypes.polymorphicUnionsFromLambdaTests",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.test.checking.nominalTypes.unionsInComplexContextsTests",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "record": {
             "fields": [
               {"name": "name", "term": {"literal": {"string": "Unions in complex contexts"}}},
@@ -11799,12 +11797,12 @@
                           {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
-            "typeName": "hydra.testing.TestGroup"}}}},
+            "typeName": "hydra.testing.TestGroup"}},
+        "name": "hydra.test.checking.nominalTypes.unionsInComplexContextsTests",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.test.checking.nominalTypes.multiParameterPolymorphicInjectionsTests",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "record": {
             "fields": [
               {"name": "name", "term": {"literal": {"string": "Multi-parameter polymorphic injections"}}},
@@ -12942,12 +12940,12 @@
                           {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
-            "typeName": "hydra.testing.TestGroup"}}}},
+            "typeName": "hydra.testing.TestGroup"}},
+        "name": "hydra.test.checking.nominalTypes.multiParameterPolymorphicInjectionsTests",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.test.checking.nominalTypes.unionEliminationsTests",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "record": {
             "fields": [
               {"name": "name", "term": {"literal": {"string": "Union eliminations"}}},
@@ -12968,12 +12966,12 @@
               {
                 "name": "cases",
                 "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}],
-            "typeName": "hydra.testing.TestGroup"}}}},
+            "typeName": "hydra.testing.TestGroup"}},
+        "name": "hydra.test.checking.nominalTypes.unionEliminationsTests",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.test.checking.nominalTypes.simpleUnitVariantEliminationsTests",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "record": {
             "fields": [
               {"name": "name", "term": {"literal": {"string": "Simple unit inject eliminations"}}},
@@ -13024,7 +13022,7 @@
                                                                             "fields": [
                                                                               {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "lessThan"}}, "typeName": "hydra.core.Name"}}},
                                                                               {
-                                                                                "name": "term",
+                                                                                "name": "handler",
                                                                                 "term": {
                                                                                   "inject": {
                                                                                     "field": {
@@ -13044,13 +13042,13 @@
                                                                                                   "typeName": "hydra.core.Term"}}}],
                                                                                           "typeName": "hydra.core.Lambda"}}},
                                                                                     "typeName": "hydra.core.Term"}}}],
-                                                                            "typeName": "hydra.core.Field"}},
+                                                                            "typeName": "hydra.core.CaseAlternative"}},
                                                                         {
                                                                           "record": {
                                                                             "fields": [
                                                                               {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "equalTo"}}, "typeName": "hydra.core.Name"}}},
                                                                               {
-                                                                                "name": "term",
+                                                                                "name": "handler",
                                                                                 "term": {
                                                                                   "inject": {
                                                                                     "field": {
@@ -13070,13 +13068,13 @@
                                                                                                   "typeName": "hydra.core.Term"}}}],
                                                                                           "typeName": "hydra.core.Lambda"}}},
                                                                                     "typeName": "hydra.core.Term"}}}],
-                                                                            "typeName": "hydra.core.Field"}},
+                                                                            "typeName": "hydra.core.CaseAlternative"}},
                                                                         {
                                                                           "record": {
                                                                             "fields": [
                                                                               {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "greaterThan"}}, "typeName": "hydra.core.Name"}}},
                                                                               {
-                                                                                "name": "term",
+                                                                                "name": "handler",
                                                                                 "term": {
                                                                                   "inject": {
                                                                                     "field": {
@@ -13096,7 +13094,7 @@
                                                                                                   "typeName": "hydra.core.Term"}}}],
                                                                                           "typeName": "hydra.core.Lambda"}}},
                                                                                     "typeName": "hydra.core.Term"}}}],
-                                                                            "typeName": "hydra.core.Field"}}]}}],
+                                                                            "typeName": "hydra.core.CaseAlternative"}}]}}],
                                                                 "typeName": "hydra.core.CaseStatement"}}},
                                                           "typeName": "hydra.core.Term"}},
                                                       "function": {
@@ -13227,7 +13225,7 @@
                                                                             "fields": [
                                                                               {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "lessThan"}}, "typeName": "hydra.core.Name"}}},
                                                                               {
-                                                                                "name": "term",
+                                                                                "name": "handler",
                                                                                 "term": {
                                                                                   "inject": {
                                                                                     "field": {
@@ -13253,13 +13251,13 @@
                                                                                                   "typeName": "hydra.core.Term"}}}],
                                                                                           "typeName": "hydra.core.Lambda"}}},
                                                                                     "typeName": "hydra.core.Term"}}}],
-                                                                            "typeName": "hydra.core.Field"}},
+                                                                            "typeName": "hydra.core.CaseAlternative"}},
                                                                         {
                                                                           "record": {
                                                                             "fields": [
                                                                               {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "equalTo"}}, "typeName": "hydra.core.Name"}}},
                                                                               {
-                                                                                "name": "term",
+                                                                                "name": "handler",
                                                                                 "term": {
                                                                                   "inject": {
                                                                                     "field": {
@@ -13285,13 +13283,13 @@
                                                                                                   "typeName": "hydra.core.Term"}}}],
                                                                                           "typeName": "hydra.core.Lambda"}}},
                                                                                     "typeName": "hydra.core.Term"}}}],
-                                                                            "typeName": "hydra.core.Field"}},
+                                                                            "typeName": "hydra.core.CaseAlternative"}},
                                                                         {
                                                                           "record": {
                                                                             "fields": [
                                                                               {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "greaterThan"}}, "typeName": "hydra.core.Name"}}},
                                                                               {
-                                                                                "name": "term",
+                                                                                "name": "handler",
                                                                                 "term": {
                                                                                   "inject": {
                                                                                     "field": {
@@ -13317,7 +13315,7 @@
                                                                                                   "typeName": "hydra.core.Term"}}}],
                                                                                           "typeName": "hydra.core.Lambda"}}},
                                                                                     "typeName": "hydra.core.Term"}}}],
-                                                                            "typeName": "hydra.core.Field"}}]}}],
+                                                                            "typeName": "hydra.core.CaseAlternative"}}]}}],
                                                                 "typeName": "hydra.core.CaseStatement"}}},
                                                           "typeName": "hydra.core.Term"}},
                                                       "function": {
@@ -13462,7 +13460,7 @@
                                                                                           "fields": [
                                                                                             {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "lessThan"}}, "typeName": "hydra.core.Name"}}},
                                                                                             {
-                                                                                              "name": "term",
+                                                                                              "name": "handler",
                                                                                               "term": {
                                                                                                 "inject": {
                                                                                                   "field": {
@@ -13482,13 +13480,13 @@
                                                                                                                 "typeName": "hydra.core.Term"}}}],
                                                                                                         "typeName": "hydra.core.Lambda"}}},
                                                                                                   "typeName": "hydra.core.Term"}}}],
-                                                                                          "typeName": "hydra.core.Field"}},
+                                                                                          "typeName": "hydra.core.CaseAlternative"}},
                                                                                       {
                                                                                         "record": {
                                                                                           "fields": [
                                                                                             {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "equalTo"}}, "typeName": "hydra.core.Name"}}},
                                                                                             {
-                                                                                              "name": "term",
+                                                                                              "name": "handler",
                                                                                               "term": {
                                                                                                 "inject": {
                                                                                                   "field": {
@@ -13508,13 +13506,13 @@
                                                                                                                 "typeName": "hydra.core.Term"}}}],
                                                                                                         "typeName": "hydra.core.Lambda"}}},
                                                                                                   "typeName": "hydra.core.Term"}}}],
-                                                                                          "typeName": "hydra.core.Field"}},
+                                                                                          "typeName": "hydra.core.CaseAlternative"}},
                                                                                       {
                                                                                         "record": {
                                                                                           "fields": [
                                                                                             {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "greaterThan"}}, "typeName": "hydra.core.Name"}}},
                                                                                             {
-                                                                                              "name": "term",
+                                                                                              "name": "handler",
                                                                                               "term": {
                                                                                                 "inject": {
                                                                                                   "field": {
@@ -13534,7 +13532,7 @@
                                                                                                                 "typeName": "hydra.core.Term"}}}],
                                                                                                         "typeName": "hydra.core.Lambda"}}},
                                                                                                   "typeName": "hydra.core.Term"}}}],
-                                                                                          "typeName": "hydra.core.Field"}}]}}],
+                                                                                          "typeName": "hydra.core.CaseAlternative"}}]}}],
                                                                               "typeName": "hydra.core.CaseStatement"}}},
                                                                         "typeName": "hydra.core.Term"}}},
                                                                   {
@@ -13631,12 +13629,12 @@
                           {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
-            "typeName": "hydra.testing.TestGroup"}}}},
+            "typeName": "hydra.testing.TestGroup"}},
+        "name": "hydra.test.checking.nominalTypes.simpleUnitVariantEliminationsTests",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.test.checking.nominalTypes.unionEliminationsWithDataTests",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "record": {
             "fields": [
               {"name": "name", "term": {"literal": {"string": "Union eliminations with data"}}},
@@ -13687,7 +13685,7 @@
                                                                             "fields": [
                                                                               {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "int"}}, "typeName": "hydra.core.Name"}}},
                                                                               {
-                                                                                "name": "term",
+                                                                                "name": "handler",
                                                                                 "term": {
                                                                                   "inject": {
                                                                                     "field": {
@@ -13705,13 +13703,13 @@
                                                                                                   "typeName": "hydra.core.Term"}}}],
                                                                                           "typeName": "hydra.core.Lambda"}}},
                                                                                     "typeName": "hydra.core.Term"}}}],
-                                                                            "typeName": "hydra.core.Field"}},
+                                                                            "typeName": "hydra.core.CaseAlternative"}},
                                                                         {
                                                                           "record": {
                                                                             "fields": [
                                                                               {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "float"}}, "typeName": "hydra.core.Name"}}},
                                                                               {
-                                                                                "name": "term",
+                                                                                "name": "handler",
                                                                                 "term": {
                                                                                   "inject": {
                                                                                     "field": {
@@ -13737,7 +13735,7 @@
                                                                                                   "typeName": "hydra.core.Term"}}}],
                                                                                           "typeName": "hydra.core.Lambda"}}},
                                                                                     "typeName": "hydra.core.Term"}}}],
-                                                                            "typeName": "hydra.core.Field"}}]}}],
+                                                                            "typeName": "hydra.core.CaseAlternative"}}]}}],
                                                                 "typeName": "hydra.core.CaseStatement"}}},
                                                           "typeName": "hydra.core.Term"}},
                                                       "function": {
@@ -13873,7 +13871,7 @@
                                                                             "fields": [
                                                                               {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "int"}}, "typeName": "hydra.core.Name"}}},
                                                                               {
-                                                                                "name": "term",
+                                                                                "name": "handler",
                                                                                 "term": {
                                                                                   "inject": {
                                                                                     "field": {
@@ -13910,13 +13908,13 @@
                                                                                                   "typeName": "hydra.core.Term"}}}],
                                                                                           "typeName": "hydra.core.Lambda"}}},
                                                                                     "typeName": "hydra.core.Term"}}}],
-                                                                            "typeName": "hydra.core.Field"}},
+                                                                            "typeName": "hydra.core.CaseAlternative"}},
                                                                         {
                                                                           "record": {
                                                                             "fields": [
                                                                               {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "float"}}, "typeName": "hydra.core.Name"}}},
                                                                               {
-                                                                                "name": "term",
+                                                                                "name": "handler",
                                                                                 "term": {
                                                                                   "inject": {
                                                                                     "field": {
@@ -13953,7 +13951,7 @@
                                                                                                   "typeName": "hydra.core.Term"}}}],
                                                                                           "typeName": "hydra.core.Lambda"}}},
                                                                                     "typeName": "hydra.core.Term"}}}],
-                                                                            "typeName": "hydra.core.Field"}}]}}],
+                                                                            "typeName": "hydra.core.CaseAlternative"}}]}}],
                                                                 "typeName": "hydra.core.CaseStatement"}}},
                                                           "typeName": "hydra.core.Term"}},
                                                       "function": {
@@ -14093,7 +14091,7 @@
                                                                                           "fields": [
                                                                                             {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "int"}}, "typeName": "hydra.core.Name"}}},
                                                                                             {
-                                                                                              "name": "term",
+                                                                                              "name": "handler",
                                                                                               "term": {
                                                                                                 "inject": {
                                                                                                   "field": {
@@ -14155,13 +14153,13 @@
                                                                                                                 "typeName": "hydra.core.Term"}}}],
                                                                                                         "typeName": "hydra.core.Lambda"}}},
                                                                                                   "typeName": "hydra.core.Term"}}}],
-                                                                                          "typeName": "hydra.core.Field"}},
+                                                                                          "typeName": "hydra.core.CaseAlternative"}},
                                                                                       {
                                                                                         "record": {
                                                                                           "fields": [
                                                                                             {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "float"}}, "typeName": "hydra.core.Name"}}},
                                                                                             {
-                                                                                              "name": "term",
+                                                                                              "name": "handler",
                                                                                               "term": {
                                                                                                 "inject": {
                                                                                                   "field": {
@@ -14187,7 +14185,7 @@
                                                                                                                 "typeName": "hydra.core.Term"}}}],
                                                                                                         "typeName": "hydra.core.Lambda"}}},
                                                                                                   "typeName": "hydra.core.Term"}}}],
-                                                                                          "typeName": "hydra.core.Field"}}]}}],
+                                                                                          "typeName": "hydra.core.CaseAlternative"}}]}}],
                                                                               "typeName": "hydra.core.CaseStatement"}}},
                                                                         "typeName": "hydra.core.Term"}}},
                                                                   {
@@ -14341,7 +14339,7 @@
                                                                             "fields": [
                                                                               {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "unixTimeMillis"}}, "typeName": "hydra.core.Name"}}},
                                                                               {
-                                                                                "name": "term",
+                                                                                "name": "handler",
                                                                                 "term": {
                                                                                   "inject": {
                                                                                     "field": {
@@ -14378,13 +14376,13 @@
                                                                                                   "typeName": "hydra.core.Term"}}}],
                                                                                           "typeName": "hydra.core.Lambda"}}},
                                                                                     "typeName": "hydra.core.Term"}}}],
-                                                                            "typeName": "hydra.core.Field"}},
+                                                                            "typeName": "hydra.core.CaseAlternative"}},
                                                                         {
                                                                           "record": {
                                                                             "fields": [
                                                                               {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "date"}}, "typeName": "hydra.core.Name"}}},
                                                                               {
-                                                                                "name": "term",
+                                                                                "name": "handler",
                                                                                 "term": {
                                                                                   "inject": {
                                                                                     "field": {
@@ -14402,7 +14400,7 @@
                                                                                                   "typeName": "hydra.core.Term"}}}],
                                                                                           "typeName": "hydra.core.Lambda"}}},
                                                                                     "typeName": "hydra.core.Term"}}}],
-                                                                            "typeName": "hydra.core.Field"}}]}}],
+                                                                            "typeName": "hydra.core.CaseAlternative"}}]}}],
                                                                 "typeName": "hydra.core.CaseStatement"}}},
                                                           "typeName": "hydra.core.Term"}},
                                                       "function": {
@@ -14494,12 +14492,12 @@
                           {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
-            "typeName": "hydra.testing.TestGroup"}}}},
+            "typeName": "hydra.testing.TestGroup"}},
+        "name": "hydra.test.checking.nominalTypes.unionEliminationsWithDataTests",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.test.checking.nominalTypes.polymorphicUnionEliminationsTests",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "record": {
             "fields": [
               {"name": "name", "term": {"literal": {"string": "Polymorphic union eliminations"}}},
@@ -14514,12 +14512,12 @@
               {
                 "name": "cases",
                 "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}],
-            "typeName": "hydra.testing.TestGroup"}}}},
+            "typeName": "hydra.testing.TestGroup"}},
+        "name": "hydra.test.checking.nominalTypes.polymorphicUnionEliminationsTests",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.test.checking.nominalTypes.simplePolymorphicUnionTests",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "record": {
             "fields": [
               {"name": "name", "term": {"literal": {"string": "Simple polymorphic unions"}}},
@@ -14570,7 +14568,7 @@
                                                                             "fields": [
                                                                               {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "person"}}, "typeName": "hydra.core.Name"}}},
                                                                               {
-                                                                                "name": "term",
+                                                                                "name": "handler",
                                                                                 "term": {
                                                                                   "inject": {
                                                                                     "field": {
@@ -14612,13 +14610,13 @@
                                                                                                   "typeName": "hydra.core.Term"}}}],
                                                                                           "typeName": "hydra.core.Lambda"}}},
                                                                                     "typeName": "hydra.core.Term"}}}],
-                                                                            "typeName": "hydra.core.Field"}},
+                                                                            "typeName": "hydra.core.CaseAlternative"}},
                                                                         {
                                                                           "record": {
                                                                             "fields": [
                                                                               {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "other"}}, "typeName": "hydra.core.Name"}}},
                                                                               {
-                                                                                "name": "term",
+                                                                                "name": "handler",
                                                                                 "term": {
                                                                                   "inject": {
                                                                                     "field": {
@@ -14636,7 +14634,7 @@
                                                                                                   "typeName": "hydra.core.Term"}}}],
                                                                                           "typeName": "hydra.core.Lambda"}}},
                                                                                     "typeName": "hydra.core.Term"}}}],
-                                                                            "typeName": "hydra.core.Field"}}]}}],
+                                                                            "typeName": "hydra.core.CaseAlternative"}}]}}],
                                                                 "typeName": "hydra.core.CaseStatement"}}},
                                                           "typeName": "hydra.core.Term"}},
                                                       "function": {
@@ -14795,7 +14793,7 @@
                                                                                           "fields": [
                                                                                             {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "person"}}, "typeName": "hydra.core.Name"}}},
                                                                                             {
-                                                                                              "name": "term",
+                                                                                              "name": "handler",
                                                                                               "term": {
                                                                                                 "inject": {
                                                                                                   "field": {
@@ -14837,13 +14835,13 @@
                                                                                                                 "typeName": "hydra.core.Term"}}}],
                                                                                                         "typeName": "hydra.core.Lambda"}}},
                                                                                                   "typeName": "hydra.core.Term"}}}],
-                                                                                          "typeName": "hydra.core.Field"}},
+                                                                                          "typeName": "hydra.core.CaseAlternative"}},
                                                                                       {
                                                                                         "record": {
                                                                                           "fields": [
                                                                                             {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "other"}}, "typeName": "hydra.core.Name"}}},
                                                                                             {
-                                                                                              "name": "term",
+                                                                                              "name": "handler",
                                                                                               "term": {
                                                                                                 "inject": {
                                                                                                   "field": {
@@ -14861,7 +14859,7 @@
                                                                                                                 "typeName": "hydra.core.Term"}}}],
                                                                                                         "typeName": "hydra.core.Lambda"}}},
                                                                                                   "typeName": "hydra.core.Term"}}}],
-                                                                                          "typeName": "hydra.core.Field"}}]}}],
+                                                                                          "typeName": "hydra.core.CaseAlternative"}}]}}],
                                                                               "typeName": "hydra.core.CaseStatement"}}},
                                                                         "typeName": "hydra.core.Term"}}},
                                                                   {
@@ -14965,12 +14963,12 @@
                           {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
-            "typeName": "hydra.testing.TestGroup"}}}},
+            "typeName": "hydra.testing.TestGroup"}},
+        "name": "hydra.test.checking.nominalTypes.simplePolymorphicUnionTests",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.test.checking.nominalTypes.usingUnionPolymorphicRecursiveTests",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "record": {
             "fields": [
               {"name": "name", "term": {"literal": {"string": "using UnionPolymorphicRecursive"}}},
@@ -15046,7 +15044,7 @@
                                                                                                       "fields": [
                                                                                                         {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "value"}}, "typeName": "hydra.core.Name"}}},
                                                                                                         {
-                                                                                                          "name": "term",
+                                                                                                          "name": "handler",
                                                                                                           "term": {
                                                                                                             "inject": {
                                                                                                               "field": {
@@ -15083,7 +15081,7 @@
                                                                                                                             "typeName": "hydra.core.Term"}}}],
                                                                                                                     "typeName": "hydra.core.Lambda"}}},
                                                                                                               "typeName": "hydra.core.Term"}}}],
-                                                                                                      "typeName": "hydra.core.Field"}}]}}],
+                                                                                                      "typeName": "hydra.core.CaseAlternative"}}]}}],
                                                                                           "typeName": "hydra.core.CaseStatement"}}},
                                                                                     "typeName": "hydra.core.Term"}}},
                                                                               {
@@ -15284,7 +15282,7 @@
                                                                                                                     "fields": [
                                                                                                                       {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "value"}}, "typeName": "hydra.core.Name"}}},
                                                                                                                       {
-                                                                                                                        "name": "term",
+                                                                                                                        "name": "handler",
                                                                                                                         "term": {
                                                                                                                           "inject": {
                                                                                                                             "field": {
@@ -15321,7 +15319,7 @@
                                                                                                                                           "typeName": "hydra.core.Term"}}}],
                                                                                                                                   "typeName": "hydra.core.Lambda"}}},
                                                                                                                             "typeName": "hydra.core.Term"}}}],
-                                                                                                                    "typeName": "hydra.core.Field"}}]}}],
+                                                                                                                    "typeName": "hydra.core.CaseAlternative"}}]}}],
                                                                                                         "typeName": "hydra.core.CaseStatement"}}},
                                                                                                   "typeName": "hydra.core.Term"}}},
                                                                                             {
@@ -15527,7 +15525,7 @@
                                                                                                                                   "fields": [
                                                                                                                                     {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "value"}}, "typeName": "hydra.core.Name"}}},
                                                                                                                                     {
-                                                                                                                                      "name": "term",
+                                                                                                                                      "name": "handler",
                                                                                                                                       "term": {
                                                                                                                                         "inject": {
                                                                                                                                           "field": {
@@ -15564,7 +15562,7 @@
                                                                                                                                                         "typeName": "hydra.core.Term"}}}],
                                                                                                                                                 "typeName": "hydra.core.Lambda"}}},
                                                                                                                                           "typeName": "hydra.core.Term"}}}],
-                                                                                                                                  "typeName": "hydra.core.Field"}}]}}],
+                                                                                                                                  "typeName": "hydra.core.CaseAlternative"}}]}}],
                                                                                                                       "typeName": "hydra.core.CaseStatement"}}},
                                                                                                                 "typeName": "hydra.core.Term"}}},
                                                                                                           {
@@ -15786,7 +15784,7 @@
                                                                                                                                   "fields": [
                                                                                                                                     {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "value"}}, "typeName": "hydra.core.Name"}}},
                                                                                                                                     {
-                                                                                                                                      "name": "term",
+                                                                                                                                      "name": "handler",
                                                                                                                                       "term": {
                                                                                                                                         "inject": {
                                                                                                                                           "field": {
@@ -15806,7 +15804,7 @@
                                                                                                                                                         "typeName": "hydra.core.Term"}}}],
                                                                                                                                                 "typeName": "hydra.core.Lambda"}}},
                                                                                                                                           "typeName": "hydra.core.Term"}}}],
-                                                                                                                                  "typeName": "hydra.core.Field"}}]}}],
+                                                                                                                                  "typeName": "hydra.core.CaseAlternative"}}]}}],
                                                                                                                       "typeName": "hydra.core.CaseStatement"}}},
                                                                                                                 "typeName": "hydra.core.Term"}}},
                                                                                                           {
@@ -15949,12 +15947,12 @@
                           {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
-            "typeName": "hydra.testing.TestGroup"}}}},
+            "typeName": "hydra.testing.TestGroup"}},
+        "name": "hydra.test.checking.nominalTypes.usingUnionPolymorphicRecursiveTests",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.test.checking.nominalTypes.usingKernelTypesTests",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "record": {
             "fields": [
               {"name": "name", "term": {"literal": {"string": "Using kernel types"}}},
@@ -16038,7 +16036,7 @@
                                                                                                                       "fields": [
                                                                                                                         {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "encode"}}, "typeName": "hydra.core.Name"}}},
                                                                                                                         {
-                                                                                                                          "name": "term",
+                                                                                                                          "name": "handler",
                                                                                                                           "term": {
                                                                                                                             "inject": {
                                                                                                                               "field": {
@@ -16112,13 +16110,13 @@
                                                                                                                                             "typeName": "hydra.core.Term"}}}],
                                                                                                                                     "typeName": "hydra.core.Lambda"}}},
                                                                                                                               "typeName": "hydra.core.Term"}}}],
-                                                                                                                      "typeName": "hydra.core.Field"}},
+                                                                                                                      "typeName": "hydra.core.CaseAlternative"}},
                                                                                                                   {
                                                                                                                     "record": {
                                                                                                                       "fields": [
                                                                                                                         {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "decode"}}, "typeName": "hydra.core.Name"}}},
                                                                                                                         {
-                                                                                                                          "name": "term",
+                                                                                                                          "name": "handler",
                                                                                                                           "term": {
                                                                                                                             "inject": {
                                                                                                                               "field": {
@@ -16192,7 +16190,7 @@
                                                                                                                                             "typeName": "hydra.core.Term"}}}],
                                                                                                                                     "typeName": "hydra.core.Lambda"}}},
                                                                                                                               "typeName": "hydra.core.Term"}}}],
-                                                                                                                      "typeName": "hydra.core.Field"}}]}}],
+                                                                                                                      "typeName": "hydra.core.CaseAlternative"}}]}}],
                                                                                                           "typeName": "hydra.core.CaseStatement"}}},
                                                                                                     "typeName": "hydra.core.Term"}}},
                                                                                               {
@@ -16418,12 +16416,12 @@
                             "name": "tags",
                             "term": {"list": [{"wrap": {"body": {"literal": {"string": "disabled"}}, "typeName": "hydra.testing.Tag"}}]}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
-            "typeName": "hydra.testing.TestGroup"}}}},
+            "typeName": "hydra.testing.TestGroup"}},
+        "name": "hydra.test.checking.nominalTypes.usingKernelTypesTests",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.test.checking.nominalTypes.unionEliminationsWithDefaultsTests",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "record": {
             "fields": [
               {"name": "name", "term": {"literal": {"string": "Union eliminations with defaults"}}},
@@ -16482,7 +16480,7 @@
                                                                             "fields": [
                                                                               {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "lessThan"}}, "typeName": "hydra.core.Name"}}},
                                                                               {
-                                                                                "name": "term",
+                                                                                "name": "handler",
                                                                                 "term": {
                                                                                   "inject": {
                                                                                     "field": {
@@ -16502,13 +16500,13 @@
                                                                                                   "typeName": "hydra.core.Term"}}}],
                                                                                           "typeName": "hydra.core.Lambda"}}},
                                                                                     "typeName": "hydra.core.Term"}}}],
-                                                                            "typeName": "hydra.core.Field"}},
+                                                                            "typeName": "hydra.core.CaseAlternative"}},
                                                                         {
                                                                           "record": {
                                                                             "fields": [
                                                                               {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "equalTo"}}, "typeName": "hydra.core.Name"}}},
                                                                               {
-                                                                                "name": "term",
+                                                                                "name": "handler",
                                                                                 "term": {
                                                                                   "inject": {
                                                                                     "field": {
@@ -16528,7 +16526,7 @@
                                                                                                   "typeName": "hydra.core.Term"}}}],
                                                                                           "typeName": "hydra.core.Lambda"}}},
                                                                                     "typeName": "hydra.core.Term"}}}],
-                                                                            "typeName": "hydra.core.Field"}}]}}],
+                                                                            "typeName": "hydra.core.CaseAlternative"}}]}}],
                                                                 "typeName": "hydra.core.CaseStatement"}}},
                                                           "typeName": "hydra.core.Term"}},
                                                       "function": {
@@ -16673,7 +16671,7 @@
                                                                             "fields": [
                                                                               {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "int"}}, "typeName": "hydra.core.Name"}}},
                                                                               {
-                                                                                "name": "term",
+                                                                                "name": "handler",
                                                                                 "term": {
                                                                                   "inject": {
                                                                                     "field": {
@@ -16691,7 +16689,7 @@
                                                                                                   "typeName": "hydra.core.Term"}}}],
                                                                                           "typeName": "hydra.core.Lambda"}}},
                                                                                     "typeName": "hydra.core.Term"}}}],
-                                                                            "typeName": "hydra.core.Field"}}]}}],
+                                                                            "typeName": "hydra.core.CaseAlternative"}}]}}],
                                                                 "typeName": "hydra.core.CaseStatement"}}},
                                                           "typeName": "hydra.core.Term"}},
                                                       "function": {
@@ -16835,7 +16833,7 @@
                                                                             "fields": [
                                                                               {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "bool"}}, "typeName": "hydra.core.Name"}}},
                                                                               {
-                                                                                "name": "term",
+                                                                                "name": "handler",
                                                                                 "term": {
                                                                                   "inject": {
                                                                                     "field": {
@@ -16872,13 +16870,13 @@
                                                                                                   "typeName": "hydra.core.Term"}}}],
                                                                                           "typeName": "hydra.core.Lambda"}}},
                                                                                     "typeName": "hydra.core.Term"}}}],
-                                                                            "typeName": "hydra.core.Field"}},
+                                                                            "typeName": "hydra.core.CaseAlternative"}},
                                                                         {
                                                                           "record": {
                                                                             "fields": [
                                                                               {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "string"}}, "typeName": "hydra.core.Name"}}},
                                                                               {
-                                                                                "name": "term",
+                                                                                "name": "handler",
                                                                                 "term": {
                                                                                   "inject": {
                                                                                     "field": {
@@ -16896,7 +16894,7 @@
                                                                                                   "typeName": "hydra.core.Term"}}}],
                                                                                           "typeName": "hydra.core.Lambda"}}},
                                                                                     "typeName": "hydra.core.Term"}}}],
-                                                                            "typeName": "hydra.core.Field"}}]}}],
+                                                                            "typeName": "hydra.core.CaseAlternative"}}]}}],
                                                                 "typeName": "hydra.core.CaseStatement"}}},
                                                           "typeName": "hydra.core.Term"}},
                                                       "function": {
@@ -16988,12 +16986,12 @@
                           {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
-            "typeName": "hydra.testing.TestGroup"}}}},
+            "typeName": "hydra.testing.TestGroup"}},
+        "name": "hydra.test.checking.nominalTypes.unionEliminationsWithDefaultsTests",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.test.checking.nominalTypes.nestedUnionEliminationsTests",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "record": {
             "fields": [
               {"name": "name", "term": {"literal": {"string": "Nested union eliminations"}}},
@@ -17044,7 +17042,7 @@
                                                                             "fields": [
                                                                               {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "person"}}, "typeName": "hydra.core.Name"}}},
                                                                               {
-                                                                                "name": "term",
+                                                                                "name": "handler",
                                                                                 "term": {
                                                                                   "inject": {
                                                                                     "field": {
@@ -17086,13 +17084,13 @@
                                                                                                   "typeName": "hydra.core.Term"}}}],
                                                                                           "typeName": "hydra.core.Lambda"}}},
                                                                                     "typeName": "hydra.core.Term"}}}],
-                                                                            "typeName": "hydra.core.Field"}},
+                                                                            "typeName": "hydra.core.CaseAlternative"}},
                                                                         {
                                                                           "record": {
                                                                             "fields": [
                                                                               {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "other"}}, "typeName": "hydra.core.Name"}}},
                                                                               {
-                                                                                "name": "term",
+                                                                                "name": "handler",
                                                                                 "term": {
                                                                                   "inject": {
                                                                                     "field": {
@@ -17131,7 +17129,7 @@
                                                                                                                                   "fields": [
                                                                                                                                     {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "int"}}, "typeName": "hydra.core.Name"}}},
                                                                                                                                     {
-                                                                                                                                      "name": "term",
+                                                                                                                                      "name": "handler",
                                                                                                                                       "term": {
                                                                                                                                         "inject": {
                                                                                                                                           "field": {
@@ -17168,13 +17166,13 @@
                                                                                                                                                         "typeName": "hydra.core.Term"}}}],
                                                                                                                                                 "typeName": "hydra.core.Lambda"}}},
                                                                                                                                           "typeName": "hydra.core.Term"}}}],
-                                                                                                                                  "typeName": "hydra.core.Field"}},
+                                                                                                                                  "typeName": "hydra.core.CaseAlternative"}},
                                                                                                                               {
                                                                                                                                 "record": {
                                                                                                                                   "fields": [
                                                                                                                                     {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "float"}}, "typeName": "hydra.core.Name"}}},
                                                                                                                                     {
-                                                                                                                                      "name": "term",
+                                                                                                                                      "name": "handler",
                                                                                                                                       "term": {
                                                                                                                                         "inject": {
                                                                                                                                           "field": {
@@ -17211,7 +17209,7 @@
                                                                                                                                                         "typeName": "hydra.core.Term"}}}],
                                                                                                                                                 "typeName": "hydra.core.Lambda"}}},
                                                                                                                                           "typeName": "hydra.core.Term"}}}],
-                                                                                                                                  "typeName": "hydra.core.Field"}}]}}],
+                                                                                                                                  "typeName": "hydra.core.CaseAlternative"}}]}}],
                                                                                                                       "typeName": "hydra.core.CaseStatement"}}},
                                                                                                                 "typeName": "hydra.core.Term"}}},
                                                                                                           {
@@ -17224,7 +17222,7 @@
                                                                                                   "typeName": "hydra.core.Term"}}}],
                                                                                           "typeName": "hydra.core.Lambda"}}},
                                                                                     "typeName": "hydra.core.Term"}}}],
-                                                                            "typeName": "hydra.core.Field"}}]}}],
+                                                                            "typeName": "hydra.core.CaseAlternative"}}]}}],
                                                                 "typeName": "hydra.core.CaseStatement"}}},
                                                           "typeName": "hydra.core.Term"}},
                                                       "function": {
@@ -17382,7 +17380,7 @@
                                                                                               "fields": [
                                                                                                 {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "lessThan"}}, "typeName": "hydra.core.Name"}}},
                                                                                                 {
-                                                                                                  "name": "term",
+                                                                                                  "name": "handler",
                                                                                                   "term": {
                                                                                                     "inject": {
                                                                                                       "field": {
@@ -17408,13 +17406,13 @@
                                                                                                                     "typeName": "hydra.core.Term"}}}],
                                                                                                             "typeName": "hydra.core.Lambda"}}},
                                                                                                       "typeName": "hydra.core.Term"}}}],
-                                                                                              "typeName": "hydra.core.Field"}},
+                                                                                              "typeName": "hydra.core.CaseAlternative"}},
                                                                                           {
                                                                                             "record": {
                                                                                               "fields": [
                                                                                                 {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "equalTo"}}, "typeName": "hydra.core.Name"}}},
                                                                                                 {
-                                                                                                  "name": "term",
+                                                                                                  "name": "handler",
                                                                                                   "term": {
                                                                                                     "inject": {
                                                                                                       "field": {
@@ -17440,13 +17438,13 @@
                                                                                                                     "typeName": "hydra.core.Term"}}}],
                                                                                                             "typeName": "hydra.core.Lambda"}}},
                                                                                                       "typeName": "hydra.core.Term"}}}],
-                                                                                              "typeName": "hydra.core.Field"}},
+                                                                                              "typeName": "hydra.core.CaseAlternative"}},
                                                                                           {
                                                                                             "record": {
                                                                                               "fields": [
                                                                                                 {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "greaterThan"}}, "typeName": "hydra.core.Name"}}},
                                                                                                 {
-                                                                                                  "name": "term",
+                                                                                                  "name": "handler",
                                                                                                   "term": {
                                                                                                     "inject": {
                                                                                                       "field": {
@@ -17472,7 +17470,7 @@
                                                                                                                     "typeName": "hydra.core.Term"}}}],
                                                                                                             "typeName": "hydra.core.Lambda"}}},
                                                                                                       "typeName": "hydra.core.Term"}}}],
-                                                                                              "typeName": "hydra.core.Field"}}]}}],
+                                                                                              "typeName": "hydra.core.CaseAlternative"}}]}}],
                                                                                   "typeName": "hydra.core.CaseStatement"}}},
                                                                             "typeName": "hydra.core.Term"}},
                                                                         "second": {
@@ -17597,12 +17595,12 @@
                           {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
-            "typeName": "hydra.testing.TestGroup"}}}},
+            "typeName": "hydra.testing.TestGroup"}},
+        "name": "hydra.test.checking.nominalTypes.nestedUnionEliminationsTests",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.test.checking.nominalTypes.unionEliminationsInComplexContextsTests",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "record": {
             "fields": [
               {"name": "name", "term": {"literal": {"string": "Union eliminations in complex contexts"}}},
@@ -17670,7 +17668,7 @@
                                                                                                       "fields": [
                                                                                                         {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "lessThan"}}, "typeName": "hydra.core.Name"}}},
                                                                                                         {
-                                                                                                          "name": "term",
+                                                                                                          "name": "handler",
                                                                                                           "term": {
                                                                                                             "inject": {
                                                                                                               "field": {
@@ -17690,13 +17688,13 @@
                                                                                                                             "typeName": "hydra.core.Term"}}}],
                                                                                                                     "typeName": "hydra.core.Lambda"}}},
                                                                                                               "typeName": "hydra.core.Term"}}}],
-                                                                                                      "typeName": "hydra.core.Field"}},
+                                                                                                      "typeName": "hydra.core.CaseAlternative"}},
                                                                                                   {
                                                                                                     "record": {
                                                                                                       "fields": [
                                                                                                         {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "equalTo"}}, "typeName": "hydra.core.Name"}}},
                                                                                                         {
-                                                                                                          "name": "term",
+                                                                                                          "name": "handler",
                                                                                                           "term": {
                                                                                                             "inject": {
                                                                                                               "field": {
@@ -17716,13 +17714,13 @@
                                                                                                                             "typeName": "hydra.core.Term"}}}],
                                                                                                                     "typeName": "hydra.core.Lambda"}}},
                                                                                                               "typeName": "hydra.core.Term"}}}],
-                                                                                                      "typeName": "hydra.core.Field"}},
+                                                                                                      "typeName": "hydra.core.CaseAlternative"}},
                                                                                                   {
                                                                                                     "record": {
                                                                                                       "fields": [
                                                                                                         {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "greaterThan"}}, "typeName": "hydra.core.Name"}}},
                                                                                                         {
-                                                                                                          "name": "term",
+                                                                                                          "name": "handler",
                                                                                                           "term": {
                                                                                                             "inject": {
                                                                                                               "field": {
@@ -17742,7 +17740,7 @@
                                                                                                                             "typeName": "hydra.core.Term"}}}],
                                                                                                                     "typeName": "hydra.core.Lambda"}}},
                                                                                                               "typeName": "hydra.core.Term"}}}],
-                                                                                                      "typeName": "hydra.core.Field"}}]}}],
+                                                                                                      "typeName": "hydra.core.CaseAlternative"}}]}}],
                                                                                           "typeName": "hydra.core.CaseStatement"}}},
                                                                                     "typeName": "hydra.core.Term"}}},
                                                                               {
@@ -17912,7 +17910,7 @@
                                                                                                                     "fields": [
                                                                                                                       {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "person"}}, "typeName": "hydra.core.Name"}}},
                                                                                                                       {
-                                                                                                                        "name": "term",
+                                                                                                                        "name": "handler",
                                                                                                                         "term": {
                                                                                                                           "inject": {
                                                                                                                             "field": {
@@ -17954,13 +17952,13 @@
                                                                                                                                           "typeName": "hydra.core.Term"}}}],
                                                                                                                                   "typeName": "hydra.core.Lambda"}}},
                                                                                                                             "typeName": "hydra.core.Term"}}}],
-                                                                                                                    "typeName": "hydra.core.Field"}},
+                                                                                                                    "typeName": "hydra.core.CaseAlternative"}},
                                                                                                                 {
                                                                                                                   "record": {
                                                                                                                     "fields": [
                                                                                                                       {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "other"}}, "typeName": "hydra.core.Name"}}},
                                                                                                                       {
-                                                                                                                        "name": "term",
+                                                                                                                        "name": "handler",
                                                                                                                         "term": {
                                                                                                                           "inject": {
                                                                                                                             "field": {
@@ -17978,7 +17976,7 @@
                                                                                                                                           "typeName": "hydra.core.Term"}}}],
                                                                                                                                   "typeName": "hydra.core.Lambda"}}},
                                                                                                                             "typeName": "hydra.core.Term"}}}],
-                                                                                                                    "typeName": "hydra.core.Field"}}]}}],
+                                                                                                                    "typeName": "hydra.core.CaseAlternative"}}]}}],
                                                                                                         "typeName": "hydra.core.CaseStatement"}}},
                                                                                                   "typeName": "hydra.core.Term"}}},
                                                                                             {
@@ -18169,7 +18167,7 @@
                                                                                                     "fields": [
                                                                                                       {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "person"}}, "typeName": "hydra.core.Name"}}},
                                                                                                       {
-                                                                                                        "name": "term",
+                                                                                                        "name": "handler",
                                                                                                         "term": {
                                                                                                           "inject": {
                                                                                                             "field": {
@@ -18211,13 +18209,13 @@
                                                                                                                           "typeName": "hydra.core.Term"}}}],
                                                                                                                   "typeName": "hydra.core.Lambda"}}},
                                                                                                             "typeName": "hydra.core.Term"}}}],
-                                                                                                    "typeName": "hydra.core.Field"}},
+                                                                                                    "typeName": "hydra.core.CaseAlternative"}},
                                                                                                 {
                                                                                                   "record": {
                                                                                                     "fields": [
                                                                                                       {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "other"}}, "typeName": "hydra.core.Name"}}},
                                                                                                       {
-                                                                                                        "name": "term",
+                                                                                                        "name": "handler",
                                                                                                         "term": {
                                                                                                           "inject": {
                                                                                                             "field": {
@@ -18235,7 +18233,7 @@
                                                                                                                           "typeName": "hydra.core.Term"}}}],
                                                                                                                   "typeName": "hydra.core.Lambda"}}},
                                                                                                             "typeName": "hydra.core.Term"}}}],
-                                                                                                    "typeName": "hydra.core.Field"}}]}}],
+                                                                                                    "typeName": "hydra.core.CaseAlternative"}}]}}],
                                                                                         "typeName": "hydra.core.CaseStatement"}}},
                                                                                   "typeName": "hydra.core.Term"}}},
                                                                             {
@@ -18368,12 +18366,12 @@
                           {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
-            "typeName": "hydra.testing.TestGroup"}}}},
+            "typeName": "hydra.testing.TestGroup"}},
+        "name": "hydra.test.checking.nominalTypes.unionEliminationsInComplexContextsTests",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.test.checking.nominalTypes.multiParameterPolymorphicCaseStatementsTests",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "record": {
             "fields": [
               {"name": "name", "term": {"literal": {"string": "Multi-parameter polymorphic case statements"}}},
@@ -18424,7 +18422,7 @@
                                                                             "fields": [
                                                                               {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "left"}}, "typeName": "hydra.core.Name"}}},
                                                                               {
-                                                                                "name": "term",
+                                                                                "name": "handler",
                                                                                 "term": {
                                                                                   "inject": {
                                                                                     "field": {
@@ -18461,13 +18459,13 @@
                                                                                                   "typeName": "hydra.core.Term"}}}],
                                                                                           "typeName": "hydra.core.Lambda"}}},
                                                                                     "typeName": "hydra.core.Term"}}}],
-                                                                            "typeName": "hydra.core.Field"}},
+                                                                            "typeName": "hydra.core.CaseAlternative"}},
                                                                         {
                                                                           "record": {
                                                                             "fields": [
                                                                               {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "right"}}, "typeName": "hydra.core.Name"}}},
                                                                               {
-                                                                                "name": "term",
+                                                                                "name": "handler",
                                                                                 "term": {
                                                                                   "inject": {
                                                                                     "field": {
@@ -18504,7 +18502,7 @@
                                                                                                   "typeName": "hydra.core.Term"}}}],
                                                                                           "typeName": "hydra.core.Lambda"}}},
                                                                                     "typeName": "hydra.core.Term"}}}],
-                                                                            "typeName": "hydra.core.Field"}}]}}],
+                                                                            "typeName": "hydra.core.CaseAlternative"}}]}}],
                                                                 "typeName": "hydra.core.CaseStatement"}}},
                                                           "typeName": "hydra.core.Term"}},
                                                       "function": {
@@ -18692,7 +18690,7 @@
                                                                                           "fields": [
                                                                                             {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "left"}}, "typeName": "hydra.core.Name"}}},
                                                                                             {
-                                                                                              "name": "term",
+                                                                                              "name": "handler",
                                                                                               "term": {
                                                                                                 "inject": {
                                                                                                   "field": {
@@ -18754,13 +18752,13 @@
                                                                                                                 "typeName": "hydra.core.Term"}}}],
                                                                                                         "typeName": "hydra.core.Lambda"}}},
                                                                                                   "typeName": "hydra.core.Term"}}}],
-                                                                                          "typeName": "hydra.core.Field"}},
+                                                                                          "typeName": "hydra.core.CaseAlternative"}},
                                                                                       {
                                                                                         "record": {
                                                                                           "fields": [
                                                                                             {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "right"}}, "typeName": "hydra.core.Name"}}},
                                                                                             {
-                                                                                              "name": "term",
+                                                                                              "name": "handler",
                                                                                               "term": {
                                                                                                 "inject": {
                                                                                                   "field": {
@@ -18797,7 +18795,7 @@
                                                                                                                 "typeName": "hydra.core.Term"}}}],
                                                                                                         "typeName": "hydra.core.Lambda"}}},
                                                                                                   "typeName": "hydra.core.Term"}}}],
-                                                                                          "typeName": "hydra.core.Field"}}]}}],
+                                                                                          "typeName": "hydra.core.CaseAlternative"}}]}}],
                                                                               "typeName": "hydra.core.CaseStatement"}}},
                                                                         "typeName": "hydra.core.Term"}}},
                                                                   {
@@ -18971,7 +18969,7 @@
                                                                                                         "fields": [
                                                                                                           {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "left"}}, "typeName": "hydra.core.Name"}}},
                                                                                                           {
-                                                                                                            "name": "term",
+                                                                                                            "name": "handler",
                                                                                                             "term": {
                                                                                                               "inject": {
                                                                                                                 "field": {
@@ -19013,13 +19011,13 @@
                                                                                                                               "typeName": "hydra.core.Term"}}}],
                                                                                                                       "typeName": "hydra.core.Lambda"}}},
                                                                                                                 "typeName": "hydra.core.Term"}}}],
-                                                                                                        "typeName": "hydra.core.Field"}},
+                                                                                                        "typeName": "hydra.core.CaseAlternative"}},
                                                                                                     {
                                                                                                       "record": {
                                                                                                         "fields": [
                                                                                                           {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "right"}}, "typeName": "hydra.core.Name"}}},
                                                                                                           {
-                                                                                                            "name": "term",
+                                                                                                            "name": "handler",
                                                                                                             "term": {
                                                                                                               "inject": {
                                                                                                                 "field": {
@@ -19061,7 +19059,7 @@
                                                                                                                               "typeName": "hydra.core.Term"}}}],
                                                                                                                       "typeName": "hydra.core.Lambda"}}},
                                                                                                                 "typeName": "hydra.core.Term"}}}],
-                                                                                                        "typeName": "hydra.core.Field"}}]}}],
+                                                                                                        "typeName": "hydra.core.CaseAlternative"}}]}}],
                                                                                             "typeName": "hydra.core.CaseStatement"}}},
                                                                                       "typeName": "hydra.core.Term"}}},
                                                                                 {
@@ -19562,7 +19560,7 @@
                                                                                                                       "fields": [
                                                                                                                         {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "left"}}, "typeName": "hydra.core.Name"}}},
                                                                                                                         {
-                                                                                                                          "name": "term",
+                                                                                                                          "name": "handler",
                                                                                                                           "term": {
                                                                                                                             "inject": {
                                                                                                                               "field": {
@@ -19641,13 +19639,13 @@
                                                                                                                                             "typeName": "hydra.core.Term"}}}],
                                                                                                                                     "typeName": "hydra.core.Lambda"}}},
                                                                                                                               "typeName": "hydra.core.Term"}}}],
-                                                                                                                      "typeName": "hydra.core.Field"}},
+                                                                                                                      "typeName": "hydra.core.CaseAlternative"}},
                                                                                                                   {
                                                                                                                     "record": {
                                                                                                                       "fields": [
                                                                                                                         {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "right"}}, "typeName": "hydra.core.Name"}}},
                                                                                                                         {
-                                                                                                                          "name": "term",
+                                                                                                                          "name": "handler",
                                                                                                                           "term": {
                                                                                                                             "inject": {
                                                                                                                               "field": {
@@ -19701,7 +19699,7 @@
                                                                                                                                             "typeName": "hydra.core.Term"}}}],
                                                                                                                                     "typeName": "hydra.core.Lambda"}}},
                                                                                                                               "typeName": "hydra.core.Term"}}}],
-                                                                                                                      "typeName": "hydra.core.Field"}}]}}],
+                                                                                                                      "typeName": "hydra.core.CaseAlternative"}}]}}],
                                                                                                           "typeName": "hydra.core.CaseStatement"}}},
                                                                                                     "typeName": "hydra.core.Term"}}},
                                                                                               {
@@ -19894,12 +19892,12 @@
                           {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
-            "typeName": "hydra.testing.TestGroup"}}}},
+            "typeName": "hydra.testing.TestGroup"}},
+        "name": "hydra.test.checking.nominalTypes.multiParameterPolymorphicCaseStatementsTests",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.test.checking.nominalTypes.higherOrderUnionEliminationsTests",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "record": {
             "fields": [
               {"name": "name", "term": {"literal": {"string": "Higher-order union eliminations"}}},
@@ -19976,7 +19974,7 @@
                                                                                                         "fields": [
                                                                                                           {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "lessThan"}}, "typeName": "hydra.core.Name"}}},
                                                                                                           {
-                                                                                                            "name": "term",
+                                                                                                            "name": "handler",
                                                                                                             "term": {
                                                                                                               "inject": {
                                                                                                                 "field": {
@@ -19996,13 +19994,13 @@
                                                                                                                               "typeName": "hydra.core.Term"}}}],
                                                                                                                       "typeName": "hydra.core.Lambda"}}},
                                                                                                                 "typeName": "hydra.core.Term"}}}],
-                                                                                                        "typeName": "hydra.core.Field"}},
+                                                                                                        "typeName": "hydra.core.CaseAlternative"}},
                                                                                                     {
                                                                                                       "record": {
                                                                                                         "fields": [
                                                                                                           {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "equalTo"}}, "typeName": "hydra.core.Name"}}},
                                                                                                           {
-                                                                                                            "name": "term",
+                                                                                                            "name": "handler",
                                                                                                             "term": {
                                                                                                               "inject": {
                                                                                                                 "field": {
@@ -20022,13 +20020,13 @@
                                                                                                                               "typeName": "hydra.core.Term"}}}],
                                                                                                                       "typeName": "hydra.core.Lambda"}}},
                                                                                                                 "typeName": "hydra.core.Term"}}}],
-                                                                                                        "typeName": "hydra.core.Field"}},
+                                                                                                        "typeName": "hydra.core.CaseAlternative"}},
                                                                                                     {
                                                                                                       "record": {
                                                                                                         "fields": [
                                                                                                           {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "greaterThan"}}, "typeName": "hydra.core.Name"}}},
                                                                                                           {
-                                                                                                            "name": "term",
+                                                                                                            "name": "handler",
                                                                                                             "term": {
                                                                                                               "inject": {
                                                                                                                 "field": {
@@ -20048,7 +20046,7 @@
                                                                                                                               "typeName": "hydra.core.Term"}}}],
                                                                                                                       "typeName": "hydra.core.Lambda"}}},
                                                                                                                 "typeName": "hydra.core.Term"}}}],
-                                                                                                        "typeName": "hydra.core.Field"}}]}}],
+                                                                                                        "typeName": "hydra.core.CaseAlternative"}}]}}],
                                                                                             "typeName": "hydra.core.CaseStatement"}}},
                                                                                       "typeName": "hydra.core.Term"}}}],
                                                                               "typeName": "hydra.core.Application"}}},
@@ -20253,7 +20251,7 @@
                                                                                                                       "fields": [
                                                                                                                         {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "lessThan"}}, "typeName": "hydra.core.Name"}}},
                                                                                                                         {
-                                                                                                                          "name": "term",
+                                                                                                                          "name": "handler",
                                                                                                                           "term": {
                                                                                                                             "inject": {
                                                                                                                               "field": {
@@ -20273,13 +20271,13 @@
                                                                                                                                             "typeName": "hydra.core.Term"}}}],
                                                                                                                                     "typeName": "hydra.core.Lambda"}}},
                                                                                                                               "typeName": "hydra.core.Term"}}}],
-                                                                                                                      "typeName": "hydra.core.Field"}},
+                                                                                                                      "typeName": "hydra.core.CaseAlternative"}},
                                                                                                                   {
                                                                                                                     "record": {
                                                                                                                       "fields": [
                                                                                                                         {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "equalTo"}}, "typeName": "hydra.core.Name"}}},
                                                                                                                         {
-                                                                                                                          "name": "term",
+                                                                                                                          "name": "handler",
                                                                                                                           "term": {
                                                                                                                             "inject": {
                                                                                                                               "field": {
@@ -20299,13 +20297,13 @@
                                                                                                                                             "typeName": "hydra.core.Term"}}}],
                                                                                                                                     "typeName": "hydra.core.Lambda"}}},
                                                                                                                               "typeName": "hydra.core.Term"}}}],
-                                                                                                                      "typeName": "hydra.core.Field"}},
+                                                                                                                      "typeName": "hydra.core.CaseAlternative"}},
                                                                                                                   {
                                                                                                                     "record": {
                                                                                                                       "fields": [
                                                                                                                         {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "greaterThan"}}, "typeName": "hydra.core.Name"}}},
                                                                                                                         {
-                                                                                                                          "name": "term",
+                                                                                                                          "name": "handler",
                                                                                                                           "term": {
                                                                                                                             "inject": {
                                                                                                                               "field": {
@@ -20325,7 +20323,7 @@
                                                                                                                                             "typeName": "hydra.core.Term"}}}],
                                                                                                                                     "typeName": "hydra.core.Lambda"}}},
                                                                                                                               "typeName": "hydra.core.Term"}}}],
-                                                                                                                      "typeName": "hydra.core.Field"}}]}}],
+                                                                                                                      "typeName": "hydra.core.CaseAlternative"}}]}}],
                                                                                                           "typeName": "hydra.core.CaseStatement"}}},
                                                                                                     "typeName": "hydra.core.Term"}}},
                                                                                               {
@@ -20493,7 +20491,7 @@
                                                                                                         "fields": [
                                                                                                           {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "int"}}, "typeName": "hydra.core.Name"}}},
                                                                                                           {
-                                                                                                            "name": "term",
+                                                                                                            "name": "handler",
                                                                                                             "term": {
                                                                                                               "inject": {
                                                                                                                 "field": {
@@ -20555,13 +20553,13 @@
                                                                                                                               "typeName": "hydra.core.Term"}}}],
                                                                                                                       "typeName": "hydra.core.Lambda"}}},
                                                                                                                 "typeName": "hydra.core.Term"}}}],
-                                                                                                        "typeName": "hydra.core.Field"}},
+                                                                                                        "typeName": "hydra.core.CaseAlternative"}},
                                                                                                     {
                                                                                                       "record": {
                                                                                                         "fields": [
                                                                                                           {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "float"}}, "typeName": "hydra.core.Name"}}},
                                                                                                           {
-                                                                                                            "name": "term",
+                                                                                                            "name": "handler",
                                                                                                             "term": {
                                                                                                               "inject": {
                                                                                                                 "field": {
@@ -20587,7 +20585,7 @@
                                                                                                                               "typeName": "hydra.core.Term"}}}],
                                                                                                                       "typeName": "hydra.core.Lambda"}}},
                                                                                                                 "typeName": "hydra.core.Term"}}}],
-                                                                                                        "typeName": "hydra.core.Field"}}]}}],
+                                                                                                        "typeName": "hydra.core.CaseAlternative"}}]}}],
                                                                                             "typeName": "hydra.core.CaseStatement"}}},
                                                                                       "typeName": "hydra.core.Term"}}},
                                                                                 {
@@ -20694,12 +20692,12 @@
                           {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
-            "typeName": "hydra.testing.TestGroup"}}}},
+            "typeName": "hydra.testing.TestGroup"}},
+        "name": "hydra.test.checking.nominalTypes.higherOrderUnionEliminationsTests",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.test.checking.nominalTypes.recursiveUnionEliminationsTests",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "record": {
             "fields": [
               {"name": "name", "term": {"literal": {"string": "Recursive union eliminations"}}},
@@ -20750,7 +20748,7 @@
                                                                             "fields": [
                                                                               {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "literal"}}, "typeName": "hydra.core.Name"}}},
                                                                               {
-                                                                                "name": "term",
+                                                                                "name": "handler",
                                                                                 "term": {
                                                                                   "inject": {
                                                                                     "field": {
@@ -20789,7 +20787,7 @@
                                                                                                                                   "fields": [
                                                                                                                                     {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "boolean"}}, "typeName": "hydra.core.Name"}}},
                                                                                                                                     {
-                                                                                                                                      "name": "term",
+                                                                                                                                      "name": "handler",
                                                                                                                                       "term": {
                                                                                                                                         "inject": {
                                                                                                                                           "field": {
@@ -20826,13 +20824,13 @@
                                                                                                                                                         "typeName": "hydra.core.Term"}}}],
                                                                                                                                                 "typeName": "hydra.core.Lambda"}}},
                                                                                                                                           "typeName": "hydra.core.Term"}}}],
-                                                                                                                                  "typeName": "hydra.core.Field"}},
+                                                                                                                                  "typeName": "hydra.core.CaseAlternative"}},
                                                                                                                               {
                                                                                                                                 "record": {
                                                                                                                                   "fields": [
                                                                                                                                     {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "string"}}, "typeName": "hydra.core.Name"}}},
                                                                                                                                     {
-                                                                                                                                      "name": "term",
+                                                                                                                                      "name": "handler",
                                                                                                                                       "term": {
                                                                                                                                         "inject": {
                                                                                                                                           "field": {
@@ -20850,7 +20848,7 @@
                                                                                                                                                         "typeName": "hydra.core.Term"}}}],
                                                                                                                                                 "typeName": "hydra.core.Lambda"}}},
                                                                                                                                           "typeName": "hydra.core.Term"}}}],
-                                                                                                                                  "typeName": "hydra.core.Field"}}]}}],
+                                                                                                                                  "typeName": "hydra.core.CaseAlternative"}}]}}],
                                                                                                                       "typeName": "hydra.core.CaseStatement"}}},
                                                                                                                 "typeName": "hydra.core.Term"}}},
                                                                                                           {
@@ -20863,13 +20861,13 @@
                                                                                                   "typeName": "hydra.core.Term"}}}],
                                                                                           "typeName": "hydra.core.Lambda"}}},
                                                                                     "typeName": "hydra.core.Term"}}}],
-                                                                            "typeName": "hydra.core.Field"}},
+                                                                            "typeName": "hydra.core.CaseAlternative"}},
                                                                         {
                                                                           "record": {
                                                                             "fields": [
                                                                               {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "list"}}, "typeName": "hydra.core.Name"}}},
                                                                               {
-                                                                                "name": "term",
+                                                                                "name": "handler",
                                                                                 "term": {
                                                                                   "inject": {
                                                                                     "field": {
@@ -20889,7 +20887,7 @@
                                                                                                   "typeName": "hydra.core.Term"}}}],
                                                                                           "typeName": "hydra.core.Lambda"}}},
                                                                                     "typeName": "hydra.core.Term"}}}],
-                                                                            "typeName": "hydra.core.Field"}}]}}],
+                                                                            "typeName": "hydra.core.CaseAlternative"}}]}}],
                                                                 "typeName": "hydra.core.CaseStatement"}}},
                                                           "typeName": "hydra.core.Term"}},
                                                       "function": {
@@ -20981,12 +20979,12 @@
                           {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
-            "typeName": "hydra.testing.TestGroup"}}}},
+            "typeName": "hydra.testing.TestGroup"}},
+        "name": "hydra.test.checking.nominalTypes.recursiveUnionEliminationsTests",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.test.checking.nominalTypes.wrappedTermsTests",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "record": {
             "fields": [
               {"name": "name", "term": {"literal": {"string": "Wrapped terms"}}},
@@ -21004,12 +21002,12 @@
               {
                 "name": "cases",
                 "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}],
-            "typeName": "hydra.testing.TestGroup"}}}},
+            "typeName": "hydra.testing.TestGroup"}},
+        "name": "hydra.test.checking.nominalTypes.wrappedTermsTests",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.test.checking.nominalTypes.monomorphicWrappedTermsTests",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "record": {
             "fields": [
               {"name": "name", "term": {"literal": {"string": "Monomorphic wrapped terms"}}},
@@ -21386,12 +21384,12 @@
                           {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
-            "typeName": "hydra.testing.TestGroup"}}}},
+            "typeName": "hydra.testing.TestGroup"}},
+        "name": "hydra.test.checking.nominalTypes.monomorphicWrappedTermsTests",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.test.checking.nominalTypes.polymorphicWrappedTermsTests",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "record": {
             "fields": [
               {"name": "name", "term": {"literal": {"string": "Polymorphic wrapped terms"}}},
@@ -21875,12 +21873,12 @@
                           {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
-            "typeName": "hydra.testing.TestGroup"}}}},
+            "typeName": "hydra.testing.TestGroup"}},
+        "name": "hydra.test.checking.nominalTypes.polymorphicWrappedTermsTests",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.test.checking.nominalTypes.wrappedTermsInComplexContextsTests",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "record": {
             "fields": [
               {"name": "name", "term": {"literal": {"string": "Wrapped terms in complex contexts"}}},
@@ -22319,12 +22317,12 @@
                           {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
-            "typeName": "hydra.testing.TestGroup"}}}},
+            "typeName": "hydra.testing.TestGroup"}},
+        "name": "hydra.test.checking.nominalTypes.wrappedTermsInComplexContextsTests",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.test.checking.nominalTypes.nestedWrappedTermsTests",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "record": {
             "fields": [
               {"name": "name", "term": {"literal": {"string": "Nested wrapped terms"}}},
@@ -22856,12 +22854,12 @@
                           {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
-            "typeName": "hydra.testing.TestGroup"}}}},
+            "typeName": "hydra.testing.TestGroup"}},
+        "name": "hydra.test.checking.nominalTypes.nestedWrappedTermsTests",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.test.checking.nominalTypes.multipleWrappingLevelsTests",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "record": {
             "fields": [
               {"name": "name", "term": {"literal": {"string": "Multiple wrapping levels"}}},
@@ -23182,12 +23180,12 @@
                           {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
-            "typeName": "hydra.testing.TestGroup"}}}},
+            "typeName": "hydra.testing.TestGroup"}},
+        "name": "hydra.test.checking.nominalTypes.multipleWrappingLevelsTests",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.test.checking.nominalTypes.multiParameterPolymorphicWrappersTests",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "record": {
             "fields": [
               {"name": "name", "term": {"literal": {"string": "Multi-parameter polymorphic wrappers"}}},
@@ -24210,12 +24208,12 @@
                           {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
-            "typeName": "hydra.testing.TestGroup"}}}},
+            "typeName": "hydra.testing.TestGroup"}},
+        "name": "hydra.test.checking.nominalTypes.multiParameterPolymorphicWrappersTests",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.test.checking.nominalTypes.wrapEliminationsTests",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "record": {
             "fields": [
               {"name": "name", "term": {"literal": {"string": "Wrap eliminations"}}},
@@ -24234,12 +24232,12 @@
               {
                 "name": "cases",
                 "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}],
-            "typeName": "hydra.testing.TestGroup"}}}},
+            "typeName": "hydra.testing.TestGroup"}},
+        "name": "hydra.test.checking.nominalTypes.wrapEliminationsTests",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.test.checking.nominalTypes.monomorphicUnwrappingTests",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "record": {
             "fields": [
               {"name": "name", "term": {"literal": {"string": "Monomorphic unwrapping"}}},
@@ -24365,12 +24363,12 @@
                           {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
-            "typeName": "hydra.testing.TestGroup"}}}},
+            "typeName": "hydra.testing.TestGroup"}},
+        "name": "hydra.test.checking.nominalTypes.monomorphicUnwrappingTests",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.test.checking.nominalTypes.polymorphicUnwrappingTests",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "record": {
             "fields": [
               {"name": "name", "term": {"literal": {"string": "Polymorphic unwrapping"}}},
@@ -24528,12 +24526,12 @@
                           {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
-            "typeName": "hydra.testing.TestGroup"}}}},
+            "typeName": "hydra.testing.TestGroup"}},
+        "name": "hydra.test.checking.nominalTypes.polymorphicUnwrappingTests",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.test.checking.nominalTypes.unwrapEliminationsInApplicationsTests",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "record": {
             "fields": [
               {"name": "name", "term": {"literal": {"string": "Unwrap eliminations in applications"}}},
@@ -24836,12 +24834,12 @@
                           {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
-            "typeName": "hydra.testing.TestGroup"}}}},
+            "typeName": "hydra.testing.TestGroup"}},
+        "name": "hydra.test.checking.nominalTypes.unwrapEliminationsInApplicationsTests",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.test.checking.nominalTypes.unwrapInComplexContextsTests",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "record": {
             "fields": [
               {"name": "name", "term": {"literal": {"string": "Unwrap in complex contexts"}}},
@@ -25320,12 +25318,12 @@
                           {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
-            "typeName": "hydra.testing.TestGroup"}}}},
+            "typeName": "hydra.testing.TestGroup"}},
+        "name": "hydra.test.checking.nominalTypes.unwrapInComplexContextsTests",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.test.checking.nominalTypes.multiParameterPolymorphicUnwrappersTests",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "record": {
             "fields": [
               {"name": "name", "term": {"literal": {"string": "Multi-parameter polymorphic unwrappers"}}},
@@ -26254,12 +26252,12 @@
                           {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
-            "typeName": "hydra.testing.TestGroup"}}}},
+            "typeName": "hydra.testing.TestGroup"}},
+        "name": "hydra.test.checking.nominalTypes.multiParameterPolymorphicUnwrappersTests",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.test.checking.nominalTypes.chainedUnwrappingTests",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "record": {
             "fields": [
               {"name": "name", "term": {"literal": {"string": "Chained unwrapping"}}},
@@ -26694,12 +26692,12 @@
                           {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
-            "typeName": "hydra.testing.TestGroup"}}}},
+            "typeName": "hydra.testing.TestGroup"}},
+        "name": "hydra.test.checking.nominalTypes.chainedUnwrappingTests",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.test.checking.nominalTypes.multipleUnwrapOperationsTests",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "record": {
             "fields": [
               {"name": "name", "term": {"literal": {"string": "Multiple unwrap operations"}}},
@@ -26974,12 +26972,12 @@
                           {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
-            "typeName": "hydra.testing.TestGroup"}}}},
+            "typeName": "hydra.testing.TestGroup"}},
+        "name": "hydra.test.checking.nominalTypes.multipleUnwrapOperationsTests",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.test.checking.nominalTypes.eliminationsTests",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "record": {
             "fields": [
               {"name": "name", "term": {"literal": {"string": "Eliminations"}}},
@@ -26994,12 +26992,12 @@
               {
                 "name": "cases",
                 "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}],
-            "typeName": "hydra.testing.TestGroup"}}}},
+            "typeName": "hydra.testing.TestGroup"}},
+        "name": "hydra.test.checking.nominalTypes.eliminationsTests",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.test.checking.nominalTypes.projectionsWithVariablesTests",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "record": {
             "fields": [
               {"name": "name", "term": {"literal": {"string": "Projections with variables"}}},
@@ -27551,7 +27549,9 @@
                           {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
-            "typeName": "hydra.testing.TestGroup"}}}}],
+            "typeName": "hydra.testing.TestGroup"}},
+        "name": "hydra.test.checking.nominalTypes.projectionsWithVariablesTests",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []}}}],
   "dependencies": [
     {"module": "hydra.test.testGraph"},
     {"module": "hydra.rewriting"},

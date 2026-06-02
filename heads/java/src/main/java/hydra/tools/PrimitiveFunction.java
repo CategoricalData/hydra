@@ -99,8 +99,8 @@ public abstract class PrimitiveFunction {
             };
         PrimitiveDefinition definition = new PrimitiveDefinition(
             name(),
-            signatureWithLaziness(),
             Maybe.nothing(),
+            signatureWithLaziness(),
             Boolean.TRUE,
             Boolean.TRUE,
             Maybe.nothing());

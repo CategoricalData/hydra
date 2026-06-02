@@ -2,9 +2,7 @@
   "definitions": [
     {
       "term": {
-        "name": "hydra.csharp.language.csharpLanguage",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.coders.Language"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Language constraints for C Sharp (C#)"}}}],
             "body": {
@@ -125,12 +123,12 @@
                                 "name": "types",
                                 "term": {"typeApplication": {"body": {"variable": "typePredicate"}, "type": {"variable": "hydra.core.Type"}}}}],
                             "typeName": "hydra.coders.LanguageConstraints"}}}],
-                    "typeName": "hydra.coders.Language"}}}}}}}},
+                    "typeName": "hydra.coders.Language"}}}}}},
+        "name": "hydra.csharp.language.csharpLanguage",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.coders.Language"}}, "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.csharp.language.csharpReservedWords",
-        "signature": {"parameters": [], "result": {"type": {"set": {"literal": {"string": {}}}}}, "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -263,7 +261,9 @@
                       "application": {
                         "argument": {"list": [{"variable": "keywords"}, {"variable": "contextualKeywords"}]},
                         "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.concat"}, "type": {"literal": {"string": {}}}}}}},
-                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.sets.fromList"}, "type": {"literal": {"string": {}}}}}}}}}}}}}],
+                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.sets.fromList"}, "type": {"literal": {"string": {}}}}}}}}}}},
+        "name": "hydra.csharp.language.csharpReservedWords",
+        "signature": {"parameters": [], "result": {"type": {"set": {"literal": {"string": {}}}}}, "typeParameters": []}}}],
   "dependencies": [
     {"module": "hydra.lexical"},
     {"module": "hydra.paths"},

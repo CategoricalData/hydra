@@ -2,27 +2,19 @@
   "definitions": [
     {
       "term": {
+        "body": {
+          "annotated": {
+            "annotation": [{"key": "description", "value": {"literal": {"string": "Capitalize the first letter of a string"}}}],
+            "body": {
+              "application": {"argument": {"variable": "hydra.lib.strings.toUpper"}, "function": {"variable": "hydra.formatting.mapFirstLetter"}}}}},
         "name": "hydra.formatting.capitalize",
         "signature": {
           "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"string": {}}}}],
           "result": {"type": {"literal": {"string": {}}}},
-          "typeParameters": []},
-        "term": {
-          "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Capitalize the first letter of a string"}}}],
-            "body": {
-              "application": {"argument": {"variable": "hydra.lib.strings.toUpper"}, "function": {"variable": "hydra.formatting.mapFirstLetter"}}}}}}},
+          "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.formatting.convertCase",
-        "signature": {
-          "parameters": [
-            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.util.CaseConvention"}},
-            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.util.CaseConvention"}},
-            {"isLazy": false, "name": "arg2", "type": {"literal": {"string": {}}}}],
-          "result": {"type": {"literal": {"string": {}}}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a string from one case convention to another"}}}],
             "body": {
@@ -187,14 +179,14 @@
                                         "function": {
                                           "cases": {
                                             "cases": [
-                                              {"name": "camel", "term": {"lambda": {"body": {"variable": "byCaps"}, "domain": {"unit": {}}, "parameter": "_"}}},
-                                              {"name": "pascal", "term": {"lambda": {"body": {"variable": "byCaps"}, "domain": {"unit": {}}, "parameter": "_"}}},
+                                              {"handler": {"lambda": {"body": {"variable": "byCaps"}, "domain": {"unit": {}}, "parameter": "_"}}, "name": "camel"},
+                                              {"handler": {"lambda": {"body": {"variable": "byCaps"}, "domain": {"unit": {}}, "parameter": "_"}}, "name": "pascal"},
                                               {
-                                                "name": "lowerSnake",
-                                                "term": {"lambda": {"body": {"variable": "byUnderscores"}, "domain": {"unit": {}}, "parameter": "_"}}},
+                                                "handler": {"lambda": {"body": {"variable": "byUnderscores"}, "domain": {"unit": {}}, "parameter": "_"}},
+                                                "name": "lowerSnake"},
                                               {
-                                                "name": "upperSnake",
-                                                "term": {"lambda": {"body": {"variable": "byUnderscores"}, "domain": {"unit": {}}, "parameter": "_"}}}],
+                                                "handler": {"lambda": {"body": {"variable": "byUnderscores"}, "domain": {"unit": {}}, "parameter": "_"}},
+                                                "name": "upperSnake"}],
                                             "typeName": "hydra.util.CaseConvention"}}}}}},
                                 "typeScheme": {"body": {"list": {"literal": {"string": {}}}}, "variables": []}}],
                             "body": {
@@ -204,8 +196,7 @@
                                   "cases": {
                                     "cases": [
                                       {
-                                        "name": "camel",
-                                        "term": {
+                                        "handler": {
                                           "lambda": {
                                             "body": {
                                               "application": {
@@ -231,10 +222,10 @@
                                                     "function": {"variable": "hydra.lib.strings.cat"}}},
                                                 "function": {"variable": "hydra.formatting.decapitalize"}}},
                                             "domain": {"unit": {}},
-                                            "parameter": "_"}}},
+                                            "parameter": "_"}},
+                                        "name": "camel"},
                                       {
-                                        "name": "pascal",
-                                        "term": {
+                                        "handler": {
                                           "lambda": {
                                             "body": {
                                               "application": {
@@ -257,10 +248,10 @@
                                                             "type": {"literal": {"string": {}}}}}}}}},
                                                 "function": {"variable": "hydra.lib.strings.cat"}}},
                                             "domain": {"unit": {}},
-                                            "parameter": "_"}}},
+                                            "parameter": "_"}},
+                                        "name": "pascal"},
                                       {
-                                        "name": "lowerSnake",
-                                        "term": {
+                                        "handler": {
                                           "lambda": {
                                             "body": {
                                               "application": {
@@ -276,10 +267,10 @@
                                                             "type": {"literal": {"string": {}}}}}}}}},
                                                 "function": {"application": {"argument": {"literal": {"string": "_"}}, "function": {"variable": "hydra.lib.strings.intercalate"}}}}},
                                             "domain": {"unit": {}},
-                                            "parameter": "_"}}},
+                                            "parameter": "_"}},
+                                        "name": "lowerSnake"},
                                       {
-                                        "name": "upperSnake",
-                                        "term": {
+                                        "handler": {
                                           "lambda": {
                                             "body": {
                                               "application": {
@@ -295,22 +286,26 @@
                                                             "type": {"literal": {"string": {}}}}}}}}},
                                                 "function": {"application": {"argument": {"literal": {"string": "_"}}, "function": {"variable": "hydra.lib.strings.intercalate"}}}}},
                                             "domain": {"unit": {}},
-                                            "parameter": "_"}}}],
+                                            "parameter": "_"}},
+                                        "name": "upperSnake"}],
                                     "typeName": "hydra.util.CaseConvention"}}}}}},
                         "domain": {"literal": {"string": {}}},
                         "parameter": "original"}},
                     "domain": {"variable": "hydra.util.CaseConvention"},
                     "parameter": "to"}},
                 "domain": {"variable": "hydra.util.CaseConvention"},
-                "parameter": "from"}}}}}},
+                "parameter": "from"}}}},
+        "name": "hydra.formatting.convertCase",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.util.CaseConvention"}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.util.CaseConvention"}},
+            {"isLazy": false, "name": "arg2", "type": {"literal": {"string": {}}}}],
+          "result": {"type": {"literal": {"string": {}}}},
+          "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.formatting.convertCaseCamelOrUnderscoreToLowerSnake",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"string": {}}}}],
-          "result": {"type": {"literal": {"string": {}}}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -356,15 +351,15 @@
                             "argument": {"variable": "snakeParts"},
                             "function": {"application": {"argument": {"literal": {"string": "_"}}, "function": {"variable": "hydra.lib.strings.intercalate"}}}}}}}}},
                 "domain": {"literal": {"string": {}}},
-                "parameter": "s"}}}}}},
-    {
-      "term": {
-        "name": "hydra.formatting.convertCaseCamelToLowerSnake",
+                "parameter": "s"}}}},
+        "name": "hydra.formatting.convertCaseCamelOrUnderscoreToLowerSnake",
         "signature": {
           "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"string": {}}}}],
           "result": {"type": {"literal": {"string": {}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a string from camel case to lower snake case"}}}],
             "body": {
@@ -373,15 +368,15 @@
                 "function": {
                   "application": {
                     "argument": {"inject": {"field": {"name": "camel", "term": {"unit": {}}}, "typeName": "hydra.util.CaseConvention"}},
-                    "function": {"variable": "hydra.formatting.convertCase"}}}}}}}}},
-    {
-      "term": {
-        "name": "hydra.formatting.convertCaseCamelToUpperSnake",
+                    "function": {"variable": "hydra.formatting.convertCase"}}}}}}},
+        "name": "hydra.formatting.convertCaseCamelToLowerSnake",
         "signature": {
           "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"string": {}}}}],
           "result": {"type": {"literal": {"string": {}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a string from camel case to upper snake case"}}}],
             "body": {
@@ -390,15 +385,15 @@
                 "function": {
                   "application": {
                     "argument": {"inject": {"field": {"name": "camel", "term": {"unit": {}}}, "typeName": "hydra.util.CaseConvention"}},
-                    "function": {"variable": "hydra.formatting.convertCase"}}}}}}}}},
-    {
-      "term": {
-        "name": "hydra.formatting.convertCasePascalToUpperSnake",
+                    "function": {"variable": "hydra.formatting.convertCase"}}}}}}},
+        "name": "hydra.formatting.convertCaseCamelToUpperSnake",
         "signature": {
           "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"string": {}}}}],
           "result": {"type": {"literal": {"string": {}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a string from pascal case to upper snake case"}}}],
             "body": {
@@ -407,29 +402,27 @@
                 "function": {
                   "application": {
                     "argument": {"inject": {"field": {"name": "pascal", "term": {"unit": {}}}, "typeName": "hydra.util.CaseConvention"}},
-                    "function": {"variable": "hydra.formatting.convertCase"}}}}}}}}},
+                    "function": {"variable": "hydra.formatting.convertCase"}}}}}}},
+        "name": "hydra.formatting.convertCasePascalToUpperSnake",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"string": {}}}}],
+          "result": {"type": {"literal": {"string": {}}}},
+          "typeParameters": []}}},
     {
       "term": {
+        "body": {
+          "annotated": {
+            "annotation": [{"key": "description", "value": {"literal": {"string": "Decapitalize the first letter of a string"}}}],
+            "body": {
+              "application": {"argument": {"variable": "hydra.lib.strings.toLower"}, "function": {"variable": "hydra.formatting.mapFirstLetter"}}}}},
         "name": "hydra.formatting.decapitalize",
         "signature": {
           "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"string": {}}}}],
           "result": {"type": {"literal": {"string": {}}}},
-          "typeParameters": []},
-        "term": {
-          "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Decapitalize the first letter of a string"}}}],
-            "body": {
-              "application": {"argument": {"variable": "hydra.lib.strings.toLower"}, "function": {"variable": "hydra.formatting.mapFirstLetter"}}}}}}},
+          "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.formatting.escapeWithUnderscore",
-        "signature": {
-          "parameters": [
-            {"isLazy": false, "name": "arg0", "type": {"set": {"literal": {"string": {}}}}},
-            {"isLazy": false, "name": "arg1", "type": {"literal": {"string": {}}}}],
-          "result": {"type": {"literal": {"string": {}}}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Escape reserved words by appending an underscore"}}}],
             "body": {
@@ -458,15 +451,17 @@
                     "domain": {"literal": {"string": {}}},
                     "parameter": "s"}},
                 "domain": {"set": {"literal": {"string": {}}}},
-                "parameter": "reserved"}}}}}},
+                "parameter": "reserved"}}}},
+        "name": "hydra.formatting.escapeWithUnderscore",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"set": {"literal": {"string": {}}}}},
+            {"isLazy": false, "name": "arg1", "type": {"literal": {"string": {}}}}],
+          "result": {"type": {"literal": {"string": {}}}},
+          "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.formatting.indentLines",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"string": {}}}}],
-          "result": {"type": {"literal": {"string": {}}}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Indent each line of a string with four spaces"}}}],
             "body": {
@@ -501,15 +496,15 @@
                                     "type": {"literal": {"string": {}}}}}}}}},
                         "function": {"variable": "hydra.lib.strings.unlines"}}}}},
                 "domain": {"literal": {"string": {}}},
-                "parameter": "s"}}}}}},
-    {
-      "term": {
-        "name": "hydra.formatting.javaStyleComment",
+                "parameter": "s"}}}},
+        "name": "hydra.formatting.indentLines",
         "signature": {
           "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"string": {}}}}],
           "result": {"type": {"literal": {"string": {}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Format a string as a Java-style block comment"}}}],
             "body": {
@@ -531,20 +526,15 @@
                                 "function": {"variable": "hydra.lib.strings.cat2"}}}}},
                         "function": {"variable": "hydra.lib.strings.cat2"}}}}},
                 "domain": {"literal": {"string": {}}},
-                "parameter": "s"}}}}}},
+                "parameter": "s"}}}},
+        "name": "hydra.formatting.javaStyleComment",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"string": {}}}}],
+          "result": {"type": {"literal": {"string": {}}}},
+          "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.formatting.mapFirstLetter",
-        "signature": {
-          "parameters": [
-            {
-              "isLazy": false,
-              "name": "arg0",
-              "type": {"function": {"codomain": {"literal": {"string": {}}}, "domain": {"literal": {"string": {}}}}}},
-            {"isLazy": false, "name": "arg1", "type": {"literal": {"string": {}}}}],
-          "result": {"type": {"literal": {"string": {}}}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -635,15 +625,20 @@
                     "domain": {"literal": {"string": {}}},
                     "parameter": "s"}},
                 "domain": {"function": {"codomain": {"literal": {"string": {}}}, "domain": {"literal": {"string": {}}}}},
-                "parameter": "mapping"}}}}}},
+                "parameter": "mapping"}}}},
+        "name": "hydra.formatting.mapFirstLetter",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {"function": {"codomain": {"literal": {"string": {}}}, "domain": {"literal": {"string": {}}}}}},
+            {"isLazy": false, "name": "arg1", "type": {"literal": {"string": {}}}}],
+          "result": {"type": {"literal": {"string": {}}}},
+          "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.formatting.nonAlnumToUnderscores",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"string": {}}}}],
-          "result": {"type": {"literal": {"string": {}}}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -889,15 +884,15 @@
                                     "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.reverse"}, "type": {"literal": {"integer": {"int32": {}}}}}}}},
                                 "function": {"variable": "hydra.lib.strings.fromList"}}}}}}}}},
                 "domain": {"literal": {"string": {}}},
-                "parameter": "input"}}}}}},
-    {
-      "term": {
-        "name": "hydra.formatting.normalizeComment",
+                "parameter": "input"}}}},
+        "name": "hydra.formatting.nonAlnumToUnderscores",
         "signature": {
           "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"string": {}}}}],
           "result": {"type": {"literal": {"string": {}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -981,17 +976,15 @@
                                 "argument": {"application": {"argument": {"variable": "stripped"}, "function": {"variable": "hydra.lib.strings.null"}}},
                                 "function": {"typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"literal": {"string": {}}}}}}}}}}}}},
                 "domain": {"literal": {"string": {}}},
-                "parameter": "s"}}}}}},
+                "parameter": "s"}}}},
+        "name": "hydra.formatting.normalizeComment",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"string": {}}}}],
+          "result": {"type": {"literal": {"string": {}}}},
+          "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.formatting.sanitizeWithUnderscores",
-        "signature": {
-          "parameters": [
-            {"isLazy": false, "name": "arg0", "type": {"set": {"literal": {"string": {}}}}},
-            {"isLazy": false, "name": "arg1", "type": {"literal": {"string": {}}}}],
-          "result": {"type": {"literal": {"string": {}}}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -1009,20 +1002,17 @@
                     "domain": {"literal": {"string": {}}},
                     "parameter": "s"}},
                 "domain": {"set": {"literal": {"string": {}}}},
-                "parameter": "reserved"}}}}}},
-    {
-      "term": {
-        "name": "hydra.formatting.showList",
+                "parameter": "reserved"}}}},
+        "name": "hydra.formatting.sanitizeWithUnderscores",
         "signature": {
           "parameters": [
-            {
-              "isLazy": false,
-              "name": "arg0",
-              "type": {"function": {"codomain": {"literal": {"string": {}}}, "domain": {"variable": "t0"}}}},
-            {"isLazy": false, "name": "arg1", "type": {"list": {"variable": "t0"}}}],
+            {"isLazy": false, "name": "arg0", "type": {"set": {"literal": {"string": {}}}}},
+            {"isLazy": false, "name": "arg1", "type": {"literal": {"string": {}}}}],
           "result": {"type": {"literal": {"string": {}}}},
-          "typeParameters": [{"constraints": [], "name": "t0"}]},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "typeLambda": {
             "body": {
               "annotated": {
@@ -1058,15 +1048,20 @@
                         "parameter": "els"}},
                     "domain": {"function": {"codomain": {"literal": {"string": {}}}, "domain": {"variable": "t0"}}},
                     "parameter": "f"}}}},
-            "parameter": "t0"}}}},
+            "parameter": "t0"}},
+        "name": "hydra.formatting.showList",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {"function": {"codomain": {"literal": {"string": {}}}, "domain": {"variable": "t0"}}}},
+            {"isLazy": false, "name": "arg1", "type": {"list": {"variable": "t0"}}}],
+          "result": {"type": {"literal": {"string": {}}}},
+          "typeParameters": [{"constraints": [], "name": "t0"}]}}},
     {
       "term": {
-        "name": "hydra.formatting.stripLeadingAndTrailingWhitespace",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"string": {}}}}],
-          "result": {"type": {"literal": {"string": {}}}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Remove leading and trailing whitespace from a string"}}}],
             "body": {
@@ -1096,15 +1091,15 @@
                               "typeApplication": {"body": {"variable": "hydra.lib.lists.dropWhile"}, "type": {"literal": {"integer": {"int32": {}}}}}}}}}},
                     "function": {"variable": "hydra.lib.strings.fromList"}}},
                 "domain": {"literal": {"string": {}}},
-                "parameter": "s"}}}}}},
-    {
-      "term": {
-        "name": "hydra.formatting.withCharacterAliases",
+                "parameter": "s"}}}},
+        "name": "hydra.formatting.stripLeadingAndTrailingWhitespace",
         "signature": {
           "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"string": {}}}}],
           "result": {"type": {"literal": {"string": {}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Replace special characters with their alphanumeric aliases"}}}],
             "body": {
@@ -1418,17 +1413,15 @@
                                 "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.filter"}, "type": {"literal": {"integer": {"int32": {}}}}}}}}}},
                         "function": {"variable": "hydra.lib.strings.fromList"}}}}},
                 "domain": {"literal": {"string": {}}},
-                "parameter": "original"}}}}}},
+                "parameter": "original"}}}},
+        "name": "hydra.formatting.withCharacterAliases",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"string": {}}}}],
+          "result": {"type": {"literal": {"string": {}}}},
+          "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.formatting.wrapLine",
-        "signature": {
-          "parameters": [
-            {"isLazy": false, "name": "arg0", "type": {"literal": {"integer": {"int32": {}}}}},
-            {"isLazy": false, "name": "arg1", "type": {"literal": {"string": {}}}}],
-          "result": {"type": {"literal": {"string": {}}}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {"key": "description", "value": {"literal": {"string": "A simple soft line wrap which is suitable for code comments"}}}],
@@ -1699,7 +1692,14 @@
                     "domain": {"literal": {"string": {}}},
                     "parameter": "input"}},
                 "domain": {"literal": {"integer": {"int32": {}}}},
-                "parameter": "maxlen"}}}}}}],
+                "parameter": "maxlen"}}}},
+        "name": "hydra.formatting.wrapLine",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"literal": {"integer": {"int32": {}}}}},
+            {"isLazy": false, "name": "arg1", "type": {"literal": {"string": {}}}}],
+          "result": {"type": {"literal": {"string": {}}}},
+          "typeParameters": []}}}],
   "dependencies": [
     {"module": "hydra.paths"},
     {"module": "hydra.ast"},

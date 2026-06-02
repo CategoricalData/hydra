@@ -2,17 +2,16 @@
   "definitions": [
     {
       "type": {
-        "name": "hydra.testing.Tag",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A tag for test cases"}}}],
               "body": {"wrap": {"literal": {"string": {}}}}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.testing.Tag"}},
     {
       "type": {
-        "name": "hydra.testing.TestCase",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [
@@ -27,11 +26,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "A universal test case (string comparison)"}}}],
                         "body": {"variable": "hydra.testing.UniversalTestCase"}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.testing.TestCase"}},
     {
       "type": {
-        "name": "hydra.testing.TestCaseWithMetadata",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A test case together with metadata"}}}],
@@ -61,11 +60,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "Zero or more tags for the test case"}}}],
                         "body": {"list": {"variable": "hydra.testing.Tag"}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.testing.TestCaseWithMetadata"}},
     {
       "type": {
-        "name": "hydra.testing.TestGroup",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [
@@ -98,11 +97,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "Zero or more test cases"}}}],
                         "body": {"list": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.testing.TestGroup"}},
     {
       "type": {
-        "name": "hydra.testing.UniversalTestCase",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [
@@ -128,7 +127,8 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "A thunk producing the expected result string."}}}],
                         "body": {"function": {"codomain": {"literal": {"string": {}}}, "domain": {"unit": {}}}}}}}]}}},
-          "variables": []}}}],
+          "variables": []},
+        "name": "hydra.testing.UniversalTestCase"}}],
   "dependencies": [{"module": "hydra.core"}],
   "metadata": {"comments": [], "description": "A model for unit testing", "seeAlso": []},
   "name": "hydra.testing"}

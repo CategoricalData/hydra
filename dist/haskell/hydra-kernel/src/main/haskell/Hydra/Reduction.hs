@@ -495,7 +495,8 @@ reduceTerm cx graph eager term =
                       Errors.noMatchingFieldErrorFieldName = (Core.projectionFieldName proj)})))) (\mf -> Right (Core.fieldTerm mf)) matching))
           applyCases =
                   \cs -> \reducedArg -> Eithers.bind (ExtractCore.injection (Core.caseStatementTypeName cs) graph reducedArg) (\field ->
-                    let matching = Lists.find (\f -> Equality.equal (Core.caseAlternativeName f) (Core.fieldName field)) (Core.caseStatementCases cs)
+                    let matching =
+                            Lists.find (\f -> Equality.equal (Core.caseAlternativeName f) (Core.fieldName field)) (Core.caseStatementCases cs)
                     in (Maybes.maybe (Maybes.maybe (Left (Errors.ErrorResolution (Errors.ResolutionErrorNoMatchingField (Errors.NoMatchingFieldError {
                       Errors.noMatchingFieldErrorFieldName = (Core.fieldName field)})))) (\x -> Right x) (Core.caseStatementDefault cs)) (\mf -> Right (Core.TermApplication (Core.Application {
                       Core.applicationFunction = (Core.caseAlternativeHandler mf),
@@ -578,7 +579,8 @@ termIsValue term =
       let forList = \els -> Lists.foldl (\b -> \t -> Logic.and b (termIsValue t)) True els
           checkField = \f -> termIsValue (Core.fieldTerm f)
           checkFields = \fields -> Lists.foldl (\b -> \f -> Logic.and b (checkField f)) True fields
-          checkCaseAlternatives = \alts -> Lists.foldl (\b -> \a -> Logic.and b (termIsValue (Core.caseAlternativeHandler a))) True alts
+          checkCaseAlternatives =
+                  \alts -> Lists.foldl (\b -> \a -> Logic.and b (termIsValue (Core.caseAlternativeHandler a))) True alts
       in case (Strip.deannotateTerm term) of
         Core.TermApplication _ -> False
         Core.TermCases v0 -> Logic.and (checkCaseAlternatives (Core.caseStatementCases v0)) (Maybes.maybe True termIsValue (Core.caseStatementDefault v0))

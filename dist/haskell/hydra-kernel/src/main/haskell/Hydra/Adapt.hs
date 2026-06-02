@@ -220,8 +220,8 @@ adaptPrimitive constraints litmap prim0 =
         let def1 =
                 Packaging.PrimitiveDefinition {
                   Packaging.primitiveDefinitionName = (Packaging.primitiveDefinitionName def0),
-                  Packaging.primitiveDefinitionSignature = sig1,
                   Packaging.primitiveDefinitionMetadata = (Packaging.primitiveDefinitionMetadata def0),
+                  Packaging.primitiveDefinitionSignature = sig1,
                   Packaging.primitiveDefinitionIsPure = (Packaging.primitiveDefinitionIsPure def0),
                   Packaging.primitiveDefinitionIsTotal = (Packaging.primitiveDefinitionIsTotal def0),
                   Packaging.primitiveDefinitionDefaultImplementation = (Packaging.primitiveDefinitionDefaultImplementation def0)}
@@ -433,8 +433,8 @@ dataGraphToDefinitions constraints doInfer doExpand doHoistCaseStatements doHois
                       \el -> Maybes.map (\ts -> Packaging.TermDefinition {
                         Packaging.termDefinitionName = (Core.bindingName el),
                         Packaging.termDefinitionMetadata = Nothing,
-                        Packaging.termDefinitionBody = (Core.bindingTerm el),
-                        Packaging.termDefinitionSignature = (Just (Scoping.typeSchemeToTermSignature ts))}) (Core.bindingTypeScheme el)
+                        Packaging.termDefinitionSignature = (Just (Scoping.typeSchemeToTermSignature ts)),
+                        Packaging.termDefinitionBody = (Core.bindingTerm el)}) (Core.bindingTypeScheme el)
               selectedElements =
                       Lists.filter (\el -> Maybes.maybe False (\ns -> Sets.member ns namespacesSet) (Names.moduleNameOf (Core.bindingName el))) bins5
               elementsByNamespace =
@@ -622,6 +622,10 @@ pushTypeAppsInward term =
                             \fld -> Core.Field {
                               Core.fieldName = (Core.fieldName fld),
                               Core.fieldTerm = (go (Core.fieldTerm fld))}
+                        forCaseAlternative =
+                                \alt -> Core.CaseAlternative {
+                                  Core.caseAlternativeName = (Core.caseAlternativeName alt),
+                                  Core.caseAlternativeHandler = (go (Core.caseAlternativeHandler alt))}
                         forLet =
                                 \lt ->
                                   let mapBinding =
@@ -646,7 +650,7 @@ pushTypeAppsInward term =
                       Core.TermCases v0 -> Core.TermCases (Core.CaseStatement {
                         Core.caseStatementTypeName = (Core.caseStatementTypeName v0),
                         Core.caseStatementDefault = (Maybes.map go (Core.caseStatementDefault v0)),
-                        Core.caseStatementCases = (Lists.map (\alt -> Core.CaseAlternative {Core.caseAlternativeName = (Core.caseAlternativeName alt), Core.caseAlternativeHandler = (go (Core.caseAlternativeHandler alt))}) (Core.caseStatementCases v0))})
+                        Core.caseStatementCases = (Lists.map forCaseAlternative (Core.caseStatementCases v0))})
                       Core.TermEither v0 -> Core.TermEither (Eithers.either (\l -> Left (go l)) (\r -> Right (go r)) v0)
                       Core.TermLambda v0 -> Core.TermLambda (Core.Lambda {
                         Core.lambdaParameter = (Core.lambdaParameter v0),

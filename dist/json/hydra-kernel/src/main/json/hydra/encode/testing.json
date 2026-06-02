@@ -2,12 +2,7 @@
   "definitions": [
     {
       "term": {
-        "name": "hydra.encode.testing.tag",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.testing.Tag"}}],
-          "result": {"type": {"variable": "hydra.core.Term"}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Encoder for hydra.testing.Tag"}}}],
             "body": {
@@ -40,7 +35,12 @@
                           "typeName": "hydra.core.WrappedTerm"}}},
                     "typeName": "hydra.core.Term"}},
                 "domain": {"variable": "hydra.testing.Tag"},
-                "parameter": "x"}}}}}}],
+                "parameter": "x"}}}},
+        "name": "hydra.encode.testing.tag",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.testing.Tag"}}],
+          "result": {"type": {"variable": "hydra.core.Term"}},
+          "typeParameters": []}}}],
   "dependencies": [{"module": "hydra.encode.core"}, {"module": "hydra.testing"}],
   "metadata": {"comments": [], "description": "Term encoders for hydra.testing", "seeAlso": []},
   "name": "hydra.encode.testing"}

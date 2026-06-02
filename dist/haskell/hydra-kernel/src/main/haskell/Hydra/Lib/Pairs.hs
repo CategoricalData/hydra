@@ -31,6 +31,13 @@ bimap :: Packaging.PrimitiveDefinition
 bimap =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.pairs.bimap"),
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "Map over both elements of a pair."),
+        Packaging.entityMetadataComments = [
+          "bimap(f, g, p) returns a new pair (f(first(p)), g(second(p))). The bifunctor map for pairs.",
+          "Total. Corresponds to Haskell's Data.Bifunctor.bimap :: (a -> c) -> (b -> d) -> (a, b) -> (c, d)."],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [
           Typing.TypeParameter {
@@ -72,13 +79,6 @@ bimap =
           Typing.resultType = (Core.TypePair (Core.PairType {
             Core.pairTypeFirst = (Core.TypeVariable (Core.Name "c")),
             Core.pairTypeSecond = (Core.TypeVariable (Core.Name "d"))}))}},
-      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
-        Packaging.entityMetadataDescription = (Just "Map over both elements of a pair."),
-        Packaging.entityMetadataComments = [
-          "bimap(f, g, p) returns a new pair (f(first(p)), g(second(p))). The bifunctor map for pairs.",
-          "Total. Corresponds to Haskell's Data.Bifunctor.bimap :: (a -> c) -> (b -> d) -> (a, b) -> (c, d)."],
-        Packaging.entityMetadataSeeAlso = [],
-        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = (Just (Core.TermAnnotated (Core.AnnotatedTerm {
@@ -110,6 +110,13 @@ first :: Packaging.PrimitiveDefinition
 first =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.pairs.first"),
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "Get the first element of a pair."),
+        Packaging.entityMetadataComments = [
+          "first(p) returns the first component of the pair p.",
+          "Total. Corresponds to Haskell's fst :: (a, b) -> a."],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [
           Typing.TypeParameter {
@@ -129,13 +136,6 @@ first =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeVariable (Core.Name "a"))}},
-      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
-        Packaging.entityMetadataDescription = (Just "Get the first element of a pair."),
-        Packaging.entityMetadataComments = [
-          "first(p) returns the first component of the pair p.",
-          "Total. Corresponds to Haskell's fst :: (a, b) -> a."],
-        Packaging.entityMetadataSeeAlso = [],
-        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
@@ -143,6 +143,13 @@ second :: Packaging.PrimitiveDefinition
 second =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.pairs.second"),
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "Get the second element of a pair."),
+        Packaging.entityMetadataComments = [
+          "second(p) returns the second component of the pair p.",
+          "Total. Corresponds to Haskell's snd :: (a, b) -> b."],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [
           Typing.TypeParameter {
@@ -162,13 +169,6 @@ second =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeVariable (Core.Name "b"))}},
-      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
-        Packaging.entityMetadataDescription = (Just "Get the second element of a pair."),
-        Packaging.entityMetadataComments = [
-          "second(p) returns the second component of the pair p.",
-          "Total. Corresponds to Haskell's snd :: (a, b) -> b."],
-        Packaging.entityMetadataSeeAlso = [],
-        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}

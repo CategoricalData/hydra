@@ -2,13 +2,7 @@
   "definitions": [
     {
       "term": {
-        "name": "hydra.json.parser.digit",
-        "signature": {
-          "parameters": [],
-          "result": {
-            "type": {"application": {"argument": {"literal": {"integer": {"int32": {}}}}, "function": {"variable": "hydra.parsing.Parser"}}}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Parse a single digit (0-9)"}}}],
             "body": {
@@ -36,15 +30,16 @@
                             "function": {"variable": "hydra.lib.logic.and"}}}}},
                     "domain": {"literal": {"integer": {"int32": {}}}},
                     "parameter": "c"}},
-                "function": {"variable": "hydra.parsers.satisfy"}}}}}}},
-    {
-      "term": {
-        "name": "hydra.json.parser.digits",
+                "function": {"variable": "hydra.parsers.satisfy"}}}}},
+        "name": "hydra.json.parser.digit",
         "signature": {
           "parameters": [],
-          "result": {"type": {"application": {"argument": {"literal": {"string": {}}}, "function": {"variable": "hydra.parsing.Parser"}}}},
-          "typeParameters": []},
-        "term": {
+          "result": {
+            "type": {"application": {"argument": {"literal": {"integer": {"int32": {}}}}, "function": {"variable": "hydra.parsing.Parser"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Parse one or more digits as a string"}}}],
             "body": {
@@ -60,16 +55,15 @@
                       "typeApplication": {
                         "body": {
                           "typeApplication": {"body": {"variable": "hydra.parsers.map"}, "type": {"list": {"literal": {"integer": {"int32": {}}}}}}},
-                        "type": {"literal": {"string": {}}}}}}}}}}}}},
-    {
-      "term": {
-        "name": "hydra.json.parser.jsonArray",
+                        "type": {"literal": {"string": {}}}}}}}}}}},
+        "name": "hydra.json.parser.digits",
         "signature": {
           "parameters": [],
-          "result": {
-            "type": {"application": {"argument": {"variable": "hydra.json.model.Value"}, "function": {"variable": "hydra.parsing.Parser"}}}},
-          "typeParameters": []},
-        "term": {
+          "result": {"type": {"application": {"argument": {"literal": {"string": {}}}, "function": {"variable": "hydra.parsing.Parser"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Parse a JSON array"}}}],
             "body": {
@@ -122,16 +116,16 @@
                       "typeApplication": {
                         "body": {
                           "typeApplication": {"body": {"variable": "hydra.parsers.map"}, "type": {"list": {"variable": "hydra.json.model.Value"}}}},
-                        "type": {"variable": "hydra.json.model.Value"}}}}}}}}}}},
-    {
-      "term": {
-        "name": "hydra.json.parser.jsonBool",
+                        "type": {"variable": "hydra.json.model.Value"}}}}}}}}},
+        "name": "hydra.json.parser.jsonArray",
         "signature": {
           "parameters": [],
           "result": {
             "type": {"application": {"argument": {"variable": "hydra.json.model.Value"}, "function": {"variable": "hydra.parsing.Parser"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Parse JSON boolean (true or false)"}}}],
             "body": {
@@ -173,16 +167,16 @@
                               "typeApplication": {
                                 "body": {"typeApplication": {"body": {"variable": "hydra.parsers.map"}, "type": {"literal": {"string": {}}}}},
                                 "type": {"variable": "hydra.json.model.Value"}}}}}}},
-                    "function": {"typeApplication": {"body": {"variable": "hydra.parsers.alt"}, "type": {"variable": "hydra.json.model.Value"}}}}}}}}}}},
-    {
-      "term": {
-        "name": "hydra.json.parser.jsonEscapeChar",
+                    "function": {"typeApplication": {"body": {"variable": "hydra.parsers.alt"}, "type": {"variable": "hydra.json.model.Value"}}}}}}}}},
+        "name": "hydra.json.parser.jsonBool",
         "signature": {
           "parameters": [],
           "result": {
-            "type": {"application": {"argument": {"literal": {"integer": {"int32": {}}}}, "function": {"variable": "hydra.parsing.Parser"}}}},
-          "typeParameters": []},
-        "term": {
+            "type": {"application": {"argument": {"variable": "hydra.json.model.Value"}, "function": {"variable": "hydra.parsing.Parser"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Parse a JSON escape sequence after the backslash"}}}],
             "body": {
@@ -277,16 +271,16 @@
                               "typeApplication": {
                                 "body": {"typeApplication": {"body": {"variable": "hydra.parsers.map"}, "type": {"literal": {"integer": {"int32": {}}}}}},
                                 "type": {"literal": {"integer": {"int32": {}}}}}}}}}}]},
-                "function": {"typeApplication": {"body": {"variable": "hydra.parsers.choice"}, "type": {"literal": {"integer": {"int32": {}}}}}}}}}}}},
-    {
-      "term": {
-        "name": "hydra.json.parser.jsonExponentPart",
+                "function": {"typeApplication": {"body": {"variable": "hydra.parsers.choice"}, "type": {"literal": {"integer": {"int32": {}}}}}}}}}},
+        "name": "hydra.json.parser.jsonEscapeChar",
         "signature": {
           "parameters": [],
           "result": {
-            "type": {"application": {"argument": {"maybe": {"literal": {"string": {}}}}, "function": {"variable": "hydra.parsing.Parser"}}}},
-          "typeParameters": []},
-        "term": {
+            "type": {"application": {"argument": {"literal": {"integer": {"int32": {}}}}, "function": {"variable": "hydra.parsing.Parser"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Parse the optional exponent part of a JSON number"}}}],
             "body": {
@@ -416,16 +410,16 @@
                           "typeApplication": {
                             "body": {"typeApplication": {"body": {"variable": "hydra.parsers.bind"}, "type": {"literal": {"integer": {"int32": {}}}}}},
                             "type": {"literal": {"string": {}}}}}}}}},
-                "function": {"typeApplication": {"body": {"variable": "hydra.parsers.optional"}, "type": {"literal": {"string": {}}}}}}}}}}},
-    {
-      "term": {
-        "name": "hydra.json.parser.jsonFractionPart",
+                "function": {"typeApplication": {"body": {"variable": "hydra.parsers.optional"}, "type": {"literal": {"string": {}}}}}}}}},
+        "name": "hydra.json.parser.jsonExponentPart",
         "signature": {
           "parameters": [],
           "result": {
             "type": {"application": {"argument": {"maybe": {"literal": {"string": {}}}}, "function": {"variable": "hydra.parsing.Parser"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Parse the optional fractional part of a JSON number"}}}],
             "body": {
@@ -460,15 +454,16 @@
                           "typeApplication": {
                             "body": {"typeApplication": {"body": {"variable": "hydra.parsers.bind"}, "type": {"literal": {"integer": {"int32": {}}}}}},
                             "type": {"literal": {"string": {}}}}}}}}},
-                "function": {"typeApplication": {"body": {"variable": "hydra.parsers.optional"}, "type": {"literal": {"string": {}}}}}}}}}}},
-    {
-      "term": {
-        "name": "hydra.json.parser.jsonIntegerPart",
+                "function": {"typeApplication": {"body": {"variable": "hydra.parsers.optional"}, "type": {"literal": {"string": {}}}}}}}}},
+        "name": "hydra.json.parser.jsonFractionPart",
         "signature": {
           "parameters": [],
-          "result": {"type": {"application": {"argument": {"literal": {"string": {}}}, "function": {"variable": "hydra.parsing.Parser"}}}},
-          "typeParameters": []},
-        "term": {
+          "result": {
+            "type": {"application": {"argument": {"maybe": {"literal": {"string": {}}}}, "function": {"variable": "hydra.parsing.Parser"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -526,19 +521,15 @@
                       "typeApplication": {
                         "body": {
                           "typeApplication": {"body": {"variable": "hydra.parsers.bind"}, "type": {"maybe": {"literal": {"integer": {"int32": {}}}}}}},
-                        "type": {"literal": {"string": {}}}}}}}}}}}}},
-    {
-      "term": {
-        "name": "hydra.json.parser.jsonKeyValue",
+                        "type": {"literal": {"string": {}}}}}}}}}}},
+        "name": "hydra.json.parser.jsonIntegerPart",
         "signature": {
           "parameters": [],
-          "result": {
-            "type": {
-              "application": {
-                "argument": {"pair": {"first": {"literal": {"string": {}}}, "second": {"variable": "hydra.json.model.Value"}}},
-                "function": {"variable": "hydra.parsing.Parser"}}}},
-          "typeParameters": []},
-        "term": {
+          "result": {"type": {"application": {"argument": {"literal": {"string": {}}}, "function": {"variable": "hydra.parsing.Parser"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Parse a JSON object key-value pair"}}}],
             "body": {
@@ -639,16 +630,19 @@
                     "function": {
                       "typeApplication": {
                         "body": {"typeApplication": {"body": {"variable": "hydra.parsers.bind"}, "type": {"literal": {"string": {}}}}},
-                        "type": {"pair": {"first": {"literal": {"string": {}}}, "second": {"variable": "hydra.json.model.Value"}}}}}}}}}}}}},
-    {
-      "term": {
-        "name": "hydra.json.parser.jsonNull",
+                        "type": {"pair": {"first": {"literal": {"string": {}}}, "second": {"variable": "hydra.json.model.Value"}}}}}}}}}}},
+        "name": "hydra.json.parser.jsonKeyValue",
         "signature": {
           "parameters": [],
           "result": {
-            "type": {"application": {"argument": {"variable": "hydra.json.model.Value"}, "function": {"variable": "hydra.parsing.Parser"}}}},
-          "typeParameters": []},
-        "term": {
+            "type": {
+              "application": {
+                "argument": {"pair": {"first": {"literal": {"string": {}}}, "second": {"variable": "hydra.json.model.Value"}}},
+                "function": {"variable": "hydra.parsing.Parser"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Parse JSON null value"}}}],
             "body": {
@@ -667,16 +661,16 @@
                     "function": {
                       "typeApplication": {
                         "body": {"typeApplication": {"body": {"variable": "hydra.parsers.map"}, "type": {"literal": {"string": {}}}}},
-                        "type": {"variable": "hydra.json.model.Value"}}}}}}}}}}},
-    {
-      "term": {
-        "name": "hydra.json.parser.jsonNumber",
+                        "type": {"variable": "hydra.json.model.Value"}}}}}}}}},
+        "name": "hydra.json.parser.jsonNull",
         "signature": {
           "parameters": [],
           "result": {
             "type": {"application": {"argument": {"variable": "hydra.json.model.Value"}, "function": {"variable": "hydra.parsing.Parser"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -784,16 +778,16 @@
                           "typeApplication": {
                             "body": {"typeApplication": {"body": {"variable": "hydra.parsers.bind"}, "type": {"literal": {"string": {}}}}},
                             "type": {"variable": "hydra.json.model.Value"}}}}}}},
-                "function": {"typeApplication": {"body": {"variable": "hydra.json.parser.token"}, "type": {"variable": "hydra.json.model.Value"}}}}}}}}},
-    {
-      "term": {
-        "name": "hydra.json.parser.jsonObject",
+                "function": {"typeApplication": {"body": {"variable": "hydra.json.parser.token"}, "type": {"variable": "hydra.json.model.Value"}}}}}}},
+        "name": "hydra.json.parser.jsonNumber",
         "signature": {
           "parameters": [],
           "result": {
             "type": {"application": {"argument": {"variable": "hydra.json.model.Value"}, "function": {"variable": "hydra.parsing.Parser"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Parse a JSON object"}}}],
             "body": {
@@ -861,16 +855,16 @@
                           "typeApplication": {
                             "body": {"variable": "hydra.parsers.map"},
                             "type": {"list": {"pair": {"first": {"literal": {"string": {}}}, "second": {"variable": "hydra.json.model.Value"}}}}}},
-                        "type": {"variable": "hydra.json.model.Value"}}}}}}}}}}},
-    {
-      "term": {
-        "name": "hydra.json.parser.jsonString",
+                        "type": {"variable": "hydra.json.model.Value"}}}}}}}}},
+        "name": "hydra.json.parser.jsonObject",
         "signature": {
           "parameters": [],
           "result": {
             "type": {"application": {"argument": {"variable": "hydra.json.model.Value"}, "function": {"variable": "hydra.parsing.Parser"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Parse a JSON string value"}}}],
             "body": {
@@ -927,16 +921,16 @@
                           "typeApplication": {
                             "body": {"typeApplication": {"body": {"variable": "hydra.parsers.bind"}, "type": {"literal": {"integer": {"int32": {}}}}}},
                             "type": {"variable": "hydra.json.model.Value"}}}}}}},
-                "function": {"typeApplication": {"body": {"variable": "hydra.json.parser.token"}, "type": {"variable": "hydra.json.model.Value"}}}}}}}}},
-    {
-      "term": {
-        "name": "hydra.json.parser.jsonStringChar",
+                "function": {"typeApplication": {"body": {"variable": "hydra.json.parser.token"}, "type": {"variable": "hydra.json.model.Value"}}}}}}},
+        "name": "hydra.json.parser.jsonString",
         "signature": {
           "parameters": [],
           "result": {
-            "type": {"application": {"argument": {"literal": {"integer": {"int32": {}}}}, "function": {"variable": "hydra.parsing.Parser"}}}},
-          "typeParameters": []},
-        "term": {
+            "type": {"application": {"argument": {"variable": "hydra.json.model.Value"}, "function": {"variable": "hydra.parsing.Parser"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {"key": "description", "value": {"literal": {"string": "Parse a single character in a JSON string (handling escapes)"}}}],
@@ -990,16 +984,16 @@
                               "typeApplication": {
                                 "body": {"typeApplication": {"body": {"variable": "hydra.parsers.bind"}, "type": {"literal": {"integer": {"int32": {}}}}}},
                                 "type": {"literal": {"integer": {"int32": {}}}}}}}}}},
-                    "function": {"typeApplication": {"body": {"variable": "hydra.parsers.alt"}, "type": {"literal": {"integer": {"int32": {}}}}}}}}}}}}}},
-    {
-      "term": {
-        "name": "hydra.json.parser.jsonValue",
+                    "function": {"typeApplication": {"body": {"variable": "hydra.parsers.alt"}, "type": {"literal": {"integer": {"int32": {}}}}}}}}}}}},
+        "name": "hydra.json.parser.jsonStringChar",
         "signature": {
           "parameters": [],
           "result": {
-            "type": {"application": {"argument": {"variable": "hydra.json.model.Value"}, "function": {"variable": "hydra.parsing.Parser"}}}},
-          "typeParameters": []},
-        "term": {
+            "type": {"application": {"argument": {"literal": {"integer": {"int32": {}}}}, "function": {"variable": "hydra.parsing.Parser"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Parse any JSON value"}}}],
             "body": {
@@ -1012,17 +1006,16 @@
                     {"variable": "hydra.json.parser.jsonString"},
                     {"variable": "hydra.json.parser.jsonArray"},
                     {"variable": "hydra.json.parser.jsonObject"}]},
-                "function": {"typeApplication": {"body": {"variable": "hydra.parsers.choice"}, "type": {"variable": "hydra.json.model.Value"}}}}}}}}},
+                "function": {"typeApplication": {"body": {"variable": "hydra.parsers.choice"}, "type": {"variable": "hydra.json.model.Value"}}}}}}},
+        "name": "hydra.json.parser.jsonValue",
+        "signature": {
+          "parameters": [],
+          "result": {
+            "type": {"application": {"argument": {"variable": "hydra.json.model.Value"}, "function": {"variable": "hydra.parsing.Parser"}}}},
+          "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.json.parser.parseJson",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"string": {}}}}],
-          "result": {
-            "type": {
-              "application": {"argument": {"variable": "hydra.json.model.Value"}, "function": {"variable": "hydra.parsing.ParseResult"}}}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Parse a JSON document from a string"}}}],
             "body": {
@@ -1090,19 +1083,17 @@
                                     "type": {"variable": "hydra.json.model.Value"}}}}}}},
                         "function": {"typeApplication": {"body": {"unwrap": "hydra.parsing.Parser"}, "type": {"variable": "hydra.json.model.Value"}}}}}}},
                 "domain": {"literal": {"string": {}}},
-                "parameter": "input"}}}}}},
+                "parameter": "input"}}}},
+        "name": "hydra.json.parser.parseJson",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"string": {}}}}],
+          "result": {
+            "type": {
+              "application": {"argument": {"variable": "hydra.json.model.Value"}, "function": {"variable": "hydra.parsing.ParseResult"}}}},
+          "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.json.parser.token",
-        "signature": {
-          "parameters": [
-            {
-              "isLazy": false,
-              "name": "arg0",
-              "type": {"application": {"argument": {"variable": "t0"}, "function": {"variable": "hydra.parsing.Parser"}}}}],
-          "result": {"type": {"application": {"argument": {"variable": "t0"}, "function": {"variable": "hydra.parsing.Parser"}}}},
-          "typeParameters": [{"constraints": [], "name": "t0"}]},
-        "term": {
+        "body": {
           "typeLambda": {
             "body": {
               "annotated": {
@@ -1141,15 +1132,19 @@
                                 "type": {"variable": "t0"}}}}}}},
                     "domain": {"application": {"argument": {"variable": "t0"}, "function": {"variable": "hydra.parsing.Parser"}}},
                     "parameter": "p"}}}},
-            "parameter": "t0"}}}},
+            "parameter": "t0"}},
+        "name": "hydra.json.parser.token",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {"application": {"argument": {"variable": "t0"}, "function": {"variable": "hydra.parsing.Parser"}}}}],
+          "result": {"type": {"application": {"argument": {"variable": "t0"}, "function": {"variable": "hydra.parsing.Parser"}}}},
+          "typeParameters": [{"constraints": [], "name": "t0"}]}}},
     {
       "term": {
-        "name": "hydra.json.parser.whitespace",
-        "signature": {
-          "parameters": [],
-          "result": {"type": {"application": {"argument": {"unit": {}}, "function": {"variable": "hydra.parsing.Parser"}}}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -1216,7 +1211,12 @@
                       "typeApplication": {
                         "body": {
                           "typeApplication": {"body": {"variable": "hydra.parsers.map"}, "type": {"list": {"literal": {"integer": {"int32": {}}}}}}},
-                        "type": {"unit": {}}}}}}}}}}}}],
+                        "type": {"unit": {}}}}}}}}}},
+        "name": "hydra.json.parser.whitespace",
+        "signature": {
+          "parameters": [],
+          "result": {"type": {"application": {"argument": {"unit": {}}, "function": {"variable": "hydra.parsing.Parser"}}}},
+          "typeParameters": []}}}],
   "dependencies": [
     {"module": "hydra.parsers"},
     {"module": "hydra.paths"},

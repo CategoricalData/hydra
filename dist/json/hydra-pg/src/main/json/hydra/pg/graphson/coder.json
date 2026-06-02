@@ -2,14 +2,7 @@
   "definitions": [
     {
       "term": {
-        "name": "hydra.pg.graphson.coder.adjacentEdgeToJson",
-        "signature": {
-          "parameters": [
-            {"isLazy": false, "name": "arg0", "type": {"literal": {"boolean": {}}}},
-            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.pg.graphson.syntax.AdjacentEdge"}}],
-          "result": {"type": {"variable": "hydra.json.model.Value"}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -115,23 +108,24 @@
                     "domain": {"variable": "hydra.pg.graphson.syntax.AdjacentEdge"},
                     "parameter": "ae"}},
                 "domain": {"literal": {"boolean": {}}},
-                "parameter": "out"}}}}}},
+                "parameter": "out"}}}},
+        "name": "hydra.pg.graphson.coder.adjacentEdgeToJson",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"literal": {"boolean": {}}}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.pg.graphson.syntax.AdjacentEdge"}}],
+          "result": {"type": {"variable": "hydra.json.model.Value"}},
+          "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.pg.graphson.coder.doubleValueToJson",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.pg.graphson.syntax.DoubleValue"}}],
-          "result": {"type": {"variable": "hydra.json.model.Value"}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a GraphSON DoubleValue to a JSON Value"}}}],
             "body": {
               "cases": {
                 "cases": [
                   {
-                    "name": "finite",
-                    "term": {
+                    "handler": {
                       "lambda": {
                         "body": {
                           "inject": {
@@ -140,47 +134,40 @@
                               "term": {"application": {"argument": {"variable": "d"}, "function": {"variable": "hydra.lib.literals.float64ToDecimal"}}}},
                             "typeName": "hydra.json.model.Value"}},
                         "domain": {"literal": {"float": {"float64": {}}}},
-                        "parameter": "d"}}},
+                        "parameter": "d"}},
+                    "name": "finite"},
                   {
-                    "name": "infinity",
-                    "term": {
+                    "handler": {
                       "lambda": {
                         "body": {
                           "inject": {"field": {"name": "string", "term": {"literal": {"string": "Infinity"}}}, "typeName": "hydra.json.model.Value"}},
                         "domain": {"unit": {}},
-                        "parameter": "_"}}},
+                        "parameter": "_"}},
+                    "name": "infinity"},
                   {
-                    "name": "negativeInfinity",
-                    "term": {
+                    "handler": {
                       "lambda": {
                         "body": {
                           "inject": {"field": {"name": "string", "term": {"literal": {"string": "-Infinity"}}}, "typeName": "hydra.json.model.Value"}},
                         "domain": {"unit": {}},
-                        "parameter": "_"}}},
+                        "parameter": "_"}},
+                    "name": "negativeInfinity"},
                   {
-                    "name": "notANumber",
-                    "term": {
+                    "handler": {
                       "lambda": {
                         "body": {"inject": {"field": {"name": "string", "term": {"literal": {"string": "NaN"}}}, "typeName": "hydra.json.model.Value"}},
                         "domain": {"unit": {}},
-                        "parameter": "_"}}}],
-                "typeName": "hydra.pg.graphson.syntax.DoubleValue"}}}}}},
+                        "parameter": "_"}},
+                    "name": "notANumber"}],
+                "typeName": "hydra.pg.graphson.syntax.DoubleValue"}}}},
+        "name": "hydra.pg.graphson.coder.doubleValueToJson",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.pg.graphson.syntax.DoubleValue"}}],
+          "result": {"type": {"variable": "hydra.json.model.Value"}},
+          "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.pg.graphson.coder.edgeMapToJson",
-        "signature": {
-          "parameters": [
-            {"isLazy": false, "name": "arg0", "type": {"literal": {"boolean": {}}}},
-            {
-              "isLazy": false,
-              "name": "arg1",
-              "type": {
-                "map": {
-                  "keys": {"variable": "hydra.pg.graphson.syntax.EdgeLabel"},
-                  "values": {"list": {"variable": "hydra.pg.graphson.syntax.AdjacentEdge"}}}}}],
-          "result": {"type": {"maybe": {"variable": "hydra.json.model.Value"}}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a map of edges by label to an optional JSON Value"}}}],
             "body": {
@@ -294,20 +281,23 @@
                         "values": {"list": {"variable": "hydra.pg.graphson.syntax.AdjacentEdge"}}}},
                     "parameter": "m"}},
                 "domain": {"literal": {"boolean": {}}},
-                "parameter": "out"}}}}}},
-    {
-      "term": {
-        "name": "hydra.pg.graphson.coder.edgePropertyMapToJson",
+                "parameter": "out"}}}},
+        "name": "hydra.pg.graphson.coder.edgeMapToJson",
         "signature": {
           "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"literal": {"boolean": {}}}},
             {
               "isLazy": false,
-              "name": "arg0",
+              "name": "arg1",
               "type": {
-                "map": {"keys": {"variable": "hydra.pg.graphson.syntax.PropertyKey"}, "values": {"variable": "hydra.pg.graphson.syntax.Value"}}}}],
+                "map": {
+                  "keys": {"variable": "hydra.pg.graphson.syntax.EdgeLabel"},
+                  "values": {"list": {"variable": "hydra.pg.graphson.syntax.AdjacentEdge"}}}}}],
           "result": {"type": {"maybe": {"variable": "hydra.json.model.Value"}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a map of edge properties to an optional JSON Value"}}}],
             "body": {
@@ -402,23 +392,27 @@
                               "typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"maybe": {"variable": "hydra.json.model.Value"}}}}}}}}}},
                 "domain": {
                   "map": {"keys": {"variable": "hydra.pg.graphson.syntax.PropertyKey"}, "values": {"variable": "hydra.pg.graphson.syntax.Value"}}},
-                "parameter": "m"}}}}}},
+                "parameter": "m"}}}},
+        "name": "hydra.pg.graphson.coder.edgePropertyMapToJson",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {
+                "map": {"keys": {"variable": "hydra.pg.graphson.syntax.PropertyKey"}, "values": {"variable": "hydra.pg.graphson.syntax.Value"}}}}],
+          "result": {"type": {"maybe": {"variable": "hydra.json.model.Value"}}},
+          "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.pg.graphson.coder.floatValueToJson",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.pg.graphson.syntax.FloatValue"}}],
-          "result": {"type": {"variable": "hydra.json.model.Value"}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a GraphSON FloatValue to a JSON Value"}}}],
             "body": {
               "cases": {
                 "cases": [
                   {
-                    "name": "finite",
-                    "term": {
+                    "handler": {
                       "lambda": {
                         "body": {
                           "inject": {
@@ -427,39 +421,40 @@
                               "term": {"application": {"argument": {"variable": "f"}, "function": {"variable": "hydra.lib.literals.float32ToDecimal"}}}},
                             "typeName": "hydra.json.model.Value"}},
                         "domain": {"literal": {"float": {"float32": {}}}},
-                        "parameter": "f"}}},
+                        "parameter": "f"}},
+                    "name": "finite"},
                   {
-                    "name": "infinity",
-                    "term": {
+                    "handler": {
                       "lambda": {
                         "body": {
                           "inject": {"field": {"name": "string", "term": {"literal": {"string": "Infinity"}}}, "typeName": "hydra.json.model.Value"}},
                         "domain": {"unit": {}},
-                        "parameter": "_"}}},
+                        "parameter": "_"}},
+                    "name": "infinity"},
                   {
-                    "name": "negativeInfinity",
-                    "term": {
+                    "handler": {
                       "lambda": {
                         "body": {
                           "inject": {"field": {"name": "string", "term": {"literal": {"string": "-Infinity"}}}, "typeName": "hydra.json.model.Value"}},
                         "domain": {"unit": {}},
-                        "parameter": "_"}}},
+                        "parameter": "_"}},
+                    "name": "negativeInfinity"},
                   {
-                    "name": "notANumber",
-                    "term": {
+                    "handler": {
                       "lambda": {
                         "body": {"inject": {"field": {"name": "string", "term": {"literal": {"string": "NaN"}}}, "typeName": "hydra.json.model.Value"}},
                         "domain": {"unit": {}},
-                        "parameter": "_"}}}],
-                "typeName": "hydra.pg.graphson.syntax.FloatValue"}}}}}},
+                        "parameter": "_"}},
+                    "name": "notANumber"}],
+                "typeName": "hydra.pg.graphson.syntax.FloatValue"}}}},
+        "name": "hydra.pg.graphson.coder.floatValueToJson",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.pg.graphson.syntax.FloatValue"}}],
+          "result": {"type": {"variable": "hydra.json.model.Value"}},
+          "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.pg.graphson.coder.mapToJson",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.pg.graphson.syntax.Map"}}],
-          "result": {"type": {"variable": "hydra.json.model.Value"}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -506,19 +501,15 @@
                           "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.concat"}, "type": {"variable": "hydra.json.model.Value"}}}}}},
                     "typeName": "hydra.json.model.Value"}},
                 "domain": {"variable": "hydra.pg.graphson.syntax.Map"},
-                "parameter": "m"}}}}}},
+                "parameter": "m"}}}},
+        "name": "hydra.pg.graphson.coder.mapToJson",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.pg.graphson.syntax.Map"}}],
+          "result": {"type": {"variable": "hydra.json.model.Value"}},
+          "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.pg.graphson.coder.toJsonObject",
-        "signature": {
-          "parameters": [
-            {
-              "isLazy": false,
-              "name": "arg0",
-              "type": {"list": {"pair": {"first": {"literal": {"string": {}}}, "second": {"maybe": {"variable": "hydra.json.model.Value"}}}}}}],
-          "result": {"type": {"variable": "hydra.json.model.Value"}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -595,17 +586,19 @@
                               "type": {"variable": "hydra.json.model.Value"}}}}}},
                     "typeName": "hydra.json.model.Value"}},
                 "domain": {"list": {"pair": {"first": {"literal": {"string": {}}}, "second": {"maybe": {"variable": "hydra.json.model.Value"}}}}},
-                "parameter": "pairs"}}}}}},
-    {
-      "term": {
-        "name": "hydra.pg.graphson.coder.typedValueToJson",
+                "parameter": "pairs"}}}},
+        "name": "hydra.pg.graphson.coder.toJsonObject",
         "signature": {
           "parameters": [
-            {"isLazy": false, "name": "arg0", "type": {"literal": {"string": {}}}},
-            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.json.model.Value"}}],
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {"list": {"pair": {"first": {"literal": {"string": {}}}, "second": {"maybe": {"variable": "hydra.json.model.Value"}}}}}}],
           "result": {"type": {"variable": "hydra.json.model.Value"}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Create a typed JSON object with @type and @value fields"}}}],
             "body": {
@@ -638,23 +631,24 @@
                     "domain": {"variable": "hydra.json.model.Value"},
                     "parameter": "valueJson"}},
                 "domain": {"literal": {"string": {}}},
-                "parameter": "typeName"}}}}}},
+                "parameter": "typeName"}}}},
+        "name": "hydra.pg.graphson.coder.typedValueToJson",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"literal": {"string": {}}}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.json.model.Value"}}],
+          "result": {"type": {"variable": "hydra.json.model.Value"}},
+          "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.pg.graphson.coder.valueToJson",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.pg.graphson.syntax.Value"}}],
-          "result": {"type": {"variable": "hydra.json.model.Value"}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a GraphSON Value to a JSON Value"}}}],
             "body": {
               "cases": {
                 "cases": [
                   {
-                    "name": "bigDecimal",
-                    "term": {
+                    "handler": {
                       "lambda": {
                         "body": {
                           "application": {
@@ -669,10 +663,10 @@
                                 "argument": {"literal": {"string": "g:BigDecimal"}},
                                 "function": {"variable": "hydra.pg.graphson.coder.typedValueToJson"}}}}},
                         "domain": {"variable": "hydra.pg.graphson.syntax.BigDecimalValue"},
-                        "parameter": "bd"}}},
+                        "parameter": "bd"}},
+                    "name": "bigDecimal"},
                   {
-                    "name": "bigInteger",
-                    "term": {
+                    "handler": {
                       "lambda": {
                         "body": {
                           "application": {
@@ -687,10 +681,10 @@
                                 "argument": {"literal": {"string": "g:BigInteger"}},
                                 "function": {"variable": "hydra.pg.graphson.coder.typedValueToJson"}}}}},
                         "domain": {"literal": {"integer": {"bigint": {}}}},
-                        "parameter": "i"}}},
+                        "parameter": "i"}},
+                    "name": "bigInteger"},
                   {
-                    "name": "binary",
-                    "term": {
+                    "handler": {
                       "lambda": {
                         "body": {
                           "application": {
@@ -698,17 +692,17 @@
                             "function": {
                               "application": {"argument": {"literal": {"string": "g:Binary"}}, "function": {"variable": "hydra.pg.graphson.coder.typedValueToJson"}}}}},
                         "domain": {"literal": {"string": {}}},
-                        "parameter": "b"}}},
+                        "parameter": "b"}},
+                    "name": "binary"},
                   {
-                    "name": "boolean",
-                    "term": {
+                    "handler": {
                       "lambda": {
                         "body": {"inject": {"field": {"name": "boolean", "term": {"variable": "b"}}, "typeName": "hydra.json.model.Value"}},
                         "domain": {"literal": {"boolean": {}}},
-                        "parameter": "b"}}},
+                        "parameter": "b"}},
+                    "name": "boolean"},
                   {
-                    "name": "byte",
-                    "term": {
+                    "handler": {
                       "lambda": {
                         "body": {
                           "application": {
@@ -724,10 +718,10 @@
                             "function": {
                               "application": {"argument": {"literal": {"string": "g:Byte"}}, "function": {"variable": "hydra.pg.graphson.coder.typedValueToJson"}}}}},
                         "domain": {"literal": {"integer": {"uint8": {}}}},
-                        "parameter": "b"}}},
+                        "parameter": "b"}},
+                    "name": "byte"},
                   {
-                    "name": "char",
-                    "term": {
+                    "handler": {
                       "lambda": {
                         "body": {
                           "application": {
@@ -749,10 +743,10 @@
                             "function": {
                               "application": {"argument": {"literal": {"string": "g:Char"}}, "function": {"variable": "hydra.pg.graphson.coder.typedValueToJson"}}}}},
                         "domain": {"literal": {"integer": {"uint32": {}}}},
-                        "parameter": "c"}}},
+                        "parameter": "c"}},
+                    "name": "char"},
                   {
-                    "name": "composite",
-                    "term": {
+                    "handler": {
                       "lambda": {
                         "body": {
                           "application": {
@@ -774,10 +768,10 @@
                                     "function": {"unwrap": "hydra.pg.graphson.syntax.TypeName"}}},
                                 "function": {"variable": "hydra.pg.graphson.coder.typedValueToJson"}}}}},
                         "domain": {"variable": "hydra.pg.graphson.syntax.CompositeTypedValue"},
-                        "parameter": "ctv"}}},
+                        "parameter": "ctv"}},
+                    "name": "composite"},
                   {
-                    "name": "dateTime",
-                    "term": {
+                    "handler": {
                       "lambda": {
                         "body": {
                           "application": {
@@ -792,10 +786,10 @@
                                 "argument": {"literal": {"string": "g:DateTime"}},
                                 "function": {"variable": "hydra.pg.graphson.coder.typedValueToJson"}}}}},
                         "domain": {"variable": "hydra.pg.graphson.syntax.DateTime"},
-                        "parameter": "dt"}}},
+                        "parameter": "dt"}},
+                    "name": "dateTime"},
                   {
-                    "name": "double",
-                    "term": {
+                    "handler": {
                       "lambda": {
                         "body": {
                           "application": {
@@ -803,10 +797,10 @@
                             "function": {
                               "application": {"argument": {"literal": {"string": "g:Double"}}, "function": {"variable": "hydra.pg.graphson.coder.typedValueToJson"}}}}},
                         "domain": {"variable": "hydra.pg.graphson.syntax.DoubleValue"},
-                        "parameter": "dv"}}},
+                        "parameter": "dv"}},
+                    "name": "double"},
                   {
-                    "name": "duration",
-                    "term": {
+                    "handler": {
                       "lambda": {
                         "body": {
                           "application": {
@@ -821,10 +815,10 @@
                                 "argument": {"literal": {"string": "g:Duration"}},
                                 "function": {"variable": "hydra.pg.graphson.coder.typedValueToJson"}}}}},
                         "domain": {"variable": "hydra.pg.graphson.syntax.Duration"},
-                        "parameter": "dur"}}},
+                        "parameter": "dur"}},
+                    "name": "duration"},
                   {
-                    "name": "float",
-                    "term": {
+                    "handler": {
                       "lambda": {
                         "body": {
                           "application": {
@@ -832,10 +826,10 @@
                             "function": {
                               "application": {"argument": {"literal": {"string": "g:Float"}}, "function": {"variable": "hydra.pg.graphson.coder.typedValueToJson"}}}}},
                         "domain": {"variable": "hydra.pg.graphson.syntax.FloatValue"},
-                        "parameter": "fv"}}},
+                        "parameter": "fv"}},
+                    "name": "float"},
                   {
-                    "name": "integer",
-                    "term": {
+                    "handler": {
                       "lambda": {
                         "body": {
                           "application": {
@@ -851,10 +845,10 @@
                             "function": {
                               "application": {"argument": {"literal": {"string": "g:Int32"}}, "function": {"variable": "hydra.pg.graphson.coder.typedValueToJson"}}}}},
                         "domain": {"literal": {"integer": {"int32": {}}}},
-                        "parameter": "i"}}},
+                        "parameter": "i"}},
+                    "name": "integer"},
                   {
-                    "name": "list",
-                    "term": {
+                    "handler": {
                       "lambda": {
                         "body": {
                           "application": {
@@ -877,10 +871,10 @@
                             "function": {
                               "application": {"argument": {"literal": {"string": "g:List"}}, "function": {"variable": "hydra.pg.graphson.coder.typedValueToJson"}}}}},
                         "domain": {"list": {"variable": "hydra.pg.graphson.syntax.Value"}},
-                        "parameter": "vals"}}},
+                        "parameter": "vals"}},
+                    "name": "list"},
                   {
-                    "name": "long",
-                    "term": {
+                    "handler": {
                       "lambda": {
                         "body": {
                           "application": {
@@ -896,10 +890,10 @@
                             "function": {
                               "application": {"argument": {"literal": {"string": "g:Long"}}, "function": {"variable": "hydra.pg.graphson.coder.typedValueToJson"}}}}},
                         "domain": {"literal": {"integer": {"int64": {}}}},
-                        "parameter": "l"}}},
+                        "parameter": "l"}},
+                    "name": "long"},
                   {
-                    "name": "map",
-                    "term": {
+                    "handler": {
                       "lambda": {
                         "body": {
                           "application": {
@@ -907,17 +901,17 @@
                             "function": {
                               "application": {"argument": {"literal": {"string": "g:Map"}}, "function": {"variable": "hydra.pg.graphson.coder.typedValueToJson"}}}}},
                         "domain": {"variable": "hydra.pg.graphson.syntax.Map"},
-                        "parameter": "m"}}},
+                        "parameter": "m"}},
+                    "name": "map"},
                   {
-                    "name": "null",
-                    "term": {
+                    "handler": {
                       "lambda": {
                         "body": {"inject": {"field": {"name": "null", "term": {"unit": {}}}, "typeName": "hydra.json.model.Value"}},
                         "domain": {"unit": {}},
-                        "parameter": "_"}}},
+                        "parameter": "_"}},
+                    "name": "null"},
                   {
-                    "name": "primitive",
-                    "term": {
+                    "handler": {
                       "lambda": {
                         "body": {
                           "application": {
@@ -935,10 +929,10 @@
                                 "argument": {"literal": {"string": "g:PrimitivePdt"}},
                                 "function": {"variable": "hydra.pg.graphson.coder.typedValueToJson"}}}}},
                         "domain": {"variable": "hydra.pg.graphson.syntax.PrimitiveTypedValue"},
-                        "parameter": "ptv"}}},
+                        "parameter": "ptv"}},
+                    "name": "primitive"},
                   {
-                    "name": "set",
-                    "term": {
+                    "handler": {
                       "lambda": {
                         "body": {
                           "application": {
@@ -961,10 +955,10 @@
                             "function": {
                               "application": {"argument": {"literal": {"string": "g:Set"}}, "function": {"variable": "hydra.pg.graphson.coder.typedValueToJson"}}}}},
                         "domain": {"list": {"variable": "hydra.pg.graphson.syntax.Value"}},
-                        "parameter": "vals"}}},
+                        "parameter": "vals"}},
+                    "name": "set"},
                   {
-                    "name": "short",
-                    "term": {
+                    "handler": {
                       "lambda": {
                         "body": {
                           "application": {
@@ -980,17 +974,17 @@
                             "function": {
                               "application": {"argument": {"literal": {"string": "g:Int16"}}, "function": {"variable": "hydra.pg.graphson.coder.typedValueToJson"}}}}},
                         "domain": {"literal": {"integer": {"int16": {}}}},
-                        "parameter": "i"}}},
+                        "parameter": "i"}},
+                    "name": "short"},
                   {
-                    "name": "string",
-                    "term": {
+                    "handler": {
                       "lambda": {
                         "body": {"inject": {"field": {"name": "string", "term": {"variable": "s"}}, "typeName": "hydra.json.model.Value"}},
                         "domain": {"literal": {"string": {}}},
-                        "parameter": "s"}}},
+                        "parameter": "s"}},
+                    "name": "string"},
                   {
-                    "name": "uuid",
-                    "term": {
+                    "handler": {
                       "lambda": {
                         "body": {
                           "application": {
@@ -1003,23 +997,17 @@
                             "function": {
                               "application": {"argument": {"literal": {"string": "g:UUID"}}, "function": {"variable": "hydra.pg.graphson.coder.typedValueToJson"}}}}},
                         "domain": {"variable": "hydra.pg.graphson.syntax.Uuid"},
-                        "parameter": "u"}}}],
-                "typeName": "hydra.pg.graphson.syntax.Value"}}}}}},
+                        "parameter": "u"}},
+                    "name": "uuid"}],
+                "typeName": "hydra.pg.graphson.syntax.Value"}}}},
+        "name": "hydra.pg.graphson.coder.valueToJson",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.pg.graphson.syntax.Value"}}],
+          "result": {"type": {"variable": "hydra.json.model.Value"}},
+          "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.pg.graphson.coder.vertexPropertyMapToJson",
-        "signature": {
-          "parameters": [
-            {
-              "isLazy": false,
-              "name": "arg0",
-              "type": {
-                "map": {
-                  "keys": {"variable": "hydra.pg.graphson.syntax.PropertyKey"},
-                  "values": {"list": {"variable": "hydra.pg.graphson.syntax.VertexPropertyValue"}}}}}],
-          "result": {"type": {"maybe": {"variable": "hydra.json.model.Value"}}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {"key": "description", "value": {"literal": {"string": "Convert a map of vertex properties to an optional JSON Value"}}}],
@@ -1129,15 +1117,22 @@
                   "map": {
                     "keys": {"variable": "hydra.pg.graphson.syntax.PropertyKey"},
                     "values": {"list": {"variable": "hydra.pg.graphson.syntax.VertexPropertyValue"}}}},
-                "parameter": "m"}}}}}},
+                "parameter": "m"}}}},
+        "name": "hydra.pg.graphson.coder.vertexPropertyMapToJson",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {
+                "map": {
+                  "keys": {"variable": "hydra.pg.graphson.syntax.PropertyKey"},
+                  "values": {"list": {"variable": "hydra.pg.graphson.syntax.VertexPropertyValue"}}}}}],
+          "result": {"type": {"maybe": {"variable": "hydra.json.model.Value"}}},
+          "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.pg.graphson.coder.vertexPropertyValueToJson",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.pg.graphson.syntax.VertexPropertyValue"}}],
-          "result": {"type": {"variable": "hydra.json.model.Value"}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a GraphSON VertexPropertyValue to a JSON Value"}}}],
             "body": {
@@ -1188,15 +1183,15 @@
                             "type": {"maybe": {"variable": "hydra.json.model.Value"}}}}]},
                     "function": {"variable": "hydra.pg.graphson.coder.toJsonObject"}}},
                 "domain": {"variable": "hydra.pg.graphson.syntax.VertexPropertyValue"},
-                "parameter": "vpv"}}}}}},
+                "parameter": "vpv"}}}},
+        "name": "hydra.pg.graphson.coder.vertexPropertyValueToJson",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.pg.graphson.syntax.VertexPropertyValue"}}],
+          "result": {"type": {"variable": "hydra.json.model.Value"}},
+          "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.pg.graphson.coder.vertexToJson",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.pg.graphson.syntax.Vertex"}}],
-          "result": {"type": {"variable": "hydra.json.model.Value"}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a GraphSON Vertex to a JSON Value"}}}],
             "body": {
@@ -1306,7 +1301,12 @@
                             "type": {"maybe": {"variable": "hydra.json.model.Value"}}}}]},
                     "function": {"variable": "hydra.pg.graphson.coder.toJsonObject"}}},
                 "domain": {"variable": "hydra.pg.graphson.syntax.Vertex"},
-                "parameter": "v"}}}}}}],
+                "parameter": "v"}}}},
+        "name": "hydra.pg.graphson.coder.vertexToJson",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.pg.graphson.syntax.Vertex"}}],
+          "result": {"type": {"variable": "hydra.json.model.Value"}},
+          "typeParameters": []}}}],
   "dependencies": [
     {"module": "hydra.paths"},
     {"module": "hydra.ast"},

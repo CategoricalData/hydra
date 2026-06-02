@@ -2,15 +2,7 @@
   "definitions": [
     {
       "term": {
-        "name": "hydra.python.testing.buildPythonTestModule",
-        "signature": {
-          "parameters": [
-            {"isLazy": false, "name": "arg0", "type": {"variable": "t0"}},
-            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.testing.TestGroup"}},
-            {"isLazy": false, "name": "arg2", "type": {"literal": {"string": {}}}}],
-          "result": {"type": {"literal": {"string": {}}}},
-          "typeParameters": [{"constraints": [], "name": "t0"}]},
-        "term": {
+        "body": {
           "typeLambda": {
             "body": {
               "annotated": {
@@ -59,15 +51,18 @@
                         "parameter": "testGroup"}},
                     "domain": {"variable": "t0"},
                     "parameter": "testModule"}}}},
-            "parameter": "t0"}}}},
+            "parameter": "t0"}},
+        "name": "hydra.python.testing.buildPythonTestModule",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "t0"}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.testing.TestGroup"}},
+            {"isLazy": false, "name": "arg2", "type": {"literal": {"string": {}}}}],
+          "result": {"type": {"literal": {"string": {}}}},
+          "typeParameters": [{"constraints": [], "name": "t0"}]}}},
     {
       "term": {
-        "name": "hydra.python.testing.formatPythonTestName",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"string": {}}}}],
-          "result": {"type": {"literal": {"string": {}}}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {"key": "description", "value": {"literal": {"string": "Format a test name for Python (snake_case with test_ prefix)"}}}],
@@ -103,17 +98,15 @@
                         "function": {"variable": "hydra.lib.strings.fromList"}}},
                     "function": {"application": {"argument": {"literal": {"string": "test_"}}, "function": {"variable": "hydra.lib.strings.cat2"}}}}},
                 "domain": {"literal": {"string": {}}},
-                "parameter": "name"}}}}}},
+                "parameter": "name"}}}},
+        "name": "hydra.python.testing.formatPythonTestName",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"string": {}}}}],
+          "result": {"type": {"literal": {"string": {}}}},
+          "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.python.testing.generatePythonTestCase",
-        "signature": {
-          "parameters": [
-            {"isLazy": false, "name": "arg0", "type": {"list": {"literal": {"string": {}}}}},
-            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}],
-          "result": {"type": {"either": {"left": {"variable": "t0"}, "right": {"list": {"literal": {"string": {}}}}}}},
-          "typeParameters": [{"constraints": [], "name": "t0"}]},
-        "term": {
+        "body": {
           "typeLambda": {
             "body": {
               "annotated": {
@@ -149,8 +142,7 @@
                                   "cases": {
                                     "cases": [
                                       {
-                                        "name": "universal",
-                                        "term": {
+                                        "handler": {
                                           "lambda": {
                                             "body": {
                                               "let": {
@@ -230,28 +222,24 @@
                                                         "type": {"variable": "t0"}}},
                                                     "type": {"list": {"literal": {"string": {}}}}}}}},
                                             "domain": {"variable": "hydra.testing.UniversalTestCase"},
-                                            "parameter": "ucase"}}}],
+                                            "parameter": "ucase"}},
+                                        "name": "universal"}],
                                     "typeName": "hydra.testing.TestCase"}}}}}},
                         "domain": {"variable": "hydra.testing.TestCaseWithMetadata"},
                         "parameter": "tcm"}},
                     "domain": {"list": {"literal": {"string": {}}}},
                     "parameter": "groupPath"}}}},
-            "parameter": "t0"}}}},
-    {
-      "term": {
-        "name": "hydra.python.testing.generatePythonTestFile",
+            "parameter": "t0"}},
+        "name": "hydra.python.testing.generatePythonTestCase",
         "signature": {
           "parameters": [
-            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.packaging.Module"}},
-            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.testing.TestGroup"}},
-            {"isLazy": false, "name": "arg2", "type": {"variable": "t0"}}],
-          "result": {
-            "type": {
-              "either": {
-                "left": {"variable": "t1"},
-                "right": {"pair": {"first": {"literal": {"string": {}}}, "second": {"literal": {"string": {}}}}}}}},
-          "typeParameters": [{"constraints": [], "name": "t0"}, {"constraints": [], "name": "t1"}]},
-        "term": {
+            {"isLazy": false, "name": "arg0", "type": {"list": {"literal": {"string": {}}}}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}],
+          "result": {"type": {"either": {"left": {"variable": "t0"}, "right": {"list": {"literal": {"string": {}}}}}}},
+          "typeParameters": [{"constraints": [], "name": "t0"}]}}},
+    {
+      "term": {
+        "body": {
           "typeLambda": {
             "body": {
               "typeLambda": {
@@ -279,17 +267,22 @@
                         "domain": {"variable": "hydra.packaging.Module"},
                         "parameter": "testModule"}}}},
                 "parameter": "t1"}},
-            "parameter": "t0"}}}},
-    {
-      "term": {
-        "name": "hydra.python.testing.generatePythonTestGroupHierarchy",
+            "parameter": "t0"}},
+        "name": "hydra.python.testing.generatePythonTestFile",
         "signature": {
           "parameters": [
-            {"isLazy": false, "name": "arg0", "type": {"list": {"literal": {"string": {}}}}},
-            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.testing.TestGroup"}}],
-          "result": {"type": {"either": {"left": {"variable": "t0"}, "right": {"literal": {"string": {}}}}}},
-          "typeParameters": [{"constraints": [], "name": "t0"}]},
-        "term": {
+            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.packaging.Module"}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.testing.TestGroup"}},
+            {"isLazy": false, "name": "arg2", "type": {"variable": "t0"}}],
+          "result": {
+            "type": {
+              "either": {
+                "left": {"variable": "t1"},
+                "right": {"pair": {"first": {"literal": {"string": {}}}, "second": {"literal": {"string": {}}}}}}}},
+          "typeParameters": [{"constraints": [], "name": "t0"}, {"constraints": [], "name": "t1"}]}}},
+    {
+      "term": {
+        "body": {
           "typeLambda": {
             "body": {
               "annotated": {
@@ -505,21 +498,17 @@
                         "parameter": "testGroup"}},
                     "domain": {"list": {"literal": {"string": {}}}},
                     "parameter": "groupPath"}}}},
-            "parameter": "t0"}}}},
-    {
-      "term": {
-        "name": "hydra.python.testing.generateTestFileWithPythonCodec",
+            "parameter": "t0"}},
+        "name": "hydra.python.testing.generatePythonTestGroupHierarchy",
         "signature": {
           "parameters": [
-            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.packaging.Module"}},
+            {"isLazy": false, "name": "arg0", "type": {"list": {"literal": {"string": {}}}}},
             {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.testing.TestGroup"}}],
-          "result": {
-            "type": {
-              "either": {
-                "left": {"variable": "t0"},
-                "right": {"pair": {"first": {"literal": {"string": {}}}, "second": {"literal": {"string": {}}}}}}}},
-          "typeParameters": [{"constraints": [], "name": "t0"}]},
-        "term": {
+          "result": {"type": {"either": {"left": {"variable": "t0"}, "right": {"literal": {"string": {}}}}}},
+          "typeParameters": [{"constraints": [], "name": "t0"}]}}},
+    {
+      "term": {
+        "body": {
           "typeLambda": {
             "body": {
               "annotated": {
@@ -640,7 +629,18 @@
                         "parameter": "testGroup"}},
                     "domain": {"variable": "hydra.packaging.Module"},
                     "parameter": "testModule"}}}},
-            "parameter": "t0"}}}}],
+            "parameter": "t0"}},
+        "name": "hydra.python.testing.generateTestFileWithPythonCodec",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.packaging.Module"}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.testing.TestGroup"}}],
+          "result": {
+            "type": {
+              "either": {
+                "left": {"variable": "t0"},
+                "right": {"pair": {"first": {"literal": {"string": {}}}, "second": {"literal": {"string": {}}}}}}}},
+          "typeParameters": [{"constraints": [], "name": "t0"}]}}}],
   "dependencies": [
     {"module": "hydra.serialization"},
     {"module": "hydra.formatting"},

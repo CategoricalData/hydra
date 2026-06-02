@@ -99,7 +99,7 @@ public class HydraTestBase {
     protected static Graph emptyGraph() {
         Map<Name, Term> boundTerms = new HashMap<>();
         Map<Name, TypeScheme> boundTypes = new HashMap<>();
-        Map<Name, hydra.core.TypeVariableMetadata> classConstraints = new HashMap<>();
+        Map<Name, hydra.core.TypeVariableConstraints> classConstraints = new HashMap<>();
         Set<Name> lambdaVariables = new HashSet<>();
         Map<Name, Term> metadata = new HashMap<>();
 

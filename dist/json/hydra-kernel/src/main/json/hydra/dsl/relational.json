@@ -2,18 +2,7 @@
   "definitions": [
     {
       "term": {
-        "name": "hydra.dsl.relational.columnName",
-        "signature": {
-          "parameters": [
-            {
-              "isLazy": false,
-              "name": "arg0",
-              "type": {"application": {"argument": {"literal": {"string": {}}}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
-          "result": {
-            "type": {
-              "application": {"argument": {"variable": "hydra.relational.ColumnName"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {"key": "description", "value": {"literal": {"string": "DSL constructor for the hydra.relational.ColumnName wrapper"}}}],
@@ -38,20 +27,21 @@
                         "typeName": "hydra.core.Term"}},
                     "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {"application": {"argument": {"literal": {"string": {}}}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.relational.unColumnName",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.relational.columnName",
         "signature": {
           "parameters": [
             {
               "isLazy": false,
               "name": "arg0",
-              "type": {
-                "application": {"argument": {"variable": "hydra.relational.ColumnName"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
-          "result": {"type": {"application": {"argument": {"literal": {"string": {}}}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+              "type": {"application": {"argument": {"literal": {"string": {}}}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+          "result": {
+            "type": {
+              "application": {"argument": {"variable": "hydra.relational.ColumnName"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL accessor for the body of hydra.relational.ColumnName"}}}],
             "body": {
@@ -81,39 +71,20 @@
                     "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.relational.ColumnName"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.relational.columnSchema",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.relational.unColumnName",
         "signature": {
           "parameters": [
             {
               "isLazy": false,
               "name": "arg0",
               "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "A unique name for the column"}}}],
-                      "body": {"variable": "hydra.relational.ColumnName"}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
-            {
-              "isLazy": false,
-              "name": "arg1",
-              "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The domain (type) of the column"}}}],
-                      "body": {"variable": "t"}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
-          "result": {
-            "type": {
-              "application": {
-                "argument": {"application": {"argument": {"variable": "t"}, "function": {"variable": "hydra.relational.ColumnSchema"}}},
-                "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": [{"constraints": [], "name": "t"}]},
-        "term": {
+                "application": {"argument": {"variable": "hydra.relational.ColumnName"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+          "result": {"type": {"application": {"argument": {"literal": {"string": {}}}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for hydra.relational.ColumnSchema"}}}],
             "body": {
@@ -170,10 +141,8 @@
                         "annotation": [{"key": "description", "value": {"literal": {"string": "A unique name for the column"}}}],
                         "body": {"variable": "hydra.relational.ColumnName"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "name"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.relational.columnSchemaName",
+                "parameter": "name"}}}},
+        "name": "hydra.dsl.relational.columnSchema",
         "signature": {
           "parameters": [
             {
@@ -181,18 +150,30 @@
               "name": "arg0",
               "type": {
                 "application": {
-                  "argument": {"application": {"argument": {"variable": "t"}, "function": {"variable": "hydra.relational.ColumnSchema"}}},
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "A unique name for the column"}}}],
+                      "body": {"variable": "hydra.relational.ColumnName"}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The domain (type) of the column"}}}],
+                      "body": {"variable": "t"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {
-                "argument": {
-                  "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "A unique name for the column"}}}],
-                    "body": {"variable": "hydra.relational.ColumnName"}}},
+                "argument": {"application": {"argument": {"variable": "t"}, "function": {"variable": "hydra.relational.ColumnSchema"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": [{"constraints": [], "name": "t"}]},
-        "term": {
+          "typeParameters": [{"constraints": [], "name": "t"}]}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -234,10 +215,8 @@
                   "application": {
                     "argument": {"application": {"argument": {"variable": "t"}, "function": {"variable": "hydra.relational.ColumnSchema"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.relational.columnSchemaDomain",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.relational.columnSchemaName",
         "signature": {
           "parameters": [
             {
@@ -252,11 +231,13 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The domain (type) of the column"}}}],
-                    "body": {"variable": "t"}}},
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "A unique name for the column"}}}],
+                    "body": {"variable": "hydra.relational.ColumnName"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": [{"constraints": [], "name": "t"}]},
-        "term": {
+          "typeParameters": [{"constraints": [], "name": "t"}]}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -298,10 +279,8 @@
                   "application": {
                     "argument": {"application": {"argument": {"variable": "t"}, "function": {"variable": "hydra.relational.ColumnSchema"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.relational.columnSchemaWithName",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.relational.columnSchemaDomain",
         "signature": {
           "parameters": [
             {
@@ -310,24 +289,19 @@
               "type": {
                 "application": {
                   "argument": {"application": {"argument": {"variable": "t"}, "function": {"variable": "hydra.relational.ColumnSchema"}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
-            {
-              "isLazy": false,
-              "name": "arg1",
-              "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "A unique name for the column"}}}],
-                      "body": {"variable": "hydra.relational.ColumnName"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {
-                "argument": {"application": {"argument": {"variable": "t"}, "function": {"variable": "hydra.relational.ColumnSchema"}}},
+                "argument": {
+                  "annotated": {
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "The domain (type) of the column"}}}],
+                    "body": {"variable": "t"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": [{"constraints": [], "name": "t"}]},
-        "term": {
+          "typeParameters": [{"constraints": [], "name": "t"}]}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -410,10 +384,8 @@
                   "application": {
                     "argument": {"application": {"argument": {"variable": "t"}, "function": {"variable": "hydra.relational.ColumnSchema"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.relational.columnSchemaWithDomain",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.relational.columnSchemaWithName",
         "signature": {
           "parameters": [
             {
@@ -430,16 +402,18 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The domain (type) of the column"}}}],
-                      "body": {"variable": "t"}}},
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "A unique name for the column"}}}],
+                      "body": {"variable": "hydra.relational.ColumnName"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {
                 "argument": {"application": {"argument": {"variable": "t"}, "function": {"variable": "hydra.relational.ColumnSchema"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": [{"constraints": [], "name": "t"}]},
-        "term": {
+          "typeParameters": [{"constraints": [], "name": "t"}]}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -522,10 +496,8 @@
                   "application": {
                     "argument": {"application": {"argument": {"variable": "t"}, "function": {"variable": "hydra.relational.ColumnSchema"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.relational.foreignKey",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.relational.columnSchemaWithDomain",
         "signature": {
           "parameters": [
             {
@@ -533,10 +505,7 @@
               "name": "arg0",
               "type": {
                 "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the target relation"}}}],
-                      "body": {"variable": "hydra.relational.RelationName"}}},
+                  "argument": {"application": {"argument": {"variable": "t"}, "function": {"variable": "hydra.relational.ColumnSchema"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
               "isLazy": false,
@@ -545,19 +514,18 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {
-                            "literal": {
-                              "string": "The mapping of source column names to target column names. The target column names must together make up the primary key of the target relation."}}}],
-                      "body": {"map": {"keys": {"variable": "hydra.relational.ColumnName"}, "values": {"variable": "hydra.relational.ColumnName"}}}}},
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The domain (type) of the column"}}}],
+                      "body": {"variable": "t"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.relational.ForeignKey"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+              "application": {
+                "argument": {"application": {"argument": {"variable": "t"}, "function": {"variable": "hydra.relational.ColumnSchema"}}},
+                "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": [{"constraints": [], "name": "t"}]}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for hydra.relational.ForeignKey"}}}],
             "body": {
@@ -619,27 +587,42 @@
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the target relation"}}}],
                         "body": {"variable": "hydra.relational.RelationName"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "foreignRelation"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.relational.foreignKeyForeignRelation",
+                "parameter": "foreignRelation"}}}},
+        "name": "hydra.dsl.relational.foreignKey",
         "signature": {
           "parameters": [
             {
               "isLazy": false,
               "name": "arg0",
               "type": {
-                "application": {"argument": {"variable": "hydra.relational.ForeignKey"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the target relation"}}}],
+                      "body": {"variable": "hydra.relational.RelationName"}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "key": "description",
+                          "value": {
+                            "literal": {
+                              "string": "The mapping of source column names to target column names. The target column names must together make up the primary key of the target relation."}}}],
+                      "body": {"map": {"keys": {"variable": "hydra.relational.ColumnName"}, "values": {"variable": "hydra.relational.ColumnName"}}}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
-              "application": {
-                "argument": {
-                  "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the target relation"}}}],
-                    "body": {"variable": "hydra.relational.RelationName"}}},
-                "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+              "application": {"argument": {"variable": "hydra.relational.ForeignKey"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -681,10 +664,8 @@
                     "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.relational.ForeignKey"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.relational.foreignKeyKeys",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.relational.foreignKeyForeignRelation",
         "signature": {
           "parameters": [
             {
@@ -697,16 +678,13 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {
-                          "literal": {
-                            "string": "The mapping of source column names to target column names. The target column names must together make up the primary key of the target relation."}}}],
-                    "body": {"map": {"keys": {"variable": "hydra.relational.ColumnName"}, "values": {"variable": "hydra.relational.ColumnName"}}}}},
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the target relation"}}}],
+                    "body": {"variable": "hydra.relational.RelationName"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -746,32 +724,32 @@
                     "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.relational.ForeignKey"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.relational.foreignKeyWithForeignRelation",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.relational.foreignKeyKeys",
         "signature": {
           "parameters": [
             {
               "isLazy": false,
               "name": "arg0",
               "type": {
-                "application": {"argument": {"variable": "hydra.relational.ForeignKey"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-            {
-              "isLazy": false,
-              "name": "arg1",
-              "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the target relation"}}}],
-                      "body": {"variable": "hydra.relational.RelationName"}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+                "application": {"argument": {"variable": "hydra.relational.ForeignKey"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.relational.ForeignKey"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+              "application": {
+                "argument": {
+                  "annotated": {
+                    "annotation": [
+                      {
+                        "key": "description",
+                        "value": {
+                          "literal": {
+                            "string": "The mapping of source column names to target column names. The target column names must together make up the primary key of the target relation."}}}],
+                    "body": {"map": {"keys": {"variable": "hydra.relational.ColumnName"}, "values": {"variable": "hydra.relational.ColumnName"}}}}},
+                "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -852,10 +830,8 @@
                     "parameter": "newVal"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.relational.ForeignKey"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.relational.foreignKeyWithKeys",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.relational.foreignKeyWithForeignRelation",
         "signature": {
           "parameters": [
             {
@@ -870,19 +846,16 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {
-                            "literal": {
-                              "string": "The mapping of source column names to target column names. The target column names must together make up the primary key of the target relation."}}}],
-                      "body": {"map": {"keys": {"variable": "hydra.relational.ColumnName"}, "values": {"variable": "hydra.relational.ColumnName"}}}}},
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the target relation"}}}],
+                      "body": {"variable": "hydra.relational.RelationName"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {"argument": {"variable": "hydra.relational.ForeignKey"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -970,22 +943,37 @@
                     "parameter": "newVal"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.relational.ForeignKey"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.relational.primaryKey",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.relational.foreignKeyWithKeys",
         "signature": {
           "parameters": [
             {
               "isLazy": false,
               "name": "arg0",
               "type": {
-                "application": {"argument": {"list": {"variable": "hydra.relational.ColumnName"}}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+                "application": {"argument": {"variable": "hydra.relational.ForeignKey"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "key": "description",
+                          "value": {
+                            "literal": {
+                              "string": "The mapping of source column names to target column names. The target column names must together make up the primary key of the target relation."}}}],
+                      "body": {"map": {"keys": {"variable": "hydra.relational.ColumnName"}, "values": {"variable": "hydra.relational.ColumnName"}}}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.relational.PrimaryKey"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+              "application": {"argument": {"variable": "hydra.relational.ForeignKey"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {"key": "description", "value": {"literal": {"string": "DSL constructor for the hydra.relational.PrimaryKey wrapper"}}}],
@@ -1011,22 +999,22 @@
                     "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
                   "application": {"argument": {"list": {"variable": "hydra.relational.ColumnName"}}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.relational.unPrimaryKey",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.relational.primaryKey",
         "signature": {
           "parameters": [
             {
               "isLazy": false,
               "name": "arg0",
               "type": {
-                "application": {"argument": {"variable": "hydra.relational.PrimaryKey"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+                "application": {"argument": {"list": {"variable": "hydra.relational.ColumnName"}}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
-              "application": {"argument": {"list": {"variable": "hydra.relational.ColumnName"}}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+              "application": {"argument": {"variable": "hydra.relational.PrimaryKey"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL accessor for the body of hydra.relational.PrimaryKey"}}}],
             "body": {
@@ -1056,26 +1044,22 @@
                     "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.relational.PrimaryKey"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.relational.relation",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.relational.unPrimaryKey",
         "signature": {
           "parameters": [
             {
               "isLazy": false,
               "name": "arg0",
               "type": {
-                "application": {
-                  "argument": {"list": {"application": {"argument": {"variable": "v"}, "function": {"variable": "hydra.relational.Row"}}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+                "application": {"argument": {"variable": "hydra.relational.PrimaryKey"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
-              "application": {
-                "argument": {"application": {"argument": {"variable": "v"}, "function": {"variable": "hydra.relational.Relation"}}},
-                "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": [{"constraints": [], "name": "v"}]},
-        "term": {
+              "application": {"argument": {"list": {"variable": "hydra.relational.ColumnName"}}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for the hydra.relational.Relation wrapper"}}}],
             "body": {
@@ -1102,10 +1086,8 @@
                   "application": {
                     "argument": {"list": {"application": {"argument": {"variable": "v"}, "function": {"variable": "hydra.relational.Row"}}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.relational.unRelation",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.relational.relation",
         "signature": {
           "parameters": [
             {
@@ -1113,15 +1095,17 @@
               "name": "arg0",
               "type": {
                 "application": {
-                  "argument": {"application": {"argument": {"variable": "v"}, "function": {"variable": "hydra.relational.Relation"}}},
+                  "argument": {"list": {"application": {"argument": {"variable": "v"}, "function": {"variable": "hydra.relational.Row"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {
-                "argument": {"list": {"application": {"argument": {"variable": "v"}, "function": {"variable": "hydra.relational.Row"}}}},
+                "argument": {"application": {"argument": {"variable": "v"}, "function": {"variable": "hydra.relational.Relation"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": [{"constraints": [], "name": "v"}]},
-        "term": {
+          "typeParameters": [{"constraints": [], "name": "v"}]}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL accessor for the body of hydra.relational.Relation"}}}],
             "body": {
@@ -1153,21 +1137,26 @@
                   "application": {
                     "argument": {"application": {"argument": {"variable": "v"}, "function": {"variable": "hydra.relational.Relation"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.relational.relationName",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.relational.unRelation",
         "signature": {
           "parameters": [
             {
               "isLazy": false,
               "name": "arg0",
-              "type": {"application": {"argument": {"literal": {"string": {}}}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+              "type": {
+                "application": {
+                  "argument": {"application": {"argument": {"variable": "v"}, "function": {"variable": "hydra.relational.Relation"}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.relational.RelationName"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+              "application": {
+                "argument": {"list": {"application": {"argument": {"variable": "v"}, "function": {"variable": "hydra.relational.Row"}}}},
+                "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": [{"constraints": [], "name": "v"}]}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -1194,20 +1183,21 @@
                         "typeName": "hydra.core.Term"}},
                     "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {"application": {"argument": {"literal": {"string": {}}}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.relational.unRelationName",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.relational.relationName",
         "signature": {
           "parameters": [
             {
               "isLazy": false,
               "name": "arg0",
-              "type": {
-                "application": {"argument": {"variable": "hydra.relational.RelationName"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
-          "result": {"type": {"application": {"argument": {"literal": {"string": {}}}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+              "type": {"application": {"argument": {"literal": {"string": {}}}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+          "result": {
+            "type": {
+              "application": {"argument": {"variable": "hydra.relational.RelationName"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL accessor for the body of hydra.relational.RelationName"}}}],
             "body": {
@@ -1237,66 +1227,20 @@
                     "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.relational.RelationName"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.relational.relationSchema",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.relational.unRelationName",
         "signature": {
           "parameters": [
             {
               "isLazy": false,
               "name": "arg0",
               "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "A unique name for the relation"}}}],
-                      "body": {"variable": "hydra.relational.RelationName"}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
-            {
-              "isLazy": false,
-              "name": "arg1",
-              "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "A list of column specifications"}}}],
-                      "body": {"list": {"application": {"argument": {"variable": "t"}, "function": {"variable": "hydra.relational.ColumnSchema"}}}}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
-            {
-              "isLazy": false,
-              "name": "arg2",
-              "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "Any number of primary keys for the relation, each of which must be valid for this relation"}}}],
-                      "body": {"list": {"variable": "hydra.relational.PrimaryKey"}}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
-            {
-              "isLazy": false,
-              "name": "arg3",
-              "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {
-                            "literal": {"string": "Any number of foreign keys, each of which must be valid for both this relation and the target relation"}}}],
-                      "body": {"list": {"variable": "hydra.relational.ForeignKey"}}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
-          "result": {
-            "type": {
-              "application": {
-                "argument": {"application": {"argument": {"variable": "t"}, "function": {"variable": "hydra.relational.RelationSchema"}}},
-                "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": [{"constraints": [], "name": "t"}]},
-        "term": {
+                "application": {"argument": {"variable": "hydra.relational.RelationName"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+          "result": {"type": {"application": {"argument": {"literal": {"string": {}}}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for hydra.relational.RelationSchema"}}}],
             "body": {
@@ -1396,10 +1340,8 @@
                         "annotation": [{"key": "description", "value": {"literal": {"string": "A unique name for the relation"}}}],
                         "body": {"variable": "hydra.relational.RelationName"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "name"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.relational.relationSchemaName",
+                "parameter": "name"}}}},
+        "name": "hydra.dsl.relational.relationSchema",
         "signature": {
           "parameters": [
             {
@@ -1407,18 +1349,57 @@
               "name": "arg0",
               "type": {
                 "application": {
-                  "argument": {"application": {"argument": {"variable": "t"}, "function": {"variable": "hydra.relational.RelationSchema"}}},
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "A unique name for the relation"}}}],
+                      "body": {"variable": "hydra.relational.RelationName"}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "A list of column specifications"}}}],
+                      "body": {"list": {"application": {"argument": {"variable": "t"}, "function": {"variable": "hydra.relational.ColumnSchema"}}}}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg2",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "key": "description",
+                          "value": {"literal": {"string": "Any number of primary keys for the relation, each of which must be valid for this relation"}}}],
+                      "body": {"list": {"variable": "hydra.relational.PrimaryKey"}}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg3",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "key": "description",
+                          "value": {
+                            "literal": {"string": "Any number of foreign keys, each of which must be valid for both this relation and the target relation"}}}],
+                      "body": {"list": {"variable": "hydra.relational.ForeignKey"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {
-                "argument": {
-                  "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "A unique name for the relation"}}}],
-                    "body": {"variable": "hydra.relational.RelationName"}}},
+                "argument": {"application": {"argument": {"variable": "t"}, "function": {"variable": "hydra.relational.RelationSchema"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": [{"constraints": [], "name": "t"}]},
-        "term": {
+          "typeParameters": [{"constraints": [], "name": "t"}]}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -1460,10 +1441,8 @@
                   "application": {
                     "argument": {"application": {"argument": {"variable": "t"}, "function": {"variable": "hydra.relational.RelationSchema"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.relational.relationSchemaColumns",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.relational.relationSchemaName",
         "signature": {
           "parameters": [
             {
@@ -1478,11 +1457,13 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "A list of column specifications"}}}],
-                    "body": {"list": {"application": {"argument": {"variable": "t"}, "function": {"variable": "hydra.relational.ColumnSchema"}}}}}},
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "A unique name for the relation"}}}],
+                    "body": {"variable": "hydra.relational.RelationName"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": [{"constraints": [], "name": "t"}]},
-        "term": {
+          "typeParameters": [{"constraints": [], "name": "t"}]}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -1524,10 +1505,8 @@
                   "application": {
                     "argument": {"application": {"argument": {"variable": "t"}, "function": {"variable": "hydra.relational.RelationSchema"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.relational.relationSchemaPrimaryKeys",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.relational.relationSchemaColumns",
         "signature": {
           "parameters": [
             {
@@ -1542,14 +1521,13 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {"literal": {"string": "Any number of primary keys for the relation, each of which must be valid for this relation"}}}],
-                    "body": {"list": {"variable": "hydra.relational.PrimaryKey"}}}},
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "A list of column specifications"}}}],
+                    "body": {"list": {"application": {"argument": {"variable": "t"}, "function": {"variable": "hydra.relational.ColumnSchema"}}}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": [{"constraints": [], "name": "t"}]},
-        "term": {
+          "typeParameters": [{"constraints": [], "name": "t"}]}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -1591,10 +1569,8 @@
                   "application": {
                     "argument": {"application": {"argument": {"variable": "t"}, "function": {"variable": "hydra.relational.RelationSchema"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.relational.relationSchemaForeignKeys",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.relational.relationSchemaPrimaryKeys",
         "signature": {
           "parameters": [
             {
@@ -1612,12 +1588,13 @@
                     "annotation": [
                       {
                         "key": "description",
-                        "value": {
-                          "literal": {"string": "Any number of foreign keys, each of which must be valid for both this relation and the target relation"}}}],
-                    "body": {"list": {"variable": "hydra.relational.ForeignKey"}}}},
+                        "value": {"literal": {"string": "Any number of primary keys for the relation, each of which must be valid for this relation"}}}],
+                    "body": {"list": {"variable": "hydra.relational.PrimaryKey"}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": [{"constraints": [], "name": "t"}]},
-        "term": {
+          "typeParameters": [{"constraints": [], "name": "t"}]}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -1659,10 +1636,8 @@
                   "application": {
                     "argument": {"application": {"argument": {"variable": "t"}, "function": {"variable": "hydra.relational.RelationSchema"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.relational.relationSchemaWithName",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.relational.relationSchemaForeignKeys",
         "signature": {
           "parameters": [
             {
@@ -1671,24 +1646,23 @@
               "type": {
                 "application": {
                   "argument": {"application": {"argument": {"variable": "t"}, "function": {"variable": "hydra.relational.RelationSchema"}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
-            {
-              "isLazy": false,
-              "name": "arg1",
-              "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "A unique name for the relation"}}}],
-                      "body": {"variable": "hydra.relational.RelationName"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {
-                "argument": {"application": {"argument": {"variable": "t"}, "function": {"variable": "hydra.relational.RelationSchema"}}},
+                "argument": {
+                  "annotated": {
+                    "annotation": [
+                      {
+                        "key": "description",
+                        "value": {
+                          "literal": {"string": "Any number of foreign keys, each of which must be valid for both this relation and the target relation"}}}],
+                    "body": {"list": {"variable": "hydra.relational.ForeignKey"}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": [{"constraints": [], "name": "t"}]},
-        "term": {
+          "typeParameters": [{"constraints": [], "name": "t"}]}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -1839,10 +1813,8 @@
                   "application": {
                     "argument": {"application": {"argument": {"variable": "t"}, "function": {"variable": "hydra.relational.RelationSchema"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.relational.relationSchemaWithColumns",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.relational.relationSchemaWithName",
         "signature": {
           "parameters": [
             {
@@ -1859,16 +1831,18 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "A list of column specifications"}}}],
-                      "body": {"list": {"application": {"argument": {"variable": "t"}, "function": {"variable": "hydra.relational.ColumnSchema"}}}}}},
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "A unique name for the relation"}}}],
+                      "body": {"variable": "hydra.relational.RelationName"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {
                 "argument": {"application": {"argument": {"variable": "t"}, "function": {"variable": "hydra.relational.RelationSchema"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": [{"constraints": [], "name": "t"}]},
-        "term": {
+          "typeParameters": [{"constraints": [], "name": "t"}]}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -2019,10 +1993,8 @@
                   "application": {
                     "argument": {"application": {"argument": {"variable": "t"}, "function": {"variable": "hydra.relational.RelationSchema"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.relational.relationSchemaWithPrimaryKeys",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.relational.relationSchemaWithColumns",
         "signature": {
           "parameters": [
             {
@@ -2039,19 +2011,18 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "Any number of primary keys for the relation, each of which must be valid for this relation"}}}],
-                      "body": {"list": {"variable": "hydra.relational.PrimaryKey"}}}},
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "A list of column specifications"}}}],
+                      "body": {"list": {"application": {"argument": {"variable": "t"}, "function": {"variable": "hydra.relational.ColumnSchema"}}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {
                 "argument": {"application": {"argument": {"variable": "t"}, "function": {"variable": "hydra.relational.RelationSchema"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": [{"constraints": [], "name": "t"}]},
-        "term": {
+          "typeParameters": [{"constraints": [], "name": "t"}]}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -2205,10 +2176,8 @@
                   "application": {
                     "argument": {"application": {"argument": {"variable": "t"}, "function": {"variable": "hydra.relational.RelationSchema"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.relational.relationSchemaWithForeignKeys",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.relational.relationSchemaWithPrimaryKeys",
         "signature": {
           "parameters": [
             {
@@ -2228,17 +2197,18 @@
                       "annotation": [
                         {
                           "key": "description",
-                          "value": {
-                            "literal": {"string": "Any number of foreign keys, each of which must be valid for both this relation and the target relation"}}}],
-                      "body": {"list": {"variable": "hydra.relational.ForeignKey"}}}},
+                          "value": {"literal": {"string": "Any number of primary keys for the relation, each of which must be valid for this relation"}}}],
+                      "body": {"list": {"variable": "hydra.relational.PrimaryKey"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {
                 "argument": {"application": {"argument": {"variable": "t"}, "function": {"variable": "hydra.relational.RelationSchema"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": [{"constraints": [], "name": "t"}]},
-        "term": {
+          "typeParameters": [{"constraints": [], "name": "t"}]}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -2393,10 +2363,8 @@
                   "application": {
                     "argument": {"application": {"argument": {"variable": "t"}, "function": {"variable": "hydra.relational.RelationSchema"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.relational.relationship",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.relational.relationSchemaWithForeignKeys",
         "signature": {
           "parameters": [
             {
@@ -2404,15 +2372,31 @@
               "name": "arg0",
               "type": {
                 "application": {
-                  "argument": {"set": {"map": {"keys": {"variable": "hydra.relational.ColumnName"}, "values": {"variable": "v"}}}},
+                  "argument": {"application": {"argument": {"variable": "t"}, "function": {"variable": "hydra.relational.RelationSchema"}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "key": "description",
+                          "value": {
+                            "literal": {"string": "Any number of foreign keys, each of which must be valid for both this relation and the target relation"}}}],
+                      "body": {"list": {"variable": "hydra.relational.ForeignKey"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {
-                "argument": {"application": {"argument": {"variable": "v"}, "function": {"variable": "hydra.relational.Relationship"}}},
+                "argument": {"application": {"argument": {"variable": "t"}, "function": {"variable": "hydra.relational.RelationSchema"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": [{"constraints": [], "name": "v"}]},
-        "term": {
+          "typeParameters": [{"constraints": [], "name": "t"}]}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -2442,10 +2426,8 @@
                   "application": {
                     "argument": {"set": {"map": {"keys": {"variable": "hydra.relational.ColumnName"}, "values": {"variable": "v"}}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.relational.unRelationship",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.relational.relationship",
         "signature": {
           "parameters": [
             {
@@ -2453,15 +2435,17 @@
               "name": "arg0",
               "type": {
                 "application": {
-                  "argument": {"application": {"argument": {"variable": "v"}, "function": {"variable": "hydra.relational.Relationship"}}},
+                  "argument": {"set": {"map": {"keys": {"variable": "hydra.relational.ColumnName"}, "values": {"variable": "v"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {
-                "argument": {"set": {"map": {"keys": {"variable": "hydra.relational.ColumnName"}, "values": {"variable": "v"}}}},
+                "argument": {"application": {"argument": {"variable": "v"}, "function": {"variable": "hydra.relational.Relationship"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": [{"constraints": [], "name": "v"}]},
-        "term": {
+          "typeParameters": [{"constraints": [], "name": "v"}]}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL accessor for the body of hydra.relational.Relationship"}}}],
             "body": {
@@ -2493,23 +2477,26 @@
                   "application": {
                     "argument": {"application": {"argument": {"variable": "v"}, "function": {"variable": "hydra.relational.Relationship"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.relational.row",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.relational.unRelationship",
         "signature": {
           "parameters": [
             {
               "isLazy": false,
               "name": "arg0",
-              "type": {"application": {"argument": {"list": {"variable": "v"}}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+              "type": {
+                "application": {
+                  "argument": {"application": {"argument": {"variable": "v"}, "function": {"variable": "hydra.relational.Relationship"}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {
-                "argument": {"application": {"argument": {"variable": "v"}, "function": {"variable": "hydra.relational.Row"}}},
+                "argument": {"set": {"map": {"keys": {"variable": "hydra.relational.ColumnName"}, "values": {"variable": "v"}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": [{"constraints": [], "name": "v"}]},
-        "term": {
+          "typeParameters": [{"constraints": [], "name": "v"}]}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for the hydra.relational.Row wrapper"}}}],
             "body": {
@@ -2533,22 +2520,23 @@
                         "typeName": "hydra.core.Term"}},
                     "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {"application": {"argument": {"list": {"variable": "v"}}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.relational.unRow",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.relational.row",
         "signature": {
           "parameters": [
             {
               "isLazy": false,
               "name": "arg0",
-              "type": {
-                "application": {
-                  "argument": {"application": {"argument": {"variable": "v"}, "function": {"variable": "hydra.relational.Row"}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
-          "result": {"type": {"application": {"argument": {"list": {"variable": "v"}}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": [{"constraints": [], "name": "v"}]},
-        "term": {
+              "type": {"application": {"argument": {"list": {"variable": "v"}}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+          "result": {
+            "type": {
+              "application": {
+                "argument": {"application": {"argument": {"variable": "v"}, "function": {"variable": "hydra.relational.Row"}}},
+                "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": [{"constraints": [], "name": "v"}]}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL accessor for the body of hydra.relational.Row"}}}],
             "body": {
@@ -2580,7 +2568,19 @@
                   "application": {
                     "argument": {"application": {"argument": {"variable": "v"}, "function": {"variable": "hydra.relational.Row"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}}],
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.relational.unRow",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {
+                "application": {
+                  "argument": {"application": {"argument": {"variable": "v"}, "function": {"variable": "hydra.relational.Row"}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+          "result": {"type": {"application": {"argument": {"list": {"variable": "v"}}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": [{"constraints": [], "name": "v"}]}}}],
   "dependencies": [{"module": "hydra.relational"}, {"module": "hydra.typed"}, {"module": "hydra.core"}, {"module": "hydra.dsl.core"}],
   "metadata": {"comments": [], "description": "DSL functions for hydra.relational", "seeAlso": []},
   "name": "hydra.dsl.relational"}

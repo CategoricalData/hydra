@@ -2,8 +2,7 @@
   "definitions": [
     {
       "type": {
-        "name": "hydra.graph.Graph",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [
@@ -34,7 +33,7 @@
                             "value": {
                               "literal": {
                                 "string": "A mutable map from type variable names to their accumulated class constraints. This is populated during type inference when operations requiring Eq or Ord are encountered."}}}],
-                        "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableMetadata"}}}}}},
+                        "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}},
                   {
                     "name": "lambdaVariables",
                     "type": {
@@ -71,18 +70,18 @@
                             "key": "description",
                             "value": {"literal": {"string": "The set of type variables introduced specifically by type lambdas"}}}],
                         "body": {"set": {"variable": "hydra.core.Name"}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.graph.Graph"}},
     {
       "type": {
-        "name": "hydra.graph.Library",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A library of primitive functions"}}}],
               "body": {
                 "record": [
                   {
-                    "name": "namespace",
+                    "name": "name",
                     "type": {
                       "annotated": {
                         "annotation": [
@@ -105,11 +104,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The primitives defined in this library"}}}],
                         "body": {"list": {"variable": "hydra.graph.Primitive"}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.graph.Library"}},
     {
       "type": {
-        "name": "hydra.graph.Primitive",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [
@@ -151,11 +150,11 @@
                                     "domain": {"list": {"variable": "hydra.core.Term"}}}},
                                 "domain": {"variable": "hydra.graph.Graph"}}},
                             "domain": {"variable": "hydra.typing.InferenceContext"}}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.graph.Primitive"}},
     {
       "type": {
-        "name": "hydra.graph.TermCoder",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [
@@ -202,7 +201,8 @@
                                     "domain": {"variable": "a"}}},
                                 "domain": {"variable": "hydra.typing.InferenceContext"}}}}}}]},
                   "parameter": "a"}}}},
-          "variables": []}}}],
+          "variables": []},
+        "name": "hydra.graph.TermCoder"}}],
   "dependencies": [{"module": "hydra.core"}, {"module": "hydra.errors"}, {"module": "hydra.packaging"}, {"module": "hydra.typing"}],
   "metadata": {"comments": [], "description": "The extension to graphs of Hydra's core type system (hydra.core)", "seeAlso": []},
   "name": "hydra.graph"}

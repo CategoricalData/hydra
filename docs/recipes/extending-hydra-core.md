@@ -34,6 +34,8 @@ and serves as a reference for adding other constructs like pairs, sum types, etc
 - [Adding Fields to Existing Record Types](#adding-fields-to-existing-record-types)
 - [Renaming a field in an existing record type](#renaming-a-field-in-an-existing-record-type)
 - [Changing a field's type (delta from rename)](#changing-a-fields-type-delta-from-rename)
+- [Reordering fields in an existing record type (delta from rename)](#reordering-fields-in-an-existing-record-type-delta-from-rename)
+- [Introducing a new carrier type for an existing field (delta from rename)](#introducing-a-new-carrier-type-for-an-existing-field-delta-from-rename)
 
 ---
 
@@ -1562,6 +1564,65 @@ emit `\_ -> body` (Hydra), `lambda _: body` (Python), `Function<Void, String>`
 unit-value argument — `()`, `None`, `null`, `(())`, `nil`, `'()`, `tt` — not
 zero arguments. Hydra's `λ_. body` is always a *one-argument* function in the
 target.
+
+### Reordering fields in an existing record type (delta from rename)
+
+Working example: `PrimitiveDefinition` and `TermDefinition` reordered so `metadata`
+precedes `signature`/`body` (#369).
+
+Reordering fields keeps the same field *set*, so it reads like a no-op — but it is
+*not*, for two reasons:
+
+1. **Hydra's inference treats record types as order-sensitive.** A `TermRecord` value
+   whose fields appear in a different order than the schema's `TypeRecord` fails
+   `update-json` with `cannot unify record{...} with record{...}` — where both
+   records list the *same* fields, just permuted. Every DSL-Term-literal that
+   *constructs* the record (the `Sources/Decode/*.hs` decoders, which build a
+   `Core.Record` field-by-field) must emit fields in the new schema order. Encoders
+   are safe — they read fields by name via `project`, which is order-insensitive.
+
+2. **Every *positional* constructor across hosts breaks silently.** Named-field
+   construction (Haskell `Foo {fooName = ..}`, the generated `Dsl.Packaging`
+   builders' record bodies) is order-independent and compiles unchanged. But
+   positional calls — the DSL builder *function* (`termDefinition name metadata
+   signature body`), and the hand-written `PrimitiveDefinition`/`TermDefinition`
+   sites listed in `reference_primitivedefinition_handwritten_sites` (12 files across
+   Haskell/Java/Python/Scala/Lisp) — silently bind the wrong argument to the wrong
+   field. In Haskell these usually surface as a type error (`Couldn't match Term with
+   Maybe TermSignature`); in dynamically-checked hosts they pass compilation and fail
+   only at runtime or round-trip. Grep for every `Packaging.termDefinition`/
+   `primitiveDefinition` *call* (not accessor) and reorder its arguments; there were
+   ~12 such call sites in the kernel+test+coder sources alone.
+
+### Introducing a new carrier type for an existing field (delta from rename)
+
+Working example: `CaseStatement.cases : [Field]` → `[CaseAlternative]`, where
+`CaseAlternative = {name, handler}` is a brand-new kernel type (#369).
+
+This is a rename *plus* a new type, with two extra concerns beyond the rename playbook:
+
+1. **The DSL "funnel" lets you avoid touching thousands of call sites.** Case
+   alternatives are built with the same `>>:` operator as record/union fields
+   (`(>>:) :: Name -> t -> Field`), used at ~8000 sites. Rather than introduce a new
+   operator and rewrite them, retarget the *funnel* — the `cases`/`match` helpers in
+   `Dsl/Terms.hs` and `Dsl/Meta/{Phantoms,DeepCore}.hs` — to map `Field →
+   CaseAlternative` internally (`match` keeps its `[Field]` parameter; `DeepCore.cases`
+   takes `[CaseAlternative]` via a new `DeepCore.caseAlternative` builder). Call sites
+   stay byte-identical. Discriminate carefully: a generic `forField`/`rewriteField`
+   helper reused for *both* records and case branches needs a sibling
+   `forCaseAlternative` so only the case path moves; record/injection paths keep `Field`.
+
+2. **A new *type* (not just a renamed field) must be hand-added to the synthesized
+   `Sources/{Encode,Decode}/*.hs` as a bootstrap patch.** Those files are regenerated
+   by `--synthesize-sources`, but `update-json` infers the *stale* committed versions
+   *before* regenerating them. A renamed field only needs its literals patched; a new
+   type has no encoder/decoder DSL-Term at all, so its container's
+   encoder/decoder references a non-existent `hydra.{encode,decode}.core.<newType>`.
+   Clone the nearest sibling's encoder/decoder term (e.g. copy the `field`
+   encoder/decoder, rename type + wire keys), add it to `Sources/Encode/Core.hs` and
+   `Sources/Decode/Core.hs`, and point the container (`caseStatement`) at it. Also add
+   the runtime `data`, `Dsl` builders/accessors, and `Encode`/`Decode` functions to the
+   dist tier as usual.
 
 ---
 

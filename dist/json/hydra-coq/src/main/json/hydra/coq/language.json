@@ -2,9 +2,7 @@
   "definitions": [
     {
       "term": {
-        "name": "hydra.coq.language.coqLanguage",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.coders.Language"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "let": {
             "bindings": [
               {
@@ -116,12 +114,12 @@
                             "name": "types",
                             "term": {"typeApplication": {"body": {"variable": "typePredicate"}, "type": {"variable": "hydra.core.Type"}}}}],
                         "typeName": "hydra.coders.LanguageConstraints"}}}],
-                "typeName": "hydra.coders.Language"}}}}}},
+                "typeName": "hydra.coders.Language"}}}},
+        "name": "hydra.coq.language.coqLanguage",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.coders.Language"}}, "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.coq.language.coqReservedWords",
-        "signature": {"parameters": [], "result": {"type": {"set": {"literal": {"string": {}}}}}, "typeParameters": []},
-        "term": {
+        "body": {
           "application": {
             "argument": {
               "list": [
@@ -190,12 +188,12 @@
                 {"literal": {"string": "literal"}},
                 {"literal": {"string": "graph"}},
                 {"literal": {"string": "element"}}]},
-            "function": {"typeApplication": {"body": {"variable": "hydra.lib.sets.fromList"}, "type": {"literal": {"string": {}}}}}}}}},
+            "function": {"typeApplication": {"body": {"variable": "hydra.lib.sets.fromList"}, "type": {"literal": {"string": {}}}}}}},
+        "name": "hydra.coq.language.coqReservedWords",
+        "signature": {"parameters": [], "result": {"type": {"set": {"literal": {"string": {}}}}}, "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.coq.language.coqStrippedReservedWords",
-        "signature": {"parameters": [], "result": {"type": {"set": {"literal": {"string": {}}}}}, "typeParameters": []},
-        "term": {
+        "body": {
           "application": {
             "argument": {
               "list": [
@@ -269,7 +267,9 @@
                 {"literal": {"string": "inr"}},
                 {"literal": {"string": "tt"}},
                 {"literal": {"string": "graph"}}]},
-            "function": {"typeApplication": {"body": {"variable": "hydra.lib.sets.fromList"}, "type": {"literal": {"string": {}}}}}}}}}],
+            "function": {"typeApplication": {"body": {"variable": "hydra.lib.sets.fromList"}, "type": {"literal": {"string": {}}}}}}},
+        "name": "hydra.coq.language.coqStrippedReservedWords",
+        "signature": {"parameters": [], "result": {"type": {"set": {"literal": {"string": {}}}}}, "typeParameters": []}}}],
   "dependencies": [
     {"module": "hydra.constants"},
     {"module": "hydra.formatting"},

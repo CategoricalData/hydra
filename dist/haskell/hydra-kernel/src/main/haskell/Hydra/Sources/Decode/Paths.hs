@@ -40,6 +40,24 @@ module_ =
         Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.decode.paths.subtermEdge"),
           Packaging.termDefinitionMetadata = Nothing,
+          Packaging.termDefinitionSignature = (Just (Typing.TermSignature {
+            Typing.termSignatureTypeParameters = [],
+            Typing.termSignatureParameters = [
+              Typing.Parameter {
+                Typing.parameterName = (Core.Name "arg0"),
+                Typing.parameterDescription = Nothing,
+                Typing.parameterType = (Core.TypeVariable (Core.Name "hydra.graph.Graph")),
+                Typing.parameterIsLazy = False},
+              Typing.Parameter {
+                Typing.parameterName = (Core.Name "arg1"),
+                Typing.parameterDescription = Nothing,
+                Typing.parameterType = (Core.TypeVariable (Core.Name "hydra.core.Term")),
+                Typing.parameterIsLazy = False}],
+            Typing.termSignatureResult = Typing.Result {
+              Typing.resultDescription = Nothing,
+              Typing.resultType = (Core.TypeEither (Core.EitherType {
+                Core.eitherTypeLeft = (Core.TypeVariable (Core.Name "hydra.errors.DecodingError")),
+                Core.eitherTypeRight = (Core.TypeVariable (Core.Name "hydra.paths.SubtermEdge"))}))}})),
           Packaging.termDefinitionBody = (Core.TermAnnotated (Core.AnnotatedTerm {
             Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
               Core.lambdaParameter = (Core.Name "cx"),
@@ -142,7 +160,10 @@ module_ =
                       Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
                     Core.applicationArgument = (Core.TermVariable (Core.Name "raw"))}))}))}))})),
             Core.annotatedTermAnnotation = (M.fromList [
-              (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Decoder for hydra.paths.SubtermEdge")))])})),
+              (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Decoder for hydra.paths.SubtermEdge")))])}))}),
+        (Packaging.DefinitionTerm (Packaging.TermDefinition {
+          Packaging.termDefinitionName = (Core.Name "hydra.decode.paths.subtermGraph"),
+          Packaging.termDefinitionMetadata = Nothing,
           Packaging.termDefinitionSignature = (Just (Typing.TermSignature {
             Typing.termSignatureTypeParameters = [],
             Typing.termSignatureParameters = [
@@ -160,10 +181,7 @@ module_ =
               Typing.resultDescription = Nothing,
               Typing.resultType = (Core.TypeEither (Core.EitherType {
                 Core.eitherTypeLeft = (Core.TypeVariable (Core.Name "hydra.errors.DecodingError")),
-                Core.eitherTypeRight = (Core.TypeVariable (Core.Name "hydra.paths.SubtermEdge"))}))}}))}),
-        (Packaging.DefinitionTerm (Packaging.TermDefinition {
-          Packaging.termDefinitionName = (Core.Name "hydra.decode.paths.subtermGraph"),
-          Packaging.termDefinitionMetadata = Nothing,
+                Core.eitherTypeRight = (Core.TypeVariable (Core.Name "hydra.paths.SubtermGraph"))}))}})),
           Packaging.termDefinitionBody = (Core.TermAnnotated (Core.AnnotatedTerm {
             Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
               Core.lambdaParameter = (Core.Name "cx"),
@@ -252,7 +270,10 @@ module_ =
                       Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
                     Core.applicationArgument = (Core.TermVariable (Core.Name "raw"))}))}))}))})),
             Core.annotatedTermAnnotation = (M.fromList [
-              (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Decoder for hydra.paths.SubtermGraph")))])})),
+              (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Decoder for hydra.paths.SubtermGraph")))])}))})),
+        (Packaging.DefinitionTerm (Packaging.TermDefinition {
+          Packaging.termDefinitionName = (Core.Name "hydra.decode.paths.subtermNode"),
+          Packaging.termDefinitionMetadata = Nothing,
           Packaging.termDefinitionSignature = (Just (Typing.TermSignature {
             Typing.termSignatureTypeParameters = [],
             Typing.termSignatureParameters = [
@@ -270,10 +291,7 @@ module_ =
               Typing.resultDescription = Nothing,
               Typing.resultType = (Core.TypeEither (Core.EitherType {
                 Core.eitherTypeLeft = (Core.TypeVariable (Core.Name "hydra.errors.DecodingError")),
-                Core.eitherTypeRight = (Core.TypeVariable (Core.Name "hydra.paths.SubtermGraph"))}))}}))})),
-        (Packaging.DefinitionTerm (Packaging.TermDefinition {
-          Packaging.termDefinitionName = (Core.Name "hydra.decode.paths.subtermNode"),
-          Packaging.termDefinitionMetadata = Nothing,
+                Core.eitherTypeRight = (Core.TypeVariable (Core.Name "hydra.paths.SubtermNode"))}))}})),
           Packaging.termDefinitionBody = (Core.TermAnnotated (Core.AnnotatedTerm {
             Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
               Core.lambdaParameter = (Core.Name "cx"),
@@ -472,7 +490,10 @@ module_ =
                       Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
                     Core.applicationArgument = (Core.TermVariable (Core.Name "raw"))}))}))}))})),
             Core.annotatedTermAnnotation = (M.fromList [
-              (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Decoder for hydra.paths.SubtermNode")))])})),
+              (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Decoder for hydra.paths.SubtermNode")))])}))})),
+        (Packaging.DefinitionTerm (Packaging.TermDefinition {
+          Packaging.termDefinitionName = (Core.Name "hydra.decode.paths.subtermPath"),
+          Packaging.termDefinitionMetadata = Nothing,
           Packaging.termDefinitionSignature = (Just (Typing.TermSignature {
             Typing.termSignatureTypeParameters = [],
             Typing.termSignatureParameters = [
@@ -490,10 +511,7 @@ module_ =
               Typing.resultDescription = Nothing,
               Typing.resultType = (Core.TypeEither (Core.EitherType {
                 Core.eitherTypeLeft = (Core.TypeVariable (Core.Name "hydra.errors.DecodingError")),
-                Core.eitherTypeRight = (Core.TypeVariable (Core.Name "hydra.paths.SubtermNode"))}))}}))})),
-        (Packaging.DefinitionTerm (Packaging.TermDefinition {
-          Packaging.termDefinitionName = (Core.Name "hydra.decode.paths.subtermPath"),
-          Packaging.termDefinitionMetadata = Nothing,
+                Core.eitherTypeRight = (Core.TypeVariable (Core.Name "hydra.paths.SubtermPath"))}))}})),
           Packaging.termDefinitionBody = (Core.TermAnnotated (Core.AnnotatedTerm {
             Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
               Core.lambdaParameter = (Core.Name "cx"),
@@ -551,7 +569,10 @@ module_ =
                       Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
                     Core.applicationArgument = (Core.TermVariable (Core.Name "raw"))}))}))}))})),
             Core.annotatedTermAnnotation = (M.fromList [
-              (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Decoder for hydra.paths.SubtermPath")))])})),
+              (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Decoder for hydra.paths.SubtermPath")))])}))})),
+        (Packaging.DefinitionTerm (Packaging.TermDefinition {
+          Packaging.termDefinitionName = (Core.Name "hydra.decode.paths.subtermStep"),
+          Packaging.termDefinitionMetadata = Nothing,
           Packaging.termDefinitionSignature = (Just (Typing.TermSignature {
             Typing.termSignatureTypeParameters = [],
             Typing.termSignatureParameters = [
@@ -569,10 +590,7 @@ module_ =
               Typing.resultDescription = Nothing,
               Typing.resultType = (Core.TypeEither (Core.EitherType {
                 Core.eitherTypeLeft = (Core.TypeVariable (Core.Name "hydra.errors.DecodingError")),
-                Core.eitherTypeRight = (Core.TypeVariable (Core.Name "hydra.paths.SubtermPath"))}))}}))})),
-        (Packaging.DefinitionTerm (Packaging.TermDefinition {
-          Packaging.termDefinitionName = (Core.Name "hydra.decode.paths.subtermStep"),
-          Packaging.termDefinitionMetadata = Nothing,
+                Core.eitherTypeRight = (Core.TypeVariable (Core.Name "hydra.paths.SubtermStep"))}))}})),
           Packaging.termDefinitionBody = (Core.TermAnnotated (Core.AnnotatedTerm {
             Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
               Core.lambdaParameter = (Core.Name "cx"),
@@ -1527,7 +1545,10 @@ module_ =
                       Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
                     Core.applicationArgument = (Core.TermVariable (Core.Name "raw"))}))}))}))})),
             Core.annotatedTermAnnotation = (M.fromList [
-              (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Decoder for hydra.paths.SubtermStep")))])})),
+              (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Decoder for hydra.paths.SubtermStep")))])}))})),
+        (Packaging.DefinitionTerm (Packaging.TermDefinition {
+          Packaging.termDefinitionName = (Core.Name "hydra.decode.paths.subtypeEdge"),
+          Packaging.termDefinitionMetadata = Nothing,
           Packaging.termDefinitionSignature = (Just (Typing.TermSignature {
             Typing.termSignatureTypeParameters = [],
             Typing.termSignatureParameters = [
@@ -1545,10 +1566,7 @@ module_ =
               Typing.resultDescription = Nothing,
               Typing.resultType = (Core.TypeEither (Core.EitherType {
                 Core.eitherTypeLeft = (Core.TypeVariable (Core.Name "hydra.errors.DecodingError")),
-                Core.eitherTypeRight = (Core.TypeVariable (Core.Name "hydra.paths.SubtermStep"))}))}}))})),
-        (Packaging.DefinitionTerm (Packaging.TermDefinition {
-          Packaging.termDefinitionName = (Core.Name "hydra.decode.paths.subtypeEdge"),
-          Packaging.termDefinitionMetadata = Nothing,
+                Core.eitherTypeRight = (Core.TypeVariable (Core.Name "hydra.paths.SubtypeEdge"))}))}})),
           Packaging.termDefinitionBody = (Core.TermAnnotated (Core.AnnotatedTerm {
             Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
               Core.lambdaParameter = (Core.Name "cx"),
@@ -1651,7 +1669,10 @@ module_ =
                       Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
                     Core.applicationArgument = (Core.TermVariable (Core.Name "raw"))}))}))}))})),
             Core.annotatedTermAnnotation = (M.fromList [
-              (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Decoder for hydra.paths.SubtypeEdge")))])})),
+              (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Decoder for hydra.paths.SubtypeEdge")))])}))})),
+        (Packaging.DefinitionTerm (Packaging.TermDefinition {
+          Packaging.termDefinitionName = (Core.Name "hydra.decode.paths.subtypeGraph"),
+          Packaging.termDefinitionMetadata = Nothing,
           Packaging.termDefinitionSignature = (Just (Typing.TermSignature {
             Typing.termSignatureTypeParameters = [],
             Typing.termSignatureParameters = [
@@ -1669,10 +1690,7 @@ module_ =
               Typing.resultDescription = Nothing,
               Typing.resultType = (Core.TypeEither (Core.EitherType {
                 Core.eitherTypeLeft = (Core.TypeVariable (Core.Name "hydra.errors.DecodingError")),
-                Core.eitherTypeRight = (Core.TypeVariable (Core.Name "hydra.paths.SubtypeEdge"))}))}}))})),
-        (Packaging.DefinitionTerm (Packaging.TermDefinition {
-          Packaging.termDefinitionName = (Core.Name "hydra.decode.paths.subtypeGraph"),
-          Packaging.termDefinitionMetadata = Nothing,
+                Core.eitherTypeRight = (Core.TypeVariable (Core.Name "hydra.paths.SubtypeGraph"))}))}})),
           Packaging.termDefinitionBody = (Core.TermAnnotated (Core.AnnotatedTerm {
             Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
               Core.lambdaParameter = (Core.Name "cx"),
@@ -1761,7 +1779,10 @@ module_ =
                       Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
                     Core.applicationArgument = (Core.TermVariable (Core.Name "raw"))}))}))}))})),
             Core.annotatedTermAnnotation = (M.fromList [
-              (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Decoder for hydra.paths.SubtypeGraph")))])})),
+              (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Decoder for hydra.paths.SubtypeGraph")))])}))})),
+        (Packaging.DefinitionTerm (Packaging.TermDefinition {
+          Packaging.termDefinitionName = (Core.Name "hydra.decode.paths.subtypeNode"),
+          Packaging.termDefinitionMetadata = Nothing,
           Packaging.termDefinitionSignature = (Just (Typing.TermSignature {
             Typing.termSignatureTypeParameters = [],
             Typing.termSignatureParameters = [
@@ -1779,10 +1800,7 @@ module_ =
               Typing.resultDescription = Nothing,
               Typing.resultType = (Core.TypeEither (Core.EitherType {
                 Core.eitherTypeLeft = (Core.TypeVariable (Core.Name "hydra.errors.DecodingError")),
-                Core.eitherTypeRight = (Core.TypeVariable (Core.Name "hydra.paths.SubtypeGraph"))}))}}))})),
-        (Packaging.DefinitionTerm (Packaging.TermDefinition {
-          Packaging.termDefinitionName = (Core.Name "hydra.decode.paths.subtypeNode"),
-          Packaging.termDefinitionMetadata = Nothing,
+                Core.eitherTypeRight = (Core.TypeVariable (Core.Name "hydra.paths.SubtypeNode"))}))}})),
           Packaging.termDefinitionBody = (Core.TermAnnotated (Core.AnnotatedTerm {
             Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
               Core.lambdaParameter = (Core.Name "cx"),
@@ -1981,7 +1999,10 @@ module_ =
                       Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
                     Core.applicationArgument = (Core.TermVariable (Core.Name "raw"))}))}))}))})),
             Core.annotatedTermAnnotation = (M.fromList [
-              (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Decoder for hydra.paths.SubtypeNode")))])})),
+              (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Decoder for hydra.paths.SubtypeNode")))])}))})),
+        (Packaging.DefinitionTerm (Packaging.TermDefinition {
+          Packaging.termDefinitionName = (Core.Name "hydra.decode.paths.subtypePath"),
+          Packaging.termDefinitionMetadata = Nothing,
           Packaging.termDefinitionSignature = (Just (Typing.TermSignature {
             Typing.termSignatureTypeParameters = [],
             Typing.termSignatureParameters = [
@@ -1999,10 +2020,7 @@ module_ =
               Typing.resultDescription = Nothing,
               Typing.resultType = (Core.TypeEither (Core.EitherType {
                 Core.eitherTypeLeft = (Core.TypeVariable (Core.Name "hydra.errors.DecodingError")),
-                Core.eitherTypeRight = (Core.TypeVariable (Core.Name "hydra.paths.SubtypeNode"))}))}}))})),
-        (Packaging.DefinitionTerm (Packaging.TermDefinition {
-          Packaging.termDefinitionName = (Core.Name "hydra.decode.paths.subtypePath"),
-          Packaging.termDefinitionMetadata = Nothing,
+                Core.eitherTypeRight = (Core.TypeVariable (Core.Name "hydra.paths.SubtypePath"))}))}})),
           Packaging.termDefinitionBody = (Core.TermAnnotated (Core.AnnotatedTerm {
             Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
               Core.lambdaParameter = (Core.Name "cx"),
@@ -2060,7 +2078,10 @@ module_ =
                       Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
                     Core.applicationArgument = (Core.TermVariable (Core.Name "raw"))}))}))}))})),
             Core.annotatedTermAnnotation = (M.fromList [
-              (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Decoder for hydra.paths.SubtypePath")))])})),
+              (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Decoder for hydra.paths.SubtypePath")))])}))})),
+        (Packaging.DefinitionTerm (Packaging.TermDefinition {
+          Packaging.termDefinitionName = (Core.Name "hydra.decode.paths.subtypeStep"),
+          Packaging.termDefinitionMetadata = Nothing,
           Packaging.termDefinitionSignature = (Just (Typing.TermSignature {
             Typing.termSignatureTypeParameters = [],
             Typing.termSignatureParameters = [
@@ -2078,10 +2099,7 @@ module_ =
               Typing.resultDescription = Nothing,
               Typing.resultType = (Core.TypeEither (Core.EitherType {
                 Core.eitherTypeLeft = (Core.TypeVariable (Core.Name "hydra.errors.DecodingError")),
-                Core.eitherTypeRight = (Core.TypeVariable (Core.Name "hydra.paths.SubtypePath"))}))}}))})),
-        (Packaging.DefinitionTerm (Packaging.TermDefinition {
-          Packaging.termDefinitionName = (Core.Name "hydra.decode.paths.subtypeStep"),
-          Packaging.termDefinitionMetadata = Nothing,
+                Core.eitherTypeRight = (Core.TypeVariable (Core.Name "hydra.paths.SubtypeStep"))}))}})),
           Packaging.termDefinitionBody = (Core.TermAnnotated (Core.AnnotatedTerm {
             Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
               Core.lambdaParameter = (Core.Name "cx"),
@@ -2750,22 +2768,4 @@ module_ =
                       Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
                     Core.applicationArgument = (Core.TermVariable (Core.Name "raw"))}))}))}))})),
             Core.annotatedTermAnnotation = (M.fromList [
-              (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Decoder for hydra.paths.SubtypeStep")))])})),
-          Packaging.termDefinitionSignature = (Just (Typing.TermSignature {
-            Typing.termSignatureTypeParameters = [],
-            Typing.termSignatureParameters = [
-              Typing.Parameter {
-                Typing.parameterName = (Core.Name "arg0"),
-                Typing.parameterDescription = Nothing,
-                Typing.parameterType = (Core.TypeVariable (Core.Name "hydra.graph.Graph")),
-                Typing.parameterIsLazy = False},
-              Typing.Parameter {
-                Typing.parameterName = (Core.Name "arg1"),
-                Typing.parameterDescription = Nothing,
-                Typing.parameterType = (Core.TypeVariable (Core.Name "hydra.core.Term")),
-                Typing.parameterIsLazy = False}],
-            Typing.termSignatureResult = Typing.Result {
-              Typing.resultDescription = Nothing,
-              Typing.resultType = (Core.TypeEither (Core.EitherType {
-                Core.eitherTypeLeft = (Core.TypeVariable (Core.Name "hydra.errors.DecodingError")),
-                Core.eitherTypeRight = (Core.TypeVariable (Core.Name "hydra.paths.SubtypeStep"))}))}}))}))]}
+              (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Decoder for hydra.paths.SubtypeStep")))])}))}))]}

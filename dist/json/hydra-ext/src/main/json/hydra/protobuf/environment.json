@@ -2,8 +2,7 @@
   "definitions": [
     {
       "type": {
-        "name": "hydra.protobuf.environment.EncoderState",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [
@@ -30,11 +29,11 @@
                             "key": "description",
                             "value": {"literal": {"string": "Counter used to assign the next Protobuf field index within the current message"}}}],
                         "body": {"literal": {"integer": {"int32": {}}}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.protobuf.environment.EncoderState"}},
     {
       "type": {
-        "name": "hydra.protobuf.environment.StructuralTypeRef",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [
@@ -55,7 +54,8 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "A Pair type with first and second component types"}}}],
                         "body": {"pair": {"first": {"variable": "hydra.core.Type"}, "second": {"variable": "hydra.core.Type"}}}}}}]}}},
-          "variables": []}}}],
+          "variables": []},
+        "name": "hydra.protobuf.environment.StructuralTypeRef"}}],
   "dependencies": [{"module": "hydra.core"}, {"module": "hydra.typing"}],
   "metadata": {"comments": [], "description": "Type definitions for the Protobuf code generation environment", "seeAlso": []},
   "name": "hydra.protobuf.environment"}

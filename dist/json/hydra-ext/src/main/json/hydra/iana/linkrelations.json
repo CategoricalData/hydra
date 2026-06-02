@@ -2,8 +2,7 @@
   "definitions": [
     {
       "type": {
-        "name": "hydra.iana.linkrelations.LinkRelationType",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "An IANA link relation type"}}}],
@@ -1200,7 +1199,8 @@
                             "key": "description",
                             "value": {"literal": {"string": "Points to the versioned resource from which this working copy was obtained. [RFC5829]"}}}],
                         "body": {"unit": {}}}}}]}}},
-          "variables": []}}}],
+          "variables": []},
+        "name": "hydra.iana.linkrelations.LinkRelationType"}}],
   "dependencies": [],
   "metadata": {
     "comments": [],

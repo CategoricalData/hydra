@@ -2,8 +2,7 @@
   "definitions": [
     {
       "type": {
-        "name": "hydra.cypher.features.CypherFeatures",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [
@@ -158,11 +157,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "Specific syntax related to updating data in the graph"}}}],
                         "body": {"variable": "hydra.cypher.features.UpdatingFeatures"}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.cypher.features.CypherFeatures"}},
     {
       "type": {
-        "name": "hydra.cypher.features.ArithmeticFeatures",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "Arithmetic operations"}}}],
@@ -204,11 +203,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The ^ operator"}}}],
                         "body": {"literal": {"boolean": {}}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.cypher.features.ArithmeticFeatures"}},
     {
       "type": {
-        "name": "hydra.cypher.features.AtomFeatures",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "Various kinds of atomic expressions"}}}],
@@ -265,11 +264,11 @@
                             "key": "description",
                             "value": {"literal": {"string": "Variable expressions (note: included by most if not all implementations)."}}}],
                         "body": {"literal": {"boolean": {}}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.cypher.features.AtomFeatures"}},
     {
       "type": {
-        "name": "hydra.cypher.features.ComparisonFeatures",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "Comparison operators and functions"}}}],
@@ -311,11 +310,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The <> comparison operator"}}}],
                         "body": {"literal": {"boolean": {}}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.cypher.features.ComparisonFeatures"}},
     {
       "type": {
-        "name": "hydra.cypher.features.DeleteFeatures",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "Delete operations"}}}],
@@ -333,11 +332,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The DETACH DELETE clause"}}}],
                         "body": {"literal": {"boolean": {}}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.cypher.features.DeleteFeatures"}},
     {
       "type": {
-        "name": "hydra.cypher.features.FunctionFeatures",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "Standard Cypher functions"}}}],
@@ -439,11 +438,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "Vector functions"}}}],
                         "body": {"variable": "hydra.cypher.features.VectorFunctionFeatures"}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.cypher.features.FunctionFeatures"}},
     {
       "type": {
-        "name": "hydra.cypher.features.AggregateFunctionFeatures",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "Aggregate functions"}}}],
@@ -551,11 +550,11 @@
                               "literal": {
                                 "string": "The sum() function / SUM. Returns the sum of a set of DURATION values.; Returns the sum of a set of FLOAT values.; Returns the sum of a set of INTEGER values."}}}],
                         "body": {"literal": {"boolean": {}}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.cypher.features.AggregateFunctionFeatures"}},
     {
       "type": {
-        "name": "hydra.cypher.features.DatabaseFunctionFeatures",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "Database functions"}}}],
@@ -572,11 +571,11 @@
                               "literal": {
                                 "string": "The db.nameFromElementId() function. Resolves the database name from the given element id. Introduced in 5.12."}}}],
                         "body": {"literal": {"boolean": {}}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.cypher.features.DatabaseFunctionFeatures"}},
     {
       "type": {
-        "name": "hydra.cypher.features.GenAIFunctionFeatures",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "GenAI functions"}}}],
@@ -593,11 +592,11 @@
                               "literal": {
                                 "string": "The genai.vector.encode() function. Encode a given resource as a vector using the named provider. Introduced in 5.17."}}}],
                         "body": {"literal": {"boolean": {}}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.cypher.features.GenAIFunctionFeatures"}},
     {
       "type": {
-        "name": "hydra.cypher.features.GraphFunctionFeatures",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "Graph functions"}}}],
@@ -645,11 +644,11 @@
                               "literal": {
                                 "string": "The graph.propertiesByName() function. Returns a map containing the properties associated with the given graph."}}}],
                         "body": {"literal": {"boolean": {}}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.cypher.features.GraphFunctionFeatures"}},
     {
       "type": {
-        "name": "hydra.cypher.features.ListFunctionFeatures",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "List functions"}}}],
@@ -783,11 +782,11 @@
                               "literal": {
                                 "string": "The toStringList() function. Converts a LIST<ANY> to a LIST<STRING> values. If any values are not convertible to STRING they will be null in the LIST<STRING> returned."}}}],
                         "body": {"literal": {"boolean": {}}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.cypher.features.ListFunctionFeatures"}},
     {
       "type": {
-        "name": "hydra.cypher.features.LoadCSVFunctionFeatures",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "Load CSV functions"}}}],
@@ -811,11 +810,11 @@
                             "key": "description",
                             "value": {"literal": {"string": "The linenumber() function. Returns the line number that LOAD CSV is currently using."}}}],
                         "body": {"literal": {"boolean": {}}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.cypher.features.LoadCSVFunctionFeatures"}},
     {
       "type": {
-        "name": "hydra.cypher.features.LogarithmicFunctionFeatures",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "Logarithmic functions"}}}],
@@ -865,11 +864,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The sqrt() function. Returns the square root of a FLOAT."}}}],
                         "body": {"literal": {"boolean": {}}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.cypher.features.LogarithmicFunctionFeatures"}},
     {
       "type": {
-        "name": "hydra.cypher.features.NumericFunctionFeatures",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "Numeric functions"}}}],
@@ -949,11 +948,11 @@
                               "literal": {
                                 "string": "The sign() function. Returns the signum of a FLOAT: 0 if the number is 0, -1 for any negative number, and 1 for any positive number.; Returns the signum of an INTEGER: 0 if the number is 0, -1 for any negative number, and 1 for any positive number."}}}],
                         "body": {"literal": {"boolean": {}}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.cypher.features.NumericFunctionFeatures"}},
     {
       "type": {
-        "name": "hydra.cypher.features.PredicateFunctionFeatures",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "Predicate functions"}}}],
@@ -1020,11 +1019,11 @@
                               "literal": {
                                 "string": "The single() function. Returns true if the predicate holds for exactly one of the elements in the given LIST<ANY>."}}}],
                         "body": {"literal": {"boolean": {}}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.cypher.features.PredicateFunctionFeatures"}},
     {
       "type": {
-        "name": "hydra.cypher.features.ScalarFunctionFeatures",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "Scalar functions"}}}],
@@ -1246,11 +1245,11 @@
                               "literal": {
                                 "string": "The valueType() function. Returns a STRING representation of the most precise value type that the given expression evaluates to."}}}],
                         "body": {"literal": {"boolean": {}}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.cypher.features.ScalarFunctionFeatures"}},
     {
       "type": {
-        "name": "hydra.cypher.features.SpatialFunctionFeatures",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "Spatial functions"}}}],
@@ -1289,11 +1288,11 @@
                               "literal": {
                                 "string": "The point.withinBBox() function. Returns true if the provided point is within the bounding box defined by the two provided points, lowerLeft and upperRight."}}}],
                         "body": {"literal": {"boolean": {}}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.cypher.features.SpatialFunctionFeatures"}},
     {
       "type": {
-        "name": "hydra.cypher.features.StringFunctionFeatures",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "String functions"}}}],
@@ -1482,11 +1481,11 @@
                               "literal": {
                                 "string": "The upper() function. Returns the given STRING in uppercase. This function is an alias to the toUpper() function, and it was introduced as part of Cypher's GQL conformance. Introduced in 5.21."}}}],
                         "body": {"literal": {"boolean": {}}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.cypher.features.StringFunctionFeatures"}},
     {
       "type": {
-        "name": "hydra.cypher.features.TemporalDurationFunctionFeatures",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "Temporal duration functions"}}}],
@@ -1542,11 +1541,11 @@
                               "literal": {
                                 "string": "The duration.inSeconds() function. Computes the DURATION between the from instant (inclusive) and the to instant (exclusive) in seconds."}}}],
                         "body": {"literal": {"boolean": {}}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.cypher.features.TemporalDurationFunctionFeatures"}},
     {
       "type": {
-        "name": "hydra.cypher.features.TemporalInstantFunctionFeatures",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "Temporal instant functions"}}}],
@@ -1814,11 +1813,11 @@
                               "literal": {
                                 "string": "The time.truncate() function. Truncates the given temporal value to a ZONED TIME instant using the specified unit."}}}],
                         "body": {"literal": {"boolean": {}}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.cypher.features.TemporalInstantFunctionFeatures"}},
     {
       "type": {
-        "name": "hydra.cypher.features.TrigonometricFunctionFeatures",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "Trigonometric functions"}}}],
@@ -1911,11 +1910,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The tan() function. Returns the tangent of a FLOAT."}}}],
                         "body": {"literal": {"boolean": {}}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.cypher.features.TrigonometricFunctionFeatures"}},
     {
       "type": {
-        "name": "hydra.cypher.features.VectorFunctionFeatures",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "Vector functions"}}}],
@@ -1943,11 +1942,11 @@
                               "literal": {
                                 "string": "The vector.similarity.euclidean() function. Returns a FLOAT representing the similarity between the argument vectors based on their Euclidean distance."}}}],
                         "body": {"literal": {"boolean": {}}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.cypher.features.VectorFunctionFeatures"}},
     {
       "type": {
-        "name": "hydra.cypher.features.ListFeatures",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "List functionality"}}}],
@@ -1965,11 +1964,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "List range comprehensions (e.g. [1..10])"}}}],
                         "body": {"literal": {"boolean": {}}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.cypher.features.ListFeatures"}},
     {
       "type": {
-        "name": "hydra.cypher.features.LiteralFeatures",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "Various types of literal values"}}}],
@@ -2023,11 +2022,11 @@
                             "key": "description",
                             "value": {"literal": {"string": "String literals (note: included by most if not all implementations)."}}}],
                         "body": {"literal": {"boolean": {}}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.cypher.features.LiteralFeatures"}},
     {
       "type": {
-        "name": "hydra.cypher.features.LogicalFeatures",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "Logical operations"}}}],
@@ -2057,11 +2056,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The XOR operator"}}}],
                         "body": {"literal": {"boolean": {}}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.cypher.features.LogicalFeatures"}},
     {
       "type": {
-        "name": "hydra.cypher.features.MatchFeatures",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "Match queries"}}}],
@@ -2079,11 +2078,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "OPTIONAL MATCH"}}}],
                         "body": {"literal": {"boolean": {}}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.cypher.features.MatchFeatures"}},
     {
       "type": {
-        "name": "hydra.cypher.features.MergeFeatures",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "Merge operations"}}}],
@@ -2107,11 +2106,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "MERGE with the ON MATCH action"}}}],
                         "body": {"literal": {"boolean": {}}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.cypher.features.MergeFeatures"}},
     {
       "type": {
-        "name": "hydra.cypher.features.NodePatternFeatures",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "Node patterns"}}}],
@@ -2151,11 +2150,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "Omitting labels from a node pattern"}}}],
                         "body": {"literal": {"boolean": {}}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.cypher.features.NodePatternFeatures"}},
     {
       "type": {
-        "name": "hydra.cypher.features.NullFeatures",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "IS NULL / IS NOT NULL checks"}}}],
@@ -2173,11 +2172,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The IS NOT NULL operator"}}}],
                         "body": {"literal": {"boolean": {}}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.cypher.features.NullFeatures"}},
     {
       "type": {
-        "name": "hydra.cypher.features.PathFeatures",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "Path functions only found in OpenCypher"}}}],
@@ -2189,11 +2188,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The shortestPath() function"}}}],
                         "body": {"literal": {"boolean": {}}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.cypher.features.PathFeatures"}},
     {
       "type": {
-        "name": "hydra.cypher.features.ProcedureCallFeatures",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "Procedure calls"}}}],
@@ -2217,11 +2216,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The YIELD clause in CALL"}}}],
                         "body": {"literal": {"boolean": {}}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.cypher.features.ProcedureCallFeatures"}},
     {
       "type": {
-        "name": "hydra.cypher.features.ProjectionFeatures",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "Projections"}}}],
@@ -2269,11 +2268,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The ASC/ASCENDING and DESC/DESCENDING keywords"}}}],
                         "body": {"literal": {"boolean": {}}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.cypher.features.ProjectionFeatures"}},
     {
       "type": {
-        "name": "hydra.cypher.features.QuantifierFeatures",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "Quantifier expressions"}}}],
@@ -2303,11 +2302,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The SINGLE quantifier"}}}],
                         "body": {"literal": {"boolean": {}}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.cypher.features.QuantifierFeatures"}},
     {
       "type": {
-        "name": "hydra.cypher.features.RangeLiteralFeatures",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "Range literals within relationship patterns"}}}],
@@ -2343,11 +2342,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "Range literals with an upper bound (only)"}}}],
                         "body": {"literal": {"boolean": {}}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.cypher.features.RangeLiteralFeatures"}},
     {
       "type": {
-        "name": "hydra.cypher.features.ReadingFeatures",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "Specific syntax related to reading data from the graph."}}}],
@@ -2371,11 +2370,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The UNWIND clause"}}}],
                         "body": {"literal": {"boolean": {}}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.cypher.features.ReadingFeatures"}},
     {
       "type": {
-        "name": "hydra.cypher.features.RelationshipDirectionFeatures",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "Relationship directions / arrow patterns"}}}],
@@ -2405,11 +2404,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The right arrow (-[]->) relationship direction"}}}],
                         "body": {"literal": {"boolean": {}}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.cypher.features.RelationshipDirectionFeatures"}},
     {
       "type": {
-        "name": "hydra.cypher.features.RelationshipPatternFeatures",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "Relationship patterns"}}}],
@@ -2441,11 +2440,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "Omitting types from a relationship pattern"}}}],
                         "body": {"literal": {"boolean": {}}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.cypher.features.RelationshipPatternFeatures"}},
     {
       "type": {
-        "name": "hydra.cypher.features.RemoveFeatures",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "REMOVE operations"}}}],
@@ -2463,11 +2462,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "REMOVE PropertyExpression"}}}],
                         "body": {"literal": {"boolean": {}}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.cypher.features.RemoveFeatures"}},
     {
       "type": {
-        "name": "hydra.cypher.features.SetFeatures",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "Set definitions"}}}],
@@ -2497,11 +2496,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "Defining a set using Variable:NodeLabels"}}}],
                         "body": {"literal": {"boolean": {}}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.cypher.features.SetFeatures"}},
     {
       "type": {
-        "name": "hydra.cypher.features.StringFeatures",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "String functions/keywords only found in OpenCypher"}}}],
@@ -2531,11 +2530,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The startsWith() function / STARTS WITH"}}}],
                         "body": {"literal": {"boolean": {}}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.cypher.features.StringFeatures"}},
     {
       "type": {
-        "name": "hydra.cypher.features.UpdatingFeatures",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "Specific syntax related to updating data in the graph"}}}],
@@ -2559,7 +2558,8 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "Multi-part queries using WITH"}}}],
                         "body": {"literal": {"boolean": {}}}}}}]}}},
-          "variables": []}}}],
+          "variables": []},
+        "name": "hydra.cypher.features.UpdatingFeatures"}}],
   "dependencies": [{"module": "hydra.core"}],
   "metadata": {
     "comments": [],

@@ -2,17 +2,7 @@
   "definitions": [
     {
       "term": {
-        "name": "hydra.graphql.coder.descriptionFromType",
-        "signature": {
-          "parameters": [
-            {"isLazy": false, "name": "arg0", "type": {"variable": "t0"}},
-            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.graph.Graph"}},
-            {"isLazy": false, "name": "arg2", "type": {"variable": "hydra.core.Type"}}],
-          "result": {
-            "type": {
-              "either": {"left": {"variable": "hydra.errors.Error"}, "right": {"maybe": {"variable": "hydra.graphql.syntax.Description"}}}}},
-          "typeParameters": [{"constraints": [], "name": "t0"}]},
-        "term": {
+        "body": {
           "typeLambda": {
             "body": {
               "lambda": {
@@ -68,15 +58,20 @@
                     "parameter": "g"}},
                 "domain": {"variable": "t0"},
                 "parameter": "cx"}},
-            "parameter": "t0"}}}},
+            "parameter": "t0"}},
+        "name": "hydra.graphql.coder.descriptionFromType",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "t0"}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.graph.Graph"}},
+            {"isLazy": false, "name": "arg2", "type": {"variable": "hydra.core.Type"}}],
+          "result": {
+            "type": {
+              "either": {"left": {"variable": "hydra.errors.Error"}, "right": {"maybe": {"variable": "hydra.graphql.syntax.Description"}}}}},
+          "typeParameters": [{"constraints": [], "name": "t0"}]}}},
     {
       "term": {
-        "name": "hydra.graphql.coder.encodeEnumFieldName",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.core.Name"}}],
-          "result": {"type": {"variable": "hydra.graphql.syntax.EnumValue"}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "lambda": {
             "body": {
               "wrap": {
@@ -89,20 +84,15 @@
                     "typeName": "hydra.graphql.syntax.Name"}},
                 "typeName": "hydra.graphql.syntax.EnumValue"}},
             "domain": {"variable": "hydra.core.Name"},
-            "parameter": "name"}}}},
+            "parameter": "name"}},
+        "name": "hydra.graphql.coder.encodeEnumFieldName",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.core.Name"}}],
+          "result": {"type": {"variable": "hydra.graphql.syntax.EnumValue"}},
+          "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.graphql.coder.encodeEnumFieldType",
-        "signature": {
-          "parameters": [
-            {"isLazy": false, "name": "arg0", "type": {"variable": "t0"}},
-            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.graph.Graph"}},
-            {"isLazy": false, "name": "arg2", "type": {"variable": "hydra.core.FieldType"}}],
-          "result": {
-            "type": {
-              "either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "hydra.graphql.syntax.EnumValueDefinition"}}}},
-          "typeParameters": [{"constraints": [], "name": "t0"}]},
-        "term": {
+        "body": {
           "typeLambda": {
             "body": {
               "lambda": {
@@ -165,15 +155,20 @@
                     "parameter": "g"}},
                 "domain": {"variable": "t0"},
                 "parameter": "cx"}},
-            "parameter": "t0"}}}},
+            "parameter": "t0"}},
+        "name": "hydra.graphql.coder.encodeEnumFieldType",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "t0"}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.graph.Graph"}},
+            {"isLazy": false, "name": "arg2", "type": {"variable": "hydra.core.FieldType"}}],
+          "result": {
+            "type": {
+              "either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "hydra.graphql.syntax.EnumValueDefinition"}}}},
+          "typeParameters": [{"constraints": [], "name": "t0"}]}}},
     {
       "term": {
-        "name": "hydra.graphql.coder.encodeFieldName",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.core.Name"}}],
-          "result": {"type": {"variable": "hydra.graphql.syntax.Name"}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "lambda": {
             "body": {
               "wrap": {
@@ -183,23 +178,15 @@
                     "function": {"variable": "hydra.graphql.coder.sanitize"}}},
                 "typeName": "hydra.graphql.syntax.Name"}},
             "domain": {"variable": "hydra.core.Name"},
-            "parameter": "name"}}}},
+            "parameter": "name"}},
+        "name": "hydra.graphql.coder.encodeFieldName",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.core.Name"}}],
+          "result": {"type": {"variable": "hydra.graphql.syntax.Name"}},
+          "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.graphql.coder.encodeFieldType",
-        "signature": {
-          "parameters": [
-            {"isLazy": false, "name": "arg0", "type": {"variable": "t0"}},
-            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.graph.Graph"}},
-            {
-              "isLazy": false,
-              "name": "arg2",
-              "type": {"map": {"keys": {"variable": "hydra.packaging.ModuleName"}, "values": {"literal": {"string": {}}}}}},
-            {"isLazy": false, "name": "arg3", "type": {"variable": "hydra.core.FieldType"}}],
-          "result": {
-            "type": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "hydra.graphql.syntax.FieldDefinition"}}}},
-          "typeParameters": [{"constraints": [], "name": "t0"}]},
-        "term": {
+        "body": {
           "typeLambda": {
             "body": {
               "lambda": {
@@ -302,18 +289,23 @@
                     "parameter": "g"}},
                 "domain": {"variable": "t0"},
                 "parameter": "cx"}},
-            "parameter": "t0"}}}},
-    {
-      "term": {
-        "name": "hydra.graphql.coder.encodeLiteralType",
+            "parameter": "t0"}},
+        "name": "hydra.graphql.coder.encodeFieldType",
         "signature": {
           "parameters": [
             {"isLazy": false, "name": "arg0", "type": {"variable": "t0"}},
-            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.core.LiteralType"}}],
+            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.graph.Graph"}},
+            {
+              "isLazy": false,
+              "name": "arg2",
+              "type": {"map": {"keys": {"variable": "hydra.packaging.ModuleName"}, "values": {"literal": {"string": {}}}}}},
+            {"isLazy": false, "name": "arg3", "type": {"variable": "hydra.core.FieldType"}}],
           "result": {
-            "type": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "hydra.graphql.syntax.NamedType"}}}},
-          "typeParameters": [{"constraints": [], "name": "t0"}]},
-        "term": {
+            "type": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "hydra.graphql.syntax.FieldDefinition"}}}},
+          "typeParameters": [{"constraints": [], "name": "t0"}]}}},
+    {
+      "term": {
+        "body": {
           "typeLambda": {
             "body": {
               "lambda": {
@@ -326,8 +318,7 @@
                           "cases": {
                             "cases": [
                               {
-                                "name": "boolean",
-                                "term": {
+                                "handler": {
                                   "lambda": {
                                     "body": {
                                       "typeApplication": {
@@ -342,10 +333,10 @@
                                             "type": {"variable": "hydra.errors.Error"}}},
                                         "type": {"variable": "hydra.graphql.syntax.NamedType"}}},
                                     "domain": {"unit": {}},
-                                    "parameter": "_"}}},
+                                    "parameter": "_"}},
+                                "name": "boolean"},
                               {
-                                "name": "float",
-                                "term": {
+                                "handler": {
                                   "lambda": {
                                     "body": {
                                       "application": {
@@ -354,8 +345,7 @@
                                           "cases": {
                                             "cases": [
                                               {
-                                                "name": "float64",
-                                                "term": {
+                                                "handler": {
                                                   "lambda": {
                                                     "body": {
                                                       "typeApplication": {
@@ -370,7 +360,8 @@
                                                             "type": {"variable": "hydra.errors.Error"}}},
                                                         "type": {"variable": "hydra.graphql.syntax.NamedType"}}},
                                                     "domain": {"unit": {}},
-                                                    "parameter": "_"}}}],
+                                                    "parameter": "_"}},
+                                                "name": "float64"}],
                                             "default": {
                                               "typeApplication": {
                                                 "body": {
@@ -396,10 +387,10 @@
                                                 "type": {"variable": "hydra.graphql.syntax.NamedType"}}},
                                             "typeName": "hydra.core.FloatType"}}}},
                                     "domain": {"variable": "hydra.core.FloatType"},
-                                    "parameter": "ft_"}}},
+                                    "parameter": "ft_"}},
+                                "name": "float"},
                               {
-                                "name": "integer",
-                                "term": {
+                                "handler": {
                                   "lambda": {
                                     "body": {
                                       "application": {
@@ -408,8 +399,7 @@
                                           "cases": {
                                             "cases": [
                                               {
-                                                "name": "int32",
-                                                "term": {
+                                                "handler": {
                                                   "lambda": {
                                                     "body": {
                                                       "typeApplication": {
@@ -424,7 +414,8 @@
                                                             "type": {"variable": "hydra.errors.Error"}}},
                                                         "type": {"variable": "hydra.graphql.syntax.NamedType"}}},
                                                     "domain": {"unit": {}},
-                                                    "parameter": "_"}}}],
+                                                    "parameter": "_"}},
+                                                "name": "int32"}],
                                             "default": {
                                               "typeApplication": {
                                                 "body": {
@@ -450,10 +441,10 @@
                                                 "type": {"variable": "hydra.graphql.syntax.NamedType"}}},
                                             "typeName": "hydra.core.IntegerType"}}}},
                                     "domain": {"variable": "hydra.core.IntegerType"},
-                                    "parameter": "it_"}}},
+                                    "parameter": "it_"}},
+                                "name": "integer"},
                               {
-                                "name": "string",
-                                "term": {
+                                "handler": {
                                   "lambda": {
                                     "body": {
                                       "typeApplication": {
@@ -468,7 +459,8 @@
                                             "type": {"variable": "hydra.errors.Error"}}},
                                         "type": {"variable": "hydra.graphql.syntax.NamedType"}}},
                                     "domain": {"unit": {}},
-                                    "parameter": "_"}}}],
+                                    "parameter": "_"}},
+                                "name": "string"}],
                             "default": {
                               "typeApplication": {
                                 "body": {
@@ -497,24 +489,18 @@
                     "parameter": "lt"}},
                 "domain": {"variable": "t0"},
                 "parameter": "cx"}},
-            "parameter": "t0"}}}},
-    {
-      "term": {
-        "name": "hydra.graphql.coder.encodeNamedType",
+            "parameter": "t0"}},
+        "name": "hydra.graphql.coder.encodeLiteralType",
         "signature": {
           "parameters": [
             {"isLazy": false, "name": "arg0", "type": {"variable": "t0"}},
-            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.graph.Graph"}},
-            {
-              "isLazy": false,
-              "name": "arg2",
-              "type": {"map": {"keys": {"variable": "hydra.packaging.ModuleName"}, "values": {"literal": {"string": {}}}}}},
-            {"isLazy": false, "name": "arg3", "type": {"variable": "hydra.core.Name"}},
-            {"isLazy": false, "name": "arg4", "type": {"variable": "hydra.core.Type"}}],
+            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.core.LiteralType"}}],
           "result": {
-            "type": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "hydra.graphql.syntax.TypeDefinition"}}}},
-          "typeParameters": [{"constraints": [], "name": "t0"}]},
-        "term": {
+            "type": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "hydra.graphql.syntax.NamedType"}}}},
+          "typeParameters": [{"constraints": [], "name": "t0"}]}}},
+    {
+      "term": {
+        "body": {
           "typeLambda": {
             "body": {
               "lambda": {
@@ -533,8 +519,7 @@
                                       "cases": {
                                         "cases": [
                                           {
-                                            "name": "record",
-                                            "term": {
+                                            "handler": {
                                               "lambda": {
                                                 "body": {
                                                   "application": {
@@ -639,10 +624,10 @@
                                                                 "type": {"list": {"variable": "hydra.graphql.syntax.FieldDefinition"}}}},
                                                             "type": {"variable": "hydra.graphql.syntax.TypeDefinition"}}}}}}},
                                                 "domain": {"list": {"variable": "hydra.core.FieldType"}},
-                                                "parameter": "rt"}}},
+                                                "parameter": "rt"}},
+                                            "name": "record"},
                                           {
-                                            "name": "union",
-                                            "term": {
+                                            "handler": {
                                               "lambda": {
                                                 "body": {
                                                   "application": {
@@ -854,10 +839,10 @@
                                                                 "body": {"variable": "hydra.lib.logic.ifElse"},
                                                                 "type": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "hydra.graphql.syntax.TypeDefinition"}}}}}}}}}}},
                                                 "domain": {"list": {"variable": "hydra.core.FieldType"}},
-                                                "parameter": "rt"}}},
+                                                "parameter": "rt"}},
+                                            "name": "union"},
                                           {
-                                            "name": "either",
-                                            "term": {
+                                            "handler": {
                                               "lambda": {
                                                 "body": {
                                                   "application": {
@@ -910,10 +895,10 @@
                                                                     "argument": {"variable": "cx"},
                                                                     "function": {"typeApplication": {"body": {"variable": "hydra.graphql.coder.encodeNamedType"}, "type": {"variable": "t0"}}}}}}}}}}}}},
                                                 "domain": {"variable": "hydra.core.EitherType"},
-                                                "parameter": "et"}}},
+                                                "parameter": "et"}},
+                                            "name": "either"},
                                           {
-                                            "name": "pair",
-                                            "term": {
+                                            "handler": {
                                               "lambda": {
                                                 "body": {
                                                   "application": {
@@ -956,10 +941,10 @@
                                                                     "argument": {"variable": "cx"},
                                                                     "function": {"typeApplication": {"body": {"variable": "hydra.graphql.coder.encodeNamedType"}, "type": {"variable": "t0"}}}}}}}}}}}}},
                                                 "domain": {"variable": "hydra.core.PairType"},
-                                                "parameter": "pt"}}},
+                                                "parameter": "pt"}},
+                                            "name": "pair"},
                                           {
-                                            "name": "list",
-                                            "term": {
+                                            "handler": {
                                               "lambda": {
                                                 "body": {
                                                   "application": {
@@ -992,10 +977,10 @@
                                                                     "argument": {"variable": "cx"},
                                                                     "function": {"typeApplication": {"body": {"variable": "hydra.graphql.coder.encodeNamedType"}, "type": {"variable": "t0"}}}}}}}}}}}}},
                                                 "domain": {"variable": "hydra.core.Type"},
-                                                "parameter": "lt_"}}},
+                                                "parameter": "lt_"}},
+                                            "name": "list"},
                                           {
-                                            "name": "set",
-                                            "term": {
+                                            "handler": {
                                               "lambda": {
                                                 "body": {
                                                   "application": {
@@ -1028,10 +1013,10 @@
                                                                     "argument": {"variable": "cx"},
                                                                     "function": {"typeApplication": {"body": {"variable": "hydra.graphql.coder.encodeNamedType"}, "type": {"variable": "t0"}}}}}}}}}}}}},
                                                 "domain": {"variable": "hydra.core.Type"},
-                                                "parameter": "st"}}},
+                                                "parameter": "st"}},
+                                            "name": "set"},
                                           {
-                                            "name": "map",
-                                            "term": {
+                                            "handler": {
                                               "lambda": {
                                                 "body": {
                                                   "application": {
@@ -1074,10 +1059,10 @@
                                                                     "argument": {"variable": "cx"},
                                                                     "function": {"typeApplication": {"body": {"variable": "hydra.graphql.coder.encodeNamedType"}, "type": {"variable": "t0"}}}}}}}}}}}}},
                                                 "domain": {"variable": "hydra.core.MapType"},
-                                                "parameter": "mt"}}},
+                                                "parameter": "mt"}},
+                                            "name": "map"},
                                           {
-                                            "name": "literal",
-                                            "term": {
+                                            "handler": {
                                               "lambda": {
                                                 "body": {
                                                   "application": {
@@ -1110,10 +1095,10 @@
                                                                     "argument": {"variable": "cx"},
                                                                     "function": {"typeApplication": {"body": {"variable": "hydra.graphql.coder.encodeNamedType"}, "type": {"variable": "t0"}}}}}}}}}}}}},
                                                 "domain": {"variable": "hydra.core.LiteralType"},
-                                                "parameter": "lt_"}}},
+                                                "parameter": "lt_"}},
+                                            "name": "literal"},
                                           {
-                                            "name": "variable",
-                                            "term": {
+                                            "handler": {
                                               "lambda": {
                                                 "body": {
                                                   "application": {
@@ -1146,10 +1131,10 @@
                                                                     "argument": {"variable": "cx"},
                                                                     "function": {"typeApplication": {"body": {"variable": "hydra.graphql.coder.encodeNamedType"}, "type": {"variable": "t0"}}}}}}}}}}}}},
                                                 "domain": {"variable": "hydra.core.Name"},
-                                                "parameter": "vn"}}},
+                                                "parameter": "vn"}},
+                                            "name": "variable"},
                                           {
-                                            "name": "wrap",
-                                            "term": {
+                                            "handler": {
                                               "lambda": {
                                                 "body": {
                                                   "application": {
@@ -1180,10 +1165,10 @@
                                                                     "argument": {"variable": "cx"},
                                                                     "function": {"typeApplication": {"body": {"variable": "hydra.graphql.coder.encodeNamedType"}, "type": {"variable": "t0"}}}}}}}}}}}}},
                                                 "domain": {"variable": "hydra.core.Type"},
-                                                "parameter": "wt"}}},
+                                                "parameter": "wt"}},
+                                            "name": "wrap"},
                                           {
-                                            "name": "unit",
-                                            "term": {
+                                            "handler": {
                                               "lambda": {
                                                 "body": {
                                                   "application": {
@@ -1221,10 +1206,10 @@
                                                                     "argument": {"variable": "cx"},
                                                                     "function": {"typeApplication": {"body": {"variable": "hydra.graphql.coder.encodeNamedType"}, "type": {"variable": "t0"}}}}}}}}}}}}},
                                                 "domain": {"unit": {}},
-                                                "parameter": "_"}}},
+                                                "parameter": "_"}},
+                                            "name": "unit"},
                                           {
-                                            "name": "forall",
-                                            "term": {
+                                            "handler": {
                                               "lambda": {
                                                 "body": {
                                                   "application": {
@@ -1244,10 +1229,10 @@
                                                                     "argument": {"variable": "cx"},
                                                                     "function": {"typeApplication": {"body": {"variable": "hydra.graphql.coder.encodeNamedType"}, "type": {"variable": "t0"}}}}}}}}}}}}},
                                                 "domain": {"variable": "hydra.core.ForallType"},
-                                                "parameter": "ft"}}},
+                                                "parameter": "ft"}},
+                                            "name": "forall"},
                                           {
-                                            "name": "application",
-                                            "term": {
+                                            "handler": {
                                               "lambda": {
                                                 "body": {
                                                   "application": {
@@ -1269,10 +1254,10 @@
                                                                     "argument": {"variable": "cx"},
                                                                     "function": {"typeApplication": {"body": {"variable": "hydra.graphql.coder.encodeNamedType"}, "type": {"variable": "t0"}}}}}}}}}}}}},
                                                 "domain": {"variable": "hydra.core.ApplicationType"},
-                                                "parameter": "at"}}},
+                                                "parameter": "at"}},
+                                            "name": "application"},
                                           {
-                                            "name": "function",
-                                            "term": {
+                                            "handler": {
                                               "lambda": {
                                                 "body": {
                                                   "application": {
@@ -1319,7 +1304,8 @@
                                                                     "argument": {"variable": "cx"},
                                                                     "function": {"typeApplication": {"body": {"variable": "hydra.graphql.coder.encodeNamedType"}, "type": {"variable": "t0"}}}}}}}}}}}}},
                                                 "domain": {"variable": "hydra.core.FunctionType"},
-                                                "parameter": "ft"}}}],
+                                                "parameter": "ft"}},
+                                            "name": "function"}],
                                         "default": {
                                           "typeApplication": {
                                             "body": {
@@ -1354,22 +1340,24 @@
                     "parameter": "g"}},
                 "domain": {"variable": "t0"},
                 "parameter": "cx"}},
-            "parameter": "t0"}}}},
-    {
-      "term": {
-        "name": "hydra.graphql.coder.encodeType",
+            "parameter": "t0"}},
+        "name": "hydra.graphql.coder.encodeNamedType",
         "signature": {
           "parameters": [
             {"isLazy": false, "name": "arg0", "type": {"variable": "t0"}},
-            {"isLazy": false, "name": "arg1", "type": {"variable": "t1"}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.graph.Graph"}},
             {
               "isLazy": false,
               "name": "arg2",
               "type": {"map": {"keys": {"variable": "hydra.packaging.ModuleName"}, "values": {"literal": {"string": {}}}}}},
-            {"isLazy": false, "name": "arg3", "type": {"variable": "hydra.core.Type"}}],
-          "result": {"type": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "hydra.graphql.syntax.Type"}}}},
-          "typeParameters": [{"constraints": [], "name": "t0"}, {"constraints": [], "name": "t1"}]},
-        "term": {
+            {"isLazy": false, "name": "arg3", "type": {"variable": "hydra.core.Name"}},
+            {"isLazy": false, "name": "arg4", "type": {"variable": "hydra.core.Type"}}],
+          "result": {
+            "type": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "hydra.graphql.syntax.TypeDefinition"}}}},
+          "typeParameters": [{"constraints": [], "name": "t0"}]}}},
+    {
+      "term": {
+        "body": {
           "typeLambda": {
             "body": {
               "typeLambda": {
@@ -1388,8 +1376,7 @@
                                       "cases": {
                                         "cases": [
                                           {
-                                            "name": "maybe",
-                                            "term": {
+                                            "handler": {
                                               "lambda": {
                                                 "body": {
                                                   "application": {
@@ -1398,8 +1385,7 @@
                                                       "cases": {
                                                         "cases": [
                                                           {
-                                                            "name": "list",
-                                                            "term": {
+                                                            "handler": {
                                                               "lambda": {
                                                                 "body": {
                                                                   "application": {
@@ -1437,10 +1423,10 @@
                                                                                 "type": {"variable": "hydra.graphql.syntax.Type"}}},
                                                                             "type": {"variable": "hydra.errors.Error"}}}}}}},
                                                                 "domain": {"variable": "hydra.core.Type"},
-                                                                "parameter": "et2"}}},
+                                                                "parameter": "et2"}},
+                                                            "name": "list"},
                                                           {
-                                                            "name": "set",
-                                                            "term": {
+                                                            "handler": {
                                                               "lambda": {
                                                                 "body": {
                                                                   "application": {
@@ -1478,10 +1464,10 @@
                                                                                 "type": {"variable": "hydra.graphql.syntax.Type"}}},
                                                                             "type": {"variable": "hydra.errors.Error"}}}}}}},
                                                                 "domain": {"variable": "hydra.core.Type"},
-                                                                "parameter": "st"}}},
+                                                                "parameter": "st"}},
+                                                            "name": "set"},
                                                           {
-                                                            "name": "map",
-                                                            "term": {
+                                                            "handler": {
                                                               "lambda": {
                                                                 "body": {
                                                                   "application": {
@@ -1520,10 +1506,10 @@
                                                                                 "type": {"variable": "hydra.graphql.syntax.Type"}}},
                                                                             "type": {"variable": "hydra.errors.Error"}}}}}}},
                                                                 "domain": {"variable": "hydra.core.MapType"},
-                                                                "parameter": "mt"}}},
+                                                                "parameter": "mt"}},
+                                                            "name": "map"},
                                                           {
-                                                            "name": "literal",
-                                                            "term": {
+                                                            "handler": {
                                                               "lambda": {
                                                                 "body": {
                                                                   "application": {
@@ -1550,10 +1536,10 @@
                                                                                 "type": {"variable": "hydra.graphql.syntax.Type"}}},
                                                                             "type": {"variable": "hydra.errors.Error"}}}}}}},
                                                                 "domain": {"variable": "hydra.core.LiteralType"},
-                                                                "parameter": "lt_"}}},
+                                                                "parameter": "lt_"}},
+                                                            "name": "literal"},
                                                           {
-                                                            "name": "pair",
-                                                            "term": {
+                                                            "handler": {
                                                               "lambda": {
                                                                 "body": {
                                                                   "typeApplication": {
@@ -1576,10 +1562,10 @@
                                                                         "type": {"variable": "hydra.errors.Error"}}},
                                                                     "type": {"variable": "hydra.graphql.syntax.Type"}}},
                                                                 "domain": {"variable": "hydra.core.PairType"},
-                                                                "parameter": "_"}}},
+                                                                "parameter": "_"}},
+                                                            "name": "pair"},
                                                           {
-                                                            "name": "either",
-                                                            "term": {
+                                                            "handler": {
                                                               "lambda": {
                                                                 "body": {
                                                                   "typeApplication": {
@@ -1602,10 +1588,10 @@
                                                                         "type": {"variable": "hydra.errors.Error"}}},
                                                                     "type": {"variable": "hydra.graphql.syntax.Type"}}},
                                                                 "domain": {"variable": "hydra.core.EitherType"},
-                                                                "parameter": "_"}}},
+                                                                "parameter": "_"}},
+                                                            "name": "either"},
                                                           {
-                                                            "name": "record",
-                                                            "term": {
+                                                            "handler": {
                                                               "lambda": {
                                                                 "body": {
                                                                   "typeApplication": {
@@ -1622,10 +1608,10 @@
                                                                         "type": {"variable": "hydra.errors.Error"}}},
                                                                     "type": {"variable": "hydra.graphql.syntax.Type"}}},
                                                                 "domain": {"list": {"variable": "hydra.core.FieldType"}},
-                                                                "parameter": "_"}}},
+                                                                "parameter": "_"}},
+                                                            "name": "record"},
                                                           {
-                                                            "name": "union",
-                                                            "term": {
+                                                            "handler": {
                                                               "lambda": {
                                                                 "body": {
                                                                   "typeApplication": {
@@ -1642,10 +1628,10 @@
                                                                         "type": {"variable": "hydra.errors.Error"}}},
                                                                     "type": {"variable": "hydra.graphql.syntax.Type"}}},
                                                                 "domain": {"list": {"variable": "hydra.core.FieldType"}},
-                                                                "parameter": "_"}}},
+                                                                "parameter": "_"}},
+                                                            "name": "union"},
                                                           {
-                                                            "name": "wrap",
-                                                            "term": {
+                                                            "handler": {
                                                               "lambda": {
                                                                 "body": {
                                                                   "application": {
@@ -1664,10 +1650,10 @@
                                                                                     "body": {"typeApplication": {"body": {"variable": "hydra.graphql.coder.encodeType"}, "type": {"variable": "t0"}}},
                                                                                     "type": {"variable": "t1"}}}}}}}}}}},
                                                                 "domain": {"variable": "hydra.core.Type"},
-                                                                "parameter": "wt"}}},
+                                                                "parameter": "wt"}},
+                                                            "name": "wrap"},
                                                           {
-                                                            "name": "variable",
-                                                            "term": {
+                                                            "handler": {
                                                               "lambda": {
                                                                 "body": {
                                                                   "typeApplication": {
@@ -1690,10 +1676,10 @@
                                                                         "type": {"variable": "hydra.errors.Error"}}},
                                                                     "type": {"variable": "hydra.graphql.syntax.Type"}}},
                                                                 "domain": {"variable": "hydra.core.Name"},
-                                                                "parameter": "n"}}},
+                                                                "parameter": "n"}},
+                                                            "name": "variable"},
                                                           {
-                                                            "name": "forall",
-                                                            "term": {
+                                                            "handler": {
                                                               "lambda": {
                                                                 "body": {
                                                                   "application": {
@@ -1718,10 +1704,10 @@
                                                                                     "body": {"typeApplication": {"body": {"variable": "hydra.graphql.coder.encodeType"}, "type": {"variable": "t0"}}},
                                                                                     "type": {"variable": "t1"}}}}}}}}}}},
                                                                 "domain": {"variable": "hydra.core.ForallType"},
-                                                                "parameter": "ft"}}},
+                                                                "parameter": "ft"}},
+                                                            "name": "forall"},
                                                           {
-                                                            "name": "application",
-                                                            "term": {
+                                                            "handler": {
                                                               "lambda": {
                                                                 "body": {
                                                                   "application": {
@@ -1748,10 +1734,10 @@
                                                                                     "body": {"typeApplication": {"body": {"variable": "hydra.graphql.coder.encodeType"}, "type": {"variable": "t0"}}},
                                                                                     "type": {"variable": "t1"}}}}}}}}}}},
                                                                 "domain": {"variable": "hydra.core.ApplicationType"},
-                                                                "parameter": "at"}}},
+                                                                "parameter": "at"}},
+                                                            "name": "application"},
                                                           {
-                                                            "name": "function",
-                                                            "term": {
+                                                            "handler": {
                                                               "lambda": {
                                                                 "body": {
                                                                   "typeApplication": {
@@ -1771,10 +1757,10 @@
                                                                         "type": {"variable": "hydra.errors.Error"}}},
                                                                     "type": {"variable": "hydra.graphql.syntax.Type"}}},
                                                                 "domain": {"variable": "hydra.core.FunctionType"},
-                                                                "parameter": "_"}}},
+                                                                "parameter": "_"}},
+                                                            "name": "function"},
                                                           {
-                                                            "name": "unit",
-                                                            "term": {
+                                                            "handler": {
                                                               "lambda": {
                                                                 "body": {
                                                                   "typeApplication": {
@@ -1794,7 +1780,8 @@
                                                                         "type": {"variable": "hydra.errors.Error"}}},
                                                                     "type": {"variable": "hydra.graphql.syntax.Type"}}},
                                                                 "domain": {"unit": {}},
-                                                                "parameter": "_"}}}],
+                                                                "parameter": "_"}},
+                                                            "name": "unit"}],
                                                         "default": {
                                                           "typeApplication": {
                                                             "body": {
@@ -1820,10 +1807,10 @@
                                                             "type": {"variable": "hydra.graphql.syntax.Type"}}},
                                                         "typeName": "hydra.core.Type"}}}},
                                                 "domain": {"variable": "hydra.core.Type"},
-                                                "parameter": "et"}}},
+                                                "parameter": "et"}},
+                                            "name": "maybe"},
                                           {
-                                            "name": "list",
-                                            "term": {
+                                            "handler": {
                                               "lambda": {
                                                 "body": {
                                                   "application": {
@@ -1866,10 +1853,10 @@
                                                                 "type": {"variable": "hydra.graphql.syntax.Type"}}},
                                                             "type": {"variable": "hydra.errors.Error"}}}}}}},
                                                 "domain": {"variable": "hydra.core.Type"},
-                                                "parameter": "et"}}},
+                                                "parameter": "et"}},
+                                            "name": "list"},
                                           {
-                                            "name": "set",
-                                            "term": {
+                                            "handler": {
                                               "lambda": {
                                                 "body": {
                                                   "application": {
@@ -1912,10 +1899,10 @@
                                                                 "type": {"variable": "hydra.graphql.syntax.Type"}}},
                                                             "type": {"variable": "hydra.errors.Error"}}}}}}},
                                                 "domain": {"variable": "hydra.core.Type"},
-                                                "parameter": "st"}}},
+                                                "parameter": "st"}},
+                                            "name": "set"},
                                           {
-                                            "name": "map",
-                                            "term": {
+                                            "handler": {
                                               "lambda": {
                                                 "body": {
                                                   "application": {
@@ -1959,10 +1946,10 @@
                                                                 "type": {"variable": "hydra.graphql.syntax.Type"}}},
                                                             "type": {"variable": "hydra.errors.Error"}}}}}}},
                                                 "domain": {"variable": "hydra.core.MapType"},
-                                                "parameter": "mt"}}},
+                                                "parameter": "mt"}},
+                                            "name": "map"},
                                           {
-                                            "name": "literal",
-                                            "term": {
+                                            "handler": {
                                               "lambda": {
                                                 "body": {
                                                   "application": {
@@ -1994,10 +1981,10 @@
                                                                 "type": {"variable": "hydra.graphql.syntax.Type"}}},
                                                             "type": {"variable": "hydra.errors.Error"}}}}}}},
                                                 "domain": {"variable": "hydra.core.LiteralType"},
-                                                "parameter": "lt_"}}},
+                                                "parameter": "lt_"}},
+                                            "name": "literal"},
                                           {
-                                            "name": "pair",
-                                            "term": {
+                                            "handler": {
                                               "lambda": {
                                                 "body": {
                                                   "typeApplication": {
@@ -2025,10 +2012,10 @@
                                                         "type": {"variable": "hydra.errors.Error"}}},
                                                     "type": {"variable": "hydra.graphql.syntax.Type"}}},
                                                 "domain": {"variable": "hydra.core.PairType"},
-                                                "parameter": "_"}}},
+                                                "parameter": "_"}},
+                                            "name": "pair"},
                                           {
-                                            "name": "either",
-                                            "term": {
+                                            "handler": {
                                               "lambda": {
                                                 "body": {
                                                   "typeApplication": {
@@ -2056,10 +2043,10 @@
                                                         "type": {"variable": "hydra.errors.Error"}}},
                                                     "type": {"variable": "hydra.graphql.syntax.Type"}}},
                                                 "domain": {"variable": "hydra.core.EitherType"},
-                                                "parameter": "_"}}},
+                                                "parameter": "_"}},
+                                            "name": "either"},
                                           {
-                                            "name": "record",
-                                            "term": {
+                                            "handler": {
                                               "lambda": {
                                                 "body": {
                                                   "typeApplication": {
@@ -2076,10 +2063,10 @@
                                                         "type": {"variable": "hydra.errors.Error"}}},
                                                     "type": {"variable": "hydra.graphql.syntax.Type"}}},
                                                 "domain": {"list": {"variable": "hydra.core.FieldType"}},
-                                                "parameter": "_"}}},
+                                                "parameter": "_"}},
+                                            "name": "record"},
                                           {
-                                            "name": "union",
-                                            "term": {
+                                            "handler": {
                                               "lambda": {
                                                 "body": {
                                                   "typeApplication": {
@@ -2096,10 +2083,10 @@
                                                         "type": {"variable": "hydra.errors.Error"}}},
                                                     "type": {"variable": "hydra.graphql.syntax.Type"}}},
                                                 "domain": {"list": {"variable": "hydra.core.FieldType"}},
-                                                "parameter": "_"}}},
+                                                "parameter": "_"}},
+                                            "name": "union"},
                                           {
-                                            "name": "variable",
-                                            "term": {
+                                            "handler": {
                                               "lambda": {
                                                 "body": {
                                                   "typeApplication": {
@@ -2127,10 +2114,10 @@
                                                         "type": {"variable": "hydra.errors.Error"}}},
                                                     "type": {"variable": "hydra.graphql.syntax.Type"}}},
                                                 "domain": {"variable": "hydra.core.Name"},
-                                                "parameter": "n"}}},
+                                                "parameter": "n"}},
+                                            "name": "variable"},
                                           {
-                                            "name": "wrap",
-                                            "term": {
+                                            "handler": {
                                               "lambda": {
                                                 "body": {
                                                   "application": {
@@ -2149,10 +2136,10 @@
                                                                     "body": {"typeApplication": {"body": {"variable": "hydra.graphql.coder.encodeType"}, "type": {"variable": "t0"}}},
                                                                     "type": {"variable": "t1"}}}}}}}}}}},
                                                 "domain": {"variable": "hydra.core.Type"},
-                                                "parameter": "wt"}}},
+                                                "parameter": "wt"}},
+                                            "name": "wrap"},
                                           {
-                                            "name": "forall",
-                                            "term": {
+                                            "handler": {
                                               "lambda": {
                                                 "body": {
                                                   "application": {
@@ -2172,10 +2159,10 @@
                                                                     "body": {"typeApplication": {"body": {"variable": "hydra.graphql.coder.encodeType"}, "type": {"variable": "t0"}}},
                                                                     "type": {"variable": "t1"}}}}}}}}}}},
                                                 "domain": {"variable": "hydra.core.ForallType"},
-                                                "parameter": "ft"}}},
+                                                "parameter": "ft"}},
+                                            "name": "forall"},
                                           {
-                                            "name": "application",
-                                            "term": {
+                                            "handler": {
                                               "lambda": {
                                                 "body": {
                                                   "application": {
@@ -2197,10 +2184,10 @@
                                                                     "body": {"typeApplication": {"body": {"variable": "hydra.graphql.coder.encodeType"}, "type": {"variable": "t0"}}},
                                                                     "type": {"variable": "t1"}}}}}}}}}}},
                                                 "domain": {"variable": "hydra.core.ApplicationType"},
-                                                "parameter": "at"}}},
+                                                "parameter": "at"}},
+                                            "name": "application"},
                                           {
-                                            "name": "function",
-                                            "term": {
+                                            "handler": {
                                               "lambda": {
                                                 "body": {
                                                   "typeApplication": {
@@ -2225,10 +2212,10 @@
                                                         "type": {"variable": "hydra.errors.Error"}}},
                                                     "type": {"variable": "hydra.graphql.syntax.Type"}}},
                                                 "domain": {"variable": "hydra.core.FunctionType"},
-                                                "parameter": "ft"}}},
+                                                "parameter": "ft"}},
+                                            "name": "function"},
                                           {
-                                            "name": "unit",
-                                            "term": {
+                                            "handler": {
                                               "lambda": {
                                                 "body": {
                                                   "typeApplication": {
@@ -2253,7 +2240,8 @@
                                                         "type": {"variable": "hydra.errors.Error"}}},
                                                     "type": {"variable": "hydra.graphql.syntax.Type"}}},
                                                 "domain": {"unit": {}},
-                                                "parameter": "_"}}}],
+                                                "parameter": "_"}},
+                                            "name": "unit"}],
                                         "default": {
                                           "typeApplication": {
                                             "body": {
@@ -2287,23 +2275,22 @@
                     "domain": {"variable": "t0"},
                     "parameter": "cx"}},
                 "parameter": "t1"}},
-            "parameter": "t0"}}}},
-    {
-      "term": {
-        "name": "hydra.graphql.coder.encodeTypeDefinition",
+            "parameter": "t0"}},
+        "name": "hydra.graphql.coder.encodeType",
         "signature": {
           "parameters": [
             {"isLazy": false, "name": "arg0", "type": {"variable": "t0"}},
-            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.graph.Graph"}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "t1"}},
             {
               "isLazy": false,
               "name": "arg2",
               "type": {"map": {"keys": {"variable": "hydra.packaging.ModuleName"}, "values": {"literal": {"string": {}}}}}},
-            {"isLazy": false, "name": "arg3", "type": {"variable": "hydra.packaging.TypeDefinition"}}],
-          "result": {
-            "type": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "hydra.graphql.syntax.TypeDefinition"}}}},
-          "typeParameters": [{"constraints": [], "name": "t0"}]},
-        "term": {
+            {"isLazy": false, "name": "arg3", "type": {"variable": "hydra.core.Type"}}],
+          "result": {"type": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "hydra.graphql.syntax.Type"}}}},
+          "typeParameters": [{"constraints": [], "name": "t0"}, {"constraints": [], "name": "t1"}]}}},
+    {
+      "term": {
+        "body": {
           "typeLambda": {
             "body": {
               "lambda": {
@@ -2320,7 +2307,7 @@
                                     "argument": {
                                       "application": {
                                         "argument": {"variable": "tdef"},
-                                        "function": {"project": {"fieldName": "typeScheme", "typeName": "hydra.packaging.TypeDefinition"}}}},
+                                        "function": {"project": {"fieldName": "body", "typeName": "hydra.packaging.TypeDefinition"}}}},
                                     "function": {"project": {"fieldName": "body", "typeName": "hydra.core.TypeScheme"}}}},
                                 "function": {
                                   "application": {
@@ -2346,20 +2333,23 @@
                     "parameter": "g"}},
                 "domain": {"variable": "t0"},
                 "parameter": "cx"}},
-            "parameter": "t0"}}}},
-    {
-      "term": {
-        "name": "hydra.graphql.coder.encodeTypeName",
+            "parameter": "t0"}},
+        "name": "hydra.graphql.coder.encodeTypeDefinition",
         "signature": {
           "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "t0"}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.graph.Graph"}},
             {
               "isLazy": false,
-              "name": "arg0",
+              "name": "arg2",
               "type": {"map": {"keys": {"variable": "hydra.packaging.ModuleName"}, "values": {"literal": {"string": {}}}}}},
-            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.core.Name"}}],
-          "result": {"type": {"variable": "hydra.graphql.syntax.Name"}},
-          "typeParameters": []},
-        "term": {
+            {"isLazy": false, "name": "arg3", "type": {"variable": "hydra.packaging.TypeDefinition"}}],
+          "result": {
+            "type": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "hydra.graphql.syntax.TypeDefinition"}}}},
+          "typeParameters": [{"constraints": [], "name": "t0"}]}}},
+    {
+      "term": {
+        "body": {
           "lambda": {
             "body": {
               "lambda": {
@@ -2369,20 +2359,20 @@
                       {
                         "name": "qualName",
                         "term": {"application": {"argument": {"variable": "name"}, "function": {"variable": "hydra.names.qualifyName"}}},
-                        "typeScheme": {"body": {"variable": "hydra.packaging.QualifiedName"}, "variables": []}},
+                        "typeScheme": {"body": {"variable": "hydra.util.QualifiedName"}, "variables": []}},
                       {
                         "name": "local",
                         "term": {
                           "application": {
                             "argument": {"variable": "qualName"},
-                            "function": {"project": {"fieldName": "local", "typeName": "hydra.packaging.QualifiedName"}}}},
+                            "function": {"project": {"fieldName": "local", "typeName": "hydra.util.QualifiedName"}}}},
                         "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}},
                       {
                         "name": "mns",
                         "term": {
                           "application": {
                             "argument": {"variable": "qualName"},
-                            "function": {"project": {"fieldName": "moduleName", "typeName": "hydra.packaging.QualifiedName"}}}},
+                            "function": {"project": {"fieldName": "moduleName", "typeName": "hydra.util.QualifiedName"}}}},
                         "typeScheme": {"body": {"maybe": {"variable": "hydra.packaging.ModuleName"}}, "variables": []}},
                       {
                         "name": "prefix",
@@ -2435,23 +2425,20 @@
                 "domain": {"variable": "hydra.core.Name"},
                 "parameter": "name"}},
             "domain": {"map": {"keys": {"variable": "hydra.packaging.ModuleName"}, "values": {"literal": {"string": {}}}}},
-            "parameter": "prefixes"}}}},
-    {
-      "term": {
-        "name": "hydra.graphql.coder.encodeUnionFieldType",
+            "parameter": "prefixes"}},
+        "name": "hydra.graphql.coder.encodeTypeName",
         "signature": {
           "parameters": [
-            {"isLazy": false, "name": "arg0", "type": {"variable": "t0"}},
-            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.graph.Graph"}},
             {
               "isLazy": false,
-              "name": "arg2",
+              "name": "arg0",
               "type": {"map": {"keys": {"variable": "hydra.packaging.ModuleName"}, "values": {"literal": {"string": {}}}}}},
-            {"isLazy": false, "name": "arg3", "type": {"variable": "hydra.core.FieldType"}}],
-          "result": {
-            "type": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "hydra.graphql.syntax.FieldDefinition"}}}},
-          "typeParameters": [{"constraints": [], "name": "t0"}]},
-        "term": {
+            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.core.Name"}}],
+          "result": {"type": {"variable": "hydra.graphql.syntax.Name"}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "typeLambda": {
             "body": {
               "lambda": {
@@ -2590,23 +2577,23 @@
                     "parameter": "g"}},
                 "domain": {"variable": "t0"},
                 "parameter": "cx"}},
-            "parameter": "t0"}}}},
-    {
-      "term": {
-        "name": "hydra.graphql.coder.moduleToGraphql",
+            "parameter": "t0"}},
+        "name": "hydra.graphql.coder.encodeUnionFieldType",
         "signature": {
           "parameters": [
-            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.packaging.Module"}},
-            {"isLazy": false, "name": "arg1", "type": {"list": {"variable": "hydra.packaging.Definition"}}},
-            {"isLazy": false, "name": "arg2", "type": {"variable": "t0"}},
-            {"isLazy": false, "name": "arg3", "type": {"variable": "hydra.graph.Graph"}}],
+            {"isLazy": false, "name": "arg0", "type": {"variable": "t0"}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.graph.Graph"}},
+            {
+              "isLazy": false,
+              "name": "arg2",
+              "type": {"map": {"keys": {"variable": "hydra.packaging.ModuleName"}, "values": {"literal": {"string": {}}}}}},
+            {"isLazy": false, "name": "arg3", "type": {"variable": "hydra.core.FieldType"}}],
           "result": {
-            "type": {
-              "either": {
-                "left": {"variable": "hydra.errors.Error"},
-                "right": {"map": {"keys": {"literal": {"string": {}}}, "values": {"literal": {"string": {}}}}}}}},
-          "typeParameters": [{"constraints": [], "name": "t0"}]},
-        "term": {
+            "type": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "hydra.graphql.syntax.FieldDefinition"}}}},
+          "typeParameters": [{"constraints": [], "name": "t0"}]}}},
+    {
+      "term": {
+        "body": {
           "typeLambda": {
             "body": {
               "lambda": {
@@ -2758,7 +2745,7 @@
                                           "application": {"argument": {"variable": "mod"}, "function": {"project": {"fieldName": "name", "typeName": "hydra.packaging.Module"}}}},
                                         "function": {
                                           "application": {
-                                            "argument": {"wrap": {"body": {"literal": {"string": "graphql"}}, "typeName": "hydra.packaging.FileExtension"}},
+                                            "argument": {"wrap": {"body": {"literal": {"string": "graphql"}}, "typeName": "hydra.util.FileExtension"}},
                                             "function": {
                                               "application": {
                                                 "argument": {"inject": {"field": {"name": "camel", "term": {"unit": {}}}, "typeName": "hydra.util.CaseConvention"}},
@@ -2884,15 +2871,23 @@
                     "parameter": "defs"}},
                 "domain": {"variable": "hydra.packaging.Module"},
                 "parameter": "mod"}},
-            "parameter": "t0"}}}},
+            "parameter": "t0"}},
+        "name": "hydra.graphql.coder.moduleToGraphql",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.packaging.Module"}},
+            {"isLazy": false, "name": "arg1", "type": {"list": {"variable": "hydra.packaging.Definition"}}},
+            {"isLazy": false, "name": "arg2", "type": {"variable": "t0"}},
+            {"isLazy": false, "name": "arg3", "type": {"variable": "hydra.graph.Graph"}}],
+          "result": {
+            "type": {
+              "either": {
+                "left": {"variable": "hydra.errors.Error"},
+                "right": {"map": {"keys": {"literal": {"string": {}}}, "values": {"literal": {"string": {}}}}}}}},
+          "typeParameters": [{"constraints": [], "name": "t0"}]}}},
     {
       "term": {
-        "name": "hydra.graphql.coder.sanitize",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"string": {}}}}],
-          "result": {"type": {"literal": {"string": {}}}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "lambda": {
             "body": {
               "application": {
@@ -2902,7 +2897,12 @@
                     "argument": {"variable": "hydra.graphql.language.graphqlReservedWords"},
                     "function": {"variable": "hydra.formatting.sanitizeWithUnderscores"}}}}},
             "domain": {"literal": {"string": {}}},
-            "parameter": "s"}}}}],
+            "parameter": "s"}},
+        "name": "hydra.graphql.coder.sanitize",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"string": {}}}}],
+          "result": {"type": {"literal": {"string": {}}}},
+          "typeParameters": []}}}],
   "dependencies": [
     {"module": "hydra.formatting"},
     {"module": "hydra.names"},
