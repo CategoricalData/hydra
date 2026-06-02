@@ -30,6 +30,7 @@ module_ = Module {
       application,
       applicationType,
       binding,
+      caseAlternative,
       caseStatement,
       eitherType,
       field,
@@ -56,8 +57,21 @@ module_ = Module {
       typeClassConstraint,
       typeLambda,
       typeScheme,
-      typeVariableMetadata,
+      typeVariableConstraints,
       wrappedTerm]
+
+hydraCoreGraph :: Graph
+hydraCoreGraph = elementsToGraph bootstrapGraph M.empty
+    [typeDefinitionAsBinding td | DefinitionType td <- moduleDefinitions module_]
+  where
+    -- elementsToGraph still consumes Bindings; module_ contains only type definitions.
+    typeDefinitionAsBinding td = Binding {
+        bindingName = typeDefinitionName td,
+        bindingTerm = TermAnnotated $ AnnotatedTerm {
+          annotatedTermBody = EncodeCore.type_ (typeSchemeBody (typeDefinitionBody td)),
+          annotatedTermAnnotation = M.fromList [
+            (Name "type", TermVariable (Name "hydra.core.Type"))]},
+        bindingTypeScheme = Just (TypeScheme [] (TypeVariable (Name "hydra.core.Type")) Nothing)}
 
 annotatedTerm :: TypeDefinition
 annotatedTerm = define "AnnotatedTerm" $
@@ -117,6 +131,17 @@ binding = define "Binding" $
       doc "The optional type scheme of the bound term" $
       T.maybe typeScheme]
 
+caseAlternative :: TypeDefinition
+caseAlternative = define "CaseAlternative" $
+  doc "A single alternative of a case statement (union elimination): the variant being matched, together with the term that handles it." $
+  T.record [
+    "name">:
+      doc "The name of the union variant matched by this alternative"
+      name,
+    "handler">:
+      doc "The handler applied to the matched variant's payload"
+      term]
+
 caseStatement :: TypeDefinition
 caseStatement = define "CaseStatement" $
   doc "A union elimination; a case statement" $
@@ -128,9 +153,8 @@ caseStatement = define "CaseStatement" $
       doc "An optional default case, used if none of the explicit cases match" $
       T.maybe term,
     "cases">:
-      doc ("A list of case alternatives, one per union field. Each Field's name is the variant"
-        ++ " tag being matched and term is the handler applied to the variant's payload.") $
-      T.list field]
+      doc "A list of case alternatives, one per union variant being handled" $
+      T.list caseAlternative]
 
 eitherType :: TypeDefinition
 eitherType = define "EitherType" $
@@ -151,7 +175,7 @@ field = define "Field" $
       doc "The name of the field"
       name,
     "term">:
-      doc "The term value of the field"
+      doc "The value of the field"
       term]
 
 fieldType :: TypeDefinition
@@ -206,19 +230,6 @@ functionType = define "FunctionType" $
     "codomain">:
       doc "The codomain (output) type of the function"
       type_]
-
-hydraCoreGraph :: Graph
-hydraCoreGraph = elementsToGraph bootstrapGraph M.empty
-    [typeDefinitionAsBinding td | DefinitionType td <- moduleDefinitions module_]
-  where
-    -- elementsToGraph still consumes Bindings; module_ contains only type definitions.
-    typeDefinitionAsBinding td = Binding {
-        bindingName = typeDefinitionName td,
-        bindingTerm = TermAnnotated $ AnnotatedTerm {
-          annotatedTermBody = EncodeCore.type_ (typeSchemeBody (typeDefinitionTypeScheme td)),
-          annotatedTermAnnotation = M.fromList [
-            (Name "type", TermVariable (Name "hydra.core.Type"))]},
-        bindingTypeScheme = Just (TypeScheme [] (TypeVariable (Name "hydra.core.Type")) Nothing)}
 
 injection :: TypeDefinition
 injection = define "Injection" $
@@ -525,9 +536,11 @@ type_ = define "Type" $
         ++ " is given by the `wrap` variant's argument.")
       type_]
 
+-- Note: named with the -Term suffix (rather than the more natural TypeApplication) to avoid colliding with the
+-- TypeApplication data constructor generated from the Type union's application variant.
 typeApplicationTerm :: TypeDefinition
 typeApplicationTerm = define "TypeApplicationTerm" $
-  doc "A term applied to a type; a type application" $
+  doc "A term applied to a type; a type application." $
   T.record [
     "body">:
       doc "The term being applied to a type"
@@ -566,12 +579,12 @@ typeScheme = define "TypeScheme" $
       doc "The type expression"
       type_,
     "constraints">:
-      doc "Optional metadata for type variables, including typeclass constraints. The map keys are type variable names." $
-      T.maybe $ T.map name typeVariableMetadata]
+      doc "Optional constraints on type variables, including typeclass constraints. The map keys are type variable names." $
+      T.maybe $ T.map name typeVariableConstraints]
 
-typeVariableMetadata :: TypeDefinition
-typeVariableMetadata = define "TypeVariableMetadata" $
-  doc "Metadata associated with a type variable, including typeclass constraints" $
+typeVariableConstraints :: TypeDefinition
+typeVariableConstraints = define "TypeVariableConstraints" $
+  doc "Constraints associated with a type variable, including typeclass constraints" $
   T.record [
     "classes">:
       doc "The typeclass constraints on this type variable" $

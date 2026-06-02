@@ -401,7 +401,7 @@ topologicalSortTypeDefinitions = define "topologicalSortTypeDefinitions" $
   "defs" ~>
   "toPair" <~ ("def" ~> pair
     (Packaging.typeDefinitionName (var "def"))
-    (Sets.toList (typeDependencyNames @@ false @@ (Core.typeSchemeBody $ Packaging.typeDefinitionTypeScheme (var "def"))))) $
+    (Sets.toList (typeDependencyNames @@ false @@ (Core.typeSchemeBody $ Packaging.typeDefinitionBody (var "def"))))) $
   "nameToDef" <~ Maps.fromList (Lists.map
     ("d" ~> pair (Packaging.typeDefinitionName (var "d")) (var "d"))
     (var "defs")) $

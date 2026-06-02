@@ -104,6 +104,15 @@ rewriteAndFoldTerm f term0 =
                                   Core.fieldName = (Core.fieldName field),
                                   Core.fieldTerm = (Pairs.second r)})
                     forFields = forMany forField (\x -> x)
+                    forCaseAlternative =
+                            \val -> \alt ->
+                              let r = recurse val (Core.caseAlternativeHandler alt)
+                              in (
+                                Pairs.first r,
+                                Core.CaseAlternative {
+                                  Core.caseAlternativeName = (Core.caseAlternativeName alt),
+                                  Core.caseAlternativeHandler = (Pairs.second r)})
+                    forCaseAlternatives = forMany forCaseAlternative (\x -> x)
                     forPair =
                             \val -> \kv ->
                               let rk = recurse val (Pairs.first kv)
@@ -134,7 +143,7 @@ rewriteAndFoldTerm f term0 =
                   Core.TermCases v0 ->
                     let rmd = Maybes.map (recurse val0) (Core.caseStatementDefault v0)
                         val1 = Maybes.maybe val0 Pairs.first rmd
-                        rcases = forFields val1 (Core.caseStatementCases v0)
+                        rcases = forCaseAlternatives val1 (Core.caseStatementCases v0)
                     in (
                       Pairs.first rcases,
                       (Core.TermCases (Core.CaseStatement {
@@ -301,15 +310,15 @@ rewriteAndFoldTermWithPath f term0 =
                               Paths.SubtermStepUnionCasesDefault]) val0 def) (Core.caseStatementDefault v0)
                         val1 = Maybes.maybe val0 Pairs.first rmd
                         rcases =
-                                forManyWithAccessors recurse (\x -> x) val1 (Lists.map (\f2 -> (Paths.SubtermStepUnionCasesBranch (Core.fieldName f2), (Core.fieldTerm f2))) (Core.caseStatementCases v0))
+                                forManyWithAccessors recurse (\x -> x) val1 (Lists.map (\f2 -> (Paths.SubtermStepUnionCasesBranch (Core.caseAlternativeName f2), (Core.caseAlternativeHandler f2))) (Core.caseStatementCases v0))
                     in (
                       Pairs.first rcases,
                       (Core.TermCases (Core.CaseStatement {
                         Core.caseStatementTypeName = (Core.caseStatementTypeName v0),
                         Core.caseStatementDefault = (Maybes.map Pairs.second rmd),
-                        Core.caseStatementCases = (Lists.map (\ft -> Core.Field {
-                          Core.fieldName = (Pairs.first ft),
-                          Core.fieldTerm = (Pairs.second ft)}) (Lists.zip (Lists.map Core.fieldName (Core.caseStatementCases v0)) (Pairs.second rcases)))})))
+                        Core.caseStatementCases = (Lists.map (\ft -> Core.CaseAlternative {
+                          Core.caseAlternativeName = (Pairs.first ft),
+                          Core.caseAlternativeHandler = (Pairs.second ft)}) (Lists.zip (Lists.map Core.caseAlternativeName (Core.caseStatementCases v0)) (Pairs.second rcases)))})))
                   Core.TermEither v0 -> Eithers.either (\l ->
                     let rl = recurse (Lists.concat2 path [
                           Paths.SubtermStepSumTerm]) val0 l
@@ -434,7 +443,7 @@ rewriteTerm f term0 =
                   Core.TermCases v0 -> Core.TermCases (Core.CaseStatement {
                     Core.caseStatementTypeName = (Core.caseStatementTypeName v0),
                     Core.caseStatementDefault = (Maybes.map recurse (Core.caseStatementDefault v0)),
-                    Core.caseStatementCases = (Lists.map forField (Core.caseStatementCases v0))})
+                    Core.caseStatementCases = (Lists.map (\alt -> Core.CaseAlternative {Core.caseAlternativeName = (Core.caseAlternativeName alt), Core.caseAlternativeHandler = (recurse (Core.caseAlternativeHandler alt))}) (Core.caseStatementCases v0))})
                   Core.TermEither v0 -> Core.TermEither (Eithers.either (\l -> Left (recurse l)) (\r -> Right (recurse r)) v0)
                   Core.TermLambda v0 -> Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.lambdaParameter v0),
@@ -499,7 +508,7 @@ rewriteTermM f term0 =
                     in (Eithers.bind (Maybes.maybe (Right Nothing) (\t -> Eithers.map Maybes.pure (recurse t)) def) (\rdef -> Eithers.map (\rcases -> Core.TermCases (Core.CaseStatement {
                       Core.caseStatementTypeName = n,
                       Core.caseStatementDefault = rdef,
-                      Core.caseStatementCases = rcases})) (Eithers.mapList forField csCases)))
+                      Core.caseStatementCases = rcases})) (Eithers.mapList (\alt -> Eithers.bind (recurse (Core.caseAlternativeHandler alt)) (\t -> Right (Core.CaseAlternative {Core.caseAlternativeName = (Core.caseAlternativeName alt), Core.caseAlternativeHandler = t}))) csCases)))
                   Core.TermEither v0 -> Eithers.bind (Eithers.either (\l -> Eithers.map (\x -> Left x) (recurse l)) (\r -> Eithers.map (\x -> Right x) (recurse r)) v0) (\re -> Right (Core.TermEither re))
                   Core.TermLambda v0 ->
                     let v = Core.lambdaParameter v0
@@ -589,7 +598,7 @@ rewriteTermWithContext f cx0 term0 =
                   Core.TermCases v0 -> Core.TermCases (Core.CaseStatement {
                     Core.caseStatementTypeName = (Core.caseStatementTypeName v0),
                     Core.caseStatementDefault = (Maybes.map recurse (Core.caseStatementDefault v0)),
-                    Core.caseStatementCases = (Lists.map forField (Core.caseStatementCases v0))})
+                    Core.caseStatementCases = (Lists.map (\alt -> Core.CaseAlternative {Core.caseAlternativeName = (Core.caseAlternativeName alt), Core.caseAlternativeHandler = (recurse (Core.caseAlternativeHandler alt))}) (Core.caseStatementCases v0))})
                   Core.TermEither v0 -> Core.TermEither (Eithers.either (\l -> Left (recurse l)) (\r -> Right (recurse r)) v0)
                   Core.TermLambda v0 -> Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.lambdaParameter v0),
@@ -655,7 +664,7 @@ rewriteTermWithContextM f cx0 term0 =
                     in (Eithers.bind (Maybes.maybe (Right Nothing) (\t -> Eithers.map Maybes.pure (recurse t)) def) (\rdef -> Eithers.map (\rcases -> Core.TermCases (Core.CaseStatement {
                       Core.caseStatementTypeName = n,
                       Core.caseStatementDefault = rdef,
-                      Core.caseStatementCases = rcases})) (Eithers.mapList forField csCases)))
+                      Core.caseStatementCases = rcases})) (Eithers.mapList (\alt -> Eithers.bind (recurse (Core.caseAlternativeHandler alt)) (\t -> Right (Core.CaseAlternative {Core.caseAlternativeName = (Core.caseAlternativeName alt), Core.caseAlternativeHandler = t}))) csCases)))
                   Core.TermEither v0 -> Eithers.bind (Eithers.either (\l -> Eithers.map (\x -> Left x) (recurse l)) (\r -> Eithers.map (\x -> Right x) (recurse r)) v0) (\re -> Right (Core.TermEither re))
                   Core.TermLambda v0 ->
                     let v = Core.lambdaParameter v0
@@ -836,7 +845,7 @@ subterms x =
         Core.applicationFunction v0,
         (Core.applicationArgument v0)]
       Core.TermCases v0 -> Lists.concat2 (Maybes.maybe [] (\t -> [
-        t]) (Core.caseStatementDefault v0)) (Lists.map Core.fieldTerm (Core.caseStatementCases v0))
+        t]) (Core.caseStatementDefault v0)) (Lists.map Core.caseAlternativeHandler (Core.caseStatementCases v0))
       Core.TermEither v0 -> Eithers.either (\l -> [
         l]) (\r -> [
         r]) v0
@@ -877,7 +886,7 @@ subtermsWithSteps x =
         (Paths.SubtermStepApplicationFunction, (Core.applicationFunction v0)),
         (Paths.SubtermStepApplicationArgument, (Core.applicationArgument v0))]
       Core.TermCases v0 -> Lists.concat2 (Maybes.maybe [] (\t -> [
-        (Paths.SubtermStepUnionCasesDefault, t)]) (Core.caseStatementDefault v0)) (Lists.map (\f -> (Paths.SubtermStepUnionCasesBranch (Core.fieldName f), (Core.fieldTerm f))) (Core.caseStatementCases v0))
+        (Paths.SubtermStepUnionCasesDefault, t)]) (Core.caseStatementDefault v0)) (Lists.map (\f -> (Paths.SubtermStepUnionCasesBranch (Core.caseAlternativeName f), (Core.caseAlternativeHandler f))) (Core.caseStatementCases v0))
       Core.TermEither _ -> []
       Core.TermLambda v0 -> [
         (Paths.SubtermStepLambdaBody, (Core.lambdaBody v0))]

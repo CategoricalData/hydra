@@ -348,7 +348,7 @@ encodeModule = define "encodeModule" $
       (Maybes.cat $ Lists.map
         ("d" ~> cases _Definition (var "d") (Just nothing) [
           _Definition_type>>: "td" ~>
-            just (Annotations.typeBinding @@ (Packaging.typeDefinitionName $ var "td") @@ (Core.typeSchemeBody $ Packaging.typeDefinitionTypeScheme $ var "td"))])
+            just (Annotations.typeBinding @@ (Packaging.typeDefinitionName $ var "td") @@ (Core.typeSchemeBody $ Packaging.typeDefinitionBody $ var "td"))])
         (Packaging.moduleDefinitions (var "mod")))) $
     Logic.ifElse (Lists.null (var "typeBindings"))
       (right nothing)
@@ -369,8 +369,9 @@ encodeModule = define "encodeModule" $
             (primitive _lists_map @@ encodeModuleName @@ (Lists.map ("dep" ~> Packaging.moduleDependencyModule (var "dep")) (Packaging.moduleDependencies (var "mod"))))
             (list [Packaging.moduleName (var "mod")]))))
           (Lists.map ("b" ~> Packaging.definitionTerm (Packaging.termDefinition
-            (Core.bindingName $ var "b") nothing (Core.bindingTerm $ var "b")
-            (Maybes.map Scoping.typeSchemeToTermSignature $ Core.bindingTypeScheme $ var "b")))
+            (Core.bindingName $ var "b") nothing
+            (Maybes.map Scoping.typeSchemeToTermSignature $ Core.bindingTypeScheme $ var "b")
+            (Core.bindingTerm $ var "b")))
             (var "encodedBindings")))))
 
 -- | Encode a Name as a Term (produces a wrapped term of type hydra.core.Name)
@@ -567,7 +568,7 @@ encodeUnionTypeNamed = define "encodeUnionTypeNamed" $
         (var "ename")
         nothing
         (primitive _lists_map @@
-          ("ft" ~> Core.field
+          ("ft" ~> Core.caseAlternative
             (Core.fieldTypeName (var "ft"))
             (encodeFieldValue
               @@ var "ename"
@@ -837,12 +838,12 @@ encoderTypeScheme = define "encoderTypeScheme" $
       ("v" ~> Lists.elem (var "v" :: TypedTerm Name) (var "typeVars" :: TypedTerm [Name]))
       (var "allOrdVars"),
 
-    -- Build constraints map: {varName -> TypeVariableMetadata {classes = {ordering}}}
+    -- Build constraints map: {varName -> TypeVariableConstraints {classes = {ordering}}}
     "constraints">:
       Logic.ifElse (Lists.null (var "ordVars"))
         nothing
         (just $ Maps.fromList $ Lists.map
-          ("v" ~> pair (var "v") (Core.typeVariableMetadata $ list [Core.typeClassConstraintSimple $ Core.name (string "ordering")]))
+          ("v" ~> pair (var "v") (Core.typeVariableConstraints $ list [Core.typeClassConstraintSimple $ Core.name (string "ordering")]))
           (var "ordVars"))] $
   Core.typeScheme (var "typeVars") (var "encoderFunType") (var "constraints")
 
@@ -868,7 +869,7 @@ encoderTypeSchemeNamed = define "encoderTypeSchemeNamed" $
       Logic.ifElse (Lists.null (var "ordVars"))
         nothing
         (just $ Maps.fromList $ Lists.map
-          ("v" ~> pair (var "v") (Core.typeVariableMetadata $ list [Core.typeClassConstraintSimple $ Core.name (string "ordering")]))
+          ("v" ~> pair (var "v") (Core.typeVariableConstraints $ list [Core.typeClassConstraintSimple $ Core.name (string "ordering")]))
           (var "ordVars"))] $
   Core.typeScheme (var "typeVars") (var "encoderFunType") (var "constraints")
 -- | Filter bindings to only encodable type definitions

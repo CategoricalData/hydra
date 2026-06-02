@@ -56,15 +56,15 @@ idTypeSubst = Typing.TypeSubst Maps.empty
 singletonTypeSubst :: Core.Name -> Core.Type -> Typing.TypeSubst
 singletonTypeSubst v t = Typing.TypeSubst (Maps.singleton v t)
 -- | Apply a type substitution to class constraints, propagating to free variables
-substInClassConstraints :: Typing.TypeSubst -> M.Map Core.Name Core.TypeVariableMetadata -> M.Map Core.Name Core.TypeVariableMetadata
+substInClassConstraints :: Typing.TypeSubst -> M.Map Core.Name Core.TypeVariableConstraints -> M.Map Core.Name Core.TypeVariableConstraints
 substInClassConstraints subst constraints =
 
       let substMap = Typing.unTypeSubst subst
           insertOrMerge =
                   \varName -> \metadata -> \acc -> Maybes.maybe (Maps.insert varName metadata acc) (\existing ->
                     let merged =
-                            Core.TypeVariableMetadata {
-                              Core.typeVariableMetadataClasses = (Lists.nub (Lists.concat2 (Core.typeVariableMetadataClasses existing) (Core.typeVariableMetadataClasses metadata)))}
+                            Core.TypeVariableConstraints {
+                              Core.typeVariableConstraintsClasses = (Lists.nub (Lists.concat2 (Core.typeVariableConstraintsClasses existing) (Core.typeVariableConstraintsClasses metadata)))}
                     in (Maps.insert varName merged acc)) (Maps.lookup varName acc)
       in (Lists.foldl (\acc -> \pair ->
         let varName = Pairs.first pair
