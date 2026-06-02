@@ -20,7 +20,7 @@
   "Build a PrimitiveDefinition (#156 shape) from name + arity (for annotation primitives)."
   (let* ((ts (make-prim-type-scheme arity))
          (sig (funcall hydra_scoping_type_scheme_to_term_signature ts)))
-    (make-hydra_packaging_primitive_definition name sig (list :nothing) t t (list :nothing))))
+    (make-hydra_packaging_primitive_definition name (list :nothing) sig t t (list :nothing))))
 
 (defun collect-type-vars-ordered (typ)
   "Collect type variable names from a Hydra type in order of first appearance."
@@ -91,7 +91,7 @@
   "Build a PrimitiveDefinition (#156 shape) from name + signature."
   (let* ((ts (build-type-scheme variables inputs output constraints))
          (sig (funcall hydra_scoping_type_scheme_to_term_signature ts)))
-    (make-hydra_packaging_primitive_definition pname sig (list :nothing) t t (list :nothing))))
+    (make-hydra_packaging_primitive_definition pname (list :nothing) sig t t (list :nothing))))
 
 ;; ============================================================================
 ;; Error helpers
