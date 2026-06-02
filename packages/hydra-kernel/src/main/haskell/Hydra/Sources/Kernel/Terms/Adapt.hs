@@ -588,13 +588,28 @@ dataGraphToDefinitions = define "dataGraphToDefinitions" $
     Core.letBindings $ var "letAfter") $
 
   -- Note: this is a rough test of typedness, as it only checks that the top-level bindings are typed.
+  -- A binding reaching this gate is past inference (or on a no-infer path), so a missing type scheme
+  -- is an error here — not the legitimate pre-inference "untyped" state of DSL-defined modules. The
+  -- error names each offending binding qualified by its source module (recovered from the binding's
+  -- namespace-qualified Name) so a stale/renamed-field regression points straight at the module to
+  -- regenerate, rather than dumping bare local names the way it used to (the #368/#414 pain: the
+  -- failure surfaced here but never said *where* from). See claude/pitfalls.md "Found untyped bindings".
+  "qualifyUntyped" <~ ("b" ~>
+    "nm" <~ Core.unName (Core.bindingName $ var "b") $
+    optCases (Names.moduleNameOf @@ (Core.bindingName $ var "b"))
+      (Strings.cat2 (string "(no module) ") (var "nm"))
+      ("ns" ~> Strings.concat [Packaging.unModuleName (var "ns"), string " :: ", var "nm"])) $
   "checkBindingsTyped" <~ ("debugLabel" ~> "bindings" ~>
-    "untypedBindings" <~ Lists.map ("b" ~> Core.unName (Core.bindingName $ var "b"))
+    "untypedBindings" <~ Lists.map (var "qualifyUntyped")
       (Lists.filter ("b" ~> Logic.not $ Maybes.isJust (Core.bindingTypeScheme $ var "b")) (var "bindings")) $
     Logic.ifElse (Lists.null $ var "untypedBindings")
       (right $ var "bindings")
       (left $ Error.errorOther $ Error.otherError $ Strings.concat [
-        string "Found untyped bindings (", var "debugLabel", string "): ",
+        string "Found ", Literals.showInt32 (Lists.length $ var "untypedBindings"),
+        string " untyped binding(s) (", var "debugLabel",
+        string "); each must carry a type scheme at this stage. ",
+        string "This usually means stale dist/json field shapes after a kernel record rename ",
+        string "(regenerate the affected package's JSON). Offending bindings (module :: name): ",
         Strings.intercalate (string ", ") (var "untypedBindings")])) $
 
   -- Normalize: push type applications inward past applications and lambdas.

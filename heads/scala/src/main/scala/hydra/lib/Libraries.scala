@@ -200,8 +200,8 @@ object Libraries:
   private def mkPrimDef(name: String, ts: TypeScheme): hydra.packaging.PrimitiveDefinition =
     hydra.packaging.PrimitiveDefinition(
       name,
-      hydra.scoping.typeSchemeToTermSignature(ts),
       None,
+      hydra.scoping.typeSchemeToTermSignature(ts),
       true,
       true,
       None)
