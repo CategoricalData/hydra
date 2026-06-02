@@ -66,6 +66,17 @@ _Binding = Name "hydra.core.Binding"
 _Binding_name = Name "name"
 _Binding_term = Name "term"
 _Binding_typeScheme = Name "typeScheme"
+-- | A single alternative of a case statement (union elimination): the variant being matched, together with the term that handles it.
+data CaseAlternative =
+  CaseAlternative {
+    -- | The name of the union variant matched by this alternative
+    caseAlternativeName :: Name,
+    -- | The handler applied to the matched variant's payload
+    caseAlternativeHandler :: Term}
+  deriving (Eq, Ord, Read, Show)
+_CaseAlternative = Name "hydra.core.CaseAlternative"
+_CaseAlternative_name = Name "name"
+_CaseAlternative_handler = Name "handler"
 -- | A union elimination; a case statement
 data CaseStatement =
   CaseStatement {
@@ -73,8 +84,8 @@ data CaseStatement =
     caseStatementTypeName :: Name,
     -- | An optional default case, used if none of the explicit cases match
     caseStatementDefault :: (Maybe Term),
-    -- | A list of case alternatives, one per union field. Each Field's name is the variant tag being matched and term is the handler applied to the variant's payload.
-    caseStatementCases :: [Field]}
+    -- | A list of case alternatives, one per union variant being handled
+    caseStatementCases :: [CaseAlternative]}
   deriving (Eq, Ord, Read, Show)
 _CaseStatement = Name "hydra.core.CaseStatement"
 _CaseStatement_typeName = Name "typeName"
@@ -505,21 +516,21 @@ data TypeScheme =
     typeSchemeVariables :: [Name],
     -- | The type expression
     typeSchemeBody :: Type,
-    -- | Optional metadata for type variables, including typeclass constraints. The map keys are type variable names.
-    typeSchemeConstraints :: (Maybe (M.Map Name TypeVariableMetadata))}
+    -- | Optional constraints on type variables, including typeclass constraints. The map keys are type variable names.
+    typeSchemeConstraints :: (Maybe (M.Map Name TypeVariableConstraints))}
   deriving (Eq, Ord, Read, Show)
 _TypeScheme = Name "hydra.core.TypeScheme"
 _TypeScheme_variables = Name "variables"
 _TypeScheme_body = Name "body"
 _TypeScheme_constraints = Name "constraints"
--- | Metadata associated with a type variable, including typeclass constraints
-data TypeVariableMetadata =
-  TypeVariableMetadata {
+-- | Constraints associated with a type variable, including typeclass constraints
+data TypeVariableConstraints =
+  TypeVariableConstraints {
     -- | The typeclass constraints on this type variable
-    typeVariableMetadataClasses :: [TypeClassConstraint]}
+    typeVariableConstraintsClasses :: [TypeClassConstraint]}
   deriving (Eq, Ord, Read, Show)
-_TypeVariableMetadata = Name "hydra.core.TypeVariableMetadata"
-_TypeVariableMetadata_classes = Name "classes"
+_TypeVariableConstraints = Name "hydra.core.TypeVariableConstraints"
+_TypeVariableConstraints_classes = Name "classes"
 -- | A term wrapped in a type name
 data WrappedTerm =
   WrappedTerm {

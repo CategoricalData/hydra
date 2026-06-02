@@ -97,7 +97,7 @@ constructModule namespaces mod defs cx g =
                   \def -> case def of
                     Packaging.DefinitionType v0 ->
                       let name = Packaging.typeDefinitionName v0
-                          typ = Core.typeSchemeBody (Packaging.typeDefinitionTypeScheme v0)
+                          typ = Core.typeSchemeBody (Packaging.typeDefinitionBody v0)
                       in (toTypeDeclarationsFrom namespaces name typ cx g)
                     Packaging.DefinitionTerm v0 -> Eithers.bind (toDataDeclaration namespaces v0 cx g) (\d -> Right [
                       d])
@@ -185,8 +185,8 @@ encodeCaseExpression depth namespaces stmt scrutinee cx g =
           fields = Core.caseStatementCases stmt
           toAlt =
                   \fieldMap -> \field ->
-                    let fn = Core.fieldName field
-                        fun_ = Core.fieldTerm field
+                    let fn = Core.caseAlternativeName field
+                        fun_ = Core.caseAlternativeHandler field
                         v0 = Strings.cat2 "v" (Literals.showInt32 depth)
                         raw =
                                 Core.TermApplication (Core.Application {
@@ -530,11 +530,11 @@ gatherMetadata defs =
       let addDef =
               \meta -> \def -> case def of
                 Packaging.DefinitionTerm v0 ->
-                  let term = Packaging.termDefinitionTerm v0
+                  let term = Packaging.termDefinitionBody v0
                       metaWithTerm = Rewriting.foldOverTerm Coders.TraversalOrderPre (\m -> \t -> extendMetaForTerm m t) meta term
                   in (Maybes.maybe metaWithTerm (\ts -> Rewriting.foldOverType Coders.TraversalOrderPre (\m -> \t -> extendMetaForType m t) metaWithTerm (Core.typeSchemeBody ts)) (Maybes.map Scoping.termSignatureToTypeScheme (Packaging.termDefinitionSignature v0)))
                 Packaging.DefinitionType v0 ->
-                  let typ = Core.typeSchemeBody (Packaging.typeDefinitionTypeScheme v0)
+                  let typ = Core.typeSchemeBody (Packaging.typeDefinitionBody v0)
                   in (Rewriting.foldOverType Coders.TraversalOrderPre (\m -> \t -> extendMetaForType m t) meta typ)
       in (Lists.foldl addDef emptyMetadata defs)
 -- | Get implicit typeclass constraints for type variables that need Ord
@@ -555,7 +555,7 @@ moduleToHaskell :: Packaging.Module -> [Packaging.Definition] -> t0 -> Graph.Gra
 moduleToHaskell mod defs cx g =
     Eithers.bind (moduleToHaskellModule mod defs cx g) (\hsmod ->
       let s = Serialization.printExpr (Serialization.parenthesize (Serde.moduleToExpr hsmod))
-          filepath = Names.moduleNameToFilePath Util.CaseConventionPascal (Packaging.FileExtension "hs") (Packaging.moduleName mod)
+          filepath = Names.moduleNameToFilePath Util.CaseConventionPascal (Util.FileExtension "hs") (Packaging.moduleName mod)
       in (Right (Maps.singleton filepath s)))
 -- | Convert a Hydra module and definitions to a Haskell module AST
 moduleToHaskellModule :: Packaging.Module -> [Packaging.Definition] -> t0 -> Graph.Graph -> Either Errors.Error Syntax.Module
@@ -617,7 +617,7 @@ toDataDeclaration :: Util.ModuleNames Syntax.ModuleName -> Packaging.TermDefinit
 toDataDeclaration namespaces def cx g =
 
       let name = Packaging.termDefinitionName def
-          term = Packaging.termDefinitionTerm def
+          term = Packaging.termDefinitionBody def
           typ = Maybes.map Scoping.termSignatureToTypeScheme (Packaging.termDefinitionSignature def)
           hname = Utils.simpleName (Names.localNameOf name)
           rewriteValueBinding =
@@ -725,9 +725,9 @@ toTypeDeclarationsFrom namespaces elementName typ cx g =
                         deconflict =
                                 \name ->
                                   let tname =
-                                          Names.unqualifyName (Packaging.QualifiedName {
-                                            Packaging.qualifiedNameModuleName = (Just (Pairs.first (Util.moduleNamesFocus namespaces))),
-                                            Packaging.qualifiedNameLocal = name})
+                                          Names.unqualifyName (Util.QualifiedName {
+                                            Util.qualifiedNameModuleName = (Just (Pairs.first (Util.moduleNamesFocus namespaces))),
+                                            Util.qualifiedNameLocal = name})
                                   in (Logic.ifElse (Sets.member tname boundNames_) (deconflict (Strings.cat2 name "_")) name)
                     in (Eithers.bind (Annotations.getTypeDescription cx g ftype) (\comments ->
                       let nm = deconflict (Strings.cat2 (Formatting.capitalize lname_) (Formatting.capitalize (Core.unName fname)))
@@ -820,8 +820,8 @@ typeDecl namespaces name typ cx g =
                         forVariableType =
                                 \vname ->
                                   let qname = Names.qualifyName vname
-                                      mns = Packaging.qualifiedNameModuleName qname
-                                      local = Packaging.qualifiedNameLocal qname
+                                      mns = Util.qualifiedNameModuleName qname
+                                      local = Util.qualifiedNameLocal qname
                                   in (Maybes.map (\ns -> Core.TermVariable (Names.qname ns (Strings.cat [
                                     "_",
                                     local,
@@ -840,13 +840,13 @@ typeDecl namespaces name typ cx g =
                       Syntax.simpleValueBindingComments = Nothing}))
         in (Right decl)))
 -- | Project type scheme constraints to a map of type variables to typeclass names
-typeSchemeConstraintsToClassMap :: Ord t0 => (Maybe (M.Map t0 Core.TypeVariableMetadata) -> M.Map t0 (S.Set Core.Name))
+typeSchemeConstraintsToClassMap :: Ord t0 => (Maybe (M.Map t0 Core.TypeVariableConstraints) -> M.Map t0 (S.Set Core.Name))
 typeSchemeConstraintsToClassMap maybeConstraints =
 
       let constraintToName =
               \tcc -> case tcc of
                 Core.TypeClassConstraintSimple v0 -> Just v0
-      in (Maybes.maybe Maps.empty (\constraints -> Maps.map (\meta -> Sets.fromList (Maybes.cat (Lists.map constraintToName (Core.typeVariableMetadataClasses meta)))) constraints) maybeConstraints)
+      in (Maybes.maybe Maps.empty (\constraints -> Maps.map (\meta -> Sets.fromList (Maybes.cat (Lists.map constraintToName (Core.typeVariableConstraintsClasses meta)))) constraints) maybeConstraints)
 -- | Whether to use the Hydra core import in generated modules
 useCoreImport :: Bool
 useCoreImport = True

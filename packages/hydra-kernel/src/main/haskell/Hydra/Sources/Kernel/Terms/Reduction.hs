@@ -356,10 +356,10 @@ etaExpandTerm = define "etaExpandTerm" $
     -- Helper for case statement branches - forces expansion of the branch body
     -- This is needed because case branches represent partial function values that need full expansion
     "forCaseBranch" <~ ("f" ~>
-      "branchBody" <~ var "recurse" @@ var "tx" @@ Core.fieldTerm (var "f") $
+      "branchBody" <~ var "recurse" @@ var "tx" @@ Core.caseAlternativeHandler (var "f") $
       "arty" <~ var "termArityWithContext" @@ var "tx" @@ var "branchBody" $
       "branchHType" <~ var "termHeadType" @@ var "tx" @@ var "branchBody" $
-      Core.fieldWithTerm (var "f") (var "expand" @@ true @@ list ([] :: [TypedTerm Term]) @@ var "arty" @@ var "branchHType" @@ var "branchBody")) $
+      Core.caseAlternativeWithHandler (var "f") (var "expand" @@ true @@ list ([] :: [TypedTerm Term]) @@ var "arty" @@ var "branchHType" @@ var "branchBody")) $
 
     -- Helper for maps
     "forMap" <~ ("mp" ~>
@@ -614,8 +614,8 @@ etaExpandTypedTerm = define "etaExpandTypedTerm" $
       (var "recurse" @@ var "tx" @@ (var "unwind" @@ var "term"))) $
 
     "forCase" <~ ("f" ~>
-      "r" <<~ var "rewrite" @@ false @@ true @@ list ([] :: [TypedTerm Type]) @@ var "recurse" @@ var "tx" @@ Core.fieldTerm (var "f") $
-      right $ Core.fieldWithTerm (var "f") (var "r")) $
+      "r" <<~ var "rewrite" @@ false @@ true @@ list ([] :: [TypedTerm Type]) @@ var "recurse" @@ var "tx" @@ Core.caseAlternativeHandler (var "f") $
+      right $ Core.caseAlternativeWithHandler (var "f") (var "r")) $
 
     -- Forcing case statement branches is intended for Python, where we cannot accept a branch which is simply
     -- a variable or a primitive reference; we need to expand these to lambdas.
@@ -777,7 +777,7 @@ reduceTerm = define "reduceTerm" $
   "applyCases" <~ ("cs" ~> "reducedArg" ~>
     "field" <<~ ExtractCore.injection @@ (Core.caseStatementTypeName $ var "cs") @@ var "graph" @@ var "reducedArg" $
     "matching" <~ (Lists.find
-      ("f" ~> Equality.equal (Core.fieldName $ var "f") (Core.fieldName $ var "field"))
+      ("f" ~> Equality.equal (Core.caseAlternativeName $ var "f") (Core.fieldName $ var "field"))
       (Core.caseStatementCases $ var "cs")) $
     Maybes.maybe
       (Maybes.maybe
@@ -785,7 +785,7 @@ reduceTerm = define "reduceTerm" $
         (reify right)
         (Core.caseStatementDefault $ var "cs"))
       ("mf" ~> right $ Core.termApplication $ Core.application
-        (Core.fieldTerm $ var "mf")
+        (Core.caseAlternativeHandler $ var "mf")
         (Core.fieldTerm $ var "field"))
       (var "matching")) $
   "applyIfNullary" <~ ("eager" ~> "original" ~> "args" ~>
@@ -932,11 +932,12 @@ termIsValue = define "termIsValue" $
   "forList" <~ ("els" ~> Lists.foldl ("b" ~> "t" ~> Logic.and (var "b") (termIsValue @@ var "t")) true (var "els")) $
   "checkField" <~ ("f" ~> termIsValue @@ Core.fieldTerm (var "f")) $
   "checkFields" <~ ("fields" ~> Lists.foldl ("b" ~> "f" ~> Logic.and (var "b") (var "checkField" @@ var "f")) true (var "fields")) $
+  "checkCaseAlternatives" <~ ("alts" ~> Lists.foldl ("b" ~> "a" ~> Logic.and (var "b") (termIsValue @@ Core.caseAlternativeHandler (var "a"))) true (var "alts")) $
   cases _Term (Strip.deannotateTerm @@ var "term")
     (Just false) [
     _Term_application>>: constant false,
     _Term_cases>>: "cs" ~>
-      Logic.and (var "checkFields" @@ Core.caseStatementCases (var "cs"))
+      Logic.and (var "checkCaseAlternatives" @@ Core.caseStatementCases (var "cs"))
         (Maybes.maybe true termIsValue (Core.caseStatementDefault $ var "cs")),
     _Term_either>>: "e" ~>
       Eithers.either_

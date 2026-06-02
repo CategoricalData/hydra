@@ -18,7 +18,7 @@ data Graph =
     -- | The type schemes of all term variables in scope
     graphBoundTypes :: (M.Map Core.Name Core.TypeScheme),
     -- | A mutable map from type variable names to their accumulated class constraints. This is populated during type inference when operations requiring Eq or Ord are encountered.
-    graphClassConstraints :: (M.Map Core.Name Core.TypeVariableMetadata),
+    graphClassConstraints :: (M.Map Core.Name Core.TypeVariableConstraints),
     -- | The set of term variables introduced by specifically by lambdas
     graphLambdaVariables :: (S.Set Core.Name),
     -- | Any additional metadata bound to term variables in scope

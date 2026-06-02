@@ -205,7 +205,7 @@ checkConflictingVariantNames = define "checkConflictingVariantNames" $
           _Definition_type>>: "td" ~>
             "typeName" <~ Packaging.typeDefinitionName (var "td") $
             "localTypeName" <~ (Names.localNameOf @@ var "typeName") $
-            "typ" <~ (Core.typeSchemeBody $ Packaging.typeDefinitionTypeScheme (var "td")) $
+            "typ" <~ (Core.typeSchemeBody $ Packaging.typeDefinitionBody (var "td")) $
             cases _Type (var "typ") (Just nothing) [
               _Type_union>>: "fields" ~>
                 -- Check each field of the union
@@ -249,12 +249,12 @@ checkDefinitionDocumentation = define "checkDefinitionDocumentation" $
         ("name" <~ (definitionName @@ var "def") $
           "documented" <~ cases _Definition (var "def") (Just false) [
             _Definition_term>>: "td" ~>
-              "term" <~ Packaging.termDefinitionTerm (var "td") $
+              "term" <~ Packaging.termDefinitionBody (var "td") $
               cases _Term (var "term") (Just false) [
                 _Term_annotated>>: "at" ~>
                   Annotations.hasDescription @@ (Core.annotatedTermAnnotation $ var "at")],
             _Definition_type>>: "td" ~>
-              "typ" <~ (Core.typeSchemeBody $ Packaging.typeDefinitionTypeScheme (var "td")) $
+              "typ" <~ (Core.typeSchemeBody $ Packaging.typeDefinitionBody (var "td")) $
               cases _Type (var "typ") (Just false) [
                 _Type_annotated>>: "at" ~>
                   Annotations.hasDescription @@ (Core.annotatedTypeAnnotation $ var "at")],
