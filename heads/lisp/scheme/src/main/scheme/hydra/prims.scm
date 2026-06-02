@@ -94,7 +94,7 @@
       (let* ((constraints (if (pair? rest) (car rest) #f))
              (ts (build-type-scheme variables inputs output constraints))
              (sig (hydra_scoping_type_scheme_to_term_signature ts)))
-        (make-hydra_packaging_primitive_definition pname sig (list 'nothing) #t #t (list 'nothing))))
+        (make-hydra_packaging_primitive_definition pname (list 'nothing) sig #t #t (list 'nothing))))
 
     ;; Convert an alist of (varname . TypeVariableConstraints) into the wrapped
     ;; Option[Map[Name, TypeVariableConstraints]] shape that TypeScheme expects.
