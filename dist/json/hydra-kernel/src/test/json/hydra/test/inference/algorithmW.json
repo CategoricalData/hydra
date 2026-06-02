@@ -2,9 +2,7 @@
   "definitions": [
     {
       "term": {
-        "name": "hydra.test.inference.algorithmW.allTests",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Algorithm W test cases"}}}],
             "body": {
@@ -16,12 +14,12 @@
                   {
                     "name": "cases",
                     "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}],
-                "typeName": "hydra.testing.TestGroup"}}}}}},
+                "typeName": "hydra.testing.TestGroup"}}}},
+        "name": "hydra.test.inference.algorithmW.allTests",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.test.inference.algorithmW.testGroupForSystemF",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "record": {
             "fields": [
               {"name": "name", "term": {"literal": {"string": "STLC to System F"}}},
@@ -167,7 +165,7 @@
                                                           "term": {
                                                             "typeApplication": {
                                                               "body": {"maybe": null},
-                                                              "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableMetadata"}}}}}}],
+                                                              "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}],
                                                       "typeName": "hydra.core.TypeScheme"}},
                                                   "function": {"variable": "hydra.show.core.typeScheme"}}},
                                               "domain": {"unit": {}},
@@ -336,7 +334,7 @@
                                                           "term": {
                                                             "typeApplication": {
                                                               "body": {"maybe": null},
-                                                              "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableMetadata"}}}}}}],
+                                                              "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}],
                                                       "typeName": "hydra.core.TypeScheme"}},
                                                   "function": {"variable": "hydra.show.core.typeScheme"}}},
                                               "domain": {"unit": {}},
@@ -522,7 +520,7 @@
                                                           "term": {
                                                             "typeApplication": {
                                                               "body": {"maybe": null},
-                                                              "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableMetadata"}}}}}}],
+                                                              "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}],
                                                       "typeName": "hydra.core.TypeScheme"}},
                                                   "function": {"variable": "hydra.show.core.typeScheme"}}},
                                               "domain": {"unit": {}},
@@ -708,7 +706,7 @@
                                                           "term": {
                                                             "typeApplication": {
                                                               "body": {"maybe": null},
-                                                              "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableMetadata"}}}}}}],
+                                                              "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}],
                                                       "typeName": "hydra.core.TypeScheme"}},
                                                   "function": {"variable": "hydra.show.core.typeScheme"}}},
                                               "domain": {"unit": {}},
@@ -893,7 +891,7 @@
                                                           "term": {
                                                             "typeApplication": {
                                                               "body": {"maybe": null},
-                                                              "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableMetadata"}}}}}}],
+                                                              "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}],
                                                       "typeName": "hydra.core.TypeScheme"}},
                                                   "function": {"variable": "hydra.show.core.typeScheme"}}},
                                               "domain": {"unit": {}},
@@ -1151,7 +1149,7 @@
                                                           "term": {
                                                             "typeApplication": {
                                                               "body": {"maybe": null},
-                                                              "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableMetadata"}}}}}}],
+                                                              "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}],
                                                       "typeName": "hydra.core.TypeScheme"}},
                                                   "function": {"variable": "hydra.show.core.typeScheme"}}},
                                               "domain": {"unit": {}},
@@ -1504,7 +1502,7 @@
                                                           "term": {
                                                             "typeApplication": {
                                                               "body": {"maybe": null},
-                                                              "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableMetadata"}}}}}}],
+                                                              "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}],
                                                       "typeName": "hydra.core.TypeScheme"}},
                                                   "function": {"variable": "hydra.show.core.typeScheme"}}},
                                               "domain": {"unit": {}},
@@ -1763,7 +1761,7 @@
                                                           "term": {
                                                             "typeApplication": {
                                                               "body": {"maybe": null},
-                                                              "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableMetadata"}}}}}}],
+                                                              "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}],
                                                       "typeName": "hydra.core.TypeScheme"}},
                                                   "function": {"variable": "hydra.show.core.typeScheme"}}},
                                               "domain": {"unit": {}},
@@ -2189,7 +2187,7 @@
                                                           "term": {
                                                             "typeApplication": {
                                                               "body": {"maybe": null},
-                                                              "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableMetadata"}}}}}}],
+                                                              "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}],
                                                       "typeName": "hydra.core.TypeScheme"}},
                                                   "function": {"variable": "hydra.show.core.typeScheme"}}},
                                               "domain": {"unit": {}},
@@ -2603,7 +2601,7 @@
                                                           "term": {
                                                             "typeApplication": {
                                                               "body": {"maybe": null},
-                                                              "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableMetadata"}}}}}}],
+                                                              "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}],
                                                       "typeName": "hydra.core.TypeScheme"}},
                                                   "function": {"variable": "hydra.show.core.typeScheme"}}},
                                               "domain": {"unit": {}},
@@ -3037,7 +3035,7 @@
                                                           "term": {
                                                             "typeApplication": {
                                                               "body": {"maybe": null},
-                                                              "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableMetadata"}}}}}}],
+                                                              "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}],
                                                       "typeName": "hydra.core.TypeScheme"}},
                                                   "function": {"variable": "hydra.show.core.typeScheme"}}},
                                               "domain": {"unit": {}},
@@ -3471,7 +3469,7 @@
                                                           "term": {
                                                             "typeApplication": {
                                                               "body": {"maybe": null},
-                                                              "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableMetadata"}}}}}}],
+                                                              "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}],
                                                       "typeName": "hydra.core.TypeScheme"}},
                                                   "function": {"variable": "hydra.show.core.typeScheme"}}},
                                               "domain": {"unit": {}},
@@ -3481,7 +3479,9 @@
                           {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
-            "typeName": "hydra.testing.TestGroup"}}}}],
+            "typeName": "hydra.testing.TestGroup"}},
+        "name": "hydra.test.inference.algorithmW.testGroupForSystemF",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []}}}],
   "dependencies": [
     {"module": "hydra.test.testGraph"},
     {"module": "hydra.inference"},

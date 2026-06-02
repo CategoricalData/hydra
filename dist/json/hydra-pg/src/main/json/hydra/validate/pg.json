@@ -2,22 +2,7 @@
   "definitions": [
     {
       "term": {
-        "name": "hydra.validate.pg.appendFindingEdge",
-        "signature": {
-          "parameters": [
-            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.validation.ValidationProfile"}},
-            {
-              "isLazy": false,
-              "name": "arg1",
-              "type": {"application": {"argument": {"variable": "t0"}, "function": {"variable": "hydra.validation.ValidationResult"}}}},
-            {
-              "isLazy": false,
-              "name": "arg2",
-              "type": {"maybe": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"variable": "t0"}}}}}],
-          "result": {
-            "type": {"application": {"argument": {"variable": "t0"}, "function": {"variable": "hydra.validation.ValidationResult"}}}},
-          "typeParameters": [{"constraints": [], "name": "t0"}]},
-        "term": {
+        "body": {
           "typeLambda": {
             "body": {
               "annotated": {
@@ -237,10 +222,8 @@
                         "parameter": "acc"}},
                     "domain": {"variable": "hydra.validation.ValidationProfile"},
                     "parameter": "p"}}}},
-            "parameter": "t0"}}}},
-    {
-      "term": {
-        "name": "hydra.validate.pg.appendFindingGraph",
+            "parameter": "t0"}},
+        "name": "hydra.validate.pg.appendFindingEdge",
         "signature": {
           "parameters": [
             {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.validation.ValidationProfile"}},
@@ -254,8 +237,10 @@
               "type": {"maybe": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"variable": "t0"}}}}}],
           "result": {
             "type": {"application": {"argument": {"variable": "t0"}, "function": {"variable": "hydra.validation.ValidationResult"}}}},
-          "typeParameters": [{"constraints": [], "name": "t0"}]},
-        "term": {
+          "typeParameters": [{"constraints": [], "name": "t0"}]}}},
+    {
+      "term": {
+        "body": {
           "typeLambda": {
             "body": {
               "annotated": {
@@ -475,10 +460,8 @@
                         "parameter": "acc"}},
                     "domain": {"variable": "hydra.validation.ValidationProfile"},
                     "parameter": "p"}}}},
-            "parameter": "t0"}}}},
-    {
-      "term": {
-        "name": "hydra.validate.pg.appendFindingProperty",
+            "parameter": "t0"}},
+        "name": "hydra.validate.pg.appendFindingGraph",
         "signature": {
           "parameters": [
             {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.validation.ValidationProfile"}},
@@ -492,8 +475,10 @@
               "type": {"maybe": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"variable": "t0"}}}}}],
           "result": {
             "type": {"application": {"argument": {"variable": "t0"}, "function": {"variable": "hydra.validation.ValidationResult"}}}},
-          "typeParameters": [{"constraints": [], "name": "t0"}]},
-        "term": {
+          "typeParameters": [{"constraints": [], "name": "t0"}]}}},
+    {
+      "term": {
+        "body": {
           "typeLambda": {
             "body": {
               "annotated": {
@@ -713,10 +698,8 @@
                         "parameter": "acc"}},
                     "domain": {"variable": "hydra.validation.ValidationProfile"},
                     "parameter": "p"}}}},
-            "parameter": "t0"}}}},
-    {
-      "term": {
-        "name": "hydra.validate.pg.appendFindingVertex",
+            "parameter": "t0"}},
+        "name": "hydra.validate.pg.appendFindingProperty",
         "signature": {
           "parameters": [
             {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.validation.ValidationProfile"}},
@@ -730,8 +713,10 @@
               "type": {"maybe": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"variable": "t0"}}}}}],
           "result": {
             "type": {"application": {"argument": {"variable": "t0"}, "function": {"variable": "hydra.validation.ValidationResult"}}}},
-          "typeParameters": [{"constraints": [], "name": "t0"}]},
-        "term": {
+          "typeParameters": [{"constraints": [], "name": "t0"}]}}},
+    {
+      "term": {
+        "body": {
           "typeLambda": {
             "body": {
               "annotated": {
@@ -953,12 +938,25 @@
                         "parameter": "acc"}},
                     "domain": {"variable": "hydra.validation.ValidationProfile"},
                     "parameter": "p"}}}},
-            "parameter": "t0"}}}},
+            "parameter": "t0"}},
+        "name": "hydra.validate.pg.appendFindingVertex",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.validation.ValidationProfile"}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {"application": {"argument": {"variable": "t0"}, "function": {"variable": "hydra.validation.ValidationResult"}}}},
+            {
+              "isLazy": false,
+              "name": "arg2",
+              "type": {"maybe": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"variable": "t0"}}}}}],
+          "result": {
+            "type": {"application": {"argument": {"variable": "t0"}, "function": {"variable": "hydra.validation.ValidationResult"}}}},
+          "typeParameters": [{"constraints": [], "name": "t0"}]}}},
     {
       "term": {
-        "name": "hydra.validate.pg.defaultPgProfile",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.validation.ValidationProfile"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -1001,17 +999,12 @@
                     "term": {"typeApplication": {"body": {"variable": "hydra.lib.sets.empty"}, "type": {"variable": "hydra.core.Name"}}}},
                   {"name": "maxErrors", "term": {"literal": {"integer": {"int32": 1}}}},
                   {"name": "maxWarnings", "term": {"literal": {"integer": {"int32": 20}}}}],
-                "typeName": "hydra.validation.ValidationProfile"}}}}}},
+                "typeName": "hydra.validation.ValidationProfile"}}}},
+        "name": "hydra.validate.pg.defaultPgProfile",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.validation.ValidationProfile"}}, "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.validate.pg.enabledPg",
-        "signature": {
-          "parameters": [
-            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.validation.ValidationProfile"}},
-            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.core.Name"}}],
-          "result": {"type": {"literal": {"boolean": {}}}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -1049,40 +1042,17 @@
                     "domain": {"variable": "hydra.core.Name"},
                     "parameter": "ruleName"}},
                 "domain": {"variable": "hydra.validation.ValidationProfile"},
-                "parameter": "p"}}}}}},
-    {
-      "term": {
-        "name": "hydra.validate.pg.validateEdge",
+                "parameter": "p"}}}},
+        "name": "hydra.validate.pg.enabledPg",
         "signature": {
           "parameters": [
             {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.validation.ValidationProfile"}},
-            {
-              "isLazy": false,
-              "name": "arg1",
-              "type": {
-                "function": {
-                  "codomain": {"function": {"codomain": {"maybe": {"variable": "hydra.error.pg.InvalidValueError"}}, "domain": {"variable": "t1"}}},
-                  "domain": {"variable": "t0"}}}},
-            {
-              "isLazy": false,
-              "name": "arg2",
-              "type": {
-                "maybe": {"function": {"codomain": {"maybe": {"variable": "hydra.pg.model.VertexLabel"}}, "domain": {"variable": "t1"}}}}},
-            {
-              "isLazy": false,
-              "name": "arg3",
-              "type": {"application": {"argument": {"variable": "t0"}, "function": {"variable": "hydra.pg.model.EdgeType"}}}},
-            {
-              "isLazy": false,
-              "name": "arg4",
-              "type": {"application": {"argument": {"variable": "t1"}, "function": {"variable": "hydra.pg.model.Edge"}}}}],
-          "result": {
-            "type": {
-              "application": {
-                "argument": {"variable": "hydra.error.pg.InvalidEdgeError"},
-                "function": {"variable": "hydra.validation.ValidationResult"}}}},
-          "typeParameters": [{"constraints": [], "name": "t0"}, {"constraints": [], "name": "t1"}]},
-        "term": {
+            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.core.Name"}}],
+          "result": {"type": {"literal": {"boolean": {}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "typeLambda": {
             "body": {
               "typeLambda": {
@@ -1881,10 +1851,8 @@
                         "domain": {"variable": "hydra.validation.ValidationProfile"},
                         "parameter": "p"}}}},
                 "parameter": "t1"}},
-            "parameter": "t0"}}}},
-    {
-      "term": {
-        "name": "hydra.validate.pg.validateGraph",
+            "parameter": "t0"}},
+        "name": "hydra.validate.pg.validateEdge",
         "signature": {
           "parameters": [
             {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.validation.ValidationProfile"}},
@@ -1892,31 +1860,31 @@
               "isLazy": false,
               "name": "arg1",
               "type": {
-                "application": {
-                  "argument": {"application": {"argument": {"variable": "t0"}, "function": {"variable": "hydra.error.pg.InvalidGraphError"}}},
-                  "function": {"variable": "hydra.validation.ValidationResult"}}}},
+                "function": {
+                  "codomain": {"function": {"codomain": {"maybe": {"variable": "hydra.error.pg.InvalidValueError"}}, "domain": {"variable": "t1"}}},
+                  "domain": {"variable": "t0"}}}},
             {
               "isLazy": false,
               "name": "arg2",
               "type": {
-                "function": {
-                  "codomain": {"function": {"codomain": {"maybe": {"variable": "hydra.error.pg.InvalidValueError"}}, "domain": {"variable": "t0"}}},
-                  "domain": {"variable": "t1"}}}},
+                "maybe": {"function": {"codomain": {"maybe": {"variable": "hydra.pg.model.VertexLabel"}}, "domain": {"variable": "t1"}}}}},
             {
               "isLazy": false,
               "name": "arg3",
-              "type": {"application": {"argument": {"variable": "t1"}, "function": {"variable": "hydra.pg.model.GraphSchema"}}}},
+              "type": {"application": {"argument": {"variable": "t0"}, "function": {"variable": "hydra.pg.model.EdgeType"}}}},
             {
               "isLazy": false,
               "name": "arg4",
-              "type": {"application": {"argument": {"variable": "t0"}, "function": {"variable": "hydra.pg.model.Graph"}}}}],
+              "type": {"application": {"argument": {"variable": "t1"}, "function": {"variable": "hydra.pg.model.Edge"}}}}],
           "result": {
             "type": {
               "application": {
-                "argument": {"application": {"argument": {"variable": "t0"}, "function": {"variable": "hydra.error.pg.InvalidGraphError"}}},
+                "argument": {"variable": "hydra.error.pg.InvalidEdgeError"},
                 "function": {"variable": "hydra.validation.ValidationResult"}}}},
-          "typeParameters": [{"constraints": [{"simple": "ordering"}], "name": "t0"}, {"constraints": [], "name": "t1"}]},
-        "term": {
+          "typeParameters": [{"constraints": [], "name": "t0"}, {"constraints": [], "name": "t1"}]}}},
+    {
+      "term": {
+        "body": {
           "typeLambda": {
             "body": {
               "typeLambda": {
@@ -2421,10 +2389,8 @@
                         "domain": {"variable": "hydra.validation.ValidationProfile"},
                         "parameter": "p"}}}},
                 "parameter": "t1"}},
-            "parameter": "t0"}}}},
-    {
-      "term": {
-        "name": "hydra.validate.pg.validateProperties",
+            "parameter": "t0"}},
+        "name": "hydra.validate.pg.validateGraph",
         "signature": {
           "parameters": [
             {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.validation.ValidationProfile"}},
@@ -2432,24 +2398,33 @@
               "isLazy": false,
               "name": "arg1",
               "type": {
-                "function": {
-                  "codomain": {"function": {"codomain": {"maybe": {"variable": "hydra.error.pg.InvalidValueError"}}, "domain": {"variable": "t1"}}},
-                  "domain": {"variable": "t0"}}}},
+                "application": {
+                  "argument": {"application": {"argument": {"variable": "t0"}, "function": {"variable": "hydra.error.pg.InvalidGraphError"}}},
+                  "function": {"variable": "hydra.validation.ValidationResult"}}}},
             {
               "isLazy": false,
               "name": "arg2",
-              "type": {"list": {"application": {"argument": {"variable": "t0"}, "function": {"variable": "hydra.pg.model.PropertyType"}}}}},
+              "type": {
+                "function": {
+                  "codomain": {"function": {"codomain": {"maybe": {"variable": "hydra.error.pg.InvalidValueError"}}, "domain": {"variable": "t0"}}},
+                  "domain": {"variable": "t1"}}}},
             {
               "isLazy": false,
               "name": "arg3",
-              "type": {"map": {"keys": {"variable": "hydra.pg.model.PropertyKey"}, "values": {"variable": "t1"}}}}],
+              "type": {"application": {"argument": {"variable": "t1"}, "function": {"variable": "hydra.pg.model.GraphSchema"}}}},
+            {
+              "isLazy": false,
+              "name": "arg4",
+              "type": {"application": {"argument": {"variable": "t0"}, "function": {"variable": "hydra.pg.model.Graph"}}}}],
           "result": {
             "type": {
               "application": {
-                "argument": {"variable": "hydra.error.pg.InvalidElementPropertyError"},
+                "argument": {"application": {"argument": {"variable": "t0"}, "function": {"variable": "hydra.error.pg.InvalidGraphError"}}},
                 "function": {"variable": "hydra.validation.ValidationResult"}}}},
-          "typeParameters": [{"constraints": [], "name": "t0"}, {"constraints": [], "name": "t1"}]},
-        "term": {
+          "typeParameters": [{"constraints": [{"simple": "ordering"}], "name": "t0"}, {"constraints": [], "name": "t1"}]}}},
+    {
+      "term": {
+        "body": {
           "typeLambda": {
             "body": {
               "typeLambda": {
@@ -3020,10 +2995,8 @@
                         "domain": {"variable": "hydra.validation.ValidationProfile"},
                         "parameter": "p"}}}},
                 "parameter": "t1"}},
-            "parameter": "t0"}}}},
-    {
-      "term": {
-        "name": "hydra.validate.pg.validateVertex",
+            "parameter": "t0"}},
+        "name": "hydra.validate.pg.validateProperties",
         "signature": {
           "parameters": [
             {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.validation.ValidationProfile"}},
@@ -3037,18 +3010,20 @@
             {
               "isLazy": false,
               "name": "arg2",
-              "type": {"application": {"argument": {"variable": "t0"}, "function": {"variable": "hydra.pg.model.VertexType"}}}},
+              "type": {"list": {"application": {"argument": {"variable": "t0"}, "function": {"variable": "hydra.pg.model.PropertyType"}}}}},
             {
               "isLazy": false,
               "name": "arg3",
-              "type": {"application": {"argument": {"variable": "t1"}, "function": {"variable": "hydra.pg.model.Vertex"}}}}],
+              "type": {"map": {"keys": {"variable": "hydra.pg.model.PropertyKey"}, "values": {"variable": "t1"}}}}],
           "result": {
             "type": {
               "application": {
-                "argument": {"variable": "hydra.error.pg.InvalidVertexError"},
+                "argument": {"variable": "hydra.error.pg.InvalidElementPropertyError"},
                 "function": {"variable": "hydra.validation.ValidationResult"}}}},
-          "typeParameters": [{"constraints": [], "name": "t0"}, {"constraints": [], "name": "t1"}]},
-        "term": {
+          "typeParameters": [{"constraints": [], "name": "t0"}, {"constraints": [], "name": "t1"}]}}},
+    {
+      "term": {
+        "body": {
           "typeLambda": {
             "body": {
               "typeLambda": {
@@ -3418,7 +3393,32 @@
                         "domain": {"variable": "hydra.validation.ValidationProfile"},
                         "parameter": "p"}}}},
                 "parameter": "t1"}},
-            "parameter": "t0"}}}}],
+            "parameter": "t0"}},
+        "name": "hydra.validate.pg.validateVertex",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.validation.ValidationProfile"}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {
+                "function": {
+                  "codomain": {"function": {"codomain": {"maybe": {"variable": "hydra.error.pg.InvalidValueError"}}, "domain": {"variable": "t1"}}},
+                  "domain": {"variable": "t0"}}}},
+            {
+              "isLazy": false,
+              "name": "arg2",
+              "type": {"application": {"argument": {"variable": "t0"}, "function": {"variable": "hydra.pg.model.VertexType"}}}},
+            {
+              "isLazy": false,
+              "name": "arg3",
+              "type": {"application": {"argument": {"variable": "t1"}, "function": {"variable": "hydra.pg.model.Vertex"}}}}],
+          "result": {
+            "type": {
+              "application": {
+                "argument": {"variable": "hydra.error.pg.InvalidVertexError"},
+                "function": {"variable": "hydra.validation.ValidationResult"}}}},
+          "typeParameters": [{"constraints": [], "name": "t0"}, {"constraints": [], "name": "t1"}]}}}],
   "dependencies": [{"module": "hydra.pg.model"}, {"module": "hydra.error.pg"}, {"module": "hydra.validation"}, {"module": "hydra.core"}],
   "metadata": {"comments": [], "description": "Validation functions for property graphs", "seeAlso": []},
   "name": "hydra.validate.pg"}

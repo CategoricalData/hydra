@@ -49,7 +49,7 @@ public class Generation {
     public static Graph bootstrapGraph() {
         Map<Name, Term> boundTerms = new HashMap<>();
         Map<Name, TypeScheme> boundTypes = new HashMap<>();
-        Map<Name, hydra.core.TypeVariableMetadata> classConstraints = new HashMap<>();
+        Map<Name, hydra.core.TypeVariableConstraints> classConstraints = new HashMap<>();
         java.util.Set<Name> lambdaVariables = new HashSet<>();
         Map<Name, Term> metadata = new HashMap<>();
 
@@ -506,7 +506,7 @@ public class Generation {
                             hydra.Serialization.parenthesize(
                                     hydra.lisp.Serde.programToExpr(program)));
                     String filePath = hydra.Names.moduleNameToFilePath(
-                            cc, new hydra.packaging.FileExtension(fileExt), mod.name);
+                            cc, new hydra.util.FileExtension(fileExt), mod.name);
                     Map<String, String> fileMap = new java.util.TreeMap<>();
                     fileMap.put(filePath, code);
                     return new hydra.util.Either.Right(fileMap);
@@ -537,9 +537,9 @@ public class Generation {
             d.accept(new Definition.Visitor<Void>() {
                 @Override public Void visit(Definition.Term td) {
                     TermDefinition t = td.value;
-                    Term newTerm = Strip.removeTypesFromTerm(t.term);
+                    Term newTerm = Strip.removeTypesFromTerm(t.body);
                     Maybe<TermSignature> newType = Maybe.nothing();
-                    stripped.add(new Definition.Term(new TermDefinition(t.name, hydra.util.Maybe.nothing(), newTerm, newType)));
+                    stripped.add(new Definition.Term(new TermDefinition(t.name, hydra.util.Maybe.nothing(), newType, newTerm)));
                     return null;
                 }
                 @Override public Void visit(Definition.Type td) {

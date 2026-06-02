@@ -2,8 +2,7 @@
   "definitions": [
     {
       "type": {
-        "name": "hydra.lisp.syntax.Program",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [
@@ -40,11 +39,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The top-level forms in the program"}}}],
                         "body": {"list": {"variable": "hydra.lisp.syntax.TopLevelFormWithComments"}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.lisp.syntax.Program"}},
     {
       "type": {
-        "name": "hydra.lisp.syntax.TopLevelForm",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A top-level form in a Lisp program"}}}],
@@ -86,11 +85,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "A bare expression at the top level"}}}],
                         "body": {"variable": "hydra.lisp.syntax.Expression"}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.lisp.syntax.TopLevelForm"}},
     {
       "type": {
-        "name": "hydra.lisp.syntax.TopLevelFormWithComments",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A top-level form together with optional documentation"}}}],
@@ -114,11 +113,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The form itself"}}}],
                         "body": {"variable": "hydra.lisp.syntax.TopLevelForm"}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.lisp.syntax.TopLevelFormWithComments"}},
     {
       "type": {
-        "name": "hydra.lisp.syntax.FunctionDefinition",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [
@@ -165,11 +164,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The function body (one or more expressions)"}}}],
                         "body": {"list": {"variable": "hydra.lisp.syntax.Expression"}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.lisp.syntax.FunctionDefinition"}},
     {
       "type": {
-        "name": "hydra.lisp.syntax.VariableDefinition",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [
@@ -198,11 +197,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "Optional docstring"}}}],
                         "body": {"maybe": {"variable": "hydra.lisp.syntax.Docstring"}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.lisp.syntax.VariableDefinition"}},
     {
       "type": {
-        "name": "hydra.lisp.syntax.ConstantDefinition",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [
@@ -231,11 +230,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "Optional docstring"}}}],
                         "body": {"maybe": {"variable": "hydra.lisp.syntax.Docstring"}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.lisp.syntax.ConstantDefinition"}},
     {
       "type": {
-        "name": "hydra.lisp.syntax.RecordTypeDefinition",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [
@@ -264,11 +263,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "Optional docstring"}}}],
                         "body": {"maybe": {"variable": "hydra.lisp.syntax.Docstring"}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.lisp.syntax.RecordTypeDefinition"}},
     {
       "type": {
-        "name": "hydra.lisp.syntax.FieldDefinition",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A field in a record type definition"}}}],
@@ -286,11 +285,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "Optional default value"}}}],
                         "body": {"maybe": {"variable": "hydra.lisp.syntax.Expression"}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.lisp.syntax.FieldDefinition"}},
     {
       "type": {
-        "name": "hydra.lisp.syntax.MacroDefinition",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [
@@ -325,11 +324,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The macro body"}}}],
                         "body": {"list": {"variable": "hydra.lisp.syntax.Expression"}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.lisp.syntax.MacroDefinition"}},
     {
       "type": {
-        "name": "hydra.lisp.syntax.Expression",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A Lisp expression"}}}],
@@ -494,11 +493,11 @@
                             "key": "description",
                             "value": {"literal": {"string": "An arbitrary S-expression (escape hatch for dialect-specific forms)"}}}],
                         "body": {"variable": "hydra.lisp.syntax.SExpression"}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.lisp.syntax.Expression"}},
     {
       "type": {
-        "name": "hydra.lisp.syntax.Application",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "Function application: (function arg1 arg2 ...)"}}}],
@@ -516,11 +515,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The arguments"}}}],
                         "body": {"list": {"variable": "hydra.lisp.syntax.Expression"}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.lisp.syntax.Application"}},
     {
       "type": {
-        "name": "hydra.lisp.syntax.Lambda",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [
@@ -558,11 +557,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The lambda body"}}}],
                         "body": {"list": {"variable": "hydra.lisp.syntax.Expression"}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.lisp.syntax.Lambda"}},
     {
       "type": {
-        "name": "hydra.lisp.syntax.VariableReference",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A reference to a variable by name"}}}],
@@ -585,11 +584,11 @@
                               "literal": {
                                 "string": "Whether to reference from the function namespace. In Lisp-2 dialects (Common Lisp), this emits #'name. In Lisp-1 dialects, this has no effect."}}}],
                         "body": {"literal": {"boolean": {}}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.lisp.syntax.VariableReference"}},
     {
       "type": {
-        "name": "hydra.lisp.syntax.FieldAccess",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [
@@ -618,11 +617,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The expression being accessed"}}}],
                         "body": {"variable": "hydra.lisp.syntax.Expression"}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.lisp.syntax.FieldAccess"}},
     {
       "type": {
-        "name": "hydra.lisp.syntax.TypeAnnotation",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "An expression with a type annotation"}}}],
@@ -640,11 +639,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The type specifier"}}}],
                         "body": {"variable": "hydra.lisp.syntax.TypeSpecifier"}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.lisp.syntax.TypeAnnotation"}},
     {
       "type": {
-        "name": "hydra.lisp.syntax.IfExpression",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "Conditional: (if test then else)"}}}],
@@ -668,11 +667,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "Optional else branch"}}}],
                         "body": {"maybe": {"variable": "hydra.lisp.syntax.Expression"}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.lisp.syntax.IfExpression"}},
     {
       "type": {
-        "name": "hydra.lisp.syntax.CondExpression",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [
@@ -695,11 +694,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "Optional default expression"}}}],
                         "body": {"maybe": {"variable": "hydra.lisp.syntax.Expression"}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.lisp.syntax.CondExpression"}},
     {
       "type": {
-        "name": "hydra.lisp.syntax.CondClause",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A clause in a cond expression"}}}],
@@ -717,11 +716,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The result expression"}}}],
                         "body": {"variable": "hydra.lisp.syntax.Expression"}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.lisp.syntax.CondClause"}},
     {
       "type": {
-        "name": "hydra.lisp.syntax.CaseExpression",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [
@@ -750,11 +749,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "Optional default clause"}}}],
                         "body": {"maybe": {"variable": "hydra.lisp.syntax.Expression"}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.lisp.syntax.CaseExpression"}},
     {
       "type": {
-        "name": "hydra.lisp.syntax.CaseClause",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A clause in a case expression"}}}],
@@ -772,11 +771,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The result expression"}}}],
                         "body": {"variable": "hydra.lisp.syntax.Expression"}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.lisp.syntax.CaseClause"}},
     {
       "type": {
-        "name": "hydra.lisp.syntax.AndExpression",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "Logical and: (and expr1 expr2 ...)"}}}],
@@ -788,11 +787,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The operand expressions"}}}],
                         "body": {"list": {"variable": "hydra.lisp.syntax.Expression"}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.lisp.syntax.AndExpression"}},
     {
       "type": {
-        "name": "hydra.lisp.syntax.OrExpression",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "Logical or: (or expr1 expr2 ...)"}}}],
@@ -804,11 +803,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The operand expressions"}}}],
                         "body": {"list": {"variable": "hydra.lisp.syntax.Expression"}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.lisp.syntax.OrExpression"}},
     {
       "type": {
-        "name": "hydra.lisp.syntax.NotExpression",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "Logical negation: (not expr)"}}}],
@@ -820,11 +819,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The operand expression"}}}],
                         "body": {"variable": "hydra.lisp.syntax.Expression"}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.lisp.syntax.NotExpression"}},
     {
       "type": {
-        "name": "hydra.lisp.syntax.DoExpression",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [
@@ -841,11 +840,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The expressions to evaluate in sequence"}}}],
                         "body": {"list": {"variable": "hydra.lisp.syntax.Expression"}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.lisp.syntax.DoExpression"}},
     {
       "type": {
-        "name": "hydra.lisp.syntax.BeginExpression",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [
@@ -860,11 +859,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The expressions to evaluate in sequence"}}}],
                         "body": {"list": {"variable": "hydra.lisp.syntax.Expression"}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.lisp.syntax.BeginExpression"}},
     {
       "type": {
-        "name": "hydra.lisp.syntax.QuoteExpression",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A quoted form: 'expr or (quote expr)"}}}],
@@ -876,11 +875,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The quoted form"}}}],
                         "body": {"variable": "hydra.lisp.syntax.Expression"}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.lisp.syntax.QuoteExpression"}},
     {
       "type": {
-        "name": "hydra.lisp.syntax.QuasiquoteExpression",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A quasiquoted form: `expr"}}}],
@@ -892,11 +891,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The quasiquoted form"}}}],
                         "body": {"variable": "hydra.lisp.syntax.Expression"}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.lisp.syntax.QuasiquoteExpression"}},
     {
       "type": {
-        "name": "hydra.lisp.syntax.UnquoteExpression",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "An unquoted form within a quasiquote: ~expr or ,expr"}}}],
@@ -908,11 +907,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The unquoted form"}}}],
                         "body": {"variable": "hydra.lisp.syntax.Expression"}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.lisp.syntax.UnquoteExpression"}},
     {
       "type": {
-        "name": "hydra.lisp.syntax.SplicingUnquoteExpression",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A splicing unquote within a quasiquote: ~@expr or ,@expr"}}}],
@@ -924,11 +923,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The spliced form"}}}],
                         "body": {"variable": "hydra.lisp.syntax.Expression"}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.lisp.syntax.SplicingUnquoteExpression"}},
     {
       "type": {
-        "name": "hydra.lisp.syntax.LetExpression",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [
@@ -957,11 +956,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The body expressions"}}}],
                         "body": {"list": {"variable": "hydra.lisp.syntax.Expression"}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.lisp.syntax.LetExpression"}},
     {
       "type": {
-        "name": "hydra.lisp.syntax.LetKind",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "The kind of let binding"}}}],
@@ -970,11 +969,11 @@
                   {"name": "parallel", "type": {"unit": {}}},
                   {"name": "sequential", "type": {"unit": {}}},
                   {"name": "recursive", "type": {"unit": {}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.lisp.syntax.LetKind"}},
     {
       "type": {
-        "name": "hydra.lisp.syntax.LetBinding",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A single binding in a let expression"}}}],
@@ -992,11 +991,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "A destructuring binding"}}}],
                         "body": {"variable": "hydra.lisp.syntax.DestructuringBinding"}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.lisp.syntax.LetBinding"}},
     {
       "type": {
-        "name": "hydra.lisp.syntax.SimpleBinding",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A simple name-value binding in a let expression"}}}],
@@ -1014,11 +1013,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The value expression"}}}],
                         "body": {"variable": "hydra.lisp.syntax.Expression"}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.lisp.syntax.SimpleBinding"}},
     {
       "type": {
-        "name": "hydra.lisp.syntax.DestructuringBinding",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A destructuring binding in a let expression"}}}],
@@ -1036,11 +1035,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The value to destructure"}}}],
                         "body": {"variable": "hydra.lisp.syntax.Expression"}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.lisp.syntax.DestructuringBinding"}},
     {
       "type": {
-        "name": "hydra.lisp.syntax.DestructuringPattern",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A destructuring pattern"}}}],
@@ -1070,11 +1069,11 @@
                             "key": "description",
                             "value": {"literal": {"string": "Destructuring with a rest element: [a b & rest] (leading symbols + rest symbol)"}}}],
                         "body": {"list": {"variable": "hydra.lisp.syntax.Symbol"}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.lisp.syntax.DestructuringPattern"}},
     {
       "type": {
-        "name": "hydra.lisp.syntax.Pattern",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A pattern for use in case expressions or match forms"}}}],
@@ -1104,11 +1103,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "A variable pattern that binds the matched value"}}}],
                         "body": {"variable": "hydra.lisp.syntax.Symbol"}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.lisp.syntax.Pattern"}},
     {
       "type": {
-        "name": "hydra.lisp.syntax.ConstructorPattern",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A constructor pattern matching a tagged value"}}}],
@@ -1126,11 +1125,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The sub-patterns for constructor arguments"}}}],
                         "body": {"list": {"variable": "hydra.lisp.syntax.Pattern"}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.lisp.syntax.ConstructorPattern"}},
     {
       "type": {
-        "name": "hydra.lisp.syntax.LiteralPattern",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A pattern matching a literal value"}}}],
@@ -1142,20 +1141,20 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The literal to match"}}}],
                         "body": {"variable": "hydra.lisp.syntax.Literal"}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.lisp.syntax.LiteralPattern"}},
     {
       "type": {
-        "name": "hydra.lisp.syntax.WildcardPattern",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A wildcard pattern that matches any value"}}}],
               "body": {"record": []}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.lisp.syntax.WildcardPattern"}},
     {
       "type": {
-        "name": "hydra.lisp.syntax.Literal",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A Lisp literal value"}}}],
@@ -1209,11 +1208,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "A quoted symbol literal"}}}],
                         "body": {"variable": "hydra.lisp.syntax.Symbol"}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.lisp.syntax.Literal"}},
     {
       "type": {
-        "name": "hydra.lisp.syntax.IntegerLiteral",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "An integer literal"}}}],
@@ -1234,11 +1233,11 @@
                             "key": "description",
                             "value": {"literal": {"string": "Whether this is explicitly a big integer (e.g. 42N in Clojure)"}}}],
                         "body": {"literal": {"boolean": {}}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.lisp.syntax.IntegerLiteral"}},
     {
       "type": {
-        "name": "hydra.lisp.syntax.FloatLiteral",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A floating-point literal"}}}],
@@ -1259,11 +1258,11 @@
                             "key": "description",
                             "value": {"literal": {"string": "Optional precision hint (e.g. 3.14d0 vs 3.14f0 in Common Lisp)"}}}],
                         "body": {"maybe": {"literal": {"string": {}}}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.lisp.syntax.FloatLiteral"}},
     {
       "type": {
-        "name": "hydra.lisp.syntax.CharacterLiteral",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1279,11 +1278,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The character value"}}}],
                         "body": {"literal": {"string": {}}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.lisp.syntax.CharacterLiteral"}},
     {
       "type": {
-        "name": "hydra.lisp.syntax.BooleanStyle",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "The style of boolean literals in a dialect"}}}],
@@ -1292,29 +1291,29 @@
                   {"name": "trueFalse", "type": {"unit": {}}},
                   {"name": "tNil", "type": {"unit": {}}},
                   {"name": "hashTF", "type": {"unit": {}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.lisp.syntax.BooleanStyle"}},
     {
       "type": {
-        "name": "hydra.lisp.syntax.NilStyle",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "The style of nil/null in a dialect"}}}],
               "body": {"union": [{"name": "nil", "type": {"unit": {}}}, {"name": "emptyList", "type": {"unit": {}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.lisp.syntax.NilStyle"}},
     {
       "type": {
-        "name": "hydra.lisp.syntax.Symbol",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A Lisp symbol (identifier)"}}}],
               "body": {"wrap": {"literal": {"string": {}}}}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.lisp.syntax.Symbol"}},
     {
       "type": {
-        "name": "hydra.lisp.syntax.Keyword",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1336,11 +1335,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "Optional namespace (e.g. my.ns/foo in Clojure)"}}}],
                         "body": {"maybe": {"literal": {"string": {}}}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.lisp.syntax.Keyword"}},
     {
       "type": {
-        "name": "hydra.lisp.syntax.QualifiedSymbol",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1362,20 +1361,20 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The local name"}}}],
                         "body": {"literal": {"string": {}}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.lisp.syntax.QualifiedSymbol"}},
     {
       "type": {
-        "name": "hydra.lisp.syntax.NamespaceName",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A namespace or package name"}}}],
               "body": {"wrap": {"literal": {"string": {}}}}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.lisp.syntax.NamespaceName"}},
     {
       "type": {
-        "name": "hydra.lisp.syntax.ListLiteral",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A list literal: '(1 2 3) or (list 1 2 3)"}}}],
@@ -1393,11 +1392,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "Whether to use quote syntax vs constructor syntax"}}}],
                         "body": {"literal": {"boolean": {}}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.lisp.syntax.ListLiteral"}},
     {
       "type": {
-        "name": "hydra.lisp.syntax.VectorLiteral",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1413,11 +1412,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The vector elements"}}}],
                         "body": {"list": {"variable": "hydra.lisp.syntax.Expression"}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.lisp.syntax.VectorLiteral"}},
     {
       "type": {
-        "name": "hydra.lisp.syntax.MapLiteral",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1434,11 +1433,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The key-value pairs"}}}],
                         "body": {"list": {"variable": "hydra.lisp.syntax.MapEntry"}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.lisp.syntax.MapLiteral"}},
     {
       "type": {
-        "name": "hydra.lisp.syntax.MapEntry",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A key-value pair in a map literal"}}}],
@@ -1456,11 +1455,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The value expression"}}}],
                         "body": {"variable": "hydra.lisp.syntax.Expression"}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.lisp.syntax.MapEntry"}},
     {
       "type": {
-        "name": "hydra.lisp.syntax.SetLiteral",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1476,11 +1475,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The set elements"}}}],
                         "body": {"list": {"variable": "hydra.lisp.syntax.Expression"}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.lisp.syntax.SetLiteral"}},
     {
       "type": {
-        "name": "hydra.lisp.syntax.ConsExpression",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A cons expression: (cons head tail)"}}}],
@@ -1498,11 +1497,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The tail (typically a list or another cons)"}}}],
                         "body": {"variable": "hydra.lisp.syntax.Expression"}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.lisp.syntax.ConsExpression"}},
     {
       "type": {
-        "name": "hydra.lisp.syntax.DottedPair",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A dotted pair literal: '(a . b). Not available in Clojure."}}}],
@@ -1520,11 +1519,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The second element"}}}],
                         "body": {"variable": "hydra.lisp.syntax.Expression"}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.lisp.syntax.DottedPair"}},
     {
       "type": {
-        "name": "hydra.lisp.syntax.TypeHint",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1547,11 +1546,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The type specifier"}}}],
                         "body": {"variable": "hydra.lisp.syntax.TypeSpecifier"}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.lisp.syntax.TypeHint"}},
     {
       "type": {
-        "name": "hydra.lisp.syntax.TypeSpecifier",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A type specifier"}}}],
@@ -1609,11 +1608,11 @@
                     "name": "unit",
                     "type": {
                       "annotated": {"annotation": [{"key": "description", "value": {"literal": {"string": "The unit type"}}}], "body": {"unit": {}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.lisp.syntax.TypeSpecifier"}},
     {
       "type": {
-        "name": "hydra.lisp.syntax.ModuleDeclaration",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1636,11 +1635,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "Optional module documentation"}}}],
                         "body": {"maybe": {"variable": "hydra.lisp.syntax.Docstring"}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.lisp.syntax.ModuleDeclaration"}},
     {
       "type": {
-        "name": "hydra.lisp.syntax.ImportDeclaration",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1663,11 +1662,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "Import specification"}}}],
                         "body": {"variable": "hydra.lisp.syntax.ImportSpec"}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.lisp.syntax.ImportDeclaration"}},
     {
       "type": {
-        "name": "hydra.lisp.syntax.ImportSpec",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "An import specification describing how to import symbols"}}}],
@@ -1699,11 +1698,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "Import with renaming: list of (from, to) symbol pairs"}}}],
                         "body": {"list": {"list": {"variable": "hydra.lisp.syntax.Symbol"}}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.lisp.syntax.ImportSpec"}},
     {
       "type": {
-        "name": "hydra.lisp.syntax.ExportDeclaration",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1720,11 +1719,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The symbols to export"}}}],
                         "body": {"list": {"variable": "hydra.lisp.syntax.Symbol"}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.lisp.syntax.ExportDeclaration"}},
     {
       "type": {
-        "name": "hydra.lisp.syntax.Comment",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A comment"}}}],
@@ -1742,11 +1741,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The comment text"}}}],
                         "body": {"literal": {"string": {}}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.lisp.syntax.Comment"}},
     {
       "type": {
-        "name": "hydra.lisp.syntax.CommentStyle",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "The style of a comment"}}}],
@@ -1755,20 +1754,20 @@
                   {"name": "line", "type": {"unit": {}}},
                   {"name": "block", "type": {"unit": {}}},
                   {"name": "datum", "type": {"unit": {}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.lisp.syntax.CommentStyle"}},
     {
       "type": {
-        "name": "hydra.lisp.syntax.Docstring",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A documentation string"}}}],
               "body": {"wrap": {"literal": {"string": {}}}}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.lisp.syntax.Docstring"}},
     {
       "type": {
-        "name": "hydra.lisp.syntax.Dialect",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A Lisp dialect"}}}],
@@ -1778,11 +1777,11 @@
                   {"name": "emacsLisp", "type": {"unit": {}}},
                   {"name": "commonLisp", "type": {"unit": {}}},
                   {"name": "scheme", "type": {"unit": {}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.lisp.syntax.Dialect"}},
     {
       "type": {
-        "name": "hydra.lisp.syntax.SExpression",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [
@@ -1805,7 +1804,8 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "A list of S-expressions"}}}],
                         "body": {"list": {"variable": "hydra.lisp.syntax.SExpression"}}}}}]}}},
-          "variables": []}}}],
+          "variables": []},
+        "name": "hydra.lisp.syntax.SExpression"}}],
   "dependencies": [{"module": "hydra.core"}],
   "metadata": {
     "comments": [],

@@ -2,9 +2,7 @@
   "definitions": [
     {
       "term": {
-        "name": "hydra.test.inference.kernelExamples.allTests",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Examples from the Hydra kernel"}}}],
             "body": {
@@ -16,12 +14,12 @@
                   {
                     "name": "cases",
                     "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}],
-                "typeName": "hydra.testing.TestGroup"}}}}}},
+                "typeName": "hydra.testing.TestGroup"}}}},
+        "name": "hydra.test.inference.kernelExamples.allTests",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.test.inference.kernelExamples.testGroupForNestedLet",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "record": {
             "fields": [
               {"name": "name", "term": {"literal": {"string": "Nested let"}}},
@@ -543,7 +541,7 @@
                                                                       "term": {
                                                                         "typeApplication": {
                                                                           "body": {"maybe": null},
-                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableMetadata"}}}}}}],
+                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}],
                                                                   "typeName": "hydra.core.TypeScheme"}},
                                                               "function": {"variable": "hydra.show.core.typeScheme"}}},
                                                           "domain": {"unit": {}},
@@ -1224,7 +1222,7 @@
                                                                       "term": {
                                                                         "typeApplication": {
                                                                           "body": {"maybe": null},
-                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableMetadata"}}}}}}],
+                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}],
                                                                   "typeName": "hydra.core.TypeScheme"}},
                                                               "function": {"variable": "hydra.show.core.typeScheme"}}},
                                                           "domain": {"unit": {}},
@@ -1383,7 +1381,7 @@
                                                                                                                                                                                         "fields": [
                                                                                                                                                                                           {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "forall"}}, "typeName": "hydra.core.Name"}}},
                                                                                                                                                                                           {
-                                                                                                                                                                                            "name": "term",
+                                                                                                                                                                                            "name": "handler",
                                                                                                                                                                                             "term": {
                                                                                                                                                                                               "inject": {
                                                                                                                                                                                                 "field": {
@@ -1672,7 +1670,7 @@
                                                                                                                                                                                                               "typeName": "hydra.core.Term"}}}],
                                                                                                                                                                                                       "typeName": "hydra.core.Lambda"}}},
                                                                                                                                                                                                 "typeName": "hydra.core.Term"}}}],
-                                                                                                                                                                                        "typeName": "hydra.core.Field"}}]}}],
+                                                                                                                                                                                        "typeName": "hydra.core.CaseAlternative"}}]}}],
                                                                                                                                                                             "typeName": "hydra.core.CaseStatement"}}},
                                                                                                                                                                       "typeName": "hydra.core.Term"}}},
                                                                                                                                                                 {
@@ -1984,7 +1982,7 @@
                                                                       "term": {
                                                                         "typeApplication": {
                                                                           "body": {"maybe": null},
-                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableMetadata"}}}}}}],
+                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}],
                                                                   "typeName": "hydra.core.TypeScheme"}},
                                                               "function": {"variable": "hydra.show.core.typeScheme"}}},
                                                           "domain": {"unit": {}},
@@ -2003,7 +2001,9 @@
               {
                 "name": "cases",
                 "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}],
-            "typeName": "hydra.testing.TestGroup"}}}}],
+            "typeName": "hydra.testing.TestGroup"}},
+        "name": "hydra.test.inference.kernelExamples.testGroupForNestedLet",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []}}}],
   "dependencies": [
     {"module": "hydra.test.testGraph"},
     {"module": "hydra.formatting"},

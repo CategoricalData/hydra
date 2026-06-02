@@ -439,6 +439,28 @@ typesByName =
               Core.Name "description",
               (Core.TermLiteral (Core.LiteralString "A field with an optional type scheme, used to bind variables to terms in a 'let' expression")))])}))),
       (
+        Core.Name "hydra.core.CaseAlternative",
+        (Core.TypeAnnotated (Core.AnnotatedType {
+          Core.annotatedTypeBody = (Core.TypeRecord [
+            Core.FieldType {
+              Core.fieldTypeName = (Core.Name "name"),
+              Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
+                Core.annotatedTypeBody = (Core.TypeVariable (Core.Name "hydra.core.Name")),
+                Core.annotatedTypeAnnotation = (M.fromList [
+                  (
+                    Core.Name "description",
+                    (Core.TermLiteral (Core.LiteralString "The name of the union variant matched by this alternative")))])}))},
+            Core.FieldType {
+              Core.fieldTypeName = (Core.Name "handler"),
+              Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
+                Core.annotatedTypeBody = (Core.TypeVariable (Core.Name "hydra.core.Term")),
+                Core.annotatedTypeAnnotation = (M.fromList [
+                  (Core.Name "description", (Core.TermLiteral (Core.LiteralString "The handler applied to the matched variant's payload")))])}))}]),
+          Core.annotatedTypeAnnotation = (M.fromList [
+            (
+              Core.Name "description",
+              (Core.TermLiteral (Core.LiteralString "A single alternative of a case statement (union elimination): the variant being matched, together with the term that handles it.")))])}))),
+      (
         Core.Name "hydra.core.CaseStatement",
         (Core.TypeAnnotated (Core.AnnotatedType {
           Core.annotatedTypeBody = (Core.TypeRecord [
@@ -459,11 +481,11 @@ typesByName =
             Core.FieldType {
               Core.fieldTypeName = (Core.Name "cases"),
               Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
-                Core.annotatedTypeBody = (Core.TypeList (Core.TypeVariable (Core.Name "hydra.core.Field"))),
+                Core.annotatedTypeBody = (Core.TypeList (Core.TypeVariable (Core.Name "hydra.core.CaseAlternative"))),
                 Core.annotatedTypeAnnotation = (M.fromList [
                   (
                     Core.Name "description",
-                    (Core.TermLiteral (Core.LiteralString "A list of case alternatives, one per union field. Each Field's name is the variant tag being matched and term is the handler applied to the variant's payload.")))])}))}]),
+                    (Core.TermLiteral (Core.LiteralString "A list of case alternatives, one per union variant being handled")))])}))}]),
           Core.annotatedTypeAnnotation = (M.fromList [
             (Core.Name "description", (Core.TermLiteral (Core.LiteralString "A union elimination; a case statement")))])}))),
       (
@@ -501,7 +523,7 @@ typesByName =
               Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
                 Core.annotatedTypeBody = (Core.TypeVariable (Core.Name "hydra.core.Term")),
                 Core.annotatedTypeAnnotation = (M.fromList [
-                  (Core.Name "description", (Core.TermLiteral (Core.LiteralString "The term value of the field")))])}))}]),
+                  (Core.Name "description", (Core.TermLiteral (Core.LiteralString "The value of the field")))])}))}]),
           Core.annotatedTypeAnnotation = (M.fromList [
             (Core.Name "description", (Core.TermLiteral (Core.LiteralString "A name/term pair")))])}))),
       (
@@ -1215,7 +1237,7 @@ typesByName =
                 Core.annotatedTypeAnnotation = (M.fromList [
                   (Core.Name "description", (Core.TermLiteral (Core.LiteralString "The type argument")))])}))}]),
           Core.annotatedTypeAnnotation = (M.fromList [
-            (Core.Name "description", (Core.TermLiteral (Core.LiteralString "A term applied to a type; a type application")))])}))),
+            (Core.Name "description", (Core.TermLiteral (Core.LiteralString "A term applied to a type; a type application.")))])}))),
       (
         Core.Name "hydra.core.TypeClassConstraint",
         (Core.TypeAnnotated (Core.AnnotatedType {
@@ -1275,7 +1297,7 @@ typesByName =
                 Core.annotatedTypeAnnotation = (M.fromList [
                   (
                     Core.Name "description",
-                    (Core.TermLiteral (Core.LiteralString "Optional metadata for type variables, including typeclass constraints. The map keys are type variable names.")))])}))}]),
+                    (Core.TermLiteral (Core.LiteralString "Optional constraints on type variables, including typeclass constraints. The map keys are type variable names.")))])}))}]),
           Core.annotatedTypeAnnotation = (M.fromList [
             (
               Core.Name "description",
@@ -1293,7 +1315,7 @@ typesByName =
           Core.annotatedTypeAnnotation = (M.fromList [
             (
               Core.Name "description",
-              (Core.TermLiteral (Core.LiteralString "Metadata associated with a type variable, including typeclass constraints")))])}))),
+              (Core.TermLiteral (Core.LiteralString "Constraints associated with a type variable, including typeclass constraints")))])}))),
       (
         Core.Name "hydra.core.WrappedTerm",
         (Core.TypeAnnotated (Core.AnnotatedType {
@@ -1805,7 +1827,7 @@ typesByName =
         (Core.TypeAnnotated (Core.AnnotatedType {
           Core.annotatedTypeBody = (Core.TypeRecord [
             Core.FieldType {
-              Core.fieldTypeName = (Core.Name "namespace"),
+              Core.fieldTypeName = (Core.Name "name"),
               Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
                 Core.annotatedTypeBody = (Core.TypeVariable (Core.Name "hydra.packaging.ModuleName")),
                 Core.annotatedTypeAnnotation = (M.fromList [
@@ -1955,30 +1977,6 @@ typesByName =
               Core.Name "description",
               (Core.TermLiteral (Core.LiteralString "A typed reference to a definition: a type, a term, or a primitive, identified by name")))])}))),
       (
-        Core.Name "hydra.packaging.LifecycleInfo",
-        (Core.TypeAnnotated (Core.AnnotatedType {
-          Core.annotatedTypeBody = (Core.TypeRecord [
-            Core.FieldType {
-              Core.fieldTypeName = (Core.Name "availableSince"),
-              Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
-                Core.annotatedTypeBody = (Core.TypeMaybe (Core.TypeVariable (Core.Name "hydra.packaging.Version"))),
-                Core.annotatedTypeAnnotation = (M.fromList [
-                  (
-                    Core.Name "description",
-                    (Core.TermLiteral (Core.LiteralString "The version in which the entity was introduced, if known.")))])}))},
-            Core.FieldType {
-              Core.fieldTypeName = (Core.Name "deprecatedSince"),
-              Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
-                Core.annotatedTypeBody = (Core.TypeMaybe (Core.TypeVariable (Core.Name "hydra.packaging.Version"))),
-                Core.annotatedTypeAnnotation = (M.fromList [
-                  (
-                    Core.Name "description",
-                    (Core.TermLiteral (Core.LiteralString "The version in which the entity was deprecated, if applicable.")))])}))}]),
-          Core.annotatedTypeAnnotation = (M.fromList [
-            (
-              Core.Name "description",
-              (Core.TermLiteral (Core.LiteralString "Version-lifecycle milestones for a packaging entity. Each milestone is independently optional; further milestones (e.g. stableSince, removedSince) may be added without changing dependent types.")))])}))),
-      (
         Core.Name "hydra.packaging.EntityMetadata",
         (Core.TypeAnnotated (Core.AnnotatedType {
           Core.annotatedTypeBody = (Core.TypeRecord [
@@ -2043,13 +2041,29 @@ typesByName =
               Core.Name "description",
               (Core.TermLiteral (Core.LiteralString "A typed reference to a packaging entity: a package, a module, or a definition")))])}))),
       (
-        Core.Name "hydra.packaging.FileExtension",
+        Core.Name "hydra.packaging.LifecycleInfo",
         (Core.TypeAnnotated (Core.AnnotatedType {
-          Core.annotatedTypeBody = (Core.TypeWrap (Core.TypeLiteral Core.LiteralTypeString)),
+          Core.annotatedTypeBody = (Core.TypeRecord [
+            Core.FieldType {
+              Core.fieldTypeName = (Core.Name "availableSince"),
+              Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
+                Core.annotatedTypeBody = (Core.TypeMaybe (Core.TypeVariable (Core.Name "hydra.packaging.Version"))),
+                Core.annotatedTypeAnnotation = (M.fromList [
+                  (
+                    Core.Name "description",
+                    (Core.TermLiteral (Core.LiteralString "The version in which the entity was introduced, if known.")))])}))},
+            Core.FieldType {
+              Core.fieldTypeName = (Core.Name "deprecatedSince"),
+              Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
+                Core.annotatedTypeBody = (Core.TypeMaybe (Core.TypeVariable (Core.Name "hydra.packaging.Version"))),
+                Core.annotatedTypeAnnotation = (M.fromList [
+                  (
+                    Core.Name "description",
+                    (Core.TermLiteral (Core.LiteralString "The version in which the entity was deprecated, if applicable.")))])}))}]),
           Core.annotatedTypeAnnotation = (M.fromList [
             (
               Core.Name "description",
-              (Core.TermLiteral (Core.LiteralString "A file extension (without the dot), e.g. \"json\" or \"py\"")))])}))),
+              (Core.TermLiteral (Core.LiteralString "Version-lifecycle milestones for a packaging entity. Each milestone is independently optional; further milestones (e.g. stableSince, removedSince) may be added without changing dependent types.")))])}))),
       (
         Core.Name "hydra.packaging.Module",
         (Core.TypeAnnotated (Core.AnnotatedType {
@@ -2179,20 +2193,6 @@ typesByName =
               Core.Name "description",
               (Core.TermLiteral (Core.LiteralString "The unique name of a package, e.g. \"hydra-kernel\" or \"hydra-python\"")))])}))),
       (
-        Core.Name "hydra.packaging.VersionSpecifier",
-        (Core.TypeAnnotated (Core.AnnotatedType {
-          Core.annotatedTypeBody = (Core.TypeUnion [
-            Core.FieldType {
-              Core.fieldTypeName = (Core.Name "any"),
-              Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
-                Core.annotatedTypeBody = Core.TypeUnit,
-                Core.annotatedTypeAnnotation = (M.fromList [
-                  (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Any version of the package satisfies the dependency")))])}))}]),
-          Core.annotatedTypeAnnotation = (M.fromList [
-            (
-              Core.Name "description",
-              (Core.TermLiteral (Core.LiteralString "A specifier constraining acceptable versions of a depended-on package. Currently only the `any` (unit) specifier is defined; future variants such as `exact`, `caret`, and `range` may be added without breaking consumers of the `any` form.")))])}))),
-      (
         Core.Name "hydra.packaging.PrimitiveDefinition",
         (Core.TypeAnnotated (Core.AnnotatedType {
           Core.annotatedTypeBody = (Core.TypeRecord [
@@ -2203,21 +2203,21 @@ typesByName =
                 Core.annotatedTypeAnnotation = (M.fromList [
                   (Core.Name "description", (Core.TermLiteral (Core.LiteralString "The name of the primitive")))])}))},
             Core.FieldType {
-              Core.fieldTypeName = (Core.Name "signature"),
-              Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
-                Core.annotatedTypeBody = (Core.TypeVariable (Core.Name "hydra.typing.TermSignature")),
-                Core.annotatedTypeAnnotation = (M.fromList [
-                  (
-                    Core.Name "description",
-                    (Core.TermLiteral (Core.LiteralString "The signature of the primitive (always explicit, never inferred)")))])}))},
-            Core.FieldType {
               Core.fieldTypeName = (Core.Name "metadata"),
               Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
                 Core.annotatedTypeBody = (Core.TypeMaybe (Core.TypeVariable (Core.Name "hydra.packaging.EntityMetadata"))),
                 Core.annotatedTypeAnnotation = (M.fromList [
                   (
                     Core.Name "description",
-                    (Core.TermLiteral (Core.LiteralString "Optional documentation and lifecycle metadata for the primitive (description, long-form comments, cross-references, version milestones).")))])}))},
+                    (Core.TermLiteral (Core.LiteralString "Optional documentation and lifecycle metadata for the primitive.")))])}))},
+            Core.FieldType {
+              Core.fieldTypeName = (Core.Name "signature"),
+              Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
+                Core.annotatedTypeBody = (Core.TypeVariable (Core.Name "hydra.typing.TermSignature")),
+                Core.annotatedTypeAnnotation = (M.fromList [
+                  (
+                    Core.Name "description",
+                    (Core.TermLiteral (Core.LiteralString "The signature of the primitive. Always explicit, never inferred.")))])}))},
             Core.FieldType {
               Core.fieldTypeName = (Core.Name "isPure"),
               Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
@@ -2225,7 +2225,7 @@ typesByName =
                 Core.annotatedTypeAnnotation = (M.fromList [
                   (
                     Core.Name "description",
-                    (Core.TermLiteral (Core.LiteralString "Whether the primitive is pure (referentially transparent, no observable side effects). Defaults to true.")))])}))},
+                    (Core.TermLiteral (Core.LiteralString "Whether the primitive is pure (referentially transparent, no observable side effects). Normally true.")))])}))},
             Core.FieldType {
               Core.fieldTypeName = (Core.Name "isTotal"),
               Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
@@ -2233,7 +2233,7 @@ typesByName =
                 Core.annotatedTypeAnnotation = (M.fromList [
                   (
                     Core.Name "description",
-                    (Core.TermLiteral (Core.LiteralString "Whether the primitive is total (terminates on every input of its declared type). Defaults to true.")))])}))},
+                    (Core.TermLiteral (Core.LiteralString "Whether the primitive is total (terminates on every input of its declared type). Normally true.")))])}))},
             Core.FieldType {
               Core.fieldTypeName = (Core.Name "defaultImplementation"),
               Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
@@ -2246,26 +2246,6 @@ typesByName =
             (
               Core.Name "description",
               (Core.TermLiteral (Core.LiteralString "A primitive definition: the universal, host-independent declarative metadata for a primitive, including name, signature, documentation and lifecycle metadata, totality and purity flags, and an optional default implementation expressed as a Hydra term.")))])}))),
-      (
-        Core.Name "hydra.packaging.QualifiedName",
-        (Core.TypeAnnotated (Core.AnnotatedType {
-          Core.annotatedTypeBody = (Core.TypeRecord [
-            Core.FieldType {
-              Core.fieldTypeName = (Core.Name "moduleName"),
-              Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
-                Core.annotatedTypeBody = (Core.TypeMaybe (Core.TypeVariable (Core.Name "hydra.packaging.ModuleName"))),
-                Core.annotatedTypeAnnotation = (M.fromList [
-                  (Core.Name "description", (Core.TermLiteral (Core.LiteralString "The optional module name")))])}))},
-            Core.FieldType {
-              Core.fieldTypeName = (Core.Name "local"),
-              Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
-                Core.annotatedTypeBody = (Core.TypeLiteral Core.LiteralTypeString),
-                Core.annotatedTypeAnnotation = (M.fromList [
-                  (Core.Name "description", (Core.TermLiteral (Core.LiteralString "The local name")))])}))}]),
-          Core.annotatedTypeAnnotation = (M.fromList [
-            (
-              Core.Name "description",
-              (Core.TermLiteral (Core.LiteralString "A qualified name consisting of an optional module name together with a mandatory local name")))])}))),
       (
         Core.Name "hydra.packaging.TermDefinition",
         (Core.TypeAnnotated (Core.AnnotatedType {
@@ -2285,23 +2265,23 @@ typesByName =
                     Core.Name "description",
                     (Core.TermLiteral (Core.LiteralString "Optional documentation and lifecycle metadata for the term definition")))])}))},
             Core.FieldType {
-              Core.fieldTypeName = (Core.Name "term"),
-              Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
-                Core.annotatedTypeBody = (Core.TypeVariable (Core.Name "hydra.core.Term")),
-                Core.annotatedTypeAnnotation = (M.fromList [
-                  (Core.Name "description", (Core.TermLiteral (Core.LiteralString "The term being defined")))])}))},
-            Core.FieldType {
               Core.fieldTypeName = (Core.Name "signature"),
               Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
                 Core.annotatedTypeBody = (Core.TypeMaybe (Core.TypeVariable (Core.Name "hydra.typing.TermSignature"))),
                 Core.annotatedTypeAnnotation = (M.fromList [
                   (
                     Core.Name "description",
-                    (Core.TermLiteral (Core.LiteralString "The optional signature of the term. When absent, the signature is to be inferred.")))])}))}]),
+                    (Core.TermLiteral (Core.LiteralString "The optional signature of the term. When absent, the signature has yet to be inferred.")))])}))},
+            Core.FieldType {
+              Core.fieldTypeName = (Core.Name "body"),
+              Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
+                Core.annotatedTypeBody = (Core.TypeVariable (Core.Name "hydra.core.Term")),
+                Core.annotatedTypeAnnotation = (M.fromList [
+                  (Core.Name "description", (Core.TermLiteral (Core.LiteralString "The term being defined")))])}))}]),
           Core.annotatedTypeAnnotation = (M.fromList [
             (
               Core.Name "description",
-              (Core.TermLiteral (Core.LiteralString "A term-level definition, including a name, a term, and an optional signature")))])}))),
+              (Core.TermLiteral (Core.LiteralString "A term-level definition, including a name, an optional signature, and a term")))])}))),
       (
         Core.Name "hydra.packaging.TypeDefinition",
         (Core.TypeAnnotated (Core.AnnotatedType {
@@ -2321,7 +2301,7 @@ typesByName =
                     Core.Name "description",
                     (Core.TermLiteral (Core.LiteralString "Optional documentation and lifecycle metadata for the type definition")))])}))},
             Core.FieldType {
-              Core.fieldTypeName = (Core.Name "typeScheme"),
+              Core.fieldTypeName = (Core.Name "body"),
               Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
                 Core.annotatedTypeBody = (Core.TypeVariable (Core.Name "hydra.core.TypeScheme")),
                 Core.annotatedTypeAnnotation = (M.fromList [
@@ -2336,6 +2316,20 @@ typesByName =
           Core.annotatedTypeBody = (Core.TypeWrap (Core.TypeLiteral Core.LiteralTypeString)),
           Core.annotatedTypeAnnotation = (M.fromList [
             (Core.Name "description", (Core.TermLiteral (Core.LiteralString "A version string, e.g. \"0.15\" or \"1.0.0\".")))])}))),
+      (
+        Core.Name "hydra.packaging.VersionSpecifier",
+        (Core.TypeAnnotated (Core.AnnotatedType {
+          Core.annotatedTypeBody = (Core.TypeUnion [
+            Core.FieldType {
+              Core.fieldTypeName = (Core.Name "any"),
+              Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
+                Core.annotatedTypeBody = Core.TypeUnit,
+                Core.annotatedTypeAnnotation = (M.fromList [
+                  (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Any version satisfies the dependency")))])}))}]),
+          Core.annotatedTypeAnnotation = (M.fromList [
+            (
+              Core.Name "description",
+              (Core.TermLiteral (Core.LiteralString "A specifier constraining acceptable versions of a dependency. Currently only the `any` (unit) specifier is defined; future variants such as `exact`, `caret`, and `range` may be added without breaking consumers of the `any` form.")))])}))),
       (
         Core.Name "hydra.typing.FunctionStructure",
         (Core.TypeAnnotated (Core.AnnotatedType {
@@ -2652,6 +2646,14 @@ typesByName =
               Core.Name "description",
               (Core.TermLiteral (Core.LiteralString "An equality judgement: less than, equal to, or greater than")))])}))),
       (
+        Core.Name "hydra.util.FileExtension",
+        (Core.TypeAnnotated (Core.AnnotatedType {
+          Core.annotatedTypeBody = (Core.TypeWrap (Core.TypeLiteral Core.LiteralTypeString)),
+          Core.annotatedTypeAnnotation = (M.fromList [
+            (
+              Core.Name "description",
+              (Core.TermLiteral (Core.LiteralString "A file extension (without the dot), e.g. \"json\" or \"py\"")))])}))),
+      (
         Core.Name "hydra.util.ModuleNames",
         (Core.TypeAnnotated (Core.AnnotatedType {
           Core.annotatedTypeBody = (Core.TypeForall (Core.ForallType {
@@ -2698,4 +2700,24 @@ typesByName =
           Core.annotatedTypeAnnotation = (M.fromList [
             (
               Core.Name "description",
-              (Core.TermLiteral (Core.LiteralString "Numeric precision: arbitrary precision, or precision to a specified number of bits")))])})))]
+              (Core.TermLiteral (Core.LiteralString "Numeric precision: arbitrary precision, or precision to a specified number of bits")))])}))),
+      (
+        Core.Name "hydra.util.QualifiedName",
+        (Core.TypeAnnotated (Core.AnnotatedType {
+          Core.annotatedTypeBody = (Core.TypeRecord [
+            Core.FieldType {
+              Core.fieldTypeName = (Core.Name "moduleName"),
+              Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
+                Core.annotatedTypeBody = (Core.TypeMaybe (Core.TypeVariable (Core.Name "hydra.packaging.ModuleName"))),
+                Core.annotatedTypeAnnotation = (M.fromList [
+                  (Core.Name "description", (Core.TermLiteral (Core.LiteralString "The optional module name")))])}))},
+            Core.FieldType {
+              Core.fieldTypeName = (Core.Name "local"),
+              Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
+                Core.annotatedTypeBody = (Core.TypeLiteral Core.LiteralTypeString),
+                Core.annotatedTypeAnnotation = (M.fromList [
+                  (Core.Name "description", (Core.TermLiteral (Core.LiteralString "The local name")))])}))}]),
+          Core.annotatedTypeAnnotation = (M.fromList [
+            (
+              Core.Name "description",
+              (Core.TermLiteral (Core.LiteralString "A qualified name consisting of an optional module name together with a mandatory local name")))])})))]
