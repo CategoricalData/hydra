@@ -3,6 +3,7 @@ package hydra.dsl;
 import hydra.core.AnnotatedTerm;
 import hydra.core.Application;
 import hydra.core.Binding;
+import hydra.core.CaseAlternative;
 import hydra.core.CaseStatement;
 import hydra.core.Field;
 import hydra.core.FloatValue;
@@ -589,7 +590,19 @@ public interface Terms {
      * @return the match term
      */
     static Term match(Name typeName, Maybe<Term> defaultCase, Field... fields) {
-        return new Term.Cases(new CaseStatement(typeName, defaultCase, Arrays.asList(fields)));
+        return new Term.Cases(new CaseStatement(typeName, defaultCase, fieldsToAlternatives(Arrays.asList(fields))));
+    }
+
+    /**
+     * Convert case fields to case alternatives. A {@link Field}'s name and term map directly to a
+     * {@link CaseAlternative}'s name and handler; this lets callers keep using {@code field(...)}.
+     */
+    static List<CaseAlternative> fieldsToAlternatives(List<Field> fields) {
+        java.util.List<CaseAlternative> alts = new java.util.ArrayList<CaseAlternative>(fields.size());
+        for (Field f : fields) {
+            alts.add(new CaseAlternative(f.name, f.term));
+        }
+        return alts;
     }
 
     /**
@@ -600,7 +613,7 @@ public interface Terms {
      * @return the match term
      */
     static Term match(Name typeName, Maybe<Term> defaultCase, List<Field> fields) {
-        return new Term.Cases(new CaseStatement(typeName, defaultCase, fields));
+        return new Term.Cases(new CaseStatement(typeName, defaultCase, fieldsToAlternatives(fields)));
     }
 
     /**

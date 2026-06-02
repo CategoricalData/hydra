@@ -41,6 +41,7 @@ import hydra.core.AnnotatedType;  // AUTO-IMPORT (hydra-java DSL)
 import hydra.core.Application;  // AUTO-IMPORT (hydra-java DSL)
 import hydra.core.ApplicationType;  // AUTO-IMPORT (hydra-java DSL)
 import hydra.core.Binding;  // AUTO-IMPORT (hydra-java DSL)
+import hydra.core.CaseAlternative;  // AUTO-IMPORT (hydra-java DSL)
 import hydra.core.CaseStatement;  // AUTO-IMPORT (hydra-java DSL)
 import hydra.core.EitherType;  // AUTO-IMPORT (hydra-java DSL)
 import hydra.core.FieldType;  // AUTO-IMPORT (hydra-java DSL)
@@ -557,17 +558,17 @@ public class Coder {
                                         CaseStatement.CASES,
                                         Lists.map(
                                             lambda("fld",
-                                                record(Field.TYPE_,
+                                                record(CaseAlternative.TYPE_,
                                                     field(
-                                                        Field.NAME,
-                                                        proj(Field.TYPE_, Field.NAME, "fld")),
+                                                        CaseAlternative.NAME,
+                                                        proj(CaseAlternative.TYPE_, CaseAlternative.NAME, "fld")),
                                                     field(
-                                                        Field.TERM,
+                                                        CaseAlternative.HANDLER,
                                                         apply(
                                                             ref(Coder.applyOvergenSubstToTermAnnotations_go),
                                                             var("subst"),
                                                             var("cx"),
-                                                            proj(Field.TYPE_, Field.TERM, "fld"))))),
+                                                            proj(CaseAlternative.TYPE_, CaseAlternative.HANDLER, "fld"))))),
                                             proj(CaseStatement.TYPE_, CaseStatement.CASES, "cs"))))))),
                     field(
                         Term.LET,
@@ -1440,7 +1441,7 @@ public class Coder {
                                                     ref(Coder.buildSubstFromAnnotations_go),
                                                     var("schemeVarSet"),
                                                     var("g"),
-                                                    proj(Field.TYPE_, Field.TERM, "fld")))),
+                                                    proj(CaseAlternative.TYPE_, CaseAlternative.HANDLER, "fld")))),
                                         var("hydra.lib.maps.empty"),
                                         proj(CaseStatement.TYPE_, CaseStatement.CASES, "cs"))),
                                 Maps.union(var("defSubst"), var("caseSubsts"))))),
@@ -4788,7 +4789,7 @@ public class Coder {
                                 let("typ",
                                     apply(
                                         project(TypeScheme.TYPE_, TypeScheme.BODY),
-                                        proj(TypeDefinition.TYPE_, TypeDefinition.TYPE_SCHEME, "td")),
+                                        proj(TypeDefinition.TYPE_, TypeDefinition.BODY, "td")),
                                     apply(ref(Coder.isSerializableJavaType), var("typ")))),
                             var("typeDefs"))),
                     Eithers.bind(
@@ -6332,7 +6333,7 @@ public class Coder {
                     field("name",
                         proj(TermDefinition.TYPE_, TermDefinition.NAME, "tdef")),
                     field("term0",
-                        proj(TermDefinition.TYPE_, TermDefinition.TERM, "tdef")),
+                        proj(TermDefinition.TYPE_, TermDefinition.BODY, "tdef")),
                     Eithers.bind(
                         apply(
                             var("hydra.annotations.getTermDescription"),
@@ -8570,7 +8571,7 @@ public class Coder {
                                                                                         let(
                                                                                             field(
                                                                                                 "fieldName",
-                                                                                                proj(Field.TYPE_, Field.NAME, "field")),
+                                                                                                proj(CaseAlternative.TYPE_, CaseAlternative.NAME, "field")),
                                                                                             field(
                                                                                                 "variantRefType",
                                                                                                 apply(
@@ -8589,7 +8590,7 @@ public class Coder {
                                                                                                 Term.TYPE_,
                                                                                                 apply(
                                                                                                     var("hydra.strip.deannotateTerm"),
-                                                                                                    proj(Field.TYPE_, Field.TERM, "field")),
+                                                                                                    proj(CaseAlternative.TYPE_, CaseAlternative.HANDLER, "field")),
                                                                                                 left(
                                                                                                     inject(
                                                                                                         Error_.TYPE_,
@@ -9315,7 +9316,7 @@ public class Coder {
                     field("typ",
                         apply(
                             project(TypeScheme.TYPE_, TypeScheme.BODY),
-                            proj(TypeDefinition.TYPE_, TypeDefinition.TYPE_SCHEME, "tdef"))),
+                            proj(TypeDefinition.TYPE_, TypeDefinition.BODY, "tdef"))),
                     field("serializable",
                         apply(ref(Coder.isSerializableJavaType), var("typ"))),
                     field("imports",
@@ -13743,7 +13744,7 @@ public class Coder {
                                         var("hydra.formatting.capitalize"),
                                         apply(
                                             unwrap(Name.TYPE_),
-                                            proj(Field.TYPE_, Field.NAME, "field"))))))),
+                                            proj(CaseAlternative.TYPE_, CaseAlternative.NAME, "field"))))))),
                     field("mods",
                         list(
                             inject(MethodModifier.TYPE_,
@@ -13758,7 +13759,7 @@ public class Coder {
                     casesWithDefault(Term.TYPE_,
                         apply(
                             var("hydra.strip.deannotateTerm"),
-                            proj(Field.TYPE_, Field.TERM, "field")),
+                            proj(CaseAlternative.TYPE_, CaseAlternative.HANDLER, "field")),
                         left(
                             inject(Error_.TYPE_,
                                 Error_.OTHER,
@@ -13767,7 +13768,7 @@ public class Coder {
                                         string("visitBranch: field term is not a lambda: "),
                                         apply(
                                             var("hydra.show.core.term"),
-                                            proj(Field.TYPE_, Field.TERM, "field")))))),
+                                            proj(CaseAlternative.TYPE_, CaseAlternative.HANDLER, "field")))))),
                         field(
                             Term.LAMBDA,
                             lambda("lam",

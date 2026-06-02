@@ -80,8 +80,8 @@ public final class Helpers {
         return new Definition.Term(new TermDefinition(
             fqName,
             Maybe.<EntityMetadata>nothing(),
-            term,
-            Maybe.<TermSignature>nothing()));
+            Maybe.<TermSignature>nothing(),
+            term));
     }
 
     /** Build a term Definition with a pre-computed TypeScheme. */
@@ -90,8 +90,8 @@ public final class Helpers {
         return new Definition.Term(new TermDefinition(
             fqName,
             Maybe.<EntityMetadata>nothing(),
-            term,
-            Maybe.<TermSignature>just(Scoping.typeSchemeToTermSignature(ts))));
+            Maybe.<TermSignature>just(Scoping.typeSchemeToTermSignature(ts)),
+            term));
     }
 
     /** Build a TypeScheme from a variables list and a body type. */

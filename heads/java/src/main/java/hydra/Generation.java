@@ -537,9 +537,9 @@ public class Generation {
             d.accept(new Definition.Visitor<Void>() {
                 @Override public Void visit(Definition.Term td) {
                     TermDefinition t = td.value;
-                    Term newTerm = Strip.removeTypesFromTerm(t.term);
+                    Term newTerm = Strip.removeTypesFromTerm(t.body);
                     Maybe<TermSignature> newType = Maybe.nothing();
-                    stripped.add(new Definition.Term(new TermDefinition(t.name, hydra.util.Maybe.nothing(), newTerm, newType)));
+                    stripped.add(new Definition.Term(new TermDefinition(t.name, hydra.util.Maybe.nothing(), newType, newTerm)));
                     return null;
                 }
                 @Override public Void visit(Definition.Type td) {
