@@ -319,7 +319,11 @@
                                                     "body": {
                                                       "typeApplication": {
                                                         "body": {
-                                                          "either": {"left": {"wrap": {"body": {"literal": {"string": "expected record"}}, "typeName": "hydra.errors.DecodingError"}}}},
+                                                          "either": {
+                                                            "left": {
+                                                              "wrap": {
+                                                                "body": {"literal": {"string": "expected a record of type hydra.relational.ColumnSchema"}},
+                                                                "typeName": "hydra.errors.DecodingError"}}}},
                                                         "type": {"variable": "hydra.errors.DecodingError"}}},
                                                     "type": {"application": {"argument": {"variable": "t0"}, "function": {"variable": "hydra.relational.ColumnSchema"}}}}},
                                                 "typeName": "hydra.core.Term"}}}},
@@ -520,7 +524,11 @@
                                             "body": {
                                               "typeApplication": {
                                                 "body": {
-                                                  "either": {"left": {"wrap": {"body": {"literal": {"string": "expected record"}}, "typeName": "hydra.errors.DecodingError"}}}},
+                                                  "either": {
+                                                    "left": {
+                                                      "wrap": {
+                                                        "body": {"literal": {"string": "expected a record of type hydra.relational.ForeignKey"}},
+                                                        "typeName": "hydra.errors.DecodingError"}}}},
                                                 "type": {"variable": "hydra.errors.DecodingError"}}},
                                             "type": {"variable": "hydra.relational.ForeignKey"}}},
                                         "typeName": "hydra.core.Term"}}}},
@@ -1214,7 +1222,11 @@
                                                     "body": {
                                                       "typeApplication": {
                                                         "body": {
-                                                          "either": {"left": {"wrap": {"body": {"literal": {"string": "expected record"}}, "typeName": "hydra.errors.DecodingError"}}}},
+                                                          "either": {
+                                                            "left": {
+                                                              "wrap": {
+                                                                "body": {"literal": {"string": "expected a record of type hydra.relational.RelationSchema"}},
+                                                                "typeName": "hydra.errors.DecodingError"}}}},
                                                         "type": {"variable": "hydra.errors.DecodingError"}}},
                                                     "type": {"application": {"argument": {"variable": "t0"}, "function": {"variable": "hydra.relational.RelationSchema"}}}}},
                                                 "typeName": "hydra.core.Term"}}}},

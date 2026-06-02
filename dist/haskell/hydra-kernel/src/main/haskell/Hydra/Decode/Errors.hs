@@ -142,7 +142,7 @@ multipleBindingsError cx raw =
         let fieldMap = ExtractCore.toFieldMap v0
         in (Eithers.bind (ExtractCore.requireField "name" DecodeCore.name fieldMap cx) (\field_name -> Right (Errors.MultipleBindingsError {
           Errors.multipleBindingsErrorName = field_name})))
-      _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+      _ -> Left (Errors.DecodingError "expected a record of type hydra.errors.MultipleBindingsError")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.errors.MultipleFieldsError
 multipleFieldsError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Errors.MultipleFieldsError
 multipleFieldsError cx raw =
@@ -151,7 +151,7 @@ multipleFieldsError cx raw =
         let fieldMap = ExtractCore.toFieldMap v0
         in (Eithers.bind (ExtractCore.requireField "fieldName" DecodeCore.name fieldMap cx) (\field_fieldName -> Right (Errors.MultipleFieldsError {
           Errors.multipleFieldsErrorFieldName = field_fieldName})))
-      _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+      _ -> Left (Errors.DecodingError "expected a record of type hydra.errors.MultipleFieldsError")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.errors.NoMatchingFieldError
 noMatchingFieldError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Errors.NoMatchingFieldError
 noMatchingFieldError cx raw =
@@ -160,7 +160,7 @@ noMatchingFieldError cx raw =
         let fieldMap = ExtractCore.toFieldMap v0
         in (Eithers.bind (ExtractCore.requireField "fieldName" DecodeCore.name fieldMap cx) (\field_fieldName -> Right (Errors.NoMatchingFieldError {
           Errors.noMatchingFieldErrorFieldName = field_fieldName})))
-      _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+      _ -> Left (Errors.DecodingError "expected a record of type hydra.errors.NoMatchingFieldError")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.errors.NoSuchBindingError
 noSuchBindingError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Errors.NoSuchBindingError
 noSuchBindingError cx raw =
@@ -169,7 +169,7 @@ noSuchBindingError cx raw =
         let fieldMap = ExtractCore.toFieldMap v0
         in (Eithers.bind (ExtractCore.requireField "name" DecodeCore.name fieldMap cx) (\field_name -> Right (Errors.NoSuchBindingError {
           Errors.noSuchBindingErrorName = field_name})))
-      _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+      _ -> Left (Errors.DecodingError "expected a record of type hydra.errors.NoSuchBindingError")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.errors.NoSuchPrimitiveError
 noSuchPrimitiveError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Errors.NoSuchPrimitiveError
 noSuchPrimitiveError cx raw =
@@ -178,7 +178,7 @@ noSuchPrimitiveError cx raw =
         let fieldMap = ExtractCore.toFieldMap v0
         in (Eithers.bind (ExtractCore.requireField "name" DecodeCore.name fieldMap cx) (\field_name -> Right (Errors.NoSuchPrimitiveError {
           Errors.noSuchPrimitiveErrorName = field_name})))
-      _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+      _ -> Left (Errors.DecodingError "expected a record of type hydra.errors.NoSuchPrimitiveError")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.errors.NotEnoughCasesError
 notEnoughCasesError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError ()
 notEnoughCasesError cx t = ExtractCore.decodeUnit cx t
@@ -205,7 +205,7 @@ otherInferenceError cx raw =
           _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx2 raw2)) fieldMap cx) (\field_message -> Right (Errors.OtherInferenceError {
           Errors.otherInferenceErrorPath = field_path,
           Errors.otherInferenceErrorMessage = field_message}))))
-      _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+      _ -> Left (Errors.DecodingError "expected a record of type hydra.errors.OtherInferenceError")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.errors.OtherResolutionError
 otherResolutionError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Errors.OtherResolutionError
 otherResolutionError cx raw =
@@ -261,7 +261,7 @@ unexpectedShapeError cx raw =
           _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx2 raw2)) fieldMap cx) (\field_actual -> Right (Errors.UnexpectedShapeError {
           Errors.unexpectedShapeErrorExpected = field_expected,
           Errors.unexpectedShapeErrorActual = field_actual}))))
-      _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+      _ -> Left (Errors.DecodingError "expected a record of type hydra.errors.UnexpectedShapeError")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.errors.UnificationError
 unificationError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Errors.UnificationError
 unificationError cx raw =
@@ -276,7 +276,7 @@ unificationError cx raw =
           Errors.unificationErrorLeftType = field_leftType,
           Errors.unificationErrorRightType = field_rightType,
           Errors.unificationErrorMessage = field_message})))))
-      _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+      _ -> Left (Errors.DecodingError "expected a record of type hydra.errors.UnificationError")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.errors.UnificationInferenceError
 unificationInferenceError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Errors.UnificationInferenceError
 unificationInferenceError cx raw =
@@ -286,4 +286,4 @@ unificationInferenceError cx raw =
         in (Eithers.bind (ExtractCore.requireField "path" Paths.subtermPath fieldMap cx) (\field_path -> Eithers.bind (ExtractCore.requireField "cause" unificationError fieldMap cx) (\field_cause -> Right (Errors.UnificationInferenceError {
           Errors.unificationInferenceErrorPath = field_path,
           Errors.unificationInferenceErrorCause = field_cause}))))
-      _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+      _ -> Left (Errors.DecodingError "expected a record of type hydra.errors.UnificationInferenceError")) (ExtractCore.stripWithDecodingError cx raw)
