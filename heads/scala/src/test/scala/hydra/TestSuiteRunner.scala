@@ -160,7 +160,7 @@ object TestSuiteRunner {
     Term.variable(name)
 
   private def matchTerm(typeName: String, default: Option[Term], fields: Field*): Term =
-    Term.cases(CaseStatement(typeName, default, fields.toSeq))
+    Term.cases(CaseStatement(typeName, default, fields.toSeq.map(f => CaseAlternative(f.name, f.term))))
 
   private def project(typeName: String, fieldName: String): Term =
     Term.project(Projection(typeName, fieldName))
