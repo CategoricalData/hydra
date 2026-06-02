@@ -135,7 +135,7 @@ arbitraryFunctionTerm (FunctionType dom cod) n = QC.oneof $ defaults ++ domainSp
             return $ TermCases $ CaseStatement (Name "placeholder") Nothing afields
           arbitraryCase (FieldType fn dom') = do
             term <- arbitraryFunctionTerm (FunctionType dom' cod) n2
-            return $ Field fn term
+            return $ CaseAlternative fn term
           n2 = div n' $ L.length sfields
         -- Note: projections now require nominally-typed records
       _ -> []
