@@ -119,7 +119,7 @@ def _load_kernel_term_bindings() -> dict[hydra.core.Name, hydra.core.Binding]:
             if isinstance(d, DefinitionTerm):
                 td = d.value
                 ts = Maybes.map(term_signature_to_type_scheme, td.signature)
-                bindings[td.name] = Binding(td.name, td.term, ts)
+                bindings[td.name] = Binding(td.name, td.body, ts)
 
     return bindings
 

@@ -109,8 +109,9 @@ def _make_synthetic_module(bench: Module, n: int) -> Module:
             DefinitionTerm(
                 TermDefinition(
                     Name(f"{target_ns.value}.{local}"),
-                    td.value.term,
-                    td.value.type_scheme,
+                    Nothing(),
+                    td.value.signature,
+                    td.value.body,
                 )
             )
         )
