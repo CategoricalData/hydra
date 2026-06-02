@@ -87,7 +87,7 @@ module_ =
                           Core.caseStatementTypeName = (Core.Name "hydra.core.Term"),
                           Core.caseStatementDefault = (Just (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
                             Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
-                            Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected record"))}))))),
+                            Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected a record of type hydra.error.packaging.ConflictingModuleNameError"))}))))),
                           Core.caseStatementCases = [
                             Core.CaseAlternative {
                               Core.caseAlternativeName = (Core.Name "record"),
@@ -195,7 +195,7 @@ module_ =
                           Core.caseStatementTypeName = (Core.Name "hydra.core.Term"),
                           Core.caseStatementDefault = (Just (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
                             Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
-                            Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected record"))}))))),
+                            Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected a record of type hydra.error.packaging.ConflictingVariantNameError"))}))))),
                           Core.caseStatementCases = [
                             Core.CaseAlternative {
                               Core.caseAlternativeName = (Core.Name "record"),
@@ -339,7 +339,7 @@ module_ =
                           Core.caseStatementTypeName = (Core.Name "hydra.core.Term"),
                           Core.caseStatementDefault = (Just (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
                             Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
-                            Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected record"))}))))),
+                            Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected a record of type hydra.error.packaging.DefinitionNotInModuleNameError"))}))))),
                           Core.caseStatementCases = [
                             Core.CaseAlternative {
                               Core.caseAlternativeName = (Core.Name "record"),
@@ -447,7 +447,7 @@ module_ =
                           Core.caseStatementTypeName = (Core.Name "hydra.core.Term"),
                           Core.caseStatementDefault = (Just (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
                             Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
-                            Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected record"))}))))),
+                            Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected a record of type hydra.error.packaging.DefinitionsOutOfOrderError"))}))))),
                           Core.caseStatementCases = [
                             Core.CaseAlternative {
                               Core.caseAlternativeName = (Core.Name "record"),
@@ -573,7 +573,7 @@ module_ =
                           Core.caseStatementTypeName = (Core.Name "hydra.core.Term"),
                           Core.caseStatementDefault = (Just (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
                             Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
-                            Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected record"))}))))),
+                            Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected a record of type hydra.error.packaging.DuplicateDefinitionNameError"))}))))),
                           Core.caseStatementCases = [
                             Core.CaseAlternative {
                               Core.caseAlternativeName = (Core.Name "record"),
@@ -681,7 +681,7 @@ module_ =
                           Core.caseStatementTypeName = (Core.Name "hydra.core.Term"),
                           Core.caseStatementDefault = (Just (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
                             Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
-                            Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected record"))}))))),
+                            Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected a record of type hydra.error.packaging.DuplicateModuleNameError"))}))))),
                           Core.caseStatementCases = [
                             Core.CaseAlternative {
                               Core.caseAlternativeName = (Core.Name "record"),
@@ -771,7 +771,7 @@ module_ =
                           Core.caseStatementTypeName = (Core.Name "hydra.core.Term"),
                           Core.caseStatementDefault = (Just (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
                             Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
-                            Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected record"))}))))),
+                            Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected a record of type hydra.error.packaging.InvalidDefinitionNameError"))}))))),
                           Core.caseStatementCases = [
                             Core.CaseAlternative {
                               Core.caseAlternativeName = (Core.Name "record"),
@@ -1174,7 +1174,7 @@ module_ =
                           Core.caseStatementTypeName = (Core.Name "hydra.core.Term"),
                           Core.caseStatementDefault = (Just (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
                             Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
-                            Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected record"))}))))),
+                            Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected a record of type hydra.error.packaging.InvalidModuleNameConventionError"))}))))),
                           Core.caseStatementCases = [
                             Core.CaseAlternative {
                               Core.caseAlternativeName = (Core.Name "record"),
@@ -1472,7 +1472,7 @@ module_ =
                           Core.caseStatementTypeName = (Core.Name "hydra.core.Term"),
                           Core.caseStatementDefault = (Just (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
                             Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
-                            Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected record"))}))))),
+                            Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected a record of type hydra.error.packaging.InvalidPackageNameError"))}))))),
                           Core.caseStatementCases = [
                             Core.CaseAlternative {
                               Core.caseAlternativeName = (Core.Name "record"),
@@ -1562,7 +1562,7 @@ module_ =
                           Core.caseStatementTypeName = (Core.Name "hydra.core.Term"),
                           Core.caseStatementDefault = (Just (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
                             Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
-                            Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected record"))}))))),
+                            Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected a record of type hydra.error.packaging.MissingDocumentationError"))}))))),
                           Core.caseStatementCases = [
                             Core.CaseAlternative {
                               Core.caseAlternativeName = (Core.Name "record"),

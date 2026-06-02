@@ -103,7 +103,7 @@ module_ =
                             Core.caseStatementTypeName = (Core.Name "hydra.core.Term"),
                             Core.caseStatementDefault = (Just (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
                               Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
-                              Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected record"))}))))),
+                              Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected a record of type hydra.typing.FunctionStructure"))}))))),
                             Core.caseStatementCases = [
                               Core.CaseAlternative {
                                 Core.caseAlternativeName = (Core.Name "record"),
@@ -309,7 +309,7 @@ module_ =
                           Core.caseStatementTypeName = (Core.Name "hydra.core.Term"),
                           Core.caseStatementDefault = (Just (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
                             Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
-                            Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected record"))}))))),
+                            Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected a record of type hydra.typing.InferenceContext"))}))))),
                           Core.caseStatementCases = [
                             Core.CaseAlternative {
                               Core.caseAlternativeName = (Core.Name "record"),
@@ -473,7 +473,7 @@ module_ =
                           Core.caseStatementTypeName = (Core.Name "hydra.core.Term"),
                           Core.caseStatementDefault = (Just (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
                             Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
-                            Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected record"))}))))),
+                            Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected a record of type hydra.typing.InferenceResult"))}))))),
                           Core.caseStatementCases = [
                             Core.CaseAlternative {
                               Core.caseAlternativeName = (Core.Name "record"),
@@ -637,7 +637,7 @@ module_ =
                           Core.caseStatementTypeName = (Core.Name "hydra.core.Term"),
                           Core.caseStatementDefault = (Just (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
                             Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
-                            Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected record"))}))))),
+                            Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected a record of type hydra.typing.Parameter"))}))))),
                           Core.caseStatementCases = [
                             Core.CaseAlternative {
                               Core.caseAlternativeName = (Core.Name "record"),
@@ -877,7 +877,7 @@ module_ =
                           Core.caseStatementTypeName = (Core.Name "hydra.core.Term"),
                           Core.caseStatementDefault = (Just (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
                             Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
-                            Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected record"))}))))),
+                            Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected a record of type hydra.typing.Result"))}))))),
                           Core.caseStatementCases = [
                             Core.CaseAlternative {
                               Core.caseAlternativeName = (Core.Name "record"),
@@ -1033,7 +1033,7 @@ module_ =
                           Core.caseStatementTypeName = (Core.Name "hydra.core.Term"),
                           Core.caseStatementDefault = (Just (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
                             Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
-                            Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected record"))}))))),
+                            Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected a record of type hydra.typing.TermSignature"))}))))),
                           Core.caseStatementCases = [
                             Core.CaseAlternative {
                               Core.caseAlternativeName = (Core.Name "record"),
@@ -1242,7 +1242,7 @@ module_ =
                           Core.caseStatementTypeName = (Core.Name "hydra.core.Term"),
                           Core.caseStatementDefault = (Just (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
                             Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
-                            Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected record"))}))))),
+                            Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected a record of type hydra.typing.TypeClass"))}))))),
                           Core.caseStatementCases = [
                             Core.CaseAlternative {
                               Core.caseAlternativeName = (Core.Name "record"),
@@ -1378,7 +1378,7 @@ module_ =
                           Core.caseStatementTypeName = (Core.Name "hydra.core.Term"),
                           Core.caseStatementDefault = (Just (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
                             Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
-                            Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected record"))}))))),
+                            Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected a record of type hydra.typing.TypeConstraint"))}))))),
                           Core.caseStatementCases = [
                             Core.CaseAlternative {
                               Core.caseAlternativeName = (Core.Name "record"),
@@ -1550,7 +1550,7 @@ module_ =
                           Core.caseStatementTypeName = (Core.Name "hydra.core.Term"),
                           Core.caseStatementDefault = (Just (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
                             Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
-                            Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected record"))}))))),
+                            Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected a record of type hydra.typing.TypeParameter"))}))))),
                           Core.caseStatementCases = [
                             Core.CaseAlternative {
                               Core.caseAlternativeName = (Core.Name "record"),
