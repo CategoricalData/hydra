@@ -120,24 +120,58 @@ runtime_identity() {
     } | shasum -a 256 | awk '{print $1}'
 }
 
+# Predicate: is the per-source-set output up to date with respect to its
+# input digest? Returns 0 (fresh — skip the rebuild) or non-zero (not
+# fresh — do the rebuild). Always called as an `if` condition, never bare,
+# so returning non-zero here does not trip the caller's `set -e`.
+#
+# `digest-check fresh` already handles a missing input or output digest
+# itself, printing a "cache miss" line and exiting 1, so the shell-side
+# `[ -f ]` pre-checks are an optimization (skip the stack invocation when
+# there is provably nothing to compare), not the source of truth. The old
+# implementation appended `2>/dev/null` to the stack call; that silenced
+# digest-check's own diagnostic ("input digest absent", "generator stamp
+# mismatch", etc.), which is exactly the kind of cause-naming output #414
+# wants preserved. Drop the suppression so a miss explains itself.
+#
+# Note: digest-check fresh emits only 0 (hit) or 1 (miss); a crash in the
+# Haskell runtime also exits non-zero, so a fault is conservatively treated
+# as a miss (rebuild) rather than swallowed as a hit — the safe direction.
 assemble_check_fresh() {
     local input_digest="$1" output_dir="$2" output_digest="$3"
-    [ -f "$input_digest" ] && [ -f "$output_digest" ] && \
-        (cd "$HYDRA_ROOT_DIR/heads/haskell" && \
-         stack exec digest-check -- fresh \
-            --inputs "$input_digest" \
-            --output-dir "$output_dir" \
-            --output-digest "$output_digest" 2>/dev/null)
+    # First-build / missing-artifact fast path: provably not fresh.
+    if [ ! -f "$input_digest" ] || [ ! -f "$output_digest" ]; then
+        return 1
+    fi
+    (cd "$HYDRA_ROOT_DIR/heads/haskell" && \
+     stack exec digest-check -- fresh \
+        --inputs "$input_digest" \
+        --output-dir "$output_dir" \
+        --output-digest "$output_digest")
 }
 
+# Write the per-source-set output digest after a (re)generation. Called in
+# statement position immediately after the modules were generated, so the
+# input digest MUST exist here — generation just consumed it. A missing
+# input digest at this point is a pipeline inconsistency, not a routine
+# condition: under `set -e` the old `[ -f X ] && (...)` guard turned that
+# into a silent script death (the "Phase 2 silent exit" pitfall), aborting
+# the assembler with no error and skipping every remaining package. Make
+# it a loud, named error instead.
 assemble_refresh_digest() {
     local input_digest="$1" output_dir="$2" output_digest="$3"
-    [ -f "$input_digest" ] && \
-        (cd "$HYDRA_ROOT_DIR/heads/haskell" && \
-         stack exec digest-check -- refresh \
-            --inputs "$input_digest" \
-            --output-dir "$output_dir" \
-            --output-digest "$output_digest")
+    if [ ! -f "$input_digest" ]; then
+        echo "ERROR: assemble_refresh_digest: input digest not found: $input_digest" >&2
+        echo "       Cannot write output digest $output_digest without it." >&2
+        echo "       This indicates a missing or stale build artifact upstream;" >&2
+        echo "       regenerate the per-package JSON / input digest before assembling." >&2
+        return 1
+    fi
+    (cd "$HYDRA_ROOT_DIR/heads/haskell" && \
+     stack exec digest-check -- refresh \
+        --inputs "$input_digest" \
+        --output-dir "$output_dir" \
+        --output-digest "$output_digest")
 }
 
 # Print the package list emitted by a Layer 2 batch assembler — i.e.

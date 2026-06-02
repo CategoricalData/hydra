@@ -138,7 +138,7 @@ EOF
         echo "[$target] FAIL: bootstrap-from-json exit nonzero (log: $log)"
         tail -20 "$log"
         FAIL=$((FAIL + 1))
-        [ -n "$keep_manifest" ] && rm -f "$keep_manifest"
+        if [ -n "$keep_manifest" ]; then rm -f "$keep_manifest"; fi
         return
     fi
 
@@ -147,7 +147,7 @@ EOF
         echo "[$target] FAIL: stale sentinel still present at $stale_sentinel"
         rm -rf "$stale_dir"
         FAIL=$((FAIL + 1))
-        [ -n "$keep_manifest" ] && rm -f "$keep_manifest"
+        if [ -n "$keep_manifest" ]; then rm -f "$keep_manifest"; fi
         return
     fi
 
@@ -164,7 +164,7 @@ EOF
         return
     fi
 
-    [ -n "$keep_manifest" ] && rm -f "$keep_manifest"
+    if [ -n "$keep_manifest" ]; then rm -f "$keep_manifest"; fi
     echo "[$target] PASS"
     PASS=$((PASS + 1))
 }
