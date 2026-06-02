@@ -11,6 +11,9 @@ bootstrap/
 # Hydra wiki
 wiki/
 
+# Old files
+old/
+
 # Haskell / Stack / Cabal
 .ghcup/
 .stack-work
