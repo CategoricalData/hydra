@@ -9,6 +9,7 @@ import hydra.dsl.literals as lt
 from hydra.core import (
     AnnotatedTerm,
     Application,
+    CaseAlternative,
     CaseStatement,
     Field,
     FloatValue,
@@ -391,8 +392,13 @@ def match(tname: Name, def_: Maybe[Term], fields: Sequence[Field]) -> Term:
                     field("error", lambda_("e", apply(var("handleError"), var("e"))))])
     This allows handling different cases of a union type with specific logic for each variant.
     The optional second parameter provides a default case for any unmatched variants.
+
+    Callers pass case branches as :class:`Field` values (name + handler term); this funnel
+    converts each to a :class:`CaseAlternative`, so the many ``field(...)`` call sites are
+    untouched. Mirrors the Haskell/Java ``match`` helpers.
     """
-    return TermCases(CaseStatement(tname, def_, tuple(fields)))
+    alternatives = tuple(CaseAlternative(f.name, f.term) for f in fields)
+    return TermCases(CaseStatement(tname, def_, alternatives))
 
 
 def match_with_variants(
