@@ -658,7 +658,11 @@
                                             "body": {
                                               "typeApplication": {
                                                 "body": {
-                                                  "either": {"left": {"wrap": {"body": {"literal": {"string": "expected record"}}, "typeName": "hydra.errors.DecodingError"}}}},
+                                                  "either": {
+                                                    "left": {
+                                                      "wrap": {
+                                                        "body": {"literal": {"string": "expected a record of type hydra.query.Edge"}},
+                                                        "typeName": "hydra.errors.DecodingError"}}}},
                                                 "type": {"variable": "hydra.errors.DecodingError"}}},
                                             "type": {"variable": "hydra.query.Edge"}}},
                                         "typeName": "hydra.core.Term"}}}},
@@ -825,7 +829,11 @@
                                             "body": {
                                               "typeApplication": {
                                                 "body": {
-                                                  "either": {"left": {"wrap": {"body": {"literal": {"string": "expected record"}}, "typeName": "hydra.errors.DecodingError"}}}},
+                                                  "either": {
+                                                    "left": {
+                                                      "wrap": {
+                                                        "body": {"literal": {"string": "expected a record of type hydra.query.GraphPattern"}},
+                                                        "typeName": "hydra.errors.DecodingError"}}}},
                                                 "type": {"variable": "hydra.errors.DecodingError"}}},
                                             "type": {"variable": "hydra.query.GraphPattern"}}},
                                         "typeName": "hydra.core.Term"}}}},
@@ -1555,7 +1563,11 @@
                                             "body": {
                                               "typeApplication": {
                                                 "body": {
-                                                  "either": {"left": {"wrap": {"body": {"literal": {"string": "expected record"}}, "typeName": "hydra.errors.DecodingError"}}}},
+                                                  "either": {
+                                                    "left": {
+                                                      "wrap": {
+                                                        "body": {"literal": {"string": "expected a record of type hydra.query.PathEquation"}},
+                                                        "typeName": "hydra.errors.DecodingError"}}}},
                                                 "type": {"variable": "hydra.errors.DecodingError"}}},
                                             "type": {"variable": "hydra.query.PathEquation"}}},
                                         "typeName": "hydra.core.Term"}}}},
@@ -2085,7 +2097,11 @@
                                             "body": {
                                               "typeApplication": {
                                                 "body": {
-                                                  "either": {"left": {"wrap": {"body": {"literal": {"string": "expected record"}}, "typeName": "hydra.errors.DecodingError"}}}},
+                                                  "either": {
+                                                    "left": {
+                                                      "wrap": {
+                                                        "body": {"literal": {"string": "expected a record of type hydra.query.PatternImplication"}},
+                                                        "typeName": "hydra.errors.DecodingError"}}}},
                                                 "type": {"variable": "hydra.errors.DecodingError"}}},
                                             "type": {"variable": "hydra.query.PatternImplication"}}},
                                         "typeName": "hydra.core.Term"}}}},
@@ -2261,7 +2277,11 @@
                                             "body": {
                                               "typeApplication": {
                                                 "body": {
-                                                  "either": {"left": {"wrap": {"body": {"literal": {"string": "expected record"}}, "typeName": "hydra.errors.DecodingError"}}}},
+                                                  "either": {
+                                                    "left": {
+                                                      "wrap": {
+                                                        "body": {"literal": {"string": "expected a record of type hydra.query.Query"}},
+                                                        "typeName": "hydra.errors.DecodingError"}}}},
                                                 "type": {"variable": "hydra.errors.DecodingError"}}},
                                             "type": {"variable": "hydra.query.Query"}}},
                                         "typeName": "hydra.core.Term"}}}},
@@ -2624,7 +2644,11 @@
                                             "body": {
                                               "typeApplication": {
                                                 "body": {
-                                                  "either": {"left": {"wrap": {"body": {"literal": {"string": "expected record"}}, "typeName": "hydra.errors.DecodingError"}}}},
+                                                  "either": {
+                                                    "left": {
+                                                      "wrap": {
+                                                        "body": {"literal": {"string": "expected a record of type hydra.query.Range"}},
+                                                        "typeName": "hydra.errors.DecodingError"}}}},
                                                 "type": {"variable": "hydra.errors.DecodingError"}}},
                                             "type": {"variable": "hydra.query.Range"}}},
                                         "typeName": "hydra.core.Term"}}}},
@@ -3470,7 +3494,11 @@
                                             "body": {
                                               "typeApplication": {
                                                 "body": {
-                                                  "either": {"left": {"wrap": {"body": {"literal": {"string": "expected record"}}, "typeName": "hydra.errors.DecodingError"}}}},
+                                                  "either": {
+                                                    "left": {
+                                                      "wrap": {
+                                                        "body": {"literal": {"string": "expected a record of type hydra.query.RegexSequence"}},
+                                                        "typeName": "hydra.errors.DecodingError"}}}},
                                                 "type": {"variable": "hydra.errors.DecodingError"}}},
                                             "type": {"variable": "hydra.query.RegexSequence"}}},
                                         "typeName": "hydra.core.Term"}}}},
@@ -3950,7 +3978,11 @@
                                             "body": {
                                               "typeApplication": {
                                                 "body": {
-                                                  "either": {"left": {"wrap": {"body": {"literal": {"string": "expected record"}}, "typeName": "hydra.errors.DecodingError"}}}},
+                                                  "either": {
+                                                    "left": {
+                                                      "wrap": {
+                                                        "body": {"literal": {"string": "expected a record of type hydra.query.TriplePattern"}},
+                                                        "typeName": "hydra.errors.DecodingError"}}}},
                                                 "type": {"variable": "hydra.errors.DecodingError"}}},
                                             "type": {"variable": "hydra.query.TriplePattern"}}},
                                         "typeName": "hydra.core.Term"}}}},

@@ -301,7 +301,11 @@
                                             "body": {
                                               "typeApplication": {
                                                 "body": {
-                                                  "either": {"left": {"wrap": {"body": {"literal": {"string": "expected record"}}, "typeName": "hydra.errors.DecodingError"}}}},
+                                                  "either": {
+                                                    "left": {
+                                                      "wrap": {
+                                                        "body": {"literal": {"string": "expected a record of type hydra.parsing.ParseError"}},
+                                                        "typeName": "hydra.errors.DecodingError"}}}},
                                                 "type": {"variable": "hydra.errors.DecodingError"}}},
                                             "type": {"variable": "hydra.parsing.ParseError"}}},
                                         "typeName": "hydra.core.Term"}}}},
@@ -867,7 +871,11 @@
                                                     "body": {
                                                       "typeApplication": {
                                                         "body": {
-                                                          "either": {"left": {"wrap": {"body": {"literal": {"string": "expected record"}}, "typeName": "hydra.errors.DecodingError"}}}},
+                                                          "either": {
+                                                            "left": {
+                                                              "wrap": {
+                                                                "body": {"literal": {"string": "expected a record of type hydra.parsing.ParseSuccess"}},
+                                                                "typeName": "hydra.errors.DecodingError"}}}},
                                                         "type": {"variable": "hydra.errors.DecodingError"}}},
                                                     "type": {"application": {"argument": {"variable": "t0"}, "function": {"variable": "hydra.parsing.ParseSuccess"}}}}},
                                                 "typeName": "hydra.core.Term"}}}},

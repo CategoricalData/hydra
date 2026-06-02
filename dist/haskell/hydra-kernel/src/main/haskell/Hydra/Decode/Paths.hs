@@ -27,7 +27,7 @@ subtermEdge cx raw =
           Paths.subtermEdgeSource = field_source,
           Paths.subtermEdgePath = field_path,
           Paths.subtermEdgeTarget = field_target})))))
-      _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+      _ -> Left (Errors.DecodingError "expected a record of type hydra.paths.SubtermEdge")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.paths.SubtermGraph
 subtermGraph :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Paths.SubtermGraph
 subtermGraph cx raw =
@@ -37,7 +37,7 @@ subtermGraph cx raw =
         in (Eithers.bind (ExtractCore.requireField "nodes" (ExtractCore.decodeList subtermNode) fieldMap cx) (\field_nodes -> Eithers.bind (ExtractCore.requireField "edges" (ExtractCore.decodeList subtermEdge) fieldMap cx) (\field_edges -> Right (Paths.SubtermGraph {
           Paths.subtermGraphNodes = field_nodes,
           Paths.subtermGraphEdges = field_edges}))))
-      _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+      _ -> Left (Errors.DecodingError "expected a record of type hydra.paths.SubtermGraph")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.paths.SubtermNode
 subtermNode :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Paths.SubtermNode
 subtermNode cx raw =
@@ -56,7 +56,7 @@ subtermNode cx raw =
           Paths.subtermNodeName = field_name,
           Paths.subtermNodeLabel = field_label,
           Paths.subtermNodeId = field_id})))))
-      _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+      _ -> Left (Errors.DecodingError "expected a record of type hydra.paths.SubtermNode")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.paths.SubtermPath
 subtermPath :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Paths.SubtermPath
 subtermPath cx raw =
@@ -164,7 +164,7 @@ subtypeEdge cx raw =
           Paths.subtypeEdgeSource = field_source,
           Paths.subtypeEdgePath = field_path,
           Paths.subtypeEdgeTarget = field_target})))))
-      _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+      _ -> Left (Errors.DecodingError "expected a record of type hydra.paths.SubtypeEdge")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.paths.SubtypeGraph
 subtypeGraph :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Paths.SubtypeGraph
 subtypeGraph cx raw =
@@ -174,7 +174,7 @@ subtypeGraph cx raw =
         in (Eithers.bind (ExtractCore.requireField "nodes" (ExtractCore.decodeList subtypeNode) fieldMap cx) (\field_nodes -> Eithers.bind (ExtractCore.requireField "edges" (ExtractCore.decodeList subtypeEdge) fieldMap cx) (\field_edges -> Right (Paths.SubtypeGraph {
           Paths.subtypeGraphNodes = field_nodes,
           Paths.subtypeGraphEdges = field_edges}))))
-      _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+      _ -> Left (Errors.DecodingError "expected a record of type hydra.paths.SubtypeGraph")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.paths.SubtypeNode
 subtypeNode :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Paths.SubtypeNode
 subtypeNode cx raw =
@@ -193,7 +193,7 @@ subtypeNode cx raw =
           Paths.subtypeNodeName = field_name,
           Paths.subtypeNodeLabel = field_label,
           Paths.subtypeNodeId = field_id})))))
-      _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+      _ -> Left (Errors.DecodingError "expected a record of type hydra.paths.SubtypeNode")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.paths.SubtypePath
 subtypePath :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Paths.SubtypePath
 subtypePath cx raw =
