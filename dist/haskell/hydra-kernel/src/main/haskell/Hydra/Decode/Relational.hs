@@ -33,7 +33,7 @@ columnSchema t cx raw =
         in (Eithers.bind (ExtractCore.requireField "name" columnName fieldMap cx) (\field_name -> Eithers.bind (ExtractCore.requireField "domain" t fieldMap cx) (\field_domain -> Right (Relational.ColumnSchema {
           Relational.columnSchemaName = field_name,
           Relational.columnSchemaDomain = field_domain}))))
-      _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+      _ -> Left (Errors.DecodingError "expected a record of type hydra.relational.ColumnSchema")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.relational.ForeignKey
 foreignKey :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Relational.ForeignKey
 foreignKey cx raw =
@@ -43,7 +43,7 @@ foreignKey cx raw =
         in (Eithers.bind (ExtractCore.requireField "foreignRelation" relationName fieldMap cx) (\field_foreignRelation -> Eithers.bind (ExtractCore.requireField "keys" (ExtractCore.decodeMap columnName columnName) fieldMap cx) (\field_keys -> Right (Relational.ForeignKey {
           Relational.foreignKeyForeignRelation = field_foreignRelation,
           Relational.foreignKeyKeys = field_keys}))))
-      _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+      _ -> Left (Errors.DecodingError "expected a record of type hydra.relational.ForeignKey")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.relational.PrimaryKey
 primaryKey :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Relational.PrimaryKey
 primaryKey cx raw =
@@ -77,7 +77,7 @@ relationSchema t cx raw =
           Relational.relationSchemaColumns = field_columns,
           Relational.relationSchemaPrimaryKeys = field_primaryKeys,
           Relational.relationSchemaForeignKeys = field_foreignKeys}))))))
-      _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+      _ -> Left (Errors.DecodingError "expected a record of type hydra.relational.RelationSchema")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.relational.Relationship
 relationship :: Ord t0 => ((Graph.Graph -> Core.Term -> Either Errors.DecodingError t0) -> Graph.Graph -> Core.Term -> Either Errors.DecodingError (Relational.Relationship t0))
 relationship v cx raw =
