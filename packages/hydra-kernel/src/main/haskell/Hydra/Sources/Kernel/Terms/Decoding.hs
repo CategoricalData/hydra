@@ -577,7 +577,12 @@ decodeRecordTypeImpl = define "decodeRecordTypeImpl" $
           (var "rt"))
       (Lists.reverse $ var "rt")) $
   deannotateAndMatch
-    (just $ leftError (string "expected record")) [
+    -- Name the expected type in the fallback so a shape mismatch (e.g. a value
+    -- decoded against the wrong type after a kernel record rename) fails loud at
+    -- the decode site naming what was expected, rather than degrading silently
+    -- and surfacing far downstream as untyped bindings (#414).
+    (just $ leftError (Strings.cat $ list [
+      string "expected a record of type ", Core.unName $ var "tname"])) [
     DeepCore.caseAlternative _Term_record $ DeepCore.lambda "record" $
       DeepCore.lets [
         -- Build Map Name Term from the record's fields using toFieldMap helper

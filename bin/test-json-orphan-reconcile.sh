@@ -105,13 +105,13 @@ echo "[case 1] planted kernel orphans pruned"
 ok=1
 [ ! -f "$KERNEL_ORPHAN" ]        || { fail "orphan survived: $KERNEL_ORPHAN"; ok=0; }
 [ ! -f "$KERNEL_ORPHAN_NESTED" ] || { fail "nested orphan survived: $KERNEL_ORPHAN_NESTED"; ok=0; }
-[ "$ok" = 1 ] && { echo "  PASS"; PASS=$((PASS + 1)); }
+if [ "$ok" = 1 ]; then echo "  PASS"; PASS=$((PASS + 1)); fi
 
 echo "[case 2] real module JSON + manifest.json survive"
 ok=1
 [ -f "$KERNEL_REAL" ]     || { fail "real module deleted: $KERNEL_REAL"; ok=0; }
 [ -f "$KERNEL_MANIFEST" ] || { fail "manifest.json deleted (protect-set failed): $KERNEL_MANIFEST"; ok=0; }
-[ "$ok" = 1 ] && { echo "  PASS"; PASS=$((PASS + 1)); }
+if [ "$ok" = 1 ]; then echo "  PASS"; PASS=$((PASS + 1)); fi
 
 echo "[case 3] skip-package (hydra-java) sentinel survives"
 if [ -f "$JAVA_SENTINEL" ]; then
@@ -122,4 +122,4 @@ fi
 
 echo ""
 echo "=== test-json-orphan-reconcile.sh: $PASS pass, $FAIL fail ==="
-[ "$FAIL" -gt 0 ] && exit 1 || exit 0
+if [ "$FAIL" -gt 0 ]; then exit 1; else exit 0; fi

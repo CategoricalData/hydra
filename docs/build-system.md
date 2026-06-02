@@ -48,6 +48,17 @@ short-circuits in seconds.
 Day-to-day, you invoke a Layer 3 script. The lower layers are useful when debugging or
 iterating on a single package.
 
+Each layer boundary is **fail-loud**: it either succeeds with a verified-consistent artifact
+or aborts with an error naming the layer and the mismatch — no step exits 0 on a swallowed
+failure (#414). Concretely, the Layer 2 digest helpers in `bin/lib/assemble-common.sh`
+distinguish their two roles: `assemble_check_fresh` is a *predicate* (a missing input or
+output digest means "not fresh — rebuild", returned quietly), while `assemble_refresh_digest`
+*writes* the output digest after a regen and treats a missing input digest there as a hard
+error naming the path — generation just consumed that input, so its absence is a genuine
+upstream inconsistency, not a routine condition. (Before #414 the latter was an
+`[ -f X ] && (…)` guard that, under `set -e`, silently killed the assembler and skipped every
+remaining package — the "Phase 2 silent exit" failure.)
+
 For the full script inventory and per-script semantics, see
 [implementation.md §Sync system](implementation.md) and
 [recipes/code-generation.md §The sync scripts](recipes/code-generation.md#the-sync-scripts).
