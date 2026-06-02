@@ -7195,7 +7195,7 @@ def _module_to_python():
                         ),
                         (
                             "path",
-                            var("hydra.names.moduleNameToFilePath")(_kref.util_case_convention_lower_snake, wrap("hydra.packaging.FileExtension",
+                            var("hydra.names.moduleNameToFilePath")(_kref.util_case_convention_lower_snake, wrap("hydra.util.FileExtension",
                                     string("py"),
                                 ), Pkg.module_name(var("mod"))),
                         ),

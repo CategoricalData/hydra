@@ -74,14 +74,14 @@
          (all-vars (collect-type-vars-ordered fun-type))
          (detected-vars (remove-if (lambda (v) (find #\. v)) all-vars))
          (vars (if variables variables detected-vars))
-         ;; Build constraints map. After #156, TypeVariableMetadata.classes is
+         ;; Build constraints map. After #156, TypeVariableConstraints.classes is
          ;; a Seq[TypeClassConstraint], not Set[String]; wrap each class name.
          (constraint-map
           (when constraints
             (funcall hydra_lib_maps_from_list
                      (mapcar (lambda (entry)
                                (list (first entry)
-                                     (make-type_variable_metadata
+                                     (make-type_variable_constraints
                                       (wrap-constraints (cdr entry)))))
                              constraints))))
          ;; TypeScheme.constraints is Maybe(Map): wrap as (:just m) or (:nothing).
