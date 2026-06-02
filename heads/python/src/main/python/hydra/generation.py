@@ -213,8 +213,8 @@ def strip_term_types(m):
     for d in m.definitions:
         if isinstance(d, DefinitionTerm):
             td = d.value
-            new_term = remove_types_from_term(td.term)
-            stripped.append(DefinitionTerm(TermDefinition(td.name, Nothing(), new_term, Nothing())))
+            new_term = remove_types_from_term(td.body)
+            stripped.append(DefinitionTerm(TermDefinition(td.name, Nothing(), Nothing(), new_term)))
         else:
             stripped.append(d)
     return Module(m.name, m.metadata, m.dependencies, tuple(stripped))
@@ -301,8 +301,8 @@ def write_lisp_dialect(base_path, dialect_name, ext, universe, mods):
     from hydra.lisp.syntax import Dialect
     from hydra.serialization import print_expr, parenthesize
     from hydra.names import module_name_to_file_path
-    from hydra.packaging import FileExtension, ModuleName
-    from hydra.util import CaseConvention
+    from hydra.packaging import ModuleName
+    from hydra.util import CaseConvention, FileExtension
 
     dialect_map = {
         "clojure": Dialect.CLOJURE,

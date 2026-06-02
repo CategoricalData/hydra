@@ -59,7 +59,7 @@ def _load_kernel_term_bindings() -> dict[hydra.core.Name, hydra.core.Binding]:
         for d in mod.definitions:
             if isinstance(d, DefinitionTerm):
                 td = d.value
-                bindings[td.name] = Binding(td.name, td.term, td.type_scheme)
+                bindings[td.name] = Binding(td.name, td.body, td.signature)
 
     return bindings
 
