@@ -1000,7 +1000,7 @@ If you're uncertain whether something is drift, flag it with a note — the user
 | Unused top-level definitions | Functions, types, or constants with no call sites (cross-check `packages/` and `heads/haskell/src/main/`; a Haskell function called only from those trees is not dead) |
 | One-call-site abstractions | Helpers with a single caller where inlining would be clearer |
 | Duplicate helpers | Near-identical functions in different files with cosmetic renames; shared ANSI constants, regexes, sort keys |
-| Error swallowing | `|| warn`, `|| true`, `|| echo` in sync scripts (violates "Never proceed with failures"); try/except that logs and continues |
+| Error swallowing | `|| warn`, `|| true`, `|| echo` in sync scripts (violates "Never proceed with failures"); try/except that logs and continues; `[ … ] && (side-effecting block)` in **statement position** under `set -e` — a false guard returns 1 and silently kills the script (use an explicit `if`; see #414 and the "Phase 2 silent exit" pitfall); failure-bearing non-final pipe stages without `set -o pipefail` (`stack build … | tee` masking the real exit code) |
 | Post-generation patches | `sed_inplace` or other edits against files under `dist/` (violates "No post-generation patches") |
 | Defensive code for impossible scenarios | `case _ of` branches that can't be reached; null checks for internal invariants |
 | Stale comments | Comments describing code that no longer exists; obsolete TODOs; "workaround for X" comments where X is fixed |
