@@ -430,39 +430,51 @@ referenced *anywhere* in the manifest, and the file's basename is the
 type name not a path). Manual `rm` is required; safe because the next
 assemble regenerates the new-named file.
 
-### Deleting a `dist/json/<pkg>/build/main/digest.json` causes Phase 2 silent exit
+### Deleting a `dist/json/<pkg>/build/main/digest.json` (Phase 2 missing-input handling)
 
-`assemble_refresh_digest` in `bin/lib/assemble-common.sh` is gated by
-`[ -f "$input_digest" ] && (cd ... && stack exec digest-check refresh ...)`.
-Under `set -e`, when the input digest file is missing the `[ -f ]` returns 1
-and the whole `&& (...)` returns 1, killing the calling `assemble-distribution.sh`
-silently — no error to stderr, no "FAILED" banner. The next package in the
-sync loop never runs.
+Fixed in #414. Previously, `assemble_refresh_digest` in `bin/lib/assemble-common.sh`
+was gated by `[ -f "$input_digest" ] && (cd ... && stack exec digest-check refresh ...)`.
+Under `set -e`, a missing input digest made `[ -f ]` return 1, the whole `&& (...)`
+return 1, and the calling `assemble-distribution.sh` died *silently* — no stderr, no
+banner, no further packages. The symptom was `bin/sync.sh` Phase 2 exiting EXIT=1 after
+the first package with no error and no Phase 3 banner.
 
-Symptom: `bin/sync.sh` Phase 2 exits EXIT=1 after writing the first package's
-files ("Done: N main files") with no error message and no Phase 3 banner.
+`assemble_refresh_digest` now uses an explicit `if [ ! -f "$input_digest" ]; then
+<named error>; return 1; fi`, so a missing input digest at refresh time aborts loudly
+naming the missing path (it is a genuine upstream inconsistency at that point —
+generation just consumed the input). `assemble_check_fresh` likewise pre-checks
+explicitly and no longer `2>/dev/null`-suppresses digest-check's own cause-naming output.
 
-Recovery: when you nuke a `dist/json/<pkg>/build/main/digest.json` to force
-regen, also nuke `heads/haskell/.stack-work/phase1-input-cache.txt`. The
-Phase 1 cache miss triggers a full Phase 1 rerun, which regenerates the
-json digest as part of `update-json-manifest`. Without busting the Phase 1
-cache, Phase 1 stays skipped and the dist/json side never gets a new digest,
-so Phase 2 keeps re-failing the same way.
+Recovery is unchanged: when you nuke a `dist/json/<pkg>/build/main/digest.json` to force
+regen, also nuke `heads/haskell/.stack-work/phase1-input-cache.txt` so the Phase 1 cache
+miss regenerates the json digest via `update-json-manifest`. The difference post-#414 is
+that a forgotten input digest now surfaces as a named error instead of a silent exit.
 
 Documented in the build-system cache model
-([docs/build-system.md §Cache files are not tracked](../docs/build-system.md#cache-files-are-not-tracked)),
-but the silent-exit mechanism deserves the explicit pitfall callout.
+([docs/build-system.md §Cache files are not tracked](../docs/build-system.md#cache-files-are-not-tracked)).
 
 ### "Found untyped bindings (after case hoisting)" usually means stale JSON field shapes
 
 A non-baseline package whose `dist/json/.../*.json` files were generated
 before a kernel record-field rename can carry stale field names that match
-no current `TermDefinition` shape. The Haskell decoder silently falls back
-to "untyped" and Phase 1 eventually fails with `Found N untyped bindings
-(after case hoisting): ...`. Seen during the #368 merge: `dist/json/hydra-java/...`
-JSON files still had `"typeScheme": {...}` while `TermDefinition` had renamed
-the field to `"signature"` (#156), so every Java/Python definition lost its
-type and downstream inference saw a wall of untyped bindings.
+no current `TermDefinition` shape, leaving definitions without a signature.
+Phase 1 then fails at the `checkBindingsTyped` gate. Seen during the #368
+merge: `dist/json/hydra-java/...` JSON files still had `"typeScheme": {...}`
+while `TermDefinition` had renamed the field to `"signature"` (#156), so every
+Java/Python definition lost its type and downstream inference saw a wall of
+untyped bindings.
+
+Post-#414 the error is more pointed: `checkBindingsTyped` now names each
+offending binding qualified by its source module (`<module> :: <name>`),
+states the expected-at-this-stage invariant, and explicitly suggests "stale
+dist/json field shapes after a kernel record rename (regenerate the affected
+package's JSON)". Record decoders also name the expected type on a shape
+mismatch ("expected a record of type T"). So the message points at the module
+to regenerate instead of dumping bare local names — that was the #368 pain
+(the failure surfaced at the gate but never said *where from*, costing ~10
+debug iterations). Note the contract: missing signatures are legitimate for
+DSL-defined modules *before* inference; the gate only rejects them on the
+post-inference / no-infer and derived-module paths.
 
 Recovery: regenerate the affected packages' JSON. If the rename only affects
 Java/Python packages (which native generators own per #344), the targeted
