@@ -372,7 +372,7 @@
 
 (define (namespace-to-path ns)
   ;; Convert "hydra.foo.bar" to "hydra/foo/bar" for the filesystem path.
-  ;; The kernel function hydra_names_namespace_to_file_path requires a
+  ;; The kernel function hydra_names_module_name_to_file_path requires a
   ;; case_conv + ext argument bundle; for our use (locating the JSON file
   ;; on disk, where path mirrors namespace exactly), we only need '.' -> '/'.
   (let ((len (string-length ns)))
@@ -473,7 +473,7 @@
                                   (case-conv (if (equal? target "clojure")
                                                   (list 'camel '())
                                                   (list 'lower_snake '())))
-                                  (fp (((hydra_names_namespace_to_file_path case-conv) ext) ns-val)))
+                                  (fp (((hydra_names_module_name_to_file_path case-conv) ext) ns-val)))
                              (list 'right (list (cons fp code))))))))))
              hydra_lisp_language_lisp_language
              (list #f #f #f #f)
@@ -531,11 +531,7 @@
   ;; doesn't declare hydra.test.testGraph in dependencies). With the
   ;; vhash maps fix, single-call codegen is fast enough.
   (let* ((bs-graph (bootstrap-graph))
-         ;; Use hydra_context_context (3 fields: trace, messages, other),
-         ;; matching scala/java/haskell hosts. The kernel's checking and
-         ;; inference functions call (hydra_context_context-trace cx), which
-         ;; expects this record type, not hydra_context_in_context.
-         (cx (make-hydra_context_context '() '() hydra_lib_maps_empty))
+         (cx (make-hydra_typing_inference_context 0 '()))
          (do-infer (list-ref flags 0))
          (do-expand (list-ref flags 1))
          (do-hoist-case (list-ref flags 2))
@@ -647,7 +643,7 @@
                      ;; Filter skip-emit test namespaces (e.g.
                      ;; hydra.test.testEnv): these are type-only stubs whose
                      ;; hand-written per-language counterparts are the source
-                     ;; of truth. Mirrors testSkipEmitNamespaces in
+                     ;; of truth. Mirrors testSkipEmitModuleNames in
                      ;; Hydra.Sources.Test.All and the equivalent filter in
                      ;; heads/python/.../bootstrap.py.
                      (test-mods-to-emit

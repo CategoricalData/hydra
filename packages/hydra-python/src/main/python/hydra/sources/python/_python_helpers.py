@@ -148,7 +148,7 @@ def args_positional_only(pos):
 
 
 def py_list(els):
-    """Wrap a list of star-named-expressions (TTerm-of-list) in hydra.python.syntax.List."""
+    """Wrap a list of star-named-expressions (TypedTerm-of-list) in hydra.python.syntax.List."""
     return wrap("hydra.python.syntax.List", els)
 
 

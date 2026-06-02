@@ -60,16 +60,16 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> (kernelTypesModuleNames),
-            moduleDescription = Just "Conversion functions for literal values."}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just "Conversion functions for literal values.")}
   where
    definitions = [
      toDefinition bigintToIntegerValue,
      toDefinition integerValueToBigint]
 
-define :: String -> TTerm a -> TTermDefinition a
+define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModule module_
 
-bigintToIntegerValue :: TTermDefinition (IntegerType -> Integer -> IntegerValue)
+bigintToIntegerValue :: TypedTermDefinition (IntegerType -> Integer -> IntegerValue)
 bigintToIntegerValue = define "bigintToIntegerValue" $
   doc "Convert a bigint to an integer value of a given type (note: lossy)" $
   "it" ~> "bi" ~> cases _IntegerType (var "it")
@@ -84,7 +84,7 @@ bigintToIntegerValue = define "bigintToIntegerValue" $
     _IntegerType_uint32>>: constant $ Core.integerValueUint32 $ Literals.bigintToUint32 $ var "bi",
     _IntegerType_uint64>>: constant $ Core.integerValueUint64 $ Literals.bigintToUint64 $ var "bi"]
 
-integerValueToBigint :: TTermDefinition (IntegerValue -> Integer)
+integerValueToBigint :: TypedTermDefinition (IntegerValue -> Integer)
 integerValueToBigint = define "integerValueToBigint" $
   doc "Convert an integer value of any precision to a bigint" $
   match _IntegerValue

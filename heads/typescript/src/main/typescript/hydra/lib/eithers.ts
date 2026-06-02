@@ -41,14 +41,14 @@ export const pure = <R, L = never>(x: R): Either<L, R> => Right(x);
 
 // `fromLeft` / `fromRight` are lazy in their default position — see
 // docs/recipes/new-implementation.md "Lazy evaluation and thunking".
-const force = <A>(x: A | (() => A)): A =>
-  typeof x === "function" ? (x as () => A)() : x;
+// The thunk-or-value branching is inlined to save one JS frame per
+// call (matches lib/logic.ts ifElse). See feature_126_typescript-plan.md.
 
 export const fromLeft = <L, R>(d: L | (() => L), e: Either<L, R>): L =>
-  e.tag === "left" ? e.value : force(d);
+  e.tag === "left" ? e.value : (typeof d === "function" ? (d as () => L)() : d);
 
 export const fromRight = <L, R>(d: R | (() => R), e: Either<L, R>): R =>
-  e.tag === "right" ? e.value : force(d);
+  e.tag === "right" ? e.value : (typeof d === "function" ? (d as () => R)() : d);
 
 export const lefts = <L, R>(es: readonly Either<L, R>[]): readonly L[] => {
   const out: L[] = [];

@@ -11,7 +11,7 @@ wrappers for generated unit-enum constants so they can be called with ().
 import hydra.core as C
 import hydra.dsl.meta.phantoms as Phantoms
 from hydra.core import Name
-from hydra.phantoms import TTerm
+from hydra.typed import TypedTerm
 
 # Re-export everything from the generated DSL module.
 from hydra.dsl.core import *  # noqa: F401, F403
@@ -24,7 +24,7 @@ import hydra.dsl.core as _Gen
 # Aliases for Python reserved words
 # ============================================================
 
-def let_(bindings: TTerm, body: TTerm) -> TTerm:
+def let_(bindings: TypedTerm, body: TypedTerm) -> TypedTerm:
     """Construct a Let (alias for generated `let` which shadows the Python keyword)."""
     return _Gen.let(bindings, body)
 
@@ -32,87 +32,87 @@ def let_(bindings: TTerm, body: TTerm) -> TTerm:
 # ============================================================
 # Function wrappers for generated unit-enum constants
 #
-# The generated module defines these as module-level TTerm constants.
+# The generated module defines these as module-level TypedTerm constants.
 # We override them as zero-argument functions for backward compatibility,
 # since the meta module historically defined them as functions.
 # ============================================================
 
-def float_type_float32() -> TTerm:
+def float_type_float32() -> TypedTerm:
     """The float32 FloatType variant."""
     return _Gen.float_type_float32
 
 
-def float_type_float64() -> TTerm:
+def float_type_float64() -> TypedTerm:
     """The float64 FloatType variant."""
     return _Gen.float_type_float64
 
 
-def integer_type_bigint() -> TTerm:
+def integer_type_bigint() -> TypedTerm:
     """The bigint IntegerType variant."""
     return _Gen.integer_type_bigint
 
 
-def integer_type_int8() -> TTerm:
+def integer_type_int8() -> TypedTerm:
     """The int8 IntegerType variant."""
     return _Gen.integer_type_int8
 
 
-def integer_type_int16() -> TTerm:
+def integer_type_int16() -> TypedTerm:
     """The int16 IntegerType variant."""
     return _Gen.integer_type_int16
 
 
-def integer_type_int32() -> TTerm:
+def integer_type_int32() -> TypedTerm:
     """The int32 IntegerType variant."""
     return _Gen.integer_type_int32
 
 
-def integer_type_int64() -> TTerm:
+def integer_type_int64() -> TypedTerm:
     """The int64 IntegerType variant."""
     return _Gen.integer_type_int64
 
 
-def integer_type_uint8() -> TTerm:
+def integer_type_uint8() -> TypedTerm:
     """The uint8 IntegerType variant."""
     return _Gen.integer_type_uint8
 
 
-def integer_type_uint16() -> TTerm:
+def integer_type_uint16() -> TypedTerm:
     """The uint16 IntegerType variant."""
     return _Gen.integer_type_uint16
 
 
-def integer_type_uint32() -> TTerm:
+def integer_type_uint32() -> TypedTerm:
     """The uint32 IntegerType variant."""
     return _Gen.integer_type_uint32
 
 
-def integer_type_uint64() -> TTerm:
+def integer_type_uint64() -> TypedTerm:
     """The uint64 IntegerType variant."""
     return _Gen.integer_type_uint64
 
 
-def literal_type_binary() -> TTerm:
+def literal_type_binary() -> TypedTerm:
     """The binary LiteralType variant."""
     return _Gen.literal_type_binary
 
 
-def literal_type_boolean() -> TTerm:
+def literal_type_boolean() -> TypedTerm:
     """The boolean LiteralType variant."""
     return _Gen.literal_type_boolean
 
 
-def literal_type_string() -> TTerm:
+def literal_type_string() -> TypedTerm:
     """The string LiteralType variant."""
     return _Gen.literal_type_string
 
 
-def term_unit() -> TTerm:
+def term_unit() -> TypedTerm:
     """The unit Term variant."""
     return _Gen.term_unit
 
 
-def type_unit() -> TTerm:
+def type_unit() -> TypedTerm:
     """The unit Type variant."""
     return _Gen.type_unit
 
@@ -121,12 +121,12 @@ def type_unit() -> TTerm:
 # Name helpers (custom)
 # ============================================================
 
-def name_lift(n: Name) -> TTerm:
-    """Lift a Python Name value into a TTerm Name."""
+def name_lift(n: Name) -> TypedTerm:
+    """Lift a Python Name value into a TypedTerm Name."""
     return Phantoms.wrap(C.Name.TYPE_, Phantoms.string(n.value))
 
 
-def un_namespace(ns: TTerm) -> TTerm:
+def un_namespace(ns: TypedTerm) -> TypedTerm:
     """Unwrap a ModuleName to its underlying string."""
     _NAMESPACE_NAME = Name("hydra.packaging.ModuleName")
     return Phantoms.apply(Phantoms.unwrap(_NAMESPACE_NAME), ns)
@@ -136,13 +136,13 @@ def un_namespace(ns: TTerm) -> TTerm:
 # Non-schema helpers (custom)
 # ============================================================
 
-def equal_name(left: TTerm, right: TTerm) -> TTerm:
+def equal_name(left: TypedTerm, right: TypedTerm) -> TypedTerm:
     """Check equality of two Names by comparing their string values."""
     import hydra.dsl.meta.lib.equality as Equality
     return Equality.equal(un_name(left), un_name(right))
 
 
-def equal_name_list(lefts: TTerm, rights: TTerm) -> TTerm:
+def equal_name_list(lefts: TypedTerm, rights: TypedTerm) -> TypedTerm:
     """Check equality of two Name lists."""
     import hydra.dsl.meta.lib.equality as Equality
     import hydra.dsl.meta.lib.lists as Lists
@@ -155,12 +155,12 @@ def equal_name_list(lefts: TTerm, rights: TTerm) -> TTerm:
         Logic.ands(Lists.zip_with(equal_name_fn, lefts, rights)))
 
 
-def field_with_term_value(ft: TTerm, t: TTerm) -> TTerm:
+def field_with_term_value(ft: TypedTerm, t: TypedTerm) -> TypedTerm:
     """Return a Field with a replacement term (same name)."""
     return _Gen.field(field_name(ft), t)
 
 
-def field_type_with_type_value(ft: TTerm, t: TTerm) -> TTerm:
+def field_type_with_type_value(ft: TypedTerm, t: TypedTerm) -> TypedTerm:
     """Return a FieldType with a replacement type (same name)."""
     return _Gen.field_type(field_type_name(ft), t)
 
@@ -170,16 +170,16 @@ def field_type_with_type_value(ft: TTerm, t: TTerm) -> TTerm:
 # (Used in meta-level encoding, e.g. for building terms that represent terms)
 # ============================================================
 
-def int32_term(v: int) -> TTerm:
+def int32_term(v: int) -> TypedTerm:
     """Create an encoded int32 Term value."""
     return term_literal(literal_integer(integer_value_int32(Phantoms.int32(v))))
 
 
-def string_term(s: str) -> TTerm:
+def string_term(s: str) -> TypedTerm:
     """Create an encoded string Term value."""
     return term_literal(literal_string(Phantoms.string(s)))
 
 
-def false_term() -> TTerm:
+def false_term() -> TypedTerm:
     """Create an encoded boolean false Term value."""
     return term_literal(literal_boolean(Phantoms.false))

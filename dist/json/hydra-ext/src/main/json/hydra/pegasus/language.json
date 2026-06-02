@@ -3,6 +3,7 @@
     {
       "term": {
         "name": "hydra.pegasus.language.pdlLanguage",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.coders.Language"}}, "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Language constraints for LinkedIn Pegasus (PDL)"}}}],
@@ -110,14 +111,12 @@
                                 "name": "types",
                                 "term": {"typeApplication": {"body": {"variable": "typePredicate"}, "type": {"variable": "hydra.core.Type"}}}}],
                             "typeName": "hydra.coders.LanguageConstraints"}}}],
-                    "typeName": "hydra.coders.Language"}}}}}},
-        "typeScheme": {"body": {"variable": "hydra.coders.Language"}, "variables": []}}}],
+                    "typeName": "hydra.coders.Language"}}}}}}}}],
   "dependencies": [
     {"module": "hydra.lexical"},
     {"module": "hydra.paths"},
     {"module": "hydra.ast"},
     {"module": "hydra.coders"},
-    {"module": "hydra.context"},
     {"module": "hydra.core"},
     {"module": "hydra.error.checking"},
     {"module": "hydra.error.core"},
@@ -127,15 +126,15 @@
     {"module": "hydra.json.model"},
     {"module": "hydra.packaging"},
     {"module": "hydra.parsing"},
-    {"module": "hydra.phantoms"},
     {"module": "hydra.query"},
     {"module": "hydra.relational"},
     {"module": "hydra.tabular"},
     {"module": "hydra.testing"},
     {"module": "hydra.topology"},
+    {"module": "hydra.typed"},
     {"module": "hydra.typing"},
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "description": "Language constraints for LinkedIn Pegasus (PDL)",
+  "metadata": {"comments": [], "description": "Language constraints for LinkedIn Pegasus (PDL)", "seeAlso": []},
   "name": "hydra.pegasus.language"}

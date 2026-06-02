@@ -6,7 +6,7 @@ module Hydra.Sources.Protobuf.Coder where
 
 -- Standard imports for term-level sources outside of the kernel
 import Hydra.Kernel
-import           Hydra.Dsl.Bootstrap (unqualifiedDep)
+import           Hydra.Dsl.Bootstrap (unqualifiedDep, descriptionMetadata)
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Meta.Lib.Strings                as Strings
 import           Hydra.Dsl.Meta.Phantoms                   as Phantoms
@@ -21,7 +21,6 @@ import qualified Hydra.Dsl.Meta.Lib.Maybes                 as Maybes
 import qualified Hydra.Dsl.Meta.Lib.Pairs                  as Pairs
 import qualified Hydra.Dsl.Meta.Lib.Sets                   as Sets
 import qualified Hydra.Dsl.Coders                     as Coders
-import qualified Hydra.Dsl.Meta.Context                    as Ctx
 import qualified Hydra.Dsl.Meta.Core                       as Core
 import qualified Hydra.Dsl.Errors                      as Error
 import qualified Hydra.Dsl.Packaging                     as Packaging
@@ -53,26 +52,12 @@ import qualified Data.Maybe                                as Y
 
 -- Additional imports
 import qualified Hydra.Protobuf.Proto3 as P3
+import qualified Hydra.Protobuf.Environment as PE
 import qualified Hydra.Sources.Protobuf.Proto3 as Proto3Syntax
 import qualified Hydra.Sources.Protobuf.Language as ProtobufLanguageSource
 import qualified Hydra.Sources.Protobuf.Environment as ProtobufEnvironment
 import qualified Hydra.Sources.Protobuf.Serde as ProtobufSerdeSource
 
-
-def :: String -> TTerm a -> TTermDefinition a
-def = definitionInModule module_
-
--- | Name for the StructuralTypeRef union type (either | pair)
-_StructuralTypeRef :: Name
-_StructuralTypeRef = Name "hydra.protobuf.environment.StructuralTypeRef"
-
--- | An empty list term, avoiding ambiguous type variable issues with 'list []'
-emptyList :: TTerm [a]
-emptyList = TTerm $ TermList []
-
--- | Reference to the hydra.decode.core.type function (Graph -> Term -> Either DecodingError Type)
-decodeType :: TTerm (Graph -> Term -> Either DecodingError Type)
-decodeType = TTerm $ TermVariable $ Name "hydra.decode.core.type"
 
 ns :: ModuleName
 ns = ModuleName "hydra.protobuf.coder"
@@ -85,7 +70,7 @@ module_ = Module {
       Formatting.ns, Names.ns, Rewriting.ns, Strip.ns, Variables.ns, Analysis.ns, Environment.ns, Predicates.ns, Lexical.ns, Serialization.ns,
       Annotations.ns, Constants.ns, ExtractCore.ns, Adapt.ns, ShowCore.ns, ShowError.ns,
       moduleName DecodeCore.module_] L.++ (ProtobufEnvironment.ns:Proto3Syntax.ns:KernelTypes.kernelTypesModuleNames)),
-            moduleDescription = Just "Protobuf code generator: converts Hydra modules to Protocol Buffers v3 definitions"}
+            moduleMetadata = descriptionMetadata (Just "Protobuf code generator: converts Hydra modules to Protocol Buffers v3 definitions")}
   where
     definitions = [
       toDefinition collectStructuralTypes,
@@ -126,8 +111,22 @@ module_ = Module {
 -- Constants
 -- =============================================================================
 
+-- | Name for the EncoderState record type (kept locally to avoid extra imports)
+_EncoderState :: Name
+_EncoderState = Name "hydra.protobuf.environment.EncoderState"
+
+_EncoderState_context :: Name
+_EncoderState_context = Name "context"
+
+_EncoderState_fieldIndex :: Name
+_EncoderState_fieldIndex = Name "fieldIndex"
+
+-- | Name for the StructuralTypeRef union type (either | pair)
+_StructuralTypeRef :: Name
+_StructuralTypeRef = Name "hydra.protobuf.environment.StructuralTypeRef"
+
 -- | Collect all structural type references (Either, Pair) from a list of types
-collectStructuralTypes :: TTermDefinition ([Type] -> S.Set Term)
+collectStructuralTypes :: TypedTermDefinition ([Type] -> S.Set Term)
 collectStructuralTypes = def "collectStructuralTypes" $
   doc "Collect all structural type references (Either, Pair) from a list of types" $
   "types" ~>
@@ -136,7 +135,7 @@ collectStructuralTypes = def "collectStructuralTypes" $
       Sets.empty
       (var "types")
 
-collectStructuralTypes_collectFromType :: TTermDefinition (Type -> S.Set Term)
+collectStructuralTypes_collectFromType :: TypedTermDefinition (Type -> S.Set Term)
 collectStructuralTypes_collectFromType = def "collectStructuralTypes_collectFromType" $
   doc "Collect structural type references from a single type" $
   "typ" ~>
@@ -160,12 +159,12 @@ collectStructuralTypes_collectFromType = def "collectStructuralTypes_collectFrom
 -- Module-level entry point
 -- =============================================================================
 
-constructModule :: TTermDefinition (Context -> Graph -> Module -> [TypeDefinition] -> Either Error P3.ProtoFile)
+constructModule :: TypedTermDefinition (PE.EncoderState -> Graph -> Module -> [TypeDefinition] -> Either Error P3.ProtoFile)
 constructModule = def "constructModule" $
   doc "Construct a Protobuf file from a Hydra module and its type definitions" $
   "cx" ~> "g" ~> "mod" ~> "typeDefs" ~> lets [
     "ns_">: Packaging.moduleName (var "mod"),
-    "desc">: Packaging.moduleDescription (var "mod"),
+    "desc">: (Maybes.bind (Packaging.moduleMetadata (var "mod")) ("em" ~> Packaging.entityMetadataDescription (var "em"))),
     "toDef">: "td" ~> lets [
       "name">: Packaging.typeDefinitionName (var "td"),
       "typ">: Core.typeSchemeBody $ Packaging.typeDefinitionTypeScheme (var "td"),
@@ -219,7 +218,7 @@ constructModule = def "constructModule" $
       (var "checkFields" @@ var "emptyCheckType" @@ var "checkFieldType_empty" @@ var "types")
       (list [wrap P3._FileReference (string "google/protobuf/empty.proto")])
       emptyList] $
-    "schemaImports" <<~ (Analysis.moduleDependencyNamespaces @@ var "cx" @@ var "g" @@ true @@ false @@ false @@ false @@ var "mod") $
+    "schemaImports" <<~ (Analysis.moduleDependencyModuleNames @@ esContext (var "cx") @@ var "g" @@ true @@ false @@ false @@ false @@ var "mod") $
     "definitions" <<~ (Eithers.mapList (var "toDef") (var "typeDefs")) $ lets [
       "schemaImportList">: Lists.map (lambda "n" $ asTerm namespaceToFileReference @@ var "n") (Sets.toList (var "schemaImports"))] $
       "helperResult" <<~ (asTerm mapAccumResult @@
@@ -237,12 +236,23 @@ constructModule = def "constructModule" $
 -- Accumulator helper
 -- =============================================================================
 
-encodeDefinition :: TTermDefinition (Context -> Graph -> ModuleName -> Name -> Type -> Either Error P3.Definition)
+-- | Reference to the hydra.decode.core.type function (Graph -> Term -> Either DecodingError Type)
+decodeType :: TypedTerm (Graph -> Term -> Either DecodingError Type)
+decodeType = TypedTerm $ TermVariable $ Name "hydra.decode.core.type"
+
+def :: String -> TypedTerm a -> TypedTermDefinition a
+def = definitionInModule module_
+
+-- | An empty list term, avoiding ambiguous type variable issues with 'list []'
+emptyList :: TypedTerm [a]
+emptyList = TypedTerm $ TermList []
+
+encodeDefinition :: TypedTermDefinition (PE.EncoderState -> Graph -> ModuleName -> Name -> Type -> Either Error P3.Definition)
 encodeDefinition = def "encodeDefinition" $
   doc "Encode a Hydra type as a Protobuf definition" $
   "cx" ~> "g" ~> "localNs" ~> "name" ~> "typ" ~> lets [
-    "cx1">: Annotations.resetCount @@ asTerm key_proto_field_index @@ var "cx",
-    "cx2">: Pairs.second (Annotations.nextCount @@ asTerm key_proto_field_index @@ var "cx1"),
+    "cx1">: esResetFieldIndex (var "cx"),
+    "cx2">: Pairs.second (esNextFieldIndex (var "cx1")),
     "wrapAsRecordType">: "t" ~>
       inject _Type _Type_record (list [Core.fieldType (Core.name (string "value")) (var "t")]),
     "toEitherString">: "result" ~> var "result",
@@ -265,7 +275,7 @@ encodeDefinition = def "encodeDefinition" $
 -- Enum encoding
 -- =============================================================================
 
-encodeEnumDefinition :: TTermDefinition (Context -> Graph -> [P3.Option] -> Name -> [FieldType] -> Either Error P3.EnumDefinition)
+encodeEnumDefinition :: TypedTermDefinition (PE.EncoderState -> Graph -> [P3.Option] -> Name -> [FieldType] -> Either Error P3.EnumDefinition)
 encodeEnumDefinition = def "encodeEnumDefinition" $
   doc "Encode a Hydra union type as a Protobuf enum definition" $
   "cx" ~> "g" ~> "options" ~> "tname" ~> "fts" ~> lets [
@@ -290,7 +300,7 @@ encodeEnumDefinition = def "encodeEnumDefinition" $
       P3._EnumDefinition_values>>: Lists.cons (var "unspecifiedField") (var "values"),
       P3._EnumDefinition_options>>: var "options"]
 
-encodeEnumValueName :: TTermDefinition (Name -> Name -> P3.EnumValueName)
+encodeEnumValueName :: TypedTermDefinition (Name -> Name -> P3.EnumValueName)
 encodeEnumValueName = def "encodeEnumValueName" $
   doc "Encode an enum value name from type name and field name" $
   "tname" ~> "fname" ~> lets [
@@ -302,7 +312,7 @@ encodeEnumValueName = def "encodeEnumValueName" $
 -- Field encoding
 -- =============================================================================
 
-encodeFieldName :: TTermDefinition (Bool -> Name -> P3.FieldName)
+encodeFieldName :: TypedTermDefinition (Bool -> Name -> P3.FieldName)
 encodeFieldName = def "encodeFieldName" $
   doc "Encode a field name, optionally preserving the original case" $
   "preserve" ~> "name" ~>
@@ -312,7 +322,7 @@ encodeFieldName = def "encodeFieldName" $
         (Formatting.convertCaseCamelToLowerSnake @@ (unwrap _Name @@ var "name"))
 
 -- | Returns the field and updated context (for counter threading)
-encodeFieldType :: TTermDefinition (Context -> Graph -> ModuleName -> FieldType -> Either Error (P3.Field, Context))
+encodeFieldType :: TypedTermDefinition (PE.EncoderState -> Graph -> ModuleName -> FieldType -> Either Error (P3.Field, PE.EncoderState))
 encodeFieldType = def "encodeFieldType" $
   doc "Encode a Hydra field type as a Protobuf field" $
   "cx" ~> "g" ~> "localNs" ~> "ft" ~> lets [
@@ -382,7 +392,7 @@ encodeFieldType = def "encodeFieldType" $
               ("resolvedTyp" ~> var "encodeSimpleType_" @@ var "cx0" @@ var "g0" @@ var "ns0" @@ var "noms" @@ var "resolvedTyp"))]] $
     "options" <<~ (asTerm findOptions @@ var "cx" @@ var "g" @@ var "ftype") $
     "ft_" <<~ (var "encodeType_" @@ var "cx" @@ var "g" @@ var "localNs" @@ var "ftype") $ lets [
-      "idxPair">: Annotations.nextCount @@ asTerm key_proto_field_index @@ var "cx",
+      "idxPair">: esNextFieldIndex (var "cx"),
       "idx">: Pairs.first (var "idxPair"),
       "cx1">: Pairs.second (var "idxPair")] $
     "preserve" <<~ (asTerm readBooleanAnnotation @@ var "cx" @@ var "g" @@ Constants.keyPreserveFieldName @@ var "ftype") $
@@ -400,7 +410,7 @@ encodeFieldType = def "encodeFieldType" $
 -- =============================================================================
 
 -- | Returns the message definition; counter is threaded via context
-encodeRecordType :: TTermDefinition (Context -> Graph -> ModuleName -> [P3.Option] -> Name -> [FieldType] -> Either Error P3.MessageDefinition)
+encodeRecordType :: TypedTermDefinition (PE.EncoderState -> Graph -> ModuleName -> [P3.Option] -> Name -> [FieldType] -> Either Error P3.MessageDefinition)
 encodeRecordType = def "encodeRecordType" $
   doc "Encode a Hydra record type as a Protobuf message definition" $
   "cx" ~> "g" ~> "localNs" ~> "options" ~> "tname" ~> "fts" ~>
@@ -418,7 +428,7 @@ encodeRecordType = def "encodeRecordType" $
 -- Scalar type encoding
 -- =============================================================================
 
-encodeScalarType :: TTermDefinition (Context -> LiteralType -> Either Error P3.ScalarType)
+encodeScalarType :: TypedTermDefinition (PE.EncoderState -> LiteralType -> Either Error P3.ScalarType)
 encodeScalarType = def "encodeScalarType" $
   doc "Encode a Hydra literal type as a Protobuf scalar type" $
   "cx" ~> "lt" ~>
@@ -440,7 +450,7 @@ encodeScalarType = def "encodeScalarType" $
           _IntegerType_uint64>>: constant $ right (inject P3._ScalarType P3._ScalarType_uint64 unit)],
       _LiteralType_string>>: constant $ right (inject P3._ScalarType P3._ScalarType_string unit)]
 
-encodeScalarTypeWrapped :: TTermDefinition (Context -> LiteralType -> Either Error P3.SimpleType)
+encodeScalarTypeWrapped :: TypedTermDefinition (PE.EncoderState -> LiteralType -> Either Error P3.SimpleType)
 encodeScalarTypeWrapped = def "encodeScalarTypeWrapped" $
   doc "Encode a Hydra literal type as a wrapped Protobuf type (for optional scalars)" $
   "cx" ~> "lt" ~> lets [
@@ -469,7 +479,7 @@ encodeScalarTypeWrapped = def "encodeScalarTypeWrapped" $
 -- =============================================================================
 
 -- | Encode a simple type for helper message fields
-encodeSimpleTypeForHelper :: TTermDefinition (Context -> ModuleName -> Type -> Either Error P3.SimpleType)
+encodeSimpleTypeForHelper :: TypedTermDefinition (PE.EncoderState -> ModuleName -> Type -> Either Error P3.SimpleType)
 encodeSimpleTypeForHelper = def "encodeSimpleTypeForHelper" $
   doc "Encode a simple type for helper message fields" $
   "cx" ~> "localNs" ~> "typ" ~> lets [
@@ -485,24 +495,24 @@ encodeSimpleTypeForHelper = def "encodeSimpleTypeForHelper" $
       _Type_unit>>: constant $ right (inject P3._SimpleType P3._SimpleType_reference (wrap P3._TypeName (string "google.protobuf.Empty"))),
       _Type_variable>>: "name" ~> var "forNominal" @@ var "name"]
 
-encodeTypeName :: TTermDefinition (Name -> P3.TypeName)
+encodeTypeName :: TypedTermDefinition (Name -> P3.TypeName)
 encodeTypeName = def "encodeTypeName" $
   doc "Encode a Hydra type name as a Protobuf type name" $
   "name" ~> wrap P3._TypeName (Names.localNameOf @@ var "name")
 
-encodeTypeReference :: TTermDefinition (ModuleName -> Name -> P3.TypeName)
+encodeTypeReference :: TypedTermDefinition (ModuleName -> Name -> P3.TypeName)
 encodeTypeReference = def "encodeTypeReference" $
   doc "Encode a Hydra name as a Protobuf type reference" $
   "localNs" ~> "name" ~> lets [
     "qn">: Names.qualifyName @@ var "name",
     "local">: Packaging.qualifiedNameLocal (var "qn"),
     "ns_">: Packaging.qualifiedNameModuleName (var "qn"),
-    "localNsParts">: Maybes.fromMaybe (list ([] :: [TTerm String])) (Lists.maybeInit (Strings.splitOn (string ".") (unwrap _ModuleName @@ var "localNs")))] $
+    "localNsParts">: Maybes.fromMaybe (list ([] :: [TypedTerm String])) (Lists.maybeInit (Strings.splitOn (string ".") (unwrap _ModuleName @@ var "localNs")))] $
     wrap P3._TypeName $
       Maybes.maybe
         (var "local")
         ("nsVal" ~> lets [
-          "nsParts">: Maybes.fromMaybe (list ([] :: [TTerm String])) (Lists.maybeInit (Strings.splitOn (string ".") (unwrap _ModuleName @@ var "nsVal")))] $
+          "nsParts">: Maybes.fromMaybe (list ([] :: [TypedTerm String])) (Lists.maybeInit (Strings.splitOn (string ".") (unwrap _ModuleName @@ var "nsVal")))] $
           Logic.ifElse (Equality.equal (var "nsParts") (var "localNsParts"))
             (var "local")
             (Strings.intercalate (string ".") (Lists.concat (list [var "nsParts", list [var "local"]]))))
@@ -512,16 +522,34 @@ encodeTypeReference = def "encodeTypeReference" $
 -- Type flattening
 -- =============================================================================
 
-err :: TTermDefinition (Context -> String -> Either Error a)
+err :: TypedTermDefinition (PE.EncoderState -> String -> Either Error a)
 err = def "err" $
   "cx" ~> "msg" ~>
-  Ctx.failInContext (Error.errorOther $ Error.otherError (var "msg")) (var "cx")
+  left (Error.errorOther $ Error.otherError (var "msg"))
 
-findOptions :: TTermDefinition (Context -> Graph -> Type -> Either Error [P3.Option])
+-- | Project the InferenceContext out of an EncoderState
+esContext :: TypedTerm PE.EncoderState -> TypedTerm InferenceContext
+esContext es = project _EncoderState _EncoderState_context @@ es
+
+-- | Project the field-index counter out of an EncoderState
+esFieldIndex :: TypedTerm PE.EncoderState -> TypedTerm Int
+esFieldIndex es = project _EncoderState _EncoderState_fieldIndex @@ es
+
+-- | Yield (current field index, EncoderState with field index incremented)
+esNextFieldIndex :: TypedTerm PE.EncoderState -> TypedTerm (Int, PE.EncoderState)
+esNextFieldIndex es = pair
+  (esFieldIndex es)
+  (mkEncoderState (esContext es) (Math.add (esFieldIndex es) (int32 1)))
+
+-- | Reset the field-index counter to zero, preserving the InferenceContext
+esResetFieldIndex :: TypedTerm PE.EncoderState -> TypedTerm PE.EncoderState
+esResetFieldIndex es = mkEncoderState (esContext es) (int32 0)
+
+findOptions :: TypedTermDefinition (PE.EncoderState -> Graph -> Type -> Either Error [P3.Option])
 findOptions = def "findOptions" $
   doc "Find Protobuf options for a type (description and deprecated)" $
   "cx" ~> "g" ~> "typ" ~>
-    "mdesc" <<~ (Annotations.getTypeDescription @@ var "cx" @@ var "g" @@ var "typ") $
+    "mdesc" <<~ (Annotations.getTypeDescription @@ esContext (var "cx") @@ var "g" @@ var "typ") $
     "bdep" <<~ (asTerm readBooleanAnnotation @@ var "cx" @@ var "g" @@ Constants.keyDeprecated @@ var "typ") $ lets [
       "mdescAnn">: Maybes.map
         ("desc_" ~> record P3._Option [
@@ -540,7 +568,7 @@ findOptions = def "findOptions" $
 -- =============================================================================
 
 -- | Eliminate type lambdas and type applications, simply replacing type variables with the string type
-flattenType :: TTermDefinition (Type -> Type)
+flattenType :: TypedTermDefinition (Type -> Type)
 flattenType = def "flattenType" $
   doc "Eliminate type lambdas and type applications, replacing type variables with the string type" $
   "typ" ~>
@@ -556,7 +584,7 @@ flattenType = def "flattenType" $
 -- Options
 -- =============================================================================
 
-fromEitherString :: TTermDefinition (Context -> Either String a -> Either Error a)
+fromEitherString :: TypedTermDefinition (PE.EncoderState -> Either String a -> Either Error a)
 fromEitherString = def "fromEitherString" $
   "cx" ~> "e" ~>
   Eithers.bimap
@@ -570,15 +598,15 @@ fromEitherString = def "fromEitherString" $
 
 -- | Generate a helper message definition for a structural type.
 -- Returns the definition and the updated context (counter state).
-generateStructuralTypeMessage :: TTermDefinition (Context -> Graph -> ModuleName -> Term -> Either Error (P3.Definition, Context))
+generateStructuralTypeMessage :: TypedTermDefinition (PE.EncoderState -> Graph -> ModuleName -> Term -> Either Error (P3.Definition, PE.EncoderState))
 generateStructuralTypeMessage = def "generateStructuralTypeMessage" $
   doc "Generate a helper message definition for a structural type" $
   "cx" ~> "g" ~> "localNs" ~> "ref" ~> lets [
-    "cx1">: Annotations.resetCount @@ asTerm key_proto_field_index @@ var "cx",
-    "cx2">: Pairs.second (Annotations.nextCount @@ asTerm key_proto_field_index @@ var "cx1"),
+    "cx1">: esResetFieldIndex (var "cx"),
+    "cx2">: Pairs.second (esNextFieldIndex (var "cx1")),
     "makeField">: "cx0" ~> "fname" ~> "ftyp" ~>
       "ft" <<~ (asTerm encodeSimpleTypeForHelper @@ var "cx0" @@ var "localNs" @@ var "ftyp") $ lets [
-        "idxPair">: Annotations.nextCount @@ asTerm key_proto_field_index @@ var "cx0",
+        "idxPair">: esNextFieldIndex (var "cx0"),
         "idx">: Pairs.first (var "idxPair"),
         "cx1_">: Pairs.second (var "idxPair")] $
         right $ pair
@@ -623,7 +651,7 @@ generateStructuralTypeMessage = def "generateStructuralTypeMessage" $
               P3._MessageDefinition_options>>: emptyList])
           (var "cx4")] @@ var "ref"
 
-isEnumDefinition :: TTermDefinition (Type -> Bool)
+isEnumDefinition :: TypedTermDefinition (Type -> Bool)
 isEnumDefinition = def "isEnumDefinition" $
   doc "Check if a type is an enum definition" $
   "typ" ~>
@@ -635,7 +663,7 @@ isEnumDefinition = def "isEnumDefinition" $
 -- ModuleName conversion
 -- =============================================================================
 
-isEnumFields :: TTermDefinition ([FieldType] -> Bool)
+isEnumFields :: TypedTermDefinition ([FieldType] -> Bool)
 isEnumFields = def "isEnumFields" $
   doc "Check if all fields are unit types (i.e., this is an enum)" $
   "fts" ~>
@@ -644,11 +672,11 @@ isEnumFields = def "isEnumFields" $
       true
       (var "fts")
 
-javaMultipleFilesOptionName :: TTermDefinition String
+javaMultipleFilesOptionName :: TypedTermDefinition String
 javaMultipleFilesOptionName = def "javaMultipleFilesOptionName" $
   string "java_multiple_files"
 
-javaPackageOptionName :: TTermDefinition String
+javaPackageOptionName :: TypedTermDefinition String
 javaPackageOptionName = def "javaPackageOptionName" $
   string "java_package"
 
@@ -656,7 +684,7 @@ javaPackageOptionName = def "javaPackageOptionName" $
 -- Module construction
 -- =============================================================================
 
-key_proto_field_index :: TTermDefinition Name
+key_proto_field_index :: TypedTermDefinition Name
 key_proto_field_index = def "key_proto_field_index" $
   Core.name (string "proto_field_index")
 
@@ -665,7 +693,7 @@ key_proto_field_index = def "key_proto_field_index" $
 -- =============================================================================
 
 -- | Helper to thread context through a list, accumulating results
-mapAccumResult :: TTermDefinition ((Context -> a -> Either Error (b, Context)) -> Context -> [a] -> Either Error ([b], Context))
+mapAccumResult :: TypedTermDefinition ((PE.EncoderState -> a -> Either Error (b, PE.EncoderState)) -> PE.EncoderState -> [a] -> Either Error ([b], PE.EncoderState))
 mapAccumResult = def "mapAccumResult" $
   doc "Thread context through a list, accumulating results" $
   "f" ~> "cx0" ~> "xs" ~>
@@ -686,15 +714,25 @@ mapAccumResult = def "mapAccumResult" $
 -- Definition encoding
 -- =============================================================================
 
+-- | Build a new EncoderState with the given context and field index
+mkEncoderState :: TypedTerm InferenceContext -> TypedTerm Int -> TypedTerm PE.EncoderState
+mkEncoderState ctx fi = record _EncoderState [
+    _EncoderState_context >>: ctx,
+    _EncoderState_fieldIndex >>: fi]
+
 -- | Note: follows the Protobuf Style Guide (https://protobuf.dev/programming-guides/style)
-moduleToProtobuf :: TTermDefinition (Module -> [Definition] -> Context -> Graph -> Either Error (M.Map FilePath String))
+-- | The boundary signature uses InferenceContext to fit the shared
+-- 'generateSources' contract; internally we wrap it in an EncoderState with a
+-- zero field-index counter, which is then threaded through encoding.
+moduleToProtobuf :: TypedTermDefinition (Module -> [Definition] -> InferenceContext -> Graph -> Either Error (M.Map FilePath String))
 moduleToProtobuf = def "moduleToProtobuf" $
   doc "Convert a Hydra module to Protocol Buffers v3 source files" $
   "mod" ~> "defs" ~> "cx" ~> "g" ~> lets [
     "ns_">: Packaging.moduleName (var "mod"),
     "partitioned">: Environment.partitionDefinitions @@ var "defs",
-    "typeDefs">: Pairs.first (var "partitioned")] $
-    "pfile" <<~ (asTerm constructModule @@ var "cx" @@ var "g" @@ var "mod" @@ var "typeDefs") $ lets [
+    "typeDefs">: Pairs.first (var "partitioned"),
+    "es">: mkEncoderState (var "cx") (int32 0)] $
+    "pfile" <<~ (asTerm constructModule @@ var "es" @@ var "g" @@ var "mod" @@ var "typeDefs") $ lets [
       "content">: Serialization.printExpr @@ (Serialization.parenthesize @@ (ProtobufSerdeSource.protoFileToExpr @@ var "pfile")),
       "path">: unwrap P3._FileReference @@ (asTerm namespaceToFileReference @@ var "ns_")] $
       right $ Maps.singleton (var "path") (var "content")
@@ -703,7 +741,7 @@ moduleToProtobuf = def "moduleToProtobuf" $
 -- Option name constants
 -- =============================================================================
 
-namespaceToFileReference :: TTermDefinition (ModuleName -> P3.FileReference)
+namespaceToFileReference :: TypedTermDefinition (ModuleName -> P3.FileReference)
 namespaceToFileReference = def "namespaceToFileReference" $
   doc "Convert a Hydra namespace to a Protobuf file reference" $
   "ns_" ~> lets [
@@ -711,7 +749,7 @@ namespaceToFileReference = def "namespaceToFileReference" $
       (Lists.map (lambda "s" $ Formatting.convertCaseCamelToLowerSnake @@ var "s") (Strings.splitOn (string ".") (unwrap _ModuleName @@ var "ns_")))] $
     wrap P3._FileReference (Strings.cat2 (var "pns") (string ".proto"))
 
-namespaceToPackageName :: TTermDefinition (ModuleName -> P3.PackageName)
+namespaceToPackageName :: TypedTermDefinition (ModuleName -> P3.PackageName)
 namespaceToPackageName = def "namespaceToPackageName" $
   doc "Convert a Hydra namespace to a Protobuf package name" $
   "ns_" ~>
@@ -719,13 +757,13 @@ namespaceToPackageName = def "namespaceToPackageName" $
       Strings.intercalate (string ".")
         (Lists.map
           (lambda "s" $ Formatting.convertCaseCamelToLowerSnake @@ var "s")
-          (Maybes.fromMaybe (list ([] :: [TTerm String])) (Lists.maybeInit (Strings.splitOn (string ".") (unwrap _ModuleName @@ var "ns_")))))
+          (Maybes.fromMaybe (list ([] :: [TypedTerm String])) (Lists.maybeInit (Strings.splitOn (string ".") (unwrap _ModuleName @@ var "ns_")))))
 
 -- =============================================================================
 -- Boolean annotation reading
 -- =============================================================================
 
-readBooleanAnnotation :: TTermDefinition (Context -> Graph -> Name -> Type -> Either Error Bool)
+readBooleanAnnotation :: TypedTermDefinition (PE.EncoderState -> Graph -> Name -> Type -> Either Error Bool)
 readBooleanAnnotation = def "readBooleanAnnotation" $
   doc "Read a boolean annotation from a type" $
   "cx" ~> "g" ~> "key" ~> "typ" ~>
@@ -739,7 +777,7 @@ readBooleanAnnotation = def "readBooleanAnnotation" $
 -- =============================================================================
 
 -- | Note: this should probably be done in the term adapters
-simplifyType :: TTermDefinition (Type -> Type)
+simplifyType :: TypedTermDefinition (Type -> Type)
 simplifyType = def "simplifyType" $
   doc "Simplify a type by removing annotations and unwrapping newtypes" $
   "typ" ~>
@@ -750,7 +788,7 @@ simplifyType = def "simplifyType" $
 -- | Generate a message name for a structural type reference.
 -- The StructuralTypeRef is represented as a tagged union with "either" and "pair" variants,
 -- where each variant holds a pair of types (left/right or first/second).
-structuralTypeName :: TTermDefinition (ModuleName -> Term -> P3.TypeName)
+structuralTypeName :: TypedTermDefinition (ModuleName -> Term -> P3.TypeName)
 structuralTypeName = def "structuralTypeName" $
   doc "Generate a message name for a structural type reference" $
   "localNs" ~> "ref" ~> lets [
@@ -794,7 +832,7 @@ structuralTypeName = def "structuralTypeName" $
             string "_",
             var "typeSuffix" @@ (Pairs.second (var "p"))])] @@ var "ref"
 
-unexpectedE :: TTermDefinition (Context -> String -> String -> Either Error a)
+unexpectedE :: TypedTermDefinition (PE.EncoderState -> String -> String -> Either Error a)
 unexpectedE = def "unexpectedE" $
   "cx" ~> "expected" ~> "found" ~>
   asTerm err @@ var "cx" @@ (Strings.cat (list [string "Expected ", var "expected", string ", found: ", var "found"]))

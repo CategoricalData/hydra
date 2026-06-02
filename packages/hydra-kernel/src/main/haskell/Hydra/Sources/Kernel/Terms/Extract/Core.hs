@@ -66,16 +66,6 @@ import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
 import qualified Hydra.Sources.Kernel.Terms.Strip as Strip
 import qualified Hydra.Sources.Kernel.Terms.Show.Errors as ShowError
 
-formatError :: TTerm (Error -> String)
-formatError = "e" ~> ShowError.error_ @@ var "e"
-
-
--- Helper for Either-based unexpected errors
--- Uses ExtractionError.UnexpectedShape wrapped in Error.Extraction
-unexpected :: TTerm String -> TTerm String -> TTerm (Prelude.Either Error a)
-unexpected expected actual = left
-  (Error.errorExtraction $ Error.extractionErrorUnexpectedShape $ Error.unexpectedShapeError expected actual)
-
 ns :: ModuleName
 ns = ModuleName "hydra.extract.core"
 
@@ -84,7 +74,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> ([Lexical.ns, Strip.ns, ShowCore.ns, ShowError.ns] L.++ kernelTypesModuleNames),
-            moduleDescription = Just ("Extraction and validation for hydra.core types")}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just ("Extraction and validation for hydra.core types"))}
   where
    definitions = [
      toDefinition bigint,
@@ -166,10 +156,10 @@ module_ = Module {
      toDefinition wrap,
      toDefinition wrappedType]
 
-define :: String -> TTerm a -> TTermDefinition a
+define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModule module_
 
-bigint :: TTermDefinition (Graph -> Term -> Prelude.Either Error Integer)
+bigint :: TypedTermDefinition (Graph -> Term -> Prelude.Either Error Integer)
 bigint = define "bigint" $
   doc "Extract an arbitrary-precision integer value from a term" $
   "graph" ~> "t" ~>
@@ -177,35 +167,35 @@ bigint = define "bigint" $
   "i" <<~ integerLiteral @@ var "l" $
   bigintValue @@ var "i"
 
-bigintValue :: TTermDefinition (IntegerValue -> Prelude.Either Error Integer)
+bigintValue :: TypedTermDefinition (IntegerValue -> Prelude.Either Error Integer)
 bigintValue = define "bigintValue" $
   doc "Extract a bigint value from an IntegerValue" $
   "v" ~> Phantoms.cases _IntegerValue (var "v")
     (Just (unexpected(Phantoms.string "bigint") (ShowCore.integerValue @@ var "v"))) [
     _IntegerValue_bigint>>: "i" ~> right (var "i")]
 
-binary :: TTermDefinition (Graph -> Term -> Prelude.Either Error String)
+binary :: TypedTermDefinition (Graph -> Term -> Prelude.Either Error String)
 binary = define "binary" $
   doc "Extract a binary data value from a term" $
   "graph" ~> "t" ~>
   "l" <<~ literal @@ var "graph" @@ var "t" $
   binaryLiteral @@ var "l"
 
-binaryLiteral :: TTermDefinition (Literal -> Prelude.Either Error String)
+binaryLiteral :: TypedTermDefinition (Literal -> Prelude.Either Error String)
 binaryLiteral = define "binaryLiteral" $
   doc "Extract a binary literal from a Literal value" $
   "v" ~> Phantoms.cases _Literal (var "v")
     (Just (unexpected(Phantoms.string "binary") (ShowCore.literal @@ var "v"))) [
     _Literal_binary>>: "b" ~> right (var "b")]
 
-boolean :: TTermDefinition (Graph -> Term -> Prelude.Either Error Bool)
+boolean :: TypedTermDefinition (Graph -> Term -> Prelude.Either Error Bool)
 boolean = define "boolean" $
   doc "Extract a boolean value from a term" $
   "graph" ~> "t" ~>
   "l" <<~ literal @@ var "graph" @@ var "t" $
   booleanLiteral @@ var "l"
 
-booleanLiteral :: TTermDefinition (Literal -> Prelude.Either Error Bool)
+booleanLiteral :: TypedTermDefinition (Literal -> Prelude.Either Error Bool)
 booleanLiteral = define "booleanLiteral" $
   doc "Extract a boolean literal from a Literal value" $
   "v" ~> Phantoms.cases _Literal (var "v")
@@ -213,7 +203,7 @@ booleanLiteral = define "booleanLiteral" $
     _Literal_boolean>>: "b" ~> right (var "b")]
 
 -- TODO: nonstandard; move me
-caseField :: TTermDefinition (Name -> String -> Graph -> Term -> Prelude.Either Error Field)
+caseField :: TypedTermDefinition (Name -> String -> Graph -> Term -> Prelude.Either Error Field)
 caseField = define "caseField" $
   doc "Extract a specific case handler from a case statement term" $
   "name" ~> "n" ~> "graph" ~> "term" ~>
@@ -227,10 +217,20 @@ caseField = define "caseField" $
     ("mf" ~> right $ var "mf")
     (var "matching")
 
+formatError :: TypedTerm (Error -> String)
+formatError = "e" ~> ShowError.error_ @@ var "e"
+
+
+-- Helper for Either-based unexpected errors
+-- Uses ExtractionError.UnexpectedShape wrapped in Error.Extraction
+unexpected :: TypedTerm String -> TypedTerm String -> TypedTerm (Prelude.Either Error a)
+unexpected expected actual = left
+  (Error.errorExtraction $ Error.extractionErrorUnexpectedShape $ Error.unexpectedShapeError expected actual)
+
 -- TODO: nonstandard; move me
 
 -- TODO: nonstandard; move me
-cases :: TTermDefinition (Name -> Graph -> Term -> Prelude.Either Error CaseStatement)
+cases :: TypedTermDefinition (Name -> Graph -> Term -> Prelude.Either Error CaseStatement)
 cases = define "cases" $
   doc "Extract case statement from a term" $
   "name" ~> "graph" ~> "term0" ~>
@@ -245,13 +245,13 @@ cases = define "cases" $
           (ShowCore.term @@ var "term"))]
 
 -- TODO: nonstandard; move me
-decimal :: TTermDefinition (Graph -> Term -> Prelude.Either Error Sci.Scientific)
+decimal :: TypedTermDefinition (Graph -> Term -> Prelude.Either Error Sci.Scientific)
 decimal = define "decimal" $
   doc "Extract an arbitrary-precision decimal value from a term" $
   "graph" ~> "t" ~>
   "l" <<~ literal @@ var "graph" @@ var "t" $
   decimalLiteral @@ var "l"
-decimalLiteral :: TTermDefinition (Literal -> Prelude.Either Error Sci.Scientific)
+decimalLiteral :: TypedTermDefinition (Literal -> Prelude.Either Error Sci.Scientific)
 decimalLiteral = define "decimalLiteral" $
   doc "Extract a decimal literal from a Literal value" $
   "v" ~> Phantoms.cases _Literal (var "v")
@@ -260,7 +260,7 @@ decimalLiteral = define "decimalLiteral" $
 
 -- TODO: nonstandard; move me
 -- | Decode an Either value using the provided left and right decoders
-decodeEither :: TTermDefinition ((Graph -> Term -> Either DecodingError a) -> (Graph -> Term -> Either DecodingError b) -> Graph -> Term -> Either DecodingError (Either a b))
+decodeEither :: TypedTermDefinition ((Graph -> Term -> Either DecodingError a) -> (Graph -> Term -> Either DecodingError b) -> Graph -> Term -> Either DecodingError (Either a b))
 decodeEither = define "decodeEither" $
   doc "Decode an Either value using the provided left and right decoders" $
   "leftDecoder" ~> "rightDecoder" ~> "g" ~> "term" ~>
@@ -279,7 +279,7 @@ decodeEither = define "decodeEither" $
 -- | Decode a list of elements using the provided element decoder
 
 -- | Decode a list of elements using the provided element decoder
-decodeList :: TTermDefinition ((Graph -> Term -> Either DecodingError a) -> Graph -> Term -> Either DecodingError [a])
+decodeList :: TypedTermDefinition ((Graph -> Term -> Either DecodingError a) -> Graph -> Term -> Either DecodingError [a])
 decodeList = define "decodeList" $
   doc "Decode a list of elements using the provided element decoder" $
   "elemDecoder" ~> "g" ~> "term" ~>
@@ -292,7 +292,7 @@ decodeList = define "decodeList" $
 -- | Decode a Map using the provided key and value decoders
 
 -- | Decode a Map using the provided key and value decoders
-decodeMap :: TTermDefinition ((Graph -> Term -> Either DecodingError k) -> (Graph -> Term -> Either DecodingError v) -> Graph -> Term -> Either DecodingError (M.Map k v))
+decodeMap :: TypedTermDefinition ((Graph -> Term -> Either DecodingError k) -> (Graph -> Term -> Either DecodingError v) -> Graph -> Term -> Either DecodingError (M.Map k v))
 decodeMap = define "decodeMap" $
   doc "Decode a Map using the provided key and value decoders" $
   "keyDecoder" ~> "valDecoder" ~> "g" ~> "term" ~>
@@ -312,7 +312,7 @@ decodeMap = define "decodeMap" $
 -- | Decode a Maybe value using the provided element decoder
 
 -- | Decode a Maybe value using the provided element decoder
-decodeMaybe :: TTermDefinition ((Graph -> Term -> Either DecodingError a) -> Graph -> Term -> Either DecodingError (Maybe a))
+decodeMaybe :: TypedTermDefinition ((Graph -> Term -> Either DecodingError a) -> Graph -> Term -> Either DecodingError (Maybe a))
 decodeMaybe = define "decodeMaybe" $
   doc "Decode a Maybe value using the provided element decoder" $
   "elemDecoder" ~> "g" ~> "term" ~>
@@ -325,7 +325,7 @@ decodeMaybe = define "decodeMaybe" $
 -- | Decode a Pair using the provided first and second decoders
 
 -- | Decode a Pair using the provided first and second decoders
-decodePair :: TTermDefinition ((Graph -> Term -> Either DecodingError a) -> (Graph -> Term -> Either DecodingError b) -> Graph -> Term -> Either DecodingError (a, b))
+decodePair :: TypedTermDefinition ((Graph -> Term -> Either DecodingError a) -> (Graph -> Term -> Either DecodingError b) -> Graph -> Term -> Either DecodingError (a, b))
 decodePair = define "decodePair" $
   doc "Decode a Pair using the provided first and second decoders" $
   "firstDecoder" ~> "secondDecoder" ~> "g" ~> "term" ~>
@@ -341,7 +341,7 @@ decodePair = define "decodePair" $
 -- | Decode a Set using the provided element decoder
 
 -- | Decode a Set using the provided element decoder
-decodeSet :: TTermDefinition ((Graph -> Term -> Either DecodingError a) -> Graph -> Term -> Either DecodingError (S.Set a))
+decodeSet :: TypedTermDefinition ((Graph -> Term -> Either DecodingError a) -> Graph -> Term -> Either DecodingError (S.Set a))
 decodeSet = define "decodeSet" $
   doc "Decode a Set using the provided element decoder" $
   "elemDecoder" ~> "g" ~> "term" ~>
@@ -356,7 +356,7 @@ decodeSet = define "decodeSet" $
 -- | Decode a unit value
 
 -- | Decode a unit value
-decodeUnit :: TTermDefinition (Graph -> Term -> Either DecodingError ())
+decodeUnit :: TypedTermDefinition (Graph -> Term -> Either DecodingError ())
 decodeUnit = define "decodeUnit" $
   doc "Decode a unit value" $
   "g" ~> "term" ~>
@@ -369,7 +369,7 @@ decodeUnit = define "decodeUnit" $
 -- | Decode a wrapped value using the provided body decoder
 
 -- | Decode a wrapped value using the provided body decoder
-decodeWrapped :: TTermDefinition ((Graph -> Term -> Either DecodingError a) -> Graph -> Term -> Either DecodingError a)
+decodeWrapped :: TypedTermDefinition ((Graph -> Term -> Either DecodingError a) -> Graph -> Term -> Either DecodingError a)
 decodeWrapped = define "decodeWrapped" $
   doc "Decode a wrapped value using the provided body decoder" $
   "bodyDecoder" ~> "g" ~> "term" ~>
@@ -383,7 +383,7 @@ decodeWrapped = define "decodeWrapped" $
 -- | Require a field from a field map and decode it using the provided decoder
 -- Returns Left with a "missing field" error if the field is not present
 
-eitherTerm :: TTermDefinition ((Term -> Prelude.Either Error x) -> (Term -> Prelude.Either Error y) -> Graph -> Term -> Prelude.Either Error (Either x y))
+eitherTerm :: TypedTermDefinition ((Term -> Prelude.Either Error x) -> (Term -> Prelude.Either Error y) -> Graph -> Term -> Prelude.Either Error (Either x y))
 eitherTerm = define "eitherTerm" $
   doc "Extract an either value from a term, applying functions to the left and right values" $
   "leftFun" ~> "rightFun" ~> "graph" ~> "term0" ~>
@@ -397,7 +397,7 @@ eitherTerm = define "eitherTerm" $
       ("r" ~> Eithers.map (reify right) (var "rightFun" @@ var "r"))
       (var "et")]
 
-eitherType :: TTermDefinition (Type -> Prelude.Either Error EitherType)
+eitherType :: TypedTermDefinition (Type -> Prelude.Either Error EitherType)
 eitherType = define "eitherType" $
   doc "Extract the left and right types from an either type" $
   "typ" ~>
@@ -406,7 +406,7 @@ eitherType = define "eitherType" $
     (Just (unexpected(Phantoms.string "either type") (ShowCore.type_ @@ var "typ"))) [
     _Type_either>>: "et" ~> right (var "et")]
 -- TODO: nonstandard; move me
-field :: TTermDefinition (Name -> (Term -> Prelude.Either Error x) -> Graph -> [Field] -> Prelude.Either Error x)
+field :: TypedTermDefinition (Name -> (Term -> Prelude.Either Error x) -> Graph -> [Field] -> Prelude.Either Error x)
 field = define "field" $
   doc "Extract a field value from a list of fields" $
   "fname" ~> "mapping" ~> "graph" ~> "fields" ~>
@@ -425,7 +425,7 @@ field = define "field" $
         (Lists.maybeHead $ var "matchingFields"))
       (unexpected(Phantoms.string "single field") (Phantoms.string "multiple fields named " ++ (Core.unName (var "fname")))))
 
-float32 :: TTermDefinition (Graph -> Term -> Prelude.Either Error Float)
+float32 :: TypedTermDefinition (Graph -> Term -> Prelude.Either Error Float)
 float32 = define "float32" $
   doc "Extract a 32-bit floating-point value from a term" $
   "graph" ~> "t" ~>
@@ -433,14 +433,14 @@ float32 = define "float32" $
   "f" <<~ floatLiteral @@ var "l" $
   float32Value @@ var "f"
 
-float32Value :: TTermDefinition (FloatValue -> Prelude.Either Error Float)
+float32Value :: TypedTermDefinition (FloatValue -> Prelude.Either Error Float)
 float32Value = define "float32Value" $
   doc "Extract a float32 value from a FloatValue" $
   "v" ~> Phantoms.cases _FloatValue (var "v")
     (Just (unexpected(Phantoms.string "float32") (ShowCore.floatValue @@ var "v"))) [
     _FloatValue_float32>>: "f" ~> right (var "f")]
 
-float64 :: TTermDefinition (Graph -> Term -> Prelude.Either Error Double)
+float64 :: TypedTermDefinition (Graph -> Term -> Prelude.Either Error Double)
 float64 = define "float64" $
   doc "Extract a 64-bit floating-point value from a term" $
   "graph" ~> "t" ~>
@@ -448,28 +448,28 @@ float64 = define "float64" $
   "f" <<~ floatLiteral @@ var "l" $
   float64Value @@ var "f"
 
-float64Value :: TTermDefinition (FloatValue -> Prelude.Either Error Double)
+float64Value :: TypedTermDefinition (FloatValue -> Prelude.Either Error Double)
 float64Value = define "float64Value" $
   doc "Extract a float64 value from a FloatValue" $
   "v" ~> Phantoms.cases _FloatValue (var "v")
     (Just (unexpected(Phantoms.string "float64") (ShowCore.floatValue @@ var "v"))) [
     _FloatValue_float64>>: "f" ~> right (var "f")]
 
-floatLiteral :: TTermDefinition (Literal -> Prelude.Either Error FloatValue)
+floatLiteral :: TypedTermDefinition (Literal -> Prelude.Either Error FloatValue)
 floatLiteral = define "floatLiteral" $
   doc "Extract a floating-point literal from a Literal value" $
   "lit" ~> Phantoms.cases _Literal (var "lit")
     (Just (unexpected(Phantoms.string "floating-point value") (ShowCore.literal @@ var "lit"))) [
     _Literal_float>>: "v" ~> right (var "v")]
 
-floatValue :: TTermDefinition (Graph -> Term -> Prelude.Either Error FloatValue)
+floatValue :: TypedTermDefinition (Graph -> Term -> Prelude.Either Error FloatValue)
 floatValue = define "floatValue" $
   doc "Extract a float value from a term" $
   "graph" ~> "t" ~>
   "l" <<~ literal @@ var "graph" @@ var "t" $
   floatLiteral @@ var "l"
 
-functionType :: TTermDefinition (Type -> Prelude.Either Error FunctionType)
+functionType :: TypedTermDefinition (Type -> Prelude.Either Error FunctionType)
 functionType = define "functionType" $
   doc "Extract a function type from a type" $
   "typ" ~>
@@ -481,7 +481,7 @@ functionType = define "functionType" $
 -- TODO: nonstandard; move me
 
 -- TODO: nonstandard; move me
-injection :: TTermDefinition (Name -> Graph -> Term -> Prelude.Either Error Field)
+injection :: TypedTermDefinition (Name -> Graph -> Term -> Prelude.Either Error Field)
 injection = define "injection" $
   doc "Extract a field from a union term" $
   "expected" ~> "graph" ~> "term0" ~>
@@ -495,7 +495,7 @@ injection = define "injection" $
           (Phantoms.string "injection of type " ++ (Core.unName (var "expected")))
           (Core.unName (Core.injectionTypeName (var "injection"))))]
 
-int16 :: TTermDefinition (Graph -> Term -> Prelude.Either Error I.Int16)
+int16 :: TypedTermDefinition (Graph -> Term -> Prelude.Either Error I.Int16)
 int16 = define "int16" $
   doc "Extract a 16-bit signed integer value from a term" $
   "graph" ~> "t" ~>
@@ -503,14 +503,14 @@ int16 = define "int16" $
   "i" <<~ integerLiteral @@ var "l" $
   int16Value @@ var "i"
 
-int16Value :: TTermDefinition (IntegerValue -> Prelude.Either Error I.Int16)
+int16Value :: TypedTermDefinition (IntegerValue -> Prelude.Either Error I.Int16)
 int16Value = define "int16Value" $
   doc "Extract an int16 value from an IntegerValue" $
   "v" ~> Phantoms.cases _IntegerValue (var "v")
     (Just (unexpected(Phantoms.string "int16") (ShowCore.integerValue @@ var "v"))) [
     _IntegerValue_int16>>: "i" ~> right (var "i")]
 
-int32 :: TTermDefinition (Graph -> Term -> Prelude.Either Error Int)
+int32 :: TypedTermDefinition (Graph -> Term -> Prelude.Either Error Int)
 int32 = define "int32" $
   doc "Extract a 32-bit signed integer value from a term" $
   "graph" ~> "t" ~>
@@ -518,13 +518,13 @@ int32 = define "int32" $
   "i" <<~ integerLiteral @@ var "l" $
   int32Value @@ var "i"
 
-int32Value :: TTermDefinition (IntegerValue -> Prelude.Either Error Int)
+int32Value :: TypedTermDefinition (IntegerValue -> Prelude.Either Error Int)
 int32Value = define "int32Value" $
   doc "Extract an int32 value from an IntegerValue" $
   "v" ~> Phantoms.cases _IntegerValue (var "v")
     (Just (unexpected(Phantoms.string "int32") (ShowCore.integerValue @@ var "v"))) [
     _IntegerValue_int32>>: "i" ~> right (var "i")]
-int64 :: TTermDefinition (Graph -> Term -> Prelude.Either Error I.Int64)
+int64 :: TypedTermDefinition (Graph -> Term -> Prelude.Either Error I.Int64)
 int64 = define "int64" $
   doc "Extract a 64-bit signed integer value from a term" $
   "graph" ~> "t" ~>
@@ -532,14 +532,14 @@ int64 = define "int64" $
   "i" <<~ integerLiteral @@ var "l" $
   int64Value @@ var "i"
 
-int64Value :: TTermDefinition (IntegerValue -> Prelude.Either Error I.Int64)
+int64Value :: TypedTermDefinition (IntegerValue -> Prelude.Either Error I.Int64)
 int64Value = define "int64Value" $
   doc "Extract an int64 value from an IntegerValue" $
   "v" ~> Phantoms.cases _IntegerValue (var "v")
     (Just (unexpected(Phantoms.string "int64") (ShowCore.integerValue @@ var "v"))) [
     _IntegerValue_int64>>: "i" ~> right (var "i")]
 
-int8 :: TTermDefinition (Graph -> Term -> Prelude.Either Error I.Int8)
+int8 :: TypedTermDefinition (Graph -> Term -> Prelude.Either Error I.Int8)
 int8 = define "int8" $
   doc "Extract an 8-bit signed integer value from a term" $
   "graph" ~> "t" ~>
@@ -547,28 +547,28 @@ int8 = define "int8" $
   "i" <<~ integerLiteral @@ var "l" $
   int8Value @@ var "i"
 
-int8Value :: TTermDefinition (IntegerValue -> Prelude.Either Error I.Int8)
+int8Value :: TypedTermDefinition (IntegerValue -> Prelude.Either Error I.Int8)
 int8Value = define "int8Value" $
   doc "Extract an int8 value from an IntegerValue" $
   "v" ~> Phantoms.cases _IntegerValue (var "v")
     (Just (unexpected(Phantoms.string "int8") (ShowCore.integerValue @@ var "v"))) [
     _IntegerValue_int8>>: "i" ~> right (var "i")]
 
-integerLiteral :: TTermDefinition (Literal -> Prelude.Either Error IntegerValue)
+integerLiteral :: TypedTermDefinition (Literal -> Prelude.Either Error IntegerValue)
 integerLiteral = define "integerLiteral" $
   doc "Extract an integer literal from a Literal value" $
   "lit" ~> Phantoms.cases _Literal (var "lit")
     (Just (unexpected(Phantoms.string "integer value") (ShowCore.literal @@ var "lit"))) [
     _Literal_integer>>: "v" ~> right (var "v")]
 
-integerValue :: TTermDefinition (Graph -> Term -> Prelude.Either Error IntegerValue)
+integerValue :: TypedTermDefinition (Graph -> Term -> Prelude.Either Error IntegerValue)
 integerValue = define "integerValue" $
   doc "Extract an integer value from a term" $
   "graph" ~> "t" ~>
   "l" <<~ literal @@ var "graph" @@ var "t" $
   integerLiteral @@ var "l"
 
-lambda :: TTermDefinition (Graph -> Term -> Prelude.Either Error Lambda)
+lambda :: TypedTermDefinition (Graph -> Term -> Prelude.Either Error Lambda)
 lambda = define "lambda" $
   doc "Extract a lambda from a term" $
   "graph" ~> "term0" ~>
@@ -579,21 +579,13 @@ lambda = define "lambda" $
 
 -- TODO: nonstandard; move me
 
-lambdaBody :: TTermDefinition (Graph -> Term -> Prelude.Either Error Term)
+lambdaBody :: TypedTermDefinition (Graph -> Term -> Prelude.Either Error Term)
 lambdaBody = define "lambdaBody" $
   doc "Extract the body of a lambda term" $
   "graph" ~> "term" ~> Eithers.map (reify Core.lambdaBody) (lambda @@ var "graph" @@ var "term")
 
-let_ :: TTermDefinition (Graph -> Term -> Prelude.Either Error Let)
-let_ = define "let" $
-  doc "Extract a let expression from a term" $
-  "graph" ~> "term0" ~>
-  "term" <<~ Lexical.stripAndDereferenceTerm @@ var "graph" @@ var "term0" $
-  Phantoms.cases _Term (var "term")
-    (Just (unexpected(Phantoms.string "let term") (ShowCore.term @@ var "term"))) [
-    _Term_let>>: "lt" ~> right (var "lt")]
 -- TODO: nonstandard; move me
-letBinding :: TTermDefinition (String -> Graph -> Term -> Prelude.Either Error Term)
+letBinding :: TypedTermDefinition (String -> Graph -> Term -> Prelude.Either Error Term)
 letBinding = define "letBinding" $
   doc "Extract a binding with the given name from a let term" $
   "n" ~> "graph" ~> "term" ~>
@@ -612,7 +604,15 @@ letBinding = define "letBinding" $
         (Lists.maybeHead $ var "matchingBindings"))
       (left (Error.errorExtraction $ Error.extractionErrorMultipleBindings $ Error.multipleBindingsError (var "name"))))
 
-list :: TTermDefinition (Graph -> Term -> Prelude.Either Error [Term])
+let_ :: TypedTermDefinition (Graph -> Term -> Prelude.Either Error Let)
+let_ = define "let" $
+  doc "Extract a let expression from a term" $
+  "graph" ~> "term0" ~>
+  "term" <<~ Lexical.stripAndDereferenceTerm @@ var "graph" @@ var "term0" $
+  Phantoms.cases _Term (var "term")
+    (Just (unexpected(Phantoms.string "let term") (ShowCore.term @@ var "term"))) [
+    _Term_let>>: "lt" ~> right (var "lt")]
+list :: TypedTermDefinition (Graph -> Term -> Prelude.Either Error [Term])
 list = define "list" $
   doc "Extract a list of terms from a term" $
   "graph" ~> "term" ~>
@@ -621,7 +621,7 @@ list = define "list" $
     (Just (unexpected(Phantoms.string "list") (ShowCore.term @@ var "stripped"))) [
     _Term_list>>: "l" ~> right (var "l")]
 
-listHead :: TTermDefinition (Graph -> Term -> Prelude.Either Error Term)
+listHead :: TypedTermDefinition (Graph -> Term -> Prelude.Either Error Term)
 listHead = define "listHead" $
   doc "Extract the first element of a list term" $
   "graph" ~> "term" ~>
@@ -631,13 +631,13 @@ listHead = define "listHead" $
     ("h" ~> right $ var "h")
     (Lists.maybeHead $ var "l")
 
-listOf :: TTermDefinition ((Term -> Prelude.Either Error x) -> Graph -> Term -> Prelude.Either Error [x])
+listOf :: TypedTermDefinition ((Term -> Prelude.Either Error x) -> Graph -> Term -> Prelude.Either Error [x])
 listOf = define "listOf" $
   doc "Extract a list of values from a term, mapping a function over each element" $
   "f" ~> "graph" ~> "term" ~>
   "els" <<~ list @@ var "graph" @@ var "term" $
   Eithers.mapList (var "f") (var "els")
-listType :: TTermDefinition (Type -> Prelude.Either Error Type)
+listType :: TypedTermDefinition (Type -> Prelude.Either Error Type)
 listType = define "listType" $
   doc "Extract the element type from a list type" $
   "typ" ~>
@@ -645,7 +645,7 @@ listType = define "listType" $
   Phantoms.cases _Type (var "stripped")
     (Just (unexpected(Phantoms.string "list type") (ShowCore.type_ @@ var "typ"))) [
     _Type_list>>: "t" ~> right (var "t")]
-literal :: TTermDefinition (Graph -> Term -> Prelude.Either Error Literal)
+literal :: TypedTermDefinition (Graph -> Term -> Prelude.Either Error Literal)
 literal = define "literal" $
   doc "Extract a literal value from a term" $
   "graph" ~> "term0" ~>
@@ -654,7 +654,7 @@ literal = define "literal" $
     (Just (unexpected(Phantoms.string "literal") (ShowCore.term @@ var "term"))) [
     _Term_literal>>: "lit" ~> right (var "lit")]
 
-map :: TTermDefinition ((Term -> Prelude.Either Error k) -> (Term -> Prelude.Either Error v) -> Graph -> Term -> Prelude.Either Error (M.Map k v))
+map :: TypedTermDefinition ((Term -> Prelude.Either Error k) -> (Term -> Prelude.Either Error v) -> Graph -> Term -> Prelude.Either Error (M.Map k v))
 map = define "map" $
   doc "Extract a map of key-value pairs from a term, mapping functions over each key and value" $
   "fk" ~> "fv" ~> "graph" ~> "term0" ~>
@@ -671,7 +671,7 @@ map = define "map" $
       (ShowCore.term @@ var "term"))) [
     _Term_map>>: "m" ~> Eithers.map (reify Maps.fromList) (Eithers.mapList (var "pair") (Maps.toList (var "m")))]
 
-mapType :: TTermDefinition (Type -> Prelude.Either Error MapType)
+mapType :: TypedTermDefinition (Type -> Prelude.Either Error MapType)
 mapType = define "mapType" $
   doc "Extract the key and value types from a map type" $
   "typ" ~>
@@ -682,7 +682,7 @@ mapType = define "mapType" $
 
 -- TODO: nonstandard; move me
 
-maybeTerm :: TTermDefinition ((Term -> Prelude.Either Error x) -> Graph -> Term -> Prelude.Either Error (Maybe x))
+maybeTerm :: TypedTermDefinition ((Term -> Prelude.Either Error x) -> Graph -> Term -> Prelude.Either Error (Maybe x))
 maybeTerm = define "maybeTerm" $
   doc "Extract an optional value from a term, applying a function to the value if present" $
   "f" ~> "graph" ~> "term0" ~>
@@ -696,7 +696,7 @@ maybeTerm = define "maybeTerm" $
       ("t" ~> Eithers.map (reify just) (var "f" @@ var "t"))
       (var "mt")]
 
-maybeType :: TTermDefinition (Type -> Prelude.Either Error Type)
+maybeType :: TypedTermDefinition (Type -> Prelude.Either Error Type)
 maybeType = define "maybeType" $
   doc "Extract the base type from an optional type" $
   "typ" ~>
@@ -706,7 +706,7 @@ maybeType = define "maybeType" $
     _Type_maybe>>: "t" ~> right (var "t")]
 
 -- TODO: nonstandard; move me
-nArgs :: TTermDefinition (Name -> Int -> [a] -> Prelude.Either Error ())
+nArgs :: TypedTermDefinition (Name -> Int -> [a] -> Prelude.Either Error ())
 nArgs = define "nArgs" $
   doc "Ensure a function has the expected number of arguments" $
   "name" ~> "n" ~> "args" ~>
@@ -717,7 +717,7 @@ nArgs = define "nArgs" $
       Phantoms.string " arguments to primitive ",
       Literals.showString (Core.unName (var "name"))]) (Literals.showInt32 (Lists.length (var "args"))))
 
-pair :: TTermDefinition ((Term -> Prelude.Either Error k) -> (Term -> Prelude.Either Error v) -> Graph -> Term -> Prelude.Either Error (k, v))
+pair :: TypedTermDefinition ((Term -> Prelude.Either Error k) -> (Term -> Prelude.Either Error v) -> Graph -> Term -> Prelude.Either Error (k, v))
 pair = define "pair" $
   doc "Extract a pair of values from a term, applying functions to each component" $
   "kf" ~> "vf" ~> "graph" ~> "term0" ~>
@@ -734,7 +734,7 @@ pair = define "pair" $
 -- TODO: nonstandard; move me
 
 -- TODO: nonstandard; move me
-record :: TTermDefinition (Name -> Graph -> Term -> Prelude.Either Error [Field])
+record :: TypedTermDefinition (Name -> Graph -> Term -> Prelude.Either Error [Field])
 record = define "record" $
   doc "Extract a record's fields from a term" $
   "expected" ~> "graph" ~> "term0" ~>
@@ -748,7 +748,7 @@ record = define "record" $
 -- TODO: nonstandard; move me
 
 -- TODO: nonstandard; move me
-recordType :: TTermDefinition (Name -> Type -> Prelude.Either Error [FieldType])
+recordType :: TypedTermDefinition (Name -> Type -> Prelude.Either Error [FieldType])
 recordType = define "recordType" $
   doc "Extract the field types from a record type" $
   "ename" ~> "typ" ~>
@@ -759,7 +759,7 @@ recordType = define "recordType" $
 
 -- | Require a field from a field map and decode it using the provided decoder
 -- Returns Left with a "missing field" error if the field is not present
-requireField :: TTermDefinition (String -> (Graph -> Term -> Either DecodingError a) -> M.Map Name Term -> Graph -> Either DecodingError a)
+requireField :: TypedTermDefinition (String -> (Graph -> Term -> Either DecodingError a) -> M.Map Name Term -> Graph -> Either DecodingError a)
 requireField = define "requireField" $
   doc "Require a field from a record's field map and decode it" $
   "fieldName" ~> "decoder" ~> "fieldMap" ~> "g" ~>
@@ -770,7 +770,7 @@ requireField = define "requireField" $
 
 -- | Convert a Record to a Map from field Name to Term
 
-set :: TTermDefinition (Graph -> Term -> Prelude.Either Error (S.Set Term))
+set :: TypedTermDefinition (Graph -> Term -> Prelude.Either Error (S.Set Term))
 set = define "set" $
   doc "Extract a set of terms from a term" $
   "graph" ~> "term" ~>
@@ -779,14 +779,14 @@ set = define "set" $
     (Just (unexpected(Phantoms.string "set") (ShowCore.term @@ var "stripped"))) [
     _Term_set>>: "s" ~> right (var "s")]
 
-setOf :: TTermDefinition ((Term -> Prelude.Either Error x) -> Graph -> Term -> Prelude.Either Error (S.Set x))
+setOf :: TypedTermDefinition ((Term -> Prelude.Either Error x) -> Graph -> Term -> Prelude.Either Error (S.Set x))
 setOf = define "setOf" $
   doc "Extract a set of values from a term, mapping a function over each element" $
   "f" ~> "graph" ~> "term" ~>
   "els" <<~ set @@ var "graph" @@ var "term" $
   Eithers.mapSet (var "f") (var "els")
 
-setType :: TTermDefinition (Type -> Prelude.Either Error Type)
+setType :: TypedTermDefinition (Type -> Prelude.Either Error Type)
 setType = define "setType" $
   doc "Extract the element type from a set type" $
   "typ" ~>
@@ -795,14 +795,14 @@ setType = define "setType" $
     (Just (unexpected(Phantoms.string "set type") (ShowCore.type_ @@ var "typ"))) [
     _Type_set>>: "t" ~> right (var "t")]
 
-string :: TTermDefinition (Graph -> Term -> Prelude.Either Error String)
+string :: TypedTermDefinition (Graph -> Term -> Prelude.Either Error String)
 string = define "string" $
   doc "Extract a string value from a term" $
   "graph" ~> "t" ~>
   "l" <<~ literal @@ var "graph" @@ var "t" $
   stringLiteral @@ var "l"
 
-stringLiteral :: TTermDefinition (Literal -> Prelude.Either Error String)
+stringLiteral :: TypedTermDefinition (Literal -> Prelude.Either Error String)
 stringLiteral = define "stringLiteral" $
   doc "Extract a string literal from a Literal value" $
   "v" ~> Phantoms.cases _Literal (var "v")
@@ -810,7 +810,7 @@ stringLiteral = define "stringLiteral" $
     _Literal_string>>: "s" ~> right (var "s")]
 -- | Strip annotations and dereference, converting Error to DecodingError
 -- This is a module-level definition so decoders can reference it at the term level
-stripWithDecodingError :: TTermDefinition (Graph -> Term -> Either DecodingError Term)
+stripWithDecodingError :: TypedTermDefinition (Graph -> Term -> Either DecodingError Term)
 stripWithDecodingError = define "stripWithDecodingError" $
   doc "Strip annotations and dereference variables, returning Either DecodingError Term" $
   "g" ~> "term" ~>
@@ -821,7 +821,7 @@ stripWithDecodingError = define "stripWithDecodingError" $
 
 -- | Decode an Either value using the provided left and right decoders
 
-termRecord :: TTermDefinition (Graph -> Term -> Prelude.Either Error Record)
+termRecord :: TypedTermDefinition (Graph -> Term -> Prelude.Either Error Record)
 termRecord = define "termRecord" $
   doc "Extract a record from a term" $
   "graph" ~> "term0" ~>
@@ -831,7 +831,7 @@ termRecord = define "termRecord" $
     _Term_record>>: "record" ~> right (var "record")]
 
 -- | Convert a Record to a Map from field Name to Term
-toFieldMap :: TTermDefinition (Record -> M.Map Name Term)
+toFieldMap :: TypedTermDefinition (Record -> M.Map Name Term)
 toFieldMap = define "toFieldMap" $
   doc "Convert a Record's fields to a Map from Name to Term" $
   "record" ~>
@@ -839,53 +839,53 @@ toFieldMap = define "toFieldMap" $
     Lists.map
       ("f" ~> Phantoms.pair (Core.fieldName $ var "f") (Core.fieldTerm $ var "f"))
       (Core.recordFields $ var "record")
-uint16 :: TTermDefinition (Graph -> Term -> Prelude.Either Error Int)
+uint16 :: TypedTermDefinition (Graph -> Term -> Prelude.Either Error Int)
 uint16 = define "uint16" $
   doc "Extract a 16-bit unsigned integer value from a term" $
   "graph" ~> "t" ~>
   "l" <<~ literal @@ var "graph" @@ var "t" $
   "i" <<~ integerLiteral @@ var "l" $
   uint16Value @@ var "i"
-uint16Value :: TTermDefinition (IntegerValue -> Prelude.Either Error Int)
+uint16Value :: TypedTermDefinition (IntegerValue -> Prelude.Either Error Int)
 uint16Value = define "uint16Value" $
   doc "Extract a uint16 value from an IntegerValue" $
   "v" ~> Phantoms.cases _IntegerValue (var "v")
     (Just (unexpected(Phantoms.string "uint16") (ShowCore.integerValue @@ var "v"))) [
     _IntegerValue_uint16>>: "i" ~> right (var "i")]
-uint32 :: TTermDefinition (Graph -> Term -> Prelude.Either Error I.Int64)
+uint32 :: TypedTermDefinition (Graph -> Term -> Prelude.Either Error I.Int64)
 uint32 = define "uint32" $
   doc "Extract a 32-bit unsigned integer value from a term" $
   "graph" ~> "t" ~>
   "l" <<~ literal @@ var "graph" @@ var "t" $
   "i" <<~ integerLiteral @@ var "l" $
   uint32Value @@ var "i"
-uint32Value :: TTermDefinition (IntegerValue -> Prelude.Either Error I.Int64)
+uint32Value :: TypedTermDefinition (IntegerValue -> Prelude.Either Error I.Int64)
 uint32Value = define "uint32Value" $
   doc "Extract a uint32 value from an IntegerValue" $
   "v" ~> Phantoms.cases _IntegerValue (var "v")
     (Just (unexpected(Phantoms.string "uint32") (ShowCore.integerValue @@ var "v"))) [
     _IntegerValue_uint32>>: "i" ~> right (var "i")]
-uint64 :: TTermDefinition (Graph -> Term -> Prelude.Either Error Integer)
+uint64 :: TypedTermDefinition (Graph -> Term -> Prelude.Either Error Integer)
 uint64 = define "uint64" $
   doc "Extract a 64-bit unsigned integer value from a term" $
   "graph" ~> "t" ~>
   "l" <<~ literal @@ var "graph" @@ var "t" $
   "i" <<~ integerLiteral @@ var "l" $
   uint64Value @@ var "i"
-uint64Value :: TTermDefinition (IntegerValue -> Prelude.Either Error Integer)
+uint64Value :: TypedTermDefinition (IntegerValue -> Prelude.Either Error Integer)
 uint64Value = define "uint64Value" $
   doc "Extract a uint64 value from an IntegerValue" $
   "v" ~> Phantoms.cases _IntegerValue (var "v")
     (Just (unexpected(Phantoms.string "uint64") (ShowCore.integerValue @@ var "v"))) [
     _IntegerValue_uint64>>: "i" ~> right (var "i")]
-uint8 :: TTermDefinition (Graph -> Term -> Prelude.Either Error I.Int16)
+uint8 :: TypedTermDefinition (Graph -> Term -> Prelude.Either Error I.Int16)
 uint8 = define "uint8" $
   doc "Extract an 8-bit unsigned integer value from a term" $
   "graph" ~> "t" ~>
   "l" <<~ literal @@ var "graph" @@ var "t" $
   "i" <<~ integerLiteral @@ var "l" $
   uint8Value @@ var "i"
-uint8Value :: TTermDefinition (IntegerValue -> Prelude.Either Error I.Int16)
+uint8Value :: TypedTermDefinition (IntegerValue -> Prelude.Either Error I.Int16)
 uint8Value = define "uint8Value" $
   doc "Extract a uint8 value from an IntegerValue" $
   "v" ~> Phantoms.cases _IntegerValue (var "v")
@@ -894,7 +894,7 @@ uint8Value = define "uint8Value" $
 
 -- TODO: nonstandard; move me
 -- TODO: nonstandard; move me
-unionType :: TTermDefinition (Name -> Type -> Prelude.Either Error [FieldType])
+unionType :: TypedTermDefinition (Name -> Type -> Prelude.Either Error [FieldType])
 unionType = define "unionType" $
   doc "Extract the field types from a union type" $
   "ename" ~> "typ" ~>
@@ -902,13 +902,13 @@ unionType = define "unionType" $
   Phantoms.cases _Type (var "stripped")
     (Just (unexpected(Phantoms.string "union type") (ShowCore.type_ @@ var "typ"))) [
     _Type_union>>: "fields" ~> right (var "fields")]
-unit :: TTermDefinition (Term -> Prelude.Either Error ())
+unit :: TypedTermDefinition (Term -> Prelude.Either Error ())
 unit = define "unit" $
   doc "Extract a unit value from a term" $
   "term" ~> Phantoms.cases _Term (var "term")
     (Just (unexpected(Phantoms.string "unit") (ShowCore.term @@ var "term"))) [
     _Term_unit>>: constant (right Phantoms.unit)]
-unitVariant :: TTermDefinition (Name -> Graph -> Term -> Prelude.Either Error Name)
+unitVariant :: TypedTermDefinition (Name -> Graph -> Term -> Prelude.Either Error Name)
 unitVariant = define "unitVariant" $
   doc "Extract a unit variant (a variant with an empty record value) from a union term" $
   "tname" ~> "graph" ~> "term" ~>
@@ -918,7 +918,7 @@ unitVariant = define "unitVariant" $
 
 -- TODO: nonstandard; move me
 -- TODO: nonstandard; move me
-wrap :: TTermDefinition (Name -> Graph -> Term -> Prelude.Either Error Term)
+wrap :: TypedTermDefinition (Name -> Graph -> Term -> Prelude.Either Error Term)
 wrap = define "wrap" $
   doc "Extract the wrapped value from a wrapped term" $
   "expected" ~> "graph" ~> "term0" ~>
@@ -936,7 +936,7 @@ wrap = define "wrap" $
 
 -- TODO: nonstandard; move me
 -- TODO: nonstandard; move me
-wrappedType :: TTermDefinition (Name -> Type -> Prelude.Either Error Type)
+wrappedType :: TypedTermDefinition (Name -> Type -> Prelude.Either Error Type)
 wrappedType = define "wrappedType" $
   doc "Extract the wrapped type from a wrapper type" $
   "ename" ~> "typ" ~>

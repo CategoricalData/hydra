@@ -2,7 +2,7 @@
 module Hydra.Sources.Test.Hoisting.All where
 
 import Hydra.Kernel
-import           Hydra.Dsl.Bootstrap (unqualifiedDep)
+import           Hydra.Dsl.Bootstrap (unqualifiedDep, descriptionMetadata)
 import Hydra.Dsl.Meta.Testing as Testing
 import Hydra.Sources.Kernel.Types.All
 import Hydra.Dsl.Meta.Phantoms as Phantoms
@@ -26,17 +26,17 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = unqualifiedDep <$> (namespaces Prelude.++ kernelTypesModuleNames),
-            moduleDescription = Just "Hydra's hoisting test suite"}
+            moduleMetadata = descriptionMetadata (Just "Hydra's hoisting test suite")}
   where
     definitions = [Phantoms.toDefinition allTests]
     namespaces = [
       Cases.ns,
       Let.ns]
 
-allTests :: TTermDefinition TestGroup
+allTests :: TypedTermDefinition TestGroup
 allTests = definitionInModule module_ "allTests" $
     doc "The group of all hoisting tests" $
-    Testing.testGroup (string "hoisting") nothing (list subgroups) (list ([] :: [TTerm TestCaseWithMetadata]))
+    Testing.testGroup (string "hoisting") nothing (list subgroups) (list ([] :: [TypedTerm TestCaseWithMetadata]))
   where
     subgroups = [
       Cases.allTests,

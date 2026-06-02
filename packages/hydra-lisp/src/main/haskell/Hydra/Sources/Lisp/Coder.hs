@@ -9,7 +9,7 @@ module Hydra.Sources.Lisp.Coder where
 
 -- Standard imports for term-level sources outside of the kernel
 import Hydra.Kernel
-import           Hydra.Dsl.Bootstrap (unqualifiedDep)
+import           Hydra.Dsl.Bootstrap (unqualifiedDep, descriptionMetadata)
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Meta.Lib.Strings                as Strings
 import           Hydra.Dsl.Meta.Phantoms                   as Phantoms
@@ -23,10 +23,11 @@ import qualified Hydra.Dsl.Meta.Lib.Pairs                  as Pairs
 import qualified Hydra.Dsl.Meta.Lib.Literals               as Literals
 import qualified Hydra.Dsl.Meta.Lib.Sets                   as Sets
 import qualified Hydra.Dsl.Coders                          as Coders
-import qualified Hydra.Dsl.Meta.Context                    as Ctx
 import qualified Hydra.Dsl.Meta.Core                       as Core
 import qualified Hydra.Dsl.Errors                           as Error
+import qualified Hydra.Dsl.Meta.Graph                      as Graph
 import qualified Hydra.Dsl.Packaging                          as Packaging
+import qualified Hydra.Dsl.Typing                          as Typing
 import qualified Hydra.Dsl.Util                            as Util
 import qualified Hydra.Sources.Kernel.Terms.Formatting     as Formatting
 import qualified Hydra.Sources.Kernel.Terms.Names          as Names
@@ -52,9 +53,6 @@ import qualified Hydra.Sources.Lisp.Syntax as LispSyntax
 import qualified Hydra.Sources.Lisp.Language as LispLanguageSource
 
 
-def :: String -> TTerm a -> TTermDefinition a
-def = definitionInModule module_
-
 ns :: ModuleName
 ns = ModuleName "hydra.lisp.coder"
 
@@ -63,7 +61,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = unqualifiedDep <$> ([moduleName LispLanguageSource.module_, Formatting.ns, Names.ns, Strip.ns, Variables.ns, Analysis.ns, Environment.ns, Predicates.ns, Sorting.ns, Lexical.ns, ModuleName "hydra.show.core"] L.++ (LispSyntax.ns:KernelTypes.kernelTypesModuleNames)),
-            moduleDescription = Just "Lisp code generator: converts Hydra type and term modules to Lisp AST"}
+            moduleMetadata = descriptionMetadata (Just "Lisp code generator: converts Hydra type and term modules to Lisp AST")}
   where
     definitions = [
       toDefinition Environment.reorderDefs,
@@ -86,10 +84,8 @@ module_ = Module {
       toDefinition encodeTypeDefinition,
       toDefinition encodeUnionElim,
       toDefinition encodeUnwrapElim,
-      toDefinition isCasesPrimitive,
-      toDefinition isLazy2ArgPrimitive,
-      toDefinition isLazy3ArgPrimitive,
       toDefinition isPrimitiveRef,
+      toDefinition lazyFlagsForPrimitiveTerm,
       toDefinition lispApp,
       toDefinition lispKeyword,
       toDefinition lispLambdaExpr,
@@ -104,35 +100,40 @@ module_ = Module {
       toDefinition moduleExports,
       toDefinition moduleImports,
       toDefinition moduleToLisp,
+      toDefinition primHeadName,
+      toDefinition primIsLazyAt,
       toDefinition qualifiedSnakeName,
       toDefinition qualifiedTypeName,
       toDefinition wrapInThunk]
 
 
+def :: String -> TypedTerm a -> TypedTermDefinition a
+def = definitionInModule module_
+
 -- | Dialect-aware name for "cadr" (second element of a list)
 -- Clojure: "second", others: "cadr"
-dialectCadr :: TTermDefinition (L.Dialect -> String)
+dialectCadr :: TypedTermDefinition (L.Dialect -> String)
 dialectCadr = def "dialectCadr" $
   lambda "d" $ cases L._Dialect (var "d") (Just $ string "cadr") [
     L._Dialect_clojure>>: constant $ string "second"]
 
 -- | Dialect-aware name for "car" (first element of a list)
 -- Clojure: "first", others: "car"
-dialectCar :: TTermDefinition (L.Dialect -> String)
+dialectCar :: TypedTermDefinition (L.Dialect -> String)
 dialectCar = def "dialectCar" $
   lambda "d" $ cases L._Dialect (var "d") (Just $ string "car") [
     L._Dialect_clojure>>: constant $ string "first"]
 
 -- | Dialect-aware constructor prefix for record types
 -- Clojure: "->", others: "make-"
-dialectConstructorPrefix :: TTermDefinition (L.Dialect -> String)
+dialectConstructorPrefix :: TypedTermDefinition (L.Dialect -> String)
 dialectConstructorPrefix = def "dialectConstructorPrefix" $
   lambda "d" $ cases L._Dialect (var "d") (Just $ string "make-") [
     L._Dialect_clojure>>: constant $ string "->"]
 
 -- | Dialect-aware name for "equal?" (equality test)
 -- Clojure: "=", Common Lisp/Emacs Lisp: "equal", Scheme: "equal?"
-dialectEqual :: TTermDefinition (L.Dialect -> String)
+dialectEqual :: TypedTermDefinition (L.Dialect -> String)
 dialectEqual = def "dialectEqual" $
   lambda "d" $ cases L._Dialect (var "d") (Just $ string "equal?") [
     L._Dialect_clojure>>: constant $ string "=",
@@ -142,7 +143,7 @@ dialectEqual = def "dialectEqual" $
 -- | Whether a dialect provides a native letrec (mutually recursive let).
 -- Clojure has only sequential let, requiring the coder to topologically sort
 -- bindings and emit letfn for cyclic groups.
-dialectSupportsLetrec :: TTermDefinition (L.Dialect -> Bool)
+dialectSupportsLetrec :: TypedTermDefinition (L.Dialect -> Bool)
 dialectSupportsLetrec = def "dialectSupportsLetrec" $
   lambda "d" $ cases L._Dialect (var "d") (Just $ boolean True) [
     L._Dialect_clojure>>: constant $ boolean False]
@@ -150,7 +151,7 @@ dialectSupportsLetrec = def "dialectSupportsLetrec" $
 -- | Encode a function application, detecting ifElse and other lazy primitives.
 -- Transforms (((hydra.lib.logic.ifElse C) T) E) into native (if C T E).
 -- For other lazy primitives, wraps the appropriate argument in a thunk.
-encodeApplication :: TTermDefinition (L.Dialect -> Context -> Graph -> Term -> Term -> Either Error L.Expression)
+encodeApplication :: TypedTermDefinition (L.Dialect -> InferenceContext -> Graph -> Term -> Term -> Either Error L.Expression)
 encodeApplication = def "encodeApplication" $
   "dialect" ~> "cx" ~> "g" ~> lambda "rawFun" $ lambda "rawArg" $
     "dFun" <~ (Strip.deannotateTerm @@ var "rawFun") $
@@ -166,11 +167,11 @@ encodeApplication = def "encodeApplication" $
        "midFun" <~ Core.applicationFunction (var "app2") $
        "midArg" <~ Core.applicationArgument (var "app2") $
        "dMidFun" <~ (Strip.deannotateTerm @@ var "midFun") $
-       -- 2-deep: dFun = App(midFun, midArg), applied to rawArg
-       -- Check if midFun is a 2-arg lazy primitive
-       "isLazy2" <~ Logic.or (isPrimitiveRef @@ string "hydra.lib.eithers.fromLeft" @@ var "dMidFun")
-                      (Logic.or (isPrimitiveRef @@ string "hydra.lib.eithers.fromRight" @@ var "dMidFun")
-                                (isPrimitiveRef @@ string "hydra.lib.maybes.fromMaybe" @@ var "dMidFun")) $
+       -- 2-deep: dFun = App(midFun, midArg), applied to rawArg.
+       -- midFun is the head; midArg is its first (position 0) argument. If the
+       -- primitive is lazy in parameter 0 (e.g. fromLeft/fromRight/fromMaybe),
+       -- thunk midArg. Decision comes from isLazy metadata, not a name table (#391).
+       "isLazy2" <~ (primIsLazyAt @@ var "g" @@ var "dMidFun" @@ int32 0) $
        Logic.ifElse (var "isLazy2")
          -- 2-arg lazy primitive: ((prim defVal) arg2) — wrap defVal in thunk
          ("ePrim" <<~ (var "enc" @@ var "midFun") $
@@ -195,8 +196,9 @@ encodeApplication = def "encodeApplication" $
                     L._IfExpression_condition>>: var "eC",
                     L._IfExpression_then>>: var "eT",
                     L._IfExpression_else>>: just (var "eE")]))
-              (Logic.ifElse (isPrimitiveRef @@ string "hydra.lib.maybes.maybe" @@ var "dInnerFun")
-                -- maybe: (((maybe defVal) f) m) — wrap defVal in thunk
+              -- maybe: (((maybe defVal) f) m) — defVal is innerFun's position-0
+              -- argument; thunk it when the primitive is lazy there (#391).
+              (Logic.ifElse (primIsLazyAt @@ var "g" @@ var "dInnerFun" @@ int32 0)
                 ("eP" <<~ (var "enc" @@ var "innerFun") $
                 "eDef" <<~ (var "enc" @@ var "innerArg") $
                 "eF" <<~ (var "enc" @@ var "midArg") $
@@ -204,8 +206,9 @@ encodeApplication = def "encodeApplication" $
                   right (lispApp @@ (lispApp @@ (lispApp @@ var "eP" @@ list [wrapInThunk @@ var "eDef"])
                                              @@ list [var "eF"])
                                  @@ list [var "eM"]))
-                (Logic.ifElse (isPrimitiveRef @@ string "hydra.lib.maybes.cases" @@ var "dInnerFun")
-                  -- cases: (((cases m) nothingVal) justFn) — wrap nothingVal in thunk
+                -- cases: (((cases m) nothingVal) justFn) — nothingVal is the
+                -- primitive's position-1 argument (midArg); thunk it when lazy there.
+                (Logic.ifElse (primIsLazyAt @@ var "g" @@ var "dInnerFun" @@ int32 1)
                   ("eP" <<~ (var "enc" @@ var "innerFun") $
                   "eM" <<~ (var "enc" @@ var "innerArg") $
                   "eN" <<~ (var "enc" @@ var "midArg") $
@@ -217,7 +220,7 @@ encodeApplication = def "encodeApplication" $
                   (var "normal")))])]
 
 -- | Encode a Hydra field type as a Lisp field definition
-encodeFieldDef :: TTermDefinition (FieldType -> L.FieldDefinition)
+encodeFieldDef :: TypedTermDefinition (FieldType -> L.FieldDefinition)
 encodeFieldDef = def "encodeFieldDef" $
   lambda "ft" $
     "fname" <~ Core.unName (Core.fieldTypeName (var "ft")) $
@@ -226,7 +229,7 @@ encodeFieldDef = def "encodeFieldDef" $
         L._FieldDefinition_defaultValue>>: nothing]
 
 -- | Encode a Hydra lambda as a Lisp expression
-encodeLambdaTerm :: TTermDefinition (L.Dialect -> Context -> Graph -> Lambda -> Either Error L.Expression)
+encodeLambdaTerm :: TypedTermDefinition (L.Dialect -> InferenceContext -> Graph -> Lambda -> Either Error L.Expression)
 encodeLambdaTerm = def "encodeLambdaTerm" $
   "dialect" ~> "cx" ~> "g" ~> lambda "lam" $
     "param" <~ (Formatting.convertCaseCamelOrUnderscoreToLowerSnake @@ (Formatting.sanitizeWithUnderscores @@ LispLanguageSource.lispReservedWords @@ Core.unName (Core.lambdaParameter (var "lam")))) $
@@ -236,7 +239,7 @@ encodeLambdaTerm = def "encodeLambdaTerm" $
 -- | Encode let bindings as nested ((lambda (x) body) init) applications.
 -- Used for self-referential non-lambda bindings (Y-combinator fixpoint pattern)
 -- so that the loader's fix-letrec can transform them into proper letrec with thunking.
-encodeLetAsLambdaApp :: TTermDefinition (L.Dialect -> Context -> Graph -> [Binding] -> Term -> Either Error L.Expression)
+encodeLetAsLambdaApp :: TypedTermDefinition (L.Dialect -> InferenceContext -> Graph -> [Binding] -> Term -> Either Error L.Expression)
 encodeLetAsLambdaApp = def "encodeLetAsLambdaApp" $
   "dialect" ~> "cx" ~> "g" ~> lambda "bindings" $ lambda "body" $
     "bodyExpr" <<~ (encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ var "body") $
@@ -252,7 +255,7 @@ encodeLetAsLambdaApp = def "encodeLetAsLambdaApp" $
 -- Self-referential bindings -> letrec (with eta-expansion for non-lambda self-refs)
 -- Single non-self-ref binding -> let
 -- Multiple non-self-ref bindings -> let* (sequential)
-encodeLetAsNative :: TTermDefinition (L.Dialect -> Context -> Graph -> [Binding] -> Term -> Either Error L.Expression)
+encodeLetAsNative :: TypedTermDefinition (L.Dialect -> InferenceContext -> Graph -> [Binding] -> Term -> Either Error L.Expression)
 encodeLetAsNative = def "encodeLetAsNative" $
   "dialect" ~> "cx" ~> "g" ~> lambda "bindings" $ lambda "body" $
     "bodyExpr" <<~ (encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ var "body") $
@@ -348,7 +351,7 @@ encodeLetAsNative = def "encodeLetAsNative" $
           L._LetExpression_body>>: list [var "bodyExpr"]])
 
 -- | Encode a Hydra literal as a Lisp expression
-encodeLiteral :: TTermDefinition (Literal -> L.Expression)
+encodeLiteral :: TypedTermDefinition (Literal -> L.Expression)
 encodeLiteral = def "encodeLiteral" $
   lambda "lit" $ cases _Literal (var "lit") Nothing [
     _Literal_boolean>>: lambda "b" $
@@ -451,7 +454,7 @@ encodeLiteral = def "encodeLiteral" $
 
 -- | Encode a Hydra record projection as a Lisp expression.
 -- Takes an optional argument for applied projections.
-encodeProjectionElim :: TTermDefinition (L.Dialect -> Context -> Graph -> Projection -> Maybe Term -> Either Error L.Expression)
+encodeProjectionElim :: TypedTermDefinition (L.Dialect -> InferenceContext -> Graph -> Projection -> Maybe Term -> Either Error L.Expression)
 encodeProjectionElim = def "encodeProjectionElim" $
   "dialect" ~> "cx" ~> "g" ~> lambda "proj" $ lambda "marg" $
       -- Record projection: (:field record) or (record-type-field record)
@@ -474,7 +477,7 @@ encodeProjectionElim = def "encodeProjectionElim" $
                   L._FieldAccess_target>>: var "sarg"]))
 
 -- | Encode a Hydra term as a Lisp expression
-encodeTerm :: TTermDefinition (L.Dialect -> Context -> Graph -> Term -> Either Error L.Expression)
+encodeTerm :: TypedTermDefinition (L.Dialect -> InferenceContext -> Graph -> Term -> Either Error L.Expression)
 encodeTerm = def "encodeTerm" $
   "dialect" ~> "cx" ~> "g" ~> lambda "term" $
     cases _Term (var "term") Nothing
@@ -607,7 +610,7 @@ encodeTerm = def "encodeTerm" $
        encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ Core.wrappedTermBody (var "wt")]
 
 -- | Encode a Hydra term definition as a Lisp top-level form
-encodeTermDefinition :: TTermDefinition (L.Dialect -> Context -> Graph -> TermDefinition -> Either Error L.TopLevelFormWithComments)
+encodeTermDefinition :: TypedTermDefinition (L.Dialect -> InferenceContext -> Graph -> TermDefinition -> Either Error L.TopLevelFormWithComments)
 encodeTermDefinition = def "encodeTermDefinition" $
   "dialect" ~> "cx" ~> "g" ~> lambda "tdef" $
     "name" <~ Packaging.termDefinitionName (var "tdef") $
@@ -634,7 +637,7 @@ encodeTermDefinition = def "encodeTermDefinition" $
              L._VariableDefinition_doc>>: nothing]))]
 
 -- | Encode a Hydra type as a Lisp type specifier (used for type annotations)
-encodeType :: TTermDefinition (Context -> Graph -> Type -> Either Error L.TypeSpecifier)
+encodeType :: TypedTermDefinition (InferenceContext -> Graph -> Type -> Either Error L.TypeSpecifier)
 encodeType = def "encodeType" $
   "cx" ~> "g" ~> lambda "t" $
     "typ" <~ (Strip.deannotateType @@ var "t") $
@@ -703,7 +706,7 @@ encodeType = def "encodeType" $
 
 -- | Encode a type body (after stripping annotations and foralls) as a Lisp top-level form.
 --   Recurses through forall to reach the underlying record/union/wrap.
-encodeTypeBody :: TTermDefinition (String -> Type -> Type -> Either Error L.TopLevelFormWithComments)
+encodeTypeBody :: TypedTermDefinition (String -> Type -> Type -> Either Error L.TopLevelFormWithComments)
 encodeTypeBody = def "encodeTypeBody" $
   lambda "lname" $ lambda "origTyp" $ lambda "typ" $
     cases _Type (var "typ") (Just $
@@ -754,7 +757,7 @@ encodeTypeBody = def "encodeTypeBody" $
            L._RecordTypeDefinition_doc>>: nothing]))]
 
 -- | Encode a Hydra type definition as a Lisp top-level form
-encodeTypeDefinition :: TTermDefinition (Context -> Graph -> TypeDefinition -> Either Error L.TopLevelFormWithComments)
+encodeTypeDefinition :: TypedTermDefinition (InferenceContext -> Graph -> TypeDefinition -> Either Error L.TopLevelFormWithComments)
 encodeTypeDefinition = def "encodeTypeDefinition" $
   "cx" ~> "g" ~> lambda "tdef" $
     "name" <~ Packaging.typeDefinitionName (var "tdef") $
@@ -765,7 +768,7 @@ encodeTypeDefinition = def "encodeTypeDefinition" $
 
 -- | Encode a Hydra case statement (union elimination) as a Lisp expression.
 -- Takes an optional argument for applied case statements.
-encodeUnionElim :: TTermDefinition (L.Dialect -> Context -> Graph -> CaseStatement -> Maybe Term -> Either Error L.Expression)
+encodeUnionElim :: TypedTermDefinition (L.Dialect -> InferenceContext -> Graph -> CaseStatement -> Maybe Term -> Either Error L.Expression)
 encodeUnionElim = def "encodeUnionElim" $
   "dialect" ~> "cx" ~> "g" ~> lambda "cs" $ lambda "marg" $
       -- Union elimination: cond dispatch on tagged values
@@ -815,7 +818,7 @@ encodeUnionElim = def "encodeUnionElim" $
 
 -- | Encode a Hydra wrap elimination (unwrap) as a Lisp expression.
 -- Takes an optional argument for applied unwraps.
-encodeUnwrapElim :: TTermDefinition (L.Dialect -> Context -> Graph -> Name -> Maybe Term -> Either Error L.Expression)
+encodeUnwrapElim :: TypedTermDefinition (L.Dialect -> InferenceContext -> Graph -> Name -> Maybe Term -> Either Error L.Expression)
 encodeUnwrapElim = def "encodeUnwrapElim" $
   "dialect" ~> "cx" ~> "g" ~> lambda "name" $ lambda "marg" $
       -- Wrap elimination: transparent unwrap
@@ -825,32 +828,47 @@ encodeUnwrapElim = def "encodeUnwrapElim" $
           (lambda "arg" $
             encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ var "arg")
 
--- | Check if a name is maybes.cases (3 args, arg 2 is lazy).
-isCasesPrimitive :: TTermDefinition (Name -> Bool)
-isCasesPrimitive = def "isCasesPrimitive" $
-  "name" ~>
-    Equality.equal (var "name") (Core.name $ string "hydra.lib.maybes.cases")
+-- | Extract the primitive/variable name a head term refers to (stripping
+-- annotations, type applications, and type lambdas), or nothing if the head is
+-- not a plain reference.
+primHeadName :: TypedTermDefinition (Term -> Maybe Name)
+primHeadName = def "primHeadName" $
+  lambda "term" $
+    cases _Term (var "term") (Just (nothing :: TypedTerm (Maybe Name))) [
+      _Term_variable>>: lambda "name" $ just (var "name"),
+      _Term_annotated>>: lambda "at" $
+        primHeadName @@ Core.annotatedTermBody (var "at"),
+      _Term_typeApplication>>: lambda "ta" $
+        primHeadName @@ Core.typeApplicationTermBody (var "ta"),
+      _Term_typeLambda>>: lambda "tl" $
+        primHeadName @@ Core.typeLambdaBody (var "tl")]
 
--- | Check if a name is a 2-arg lazy primitive (default value is arg 1, i.e. the first applied arg).
--- These primitives take a default value that should only be evaluated when needed.
-isLazy2ArgPrimitive :: TTermDefinition (Name -> Bool)
-isLazy2ArgPrimitive = def "isLazy2ArgPrimitive" $
-  "name" ~>
-    Logic.or
-      (Equality.equal (var "name") (Core.name $ string "hydra.lib.eithers.fromLeft"))
-      (Logic.or
-        (Equality.equal (var "name") (Core.name $ string "hydra.lib.eithers.fromRight"))
-        (Equality.equal (var "name") (Core.name $ string "hydra.lib.maybes.fromMaybe")))
+-- | The per-parameter isLazy flags of the primitive a head term refers to, in
+-- order; empty if the head is not a registered primitive. Single source of
+-- truth for which arguments to thunk, replacing hard-coded name checks (#391).
+lazyFlagsForPrimitiveTerm :: TypedTermDefinition (Graph -> Term -> [Bool])
+lazyFlagsForPrimitiveTerm = def "lazyFlagsForPrimitiveTerm" $
+  "g" ~> "headTerm" ~>
+    Maybes.cases (primHeadName @@ var "headTerm")
+      (list ([] :: [TypedTerm Bool]))
+      ("name" ~> Maybes.cases (Maps.lookup (var "name") (Graph.graphPrimitives (var "g")))
+        (list ([] :: [TypedTerm Bool]))
+        ("prim" ~>
+          Lists.map ("p" ~> Typing.parameterIsLazy (var "p"))
+            (Typing.termSignatureParameters
+              (Packaging.primitiveDefinitionSignature
+                (Graph.primitiveDefinition (var "prim"))))))
 
--- | Check if a name is a 3-arg lazy primitive where arg 1 (the first applied arg) should be thunked.
-isLazy3ArgPrimitive :: TTermDefinition (Name -> Bool)
-isLazy3ArgPrimitive = def "isLazy3ArgPrimitive" $
-  "name" ~>
-    Equality.equal (var "name") (Core.name $ string "hydra.lib.maybes.maybe")
+-- | Whether the primitive referenced by a head term is lazy in the parameter at
+-- the given (0-based) position.
+primIsLazyAt :: TypedTermDefinition (Graph -> Term -> Int -> Bool)
+primIsLazyAt = def "primIsLazyAt" $
+  "g" ~> "headTerm" ~> "i" ~>
+    Maybes.fromMaybe false (Lists.maybeAt (var "i") (lazyFlagsForPrimitiveTerm @@ var "g" @@ var "headTerm"))
 
 -- | Check if a term is a reference to a specific primitive, stripping type
 -- applications, type lambdas, and annotations to find the underlying primitive.
-isPrimitiveRef :: TTermDefinition (String -> Term -> Bool)
+isPrimitiveRef :: TypedTermDefinition (String -> Term -> Bool)
 isPrimitiveRef = def "isPrimitiveRef" $
   lambda "primName" $ lambda "term" $
     cases _Term (var "term") (Just $ boolean False) [
@@ -864,7 +882,7 @@ isPrimitiveRef = def "isPrimitiveRef" $
         isPrimitiveRef @@ var "primName" @@ Core.typeLambdaBody (var "tl")]
 
 -- | Function application expression
-lispApp :: TTermDefinition (L.Expression -> [L.Expression] -> L.Expression)
+lispApp :: TypedTermDefinition (L.Expression -> [L.Expression] -> L.Expression)
 lispApp = def "lispApp" $
   lambda "fun" $ lambda "args" $
     inject L._Expression L._Expression_application $
@@ -873,7 +891,7 @@ lispApp = def "lispApp" $
         L._Application_arguments>>: var "args"]
 
 -- | Construct a Lisp keyword from a string
-lispKeyword :: TTermDefinition (String -> L.Expression)
+lispKeyword :: TypedTermDefinition (String -> L.Expression)
 lispKeyword = def "lispKeyword" $
   lambda "name" $
     inject L._Expression L._Expression_literal $
@@ -883,7 +901,7 @@ lispKeyword = def "lispKeyword" $
           L._Keyword_namespace>>: nothing]
 
 -- | Lambda expression (unnamed)
-lispLambdaExpr :: TTermDefinition ([String] -> L.Expression -> L.Expression)
+lispLambdaExpr :: TypedTermDefinition ([String] -> L.Expression -> L.Expression)
 lispLambdaExpr = def "lispLambdaExpr" $
   lambda "params" $ lambda "body" $
     inject L._Expression L._Expression_lambda $
@@ -894,7 +912,7 @@ lispLambdaExpr = def "lispLambdaExpr" $
         L._Lambda_body>>: list [var "body"]]
 
 -- | Construct a Lisp list expression
-lispListExpr :: TTermDefinition ([L.Expression] -> L.Expression)
+lispListExpr :: TypedTermDefinition ([L.Expression] -> L.Expression)
 lispListExpr = def "lispListExpr" $
   lambda "elements" $
     inject L._Expression L._Expression_list $
@@ -903,13 +921,13 @@ lispListExpr = def "lispListExpr" $
         L._ListLiteral_quoted>>: boolean False]
 
 -- | Wrap a literal as an expression
-lispLitExpr :: TTermDefinition (L.Literal -> L.Expression)
+lispLitExpr :: TypedTermDefinition (L.Literal -> L.Expression)
 lispLitExpr = def "lispLitExpr" $
   lambda "lit" $
     inject L._Expression L._Expression_literal (var "lit")
 
 -- | Named lambda expression (for Clojure self-referential fn)
-lispNamedLambdaExpr :: TTermDefinition (String -> [String] -> L.Expression -> L.Expression)
+lispNamedLambdaExpr :: TypedTermDefinition (String -> [String] -> L.Expression -> L.Expression)
 lispNamedLambdaExpr = def "lispNamedLambdaExpr" $
   lambda "name" $ lambda "params" $ lambda "body" $
     inject L._Expression L._Expression_lambda $
@@ -920,19 +938,19 @@ lispNamedLambdaExpr = def "lispNamedLambdaExpr" $
         L._Lambda_body>>: list [var "body"]]
 
 -- | Nil expression
-lispNilExpr :: TTermDefinition L.Expression
+lispNilExpr :: TypedTermDefinition L.Expression
 lispNilExpr = def "lispNilExpr" $
   inject L._Expression L._Expression_literal $
     inject L._Literal L._Literal_nil unit
 
 -- | Construct a Lisp symbol from a string
-lispSymbol :: TTermDefinition (String -> L.Symbol)
+lispSymbol :: TypedTermDefinition (String -> L.Symbol)
 lispSymbol = def "lispSymbol" $
   lambda "name" $
     wrap L._Symbol (var "name")
 
 -- | Wrap a top-level form (no doc, no comment)
-lispTopForm :: TTermDefinition (L.TopLevelForm -> L.TopLevelFormWithComments)
+lispTopForm :: TypedTermDefinition (L.TopLevelForm -> L.TopLevelFormWithComments)
 lispTopForm = def "lispTopForm" $
   lambda "form" $
     record L._TopLevelFormWithComments [
@@ -941,7 +959,7 @@ lispTopForm = def "lispTopForm" $
       L._TopLevelFormWithComments_form>>: var "form"]
 
 -- | Wrap a top-level form with an optional docstring
-lispTopFormWithComments :: TTermDefinition (Maybe String -> L.TopLevelForm -> L.TopLevelFormWithComments)
+lispTopFormWithComments :: TypedTermDefinition (Maybe String -> L.TopLevelForm -> L.TopLevelFormWithComments)
 lispTopFormWithComments = def "lispTopFormWithComments" $
   lambda "mdoc" $ lambda "form" $
     record L._TopLevelFormWithComments [
@@ -950,7 +968,7 @@ lispTopFormWithComments = def "lispTopFormWithComments" $
       L._TopLevelFormWithComments_form>>: var "form"]
 
 -- | Variable reference expression (Lisp-1 style, function namespace = false)
-lispVar :: TTermDefinition (String -> L.Expression)
+lispVar :: TypedTermDefinition (String -> L.Expression)
 lispVar = def "lispVar" $
   lambda "name" $
     inject L._Expression L._Expression_variable $
@@ -961,12 +979,12 @@ lispVar = def "lispVar" $
 -- | Generate export declarations for all symbols defined in a module.
 --   For record type definitions: the type name, constructor (make-X), predicate (X?), and field accessors.
 --   For variable definitions: the variable name.
-moduleExports :: TTermDefinition ([L.TopLevelFormWithComments] -> [L.ExportDeclaration])
+moduleExports :: TypedTermDefinition ([L.TopLevelFormWithComments] -> [L.ExportDeclaration])
 moduleExports = def "moduleExports" $
   "forms" ~>
     "symbols" <~ Lists.concat (Lists.map ("fwc" ~>
       "form" <~ (project L._TopLevelFormWithComments L._TopLevelFormWithComments_form @@ var "fwc") $
-      cases L._TopLevelForm (var "form") (Just (list ([] :: [TTerm L.Symbol]))) [
+      cases L._TopLevelForm (var "form") (Just (list ([] :: [TypedTerm L.Symbol]))) [
         L._TopLevelForm_variable>>: "vd" ~>
           list [project L._VariableDefinition L._VariableDefinition_name @@ var "vd"],
         L._TopLevelForm_recordType>>: "rdef" ~>
@@ -983,7 +1001,7 @@ moduleExports = def "moduleExports" $
             var "fieldSyms"])])
       (var "forms")) $
     Logic.ifElse (Lists.null (var "symbols"))
-      (list ([] :: [TTerm L.ExportDeclaration]))
+      (list ([] :: [TypedTerm L.ExportDeclaration]))
       (list [record L._ExportDeclaration [
         L._ExportDeclaration_symbols>>: var "symbols"]])
 
@@ -991,11 +1009,11 @@ moduleExports = def "moduleExports" $
 --   This ensures that all forward references are resolved, making the generated code
 
 -- | Generate import declarations from the dependency namespaces of a module's definitions.
-moduleImports :: TTermDefinition (ModuleName -> [Definition] -> [L.ImportDeclaration])
+moduleImports :: TypedTermDefinition (ModuleName -> [Definition] -> [L.ImportDeclaration])
 moduleImports = def "moduleImports" $
   "focusNs" ~> "defs" ~>
     "depNss" <~ Sets.toList (Sets.delete (var "focusNs")
-      (Analysis.definitionDependencyNamespaces @@ var "defs")) $
+      (Analysis.definitionDependencyModuleNames @@ var "defs")) $
     Lists.map ("ns" ~>
       record L._ImportDeclaration [
         L._ImportDeclaration_module>>: wrap L._NamespaceName (Packaging.unModuleName (var "ns")),
@@ -1003,7 +1021,7 @@ moduleImports = def "moduleImports" $
       (var "depNss")
 
 -- | Convert a Hydra module to a Lisp program.
-moduleToLisp :: TTermDefinition (L.Dialect -> Module -> [Definition] -> Context -> Graph -> Either Error L.Program)
+moduleToLisp :: TypedTermDefinition (L.Dialect -> Module -> [Definition] -> InferenceContext -> Graph -> Either Error L.Program)
 moduleToLisp = def "moduleToLisp" $
   "dialect" ~> "mod" ~> "defs0" ~> "cx" ~> "g" ~>
     -- Reorder definitions: types first, then topologically sorted terms
@@ -1038,7 +1056,7 @@ moduleToLisp = def "moduleToLisp" $
 -- E.g. Name "hydra.core.AnnotatedTerm" -> "hydra_core_annotated_term"
 -- Splits on dots, converts each part to snake_case, joins with underscore.
 -- Reserved words get a trailing underscore.
-qualifiedSnakeName :: TTermDefinition (Name -> String)
+qualifiedSnakeName :: TypedTermDefinition (Name -> String)
 qualifiedSnakeName = def "qualifiedSnakeName" $
   lambda "name" $
     "raw" <~ Core.unName (var "name") $
@@ -1050,19 +1068,19 @@ qualifiedSnakeName = def "qualifiedSnakeName" $
 -- | Convert a fully-qualified Hydra Name to a PascalCase type identifier string.
 -- E.g. Name "hydra.core.AnnotatedTerm" -> "AnnotatedTerm"
 -- Type names keep PascalCase for the local part, since they are used with define-record-type.
-qualifiedTypeName :: TTermDefinition (Name -> String)
+qualifiedTypeName :: TypedTermDefinition (Name -> String)
 qualifiedTypeName = def "qualifiedTypeName" $
   lambda "name" $
     Formatting.capitalize @@ (Names.localNameOf @@ var "name")
 
 -- | Wrap an expression in a zero-argument lambda for lazy evaluation.
 -- Produces (fn [] expr) in Clojure, (lambda () expr) in Scheme, etc.
-wrapInThunk :: TTermDefinition (L.Expression -> L.Expression)
+wrapInThunk :: TypedTermDefinition (L.Expression -> L.Expression)
 wrapInThunk = def "wrapInThunk" $
   "expr" ~>
     inject L._Expression L._Expression_lambda $
       record L._Lambda [
         L._Lambda_name>>: nothing,
-        L._Lambda_params>>: list ([] :: [TTerm L.Symbol]),
+        L._Lambda_params>>: list ([] :: [TypedTerm L.Symbol]),
         L._Lambda_restParam>>: nothing,
         L._Lambda_body>>: list [var "expr"]]

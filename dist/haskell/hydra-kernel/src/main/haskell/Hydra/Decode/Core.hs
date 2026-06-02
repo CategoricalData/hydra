@@ -6,10 +6,13 @@ import qualified Hydra.Core as Core
 import qualified Hydra.Errors as Errors
 import qualified Hydra.Extract.Core as ExtractCore
 import qualified Hydra.Graph as Graph
-import qualified Hydra.Lib.Eithers as Eithers
-import qualified Hydra.Lib.Maps as Maps
-import qualified Hydra.Lib.Maybes as Maybes
-import qualified Hydra.Lib.Strings as Strings
+import qualified Hydra.Lexical as Lexical
+import qualified Hydra.Haskell.Lib.Eithers as Eithers
+import qualified Hydra.Haskell.Lib.Maps as Maps
+import qualified Hydra.Haskell.Lib.Maybes as Maybes
+import qualified Hydra.Haskell.Lib.Strings as Strings
+import qualified Hydra.Rewriting as Rewriting
+import qualified Hydra.Util as Util
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 -- | Decoder for hydra.core.AnnotatedTerm
@@ -519,6 +522,22 @@ typeApplicationTerm cx raw =
           Core.typeApplicationTermBody = field_body,
           Core.typeApplicationTermType = field_type}))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+-- | Decoder for hydra.core.TypeClassConstraint
+typeClassConstraint :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.TypeClassConstraint
+typeClassConstraint cx raw =
+    Eithers.either (\err -> Left err) (\stripped -> case stripped of
+      Core.TermInject v0 ->
+        let field = Core.injectionField v0
+            fname = Core.fieldName field
+            fterm = Core.fieldTerm field
+            variantMap =
+                    Maps.fromList [
+                      (Core.Name "simple", (\input -> Eithers.map (\t -> Core.TypeClassConstraintSimple t) (name cx input)))]
+        in (Maybes.maybe (Left (Errors.DecodingError (Strings.cat [
+          "no such field ",
+          (Core.unName fname),
+          " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
+      _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.core.TypeLambda
 typeLambda :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.TypeLambda
 typeLambda cx raw =
@@ -546,7 +565,7 @@ typeVariableMetadata cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
       Core.TermRecord v0 ->
         let fieldMap = ExtractCore.toFieldMap v0
-        in (Eithers.bind (ExtractCore.requireField "classes" (ExtractCore.decodeSet name) fieldMap cx) (\field_classes -> Right (Core.TypeVariableMetadata {
+        in (Eithers.bind (ExtractCore.requireField "classes" (ExtractCore.decodeList typeClassConstraint) fieldMap cx) (\field_classes -> Right (Core.TypeVariableMetadata {
           Core.typeVariableMetadataClasses = field_classes})))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.core.WrappedTerm

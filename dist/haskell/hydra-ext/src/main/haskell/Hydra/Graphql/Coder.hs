@@ -11,15 +11,15 @@ import qualified Hydra.Graph as Graph
 import qualified Hydra.Graphql.Language as Language
 import qualified Hydra.Graphql.Serde as Serde
 import qualified Hydra.Graphql.Syntax as Syntax
-import qualified Hydra.Lib.Eithers as Eithers
-import qualified Hydra.Lib.Equality as Equality
-import qualified Hydra.Lib.Lists as Lists
-import qualified Hydra.Lib.Logic as Logic
-import qualified Hydra.Lib.Maps as Maps
-import qualified Hydra.Lib.Maybes as Maybes
-import qualified Hydra.Lib.Pairs as Pairs
-import qualified Hydra.Lib.Sets as Sets
-import qualified Hydra.Lib.Strings as Strings
+import qualified Hydra.Haskell.Lib.Eithers as Eithers
+import qualified Hydra.Haskell.Lib.Equality as Equality
+import qualified Hydra.Haskell.Lib.Lists as Lists
+import qualified Hydra.Haskell.Lib.Logic as Logic
+import qualified Hydra.Haskell.Lib.Maps as Maps
+import qualified Hydra.Haskell.Lib.Maybes as Maybes
+import qualified Hydra.Haskell.Lib.Pairs as Pairs
+import qualified Hydra.Haskell.Lib.Sets as Sets
+import qualified Hydra.Haskell.Lib.Strings as Strings
 import qualified Hydra.Names as Names
 import qualified Hydra.Packaging as Packaging
 import qualified Hydra.Predicates as Predicates
@@ -201,12 +201,12 @@ moduleToGraphql mod defs cx g =
           typeDefs = Pairs.first partitioned
           prefixes =
                   (\modNs -> \tdefs ->
-                    let namespaces = Lists.nub (Maybes.cat (Lists.map (\td -> Names.namespaceOf (Packaging.typeDefinitionName td)) tdefs))
+                    let namespaces = Lists.nub (Maybes.cat (Lists.map (\td -> Names.moduleNameOf (Packaging.typeDefinitionName td)) tdefs))
                     in (Maps.fromList (Lists.map (\ns_ -> (
                       ns_,
                       (Logic.ifElse (Equality.equal ns_ modNs) "" (Strings.cat2 (Formatting.sanitizeWithUnderscores Sets.empty (Packaging.unModuleName ns_)) "_")))) namespaces))) (Packaging.moduleName mod) typeDefs
           filePath =
-                  Names.namespaceToFilePath Util.CaseConventionCamel (Packaging.FileExtension "graphql") (Packaging.moduleName mod)
+                  Names.moduleNameToFilePath Util.CaseConventionCamel (Packaging.FileExtension "graphql") (Packaging.moduleName mod)
       in (Eithers.bind (Eithers.mapList (\td -> encodeTypeDefinition cx g prefixes td) typeDefs) (\gtdefs -> Right (Maps.fromList (Lists.pure (
         filePath,
         (Serialization.printExpr (Serialization.parenthesize (Serde.documentToExpr (Syntax.Document (Lists.map (\gtdef -> Syntax.DefinitionTypeSystem (Syntax.TypeSystemDefinitionOrExtensionDefinition (Syntax.TypeSystemDefinitionType gtdef))) gtdefs))))))))))

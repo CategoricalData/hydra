@@ -5,36 +5,46 @@ module Hydra.Python.Coder where
 import qualified Hydra.Analysis as Analysis
 import qualified Hydra.Annotations as Annotations
 import qualified Hydra.Arity as Arity
+import qualified Hydra.Ast as Ast
 import qualified Hydra.Checking as Checking
+import qualified Hydra.Classes as Classes
 import qualified Hydra.Coders as Coders
-import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
 import qualified Hydra.Dependencies as Dependencies
 import qualified Hydra.Environment as Environment
+import qualified Hydra.Error.Checking as ErrorChecking
+import qualified Hydra.Error.Core as ErrorCore
+import qualified Hydra.Error.Packaging as ErrorPackaging
 import qualified Hydra.Errors as Errors
 import qualified Hydra.Formatting as Formatting
 import qualified Hydra.Graph as Graph
+import qualified Hydra.Inference as Inference
+import qualified Hydra.Json.Model as Model
 import qualified Hydra.Lexical as Lexical
-import qualified Hydra.Lib.Eithers as Eithers
-import qualified Hydra.Lib.Equality as Equality
-import qualified Hydra.Lib.Lists as Lists
-import qualified Hydra.Lib.Literals as Literals
-import qualified Hydra.Lib.Logic as Logic
-import qualified Hydra.Lib.Maps as Maps
-import qualified Hydra.Lib.Math as Math
-import qualified Hydra.Lib.Maybes as Maybes
-import qualified Hydra.Lib.Pairs as Pairs
-import qualified Hydra.Lib.Sets as Sets
-import qualified Hydra.Lib.Strings as Strings
+import qualified Hydra.Haskell.Lib.Eithers as Eithers
+import qualified Hydra.Haskell.Lib.Equality as Equality
+import qualified Hydra.Haskell.Lib.Lists as Lists
+import qualified Hydra.Haskell.Lib.Literals as Literals
+import qualified Hydra.Haskell.Lib.Logic as Logic
+import qualified Hydra.Haskell.Lib.Maps as Maps
+import qualified Hydra.Haskell.Lib.Math as Math
+import qualified Hydra.Haskell.Lib.Maybes as Maybes
+import qualified Hydra.Haskell.Lib.Pairs as Pairs
+import qualified Hydra.Haskell.Lib.Sets as Sets
+import qualified Hydra.Haskell.Lib.Strings as Strings
 import qualified Hydra.Names as Names
 import qualified Hydra.Packaging as Packaging
+import qualified Hydra.Parsing as Parsing
+import qualified Hydra.Paths as Paths
 import qualified Hydra.Predicates as Predicates
 import qualified Hydra.Python.Environment as PythonEnvironment
 import qualified Hydra.Python.Names as PythonNames
 import qualified Hydra.Python.Serde as Serde
 import qualified Hydra.Python.Syntax as Syntax
 import qualified Hydra.Python.Utils as Utils
+import qualified Hydra.Query as Query
 import qualified Hydra.Reduction as Reduction
+import qualified Hydra.Relational as Relational
 import qualified Hydra.Resolution as Resolution
 import qualified Hydra.Rewriting as Rewriting
 import qualified Hydra.Scoping as Scoping
@@ -42,15 +52,21 @@ import qualified Hydra.Serialization as Serialization
 import qualified Hydra.Show.Core as ShowCore
 import qualified Hydra.Sorting as Sorting
 import qualified Hydra.Strip as Strip
+import qualified Hydra.Tabular as Tabular
+import qualified Hydra.Testing as Testing
+import qualified Hydra.Topology as Topology
+import qualified Hydra.Typed as Typed
 import qualified Hydra.Typing as Typing
 import qualified Hydra.Util as Util
+import qualified Hydra.Validation as Validation
 import qualified Hydra.Variables as Variables
+import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 import qualified Data.Map as M
 import qualified Data.Set as S
 -- | Analyze a function term with Python-specific Graph management
-analyzePythonFunction :: Context.Context -> PythonEnvironment.PythonEnvironment -> Core.Term -> Either t0 (Typing.FunctionStructure PythonEnvironment.PythonEnvironment)
+analyzePythonFunction :: Typing.InferenceContext -> PythonEnvironment.PythonEnvironment -> Core.Term -> Either t0 (Typing.FunctionStructure PythonEnvironment.PythonEnvironment)
 analyzePythonFunction cx env term =
     Analysis.analyzeFunctionTermWith cx pythonBindingMetadata pythonEnvironmentGetGraph pythonEnvironmentSetGraph env term
 -- | Encode a single case (Field) into a CaseBlock for a match statement
@@ -246,7 +262,7 @@ eliminateUnitVar v term0 =
           go = \term -> rewrite go term
       in (go term0)
 -- | Create an initial empty metadata record with given namespaces
-emptyMetadata :: Util.Namespaces Syntax.DottedName -> PythonEnvironment.PythonModuleMetadata
+emptyMetadata :: Util.ModuleNames Syntax.DottedName -> PythonEnvironment.PythonModuleMetadata
 emptyMetadata ns =
     PythonEnvironment.PythonModuleMetadata {
       PythonEnvironment.pythonModuleMetadataNamespaces = ns,
@@ -273,7 +289,7 @@ emptyMetadata ns =
       PythonEnvironment.pythonModuleMetadataUsesRight = False,
       PythonEnvironment.pythonModuleMetadataUsesTypeVar = False}
 -- | Encode a function application to a Python expression
-encodeApplication :: Context.Context -> PythonEnvironment.PythonEnvironment -> Core.Application -> Either Errors.Error Syntax.Expression
+encodeApplication :: Typing.InferenceContext -> PythonEnvironment.PythonEnvironment -> Core.Application -> Either Errors.Error Syntax.Expression
 encodeApplication cx env app =
 
       let g = pythonEnvironmentGetGraph env
@@ -293,7 +309,7 @@ encodeApplication cx env app =
                     a]) lhs remainingRargs
           in (Right pyapp)))))
 -- | Inner helper for encodeApplication
-encodeApplicationInner :: Context.Context -> PythonEnvironment.PythonEnvironment -> Core.Term -> [Syntax.Expression] -> [Syntax.Expression] -> Either Errors.Error (Syntax.Expression, [Syntax.Expression])
+encodeApplicationInner :: Typing.InferenceContext -> PythonEnvironment.PythonEnvironment -> Core.Term -> [Syntax.Expression] -> [Syntax.Expression] -> Either Errors.Error (Syntax.Expression, [Syntax.Expression])
 encodeApplicationInner cx env fun hargs rargs =
 
       let firstArg = Maybes.fromMaybe (Utils.pyNameToPyExpression (Syntax.Name "")) (Lists.maybeHead hargs)
@@ -326,7 +342,7 @@ encodeApplicationInner cx env fun hargs rargs =
               remainingArgs)) (Right (
               Utils.functionCall (Utils.pyNameToPyPrimary (PythonNames.encodeName True Util.CaseConventionLowerSnake env v0)) consumedArgs,
               remainingArgs))))) (Core.bindingTypeScheme el)) (Lexical.lookupBinding g v0)) (\_prim ->
-            let wrappedArgs = wrapLazyArguments v0 hargs
+            let wrappedArgs = wrapLazyArguments g v0 hargs
             in (Eithers.bind (encodeVariable cx env v0 wrappedArgs) (\expr -> Right (expr, rargs)))))
         _ -> defaultCase
 -- | Encode an application type to Python expression
@@ -357,7 +373,7 @@ encodeApplicationType env at =
           args = Pairs.second bodyAndArgs
       in (Eithers.bind (encodeType env body) (\pyBody -> Eithers.bind (Eithers.mapList (encodeType env) args) (\pyArgs -> Right (Utils.primaryAndParams (Utils.pyExpressionToPyPrimary pyBody) pyArgs))))
 -- | Encode a binding as a Python statement (function definition or assignment)
-encodeBindingAs :: Context.Context -> PythonEnvironment.PythonEnvironment -> Core.Binding -> Either Errors.Error Syntax.Statement
+encodeBindingAs :: Typing.InferenceContext -> PythonEnvironment.PythonEnvironment -> Core.Binding -> Either Errors.Error Syntax.Statement
 encodeBindingAs cx env binding =
 
       let name1 = Core.bindingName binding
@@ -514,7 +530,7 @@ encodeBindingAs cx env binding =
         let normComment = Maybes.map Formatting.normalizeComment comment
         in (encodeTermAssignment cx env False name1 term1 ts normComment))) mts)
 -- | Encode a binding as a walrus operator assignment
-encodeBindingAsAssignment :: Context.Context -> Bool -> PythonEnvironment.PythonEnvironment -> Core.Binding -> Either Errors.Error Syntax.NamedExpression
+encodeBindingAsAssignment :: Typing.InferenceContext -> Bool -> PythonEnvironment.PythonEnvironment -> Core.Binding -> Either Errors.Error Syntax.NamedExpression
 encodeBindingAsAssignment cx allowThunking env binding =
 
       let name = Core.bindingName binding
@@ -549,7 +565,7 @@ encodeDefaultCaseBlock termToExpr isFull mdflt tname =
           Syntax.caseBlockGuard = Nothing,
           Syntax.caseBlockBody = body}]))
 -- | Encode a definition (term or type) to Python statements
-encodeDefinition :: Context.Context -> PythonEnvironment.PythonEnvironment -> Packaging.Definition -> Either Errors.Error [[Syntax.Statement]]
+encodeDefinition :: Typing.InferenceContext -> PythonEnvironment.PythonEnvironment -> Packaging.Definition -> Either Errors.Error [[Syntax.Statement]]
 encodeDefinition cx env def_ =
     case def_ of
       Packaging.DefinitionTerm v0 ->
@@ -559,7 +575,7 @@ encodeDefinition cx env def_ =
                     Maybes.maybe (Core.TypeScheme {
                       Core.typeSchemeVariables = [],
                       Core.typeSchemeBody = (Core.TypeVariable (Core.Name "hydra.core.Unit")),
-                      Core.typeSchemeConstraints = Nothing}) (\x -> x) (Packaging.termDefinitionTypeScheme v0)
+                      Core.typeSchemeConstraints = Nothing}) (\sig -> Scoping.termSignatureToTypeScheme sig) (Packaging.termDefinitionSignature v0)
         in (Eithers.bind (Annotations.getTermDescription cx (pythonEnvironmentGetGraph env) term) (\comment ->
           let normComment = Maybes.map Formatting.normalizeComment comment
           in (Eithers.bind (encodeTermAssignment cx env True name term typ normComment) (\stmt -> Right [
@@ -783,7 +799,7 @@ encodeNameConstants env name fields =
                   Lists.map (\field -> (PythonNames.encodeConstantForFieldName env name (Core.fieldTypeName field), (Core.fieldTypeName field))) fields
       in (Lists.map toStmt (Lists.cons namePair fieldPairs))
 -- | Encode a Hydra module to a Python module AST
-encodePythonModule :: Context.Context -> Graph.Graph -> Packaging.Module -> [Packaging.Definition] -> Either Errors.Error Syntax.Module
+encodePythonModule :: Typing.InferenceContext -> Graph.Graph -> Packaging.Module -> [Packaging.Definition] -> Either Errors.Error Syntax.Module
 encodePythonModule cx g mod defs0 =
 
       let defs = Environment.reorderDefs defs0
@@ -798,7 +814,7 @@ encodePythonModule cx g mod defs0 =
             namespaces = PythonEnvironment.pythonModuleMetadataNamespaces meta0
             commentStmts =
                     Maybes.maybe [] (\c -> [
-                      Utils.commentStatement c]) (Maybes.map Formatting.normalizeComment (Packaging.moduleDescription mod))
+                      Utils.commentStatement c]) (Maybes.map Formatting.normalizeComment (Maybes.bind (Packaging.moduleMetadata mod) (\em -> Packaging.entityMetadataDescription em)))
             importStmts = moduleImports namespaces meta
             tvars =
                     Logic.ifElse (Logic.or isTypeMod (Logic.not useInlineTypeParams)) (PythonEnvironment.pythonModuleMetadataTypeVariables meta) Sets.empty
@@ -836,7 +852,7 @@ encodeRecordType cx env name rowType comment =
         Syntax.classDefinitionArguments = args,
         Syntax.classDefinitionBody = body}))))
 -- | Encode a term assignment to a Python statement
-encodeTermAssignment :: Context.Context -> PythonEnvironment.PythonEnvironment -> Bool -> Core.Name -> Core.Term -> Core.TypeScheme -> Maybe String -> Either Errors.Error Syntax.Statement
+encodeTermAssignment :: Typing.InferenceContext -> PythonEnvironment.PythonEnvironment -> Bool -> Core.Name -> Core.Term -> Core.TypeScheme -> Maybe String -> Either Errors.Error Syntax.Statement
 encodeTermAssignment cx env topLevel name term ts comment =
     Eithers.bind (analyzePythonFunction cx env term) (\fs ->
       let tparams = Typing.functionStructureTypeParams fs
@@ -861,7 +877,7 @@ encodeTermAssignment cx env topLevel name term ts comment =
         let pyName = PythonNames.encodeName False Util.CaseConventionLowerSnake env2 name
         in (Right (Utils.annotatedStatement comment (Utils.assignmentStatement pyName bodyExpr)))))))
 -- | Encode a term to a Python expression (inline form)
-encodeTermInline :: Context.Context -> PythonEnvironment.PythonEnvironment -> Bool -> Core.Term -> Either Errors.Error Syntax.Expression
+encodeTermInline :: Typing.InferenceContext -> PythonEnvironment.PythonEnvironment -> Bool -> Core.Term -> Either Errors.Error Syntax.Expression
 encodeTermInline cx env noCast term =
 
       let encode = \t -> encodeTermInline cx env False t
@@ -1022,7 +1038,7 @@ encodeTermInline cx env noCast term =
           in (Eithers.bind (encode inner) (\parg -> Right (Utils.functionCall (Utils.pyNameToPyPrimary (PythonNames.encodeNameQualified env tname)) [
             parg])))
 -- | Encode a term to a list of statements with return as final statement
-encodeTermMultiline :: Context.Context -> PythonEnvironment.PythonEnvironment -> Core.Term -> Either Errors.Error [Syntax.Statement]
+encodeTermMultiline :: Typing.InferenceContext -> PythonEnvironment.PythonEnvironment -> Core.Term -> Either Errors.Error [Syntax.Statement]
 encodeTermMultiline cx env term =
 
       let dfltLogic =
@@ -1056,7 +1072,7 @@ encodeTermMultiline cx env term =
                   matchStmt])))))))
           _ -> dfltLogic) dfltLogic)
 -- | Encode a term body for TCO: tail self-calls become param reassignment + continue
-encodeTermMultilineTCO :: Context.Context -> PythonEnvironment.PythonEnvironment -> Core.Name -> [Core.Name] -> Core.Term -> Either Errors.Error [Syntax.Statement]
+encodeTermMultilineTCO :: Typing.InferenceContext -> PythonEnvironment.PythonEnvironment -> Core.Name -> [Core.Name] -> Core.Term -> Either Errors.Error [Syntax.Statement]
 encodeTermMultilineTCO cx env funcName paramNames term =
 
       let stripped = Strip.deannotateAndDetypeTerm term
@@ -1169,7 +1185,7 @@ encodeTypeQuoted :: PythonEnvironment.PythonEnvironment -> Core.Type -> Either t
 encodeTypeQuoted env typ =
     Eithers.bind (encodeType env typ) (\pytype -> Right (Logic.ifElse (Sets.null (Variables.freeVariablesInType typ)) pytype (Utils.doubleQuotedString (Serialization.printExpr (Serde.expressionToExpr pytype)))))
 -- | Encode a union elimination as an inline conditional chain (isinstance-based ternary)
-encodeUnionEliminationInline :: Context.Context -> PythonEnvironment.PythonEnvironment -> Core.CaseStatement -> Syntax.Expression -> Either Errors.Error Syntax.Expression
+encodeUnionEliminationInline :: Typing.InferenceContext -> PythonEnvironment.PythonEnvironment -> Core.CaseStatement -> Syntax.Expression -> Either Errors.Error Syntax.Expression
 encodeUnionEliminationInline cx env cs pyArg =
 
       let tname = Core.caseStatementTypeName cs
@@ -1334,7 +1350,7 @@ encodeVariable cx env name args =
           in (Right asFunctionRef))) (Core.bindingTypeScheme el))) (Lexical.lookupBinding g name)) (\prim ->
         let primArity = Arity.primitiveArity prim
         in (Logic.ifElse (Equality.equal primArity 0) (Right asFunctionCall) (
-          let ts = Graph.primitiveTypeScheme prim
+          let ts = Scoping.termSignatureToTypeScheme (Packaging.primitiveDefinitionSignature (Graph.primitiveDefinition prim))
               asFunctionRef =
                       Logic.ifElse (Logic.not (Lists.null (Core.typeSchemeVariables ts))) (makeSimpleLambda (Arity.typeArity (Core.typeSchemeBody ts)) asVariable) asVariable
           in (Right asFunctionRef)))) (Lexical.lookupPrimitive g name)))) (\typ -> Logic.ifElse (Sets.member name tcLambdaVars) (Right asVariable) (Logic.ifElse (Sets.member name inlineVars) (
@@ -1480,7 +1496,7 @@ extendMetaForTypes types meta =
 
       let names = Sets.unions (Lists.map (\t -> Dependencies.typeDependencyNames False t) types)
           currentNs = PythonEnvironment.pythonModuleMetadataNamespaces meta
-          updatedNs = Analysis.addNamesToNamespaces PythonNames.encodeNamespace names currentNs
+          updatedNs = Analysis.addNamesToModuleNames PythonNames.encodeNamespace names currentNs
           meta1 = setMetaNamespaces updatedNs meta
       in (Lists.foldl (\m -> \t -> extendMetaForType True False t m) meta1 types)
 -- | Extract CaseStatement from a case elimination term
@@ -1497,7 +1513,7 @@ findTypeParams env typ =
           isBound = \v -> Maybes.isJust (Maps.lookup v boundVars)
       in (Lists.filter isBound (Sets.toList (Variables.freeVariablesInType typ)))
 -- | Encode a function definition with parameters and body
-functionDefinitionToExpr :: Context.Context -> PythonEnvironment.PythonEnvironment -> Core.Name -> [Core.Name] -> [Core.Name] -> Core.Term -> [Core.Type] -> Maybe Core.Type -> Maybe String -> [Syntax.Statement] -> Either Errors.Error Syntax.Statement
+functionDefinitionToExpr :: Typing.InferenceContext -> PythonEnvironment.PythonEnvironment -> Core.Name -> [Core.Name] -> [Core.Name] -> Core.Term -> [Core.Type] -> Maybe Core.Type -> Maybe String -> [Syntax.Statement] -> Either Errors.Error Syntax.Statement
 functionDefinitionToExpr cx env name tparams args body doms mcod comment prefixes =
     Eithers.bind (Eithers.mapList (\pair ->
       let argName = Pairs.first pair
@@ -1562,7 +1578,7 @@ gatherMetadata focusNs defs =
                     Packaging.DefinitionTerm v0 ->
                       let term = Packaging.termDefinitionTerm v0
                           typ =
-                                  Maybes.maybe (Core.TypeVariable (Core.Name "hydra.core.Unit")) Core.typeSchemeBody (Packaging.termDefinitionTypeScheme v0)
+                                  Maybes.maybe (Core.TypeVariable (Core.Name "hydra.core.Unit")) (\sig -> Core.typeSchemeBody (Scoping.termSignatureToTypeScheme sig)) (Packaging.termDefinitionSignature v0)
                           meta2 = extendMetaForType True True typ meta
                       in (extendMetaForTerm True meta2 term)
                     Packaging.DefinitionType v0 ->
@@ -1598,7 +1614,7 @@ genericArg tparamList =
                         Syntax.powerRhs = Nothing}))}}}}}},
           Syntax.comparisonRhs = []})]])) tparamList))))
 -- | Create an initial Python environment for code generation
-initialEnvironment :: Util.Namespaces Syntax.DottedName -> Graph.Graph -> PythonEnvironment.PythonEnvironment
+initialEnvironment :: Util.ModuleNames Syntax.DottedName -> Graph.Graph -> PythonEnvironment.PythonEnvironment
 initialEnvironment namespaces tcontext =
     PythonEnvironment.PythonEnvironment {
       PythonEnvironment.pythonEnvironmentNamespaces = namespaces,
@@ -1614,9 +1630,9 @@ initialMetadata ns =
 
       let dottedNs = PythonNames.encodeNamespace ns
           emptyNs =
-                  Util.Namespaces {
-                    Util.namespacesFocus = (ns, dottedNs),
-                    Util.namespacesMapping = Maps.empty}
+                  Util.ModuleNames {
+                    Util.moduleNamesFocus = (ns, dottedNs),
+                    Util.moduleNamesMapping = Maps.empty}
       in PythonEnvironment.PythonModuleMetadata {
         PythonEnvironment.pythonModuleMetadataNamespaces = emptyNs,
         PythonEnvironment.pythonModuleMetadataTypeVariables = Sets.empty,
@@ -1678,6 +1694,13 @@ isVariantUnitType rowType fieldName =
 -- | Wrap an expression in a .get() method call (for Lazy unwrap at use sites)
 lazyDotGet :: Syntax.Expression -> Syntax.Expression
 lazyDotGet expr = Utils.functionCall (Utils.pyExpressionToPyPrimary (Utils.projectFromExpression expr (Syntax.Name "get"))) []
+-- | Per-parameter isLazy flags of a primitive (by name), or empty if not a primitive. Single source of truth for which arguments coders thunk; replaces hard-coded name tables (issue #391).
+lazyFlagsForPrimitive :: Graph.Graph -> Core.Name -> [Bool]
+lazyFlagsForPrimitive g name =
+    Maybes.cases (Maps.lookup name (Graph.graphPrimitives g)) [] (\prim ->
+      let def0 = Graph.primitiveDefinition prim
+          sig = Packaging.primitiveDefinitionSignature def0
+      in (Lists.map (\p -> Typing.parameterIsLazy p) (Typing.termSignatureParameters sig)))
 -- | Decorator for @lru_cache(1) to memoize zero-argument function results
 lruCacheDecorator :: Syntax.NamedExpression
 lruCacheDecorator =
@@ -1754,16 +1777,16 @@ makeUncurriedLambda params body =
         Syntax.lambdaParametersStarEtc = Nothing},
       Syntax.lambdaBody = body})
 -- | Generate domain import statements from namespace mappings
-moduleDomainImports :: Util.Namespaces Syntax.DottedName -> [Syntax.ImportStatement]
+moduleDomainImports :: Util.ModuleNames Syntax.DottedName -> [Syntax.ImportStatement]
 moduleDomainImports namespaces =
 
-      let names = Lists.sort (Maps.elems (Util.namespacesMapping namespaces))
+      let names = Lists.sort (Maps.elems (Util.moduleNamesMapping namespaces))
       in (Lists.map (\ns -> Syntax.ImportStatementName (Syntax.ImportName [
         Syntax.DottedAsName {
           Syntax.dottedAsNameName = ns,
           Syntax.dottedAsNameAs = Nothing}])) names)
 -- | Generate all import statements for a Python module
-moduleImports :: Util.Namespaces Syntax.DottedName -> PythonEnvironment.PythonModuleMetadata -> [Syntax.Statement]
+moduleImports :: Util.ModuleNames Syntax.DottedName -> PythonEnvironment.PythonModuleMetadata -> [Syntax.Statement]
 moduleImports namespaces meta =
     Lists.map (\imp -> Utils.pySimpleStatementToPyStatement (Syntax.SimpleStatementImport imp)) (Lists.concat [
       moduleStandardImports meta,
@@ -1823,11 +1846,11 @@ moduleStandardImports meta =
                     in (Logic.ifElse (Lists.null symbols) Nothing (Just (modName, symbols)))) pairs)
       in (Lists.map (\p -> standardImportStatement (Pairs.first p) (Pairs.second p)) simplified)
 -- | Convert a Hydra module to Python source files
-moduleToPython :: Packaging.Module -> [Packaging.Definition] -> Context.Context -> Graph.Graph -> Either Errors.Error (M.Map String String)
+moduleToPython :: Packaging.Module -> [Packaging.Definition] -> Typing.InferenceContext -> Graph.Graph -> Either Errors.Error (M.Map String String)
 moduleToPython mod defs cx g =
     Eithers.bind (encodePythonModule cx g mod defs) (\file ->
       let s = Serialization.printExpr (Serialization.parenthesize (Serde.moduleToExpr file))
-          path = Names.namespaceToFilePath Util.CaseConventionLowerSnake (Packaging.FileExtension "py") (Packaging.moduleName mod)
+          path = Names.moduleNameToFilePath Util.CaseConventionLowerSnake (Packaging.FileExtension "py") (Packaging.moduleName mod)
       in (Right (Maps.singleton path s)))
 -- | Accessor for the graph field of PyGraph
 pyGraphGraph :: PythonEnvironment.PyGraph -> Graph.Graph
@@ -1856,7 +1879,7 @@ pythonEnvironmentSetGraph tc env =
       PythonEnvironment.pythonEnvironmentVersion = (PythonEnvironment.pythonEnvironmentVersion env),
       PythonEnvironment.pythonEnvironmentSkipCasts = (PythonEnvironment.pythonEnvironmentSkipCasts env),
       PythonEnvironment.pythonEnvironmentInlineVariables = (PythonEnvironment.pythonEnvironmentInlineVariables env)}
-setMetaNamespaces :: Util.Namespaces Syntax.DottedName -> PythonEnvironment.PythonModuleMetadata -> PythonEnvironment.PythonModuleMetadata
+setMetaNamespaces :: Util.ModuleNames Syntax.DottedName -> PythonEnvironment.PythonModuleMetadata -> PythonEnvironment.PythonModuleMetadata
 setMetaNamespaces ns m =
     PythonEnvironment.PythonModuleMetadata {
       PythonEnvironment.pythonModuleMetadataNamespaces = ns,
@@ -2555,7 +2578,7 @@ withDefinitions env defs body =
                 Packaging.DefinitionTerm v0 -> Just (Core.Binding {
                   Core.bindingName = (Packaging.termDefinitionName v0),
                   Core.bindingTerm = (Packaging.termDefinitionTerm v0),
-                  Core.bindingTypeScheme = (Packaging.termDefinitionTypeScheme v0)})
+                  Core.bindingTypeScheme = (Maybes.map (\sig -> Scoping.termSignatureToTypeScheme sig) (Packaging.termDefinitionSignature v0))})
                 Packaging.DefinitionType _ -> Nothing
                 _ -> Nothing) defs)
           dummyLet =
@@ -2600,16 +2623,9 @@ wrapInNullaryLambda expr =
         Syntax.lambdaParametersParamWithDefault = [],
         Syntax.lambdaParametersStarEtc = Nothing},
       Syntax.lambdaBody = expr})
--- | Wrap specific arguments in nullary lambdas for primitives that require lazy evaluation
-wrapLazyArguments :: Core.Name -> [Syntax.Expression] -> [Syntax.Expression]
-wrapLazyArguments name args =
+-- | Wrap lazy-flagged arguments of a primitive call in nullary lambdas, per isLazy metadata (issue #391)
+wrapLazyArguments :: Graph.Graph -> Core.Name -> [Syntax.Expression] -> [Syntax.Expression]
+wrapLazyArguments g name args =
 
-      let dummyExpr = Utils.pyNameToPyExpression (Syntax.Name "")
-          argAt = \i -> Maybes.fromMaybe dummyExpr (Lists.maybeAt i args)
-      in (Logic.ifElse (Logic.and (Equality.equal name (Core.Name "hydra.lib.logic.ifElse")) (Equality.equal (Lists.length args) 3)) [
-        argAt 0,
-        (wrapInNullaryLambda (argAt 1)),
-        (wrapInNullaryLambda (argAt 2))] (Logic.ifElse (Logic.and (Equality.equal name (Core.Name "hydra.lib.maybes.cases")) (Equality.equal (Lists.length args) 3)) [
-        argAt 0,
-        (wrapInNullaryLambda (argAt 1)),
-        (argAt 2)] (Logic.ifElse (Logic.and (Logic.or (Equality.equal name (Core.Name "hydra.lib.maybes.maybe")) (Equality.equal name (Core.Name "hydra.lib.maybes.fromMaybe"))) (Equality.gte (Lists.length args) 1)) (Lists.cons (wrapInNullaryLambda (argAt 0)) (Lists.drop 1 args)) args)))
+      let lazyFlags = lazyFlagsForPrimitive g name
+      in (Lists.map (\pair -> Logic.ifElse (Pairs.second pair) (wrapInNullaryLambda (Pairs.first pair)) (Pairs.first pair)) (Lists.zip args lazyFlags))

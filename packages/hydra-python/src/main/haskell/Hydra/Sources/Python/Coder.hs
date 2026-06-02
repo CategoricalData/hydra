@@ -18,7 +18,6 @@ import qualified Hydra.Dsl.Ast                        as Ast
 import qualified Hydra.Dsl.Meta.Base                       as MetaBase
 import qualified Hydra.Dsl.Coders                     as Coders
 import qualified Hydra.Dsl.Util                    as Util
-import qualified Hydra.Dsl.Meta.Context                    as Ctx
 import qualified Hydra.Dsl.Meta.Core                       as Core
 import qualified Hydra.Dsl.Errors                      as Error
 import qualified Hydra.Dsl.Meta.Graph                      as Graph
@@ -103,9 +102,6 @@ import qualified Hydra.Sources.Python.Utils as PyUtils
 import qualified Hydra.Dsl.Python.Helpers as PyDsl
 import qualified Hydra.Typing as HydraTyping
 
-def :: String -> TTerm a -> TTermDefinition a
-def = definitionInModule module_
-
 ns :: ModuleName
 ns = ModuleName "hydra.python.coder"
 
@@ -114,7 +110,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> ([PyUtils.ns, PyNames.ns, PySerde.ns, Serialization.ns, Analysis.ns, Environment.ns, Formatting.ns, Names.ns, Predicates.ns, Resolution.ns, Rewriting.ns, Dependencies.ns, Scoping.ns, Strip.ns, Variables.ns, ShowCore.ns, Reduction.ns, Sorting.ns, Inference.ns] L.++ (PyEnvironmentSource.ns:PySyntax.ns:KernelTypes.kernelTypesModuleNames)),
-            moduleDescription = Just "Python code generator: converts Hydra modules to Python source code"}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just "Python code generator: converts Hydra modules to Python source code")}
   where
     definitions = [
       toDefinition Environment.reorderDefs,
@@ -189,6 +185,7 @@ module_ = Module {
       toDefinition isTypeVariableName,
       toDefinition isVariantUnitType,
       toDefinition lazyDotGet,
+      toDefinition lazyFlagsForPrimitive,
       toDefinition lruCacheDecorator,
       toDefinition makeCurriedLambda,
       toDefinition makeLazy,
@@ -253,7 +250,7 @@ module_ = Module {
 -- | Analyze a function term with Python-specific Graph management.
 --   This is a wrapper around Analysis.analyzeFunctionTermWith that provides the Python-specific
 --   Graph getteranalyzePythonFunction/setter and Python-specific binding metadata (which skips trivial bindings).
-analyzePythonFunction :: TTermDefinition (Context -> PyHelpers.PythonEnvironment -> Term -> Either Error (FunctionStructure PyHelpers.PythonEnvironment))
+analyzePythonFunction :: TypedTermDefinition (InferenceContext -> PyHelpers.PythonEnvironment -> Term -> Either Error (FunctionStructure PyHelpers.PythonEnvironment))
 analyzePythonFunction = def "analyzePythonFunction" $
   doc "Analyze a function term with Python-specific Graph management" $
   lambda "cx" $ lambda "env" $ lambda "term" $
@@ -263,8 +260,62 @@ analyzePythonFunction = def "analyzePythonFunction" $
       pythonEnvironmentSetGraph @@
       var "env" @@ var "term"
 
+-- | Encode a single case (Field) into a CaseBlock for a match statement.
+--   This handles both enum variants and class-based variants with value capture.
+--   The encodeBody function is passed in to allow different encoding strategies
+--   (inline vs multiline).
+--   Uses withLambda to extend Graph with the case binding variable.
+caseBlockToExpr :: TypedTermDefinition (InferenceContext -> PyHelpers.PythonEnvironment -> Name -> [FieldType] -> Bool -> (PyHelpers.PythonEnvironment -> Term -> Either Error [Py.Statement]) -> Field -> Either Error Py.CaseBlock)
+caseBlockToExpr = def "caseBlockToExpr" $
+  doc "Encode a single case (Field) into a CaseBlock for a match statement" $
+  "cx" ~> "env" ~> "tname" ~> "rowType" ~> "isEnum" ~> "encodeBody" ~> "field" ~>
+    "fname" <~ Core.fieldName (var "field") $
+    "fterm" <~ Core.fieldTerm (var "field") $
+    -- The field term should be a lambda; strip annotations and type wrappers to extract it.
+    -- After case-statement hoisting, field terms may be variable references to hoisted functions
+    -- instead of inline lambdas. The default case handles this by synthesizing a lambda wrapper.
+    "stripped" <~ (Strip.deannotateAndDetypeTerm @@ var "fterm") $
+    "effectiveLambda" <~ (cases _Term (var "stripped")
+      -- Default: fterm is not a lambda (e.g. hoisted variable reference).
+      -- Wrap it in a synthetic lambda: \v -> fterm(v)
+      (Just $ "syntheticVar" <~ Core.name (string "_matchValue") $
+        Core.lambda (var "syntheticVar") nothing
+          (Core.termApplication $ Core.application (var "stripped") (Core.termVariable $ var "syntheticVar"))) [
+      _Term_lambda>>: "lam" ~> var "lam"]) $
+    -- Now effectiveLambda is always a Lambda
+    "v" <~ Core.lambdaParameter (var "effectiveLambda") $
+    "rawBody" <~ Core.lambdaBody (var "effectiveLambda") $
+    -- Check if this variant has unit type
+    "isUnitVariant" <~ (isVariantUnitType @@ var "rowType" @@ var "fname") $
+    -- For unit variants, eliminate references to the lambda parameter
+    "effectiveBody" <~ (Logic.ifElse (var "isUnitVariant")
+      (eliminateUnitVar @@ var "v" @@ var "rawBody")
+      (var "rawBody")) $
+    -- Determine if we should capture the value
+    -- Don't capture if: unit variant, variable is free in body, or body is unit term
+    "shouldCapture" <~ (Logic.not $ Logic.or (var "isUnitVariant")
+      (Logic.or (Variables.isFreeVariableInTerm @@ var "v" @@ var "rawBody")
+                (Predicates.isUnitTerm @@ var "rawBody"))) $
+    -- Extend the Graph with the lambda parameter
+    -- to prevent the code generator from reducing it away
+    "env2" <~ (pythonEnvironmentSetGraph
+      @@ (Scoping.extendGraphForLambda @@ (pythonEnvironmentGetGraph @@ var "env") @@ var "effectiveLambda")
+      @@ var "env") $
+    -- Deconflict the variant name in case it collides with a type name
+    "pyVariantName" <~ (deconflictVariantName @@ true @@ var "env2" @@ var "tname" @@ var "fname" @@ (project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_graph @@ var "env2")) $
+    -- Create the pattern using env2 (extended context)
+    "pattern" <~ (variantClosedPattern @@ var "env2" @@ var "tname" @@ var "fname" @@ var "pyVariantName"
+      @@ var "rowType" @@ var "isEnum" @@ var "v" @@ var "shouldCapture") $
+    -- Encode the body using the provided encoder with extended env
+    "stmts" <<~ (var "encodeBody" @@ var "env2" @@ var "effectiveBody") $
+    "pyBody" <~ (PyUtils.indentedBlock @@ nothing @@ list [var "stmts"]) $
+    right $ PyDsl.caseBlock
+      (PyUtils.pyClosedPatternToPyPatterns @@ var "pattern")
+      nothing
+      (var "pyBody")
+
 -- | Create a CaseBlock pattern for a class variant with no capture (unit variant).
-classVariantPatternUnit :: TTermDefinition (Py.Name -> Py.ClosedPattern)
+classVariantPatternUnit :: TypedTermDefinition (Py.Name -> Py.ClosedPattern)
 classVariantPatternUnit = def "classVariantPatternUnit" $
   doc "Create a class pattern for a unit variant (no value captured)" $
   "pyVariantName" ~>
@@ -273,7 +324,7 @@ classVariantPatternUnit = def "classVariantPatternUnit" $
         (PyDsl.nameOrAttribute $ list [var "pyVariantName"])
 
 -- | Create a CaseBlock pattern for a class variant with value capture.
-classVariantPatternWithCapture :: TTermDefinition (PyHelpers.PythonEnvironment -> Py.Name -> Name -> Py.ClosedPattern)
+classVariantPatternWithCapture :: TypedTermDefinition (PyHelpers.PythonEnvironment -> Py.Name -> Name -> Py.ClosedPattern)
 classVariantPatternWithCapture = def "classVariantPatternWithCapture" $
   doc "Create a class pattern for a variant with captured value" $
   "env" ~> "pyVariantName" ~> "varName" ~>
@@ -290,7 +341,7 @@ classVariantPatternWithCapture = def "classVariantPatternWithCapture" $
 -- | Collect type variables from a type.
 --   Collects both explicitly quantified variables (from forall) AND free type variables.
 --   Filters out qualified names (those containing '.') since those are nominal types.
-collectTypeVariables :: TTermDefinition (S.Set Name -> Type -> S.Set Name)
+collectTypeVariables :: TypedTermDefinition (S.Set Name -> Type -> S.Set Name)
 collectTypeVariables = def "collectTypeVariables" $
   doc "Collect type variables from a type" $
   "initial" ~> "typ" ~>
@@ -307,14 +358,14 @@ collectTypeVariables = def "collectTypeVariables" $
         collectTypeVariables @@ (Sets.insert (var "v") (var "initial")) @@ var "body"]
 
 -- | Conditionally include a symbol name based on a boolean flag
-condImportSymbol :: TTermDefinition (String -> Bool -> Maybe String)
+condImportSymbol :: TypedTermDefinition (String -> Bool -> Maybe String)
 condImportSymbol = def "condImportSymbol" $
   doc "Conditionally include a symbol name based on a boolean flag" $
   "name" ~> "flag" ~>
     Logic.ifElse (var "flag") (just $ var "name") nothing
 
 -- | Create a @dataclass(frozen=True) decorator
-dataclassDecorator :: TTermDefinition Py.NamedExpression
+dataclassDecorator :: TypedTermDefinition Py.NamedExpression
 dataclassDecorator = def "dataclassDecorator" $
   doc "Create a @dataclass(frozen=True) decorator" $
   PyDsl.namedExpressionSimple $
@@ -322,14 +373,14 @@ dataclassDecorator = def "dataclassDecorator" $
       (PyUtils.primaryWithRhs @@
         (PyDsl.pyNameToPyPrimary $ PyDsl.name $ string "dataclass") @@
         (PyDsl.primaryRhsCall $ PyDsl.args
-          (Phantoms.list ([] :: [TTerm Py.PosArg]))
+          (Phantoms.list ([] :: [TypedTerm Py.PosArg]))
           (Phantoms.list [PyDsl.kwargOrStarredKwarg $ PyDsl.kwarg (PyDsl.name $ string "frozen") (PyUtils.pyAtomToPyExpression @@ PyDsl.atomTrue)])
-          (Phantoms.list ([] :: [TTerm Py.KwargOrDoubleStarred]))))
+          (Phantoms.list ([] :: [TypedTerm Py.KwargOrDoubleStarred]))))
 
 -- | Deconflict a variant name by appending '_' if the corresponding Hydra name
 --   exists as an element in the graph. This prevents name collisions between
 --   variant wrapper classes and union type metaclasses in generated Python.
-deconflictVariantName :: TTermDefinition (Bool -> PyHelpers.PythonEnvironment -> Name -> Name -> Graph -> Py.Name)
+deconflictVariantName :: TypedTermDefinition (Bool -> PyHelpers.PythonEnvironment -> Name -> Name -> Graph -> Py.Name)
 deconflictVariantName = def "deconflictVariantName" $
   doc "Deconflict a variant name to avoid collisions with type names" $
   "isQualified" ~> "env" ~> "unionName" ~> "fname" ~> "g" ~>
@@ -349,7 +400,7 @@ deconflictVariantName = def "deconflictVariantName" $
 --   Such case statements are legal in Hydra, but may lead to variable name collision in Python.
 --   For example: cases _Type Nothing [_Type_list>>: "t" ~> ..., _Type_set>>: "t" ~> ...]
 --   In Python, both branches would bind "t", so we rename them to "t1", "t2", etc.
-deduplicateCaseVariables :: TTermDefinition ([Field] -> [Field])
+deduplicateCaseVariables :: TypedTermDefinition ([Field] -> [Field])
 deduplicateCaseVariables = def "deduplicateCaseVariables" $
   doc "Rewrite case statements to avoid variable name collisions" $
   "cases_" ~>
@@ -383,14 +434,17 @@ deduplicateCaseVariables = def "deduplicateCaseVariables" $
                      (Lists.cons (var "newField") (var "done")))]) $
     -- fold with initial state (empty map, empty list)
     "result" <~ Lists.foldl (var "rewriteCase")
-                  (pair (Maps.empty :: TTerm (M.Map Name I.Int32)) (list ([] :: [TTerm Field])))
+                  (pair (Maps.empty :: TypedTerm (M.Map Name I.Int32)) (list ([] :: [TypedTerm Field])))
                   (var "cases_") $
     Lists.reverse (Pairs.second $ var "result")
+
+def :: String -> TypedTerm a -> TypedTermDefinition a
+def = definitionInModule module_
 
 -- | Recursively dig through forall types to find wrap types.
 --   This is used to detect when we need to import Node for wrapped types
 --   that are nested inside forall types (e.g., forall s. forall v. Wrap(...)).
-digForWrap :: TTermDefinition (Bool -> PyHelpers.PythonModuleMetadata -> Type -> PyHelpers.PythonModuleMetadata)
+digForWrap :: TypedTermDefinition (Bool -> PyHelpers.PythonModuleMetadata -> Type -> PyHelpers.PythonModuleMetadata)
 digForWrap = def "digForWrap" $
   doc "Recursively dig through forall types to find wrap types" $
   "isTermAnnot" ~> "meta" ~> "typ" ~>
@@ -408,7 +462,7 @@ digForWrap = def "digForWrap" $
 --   need to eliminate all references to `v`. We do this by substituting
 --   `v` with `unit` throughout the body, since `v` is only used as an
 --   argument to lambdas that ignore their parameter.
-eliminateUnitVar :: TTermDefinition (Name -> Term -> Term)
+eliminateUnitVar :: TypedTermDefinition (Name -> Term -> Term)
 eliminateUnitVar = def "eliminateUnitVar" $
   doc "Substitute unit for a variable in a term (for unit variant case handling)" $
   "v" ~> "term0" ~>
@@ -497,7 +551,7 @@ eliminateUnitVar = def "eliminateUnitVar" $
     var "go" @@ var "term0"
 
 -- | Create an initial empty metadata record with given namespaces
-emptyMetadata :: TTermDefinition (Namespaces Py.DottedName -> PyHelpers.PythonModuleMetadata)
+emptyMetadata :: TypedTermDefinition (ModuleNames Py.DottedName -> PyHelpers.PythonModuleMetadata)
 emptyMetadata = def "emptyMetadata" $
   doc "Create an initial empty metadata record with given namespaces" $
   "ns" ~>
@@ -533,7 +587,7 @@ emptyMetadata = def "emptyMetadata" $
 --   - Wrap elimination (unwrapping newtypes)
 --   - Primitive applications
 --   - Variable applications
-encodeApplication :: TTermDefinition (Context -> PyHelpers.PythonEnvironment
+encodeApplication :: TypedTermDefinition (InferenceContext -> PyHelpers.PythonEnvironment
   -> Application
   -> Either Error Py.Expression)
 encodeApplication = def "encodeApplication" $
@@ -541,7 +595,7 @@ encodeApplication = def "encodeApplication" $
   "cx" ~> "env" ~> "app" ~>
     "g" <~ (pythonEnvironmentGetGraph @@ var "env") $
     "term" <~ (Core.termApplication $ var "app") $
-    "gathered" <~ (Analysis.gatherArgs @@ var "term" @@ list ([] :: [TTerm Term])) $
+    "gathered" <~ (Analysis.gatherArgs @@ var "term" @@ list ([] :: [TypedTerm Term])) $
     "fun" <~ (Pairs.first $ var "gathered") $
     "args" <~ (Pairs.second $ var "gathered") $
     -- Use term-based arity, but ensure it is at least the number of gathered args.
@@ -566,8 +620,8 @@ encodeApplication = def "encodeApplication" $
 
 -- | Inner helper for encodeApplication that handles the different function types.
 --   Returns (expression, remaining rargs).
-encodeApplicationInner :: TTermDefinition (Context -> PyHelpers.PythonEnvironment
-  -> TTerm Term  -- fun
+encodeApplicationInner :: TypedTermDefinition (InferenceContext -> PyHelpers.PythonEnvironment
+  -> TypedTerm Term  -- fun
   -> [Py.Expression]  -- hargs
   -> [Py.Expression]  -- rargs
   -> Either Error (Py.Expression, [Py.Expression]))
@@ -598,9 +652,9 @@ encodeApplicationInner = def "encodeApplicationInner" $
         "valueExpr" <~ (PyUtils.projectFromExpression @@ var "firstArg" @@ (PyDsl.name $ string "value")) $
         "allArgs" <~ (Lists.concat2 (var "restArgs") (var "rargs")) $
         Logic.ifElse (Lists.null $ var "allArgs")
-          (right $ pair (var "valueExpr") (list ([] :: [TTerm Py.Expression])))
+          (right $ pair (var "valueExpr") (list ([] :: [TypedTerm Py.Expression])))
           (right $ pair (PyUtils.functionCall @@ (PyUtils.pyExpressionToPyPrimary @@ var "valueExpr") @@ var "allArgs")
-                          (list ([] :: [TTerm Py.Expression]))),
+                          (list ([] :: [TypedTerm Py.Expression]))),
       -- Other functions: encode and apply
       _Term_lambda>>: constant $
         "pfun" <<~ (encodeTermInline @@ var "cx" @@ var "env" @@ false @@ var "fun") $
@@ -629,7 +683,7 @@ encodeApplicationInner = def "encodeApplicationInner" $
                   "consumedArgs" <~ (Lists.take (var "consumeCount") (var "allArgs")) $
                   "remainingArgs" <~ (Lists.drop (var "consumeCount") (var "allArgs")) $
                   Logic.ifElse (Lists.null $ var "consumedArgs")
-                    ("expr" <<~ (encodeVariable @@ var "cx" @@ var "env" @@ var "name" @@ (list ([] :: [TTerm Py.Expression]))) $
+                    ("expr" <<~ (encodeVariable @@ var "cx" @@ var "env" @@ var "name" @@ (list ([] :: [TypedTerm Py.Expression]))) $
                       right $ pair (var "expr") (var "rargs"))
                     -- Lazy-aware: if the binding is an inline let (Lazy-wrapped), call .get() before applying.
                     (Logic.ifElse (Sets.member (var "name") (var "inlineVars"))
@@ -646,13 +700,13 @@ encodeApplicationInner = def "encodeApplicationInner" $
             (Lexical.lookupBinding @@ var "g" @@ var "name"))
           -- Is a primitive: wrap lazy arguments and encode
           (lambda "_prim" $
-            "wrappedArgs" <~ (wrapLazyArguments @@ var "name" @@ var "hargs") $
+            "wrappedArgs" <~ (wrapLazyArguments @@ var "g" @@ var "name" @@ var "hargs") $
             "expr" <<~ (encodeVariable @@ var "cx" @@ var "env" @@ var "name" @@ var "wrappedArgs") $
             right $ pair (var "expr") (var "rargs"))]
 
 -- | Encode an application type to Python expression.
 --   Gathers all type arguments and encodes as primary[args].
-encodeApplicationType :: TTermDefinition (PyHelpers.PythonEnvironment -> ApplicationType -> Either Error Py.Expression)
+encodeApplicationType :: TypedTermDefinition (PyHelpers.PythonEnvironment -> ApplicationType -> Either Error Py.Expression)
 encodeApplicationType = def "encodeApplicationType" $
   doc "Encode an application type to Python expression" $
   "env" ~> "at" ~>
@@ -681,7 +735,7 @@ encodeApplicationType = def "encodeApplicationType" $
           _Type_variable>>: constant $ pair (var "t") (var "ps"),
           _Type_void>>: constant $ pair (var "t") (var "ps"),
           _Type_wrap>>: constant $ pair (var "t") (var "ps")]) $
-    "bodyAndArgs" <~ (var "gatherParams" @@ (inject _Type _Type_application $ var "at") @@ list ([] :: [TTerm Type])) $
+    "bodyAndArgs" <~ (var "gatherParams" @@ (inject _Type _Type_application $ var "at") @@ list ([] :: [TypedTerm Type])) $
     "body" <~ Pairs.first (var "bodyAndArgs") $
     "args" <~ Pairs.second (var "bodyAndArgs") $
     "pyBody" <<~ encodeType @@ var "env" @@ var "body" $
@@ -694,7 +748,7 @@ encodeApplicationType = def "encodeApplicationType" $
 --   2. Hoisted bindings: lambdas wrapping a case statement application (from hoisting)
 --   3. Case elimination functions: case statements as values
 --   4. Other terms: falls back to encodeTermMultiline
-encodeBindingAs :: TTermDefinition (Context -> PyHelpers.PythonEnvironment -> Binding -> Either Error Py.Statement)
+encodeBindingAs :: TypedTermDefinition (InferenceContext -> PyHelpers.PythonEnvironment -> Binding -> Either Error Py.Statement)
 encodeBindingAs = def "encodeBindingAs" $
   doc "Encode a binding as a Python statement (function definition or assignment)" $
   "cx" ~> "env" ~> "binding" ~>
@@ -735,7 +789,7 @@ encodeBindingAs = def "encodeBindingAs" $
               Phantoms.field Py._ParamNoDefault_typeComment nothing]) $
             "params" <~ (PyDsl.parametersParamNoDefault $ Phantoms.record Py._ParamNoDefaultParameters [
               Phantoms.field Py._ParamNoDefaultParameters_paramNoDefault (list [var "param"]),
-              Phantoms.field Py._ParamNoDefaultParameters_paramWithDefault (Phantoms.list ([] :: [TTerm Py.ParamWithDefault])),
+              Phantoms.field Py._ParamNoDefaultParameters_paramWithDefault (Phantoms.list ([] :: [TypedTerm Py.ParamWithDefault])),
               Phantoms.field Py._ParamNoDefaultParameters_starEtc nothing]) $
             "pyCases" <<~ (Eithers.mapList (caseBlockToExpr @@ var "cx" @@ var "env" @@ var "tname" @@ var "rt" @@ var "isEnum" @@ ("e" ~> "t" ~> encodeTermMultiline @@ var "cx" @@ var "e" @@ var "t")) (var "cases_")) $
             "pyDflt" <<~ (encodeDefaultCaseBlock @@ ("t" ~> encodeTermInline @@ var "cx" @@ var "env" @@ false @@ var "t") @@ var "isFull" @@ var "dflt" @@ var "tname") $
@@ -748,7 +802,7 @@ encodeBindingAs = def "encodeBindingAs" $
             "funcDefRaw" <~ (Phantoms.record Py._FunctionDefRaw [
               Phantoms.field Py._FunctionDefRaw_async false,
               Phantoms.field Py._FunctionDefRaw_name (var "fname"),
-              Phantoms.field Py._FunctionDefRaw_typeParams (Phantoms.list ([] :: [TTerm Py.TypeParameter])),
+              Phantoms.field Py._FunctionDefRaw_typeParams (Phantoms.list ([] :: [TypedTerm Py.TypeParameter])),
               Phantoms.field Py._FunctionDefRaw_params (just $ var "params"),
               Phantoms.field Py._FunctionDefRaw_returnType nothing,
               Phantoms.field Py._FunctionDefRaw_funcTypeComment nothing,
@@ -780,7 +834,7 @@ encodeBindingAs = def "encodeBindingAs" $
                   Phantoms.field Py._ParamNoDefault_typeComment nothing]) $
                 "params" <~ (PyDsl.parametersParamNoDefault $ Phantoms.record Py._ParamNoDefaultParameters [
                   Phantoms.field Py._ParamNoDefaultParameters_paramNoDefault (list [var "param"]),
-                  Phantoms.field Py._ParamNoDefaultParameters_paramWithDefault (Phantoms.list ([] :: [TTerm Py.ParamWithDefault])),
+                  Phantoms.field Py._ParamNoDefaultParameters_paramWithDefault (Phantoms.list ([] :: [TypedTerm Py.ParamWithDefault])),
                   Phantoms.field Py._ParamNoDefaultParameters_starEtc nothing]) $
                 "pyCases" <<~ (Eithers.mapList (caseBlockToExpr @@ var "cx" @@ var "env" @@ var "tname" @@ var "rt" @@ var "isEnum" @@ ("e" ~> "t" ~> encodeTermMultiline @@ var "cx" @@ var "e" @@ var "t")) (var "cases_")) $
                 "pyDflt" <<~ (encodeDefaultCaseBlock @@ ("t" ~> encodeTermInline @@ var "cx" @@ var "env" @@ false @@ var "t") @@ var "isFull" @@ var "dflt" @@ var "tname") $
@@ -793,7 +847,7 @@ encodeBindingAs = def "encodeBindingAs" $
                 "funcDefRaw" <~ (Phantoms.record Py._FunctionDefRaw [
                   Phantoms.field Py._FunctionDefRaw_async false,
                   Phantoms.field Py._FunctionDefRaw_name (var "fname"),
-                  Phantoms.field Py._FunctionDefRaw_typeParams (Phantoms.list ([] :: [TTerm Py.TypeParameter])),
+                  Phantoms.field Py._FunctionDefRaw_typeParams (Phantoms.list ([] :: [TypedTerm Py.TypeParameter])),
                   Phantoms.field Py._FunctionDefRaw_params (just $ var "params"),
                   Phantoms.field Py._FunctionDefRaw_returnType nothing,
                   Phantoms.field Py._FunctionDefRaw_funcTypeComment nothing,
@@ -815,7 +869,7 @@ encodeBindingAs = def "encodeBindingAs" $
             "isFull" <~ (isCasesFull @@ var "rt" @@ var "cases_") $
             -- Separate captured variables (all but last) from the match parameter (last).
             -- The last lambda parameter is the case expression's own parameter.
-            "capturedVarNames" <~ (Maybes.fromMaybe (list ([] :: [TTerm Name])) (Lists.maybeInit $ var "lambdaParams")) $
+            "capturedVarNames" <~ (Maybes.fromMaybe (list ([] :: [TypedTerm Name])) (Lists.maybeInit $ var "lambdaParams")) $
             "matchLambdaParam" <~ (Maybes.fromMaybe (wrap _Name $ string "") (Lists.maybeLast $ var "lambdaParams")) $
             -- Create parameters for captured variables only
             "capturedParams" <~ (Lists.map
@@ -833,7 +887,7 @@ encodeBindingAs = def "encodeBindingAs" $
             "allParams" <~ (Lists.concat2 (var "capturedParams") (list [var "matchParam"])) $
             "params" <~ (PyDsl.parametersParamNoDefault $ Phantoms.record Py._ParamNoDefaultParameters [
               Phantoms.field Py._ParamNoDefaultParameters_paramNoDefault (var "allParams"),
-              Phantoms.field Py._ParamNoDefaultParameters_paramWithDefault (Phantoms.list ([] :: [TTerm Py.ParamWithDefault])),
+              Phantoms.field Py._ParamNoDefaultParameters_paramWithDefault (Phantoms.list ([] :: [TypedTerm Py.ParamWithDefault])),
               Phantoms.field Py._ParamNoDefaultParameters_starEtc nothing]) $
             -- Extend environment with all gathered lambda parameters before encoding cases
             "envWithParams" <~ (extendEnvWithLambdaParams @@ var "env" @@ var "term1") $
@@ -849,7 +903,7 @@ encodeBindingAs = def "encodeBindingAs" $
             "funcDefRaw" <~ (Phantoms.record Py._FunctionDefRaw [
               Phantoms.field Py._FunctionDefRaw_async false,
               Phantoms.field Py._FunctionDefRaw_name (var "fname"),
-              Phantoms.field Py._FunctionDefRaw_typeParams (Phantoms.list ([] :: [TTerm Py.TypeParameter])),
+              Phantoms.field Py._FunctionDefRaw_typeParams (Phantoms.list ([] :: [TypedTerm Py.TypeParameter])),
               Phantoms.field Py._FunctionDefRaw_params (just $ var "params"),
               Phantoms.field Py._FunctionDefRaw_returnType nothing,
               Phantoms.field Py._FunctionDefRaw_funcTypeComment nothing,
@@ -870,7 +924,7 @@ encodeBindingAs = def "encodeBindingAs" $
 --   Returns: NamedExpression (assignment expression)
 --   Note: This simplified version does not update metadata for lru_cache;
 --   the Staging version handles that.
-encodeBindingAsAssignment :: TTermDefinition (Context -> Bool -> PyHelpers.PythonEnvironment
+encodeBindingAsAssignment :: TypedTermDefinition (InferenceContext -> Bool -> PyHelpers.PythonEnvironment
   -> Binding
   -> Either Error Py.NamedExpression)
 encodeBindingAsAssignment = def "encodeBindingAsAssignment" $
@@ -903,71 +957,17 @@ encodeBindingAsAssignment = def "encodeBindingAsAssignment" $
     right $ PyDsl.namedExpressionAssignment $ PyDsl.assignmentExpression (var "pyName") (var "pterm")
 
 -- | Encode bindings as function definitions
-encodeBindingsAsDefs :: TTermDefinition (PyHelpers.PythonEnvironment -> (PyHelpers.PythonEnvironment -> Binding -> Either Error Py.Statement) -> [Binding] -> Either Error [Py.Statement])
+encodeBindingsAsDefs :: TypedTermDefinition (PyHelpers.PythonEnvironment -> (PyHelpers.PythonEnvironment -> Binding -> Either Error Py.Statement) -> [Binding] -> Either Error [Py.Statement])
 encodeBindingsAsDefs = def "encodeBindingsAsDefs" $
   doc "Encode bindings as function definitions" $
   "env" ~> "encodeBinding" ~> "bindings" ~>
     Eithers.mapList (var "encodeBinding" @@ var "env") (var "bindings")
 
--- | Encode a single case (Field) into a CaseBlock for a match statement.
---   This handles both enum variants and class-based variants with value capture.
---   The encodeBody function is passed in to allow different encoding strategies
---   (inline vs multiline).
---   Uses withLambda to extend Graph with the case binding variable.
-caseBlockToExpr :: TTermDefinition (Context -> PyHelpers.PythonEnvironment -> Name -> [FieldType] -> Bool -> (PyHelpers.PythonEnvironment -> Term -> Either Error [Py.Statement]) -> Field -> Either Error Py.CaseBlock)
-caseBlockToExpr = def "caseBlockToExpr" $
-  doc "Encode a single case (Field) into a CaseBlock for a match statement" $
-  "cx" ~> "env" ~> "tname" ~> "rowType" ~> "isEnum" ~> "encodeBody" ~> "field" ~>
-    "fname" <~ Core.fieldName (var "field") $
-    "fterm" <~ Core.fieldTerm (var "field") $
-    -- The field term should be a lambda; strip annotations and type wrappers to extract it.
-    -- After case-statement hoisting, field terms may be variable references to hoisted functions
-    -- instead of inline lambdas. The default case handles this by synthesizing a lambda wrapper.
-    "stripped" <~ (Strip.deannotateAndDetypeTerm @@ var "fterm") $
-    "effectiveLambda" <~ (cases _Term (var "stripped")
-      -- Default: fterm is not a lambda (e.g. hoisted variable reference).
-      -- Wrap it in a synthetic lambda: \v -> fterm(v)
-      (Just $ "syntheticVar" <~ Core.name (string "_matchValue") $
-        Core.lambda (var "syntheticVar") nothing
-          (Core.termApplication $ Core.application (var "stripped") (Core.termVariable $ var "syntheticVar"))) [
-      _Term_lambda>>: "lam" ~> var "lam"]) $
-    -- Now effectiveLambda is always a Lambda
-    "v" <~ Core.lambdaParameter (var "effectiveLambda") $
-    "rawBody" <~ Core.lambdaBody (var "effectiveLambda") $
-    -- Check if this variant has unit type
-    "isUnitVariant" <~ (isVariantUnitType @@ var "rowType" @@ var "fname") $
-    -- For unit variants, eliminate references to the lambda parameter
-    "effectiveBody" <~ (Logic.ifElse (var "isUnitVariant")
-      (eliminateUnitVar @@ var "v" @@ var "rawBody")
-      (var "rawBody")) $
-    -- Determine if we should capture the value
-    -- Don't capture if: unit variant, variable is free in body, or body is unit term
-    "shouldCapture" <~ (Logic.not $ Logic.or (var "isUnitVariant")
-      (Logic.or (Variables.isFreeVariableInTerm @@ var "v" @@ var "rawBody")
-                (Predicates.isUnitTerm @@ var "rawBody"))) $
-    -- Extend the Graph with the lambda parameter
-    -- to prevent the code generator from reducing it away
-    "env2" <~ (pythonEnvironmentSetGraph
-      @@ (Scoping.extendGraphForLambda @@ (pythonEnvironmentGetGraph @@ var "env") @@ var "effectiveLambda")
-      @@ var "env") $
-    -- Deconflict the variant name in case it collides with a type name
-    "pyVariantName" <~ (deconflictVariantName @@ true @@ var "env2" @@ var "tname" @@ var "fname" @@ (project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_graph @@ var "env2")) $
-    -- Create the pattern using env2 (extended context)
-    "pattern" <~ (variantClosedPattern @@ var "env2" @@ var "tname" @@ var "fname" @@ var "pyVariantName"
-      @@ var "rowType" @@ var "isEnum" @@ var "v" @@ var "shouldCapture") $
-    -- Encode the body using the provided encoder with extended env
-    "stmts" <<~ (var "encodeBody" @@ var "env2" @@ var "effectiveBody") $
-    "pyBody" <~ (PyUtils.indentedBlock @@ nothing @@ list [var "stmts"]) $
-    right $ PyDsl.caseBlock
-      (PyUtils.pyClosedPatternToPyPatterns @@ var "pattern")
-      nothing
-      (var "pyBody")
-
 -- | Encode the default (wildcard) case block for a match statement.
 --   Takes: encoder function, isFull (whether all variants are covered), optional default term, type name
 --   Returns: list of CaseBlocks (empty or containing the wildcard case)
 --   The encoder function is passed in to allow calling from Staging code that provides encodeTermInline.
-encodeDefaultCaseBlock :: TTermDefinition ((Term -> Either Error Py.Expression) -> Bool -> Maybe Term -> Name -> Either Error [Py.CaseBlock])
+encodeDefaultCaseBlock :: TypedTermDefinition ((Term -> Either Error Py.Expression) -> Bool -> Maybe Term -> Name -> Either Error [Py.CaseBlock])
 encodeDefaultCaseBlock = def "encodeDefaultCaseBlock" $
   doc "Encode the default (wildcard) case block for a match statement" $
   "termToExpr" ~> "isFull" ~> "mdflt" ~> "tname" ~>
@@ -985,7 +985,7 @@ encodeDefaultCaseBlock = def "encodeDefaultCaseBlock" $
     right $ list [PyDsl.caseBlock (var "patterns") nothing (var "body")]
 
 -- | Encode a definition (term or type) to Python statements
-encodeDefinition :: TTermDefinition (Context -> PyHelpers.PythonEnvironment
+encodeDefinition :: TypedTermDefinition (InferenceContext -> PyHelpers.PythonEnvironment
   -> Definition
   -> Either Error [[Py.Statement]])
 encodeDefinition = def "encodeDefinition" $
@@ -996,9 +996,9 @@ encodeDefinition = def "encodeDefinition" $
         "name" <~ (project _TermDefinition _TermDefinition_name @@ var "td") $
         "term" <~ (project _TermDefinition _TermDefinition_term @@ var "td") $
         "typ" <~ Maybes.maybe
-          (Core.typeScheme (list ([] :: [TTerm Name])) (Core.typeVariable (wrap _Name (string "hydra.core.Unit"))) nothing)
+          (Core.typeScheme (list ([] :: [TypedTerm Name])) (Core.typeVariable (wrap _Name (string "hydra.core.Unit"))) nothing)
           ("x" ~> var "x")
-          (project _TermDefinition _TermDefinition_typeScheme @@ var "td") $
+          (Maybes.map Scoping.termSignatureToTypeScheme (project _TermDefinition _TermDefinition_signature @@ var "td")) $
         "comment" <<~ (Annotations.getTermDescription @@ var "cx" @@ (pythonEnvironmentGetGraph @@ var "env") @@ var "term") $
         "normComment" <~ (Maybes.map Formatting.normalizeComment (var "comment")) $
         -- topLevel=true: keep public API stable (`@lru_cache(1) def name():` form
@@ -1013,7 +1013,7 @@ encodeDefinition = def "encodeDefinition" $
         encodeTypeAssignment @@ var "cx" @@ var "env" @@ var "name" @@ var "typ" @@ var "normComment"]
 
 -- | Encode an enum value assignment: ENUM_VALUE = Name("enum_value")
-encodeEnumValueAssignment :: TTermDefinition (Context -> PyHelpers.PythonEnvironment -> FieldType -> Either Error [Py.Statement])
+encodeEnumValueAssignment :: TypedTermDefinition (InferenceContext -> PyHelpers.PythonEnvironment -> FieldType -> Either Error [Py.Statement])
 encodeEnumValueAssignment = def "encodeEnumValueAssignment" $
   doc "Encode an enum value assignment statement with optional comment" $
   "cx" ~> "env" ~> "fieldType" ~>
@@ -1031,7 +1031,7 @@ encodeEnumValueAssignment = def "encodeEnumValueAssignment" $
       ("c" ~> list [var "assignStmt", PyUtils.pyExpressionToPyStatement @@ (PyUtils.tripleQuotedString @@ var "c")])
 
 -- | Encode a field (name-value pair) to a Python (Name, Expression) pair
-encodeField :: TTermDefinition (Context -> PyHelpers.PythonEnvironment -> Field -> (TTerm Term -> Either Error Py.Expression) -> Either Error (Py.Name, Py.Expression))
+encodeField :: TypedTermDefinition (InferenceContext -> PyHelpers.PythonEnvironment -> Field -> (TypedTerm Term -> Either Error Py.Expression) -> Either Error (Py.Name, Py.Expression))
 encodeField = def "encodeField" $
   doc "Encode a field (name-value pair) to a Python (Name, Expression) pair" $
   "cx" ~> "env" ~> "field" ~> "termToExpr" ~>
@@ -1041,7 +1041,7 @@ encodeField = def "encodeField" $
     right $ pair (PyNames.encodeFieldName @@ var "env" @@ var "fname") (var "pterm")
 
 -- | Encode a field type for record definitions (field: type annotation)
-encodeFieldType :: TTermDefinition (Context -> PyHelpers.PythonEnvironment -> FieldType -> Either Error Py.Statement)
+encodeFieldType :: TypedTermDefinition (InferenceContext -> PyHelpers.PythonEnvironment -> FieldType -> Either Error Py.Statement)
 encodeFieldType = def "encodeFieldType" $
   doc "Encode a field type for record definitions (field: type annotation)" $
   "cx" ~> "env" ~> "fieldType" ~>
@@ -1055,7 +1055,7 @@ encodeFieldType = def "encodeFieldType" $
       (PyDsl.assignmentTyped $ PyDsl.typedAssignment (var "pyName") (var "annotatedPyType") nothing)
 
 -- | Encode a float value to a Python expression
-encodeFloatValue :: TTermDefinition (FloatValue -> Either Error Py.Expression)
+encodeFloatValue :: TypedTermDefinition (FloatValue -> Either Error Py.Expression)
 encodeFloatValue = def "encodeFloatValue" $
   doc "Encode a float value to a Python expression" $
   "fv" ~>
@@ -1066,7 +1066,7 @@ encodeFloatValue = def "encodeFloatValue" $
         encodeFloatValue_encodeFloat64 @@ var "f"]
 
 -- | Encode a float32 value, handling NaN and Infinity specially since BigDecimal cannot represent them.
-encodeFloatValue_encodeFloat32 :: TTermDefinition (Float -> Either Error Py.Expression)
+encodeFloatValue_encodeFloat32 :: TypedTermDefinition (Float -> Either Error Py.Expression)
 encodeFloatValue_encodeFloat32 = def "encodeFloatValue_encodeFloat32" $
   lambda "v" $ lets [
     "s">: Literals.showFloat32 (var "v")] $
@@ -1080,7 +1080,7 @@ encodeFloatValue_encodeFloat32 = def "encodeFloatValue_encodeFloat32" $
       (PyDsl.atomNumber $ PyDsl.numberFloat $ Literals.float32ToFloat64 $ var "v")
 
 -- | Encode a float64 value, handling NaN and Infinity specially since BigDecimal cannot represent them.
-encodeFloatValue_encodeFloat64 :: TTermDefinition (Double -> Either Error Py.Expression)
+encodeFloatValue_encodeFloat64 :: TypedTermDefinition (Double -> Either Error Py.Expression)
 encodeFloatValue_encodeFloat64 = def "encodeFloatValue_encodeFloat64" $
   lambda "v" $ lets [
     "s">: Literals.showFloat64 (var "v")] $
@@ -1097,7 +1097,7 @@ encodeFloatValue_encodeFloat64 = def "encodeFloatValue_encodeFloat64" $
       (PyDsl.atomNumber $ PyDsl.numberFloat $ var "v")
 
 -- | Emit a Python float('nan'), float('inf'), or float('-inf') expression.
-encodeFloatValue_pySpecialFloat :: TTermDefinition (String -> Py.Expression)
+encodeFloatValue_pySpecialFloat :: TypedTermDefinition (String -> Py.Expression)
 encodeFloatValue_pySpecialFloat = def "encodeFloatValue_pySpecialFloat" $
   lambda "value" $
     PyUtils.functionCall @@
@@ -1106,7 +1106,7 @@ encodeFloatValue_pySpecialFloat = def "encodeFloatValue_pySpecialFloat" $
 
 -- | Encode a forall type to Python expression.
 --   Gathers all type parameters and encodes the body with parameters.
-encodeForallType :: TTermDefinition (PyHelpers.PythonEnvironment -> ForallType -> Either Error Py.Expression)
+encodeForallType :: TypedTermDefinition (PyHelpers.PythonEnvironment -> ForallType -> Either Error Py.Expression)
 encodeForallType = def "encodeForallType" $
   doc "Encode a forall type to Python expression" $
   "env" ~> "lt" ~>
@@ -1135,7 +1135,7 @@ encodeForallType = def "encodeForallType" $
           _Type_variable>>: constant $ pair (var "t") (Lists.reverse (var "ps")),
           _Type_void>>: constant $ pair (var "t") (Lists.reverse (var "ps")),
           _Type_wrap>>: constant $ pair (var "t") (Lists.reverse (var "ps"))]) $
-    "bodyAndParams" <~ (var "gatherParams" @@ (inject _Type _Type_forall $ var "lt") @@ list ([] :: [TTerm Name])) $
+    "bodyAndParams" <~ (var "gatherParams" @@ (inject _Type _Type_forall $ var "lt") @@ list ([] :: [TypedTerm Name])) $
     "body" <~ Pairs.first (var "bodyAndParams") $
     "params" <~ Pairs.second (var "bodyAndParams") $
     "pyBody" <<~ encodeType @@ var "env" @@ var "body" $
@@ -1143,65 +1143,9 @@ encodeForallType = def "encodeForallType" $
       @@ (PyUtils.pyExpressionToPyPrimary @@ var "pyBody")
       @@ (Lists.map ("n" ~> PyDsl.pyNameToPyExpression $ PyDsl.name $ Core.unName (var "n")) (var "params"))
 
--- | Encode a function definition with parameters and body.
---   Takes: environment, name, type params, arg names, body term, domain types, optional codomain, comment, prefix statements
-functionDefinitionToExpr :: TTermDefinition (Context -> PyHelpers.PythonEnvironment
-  -> Name -> [Name] -> [Name] -> TTerm Term -> [Type] -> Maybe Type -> Maybe String -> [Py.Statement]
-  -> Either Error Py.Statement)
-functionDefinitionToExpr = def "functionDefinitionToExpr" $
-  doc "Encode a function definition with parameters and body" $
-  "cx" ~> "env" ~> "name" ~> "tparams" ~> "args" ~> "body" ~> "doms" ~> "mcod" ~> "comment" ~> "prefixes" ~>
-    -- Create parameters by zipping arg names with domain types
-    "pyArgs" <<~ Eithers.mapList
-      ("pair" ~>
-        "argName" <~ Pairs.first (var "pair") $
-        "typ" <~ Pairs.second (var "pair") $
-        "pyTyp" <<~ (encodeType @@ var "env" @@ var "typ") $
-        right $ PyDsl.paramNoDefaultSimple $ PyDsl.param
-          (PyNames.encodeName @@ false @@ Util.caseConventionLowerSnake @@ var "env" @@ var "argName")
-          (just $ PyDsl.annotation $ var "pyTyp"))
-      (Lists.zip (var "args") (var "doms")) $
-    "pyParams" <~ (PyDsl.parametersParamNoDefault $ PyDsl.paramNoDefaultParameters (var "pyArgs") (Phantoms.list ([] :: [TTerm Py.ParamWithDefault])) nothing) $
-    -- Check for tail-call optimization opportunity
-    "isTCO" <~ (Logic.and
-      (Logic.not $ Lists.null (var "args"))
-      (Analysis.isSelfTailRecursive @@ var "name" @@ var "body")) $
-    "block" <<~ (Logic.ifElse (var "isTCO")
-      -- TCO path: wrap body in while True loop
-      -- Note: prefixes (let-binding statements) go INSIDE the while loop so they are
-      -- re-evaluated each iteration when parameters change via reassignment + continue.
-      ("tcoStmts" <<~ (encodeTermMultilineTCO @@ var "cx" @@ var "env" @@ var "name" @@ var "args" @@ var "body") $
-        "trueExpr" <~ (PyDsl.namedExpressionSimple $ PyUtils.pyAtomToPyExpression @@ PyDsl.atomTrue) $
-        "whileBody" <~ (PyUtils.indentedBlock @@ nothing @@ list [Lists.concat2 (var "prefixes") (var "tcoStmts")]) $
-        "whileStmt" <~ (PyDsl.statementCompound $ PyDsl.compoundStatementWhile $
-          PyDsl.whileStatement (var "trueExpr") (var "whileBody") nothing) $
-        right $ PyUtils.indentedBlock @@ var "comment" @@ list [list [var "whileStmt"]])
-      -- Normal path: encode body as statements with return
-      ("stmts" <<~ (encodeTermMultiline @@ var "cx" @@ var "env" @@ var "body") $
-        right $ PyUtils.indentedBlock @@ var "comment" @@ list [Lists.concat2 (var "prefixes") (var "stmts")])) $
-    -- Encode return type if present
-    "mreturnType" <<~ optCases (var "mcod")
-      (right (nothing :: TTerm (Maybe Py.Expression)))
-      ("cod" ~>
-        "pytyp" <<~ (encodeType @@ var "env" @@ var "cod") $
-        right $ just (var "pytyp")) $
-    -- Type parameters (only for Python 3.12+)
-    "pyTparams" <~ (Logic.ifElse useInlineTypeParams
-      (Lists.map (PyUtils.pyNameToPyTypeParameter <.> PyNames.encodeTypeVariable) (var "tparams"))
-      (Phantoms.list ([] :: [TTerm Py.TypeParameter]))) $
-    -- Check if this is a thunk (zero-argument function)
-    "isThunk" <~ (Lists.null $ var "args") $
-    "mDecorators" <~ (Logic.ifElse (var "isThunk")
-      (just $ wrap Py._Decorators $ list [lruCacheDecorator])
-      nothing) $
-    -- Metadata for lru_cache is now pre-computed in gatherMetadata
-    "pyName" <~ (PyNames.encodeName @@ false @@ Util.caseConventionLowerSnake @@ var "env" @@ var "name") $
-    right $ PyDsl.statementCompound $ PyDsl.compoundStatementFunction $ PyDsl.functionDefinition (var "mDecorators") $
-      PyDsl.functionDefRaw false (var "pyName") (var "pyTparams") (just $ var "pyParams") (var "mreturnType") nothing (var "block")
-
 -- | Encode a function type to Python Callable[..., return_type].
 --   Gathers all domain types and the final codomain.
-encodeFunctionType :: TTermDefinition (PyHelpers.PythonEnvironment -> FunctionType -> Either Error Py.Expression)
+encodeFunctionType :: TypedTermDefinition (PyHelpers.PythonEnvironment -> FunctionType -> Either Error Py.Expression)
 encodeFunctionType = def "encodeFunctionType" $
   doc "Encode a function type to Python Callable expression" $
   "env" ~> "ft" ~>
@@ -1230,7 +1174,7 @@ encodeFunctionType = def "encodeFunctionType" $
           _Type_variable>>: constant $ pair (Lists.reverse (Lists.cons (var "dom") (var "rdoms"))) (var "innerCod"),
           _Type_void>>: constant $ pair (Lists.reverse (Lists.cons (var "dom") (var "rdoms"))) (var "innerCod"),
           _Type_wrap>>: constant $ pair (Lists.reverse (Lists.cons (var "dom") (var "rdoms"))) (var "innerCod")]) $
-    "domsAndCod" <~ (var "gatherParams" @@ list ([] :: [TTerm Type]) @@ var "ft") $
+    "domsAndCod" <~ (var "gatherParams" @@ list ([] :: [TypedTerm Type]) @@ var "ft") $
     "doms" <~ Pairs.first (var "domsAndCod") $
     "cod" <~ Pairs.second (var "domsAndCod") $
     "pydoms" <<~ Eithers.mapList (encodeType @@ var "env") (var "doms") $
@@ -1243,7 +1187,7 @@ encodeFunctionType = def "encodeFunctionType" $
         @@ list [PyDsl.sliceOrStarredExpressionSlice $ PyUtils.pyExpressionToPySlice @@ var "pycod"])
 
 -- | Encode an integer value to a Python expression
-encodeIntegerValue :: TTermDefinition (IntegerValue -> Either Error Py.Expression)
+encodeIntegerValue :: TypedTermDefinition (IntegerValue -> Either Error Py.Expression)
 encodeIntegerValue = def "encodeIntegerValue" $
   doc "Encode an integer value to a Python expression" $
   "iv" ~>
@@ -1263,7 +1207,7 @@ encodeIntegerValue = def "encodeIntegerValue" $
       _IntegerValue_uint64>>: "i" ~> var "toPyInt" @@ (Literals.uint64ToBigint $ var "i")]
 
 -- | Encode a literal value to a Python expression
-encodeLiteral :: TTermDefinition (Literal -> Either Error Py.Expression)
+encodeLiteral :: TypedTermDefinition (Literal -> Either Error Py.Expression)
 encodeLiteral = def "encodeLiteral" $
   doc "Encode a literal value to a Python expression" $
   "lit" ~>
@@ -1293,7 +1237,7 @@ encodeLiteral = def "encodeLiteral" $
         right $ PyUtils.stringToPyExpression @@ PyDsl.quoteStyleDouble @@ var "s"]
 
 -- | Encode a literal type to a Python type expression
-encodeLiteralType :: TTermDefinition (LiteralType -> Either Error Py.Expression)
+encodeLiteralType :: TypedTermDefinition (LiteralType -> Either Error Py.Expression)
 encodeLiteralType = def "encodeLiteralType" $
   doc "Encode a literal type to a Python type expression" $
   "lt" ~>
@@ -1311,7 +1255,7 @@ encodeLiteralType = def "encodeLiteralType" $
 
 -- | Generate name constants for a type as class-level attributes.
 --   Produces a TYPE_ constant for the type name, plus one constant per field.
-encodeNameConstants :: TTermDefinition (PyHelpers.PythonEnvironment -> Name -> [FieldType] -> [Py.Statement])
+encodeNameConstants :: TypedTermDefinition (PyHelpers.PythonEnvironment -> Name -> [FieldType] -> [Py.Statement])
 encodeNameConstants = def "encodeNameConstants" $
   doc "Generate name constants for a type as class-level attributes" $
   "env" ~> "name" ~> "fields" ~>
@@ -1339,7 +1283,7 @@ encodeNameConstants = def "encodeNameConstants" $
 --   4. Encodes all definitions
 --   5. Generates imports based on metadata
 --   6. Assembles the final module
-encodePythonModule :: TTermDefinition (Context -> Graph -> Module -> [Definition] -> Either Error Py.Module)
+encodePythonModule :: TypedTermDefinition (InferenceContext -> Graph -> Module -> [Definition] -> Either Error Py.Module)
 encodePythonModule = def "encodePythonModule" $
   doc "Encode a Hydra module to a Python module AST" $
   "cx" ~> "g" ~> "mod" ~> "defs0" ~>
@@ -1362,9 +1306,9 @@ encodePythonModule = def "encodePythonModule" $
       "namespaces" <~ (project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_namespaces @@ var "meta0") $
       -- Generate comment statements from module description
       "commentStmts" <~ (Maybes.maybe
-        (list ([] :: [TTerm Py.Statement]))
+        (list ([] :: [TypedTerm Py.Statement]))
         ("c" ~> list [PyUtils.commentStatement @@ var "c"])
-        (Maybes.map Formatting.normalizeComment (Packaging.moduleDescription $ var "mod"))) $
+        (Maybes.map Formatting.normalizeComment ((Maybes.bind (Packaging.moduleMetadata (var "mod")) ("em" ~> Packaging.entityMetadataDescription (var "em")))))) $
       -- Generate import statements
       "importStmts" <~ (moduleImports @@ var "namespaces" @@ var "meta") $
       -- Generate type variable statements
@@ -1380,7 +1324,7 @@ encodePythonModule = def "encodePythonModule" $
       right $ PyDsl.module_ (var "body"))
 
 -- | Encode a record type as a Python dataclass
-encodeRecordType :: TTermDefinition (Context -> PyHelpers.PythonEnvironment -> Name -> [FieldType] -> Maybe String -> Either Error Py.Statement)
+encodeRecordType :: TypedTermDefinition (InferenceContext -> PyHelpers.PythonEnvironment -> Name -> [FieldType] -> Maybe String -> Either Error Py.Statement)
 encodeRecordType = def "encodeRecordType" $
   doc "Encode a record type as a Python dataclass" $
   "cx" ~> "env" ~> "name" ~> "rowType" ~> "comment" ~>
@@ -1397,7 +1341,7 @@ encodeRecordType = def "encodeRecordType" $
       ("a" ~> just (PyUtils.pyExpressionsToPyArgs @@ list [var "a"])) $
     "decs" <~ (just $ wrap Py._Decorators $ list [dataclassDecorator]) $
     "pyName" <~ (PyNames.encodeName @@ Phantoms.false @@ Util.caseConventionPascal @@ var "env" @@ var "name") $
-    "noTypeParams" <~ (Phantoms.list ([] :: [TTerm Py.TypeParameter])) $
+    "noTypeParams" <~ (Phantoms.list ([] :: [TypedTerm Py.TypeParameter])) $
     right $ PyUtils.pyClassDefinitionToPyStatement @@
       Phantoms.record Py._ClassDefinition [
         Phantoms.field Py._ClassDefinition_decorators (var "decs"),
@@ -1414,8 +1358,8 @@ encodeRecordType = def "encodeRecordType" $
 --   overhead — cProfile showed this is 58% of bootstrap codegen time).
 --   Use sites at the Python level continue to emit `name()`; Lazy.__call__
 --   delegates to .get() so callers don't need rewriting.
-encodeTermAssignment :: TTermDefinition (Context -> PyHelpers.PythonEnvironment
-  -> Bool -> Name -> TTerm Term -> TypeScheme -> Maybe String
+encodeTermAssignment :: TypedTermDefinition (InferenceContext -> PyHelpers.PythonEnvironment
+  -> Bool -> Name -> TypedTerm Term -> TypeScheme -> Maybe String
   -> Either Error Py.Statement)
 encodeTermAssignment = def "encodeTermAssignment" $
   doc "Encode a term assignment to a Python statement" $
@@ -1452,9 +1396,9 @@ encodeTermAssignment = def "encodeTermAssignment" $
 -- | Encode a term to a Python expression (inline form).
 --   This is the main term encoding function that handles all term variants.
 --   Parameters: environment, noCast flag, term
-encodeTermInline :: TTermDefinition (Context -> PyHelpers.PythonEnvironment
+encodeTermInline :: TypedTermDefinition (InferenceContext -> PyHelpers.PythonEnvironment
   -> Bool
-  -> TTerm Term
+  -> TypedTerm Term
   -> Either Error Py.Expression)
 encodeTermInline = def "encodeTermInline" $
   doc "Encode a term to a Python expression (inline form)" $
@@ -1481,7 +1425,7 @@ encodeTermInline = def "encodeTermInline" $
         ("tc" <~ (project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_graph @@ var "env") $
          -- Use fromRight to handle type inference failures gracefully
          "mtyp" <~ (Eithers.map ("_r" ~> Pairs.first (var "_r"))
-           (Checking.typeOf @@ var "cx" @@ var "tc" @@ list ([] :: [TTerm Type]) @@ var "term")) $
+           (Checking.typeOf @@ var "cx" @@ var "tc" @@ list ([] :: [TypedTerm Type]) @@ var "term")) $
          Eithers.either_
            -- Type inference failed: return expression as-is
            (constant $ right $ var "pyexp")
@@ -1612,7 +1556,7 @@ encodeTermInline = def "encodeTermInline" $
       -- TermMaybe - encode as Nothing() or Just(value)
       _Term_maybe>>: "mt" ~>
         Maybes.maybe
-          (right $ PyUtils.functionCall @@ (PyUtils.pyNameToPyPrimary @@ PyDsl.name (string "Nothing")) @@ list ([] :: [TTerm Py.Expression]))
+          (right $ PyUtils.functionCall @@ (PyUtils.pyNameToPyPrimary @@ PyDsl.name (string "Nothing")) @@ list ([] :: [TypedTerm Py.Expression]))
           ("t1" ~>
             "pyexp" <<~ (var "encode" @@ var "t1") $
             var "withCast" @@ (PyUtils.functionCall @@ (PyUtils.pyNameToPyPrimary @@ PyDsl.name (string "Just")) @@ list [var "pyexp"]))
@@ -1675,7 +1619,7 @@ encodeTermInline = def "encodeTermInline" $
               ("ft" ~> Predicates.isUnitType @@ (Strip.deannotateType @@ Core.fieldTypeType (var "ft")))
               (Lists.find ("ft" ~> Core.equalName_ (Core.fieldTypeName (var "ft")) (var "fname")) (var "rt"))) $
             "args" <<~ (Logic.ifElse (Logic.or (Predicates.isUnitTerm @@ Core.fieldTerm (var "field")) (var "isUnitVariant"))
-              (right (list ([] :: [TTerm Py.Expression])))
+              (right (list ([] :: [TypedTerm Py.Expression])))
               ("parg" <<~ (var "encode" @@ Core.fieldTerm (var "field")) $
                 right $ list [var "parg"])) $
             -- Cast to union type - set usesCast flag
@@ -1692,7 +1636,7 @@ encodeTermInline = def "encodeTermInline" $
 
       -- TermVariable
       _Term_variable>>: "name" ~>
-        encodeVariable @@ var "cx" @@ var "env" @@ var "name" @@ list ([] :: [TTerm Py.Expression]),
+        encodeVariable @@ var "cx" @@ var "env" @@ var "name" @@ list ([] :: [TypedTerm Py.Expression]),
 
       -- TermWrap
       _Term_wrap>>: "wrapped" ~>
@@ -1703,8 +1647,8 @@ encodeTermInline = def "encodeTermInline" $
 
 -- | Encode a term to a list of statements, with the last statement as the return value.
 --   This handles case statements specially by generating match statements.
-encodeTermMultiline :: TTermDefinition (Context -> PyHelpers.PythonEnvironment
-  -> TTerm Term
+encodeTermMultiline :: TypedTermDefinition (InferenceContext -> PyHelpers.PythonEnvironment
+  -> TypedTerm Term
   -> Either Error [Py.Statement])
 encodeTermMultiline = def "encodeTermMultiline" $
   doc "Encode a term to a list of statements with return as final statement" $
@@ -1752,8 +1696,8 @@ encodeTermMultiline = def "encodeTermMultiline" $
 
 -- | Encode a term body for TCO: tail self-calls become param reassignment + continue.
 --   Non-recursive returns stay as normal return statements.
-encodeTermMultilineTCO :: TTermDefinition (Context -> PyHelpers.PythonEnvironment
-  -> Name -> [Name] -> TTerm Term
+encodeTermMultilineTCO :: TypedTermDefinition (InferenceContext -> PyHelpers.PythonEnvironment
+  -> Name -> [Name] -> TypedTerm Term
   -> Either Error [Py.Statement])
 encodeTermMultilineTCO = def "encodeTermMultilineTCO" $
   doc "Encode a term body for TCO: tail self-calls become param reassignment + continue" $
@@ -1822,7 +1766,7 @@ encodeTermMultilineTCO = def "encodeTermMultilineTCO" $
 
 -- | Encode a Hydra type to a Python type expression.
 --   This is the main recursive type encoder.
-encodeType :: TTermDefinition (PyHelpers.PythonEnvironment -> Type -> Either Error Py.Expression)
+encodeType :: TypedTermDefinition (PyHelpers.PythonEnvironment -> Type -> Either Error Py.Expression)
 encodeType = def "encodeType" $
   doc "Encode a Hydra type to a Python type expression" $
   "env" ~> "typ" ~>
@@ -1872,7 +1816,7 @@ encodeType = def "encodeType" $
 
 -- | Encode a type assignment (dispatches to record, union, wrap, or simple typedef)
 --   Name constants are now generated inside the class body by each type encoder.
-encodeTypeAssignment :: TTermDefinition (Context -> PyHelpers.PythonEnvironment -> Name -> Type -> Maybe String -> Either Error [[Py.Statement]])
+encodeTypeAssignment :: TypedTermDefinition (InferenceContext -> PyHelpers.PythonEnvironment -> Name -> Type -> Maybe String -> Either Error [[Py.Statement]])
 encodeTypeAssignment = def "encodeTypeAssignment" $
   doc "Encode a type definition, dispatching based on type structure" $
   "cx" ~> "env" ~> "name" ~> "typ" ~> "comment" ~>
@@ -1880,7 +1824,7 @@ encodeTypeAssignment = def "encodeTypeAssignment" $
     right $ Lists.map ("s" ~> list [var "s"]) (var "defStmts")
 
 -- | Inner type assignment encoding that handles forall unwrapping
-encodeTypeAssignmentInner :: TTermDefinition (Context -> PyHelpers.PythonEnvironment -> Name -> Type -> Maybe String -> Either Error [Py.Statement])
+encodeTypeAssignmentInner :: TypedTermDefinition (InferenceContext -> PyHelpers.PythonEnvironment -> Name -> Type -> Maybe String -> Either Error [Py.Statement])
 encodeTypeAssignmentInner = def "encodeTypeAssignmentInner" $
   doc "Encode the inner type definition, unwrapping forall types" $
   "cx" ~> "env" ~> "name" ~> "typ" ~> "comment" ~>
@@ -1909,7 +1853,7 @@ encodeTypeAssignmentInner = def "encodeTypeAssignmentInner" $
         encodeWrappedType @@ var "env" @@ var "name" @@ var "wt" @@ var "comment"]
 
 -- | Encode a type definition with a single statement result
-encodeTypeDefSingle :: TTermDefinition (PyHelpers.PythonEnvironment -> Name -> Maybe String -> Py.Expression -> [Py.Statement])
+encodeTypeDefSingle :: TypedTermDefinition (PyHelpers.PythonEnvironment -> Name -> Maybe String -> Py.Expression -> [Py.Statement])
 encodeTypeDefSingle = def "encodeTypeDefSingle" $
   doc "Encode a simple type alias definition" $
   "env" ~> "name" ~> "comment" ~> "typeExpr" ~>
@@ -1919,7 +1863,7 @@ encodeTypeDefSingle = def "encodeTypeDefSingle" $
 
 -- | Encode a type to a Python expression, quoting if the type has free variables.
 --   Free variables indicate forward references that need to be quoted strings in Python.
-encodeTypeQuoted :: TTermDefinition (PyHelpers.PythonEnvironment -> Type -> Either Error Py.Expression)
+encodeTypeQuoted :: TypedTermDefinition (PyHelpers.PythonEnvironment -> Type -> Either Error Py.Expression)
 encodeTypeQuoted = def "encodeTypeQuoted" $
   doc "Encode a type to a Python expression, quoting if the type has free variables" $
   "env" ~> "typ" ~>
@@ -1933,7 +1877,7 @@ encodeTypeQuoted = def "encodeTypeQuoted" $
 --     branch1_result if isinstance(arg, T1) else branch2_result if isinstance(arg, T2) else ...
 --   This is used when a case application appears in an expression context where a match
 --   statement cannot be emitted (e.g., inside a lambda or walrus assignment).
-encodeUnionEliminationInline :: TTermDefinition (Context -> PyHelpers.PythonEnvironment
+encodeUnionEliminationInline :: TypedTermDefinition (InferenceContext -> PyHelpers.PythonEnvironment
   -> CaseStatement -> Py.Expression
   -> Either Error Py.Expression)
 encodeUnionEliminationInline = def "encodeUnionEliminationInline" $
@@ -2014,7 +1958,7 @@ encodeUnionEliminationInline = def "encodeUnionEliminationInline" $
 
 -- | Encode a term to a Python expression (inline form).
 
-encodeUnionField :: TTermDefinition (Context -> PyHelpers.PythonEnvironment -> Name -> FieldType -> Either Error Py.Statement)
+encodeUnionField :: TypedTermDefinition (InferenceContext -> PyHelpers.PythonEnvironment -> Name -> FieldType -> Either Error Py.Statement)
 encodeUnionField = def "encodeUnionField" $
   doc "Encode a union field as a variant class" $
   "cx" ~> "env" ~> "unionName" ~> "fieldType" ~>
@@ -2029,12 +1973,12 @@ encodeUnionField = def "encodeUnionField" $
     -- For unit types, use unitVariantMethods for body; otherwise empty
     "body" <~ Logic.ifElse (var "isUnit")
       (PyUtils.indentedBlock @@ var "fcomment" @@ list [PyUtils.unitVariantMethods @@ var "varName"])
-      (PyUtils.indentedBlock @@ var "fcomment" @@ Phantoms.list ([] :: [TTerm [Py.Statement]])) $
+      (PyUtils.indentedBlock @@ var "fcomment" @@ Phantoms.list ([] :: [TypedTerm [Py.Statement]])) $
     -- For unit types, no args; otherwise variantArgs
     "margs" <<~ Logic.ifElse (var "isUnit")
-      (right (nothing :: TTerm (Maybe Py.Args)))
+      (right (nothing :: TypedTerm (Maybe Py.Args)))
       ("quotedType" <<~ (encodeTypeQuoted @@ var "env" @@ var "ftype") $
-       right $ just (variantArgs @@ var "quotedType" @@ Phantoms.list ([] :: [TTerm Name]))) $
+       right $ just (variantArgs @@ var "quotedType" @@ Phantoms.list ([] :: [TypedTerm Name]))) $
     right $ PyUtils.pyClassDefinitionToPyStatement @@
       PyDsl.classDefinition
         nothing
@@ -2044,7 +1988,7 @@ encodeUnionField = def "encodeUnionField" $
         (var "body")
 
 -- | Encode a union field as an alternative expression for the union type alias
-encodeUnionFieldAlt :: TTermDefinition (PyHelpers.PythonEnvironment -> Name -> FieldType -> Py.Primary)
+encodeUnionFieldAlt :: TypedTermDefinition (PyHelpers.PythonEnvironment -> Name -> FieldType -> Py.Primary)
 encodeUnionFieldAlt = def "encodeUnionFieldAlt" $
   doc "Encode a union field as a primary expression for | alternatives" $
   "env" ~> "unionName" ~> "fieldType" ~>
@@ -2059,7 +2003,7 @@ encodeUnionFieldAlt = def "encodeUnionFieldAlt" $
        PyUtils.primaryWithExpressionSlices @@ var "namePrim" @@ var "tparamExprs")
 
 -- | Encode a union type as either an enum or a set of variant classes
-encodeUnionType :: TTermDefinition (Context -> PyHelpers.PythonEnvironment -> Name -> [FieldType] -> Maybe String -> Either Error [Py.Statement])
+encodeUnionType :: TypedTermDefinition (InferenceContext -> PyHelpers.PythonEnvironment -> Name -> [FieldType] -> Maybe String -> Either Error [Py.Statement])
 encodeUnionType = def "encodeUnionType" $
   doc "Encode a union type as an enum (for unit-only fields) or variant classes" $
   "cx" ~> "env" ~> "name" ~> "rowType" ~> "comment" ~>
@@ -2078,7 +2022,7 @@ encodeUnionType = def "encodeUnionType" $
                @@ (PyUtils.pyNameToPyPrimary @@ (PyNames.encodeName @@ true @@ Util.caseConventionPascal @@ var "env" @@ (Core.name $ string "hydra.core.Name")))
                @@ list [PyUtils.doubleQuotedString @@ (Core.unName $ var "name")])) $
        right $ list [PyUtils.pyClassDefinitionToPyStatement @@
-         PyDsl.classDefinition nothing (var "pyName") (Phantoms.list ([] :: [TTerm Py.TypeParameter])) (var "args") (var "body"),
+         PyDsl.classDefinition nothing (var "pyName") (Phantoms.list ([] :: [TypedTerm Py.TypeParameter])) (var "args") (var "body"),
          var "typeConstStmt"])
       -- Union case: pass constants to the union class body
       ("constStmts" <~ (encodeNameConstants @@ var "env" @@ var "name" @@ var "rowType") $
@@ -2096,7 +2040,7 @@ encodeUnionType = def "encodeUnionType" $
 -- | Encode a variable reference to a Python expression.
 --   This handles various cases: lambda variables, let-bound variables, primitives, and graph elements.
 --   The complexity arises from needing to determine when a variable needs call syntax () vs plain reference.
-encodeVariable :: TTermDefinition (Context -> PyHelpers.PythonEnvironment -> Name -> [Py.Expression] -> Either Error Py.Expression)
+encodeVariable :: TypedTermDefinition (InferenceContext -> PyHelpers.PythonEnvironment -> Name -> [Py.Expression] -> Either Error Py.Expression)
 encodeVariable = def "encodeVariable" $
   doc "Encode a variable reference to a Python expression" $
   "cx" ~> "env" ~> "name" ~> "args" ~>
@@ -2175,7 +2119,7 @@ encodeVariable = def "encodeVariable" $
                 -- Nullary primitive: call with ()
                 (right $ var "asFunctionCall")
                 -- Non-nullary primitive: function reference
-                ("ts" <~ (Phantoms.project _Primitive _Primitive_typeScheme @@ var "prim") $
+                ("ts" <~ (Scoping.termSignatureToTypeScheme @@ (Phantoms.project _PrimitiveDefinition _PrimitiveDefinition_signature @@ (Phantoms.project _Primitive _Primitive_definition @@ var "prim"))) $
                   "asFunctionRef" <~ (Logic.ifElse (Logic.not $ Lists.null (Core.typeSchemeVariables $ var "ts"))
                       (makeSimpleLambda @@ (Arity.typeArity @@ (Core.typeSchemeBody $ var "ts")) @@ var "asVariable")
                       (var "asVariable")) $
@@ -2238,14 +2182,14 @@ encodeVariable = def "encodeVariable" $
 -- | Encode a wrapped type (newtype) to a Python class definition.
 --   Creates a class that extends Node[inner_type] with optional Generic[T] for polymorphic types.
 --   TYPE_ is assigned after the class to avoid self-reference issues (e.g., Name.TYPE_ = Name(...)).
-encodeWrappedType :: TTermDefinition (PyHelpers.PythonEnvironment -> Name -> Type -> Maybe String -> Either Error [Py.Statement])
+encodeWrappedType :: TypedTermDefinition (PyHelpers.PythonEnvironment -> Name -> Type -> Maybe String -> Either Error [Py.Statement])
 encodeWrappedType = def "encodeWrappedType" $
   doc "Encode a wrapped type (newtype) to a Python class definition" $
   "env" ~> "name" ~> "typ" ~> "comment" ~>
     "tparamList" <~ (Pairs.first $ project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_boundTypeVariables @@ var "env") $
     "ptypeQuoted" <<~ encodeTypeQuoted @@ var "env" @@ var "typ" $
     "pyName" <~ (PyNames.encodeName @@ false @@ Util.caseConventionPascal @@ var "env" @@ var "name") $
-    "body" <~ (PyUtils.indentedBlock @@ var "comment" @@ list ([] :: [TTerm [Py.Statement]])) $
+    "body" <~ (PyUtils.indentedBlock @@ var "comment" @@ list ([] :: [TypedTerm [Py.Statement]])) $
     -- Generate TYPE_ as a dotted assignment after the class: ClassName.TYPE_ = Name("...")
     "typeConstStmt" <~ (PyUtils.dottedAssignmentStatement
       @@ var "pyName"
@@ -2264,7 +2208,7 @@ encodeWrappedType = def "encodeWrappedType" $
       var "typeConstStmt"]
 
 -- | Create a CaseBlock pattern for an enum variant (value pattern).
-enumVariantPattern :: TTermDefinition (PyHelpers.PythonEnvironment -> Name -> Name -> Py.ClosedPattern)
+enumVariantPattern :: TypedTermDefinition (PyHelpers.PythonEnvironment -> Name -> Name -> Py.ClosedPattern)
 enumVariantPattern = def "enumVariantPattern" $
   doc "Create a value pattern for an enum variant" $
   "env" ~> "typeName" ~> "fieldName" ~>
@@ -2273,7 +2217,7 @@ enumVariantPattern = def "enumVariantPattern" $
       PyNames.encodeEnumValue @@ var "env" @@ var "fieldName"]
 
 -- | Get type parameters from environment as Python TypeParameters
-environmentTypeParameters :: TTermDefinition (PyHelpers.PythonEnvironment -> [Py.TypeParameter])
+environmentTypeParameters :: TypedTermDefinition (PyHelpers.PythonEnvironment -> [Py.TypeParameter])
 environmentTypeParameters = def "environmentTypeParameters" $
   doc "Get type parameters from environment as Python TypeParameters" $
   "env" ~>
@@ -2283,7 +2227,7 @@ environmentTypeParameters = def "environmentTypeParameters" $
 
 -- | Extend PythonEnvironment's Graph by adding lambda parameters.
 --   This is used when we've gathered lambdas from a term but need to manually extend the context.
-extendEnvWithLambdaParams :: TTermDefinition (PyHelpers.PythonEnvironment -> Term -> PyHelpers.PythonEnvironment)
+extendEnvWithLambdaParams :: TypedTermDefinition (PyHelpers.PythonEnvironment -> Term -> PyHelpers.PythonEnvironment)
 extendEnvWithLambdaParams = def "extendEnvWithLambdaParams" $
   doc "Extend environment with lambda parameters from a term" $
   "env" ~> "term" ~>
@@ -2298,7 +2242,7 @@ extendEnvWithLambdaParams = def "extendEnvWithLambdaParams" $
 
 -- | Extend a PythonEnvironment with a new bound type variable.
 --   This creates a new environment with the variable added to the type parameter list and map.
-extendEnvWithTypeVar :: TTermDefinition (PyHelpers.PythonEnvironment -> Name -> PyHelpers.PythonEnvironment)
+extendEnvWithTypeVar :: TypedTermDefinition (PyHelpers.PythonEnvironment -> Name -> PyHelpers.PythonEnvironment)
 extendEnvWithTypeVar = def "extendEnvWithTypeVar" $
   doc "Extend a PythonEnvironment with a new bound type variable" $
   "env" ~> "var_" ~>
@@ -2319,7 +2263,7 @@ extendEnvWithTypeVar = def "extendEnvWithTypeVar" $
 -- | Extend metadata based on a term (used during module encoding).
 --   Traverses a term and updates metadata flags based on what features are used.
 --   The topLevel parameter affects whether we track function type annotations at this level.
-extendMetaForTerm :: TTermDefinition (Bool -> PyHelpers.PythonModuleMetadata -> Term -> PyHelpers.PythonModuleMetadata)
+extendMetaForTerm :: TypedTermDefinition (Bool -> PyHelpers.PythonModuleMetadata -> Term -> PyHelpers.PythonModuleMetadata)
 extendMetaForTerm = def "extendMetaForTerm" $
   doc "Extend metadata based on a term (used during module encoding)" $
   "topLevel" ~> "meta0" ~> "term" ~>
@@ -2371,12 +2315,68 @@ extendMetaForTerm = def "extendMetaForTerm" $
           setMetaUsesCast @@ true @@ var "meta"]) $
     Rewriting.foldOverTerm @@ Coders.traversalOrderPre @@ var "step" @@ var "meta0" @@ var "term"
 
+-- | Encode a function definition with parameters and body.
+--   Takes: environment, name, type params, arg names, body term, domain types, optional codomain, comment, prefix statements
+functionDefinitionToExpr :: TypedTermDefinition (InferenceContext -> PyHelpers.PythonEnvironment
+  -> Name -> [Name] -> [Name] -> TypedTerm Term -> [Type] -> Maybe Type -> Maybe String -> [Py.Statement]
+  -> Either Error Py.Statement)
+functionDefinitionToExpr = def "functionDefinitionToExpr" $
+  doc "Encode a function definition with parameters and body" $
+  "cx" ~> "env" ~> "name" ~> "tparams" ~> "args" ~> "body" ~> "doms" ~> "mcod" ~> "comment" ~> "prefixes" ~>
+    -- Create parameters by zipping arg names with domain types
+    "pyArgs" <<~ Eithers.mapList
+      ("pair" ~>
+        "argName" <~ Pairs.first (var "pair") $
+        "typ" <~ Pairs.second (var "pair") $
+        "pyTyp" <<~ (encodeType @@ var "env" @@ var "typ") $
+        right $ PyDsl.paramNoDefaultSimple $ PyDsl.param
+          (PyNames.encodeName @@ false @@ Util.caseConventionLowerSnake @@ var "env" @@ var "argName")
+          (just $ PyDsl.annotation $ var "pyTyp"))
+      (Lists.zip (var "args") (var "doms")) $
+    "pyParams" <~ (PyDsl.parametersParamNoDefault $ PyDsl.paramNoDefaultParameters (var "pyArgs") (Phantoms.list ([] :: [TypedTerm Py.ParamWithDefault])) nothing) $
+    -- Check for tail-call optimization opportunity
+    "isTCO" <~ (Logic.and
+      (Logic.not $ Lists.null (var "args"))
+      (Analysis.isSelfTailRecursive @@ var "name" @@ var "body")) $
+    "block" <<~ (Logic.ifElse (var "isTCO")
+      -- TCO path: wrap body in while True loop
+      -- Note: prefixes (let-binding statements) go INSIDE the while loop so they are
+      -- re-evaluated each iteration when parameters change via reassignment + continue.
+      ("tcoStmts" <<~ (encodeTermMultilineTCO @@ var "cx" @@ var "env" @@ var "name" @@ var "args" @@ var "body") $
+        "trueExpr" <~ (PyDsl.namedExpressionSimple $ PyUtils.pyAtomToPyExpression @@ PyDsl.atomTrue) $
+        "whileBody" <~ (PyUtils.indentedBlock @@ nothing @@ list [Lists.concat2 (var "prefixes") (var "tcoStmts")]) $
+        "whileStmt" <~ (PyDsl.statementCompound $ PyDsl.compoundStatementWhile $
+          PyDsl.whileStatement (var "trueExpr") (var "whileBody") nothing) $
+        right $ PyUtils.indentedBlock @@ var "comment" @@ list [list [var "whileStmt"]])
+      -- Normal path: encode body as statements with return
+      ("stmts" <<~ (encodeTermMultiline @@ var "cx" @@ var "env" @@ var "body") $
+        right $ PyUtils.indentedBlock @@ var "comment" @@ list [Lists.concat2 (var "prefixes") (var "stmts")])) $
+    -- Encode return type if present
+    "mreturnType" <<~ optCases (var "mcod")
+      (right (nothing :: TypedTerm (Maybe Py.Expression)))
+      ("cod" ~>
+        "pytyp" <<~ (encodeType @@ var "env" @@ var "cod") $
+        right $ just (var "pytyp")) $
+    -- Type parameters (only for Python 3.12+)
+    "pyTparams" <~ (Logic.ifElse useInlineTypeParams
+      (Lists.map (PyUtils.pyNameToPyTypeParameter <.> PyNames.encodeTypeVariable) (var "tparams"))
+      (Phantoms.list ([] :: [TypedTerm Py.TypeParameter]))) $
+    -- Check if this is a thunk (zero-argument function)
+    "isThunk" <~ (Lists.null $ var "args") $
+    "mDecorators" <~ (Logic.ifElse (var "isThunk")
+      (just $ wrap Py._Decorators $ list [lruCacheDecorator])
+      nothing) $
+    -- Metadata for lru_cache is now pre-computed in gatherMetadata
+    "pyName" <~ (PyNames.encodeName @@ false @@ Util.caseConventionLowerSnake @@ var "env" @@ var "name") $
+    right $ PyDsl.statementCompound $ PyDsl.compoundStatementFunction $ PyDsl.functionDefinition (var "mDecorators") $
+      PyDsl.functionDefRaw false (var "pyName") (var "pyTparams") (just $ var "pyParams") (var "mreturnType") nothing (var "block")
+
 -- Helper functions to set individual metadata fields
 
 -- | Extend metadata based on a type (used during module encoding).
 --   topLevel: whether this is a top-level type annotation
 --   isTermAnnot: whether this is a term's type annotation vs a type definition
-extendMetaForType :: TTermDefinition (Bool -> Bool -> Type -> PyHelpers.PythonModuleMetadata -> PyHelpers.PythonModuleMetadata)
+extendMetaForType :: TypedTermDefinition (Bool -> Bool -> Type -> PyHelpers.PythonModuleMetadata -> PyHelpers.PythonModuleMetadata)
 extendMetaForType = def "extendMetaForType" $
   doc "Extend metadata based on a type (used during module encoding)" $
   "topLevel" ~> "isTermAnnot" ~> "typ" ~> "meta" ~>
@@ -2460,7 +2460,7 @@ extendMetaForType = def "extendMetaForType" $
 
 -- | Extend metadata for a list of types.
 --   Collects dependency names and extends metadata for each type.
-extendMetaForTypes :: TTermDefinition ([Type] -> PyHelpers.PythonModuleMetadata -> PyHelpers.PythonModuleMetadata)
+extendMetaForTypes :: TypedTermDefinition ([Type] -> PyHelpers.PythonModuleMetadata -> PyHelpers.PythonModuleMetadata)
 extendMetaForTypes = def "extendMetaForTypes" $
   doc "Extend metadata for a list of types" $
   "types" ~> "meta" ~>
@@ -2468,7 +2468,7 @@ extendMetaForTypes = def "extendMetaForTypes" $
     "names" <~ Sets.unions (Lists.map ("t" ~> Dependencies.typeDependencyNames @@ false @@ var "t") (var "types")) $
     -- Update namespaces with the collected names
     "currentNs" <~ (project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_namespaces @@ var "meta") $
-    "updatedNs" <~ (Analysis.addNamesToNamespaces @@ PyNames.encodeNamespace @@ var "names" @@ var "currentNs") $
+    "updatedNs" <~ (Analysis.addNamesToModuleNames @@ PyNames.encodeNamespace @@ var "names" @@ var "currentNs") $
     -- Create meta1 with updated namespaces
     "meta1" <~ (setMetaNamespaces @@ var "updatedNs" @@ var "meta") $
     -- Now fold extendMetaForType over all types with isTypeDef=True, isTermAnnot=False
@@ -2476,7 +2476,7 @@ extendMetaForTypes = def "extendMetaForTypes" $
 
 -- | Extract CaseStatement from a term if it's a case elimination function.
 --   Returns Just the CaseStatement if the term is a case elimination, Nothing otherwise.
-extractCaseElimination :: TTermDefinition (Term -> Maybe CaseStatement)
+extractCaseElimination :: TypedTermDefinition (Term -> Maybe CaseStatement)
 extractCaseElimination = def "extractCaseElimination" $
   doc "Extract CaseStatement from a case elimination term" $
   "term" ~>
@@ -2485,7 +2485,7 @@ extractCaseElimination = def "extractCaseElimination" $
 
 -- | Find type parameters in a type that are bound in the environment.
 --   Returns the free type variables that are also in the bound type variables map.
-findTypeParams :: TTermDefinition (PyHelpers.PythonEnvironment -> Type -> [Name])
+findTypeParams :: TypedTermDefinition (PyHelpers.PythonEnvironment -> Type -> [Name])
 findTypeParams = def "findTypeParams" $
   doc "Find type parameters in a type that are bound in the environment" $
   "env" ~> "typ" ~>
@@ -2495,7 +2495,7 @@ findTypeParams = def "findTypeParams" $
 
 -- | Extract lambdas and their bodies from a term.
 --   Returns the list of lambda parameters (in order from outermost to innermost) and the innermost body.
-gatherLambdas :: TTermDefinition (Term -> ([Name], Term))
+gatherLambdas :: TypedTermDefinition (Term -> ([Name], Term))
 gatherLambdas = def "gatherLambdas" $
   doc "Extract lambdas and their bodies from a term" $
   "term" ~>
@@ -2505,11 +2505,11 @@ gatherLambdas = def "gatherLambdas" $
       _Term_lambda>>: "l" ~>
         var "go" @@ Lists.concat2 (var "params") (list [Core.lambdaParameter $ var "l"])
                  @@ Core.lambdaBody (var "l")]) $
-  var "go" @@ list ([] :: [TTerm Name]) @@ var "term"
+  var "go" @@ list ([] :: [TypedTerm Name]) @@ var "term"
 
 -- | Gather metadata from a list of definitions.
 --   This is the main entry point for collecting all import requirements.
-gatherMetadata :: TTermDefinition (ModuleName -> [Definition] -> PyHelpers.PythonModuleMetadata)
+gatherMetadata :: TypedTermDefinition (ModuleName -> [Definition] -> PyHelpers.PythonModuleMetadata)
 gatherMetadata = def "gatherMetadata" $
   doc "Gather metadata from definitions" $
   "focusNs" ~> "defs" ~>
@@ -2523,7 +2523,7 @@ gatherMetadata = def "gatherMetadata" $
           "typ" <~ Maybes.maybe
             (Core.typeVariable (wrap _Name (string "hydra.core.Unit")))
             (reify Core.typeSchemeBody)
-            (Packaging.termDefinitionTypeScheme (var "termDef")) $
+            (Maybes.map Scoping.termSignatureToTypeScheme $ Packaging.termDefinitionSignature (var "termDef")) $
           -- First extend for the type annotation (isTypeDef=True, isTermAnnot=True)
           "meta2" <~ (extendMetaForType @@ true @@ true @@ var "typ" @@ var "meta") $
           -- Then extend for the term body (isTopLevel=True)
@@ -2544,7 +2544,7 @@ gatherMetadata = def "gatherMetadata" $
     setMetaUsesTypeVar @@ var "result2" @@ (Logic.not $ Sets.null $ var "tvars")
 
 -- | Create Generic[...] argument expression for class definition
-genericArg :: TTermDefinition ([Name] -> Maybe Py.Expression)
+genericArg :: TypedTermDefinition ([Name] -> Maybe Py.Expression)
 genericArg = def "genericArg" $
   doc "Create Generic[...] argument expression for class definition" $
   "tparamList" ~>
@@ -2557,13 +2557,13 @@ genericArg = def "genericArg" $
             (Lists.map ("n" ~> PyDsl.pyNameToPyExpression (PyNames.encodeTypeVariable @@ var "n")) (var "tparamList"))))
 
 -- | Create an initial Python environment for code generation
-initialEnvironment :: TTermDefinition (Namespaces Py.DottedName -> Graph -> PyHelpers.PythonEnvironment)
+initialEnvironment :: TypedTermDefinition (ModuleNames Py.DottedName -> Graph -> PyHelpers.PythonEnvironment)
 initialEnvironment = def "initialEnvironment" $
   doc "Create an initial Python environment for code generation" $
   "namespaces" ~> "tcontext" ~>
     record PyHelpers._PythonEnvironment [
       PyHelpers._PythonEnvironment_namespaces>>: var "namespaces",
-      PyHelpers._PythonEnvironment_boundTypeVariables>>: pair (list ([] :: [TTerm Name])) Maps.empty,
+      PyHelpers._PythonEnvironment_boundTypeVariables>>: pair (list ([] :: [TypedTerm Name])) Maps.empty,
       PyHelpers._PythonEnvironment_graph>>: var "tcontext",
       PyHelpers._PythonEnvironment_nullaryBindings>>: Sets.empty,
       PyHelpers._PythonEnvironment_version>>: targetPythonVersion,
@@ -2571,12 +2571,12 @@ initialEnvironment = def "initialEnvironment" $
       PyHelpers._PythonEnvironment_inlineVariables>>: Sets.empty]
 
 -- | Initial empty metadata for a Python module
-initialMetadata :: TTermDefinition (ModuleName -> PyHelpers.PythonModuleMetadata)
+initialMetadata :: TypedTermDefinition (ModuleName -> PyHelpers.PythonModuleMetadata)
 initialMetadata = def "initialMetadata" $
   doc "Create initial empty metadata for a Python module" $
   "ns" ~>
     "dottedNs" <~ (PyNames.encodeNamespace @@ var "ns") $
-    "emptyNs" <~ (Util.namespaces (pair (var "ns") (var "dottedNs")) Maps.empty) $
+    "emptyNs" <~ (Util.moduleNames (pair (var "ns") (var "dottedNs")) Maps.empty) $
     record PyHelpers._PythonModuleMetadata [
       PyHelpers._PythonModuleMetadata_namespaces>>: var "emptyNs",
       PyHelpers._PythonModuleMetadata_typeVariables>>: Sets.empty,
@@ -2604,7 +2604,7 @@ initialMetadata = def "initialMetadata" $
 
 -- | Check if a term is a case statement applied to exactly one argument.
 --   Returns Just (tname, dflt, cases, arg) if so, Nothing otherwise.
-isCaseStatementApplication :: TTermDefinition (Term -> Maybe (Name, Maybe Term, [Field], Term))
+isCaseStatementApplication :: TypedTermDefinition (Term -> Maybe (Name, Maybe Term, [Field], Term))
 isCaseStatementApplication = def "isCaseStatementApplication" $
   doc "Check if a term is a case statement applied to exactly one argument" $
   "term" ~>
@@ -2625,7 +2625,7 @@ isCaseStatementApplication = def "isCaseStatementApplication" $
 
 -- | Determine whether a union type's cases are fully covered.
 --   Returns true if the number of cases >= number of fields in the row type.
-isCasesFull :: TTermDefinition ([FieldType] -> [Field] -> Bool)
+isCasesFull :: TypedTermDefinition ([FieldType] -> [Field] -> Bool)
 isCasesFull = def "isCasesFull" $
   doc "Check if union cases are fully covered" $
   "rowType" ~> "cases_" ~>
@@ -2635,7 +2635,7 @@ isCasesFull = def "isCasesFull" $
     Logic.not $ Equality.lt (var "numCases") (var "numFields")
 
 -- | Check whether a list of definitions contains any type definitions
-isTypeModuleCheck :: TTermDefinition ([Definition] -> Bool)
+isTypeModuleCheck :: TypedTermDefinition ([Definition] -> Bool)
 isTypeModuleCheck = def "isTypeModuleCheck" $
   doc "Check whether a list of definitions contains any type definitions" $
   "defs" ~>
@@ -2645,7 +2645,7 @@ isTypeModuleCheck = def "isTypeModuleCheck" $
       (var "defs")
 
 -- | Check if a name is a type variable (unqualified - no dots)
-isTypeVariableName :: TTermDefinition (Name -> Bool)
+isTypeVariableName :: TypedTermDefinition (Name -> Bool)
 isTypeVariableName = def "isTypeVariableName" $
   doc "Check if a name is a type variable (unqualified - no dots)" $
   "name" ~>
@@ -2654,7 +2654,7 @@ isTypeVariableName = def "isTypeVariableName" $
 
 -- | Check if a field type in a row type represents a unit-valued variant.
 --   Used to determine if a variant has "no value" (unit type).
-isVariantUnitType :: TTermDefinition ([FieldType] -> Name -> Bool)
+isVariantUnitType :: TypedTermDefinition ([FieldType] -> Name -> Bool)
 isVariantUnitType = def "isVariantUnitType" $
   doc "Check if a variant field has unit type" $
   "rowType" ~> "fieldName" ~>
@@ -2665,17 +2665,17 @@ isVariantUnitType = def "isVariantUnitType" $
         (var "mfield")
 
 -- | Wrap an expression in a `.get()` method call (Lazy unwrap at use sites).
-lazyDotGet :: TTermDefinition (Py.Expression -> Py.Expression)
+lazyDotGet :: TypedTermDefinition (Py.Expression -> Py.Expression)
 lazyDotGet = def "lazyDotGet" $
   doc "Wrap an expression in a .get() method call (for Lazy unwrap at use sites)" $
   "expr" ~>
     PyUtils.functionCall @@
       (PyUtils.pyExpressionToPyPrimary @@
         (PyUtils.projectFromExpression @@ var "expr" @@ (PyDsl.name $ string "get"))) @@
-      list ([] :: [TTerm Py.Expression])
+      list ([] :: [TypedTerm Py.Expression])
 
 -- | Decorator for @lru_cache(1) to memoize zero-argument function results
-lruCacheDecorator :: TTermDefinition Py.NamedExpression
+lruCacheDecorator :: TypedTermDefinition Py.NamedExpression
 lruCacheDecorator = def "lruCacheDecorator" $
   doc "Decorator for @lru_cache(1) to memoize zero-argument function results" $
   PyDsl.namedExpressionSimple $
@@ -2684,7 +2684,7 @@ lruCacheDecorator = def "lruCacheDecorator" $
       list [pyInt @@ bigint 1]
 
 -- | Create a curried lambda chain from a list of parameter names and a body
-makeCurriedLambda :: TTermDefinition ([Py.Name] -> Py.Expression -> Py.Expression)
+makeCurriedLambda :: TypedTermDefinition ([Py.Name] -> Py.Expression -> Py.Expression)
 makeCurriedLambda = def "makeCurriedLambda" $
   doc "Create a curried lambda chain from a list of parameter names and a body" $
   "params" ~> "body" ~>
@@ -2698,7 +2698,7 @@ makeCurriedLambda = def "makeCurriedLambda" $
 
 -- | Wrap an expression in `Lazy(lambda: ...)` for one-shot lazy memoization.
 --   Mirrors hydra.util.Lazy<> in Hydra-Java. Use sites force evaluation via .get().
-makeLazy :: TTermDefinition (Py.Expression -> Py.Expression)
+makeLazy :: TypedTermDefinition (Py.Expression -> Py.Expression)
 makeLazy = def "makeLazy" $
   doc "Wrap an expression in Lazy(lambda: ...) for one-shot lazy memoization" $
   "pbody" ~>
@@ -2707,7 +2707,7 @@ makeLazy = def "makeLazy" $
       list [wrapInNullaryLambda @@ var "pbody"]
 
 -- | Constructor for PyGraph record
-makePyGraph :: TTermDefinition (Graph -> PyHelpers.PythonModuleMetadata -> PyHelpers.PyGraph)
+makePyGraph :: TypedTermDefinition (Graph -> PyHelpers.PythonModuleMetadata -> PyHelpers.PyGraph)
 makePyGraph = def "makePyGraph" $
   doc "Constructor for PyGraph record" $
   "g" ~> "m" ~>
@@ -2718,7 +2718,7 @@ makePyGraph = def "makePyGraph" $
 -- | Wrap a bare reference to a polymorphic function in an uncurried lambda,
 --   avoiding pyright errors due to confusion about type parameters.
 --   Creates: lambda x1, x2, ...: f(x1, x2, ...)
-makeSimpleLambda :: TTermDefinition (Int -> Py.Expression -> Py.Expression)
+makeSimpleLambda :: TypedTermDefinition (Int -> Py.Expression -> Py.Expression)
 makeSimpleLambda = def "makeSimpleLambda" $
   doc "Wrap a bare reference to a polymorphic function in an uncurried lambda" $
   "arity" ~> "lhs" ~>
@@ -2735,7 +2735,7 @@ makeSimpleLambda = def "makeSimpleLambda" $
             (Lists.map ("a" ~> PyDsl.pyNameToPyExpression (var "a")) (var "args"))))
 
 -- | Create a thunk (zero-argument lambda) wrapped with lru_cache(1) for memoization
-makeThunk :: TTermDefinition (Py.Expression -> Py.Expression)
+makeThunk :: TypedTermDefinition (Py.Expression -> Py.Expression)
 makeThunk = def "makeThunk" $
   doc "Create a thunk (zero-argument lambda) wrapped with lru_cache(1) for memoization" $
   "pbody" ~>
@@ -2747,7 +2747,7 @@ makeThunk = def "makeThunk" $
       list [wrapInNullaryLambda @@ var "pbody"]
 
 -- | e.g., makeUncurriedLambda [p1, p2, p3] body => lambda p1, p2, p3: body
-makeUncurriedLambda :: TTermDefinition ([Py.Name] -> Py.Expression -> Py.Expression)
+makeUncurriedLambda :: TypedTermDefinition ([Py.Name] -> Py.Expression -> Py.Expression)
 makeUncurriedLambda = def "makeUncurriedLambda" $
   doc "Create an uncurried lambda with multiple parameters" $
   "params" ~> "body" ~>
@@ -2756,11 +2756,11 @@ makeUncurriedLambda = def "makeUncurriedLambda" $
       (var "body")
 
 -- | Generate domain import statements from namespace mappings
-moduleDomainImports :: TTermDefinition (Namespaces Py.DottedName -> [Py.ImportStatement])
+moduleDomainImports :: TypedTermDefinition (ModuleNames Py.DottedName -> [Py.ImportStatement])
 moduleDomainImports = def "moduleDomainImports" $
   doc "Generate domain import statements from namespace mappings" $
   "namespaces" ~>
-    "names" <~ (Lists.sort $ Maps.elems $ Util.namespacesMapping (var "namespaces")) $
+    "names" <~ (Lists.sort $ Maps.elems $ Util.moduleNamesMapping (var "namespaces")) $
     Lists.map
       ("ns" ~>
         inject Py._ImportStatement Py._ImportStatement_name
@@ -2771,7 +2771,7 @@ moduleDomainImports = def "moduleDomainImports" $
       (var "names")
 
 -- | Generate all import statements (standard + domain) for a Python module
-moduleImports :: TTermDefinition (Namespaces Py.DottedName -> PyHelpers.PythonModuleMetadata -> [Py.Statement])
+moduleImports :: TypedTermDefinition (ModuleNames Py.DottedName -> PyHelpers.PythonModuleMetadata -> [Py.Statement])
 moduleImports = def "moduleImports" $
   doc "Generate all import statements for a Python module" $
   "namespaces" ~> "meta" ~>
@@ -2783,7 +2783,7 @@ moduleImports = def "moduleImports" $
         moduleDomainImports @@ var "namespaces"]))
 
 -- | Generate standard import statements based on module metadata
-moduleStandardImports :: TTermDefinition (PyHelpers.PythonModuleMetadata -> [Py.ImportStatement])
+moduleStandardImports :: TypedTermDefinition (PyHelpers.PythonModuleMetadata -> [Py.ImportStatement])
 moduleStandardImports = def "moduleStandardImports" $
   doc "Generate standard import statements based on module metadata" $
   "meta" ~>
@@ -2862,29 +2862,29 @@ moduleStandardImports = def "moduleStandardImports" $
       (var "simplified")
 
 -- | Main entry point: convert a Hydra module to Python source files.
-moduleToPython :: TTermDefinition (Module -> [Definition] -> Context -> Graph -> Either Error (M.Map FilePath String))
+moduleToPython :: TypedTermDefinition (Module -> [Definition] -> InferenceContext -> Graph -> Either Error (M.Map FilePath String))
 moduleToPython = def "moduleToPython" $
   doc "Convert a Hydra module to Python source files" $
   "mod" ~> "defs" ~> "cx" ~> "g" ~>
     "file" <<~ (encodePythonModule @@ var "cx" @@ var "g" @@ var "mod" @@ var "defs") $
     "s" <~ (Serialization.printExpr @@ (Serialization.parenthesize @@ (PySerde.moduleToExpr @@ var "file"))) $
-    "path" <~ (Names.namespaceToFilePath @@ Util.caseConventionLowerSnake @@ (wrap _FileExtension $ string "py") @@ (Packaging.moduleName $ var "mod")) $
+    "path" <~ (Names.moduleNameToFilePath @@ Util.caseConventionLowerSnake @@ (wrap _FileExtension $ string "py") @@ (Packaging.moduleName $ var "mod")) $
     right $ Maps.singleton (var "path") (var "s")
 
 -- | Accessor for the graph field of PyGraph
-pyGraphGraph :: TTermDefinition (PyHelpers.PyGraph -> Graph)
+pyGraphGraph :: TypedTermDefinition (PyHelpers.PyGraph -> Graph)
 pyGraphGraph = def "pyGraphGraph" $
   doc "Accessor for the graph field of PyGraph" $
   lambda "pyg" $ project PyHelpers._PyGraph PyHelpers._PyGraph_graph @@ var "pyg"
 
 -- | Accessor for the metadata field of PyGraph
-pyGraphMetadata :: TTermDefinition (PyHelpers.PyGraph -> PyHelpers.PythonModuleMetadata)
+pyGraphMetadata :: TypedTermDefinition (PyHelpers.PyGraph -> PyHelpers.PythonModuleMetadata)
 pyGraphMetadata = def "pyGraphMetadata" $
   doc "Accessor for the metadata field of PyGraph" $
   lambda "pyg" $ project PyHelpers._PyGraph PyHelpers._PyGraph_metadata @@ var "pyg"
 
 -- | Create integer literal expression
-pyInt :: TTermDefinition (Integer -> Py.Expression)
+pyInt :: TypedTermDefinition (Integer -> Py.Expression)
 pyInt = def "pyInt" $
   doc "Create integer literal expression" $
   "n" ~>
@@ -2895,7 +2895,7 @@ pyInt = def "pyInt" $
 --   Stores metadata only for bindings that will actually be thunked by encodeTermAssignment
 --   (isComplexBinding AND NOT isTrivial). This ensures encodeVariable adds () call syntax
 --   only when the binding was actually emitted as @lru_cache(1) def.
-pythonBindingMetadata :: TTermDefinition (Graph -> Binding -> Maybe Term)
+pythonBindingMetadata :: TypedTermDefinition (Graph -> Binding -> Maybe Term)
 pythonBindingMetadata = def "pythonBindingMetadata" $
   doc "Like bindingMetadata, but only for bindings that will actually be thunked" $
   "g" ~> "b" ~>
@@ -2904,13 +2904,13 @@ pythonBindingMetadata = def "pythonBindingMetadata" $
     nothing
 
 -- | Get the Graph from a PythonEnvironment
-pythonEnvironmentGetGraph :: TTermDefinition (PyHelpers.PythonEnvironment -> Graph)
+pythonEnvironmentGetGraph :: TypedTermDefinition (PyHelpers.PythonEnvironment -> Graph)
 pythonEnvironmentGetGraph = def "pythonEnvironmentGetGraph" $
   doc "Get the Graph from a PythonEnvironment" $
   lambda "env" $ project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_graph @@ var "env"
 
 -- | Set the Graph in a PythonEnvironment
-pythonEnvironmentSetGraph :: TTermDefinition (Graph -> PyHelpers.PythonEnvironment -> PyHelpers.PythonEnvironment)
+pythonEnvironmentSetGraph :: TypedTermDefinition (Graph -> PyHelpers.PythonEnvironment -> PyHelpers.PythonEnvironment)
 pythonEnvironmentSetGraph = def "pythonEnvironmentSetGraph" $
   doc "Set the Graph in a PythonEnvironment" $
   "tc" ~> "env" ~>
@@ -2924,7 +2924,7 @@ pythonEnvironmentSetGraph = def "pythonEnvironmentSetGraph" $
       PyHelpers._PythonEnvironment_inlineVariables>>: project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_inlineVariables @@ var "env"]
 
 -- | Set the namespaces in metadata
-setMetaNamespaces :: TTermDefinition (Namespaces Py.DottedName -> PyHelpers.PythonModuleMetadata -> PyHelpers.PythonModuleMetadata)
+setMetaNamespaces :: TypedTermDefinition (ModuleNames Py.DottedName -> PyHelpers.PythonModuleMetadata -> PyHelpers.PythonModuleMetadata)
 setMetaNamespaces = def "setMetaNamespaces" $
   "ns" ~> "m" ~>
     record PyHelpers._PythonModuleMetadata [
@@ -2975,7 +2975,7 @@ setMetaNamespaces = def "setMetaNamespaces" $
         project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesTypeVar @@ var "m"]
 
 -- | Set the type variables in metadata
-setMetaTypeVariables :: TTermDefinition (PyHelpers.PythonModuleMetadata -> S.Set Name -> PyHelpers.PythonModuleMetadata)
+setMetaTypeVariables :: TypedTermDefinition (PyHelpers.PythonModuleMetadata -> S.Set Name -> PyHelpers.PythonModuleMetadata)
 setMetaTypeVariables = def "setMetaTypeVariables" $
   "m" ~> "tvars" ~>
     record PyHelpers._PythonModuleMetadata [
@@ -3027,7 +3027,7 @@ setMetaTypeVariables = def "setMetaTypeVariables" $
 
 -- | Check if a name is a type variable (unqualified - no dots)
 
-setMetaUsesAnnotated :: TTermDefinition (PyHelpers.PythonModuleMetadata -> Bool -> PyHelpers.PythonModuleMetadata)
+setMetaUsesAnnotated :: TypedTermDefinition (PyHelpers.PythonModuleMetadata -> Bool -> PyHelpers.PythonModuleMetadata)
 setMetaUsesAnnotated = def "setMetaUsesAnnotated" $
   "m" ~> "b" ~>
     record PyHelpers._PythonModuleMetadata [
@@ -3077,7 +3077,7 @@ setMetaUsesAnnotated = def "setMetaUsesAnnotated" $
       PyHelpers._PythonModuleMetadata_usesTypeVar>>:
         project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesTypeVar @@ var "m"]
 
-setMetaUsesCallable :: TTermDefinition (PyHelpers.PythonModuleMetadata -> Bool -> PyHelpers.PythonModuleMetadata)
+setMetaUsesCallable :: TypedTermDefinition (PyHelpers.PythonModuleMetadata -> Bool -> PyHelpers.PythonModuleMetadata)
 setMetaUsesCallable = def "setMetaUsesCallable" $
   "m" ~> "b" ~>
     record PyHelpers._PythonModuleMetadata [
@@ -3128,7 +3128,7 @@ setMetaUsesCallable = def "setMetaUsesCallable" $
         project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesTypeVar @@ var "m"]
 
 -- | Set usesCast flag in metadata - used when generating cast() expressions for union types
-setMetaUsesCast :: TTermDefinition (Bool -> PyHelpers.PythonModuleMetadata -> PyHelpers.PythonModuleMetadata)
+setMetaUsesCast :: TypedTermDefinition (Bool -> PyHelpers.PythonModuleMetadata -> PyHelpers.PythonModuleMetadata)
 setMetaUsesCast = def "setMetaUsesCast" $
   "b" ~> "m" ~>
     record PyHelpers._PythonModuleMetadata [
@@ -3180,7 +3180,7 @@ setMetaUsesCast = def "setMetaUsesCast" $
 
 -- | Set usesLruCache flag in metadata - used when generating @lru_cache(1) for thunks
 
-setMetaUsesDataclass :: TTermDefinition (PyHelpers.PythonModuleMetadata -> Bool -> PyHelpers.PythonModuleMetadata)
+setMetaUsesDataclass :: TypedTermDefinition (PyHelpers.PythonModuleMetadata -> Bool -> PyHelpers.PythonModuleMetadata)
 setMetaUsesDataclass = def "setMetaUsesDataclass" $
   "m" ~> "b" ~>
     record PyHelpers._PythonModuleMetadata [
@@ -3232,7 +3232,7 @@ setMetaUsesDataclass = def "setMetaUsesDataclass" $
 
 -- | Set the type variables in metadata
 
-setMetaUsesDecimal :: TTermDefinition (PyHelpers.PythonModuleMetadata -> Bool -> PyHelpers.PythonModuleMetadata)
+setMetaUsesDecimal :: TypedTermDefinition (PyHelpers.PythonModuleMetadata -> Bool -> PyHelpers.PythonModuleMetadata)
 setMetaUsesDecimal = def "setMetaUsesDecimal" $
   "m" ~> "b" ~>
     record PyHelpers._PythonModuleMetadata [
@@ -3282,7 +3282,7 @@ setMetaUsesDecimal = def "setMetaUsesDecimal" $
       PyHelpers._PythonModuleMetadata_usesTypeVar>>:
         project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesTypeVar @@ var "m"]
 
-setMetaUsesEither :: TTermDefinition (PyHelpers.PythonModuleMetadata -> Bool -> PyHelpers.PythonModuleMetadata)
+setMetaUsesEither :: TypedTermDefinition (PyHelpers.PythonModuleMetadata -> Bool -> PyHelpers.PythonModuleMetadata)
 setMetaUsesEither = def "setMetaUsesEither" $
   "m" ~> "b" ~>
     record PyHelpers._PythonModuleMetadata [
@@ -3332,7 +3332,7 @@ setMetaUsesEither = def "setMetaUsesEither" $
       PyHelpers._PythonModuleMetadata_usesTypeVar>>:
         project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesTypeVar @@ var "m"]
 
-setMetaUsesEnum :: TTermDefinition (PyHelpers.PythonModuleMetadata -> Bool -> PyHelpers.PythonModuleMetadata)
+setMetaUsesEnum :: TypedTermDefinition (PyHelpers.PythonModuleMetadata -> Bool -> PyHelpers.PythonModuleMetadata)
 setMetaUsesEnum = def "setMetaUsesEnum" $
   "m" ~> "b" ~>
     record PyHelpers._PythonModuleMetadata [
@@ -3384,7 +3384,7 @@ setMetaUsesEnum = def "setMetaUsesEnum" $
 
 -- | Recursively dig through forall types to find wrap types.
 
-setMetaUsesFrozenDict :: TTermDefinition (PyHelpers.PythonModuleMetadata -> Bool -> PyHelpers.PythonModuleMetadata)
+setMetaUsesFrozenDict :: TypedTermDefinition (PyHelpers.PythonModuleMetadata -> Bool -> PyHelpers.PythonModuleMetadata)
 setMetaUsesFrozenDict = def "setMetaUsesFrozenDict" $
   "m" ~> "b" ~>
     record PyHelpers._PythonModuleMetadata [
@@ -3434,7 +3434,7 @@ setMetaUsesFrozenDict = def "setMetaUsesFrozenDict" $
       PyHelpers._PythonModuleMetadata_usesTypeVar>>:
         project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesTypeVar @@ var "m"]
 
-setMetaUsesFrozenList :: TTermDefinition (PyHelpers.PythonModuleMetadata -> Bool -> PyHelpers.PythonModuleMetadata)
+setMetaUsesFrozenList :: TypedTermDefinition (PyHelpers.PythonModuleMetadata -> Bool -> PyHelpers.PythonModuleMetadata)
 setMetaUsesFrozenList = def "setMetaUsesFrozenList" $
   "m" ~> "b" ~>
     record PyHelpers._PythonModuleMetadata [
@@ -3484,7 +3484,7 @@ setMetaUsesFrozenList = def "setMetaUsesFrozenList" $
       PyHelpers._PythonModuleMetadata_usesTypeVar>>:
         project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesTypeVar @@ var "m"]
 
-setMetaUsesFrozenSet :: TTermDefinition (PyHelpers.PythonModuleMetadata -> Bool -> PyHelpers.PythonModuleMetadata)
+setMetaUsesFrozenSet :: TypedTermDefinition (PyHelpers.PythonModuleMetadata -> Bool -> PyHelpers.PythonModuleMetadata)
 setMetaUsesFrozenSet = def "setMetaUsesFrozenSet" $
   "m" ~> "b" ~>
     record PyHelpers._PythonModuleMetadata [
@@ -3534,7 +3534,7 @@ setMetaUsesFrozenSet = def "setMetaUsesFrozenSet" $
       PyHelpers._PythonModuleMetadata_usesTypeVar>>:
         project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesTypeVar @@ var "m"]
 
-setMetaUsesGeneric :: TTermDefinition (PyHelpers.PythonModuleMetadata -> Bool -> PyHelpers.PythonModuleMetadata)
+setMetaUsesGeneric :: TypedTermDefinition (PyHelpers.PythonModuleMetadata -> Bool -> PyHelpers.PythonModuleMetadata)
 setMetaUsesGeneric = def "setMetaUsesGeneric" $
   "m" ~> "b" ~>
     record PyHelpers._PythonModuleMetadata [
@@ -3584,7 +3584,7 @@ setMetaUsesGeneric = def "setMetaUsesGeneric" $
       PyHelpers._PythonModuleMetadata_usesTypeVar>>:
         project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesTypeVar @@ var "m"]
 
-setMetaUsesJust :: TTermDefinition (PyHelpers.PythonModuleMetadata -> Bool -> PyHelpers.PythonModuleMetadata)
+setMetaUsesJust :: TypedTermDefinition (PyHelpers.PythonModuleMetadata -> Bool -> PyHelpers.PythonModuleMetadata)
 setMetaUsesJust = def "setMetaUsesJust" $
   "m" ~> "b" ~>
     record PyHelpers._PythonModuleMetadata [
@@ -3634,7 +3634,7 @@ setMetaUsesJust = def "setMetaUsesJust" $
       PyHelpers._PythonModuleMetadata_usesTypeVar>>:
         project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesTypeVar @@ var "m"]
 
-setMetaUsesLeft :: TTermDefinition (PyHelpers.PythonModuleMetadata -> Bool -> PyHelpers.PythonModuleMetadata)
+setMetaUsesLeft :: TypedTermDefinition (PyHelpers.PythonModuleMetadata -> Bool -> PyHelpers.PythonModuleMetadata)
 setMetaUsesLeft = def "setMetaUsesLeft" $
   "m" ~> "b" ~>
     record PyHelpers._PythonModuleMetadata [
@@ -3685,7 +3685,7 @@ setMetaUsesLeft = def "setMetaUsesLeft" $
         project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesTypeVar @@ var "m"]
 
 -- | Set usesLruCache flag in metadata - used when generating @lru_cache(1) for thunks
-setMetaUsesLruCache :: TTermDefinition (Bool -> PyHelpers.PythonModuleMetadata -> PyHelpers.PythonModuleMetadata)
+setMetaUsesLruCache :: TypedTermDefinition (Bool -> PyHelpers.PythonModuleMetadata -> PyHelpers.PythonModuleMetadata)
 setMetaUsesLruCache = def "setMetaUsesLruCache" $
   "b" ~> "m" ~>
     record PyHelpers._PythonModuleMetadata [
@@ -3735,7 +3735,7 @@ setMetaUsesLruCache = def "setMetaUsesLruCache" $
       PyHelpers._PythonModuleMetadata_usesTypeVar>>:
         project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesTypeVar @@ var "m"]
 
-setMetaUsesMaybe :: TTermDefinition (PyHelpers.PythonModuleMetadata -> Bool -> PyHelpers.PythonModuleMetadata)
+setMetaUsesMaybe :: TypedTermDefinition (PyHelpers.PythonModuleMetadata -> Bool -> PyHelpers.PythonModuleMetadata)
 setMetaUsesMaybe = def "setMetaUsesMaybe" $
   "m" ~> "b" ~>
     record PyHelpers._PythonModuleMetadata [
@@ -3786,7 +3786,7 @@ setMetaUsesMaybe = def "setMetaUsesMaybe" $
         project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesTypeVar @@ var "m"]
 
 -- | Set usesName in metadata
-setMetaUsesName :: TTermDefinition (PyHelpers.PythonModuleMetadata -> Bool -> PyHelpers.PythonModuleMetadata)
+setMetaUsesName :: TypedTermDefinition (PyHelpers.PythonModuleMetadata -> Bool -> PyHelpers.PythonModuleMetadata)
 setMetaUsesName = def "setMetaUsesName" $
   "m" ~> "b" ~>
     record PyHelpers._PythonModuleMetadata [
@@ -3838,7 +3838,7 @@ setMetaUsesName = def "setMetaUsesName" $
 
 -- | Set usesTypeVar in metadata
 
-setMetaUsesNode :: TTermDefinition (PyHelpers.PythonModuleMetadata -> Bool -> PyHelpers.PythonModuleMetadata)
+setMetaUsesNode :: TypedTermDefinition (PyHelpers.PythonModuleMetadata -> Bool -> PyHelpers.PythonModuleMetadata)
 setMetaUsesNode = def "setMetaUsesNode" $
   "m" ~> "b" ~>
     record PyHelpers._PythonModuleMetadata [
@@ -3888,7 +3888,7 @@ setMetaUsesNode = def "setMetaUsesNode" $
       PyHelpers._PythonModuleMetadata_usesTypeVar>>:
         project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesTypeVar @@ var "m"]
 
-setMetaUsesNothing :: TTermDefinition (PyHelpers.PythonModuleMetadata -> Bool -> PyHelpers.PythonModuleMetadata)
+setMetaUsesNothing :: TypedTermDefinition (PyHelpers.PythonModuleMetadata -> Bool -> PyHelpers.PythonModuleMetadata)
 setMetaUsesNothing = def "setMetaUsesNothing" $
   "m" ~> "b" ~>
     record PyHelpers._PythonModuleMetadata [
@@ -3938,7 +3938,7 @@ setMetaUsesNothing = def "setMetaUsesNothing" $
       PyHelpers._PythonModuleMetadata_usesTypeVar>>:
         project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesTypeVar @@ var "m"]
 
-setMetaUsesRight :: TTermDefinition (PyHelpers.PythonModuleMetadata -> Bool -> PyHelpers.PythonModuleMetadata)
+setMetaUsesRight :: TypedTermDefinition (PyHelpers.PythonModuleMetadata -> Bool -> PyHelpers.PythonModuleMetadata)
 setMetaUsesRight = def "setMetaUsesRight" $
   "m" ~> "b" ~>
     record PyHelpers._PythonModuleMetadata [
@@ -3989,7 +3989,7 @@ setMetaUsesRight = def "setMetaUsesRight" $
         project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesTypeVar @@ var "m"]
 
 -- | Set the usesTypeAlias flag in metadata
-setMetaUsesTypeAlias :: TTermDefinition (PyHelpers.PythonModuleMetadata -> Bool -> PyHelpers.PythonModuleMetadata)
+setMetaUsesTypeAlias :: TypedTermDefinition (PyHelpers.PythonModuleMetadata -> Bool -> PyHelpers.PythonModuleMetadata)
 setMetaUsesTypeAlias = def "setMetaUsesTypeAlias" $
   "m" ~> "b" ~>
     record PyHelpers._PythonModuleMetadata [
@@ -4040,7 +4040,7 @@ setMetaUsesTypeAlias = def "setMetaUsesTypeAlias" $
         project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesTypeVar @@ var "m"]
 
 -- | Set usesTypeVar in metadata
-setMetaUsesTypeVar :: TTermDefinition (PyHelpers.PythonModuleMetadata -> Bool -> PyHelpers.PythonModuleMetadata)
+setMetaUsesTypeVar :: TypedTermDefinition (PyHelpers.PythonModuleMetadata -> Bool -> PyHelpers.PythonModuleMetadata)
 setMetaUsesTypeVar = def "setMetaUsesTypeVar" $
   "m" ~> "b" ~>
     record PyHelpers._PythonModuleMetadata [
@@ -4092,7 +4092,7 @@ setMetaUsesTypeVar = def "setMetaUsesTypeVar" $
 
 -- | Create an initial empty metadata record with given namespaces
 
-shouldThunkBinding :: TTermDefinition (Graph -> Binding -> Bool)
+shouldThunkBinding :: TypedTermDefinition (Graph -> Binding -> Bool)
 shouldThunkBinding = def "shouldThunkBinding" $
   doc "Determine if a binding should be thunked based on its complexity and triviality" $
   "g" ~> "b" ~>
@@ -4101,13 +4101,13 @@ shouldThunkBinding = def "shouldThunkBinding" $
     (Logic.not (Predicates.isTrivialTerm @@ (Core.bindingTerm $ var "b")))
 
 -- | Generate a single "from X import Y, Z" standard import statement
-standardImportStatement :: TTermDefinition (String -> [String] -> Py.ImportStatement)
+standardImportStatement :: TypedTermDefinition (String -> [String] -> Py.ImportStatement)
 standardImportStatement = def "standardImportStatement" $
   doc "Generate a single from-import statement" $
   "modName" ~> "symbols" ~>
     inject Py._ImportStatement Py._ImportStatement_from
       (record Py._ImportFrom [
-        Py._ImportFrom_prefixes>>: list ([] :: [TTerm Py.RelativeImportPrefix]),
+        Py._ImportFrom_prefixes>>: list ([] :: [TypedTerm Py.RelativeImportPrefix]),
         Py._ImportFrom_dottedName>>: just (wrap Py._DottedName $ list [PyDsl.name $ var "modName"]),
         Py._ImportFrom_targets>>:
           inject Py._ImportFromTargets Py._ImportFromTargets_simple
@@ -4118,7 +4118,7 @@ standardImportStatement = def "standardImportStatement" $
               (var "symbols"))])
 
 -- | The target Python version for code generation (from Utils)
-targetPythonVersion :: TTermDefinition PyHelpers.PythonVersion
+targetPythonVersion :: TypedTermDefinition PyHelpers.PythonVersion
 targetPythonVersion = def "targetPythonVersion" $
   doc "The target Python version for code generation" $
   PyUtils.targetPythonVersion
@@ -4126,7 +4126,7 @@ targetPythonVersion = def "targetPythonVersion" $
 -- | Calculate the arity of a term, with proper handling of primitives.
 --   Unlike Arity.termArity, this looks up primitive arities from the graph
 --   rather than returning a placeholder value.
-termArityWithPrimitives :: TTermDefinition (Graph -> Term -> Int)
+termArityWithPrimitives :: TypedTermDefinition (Graph -> Term -> Int)
 termArityWithPrimitives = def "termArityWithPrimitives" $
   doc "Calculate term arity with proper primitive handling" $
   "graph" ~> "term" ~>
@@ -4153,7 +4153,7 @@ termArityWithPrimitives = def "termArityWithPrimitives" $
             ("ts" ~> Arity.typeSchemeArity @@ var "ts"))]
 
 -- | Create a TypeVar assignment statement for a type variable name
-tvarStatement :: TTermDefinition (Py.Name -> Py.Statement)
+tvarStatement :: TypedTermDefinition (Py.Name -> Py.Statement)
 tvarStatement = def "tvarStatement" $
   doc "Create a TypeVar assignment statement for a type variable name" $
   "name" ~>
@@ -4164,7 +4164,7 @@ tvarStatement = def "tvarStatement" $
 
 -- | Version-aware type alias statement generation.
 --   Uses PEP 695 syntax for Python 3.12+, or TypeAlias syntax for Python 3.10+.
-typeAliasStatementFor :: TTermDefinition (PyHelpers.PythonEnvironment -> Py.Name -> [Py.TypeParameter] -> Maybe String -> Py.Expression -> Py.Statement)
+typeAliasStatementFor :: TypedTermDefinition (PyHelpers.PythonEnvironment -> Py.Name -> [Py.TypeParameter] -> Maybe String -> Py.Expression -> Py.Statement)
 typeAliasStatementFor = def "typeAliasStatementFor" $
   doc "Version-aware type alias statement generation" $
   "env" ~> "name" ~> "tparams" ~> "mcomment" ~> "tyexpr" ~>
@@ -4175,7 +4175,7 @@ typeAliasStatementFor = def "typeAliasStatementFor" $
 -- | Version-aware union type statement generation.
 --   Uses PEP 695 type alias syntax for Python 3.12+.
 --   For Python 3.10, generates a metaclass-based class that is subscriptable at runtime.
-unionTypeStatementsFor :: TTermDefinition (PyHelpers.PythonEnvironment -> Py.Name -> [Py.TypeParameter] -> Maybe String -> Py.Expression -> [Py.Statement] -> [Py.Statement])
+unionTypeStatementsFor :: TypedTermDefinition (PyHelpers.PythonEnvironment -> Py.Name -> [Py.TypeParameter] -> Maybe String -> Py.Expression -> [Py.Statement] -> [Py.Statement])
 unionTypeStatementsFor = def "unionTypeStatementsFor" $
   doc "Version-aware union type statement generation" $
   "env" ~> "name" ~> "tparams" ~> "mcomment" ~> "tyexpr" ~> "extraStmts" ~>
@@ -4188,7 +4188,7 @@ unionTypeStatementsFor = def "unionTypeStatementsFor" $
 
 -- | Create an expression that calls hydra.dsl.python.unsupported(message) at runtime.
 -- This is used for features that cannot be directly translated to Python.
-unsupportedExpression :: TTermDefinition (String -> Py.Expression)
+unsupportedExpression :: TypedTermDefinition (String -> Py.Expression)
 unsupportedExpression = def "unsupportedExpression" $
   doc "Create an expression that calls hydra.dsl.python.unsupported(message) at runtime" $
   "msg" ~>
@@ -4204,7 +4204,7 @@ unsupportedExpression = def "unsupportedExpression" $
       list [PyUtils.stringToPyExpression @@ PyDsl.quoteStyleDouble @@ var "msg"]
 
 -- | Legacy constant for backward compatibility
-useInlineTypeParams :: TTermDefinition Bool
+useInlineTypeParams :: TypedTermDefinition Bool
 useInlineTypeParams = def "useInlineTypeParams" $
   doc "Legacy constant for backward compatibility; use useInlineTypeParamsFor in new code" $
   useInlineTypeParamsFor @@ PyUtils.targetPythonVersion
@@ -4212,14 +4212,14 @@ useInlineTypeParams = def "useInlineTypeParams" $
 -- | Version-aware inline type parameters.
 --   Python 3.12+ supports `def foo[T]()` syntax.
 --   Python 3.10 requires `T = TypeVar("T"); def foo()` at module level.
-useInlineTypeParamsFor :: TTermDefinition (PyHelpers.PythonVersion -> Bool)
+useInlineTypeParamsFor :: TypedTermDefinition (PyHelpers.PythonVersion -> Bool)
 useInlineTypeParamsFor = def "useInlineTypeParamsFor" $
   doc "Version-aware inline type parameters" $
   "version" ~>
     Equality.equal (var "version") (inject PyHelpers._PythonVersion PyHelpers._PythonVersion_python312 unit)
 
 -- | Create args for variant (Node[type], Generic[tparams])
-variantArgs :: TTermDefinition (Py.Expression -> [Name] -> Py.Args)
+variantArgs :: TypedTermDefinition (Py.Expression -> [Name] -> Py.Args)
 variantArgs = def "variantArgs" $
   doc "Create args for variant (Node[type], Generic[tparams])" $
   "ptype" ~> "tparams" ~>
@@ -4233,7 +4233,7 @@ variantArgs = def "variantArgs" $
 
 -- | Create a ClosedPattern for a variant, choosing the appropriate pattern type
 --   based on whether the variant is an enum, unit type, or has a value.
-variantClosedPattern :: TTermDefinition (PyHelpers.PythonEnvironment -> Name -> Name -> Py.Name -> [FieldType] -> Bool -> Name -> Bool -> Py.ClosedPattern)
+variantClosedPattern :: TypedTermDefinition (PyHelpers.PythonEnvironment -> Name -> Name -> Py.Name -> [FieldType] -> Bool -> Name -> Bool -> Py.ClosedPattern)
 variantClosedPattern = def "variantClosedPattern" $
   doc "Create a ClosedPattern for a variant based on its characteristics" $
   "env" ~> "typeName" ~> "fieldName" ~> "pyVariantName" ~> "rowType" ~> "isEnum" ~> "varName" ~> "shouldCapture" ~>
@@ -4245,7 +4245,7 @@ variantClosedPattern = def "variantClosedPattern" $
 
 -- | Create a wildcard case block with a given body statement.
 --   This is used for default cases in match statements.
-wildcardCaseBlock :: TTermDefinition (Py.Statement -> Py.CaseBlock)
+wildcardCaseBlock :: TypedTermDefinition (Py.Statement -> Py.CaseBlock)
 wildcardCaseBlock = def "wildcardCaseBlock" $
   doc "Create a wildcard case block with a given body statement" $
   "stmt" ~>
@@ -4255,7 +4255,7 @@ wildcardCaseBlock = def "wildcardCaseBlock" $
       (PyUtils.indentedBlock @@ nothing @@ list [list [var "stmt"]])
 
 -- | Execute a computation with definitions in scope
-withDefinitions :: TTermDefinition (PyHelpers.PythonEnvironment -> [Definition] -> (PyHelpers.PythonEnvironment -> a) -> a)
+withDefinitions :: TypedTermDefinition (PyHelpers.PythonEnvironment -> [Definition] -> (PyHelpers.PythonEnvironment -> a) -> a)
 withDefinitions = def "withDefinitions" $
   doc "Execute a computation with definitions in scope" $
   "env" ~> "defs" ~> "body" ~>
@@ -4267,14 +4267,14 @@ withDefinitions = def "withDefinitions" $
             just $ Core.binding
               (project _TermDefinition _TermDefinition_name @@ var "td")
               (project _TermDefinition _TermDefinition_term @@ var "td")
-              (project _TermDefinition _TermDefinition_typeScheme @@ var "td"),
+              (Maybes.map Scoping.termSignatureToTypeScheme (project _TermDefinition _TermDefinition_signature @@ var "td")),
           _Definition_type>>: constant nothing])
       (var "defs")) $
     "dummyLet" <~ (Core.let_ (var "bindings") (Core.termLiteral $ Core.literalString $ string "dummy")) $
     withLet @@ var "env" @@ var "dummyLet" @@ var "body"
 
 -- | Execute a computation with lambda context (adds lambda parameter to Graph)
-withLambda :: TTermDefinition (PyHelpers.PythonEnvironment -> Lambda -> (PyHelpers.PythonEnvironment -> a) -> a)
+withLambda :: TypedTermDefinition (PyHelpers.PythonEnvironment -> Lambda -> (PyHelpers.PythonEnvironment -> a) -> a)
 withLambda = def "withLambda" $
   doc "Execute a computation with lambda context (adds lambda parameter to Graph)" $
   Environment.withLambdaContext @@
@@ -4282,7 +4282,7 @@ withLambda = def "withLambda" $
     pythonEnvironmentSetGraph
 
 -- | Execute a computation with let context (adds let bindings to Graph with metadata)
-withLet :: TTermDefinition (PyHelpers.PythonEnvironment -> Let -> (PyHelpers.PythonEnvironment -> a) -> a)
+withLet :: TypedTermDefinition (PyHelpers.PythonEnvironment -> Let -> (PyHelpers.PythonEnvironment -> a) -> a)
 withLet = def "withLet" $
   doc "Execute a computation with let context (adds let bindings to Graph)" $
   Environment.withLetContext @@
@@ -4292,13 +4292,13 @@ withLet = def "withLet" $
 
 -- | Execute a computation with inline let context (no metadata, for walrus operators)
 --   Also adds binding names to inlineVariables so encodeVariable knows not to add call syntax.
-withLetInline :: TTermDefinition (PyHelpers.PythonEnvironment -> Let -> (PyHelpers.PythonEnvironment -> a) -> a)
+withLetInline :: TypedTermDefinition (PyHelpers.PythonEnvironment -> Let -> (PyHelpers.PythonEnvironment -> a) -> a)
 withLetInline = def "withLetInline" $
   doc "Execute a computation with inline let context (for walrus operators)" $
   "env" ~> "lt" ~> "body" ~>
     "bindingNames" <~ (Lists.map ("b" ~> Core.bindingName (var "b")) (Core.letBindings $ var "lt")) $
     "inlineVars" <~ (Sets.fromList $ var "bindingNames") $
-    "noMetadata" <~ ("tc" ~> "b" ~> (nothing :: TTerm (Maybe Term))) $
+    "noMetadata" <~ ("tc" ~> "b" ~> (nothing :: TypedTerm (Maybe Term))) $
     Environment.withLetContext @@
       pythonEnvironmentGetGraph @@
       pythonEnvironmentSetGraph @@
@@ -4318,7 +4318,7 @@ withLetInline = def "withLetInline" $
         var "body" @@ var "updatedEnv")
 
 -- | Execute a computation with type lambda context (adds type parameter to Graph)
-withTypeLambda :: TTermDefinition (PyHelpers.PythonEnvironment -> TypeLambda -> (PyHelpers.PythonEnvironment -> a) -> a)
+withTypeLambda :: TypedTermDefinition (PyHelpers.PythonEnvironment -> TypeLambda -> (PyHelpers.PythonEnvironment -> a) -> a)
 withTypeLambda = def "withTypeLambda" $
   doc "Execute a computation with type lambda context" $
   Environment.withTypeLambdaContext @@
@@ -4326,44 +4326,42 @@ withTypeLambda = def "withTypeLambda" $
     pythonEnvironmentSetGraph
 
 -- | Wrap a Python expression in a nullary lambda (thunk) for lazy evaluation
-wrapInNullaryLambda :: TTermDefinition (Py.Expression -> Py.Expression)
+wrapInNullaryLambda :: TypedTermDefinition (Py.Expression -> Py.Expression)
 wrapInNullaryLambda = def "wrapInNullaryLambda" $
   doc "Wrap a Python expression in a nullary lambda (thunk) for lazy evaluation" $
   "expr" ~>
     PyDsl.expressionLambda $ PyDsl.lambda_ PyDsl.lambdaParametersEmpty (var "expr")
 
--- | Wrap specific arguments in nullary lambdas for primitives that require lazy evaluation
-wrapLazyArguments :: TTermDefinition (Name -> [Py.Expression] -> [Py.Expression])
+-- | Look up a primitive by name and return its per-parameter laziness flags
+-- (the isLazy flag of each signature parameter), in order. Empty if the name is
+-- not a registered primitive. The single source of truth for which arguments
+-- must be thunked, replacing the former hard-coded name table (issue #391).
+lazyFlagsForPrimitive :: TypedTermDefinition (Graph -> Name -> [Bool])
+lazyFlagsForPrimitive = def "lazyFlagsForPrimitive" $
+  "g" ~> "name" ~>
+    Maybes.cases (Maps.lookup (var "name") (Graph.graphPrimitives (var "g")))
+      (list ([] :: [TypedTerm Bool]))
+      ("prim" ~>
+        Lists.map ("p" ~> Typing.parameterIsLazy (var "p"))
+          (Typing.termSignatureParameters
+            (Packaging.primitiveDefinitionSignature
+              (Graph.primitiveDefinition (var "prim")))))
+
+-- | Wrap the lazy-flagged arguments of a primitive call in nullary lambdas
+-- (thunks). Which positions are lazy comes from the primitive's isLazy metadata
+-- (issue #391), not a hard-coded name table. A position is wrapped when its flag
+-- is true and the argument is present, so partially-applied calls thunk only the
+-- supplied lazy positions. The Python runtime accepts either a value or a thunk
+-- (callable() check), so unwrapped trailing args remain correct.
+wrapLazyArguments :: TypedTermDefinition (Graph -> Name -> [Py.Expression] -> [Py.Expression])
 wrapLazyArguments = def "wrapLazyArguments" $
-  doc "Wrap specific arguments in nullary lambdas for primitives that require lazy evaluation" $
-  "name" ~> "args" ~> lets [
-    "dummyExpr">: PyUtils.pyNameToPyExpression @@ (PyDsl.name $ string ""),
-    "argAt">: "i" ~> Maybes.fromMaybe (var "dummyExpr") (Lists.maybeAt (var "i") (var "args"))] $
-    Logic.ifElse
-      (Logic.and
-        (Equality.equal (var "name") (Core.name $ string "hydra.lib.logic.ifElse"))
-        (Equality.equal (Lists.length (var "args")) (int32 3)))
-      -- For if_else, wrap arguments 2 and 3 (the then/else branches)
-      (list [
-        var "argAt" @@ int32 0,
-        wrapInNullaryLambda @@ (var "argAt" @@ int32 1),
-        wrapInNullaryLambda @@ (var "argAt" @@ int32 2)])
-      (Logic.ifElse
-        (Logic.and
-          (Equality.equal (var "name") (Core.name $ string "hydra.lib.maybes.cases"))
-          (Equality.equal (Lists.length (var "args")) (int32 3)))
-        -- For cases, wrap argument 2 (the Nothing branch) for lazy evaluation
-        (list [
-          var "argAt" @@ int32 0,
-          wrapInNullaryLambda @@ (var "argAt" @@ int32 1),
-          var "argAt" @@ int32 2])
-        (Logic.ifElse
-          (Logic.and
-            (Logic.or
-              (Equality.equal (var "name") (Core.name $ string "hydra.lib.maybes.maybe"))
-              (Equality.equal (var "name") (Core.name $ string "hydra.lib.maybes.fromMaybe")))
-            (Equality.gte (Lists.length (var "args")) (int32 1)))
-          -- For maybe/fromMaybe, wrap argument 1 (the default value)
-          (Lists.cons (wrapInNullaryLambda @@ (var "argAt" @@ int32 0))
-                      (Lists.drop (int32 1) (var "args")))
-          (var "args")))
+  doc "Wrap lazy-flagged arguments of a primitive call in nullary lambdas, per isLazy metadata" $
+  "g" ~> "name" ~> "args" ~> lets [
+    "lazyFlags">: lazyFlagsForPrimitive @@ var "g" @@ var "name"] $
+    -- Zip args with flags (truncates to the shorter list, so partially-applied
+    -- calls only consider supplied positions), wrapping where the flag is true.
+    Lists.map
+      ("pair" ~> Logic.ifElse (Pairs.second (var "pair"))
+        (wrapInNullaryLambda @@ Pairs.first (var "pair"))
+        (Pairs.first (var "pair")))
+      (Lists.zip (var "args") (var "lazyFlags"))

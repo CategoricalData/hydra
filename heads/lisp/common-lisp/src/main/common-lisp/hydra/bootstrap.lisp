@@ -117,7 +117,7 @@
     (nreverse result)))
 
 (defun namespace-to-path (ns)
-  (funcall (symbol-value 'hydra_codegen_namespace_to_path) ns))
+  (funcall (symbol-value 'hydra_codegen_module_name_to_path) ns))
 
 ;; --- Module loading from JSON ---
 
@@ -200,7 +200,7 @@
                                                  (list :camel nil)
                                                  (list :lower_snake nil)))
                                   (fp (funcall (funcall (funcall
-                                        (symbol-value 'hydra_names_namespace_to_file_path)
+                                        (symbol-value 'hydra_names_module_name_to_file_path)
                                         case-conv)
                                         (subseq ext 1))  ; ".lisp" -> "lisp"
                                         ns-val)))
@@ -214,8 +214,7 @@
 
 (defun generate-sources (coder language flags out-dir universe-mods mods-to-generate)
   (let* ((bs-graph (bootstrap-graph))
-         ;; #368: build proper Context (trace, messages, other), not deleted InContext
-         (cx (funcall 'make-hydra_context_context nil nil nil))
+         (cx (funcall 'make-hydra_typing_inference_context 0 nil))
          (do-infer (first flags))
          (do-expand (second flags))
          (do-hoist-case (third flags))
@@ -336,15 +335,15 @@
                        ;; Filter skip-emit test namespaces (e.g.
                        ;; hydra.test.testEnv): these are type-only stubs whose
                        ;; hand-written per-language counterparts are the
-                       ;; source of truth. Mirrors testSkipEmitNamespaces in
+                       ;; source of truth. Mirrors testSkipEmitModuleNames in
                        ;; Hydra.Sources.Test.All and the equivalent filter in
                        ;; heads/python/.../bootstrap.py.
                        (test-mods-to-emit
                          (remove-if
                            (lambda (m)
-                             (let* ((ns (hydra_packaging_module-namespace m))
+                             (let* ((ns (hydra_packaging_module-name m))
                                     (ns-str (if (stringp ns) ns
-                                                (hydra_packaging_namespace-value ns))))
+                                                (hydra_packaging_module_name-value ns))))
                                (string= ns-str "hydra.test.testEnv")))
                            test-mods))
                        (out-test (format nil "~A/common-lisp-to-~A/src/test/~A"

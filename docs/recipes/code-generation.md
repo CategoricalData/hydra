@@ -10,7 +10,7 @@ A guide to generating source code in target languages from Hydra module definiti
 ## Overview
 
 Hydra modules can be defined in any host language's DSL and generated
-into any target language (Haskell, Java, Python, Scala, Lisp dialects,
+into any target language (Haskell, Java, Python, Scala, TypeScript, Lisp dialects,
 plus schema-only targets like Coq, Rust, GraphQL, etc.).
 There are two source representations for modules:
 
@@ -59,8 +59,8 @@ Generated code is partitioned across per-package `dist/<lang>/<pkg>/`
 trees rather than a single flat `dist/<lang>/` directory. Each package
 (hydra-kernel, hydra-haskell, hydra-java, hydra-python, hydra-scala,
 hydra-lisp, hydra-pg, hydra-rdf, hydra-coq, hydra-typescript, hydra-wasm,
-hydra-ext) owns a range of namespaces, and the generated output for
-those namespaces lands under that package's directory.
+hydra-ext) owns a range of module names, and the generated output for
+those module names lands under that package's directory.
 
 Each package's `package.json` may declare a `targetLanguages` field
 restricting which target languages the package is regenerated to. For
@@ -238,10 +238,10 @@ Both scripts:
    (~3 minutes for full, less for scoped); cold-cache is self-healing.
    See [`claude/pitfalls.md`](../../claude/pitfalls.md) under "Wrapper
    scripts auto-sync; testers don't" for the full convention.
-2. Run the self-host driver (`hydra.JavaSelfHostDemo` /
-   `bin/python-self-host-demo.py`), which loads the kernel universe from
-   `dist/json/hydra-kernel/`, imports/reflects on the package's DSL source
-   modules, infers types, and writes the resulting JSON.
+2. Run the native DSL → JSON driver (`hydra.UpdateJavaJson` via
+   `bin/update-java-json.sh` / `bin/update-python-json.py`), which loads the
+   kernel universe from `dist/json/hydra-kernel/`, imports/reflects on the
+   package's DSL source modules, infers types, and writes the resulting JSON.
 3. Optionally byte-compare the new output to the existing
    `dist/json/hydra-{java,python}/` to verify byte-identical reproduction
    of canonical.
@@ -250,8 +250,8 @@ Use these when you have edited the Java or Python DSL sources and need to
 refresh `dist/json/` from them, or to validate that the host-native sources
 and the legacy Haskell sources still agree.
 
-> See [bin/java-self-host-demo.md](../../bin/java-self-host-demo.md) and
-> [bin/python-self-host-demo.md](../../bin/python-self-host-demo.md) for
+> See [bin/update-java-json.md](../../bin/update-java-json.md) and
+> [bin/update-python-json.md](../../bin/update-python-json.md) for
 > background on how each driver works internally, including the
 > pre-computed type-scheme workaround used for `hydra.java.coder`.
 
@@ -475,6 +475,11 @@ stack exec bootstrap-from-json -- --target java --all-packages \
     --dist-json-root /other/path/dist/json --output /tmp/out
 ```
 
+These reuse the `stack build hydra:exe:bootstrap-from-json` from the
+[Phase 2 generation](#phase-2-batch-generation) section above — `stack exec`
+never rebuilds on its own, so build first if you've changed the generator
+source. The `assemble-all.sh` / `sync-<lang>.sh` scripts handle this for you.
+
 ### Generated files don't compile
 
 Ensure the universe is complete. If generating hydra-ext modules, the
@@ -524,17 +529,17 @@ enabled package), wipe the build-cache subtree (`rm -rf dist/json/build
 dist/json/*/build`) to force downstream regeneration. The whole
 `dist/**/build/` tree is gitignored cache state.
 
-### Renaming a generated namespace leaves orphan files in `dist/`
+### Renaming a generated module name leaves orphan files in `dist/`
 
 Sync writes new generated files but does not delete files that no
-longer correspond to any source. If a DSL module's namespace changes
+longer correspond to any source. If a DSL module's module name changes
 from `hydra.foo.x` to `hydra.bar.x`, the next sync will write
 `dist/json/.../hydra/bar/x.json` and `dist/haskell/.../Hydra/Bar/X.hs`
 but the old `hydra/foo/x.json` and `Hydra/Foo/X.hs` will remain on
 disk and stay tracked in git. The "Checking for new files..." block at
 the end of sync only flags additions, never removals.
 
-After any namespace rename, manually `git rm` the orphaned dist files
+After any module-name rename, manually `git rm` the orphaned dist files
 and verify with `git status` before committing. A regen commit that
 ships both the new and the old files inflates the diff and leaves the
 old modules as "phantom" code that still gets compiled by Stack but is
@@ -543,19 +548,19 @@ never referenced.
 ### Hand-written test adapters that import generated modules
 
 `heads/<lang>/src/test/...` files that import a generated module
-(e.g., `Hydra.Lib.Default.*`) cannot be built by `stack test` until
-the generated modules exist on disk. After renaming the namespace of
+(e.g., `Hydra.Lib.Defaults.*`) cannot be built by `stack test` until
+the generated modules exist on disk. After renaming the module name of
 such a module, the build sequence is:
 
 1. `stack build` -- verifies the library and execs compile against
    the renamed source. The test target is *not* configured at this
    step, so it cannot fail on the missing generated module.
 2. `/sync-haskell` -- regenerates the dist files under the new
-   namespace, then runs `stack test` itself as part of its final
+   module name, then runs `stack test` itself as part of its final
    verification phase.
 
 Running `stack test` between steps 1 and 2 will fail at the test
-adapter with `Could not find module 'Hydra.Lib.Default.X'`. This is
+adapter with `Could not find module 'Hydra.Lib.Defaults.X'`. This is
 expected; defer the test run until after sync.
 
 ## Related documentation

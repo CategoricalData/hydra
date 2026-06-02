@@ -199,5 +199,5 @@
     {"module": "hydra.graph"},
     {"module": "hydra.packaging"},
     {"module": "hydra.typing"}],
-  "description": "Environment types for Java code generation",
+  "metadata": {"comments": [], "description": "Environment types for Java code generation", "seeAlso": []},
   "name": "hydra.java.environment"}

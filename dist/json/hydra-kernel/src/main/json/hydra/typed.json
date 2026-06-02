@@ -1,0 +1,65 @@
+{
+  "definitions": [
+    {
+      "type": {
+        "name": "hydra.typed.TypedBinding",
+        "typeScheme": {
+          "body": {
+            "annotated": {
+              "annotation": [
+                {"key": "description", "value": {"literal": {"string": "An association of a named term (element) with a phantom type"}}}],
+              "body": {
+                "forall": {
+                  "body": {
+                    "record": [
+                      {
+                        "name": "name",
+                        "type": {
+                          "annotated": {
+                            "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the term"}}}],
+                            "body": {"variable": "hydra.core.Name"}}}},
+                      {
+                        "name": "term",
+                        "type": {
+                          "annotated": {
+                            "annotation": [{"key": "description", "value": {"literal": {"string": "The term with its phantom type"}}}],
+                            "body": {"application": {"argument": {"variable": "a"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}}}]},
+                  "parameter": "a"}}}},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.typed.TypedTerm",
+        "typeScheme": {
+          "body": {
+            "annotated": {
+              "annotation": [{"key": "description", "value": {"literal": {"string": "An association of a term with a phantom type"}}}],
+              "body": {"forall": {"body": {"wrap": {"variable": "hydra.core.Term"}}, "parameter": "a"}}}},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.typed.TypedTermDefinition",
+        "typeScheme": {
+          "body": {
+            "annotated": {
+              "annotation": [{"key": "description", "value": {"literal": {"string": "An association of a term definition with a phantom type"}}}],
+              "body": {
+                "forall": {
+                  "body": {
+                    "record": [
+                      {
+                        "name": "name",
+                        "type": {
+                          "annotated": {
+                            "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the term"}}}],
+                            "body": {"variable": "hydra.core.Name"}}}},
+                      {
+                        "name": "term",
+                        "type": {
+                          "annotated": {
+                            "annotation": [{"key": "description", "value": {"literal": {"string": "The term with its phantom type"}}}],
+                            "body": {"application": {"argument": {"variable": "a"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}}}]},
+                  "parameter": "a"}}}},
+          "variables": []}}}],
+  "dependencies": [{"module": "hydra.core"}],
+  "metadata": {"comments": [], "description": "Typed (phantom) wrappers for use with Hydra DSLs", "seeAlso": []},
+  "name": "hydra.typed"}

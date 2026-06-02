@@ -226,5 +226,5 @@
               "body": {"wrap": {"literal": {"string": {}}}}}},
           "variables": []}}}],
   "dependencies": [],
-  "description": "See https://ossf.github.io/osv-schema",
+  "metadata": {"comments": [], "description": "See https://ossf.github.io/osv-schema", "seeAlso": []},
   "name": "hydra.osv.schema"}

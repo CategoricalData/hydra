@@ -92,7 +92,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> ([ShowPaths.ns, Names.ns, Rewriting.ns] L.++ (DotSyntax.ns:kernelTypesModuleNames)),
-            moduleDescription = Just "Functions for converting Hydra terms to Graphviz DOT graphs"}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just "Functions for converting Hydra terms to Graphviz DOT graphs")}
   where
     definitions = [
       toDefinition labelAttr,
@@ -111,14 +111,14 @@ module_ = Module {
       toDefinition toNodeId,
       toDefinition toNodeOrSubgraph]
 
-define :: String -> TTerm a -> TTermDefinition a
+define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModule module_
 
 -- NodeStyle is represented as a string constant, as there is no custom type definition in the target schema.
 -- We use string tags to distinguish styles: "simple", "element", "variable", "primitive"
 
 -- | Create a label attribute equality pair
-labelAttr :: TTermDefinition (String -> Dot.EqualityPair)
+labelAttr :: TypedTermDefinition (String -> Dot.EqualityPair)
 labelAttr = define "labelAttr" $
   doc "Create a DOT label attribute" $
   "lab" ~>
@@ -127,13 +127,13 @@ labelAttr = define "labelAttr" $
       Dot._EqualityPair_right>>: wrap Dot._Id (var "lab")]
 
 -- | Create label attributes with style
-labelAttrs :: TTermDefinition (String -> String -> Dot.AttrList)
+labelAttrs :: TypedTermDefinition (String -> String -> Dot.AttrList)
 labelAttrs = define "labelAttrs" $
   doc "Create DOT label attributes with a node style" $
   "style" ~> "lab" ~> lets [
     "styleAttrs">:
       Logic.ifElse (Equality.equal (var "style") nodeStyleSimple)
-        (list ([] :: [TTerm Dot.EqualityPair]))
+        (list ([] :: [TypedTerm Dot.EqualityPair]))
         (Logic.ifElse (Equality.equal (var "style") nodeStyleElement)
           (list [
             record Dot._EqualityPair [Dot._EqualityPair_left>>: wrap Dot._Id (string "style"), Dot._EqualityPair_right>>: wrap Dot._Id (string "filled")],
@@ -147,34 +147,34 @@ labelAttrs = define "labelAttrs" $
               record Dot._EqualityPair [Dot._EqualityPair_left>>: wrap Dot._Id (string "fillcolor"), Dot._EqualityPair_right>>: wrap Dot._Id (string "linen")]])))]
     $ wrap Dot._AttrList (list [Lists.concat2 (list [labelAttr @@ var "lab"]) (var "styleAttrs")])
 
-nodeStyleElement :: TTermDefinition String
+nodeStyleElement :: TypedTermDefinition String
 nodeStyleElement = define "nodeStyleElement" $
   doc "The 'element' node style" $
   string "element"
 
-nodeStylePrimitive :: TTermDefinition String
+nodeStylePrimitive :: TypedTermDefinition String
 nodeStylePrimitive = define "nodeStylePrimitive" $
   doc "The 'primitive' node style" $
   string "primitive"
 
-nodeStyleSimple :: TTermDefinition String
+nodeStyleSimple :: TypedTermDefinition String
 nodeStyleSimple = define "nodeStyleSimple" $
   doc "The 'simple' node style" $
   string "simple"
 
-nodeStyleVariable :: TTermDefinition String
+nodeStyleVariable :: TypedTermDefinition String
 nodeStyleVariable = define "nodeStyleVariable" $
   doc "The 'variable' node style" $
   string "variable"
 
 -- | Construct the standard namespaces map from the standard libraries
-standardNamespaces :: TTermDefinition (M.Map ModuleName String)
+standardNamespaces :: TypedTermDefinition (M.Map ModuleName String)
 standardNamespaces = define "standardNamespaces" $
   doc "Construct a map from namespace to prefix for all standard libraries" $
   Phantoms.map $ M.fromList [(wrap _ModuleName (string (unModuleName ns_)), string (libraryPrefix lib)) | lib <- standardLibraries, let ns_ = libraryNamespace lib]
 
 -- | Compute the label and style for a term
-termLabel :: TTermDefinition (Bool -> M.Map ModuleName String -> Term -> (String, String))
+termLabel :: TypedTermDefinition (Bool -> M.Map ModuleName String -> Term -> (String, String))
 termLabel = define "termLabel" $
   doc "Compute a label and node style for a term" $
   "compact" ~> "namespaces" ~> "term" ~> lets [
@@ -242,7 +242,7 @@ termLabel = define "termLabel" $
       @@ var "term"
 
 -- | Convert a term to a full DOT graph
-termToDotGraph :: TTermDefinition (Term -> Dot.Graph)
+termToDotGraph :: TypedTermDefinition (Term -> Dot.Graph)
 termToDotGraph = define "termToDotGraph" $
   doc "Convert a term to a full DOT graph" $
   "term" ~>
@@ -253,7 +253,7 @@ termToDotGraph = define "termToDotGraph" $
       Dot._Graph_statements>>: termToDotStmts @@ standardNamespaces @@ var "term"]
 
 -- | Convert a term to full DOT statements with structural detail
-termToDotStmts :: TTermDefinition (M.Map ModuleName String -> Term -> [Dot.Stmt])
+termToDotStmts :: TypedTermDefinition (M.Map ModuleName String -> Term -> [Dot.Stmt])
 termToDotStmts = define "termToDotStmts" $
   doc "Convert a term to full DOT statements showing term structure" $
   "namespaces" ~> "term" ~> lets [
@@ -298,7 +298,7 @@ termToDotStmts = define "termToDotStmts" $
       "edgeAttrs">: "lab" ~>
         wrap Dot._AttrList (list [list [record Dot._EqualityPair [Dot._EqualityPair_left>>: wrap Dot._Id (string "label"), Dot._EqualityPair_right>>: wrap Dot._Id (var "lab")]]]),
       "parentStmt">: Maybes.maybe
-        (list ([] :: [TTerm Dot.Stmt]))
+        (list ([] :: [TypedTerm Dot.Stmt]))
         ("parent" ~> list [var "toAccessorEdgeStmt" @@ var "accessor" @@ var "style" @@ var "parent" @@ var "selfId"])
         (var "mparent"),
       "selfStmts">: Lists.concat (list [var "stmts", list [var "nodeStmt"], var "parentStmt"]),
@@ -366,11 +366,11 @@ termToDotStmts = define "termToDotStmts" $
         @@ var "currentTerm"]
     $ Pairs.first $ var "encode"
         @@ nothing @@ false @@ Maps.empty @@ nothing
-        @@ pair (list ([] :: [TTerm Dot.Stmt])) Sets.empty
+        @@ pair (list ([] :: [TypedTerm Dot.Stmt])) Sets.empty
         @@ pair Paths.subtermStepAnnotatedBody (var "term")
 
 -- | Convert a term to an subterm-style DOT graph
-termToSubtermDotGraph :: TTermDefinition (Term -> Dot.Graph)
+termToSubtermDotGraph :: TypedTermDefinition (Term -> Dot.Graph)
 termToSubtermDotGraph = define "termToSubtermDotGraph" $
   doc "Convert a term to an subterm-style DOT graph" $
   "term" ~>
@@ -381,7 +381,7 @@ termToSubtermDotGraph = define "termToSubtermDotGraph" $
       Dot._Graph_statements>>: termToSubtermDotStmts @@ standardNamespaces @@ var "term"]
 
 -- | Convert a term to subterm-style DOT statements
-termToSubtermDotStmts :: TTermDefinition (M.Map ModuleName String -> Term -> [Dot.Stmt])
+termToSubtermDotStmts :: TypedTermDefinition (M.Map ModuleName String -> Term -> [Dot.Stmt])
 termToSubtermDotStmts = define "termToSubtermDotStmts" $
   doc "Convert a term to subterm-style DOT statements" $
   "namespaces" ~> "term" ~> lets [
@@ -402,7 +402,7 @@ termToSubtermDotStmts = define "termToSubtermDotStmts" $
     $ Lists.concat2 (Lists.map (var "nodeStmt") (var "nodes")) (Lists.map (var "edgeStmt") (var "edges"))
 
 -- | Create an edge statement
-toEdgeStmt :: TTermDefinition (Dot.Id -> Dot.Id -> Maybe Dot.AttrList -> Dot.Stmt)
+toEdgeStmt :: TypedTermDefinition (Dot.Id -> Dot.Id -> Maybe Dot.AttrList -> Dot.Stmt)
 toEdgeStmt = define "toEdgeStmt" $
   doc "Create a DOT edge statement" $
   "i1" ~> "i2" ~> "attrs" ~>
@@ -412,13 +412,13 @@ toEdgeStmt = define "toEdgeStmt" $
       Dot._EdgeStmt_attributes>>: var "attrs"])
 
 -- | Create a node ID from a DOT Id
-toNodeId :: TTermDefinition (Dot.Id -> Dot.NodeId)
+toNodeId :: TypedTermDefinition (Dot.Id -> Dot.NodeId)
 toNodeId = define "toNodeId" $
   doc "Create a DOT NodeId from an Id" $
   "i" ~> record Dot._NodeId [Dot._NodeId_id>>: var "i", Dot._NodeId_port>>: nothing]
 
 -- | Create a NodeOrSubgraph from an Id
-toNodeOrSubgraph :: TTermDefinition (Dot.Id -> Dot.NodeOrSubgraph)
+toNodeOrSubgraph :: TypedTermDefinition (Dot.Id -> Dot.NodeOrSubgraph)
 toNodeOrSubgraph = define "toNodeOrSubgraph" $
   doc "Create a DOT NodeOrSubgraph from an Id" $
   "i" ~> inject Dot._NodeOrSubgraph Dot._NodeOrSubgraph_node (toNodeId @@ var "i")

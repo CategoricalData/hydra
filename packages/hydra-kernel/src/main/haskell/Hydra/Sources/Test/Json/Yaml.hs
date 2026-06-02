@@ -8,7 +8,7 @@ module Hydra.Sources.Test.Json.Yaml where
 
 -- Standard imports for tests
 import Hydra.Kernel
-import           Hydra.Dsl.Bootstrap (unqualifiedDep)
+import           Hydra.Dsl.Bootstrap (unqualifiedDep, descriptionMetadata)
 import Hydra.Dsl.Meta.Testing                 as Testing
 import Hydra.Dsl.Meta.Terms                   as Terms hiding ((@@))
 import Hydra.Sources.Kernel.Types.All
@@ -42,33 +42,23 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = unqualifiedDep <$> ([ModuleName "hydra.json.writer", ModuleName "hydra.json.yaml.encode", ModuleName "hydra.json.yaml.decode"] ++ (ModuleName "hydra.yaml.model" : kernelTypesModuleNames)),
-            moduleDescription = (Just "Round-trip test cases for the JSON<->YAML bridge, focused on decimal precision")}
+            moduleMetadata = descriptionMetadata ((Just "Round-trip test cases for the JSON<->YAML bridge, focused on decimal precision"))}
   where
     definitions = [
         Phantoms.toDefinition allTests]
 
-define :: String -> TTerm a -> TTermDefinition a
+define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModule module_
 
 -- Local alias for polymorphic application
 
-allTests :: TTermDefinition TestGroup
+allTests :: TypedTermDefinition TestGroup
 allTests = define "allTests" $
     Phantoms.doc "Round-trip test cases for the JSON<->YAML decimal bridge" $
     supergroup "JSON<->YAML bridge" [
       decimalBridgeGroup]
 
--- | Round-trip a JSON value through YAML and back, asserting the result prints identically.
--- JSON -> YAML -> JSON must preserve the full decimal value for any JSON number.
-yamlBridgeCase :: String -> TTerm Value -> TTerm TestCaseWithMetadata
-yamlBridgeCase testName jsonValue = universalCase testName
-  (Eithers.either_
-    (Phantoms.lambda "e" $ Phantoms.var "e")
-    (Phantoms.lambda "back" $ JsonWriter.printJson @@ Phantoms.var "back")
-    (JsonYamlDecode.yamlToJson @@ (JsonYamlEncode.jsonToYaml @@ jsonValue)))
-  (JsonWriter.printJson @@ jsonValue)
-
-decimalBridgeGroup :: TTerm TestGroup
+decimalBridgeGroup :: TypedTerm TestGroup
 decimalBridgeGroup = subgroup "decimal round-trip" [
     yamlBridgeCase "zero" (Json.valueNumber $ Phantoms.decimal 0),
     yamlBridgeCase "positive whole" (Json.valueNumber $ Phantoms.decimal 42),
@@ -90,3 +80,13 @@ decimalBridgeGroup = subgroup "decimal round-trip" [
         Json.valueNumber $ Phantoms.decimal 1,
         Json.valueNumber $ Phantoms.decimal (Sci.scientific 1 (-20)),
         Json.valueString $ Phantoms.string "note"])]
+
+-- | Round-trip a JSON value through YAML and back, asserting the result prints identically.
+-- JSON -> YAML -> JSON must preserve the full decimal value for any JSON number.
+yamlBridgeCase :: String -> TypedTerm Value -> TypedTerm TestCaseWithMetadata
+yamlBridgeCase testName jsonValue = universalCase testName
+  (Eithers.either_
+    (Phantoms.lambda "e" $ Phantoms.var "e")
+    (Phantoms.lambda "back" $ JsonWriter.printJson @@ Phantoms.var "back")
+    (JsonYamlDecode.yamlToJson @@ (JsonYamlEncode.jsonToYaml @@ jsonValue)))
+  (JsonWriter.printJson @@ jsonValue)

@@ -29,9 +29,13 @@ defines the core data structures:
 - **`Core.hs`** — the central grammar: `Term`, `Type`, `Literal`, `Function`,
   `Elimination`, plus annotations and type schemes. The most important file in the
   kernel.
-- **`Graph.hs`** — `Graph`, `Element`, `Primitive`, `TypedTerm` — the runtime
-  containers for terms and types.
-- **`Packaging.hs`** — `Module`, `ModuleName`, `Namespace`, module dependencies.
+- **`Graph.hs`** — `Graph`, `Primitive`, `Library`, `TermCoder` — the runtime
+  containers for terms, types, and primitive bindings. Each `Primitive` pairs
+  a universal `PrimitiveDefinition` (from `Packaging.hs`) with a host-specific
+  native implementation.
+- **`Packaging.hs`** — `Package`, `Module`, `Definition`, module/package dependencies, and
+  the `EntityMetadata` documentation/lifecycle types. See the
+  [Packaging wiki page](https://github.com/CategoricalData/hydra/wiki/Packaging) for the model.
 - **`Coders.hs`** — the bidirectional `Coder` framework that every per-language
   coder builds on, plus `Adapter` (which transforms both type and value).
 - **`Errors.hs`** — the unified error taxonomy used across inference, validation,
@@ -61,14 +65,27 @@ defines the algorithms:
 - **`Lexical.hs`**, **`Names.hs`**, **`Scoping.hs`**, **`Variables.hs`** —
   binder hygiene, name generation, scope handling.
 
-### Library modules
+### Library modules — the canonical primitive registry
 
 [`src/main/haskell/Hydra/Sources/Kernel/Lib/`](https://github.com/CategoricalData/hydra/tree/main/packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Lib)
-defines the **standard library** of primitive functions, organized by data type
-(`Chars`, `Equality`, `Flows`, `Lists`, `Literals`, `Logic`, `Maps`, `Math`,
-`Pairs`, `Sets`, `Strings`, ...). Roughly 180 primitives total. See
+is **the** primitive registry: one module per `hydra.lib.<sub>` namespace,
+declaring every primitive in that namespace as a `PrimitiveDefinition`
+(name, description, signature, isPure / isTotal flags, and an optional
+cross-compilable default implementation in Hydra terms).
+
+The 13 namespaces — `Chars`, `Eithers`, `Equality`, `Lists`, `Literals`,
+`Logic`, `Maps`, `Math`, `Maybes`, `Pairs`, `Regex`, `Sets`, `Strings` —
+together declare 241 primitives. See
 [`docs/hydra-lexicon.txt`](https://github.com/CategoricalData/hydra/blob/main/docs/hydra-lexicon.txt)
-for the full signature list.
+for the full signature list, and
+[`docs/recipes/adding-primitives.md`](https://github.com/CategoricalData/hydra/blob/main/docs/recipes/adding-primitives.md)
+for the recipe to add a new one.
+
+Host-side primitive registries — including the Haskell-side
+[`Hydra/Sources/Libraries.hs`](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-kernel/src/main/haskell/Hydra/Sources/Libraries.hs)
+that pairs each primitive name with its native implementation — are
+distinct from this canonical registry: they reference primitives by name
+and provide host-specific implementations.
 
 ## Code organization
 

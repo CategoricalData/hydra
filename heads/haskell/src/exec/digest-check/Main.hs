@@ -17,6 +17,20 @@
 --     Callers use this with an `if !` shell idiom to skip work when
 --     fresh and run the work otherwise.
 --
+--     #393 orphan reconcile: inputs/generator/recorded-outputs can all
+--     match yet the output dir still hold *extra* files not in the
+--     recorded set — e.g. target output left behind when a DSL module is
+--     renamed across namespaces (hydra.eval.lib.* -> hydra.lib.defaults.*).
+--     Such an orphan is output drift, not an input change, so it would
+--     otherwise never trigger the gated regen+prune and would linger
+--     indefinitely. When 'fresh' finds the package is otherwise a hit but
+--     extra files are present, it deletes the orphans in place (the
+--     recorded output set is the authoritative keep-set), refreshes the
+--     output digest, and reports a hit. No coder run is needed: the
+--     recorded files are already correct on disk. This keeps the entire
+--     reconcile inside the freshness gate, so the per-head assemble
+--     callers need no change.
+--
 --   digest-check refresh --inputs <file> --output-dir <dir>
 --                        --output-digest <file>
 --     Recomputes the hash of every regular file under <dir> (recursive),
@@ -27,15 +41,16 @@
 --
 -- All paths are taken as-is (no implicit normalization).
 
+{-# LANGUAGE ScopedTypeVariables #-}
 module Main where
 
 import Hydra.Digest
 import Hydra.Packaging (ModuleName(..))
 
-import Control.Monad (when, forM)
-import Data.List (isPrefixOf)
+import Control.Monad (forM)
 import qualified Data.Map as M
-import System.Directory (doesDirectoryExist, doesFileExist, listDirectory)
+import qualified Data.Set as S
+import System.Directory (doesFileExist)
 import System.Environment (getArgs)
 import System.Exit (exitFailure, exitSuccess)
 import qualified System.FilePath as FP
@@ -58,6 +73,9 @@ usage = unlines
   , ""
   , "  fresh:    exit 0 if cache hit (skip work), exit 1 if miss (do work)."
   , "            Resolves recorded (relative) output paths against <output-dir>."
+  , "            If the package is otherwise a hit but extra (orphan) files"
+  , "            are present in <output-dir>, deletes them, refreshes the"
+  , "            output digest, and reports a hit (#393 reconcile)."
   , "  refresh:  walk <output-dir>, hash every file, write a new"
   , "            <output-digest> with paths stored relative to <output-dir>."
   ]
@@ -179,8 +197,35 @@ doFresh opts = do
       putStrLn $ "  digest-check: output files missing or modified; cache miss"
       exitFailure
     else do
-      putStrLn $ "  digest-check: cache hit; skipping work"
-      exitSuccess
+      -- #393 orphan reconcile. Every recorded file is present and correct,
+      -- and all inputs match — but there may be *extra* files on disk that
+      -- the recorded output set doesn't account for (e.g. a renamed-away
+      -- namespace dir left behind by a cross-namespace module rename). The
+      -- recorded output set is the authoritative keep-set; anything on disk
+      -- not in it is an orphan. Delete orphans in place, then refresh the
+      -- output digest so the next run is a clean hit. No coder run needed.
+      let keepRel = S.fromList
+            [ FP.normalise rel | rel <- M.keys (digestOutputs outputDigest) ]
+          -- The output digest itself often lives inside outputDir; protect
+          -- it from deletion (it's about to be rewritten on reconcile and
+          -- isn't a recorded output).
+          protectRel = S.singleton
+            (FP.normalise (Hydra.Digest.makeRelativeTo outputDir (optOutputDigest opts)))
+      orphans <- Hydra.Digest.reconcileOrphans outputDir keepRel protectRel
+      if null orphans
+        then do
+          putStrLn $ "  digest-check: cache hit; skipping work"
+          exitSuccess
+        else do
+          putStrLn $ "  digest-check: " ++ show (length orphans)
+            ++ " orphan output file(s) present; reconciling (#393)"
+          mapM_ (\p -> putStrLn $ "    - " ++ p) orphans
+          -- Refresh the output digest from the now-clean dir so the orphan
+          -- doesn't reappear in the recorded set and the next 'fresh' is a
+          -- plain hit. Reuses the same recording path as 'refresh'.
+          doRefresh opts
+          putStrLn $ "  digest-check: cache hit after reconcile; skipping work"
+          exitSuccess
 
 doRefresh :: Options -> IO ()
 doRefresh opts = do
@@ -208,7 +253,7 @@ doRefresh opts = do
   -- Exclude the output-digest file itself from the walk: we're about
   -- to overwrite it, and hashing it here would (a) be a self-reference
   -- that changes every run and (b) race with writeDigestV2 below.
-  allFiles <- listFilesRecursive outputDir
+  allFiles <- Hydra.Digest.listFilesRecursive outputDir
   -- Normalize both sides so "dir//digest.json" (double slash from a
   -- pkg_dir with trailing /) compares equal to "dir/digest.json" as
   -- emitted by listFilesRecursive.
@@ -216,7 +261,7 @@ doRefresh opts = do
       files = filter (\fp -> FP.normalise fp /= digestPath) allFiles
   outputs <- fmap M.fromList $ forM files $ \fp -> do
     h <- Hydra.Digest.hashFile fp
-    let rel = makeRelative' outputDir fp
+    let rel = Hydra.Digest.makeRelativeTo outputDir fp
     return (rel, DigestEntry KindTargetFile h)
 
   gen <- generatorStamp
@@ -234,34 +279,3 @@ doRefresh opts = do
     ++ " (" ++ show (M.size inputsAsMap) ++ " inputs, "
     ++ show (M.size outputs) ++ " outputs, "
     ++ show (M.size (Hydra.Digest.ppDeps inputPpd)) ++ " deps)"
-
--- | Recursively list every regular file under a directory.
--- Skips dotfiles and dot-directories.
-listFilesRecursive :: FilePath -> IO [FilePath]
-listFilesRecursive root = do
-  exists <- doesDirectoryExist root
-  if not exists then return [] else go root
-  where
-    go dir = do
-      entries <- listDirectory dir
-      fmap concat $ forM entries $ \e ->
-        if "." `isPrefixOf` e
-          then return []
-          else do
-            let p = dir FP.</> e
-            isDir <- doesDirectoryExist p
-            if isDir
-              then go p
-              else do
-                isFile <- doesFileExist p
-                return (if isFile then [p] else [])
-
--- | Compute 'path' relative to 'base'. If 'path' isn't under 'base',
--- returns 'path' unchanged (callers should guard against that, but the
--- fallback keeps us from producing absolute paths accidentally).
-makeRelative' :: FilePath -> FilePath -> FilePath
-makeRelative' base path =
-  let prefix = if not (null base) && last base == '/' then base else base ++ "/"
-  in if prefix `isPrefixOf` path
-       then drop (length prefix) path
-       else path

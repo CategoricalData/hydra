@@ -22,7 +22,7 @@ import qualified Hydra.Sources.All as All
 import qualified Hydra.Sources.Ext as Ext
 import qualified Hydra.Show.Errors as ShowError
 import qualified Hydra.Json.Model as JsonModel
-import Hydra.Dsl.Bootstrap (bootstrapGraph, unqualifiedDep)
+import Hydra.Dsl.Bootstrap (bootstrapGraph, unqualifiedDep, descriptionMetadata)
 import qualified Hydra.PackageRouting as PackageRouting
 
 import qualified Data.Aeson as A
@@ -61,7 +61,7 @@ loadModuleFromJson :: FilePath -> [Module] -> ModuleName -> IO Module
 loadModuleFromJson distJsonRoot universe ns = do
   let pkg = PackageRouting.namespaceToPackage ns
       pkgDir = distJsonRoot FP.</> pkg FP.</> "src" FP.</> "main" FP.</> "json"
-      filePath = pkgDir FP.</> CodeGeneration.namespaceToPath ns ++ ".json"
+      filePath = pkgDir FP.</> CodeGeneration.moduleNameToPath ns ++ ".json"
   parseResult <- parseJsonFile filePath
   case parseResult of
     Left err -> fail $ "JSON parse error for " ++ unModuleName ns ++ " at " ++ filePath ++ ": " ++ err
@@ -168,7 +168,7 @@ runSubset nsStr defSpec = do
             moduleName = bisectNs,
             moduleDefinitions = cloned,
             moduleDependencies = unqualifiedDep <$> [ns],
-            moduleDescription = Just "Bisection dummy module" }
+            moduleMetadata = descriptionMetadata (Just "Bisection dummy module") }
       putStrLn $ "Universe: " ++ show (length universe) ++ " kept intact; dirty is new hydra.bisect with " ++ show (length picked) ++ " cloned defs:"
       mapM_ (\d -> putStrLn $ "  " ++ defName d ++ " → " ++ cloneName d) picked
       runWithCleanAndDirty universe [syntheticDirty]

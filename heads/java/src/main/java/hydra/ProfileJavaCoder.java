@@ -1,6 +1,6 @@
 package hydra;
 
-import hydra.context.Context;
+import hydra.typing.InferenceContext;
 import hydra.core.Name;
 import hydra.core.Term;
 import hydra.errors.Error_;
@@ -85,25 +85,24 @@ public class ProfileJavaCoder {
                     if (d instanceof Definition.Term) {
                         TermDefinition td = ((Definition.Term) d).value;
                         stripped.add(new Definition.Term(
-                            new TermDefinition(td.name, td.term, Maybe.<hydra.core.TypeScheme>nothing())));
+                            new TermDefinition(td.name, hydra.util.Maybe.nothing(), td.term, Maybe.<hydra.typing.TermSignature>nothing())));
                     } else stripped.add(d);
                 }
-                strippedTarget = new Module(m.description, m.name, m.dependencies, stripped);
+                strippedTarget = new Module(m.name, m.metadata, m.dependencies, stripped);
                 universeStripped.add(strippedTarget);
             } else {
                 universeStripped.add(m);
             }
         }
 
-        Context ctx = new Context(
-            Collections.emptyList(), Collections.emptyList(), Collections.emptyMap());
+        InferenceContext ctx = new InferenceContext(0, new java.util.ArrayList<>());
         Graph bsGraph = Generation.bootstrapGraph();
 
         System.err.println("Profiling prefix sizes ...");
         for (int n : sizes) {
             n = Math.min(n, strippedTarget.definitions.size());
             List<Definition> prefix = new ArrayList<>(strippedTarget.definitions.subList(0, n));
-            Module prefixMod = new Module(strippedTarget.description, strippedTarget.name,
+            Module prefixMod = new Module(strippedTarget.name, strippedTarget.metadata,
                 strippedTarget.dependencies, prefix);
             // Universe = stripped, with target replaced by prefix.
             List<Module> universeForCall = new ArrayList<>();

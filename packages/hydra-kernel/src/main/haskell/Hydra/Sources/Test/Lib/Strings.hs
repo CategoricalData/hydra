@@ -2,7 +2,7 @@ module Hydra.Sources.Test.Lib.Strings where
 
 -- Standard imports for term-encoded tests
 import Hydra.Kernel
-import           Hydra.Dsl.Bootstrap (unqualifiedDep)
+import           Hydra.Dsl.Bootstrap (unqualifiedDep, descriptionMetadata)
 import Hydra.Dsl.Meta.Testing                 as Testing
 import Hydra.Dsl.Meta.Terms                   as Terms
 import Hydra.Sources.Kernel.Types.All
@@ -31,15 +31,15 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = unqualifiedDep <$> ([TestGraph.ns, ModuleName "hydra.reduction", ModuleName "hydra.show.core"] ++ kernelTypesModuleNames),
-            moduleDescription = (Just "Test cases for hydra.lib.strings primitives")}
+            moduleMetadata = descriptionMetadata ((Just "Test cases for hydra.lib.strings primitives"))}
   where
     definitions = [
         Phantoms.toDefinition allTests]
 
-define :: String -> TTerm a -> TTermDefinition a
+define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModule module_
 
-allTests :: TTermDefinition TestGroup
+allTests :: TypedTermDefinition TestGroup
 allTests = define "allTests" $
     Phantoms.doc "Test cases for hydra.lib.strings primitives" $
     supergroup "hydra.lib.strings primitives" [
@@ -58,13 +58,13 @@ allTests = define "allTests" $
       stringsUnlines]
     where
       -- Show functions for evalPair
-      showInt32 :: TTerm (Int -> String)
+      showInt32 :: TypedTerm (Int -> String)
       showInt32 = Phantoms.lambda "n" $ Literals.showInt32 (Phantoms.var "n")
-      showBool :: TTerm (Bool -> String)
+      showBool :: TypedTerm (Bool -> String)
       showBool = Phantoms.lambda "b" $ Literals.showBoolean (Phantoms.var "b")
-      showStringList :: TTerm ([String] -> String)
+      showStringList :: TypedTerm ([String] -> String)
       showStringList = Phantoms.lambda "xs" $ Literals.showString (Strings.intercalate (Phantoms.string ", ") (Phantoms.var "xs"))
-      showIntList :: TTerm ([Int] -> String)
+      showIntList :: TypedTerm ([Int] -> String)
       showIntList = Phantoms.lambda "xs" $ Strings.intercalate (Phantoms.string ", ") (Lists.map (Phantoms.lambda "n" $ Literals.showInt32 (Phantoms.var "n")) (Phantoms.var "xs"))
 
       stringsCat = subgroup "cat" [

@@ -1,5 +1,5 @@
 ---
-description: Run bin/sync-clojure.sh — Clojure-host Clojure sync. One of four Lisp-dialect sync entry points; they share the hydra-lisp coder under the hood.
+description: Run bin/sync-clojure.sh — Clojure-host Clojure sync. One of four Lisp-dialect sync entry points; they share the hydra-lisp coder under the hood. Does NOT run target tests — use /test clojure for that.
 allowed-tools:
   - Bash(bin/sync-clojure.sh*)
   - Read
@@ -14,5 +14,10 @@ allowed-tools:
 bin/sync-clojure.sh
 ```
 
-Generates the Clojure kernel and runs Clojure-side tests via the
-hydra-lisp coder configured for the Clojure dialect.
+Generates the Clojure kernel via the hydra-lisp coder configured for
+the Clojure dialect.
+
+This script does **not** run the Clojure test suite. To validate the
+generated code, run `packages/hydra-lisp/bin/run-tests.sh clojure` or
+do a `/bootstrap clojure`. (Pending #387: `/test clojure` will roll
+sync + tests into one step.)

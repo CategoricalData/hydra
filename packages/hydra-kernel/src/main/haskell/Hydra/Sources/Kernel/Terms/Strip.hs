@@ -70,7 +70,7 @@ import qualified Hydra.Sources.Kernel.Terms.Sorting as Sorting
 ns :: ModuleName
 ns = ModuleName "hydra.strip"
 
-define :: String -> TTerm a -> TTermDefinition a
+define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModuleName ns
 
 module_ :: Module
@@ -78,7 +78,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> ([Rewriting.ns] L.++ kernelTypesModuleNames),
-            moduleDescription = Just ("Annotation and type stripping and normalization")}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just ("Annotation and type stripping and normalization"))}
   where
    definitions = [
      toDefinition deannotateAndDetypeTerm,
@@ -94,7 +94,7 @@ module_ = Module {
      toDefinition removeTypesFromTerm,
      toDefinition stripTypeLambdas]
 
-deannotateAndDetypeTerm :: TTermDefinition (Term -> Term)
+deannotateAndDetypeTerm :: TypedTermDefinition (Term -> Term)
 deannotateAndDetypeTerm = define "deannotateAndDetypeTerm" $
   doc "Strip type annotations from the top levels of a term" $
   "t" ~> cases _Term (var "t")
@@ -103,28 +103,28 @@ deannotateAndDetypeTerm = define "deannotateAndDetypeTerm" $
     _Term_typeApplication>>: "tt" ~> deannotateAndDetypeTerm @@ (Core.typeApplicationTermBody $ var "tt"),
     _Term_typeLambda>>: "ta" ~> deannotateAndDetypeTerm @@ (Core.typeLambdaBody $ var "ta")]
 
-deannotateTerm :: TTermDefinition (Term -> Term)
+deannotateTerm :: TypedTermDefinition (Term -> Term)
 deannotateTerm = define "deannotateTerm" $
   doc "Strip all annotations (including System F type annotations) from the top levels of a term" $
   "t" ~> cases _Term (var "t")
     (Just $ var "t") [
     _Term_annotated>>: "at" ~> deannotateTerm @@ (Core.annotatedTermBody $ var "at")]
 
-deannotateType :: TTermDefinition (Type -> Type)
+deannotateType :: TypedTermDefinition (Type -> Type)
 deannotateType = define "deannotateType" $
   doc "Strip all annotations from a term" $
   "t" ~> cases _Type (var "t")
     (Just $ var "t") [
     _Type_annotated>>: deannotateType <.> (project _AnnotatedType _AnnotatedType_body)]
 
-deannotateTypeParameters :: TTermDefinition (Type -> Type)
+deannotateTypeParameters :: TypedTermDefinition (Type -> Type)
 deannotateTypeParameters = define "deannotateTypeParameters" $
   doc "Strip any top-level type lambdas from a type, extracting the (possibly nested) type body" $
   "t" ~> cases _Type (deannotateType @@ var "t")
     (Just $ var "t") [
     _Type_forall>>: "lt" ~> deannotateTypeParameters @@ (project _ForallType _ForallType_body @@ var "lt")]
 
-deannotateTypeRecursive :: TTermDefinition (Type -> Type)
+deannotateTypeRecursive :: TypedTermDefinition (Type -> Type)
 deannotateTypeRecursive = define "deannotateTypeRecursive" $
   doc "Recursively strip all annotations from a type" $
   "typ" ~>
@@ -135,7 +135,7 @@ deannotateTypeRecursive = define "deannotateTypeRecursive" $
       _Type_annotated>>: "at" ~> Core.annotatedTypeBody $ var "at"]) $
   Rewriting.rewriteType @@ var "strip" @@ var "typ"
 
-deannotateTypeSchemeRecursive :: TTermDefinition (TypeScheme -> TypeScheme)
+deannotateTypeSchemeRecursive :: TypedTermDefinition (TypeScheme -> TypeScheme)
 deannotateTypeSchemeRecursive = define "deannotateTypeSchemeRecursive" $
   doc "Recursively strip all annotations from a type scheme" $
   "ts" ~>
@@ -144,7 +144,7 @@ deannotateTypeSchemeRecursive = define "deannotateTypeSchemeRecursive" $
   "constraints" <~ Core.typeSchemeConstraints (var "ts") $
   Core.typeScheme (var "vars") (deannotateTypeRecursive @@ var "typ") (var "constraints")
 
-detypeTerm :: TTermDefinition (Term -> Term)
+detypeTerm :: TypedTermDefinition (Term -> Term)
 detypeTerm = define "detypeTerm" $
   doc "Strip System F type annotations from the top levels of a term, but leave application-specific annotations intact" $
   "t" ~> cases _Term (var "t")
@@ -156,18 +156,7 @@ detypeTerm = define "detypeTerm" $
     _Term_typeApplication>>: "tt" ~> deannotateAndDetypeTerm @@ (Core.typeApplicationTermBody $ var "tt"),
     _Term_typeLambda>>: "ta" ~> deannotateAndDetypeTerm @@ (Core.typeLambdaBody $ var "ta")]
 
-stripTypeLambdas :: TTermDefinition (Term -> Term)
-stripTypeLambdas = define "stripTypeLambdas" $
-  doc "Strip outer type lambda wrappers from a term, preserving type application wrappers and annotations" $
-  "t" ~> cases _Term (var "t")
-    (Just $ var "t") [
-    _Term_annotated>>: "at" ~>
-       "subj" <~ Core.annotatedTermBody (var "at") $
-       "ann" <~ Core.annotatedTermAnnotation (var "at") $
-       Core.termAnnotated $ Core.annotatedTerm (stripTypeLambdas @@ var "subj") (var "ann"),
-    _Term_typeLambda>>: "ta" ~> stripTypeLambdas @@ (Core.typeLambdaBody $ var "ta")]
-
-removeTermAnnotations :: TTermDefinition (Term -> Term)
+removeTermAnnotations :: TypedTermDefinition (Term -> Term)
 removeTermAnnotations = define "removeTermAnnotations" $
   doc "Recursively remove term annotations, including within subterms" $
   "term" ~>
@@ -178,7 +167,7 @@ removeTermAnnotations = define "removeTermAnnotations" $
       _Term_annotated>>: "at" ~> Core.annotatedTermBody $ var "at"]) $
   Rewriting.rewriteTerm @@ var "remove" @@ var "term"
 
-removeTypeAnnotations :: TTermDefinition (Type -> Type)
+removeTypeAnnotations :: TypedTermDefinition (Type -> Type)
 removeTypeAnnotations = define "removeTypeAnnotations" $
   doc "Recursively remove type annotations, including within subtypes" $
   "typ" ~>
@@ -189,7 +178,26 @@ removeTypeAnnotations = define "removeTypeAnnotations" $
       _Type_annotated>>: "at" ~> Core.annotatedTypeBody $ var "at"]) $
   Rewriting.rewriteType @@ var "remove" @@ var "typ"
 
-removeTypesFromTerm :: TTermDefinition (Term -> Term)
+removeTypeAnnotationsFromTerm :: TypedTermDefinition (Term -> Term)
+removeTypeAnnotationsFromTerm = define "removeTypeAnnotationsFromTerm" $
+  doc "Strip type annotations (TypeLambda, TypeApplication, binding type schemes) from terms while preserving lambda domain types and other annotations" $
+  "term" ~>
+  "strip" <~ ("recurse" ~> "term" ~>
+    "rewritten" <~ var "recurse" @@ var "term" $
+    "stripBinding" <~ ("b" ~> Core.binding
+      (Core.bindingName $ var "b")
+      (Core.bindingTerm $ var "b")
+      nothing) $
+    cases _Term (var "rewritten")
+      (Just $ var "rewritten") [
+      _Term_let>>: "lt" ~> Core.termLet $ Core.let_
+        (Lists.map (var "stripBinding") (Core.letBindings $ var "lt"))
+        (Core.letBody $ var "lt"),
+      _Term_typeApplication>>: "tt" ~> Core.typeApplicationTermBody $ var "tt",
+      _Term_typeLambda>>: "ta" ~> Core.typeLambdaBody $ var "ta"]) $
+  Rewriting.rewriteTerm @@ var "strip" @@ var "term"
+
+removeTypesFromTerm :: TypedTermDefinition (Term -> Term)
 removeTypesFromTerm = define "removeTypesFromTerm" $
   doc "Strip type annotations from terms while preserving other annotations" $
   "term" ~>
@@ -212,21 +220,13 @@ removeTypesFromTerm = define "removeTypesFromTerm" $
       _Term_typeLambda>>: "ta" ~> Core.typeLambdaBody $ var "ta"]) $
   Rewriting.rewriteTerm @@ var "strip" @@ var "term"
 
-removeTypeAnnotationsFromTerm :: TTermDefinition (Term -> Term)
-removeTypeAnnotationsFromTerm = define "removeTypeAnnotationsFromTerm" $
-  doc "Strip type annotations (TypeLambda, TypeApplication, binding type schemes) from terms while preserving lambda domain types and other annotations" $
-  "term" ~>
-  "strip" <~ ("recurse" ~> "term" ~>
-    "rewritten" <~ var "recurse" @@ var "term" $
-    "stripBinding" <~ ("b" ~> Core.binding
-      (Core.bindingName $ var "b")
-      (Core.bindingTerm $ var "b")
-      nothing) $
-    cases _Term (var "rewritten")
-      (Just $ var "rewritten") [
-      _Term_let>>: "lt" ~> Core.termLet $ Core.let_
-        (Lists.map (var "stripBinding") (Core.letBindings $ var "lt"))
-        (Core.letBody $ var "lt"),
-      _Term_typeApplication>>: "tt" ~> Core.typeApplicationTermBody $ var "tt",
-      _Term_typeLambda>>: "ta" ~> Core.typeLambdaBody $ var "ta"]) $
-  Rewriting.rewriteTerm @@ var "strip" @@ var "term"
+stripTypeLambdas :: TypedTermDefinition (Term -> Term)
+stripTypeLambdas = define "stripTypeLambdas" $
+  doc "Strip outer type lambda wrappers from a term, preserving type application wrappers and annotations" $
+  "t" ~> cases _Term (var "t")
+    (Just $ var "t") [
+    _Term_annotated>>: "at" ~>
+       "subj" <~ Core.annotatedTermBody (var "at") $
+       "ann" <~ Core.annotatedTermAnnotation (var "at") $
+       Core.termAnnotated $ Core.annotatedTerm (stripTypeLambdas @@ var "subj") (var "ann"),
+    _Term_typeLambda>>: "ta" ~> stripTypeLambdas @@ (Core.typeLambdaBody $ var "ta")]

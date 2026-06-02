@@ -21,36 +21,12 @@ import qualified Hydra.Sources.Python.Syntax as Syntax
 ns :: ModuleName
 ns = ModuleName "hydra.python.environment"
 
-def :: String -> Type -> Binding
-def = datatype ns
-
-environment :: String -> Type
-environment = typeref ns
-
-syntax :: String -> Type
-syntax = typeref Syntax.ns
-
-core :: String -> Type
-core = typeref Core.ns
-
-graph :: String -> Type
-graph = typeref Graph.ns
-
-modul :: String -> Type
-modul = typeref Module.ns
-
-util :: String -> Type
-util = typeref Util.ns
-
-typing :: String -> Type
-typing = typeref Typing.ns
-
 module_ :: Module
 module_ = Module {
             moduleName = ns,
-            moduleDefinitions = (map toTypeDef definitions),
+            moduleDefinitions = (DefinitionType <$> definitions),
             moduleDependencies = unqualifiedDep <$> [Syntax.ns, Util.ns, Core.ns, Graph.ns, Module.ns, Typing.ns],
-            moduleDescription = Just "Environment types for Python code generation"}
+            moduleMetadata = descriptionMetadata (Just "Environment types for Python code generation")}
   where
     definitions = [
       pythonVersion,
@@ -58,22 +34,41 @@ module_ = Module {
       pythonModuleMetadata,
       pyGraph]
 
--- | Target Python version for code generation.
-pythonVersion :: Binding
-pythonVersion = def "PythonVersion" $
-  doc "Target Python version for code generation" $
-  T.enum [
-    "python310",  -- Python 3.10+ compatible (e.g., for PyPy)
-    "python312"]  -- Python 3.12+ with PEP 695 type alias syntax
+core :: String -> Type
+core = typeref Core.ns
+
+def :: String -> Type -> TypeDefinition
+def = datatype ns
+
+environment :: String -> Type
+environment = typeref ns
+
+graph :: String -> Type
+graph = typeref Graph.ns
+
+modul :: String -> Type
+modul = typeref Module.ns
+
+-- | Combined graph and metadata state for Python code generation.
+pyGraph :: TypeDefinition
+pyGraph = def "PyGraph" $
+  doc "Combined graph and metadata state for Python code generation" $
+  T.record [
+    "graph">:
+      doc "The Hydra graph being processed" $
+      graph "Graph",
+    "metadata">:
+      doc "Accumulated module metadata" $
+      environment "PythonModuleMetadata"]
 
 -- | Environment for Python code generation.
-pythonEnvironment :: Binding
+pythonEnvironment :: TypeDefinition
 pythonEnvironment = def "PythonEnvironment" $
   doc "Environment for Python code generation" $
   T.record [
     "namespaces">:
       doc "ModuleName mapping for imports" $
-      util "Namespaces" @@ syntax "DottedName",
+      util "ModuleNames" @@ syntax "DottedName",
     "boundTypeVariables">:
       doc "Type variables in scope, with their Python names" $
       T.pair (T.list (core "Name")) (T.map (core "Name") (syntax "Name")),
@@ -94,13 +89,13 @@ pythonEnvironment = def "PythonEnvironment" $
       T.set (core "Name")]
 
 -- | Metadata for Python module generation.
-pythonModuleMetadata :: Binding
+pythonModuleMetadata :: TypeDefinition
 pythonModuleMetadata = def "PythonModuleMetadata" $
   doc "Temporary metadata used to create the header section of a Python file" $
   T.record [
     "namespaces">:
       doc "ModuleName mapping for imports" $
-      util "Namespaces" @@ syntax "DottedName",
+      util "ModuleNames" @@ syntax "DottedName",
     "typeVariables">:
       doc "Type variables used in the module" $
       T.set (core "Name"),
@@ -126,14 +121,19 @@ pythonModuleMetadata = def "PythonModuleMetadata" $
     "usesRight">: T.boolean,
     "usesTypeVar">: T.boolean]
 
--- | Combined graph and metadata state for Python code generation.
-pyGraph :: Binding
-pyGraph = def "PyGraph" $
-  doc "Combined graph and metadata state for Python code generation" $
-  T.record [
-    "graph">:
-      doc "The Hydra graph being processed" $
-      graph "Graph",
-    "metadata">:
-      doc "Accumulated module metadata" $
-      environment "PythonModuleMetadata"]
+-- | Target Python version for code generation.
+pythonVersion :: TypeDefinition
+pythonVersion = def "PythonVersion" $
+  doc "Target Python version for code generation" $
+  T.enum [
+    "python310",  -- Python 3.10+ compatible (e.g., for PyPy)
+    "python312"]  -- Python 3.12+ with PEP 695 type alias syntax
+
+syntax :: String -> Type
+syntax = typeref Syntax.ns
+
+typing :: String -> Type
+typing = typeref Typing.ns
+
+util :: String -> Type
+util = typeref Util.ns

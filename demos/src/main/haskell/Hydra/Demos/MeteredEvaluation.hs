@@ -32,12 +32,12 @@ testModule = Module {
                moduleName = testNs,
                moduleDefinitions = definitions,
                moduleDependencies = [] :: [ModuleDependency],
-               moduleDescription = Nothing}
+               moduleMetadata = Nothing}
   where
-    test local tterm = TTermDefinition (unqualifyName $ QualifiedName (Just testNs) local) tterm
+    test local tterm = TypedTermDefinition (unqualifyName $ QualifiedName (Just testNs) local) tterm
     definitions = [
         toDefinition $ test "catStrings" (string "foo" ++ string "bar" ++ string "quux" ++ (Literals.showInt32 $ int32 42)),
-        toDefinition $ test "describeType" $ ShowCore.type_ @@ (TTerm $ EncodeCore.type_ $ Types.list $ Types.int32)]
+        toDefinition $ test "describeType" $ ShowCore.type_ @@ (TypedTerm $ EncodeCore.type_ $ Types.list $ Types.int32)]
 
 demoMeteredEvaluation :: IO ()
 demoMeteredEvaluation = do
@@ -46,7 +46,7 @@ demoMeteredEvaluation = do
       Right reduced -> putStrLn $ "result: " <> show reduced
   where
     graph = modulesToGraph [testModule] [testModule]
-    cx = emptyContext
+    cx = emptyInferenceContext
     result = do
       original <- bindingTerm <$> requireBinding graph (unqualifyName $ QualifiedName (Just testNs) "catStrings")
       reduceTerm cx graph False original

@@ -5,11 +5,13 @@ module Hydra.Dsl.Prims where
 
 import Hydra.Core
 import Hydra.Graph
+import Hydra.Packaging
+import Hydra.Scoping (typeSchemeToTermSignature)
 import Hydra.Util
 import qualified Hydra.Encode.Core as EncodeCore
 import qualified Hydra.Decode.Core as DecodeCore
 import qualified Hydra.Extract.Core as ExtractCore
-import qualified Hydra.Context as Context
+import qualified Hydra.Typing as Typing
 import qualified Hydra.Errors as Error
 import qualified Hydra.Extract.Util as ExtractUtil
 import qualified Hydra.Dsl.Terms as Terms
@@ -26,48 +28,6 @@ import qualified Data.Maybe as Y
 import Hydra.Strip (removeTermAnnotations)
 import Data.String(IsString(..))
 import Data.Either (Either)
-
--- | A helper to create an Error from a string message and context
-otherErr :: Context.Context -> String -> Error.Error
-otherErr _cx msg = Error.ErrorOther (Error.OtherError msg)
-
--- | A type variable specification with optional class constraints
-data TypeVar = TypeVar {
-  typeVarName :: String,
-  typeVarClasses :: [Name]
-}
-
--- | Create an unconstrained type variable
-v :: String -> TypeVar
-v name = TypeVar name []
-
--- | Create a type variable with Ord constraint
-vOrd :: String -> TypeVar
-vOrd name = TypeVar name [Name "ordering"]
-
--- | Create a type variable with Eq constraint
-vEq :: String -> TypeVar
-vEq name = TypeVar name [Name "equality"]
-
--- | Convert a list of TypeVars to the format needed by polyConstrained
--- Filters out variables with no constraints
-typeVarsToConstraints :: [TypeVar] -> [(String, [Name])]
-typeVarsToConstraints = filter (not . L.null . snd) . fmap (\tv -> (typeVarName tv, typeVarClasses tv))
-
--- | Get just the variable names from a list of TypeVars
-typeVarNames :: [TypeVar] -> [String]
-typeVarNames = fmap typeVarName
-
--- | Build a TypeScheme from type variables and a type
--- Uses polyConstrained if there are any constraints, otherwise poly
-buildTypeScheme :: [TypeVar] -> Type -> TypeScheme
-buildTypeScheme vars typ =
-  let constraints = typeVarsToConstraints vars
-  in if L.null constraints
-     then Types.poly (typeVarNames vars) typ
-     else Types.polyConstrained (fmap (\tv -> (typeVarName tv, typeVarClasses tv)) vars) typ
-
-instance IsString (TermCoder Term) where fromString = variable
 
 bigint :: TermCoder Integer
 bigint = TermCoder Types.bigint encode decode
@@ -87,6 +47,17 @@ boolean = TermCoder Types.boolean encode decode
     encode _cx g = ExtractCore.boolean g
     decode _cx = Right . Terms.boolean
 
+-- | Build a TypeScheme from type variables and a type
+-- Uses polyConstrained if there are any constraints, otherwise poly
+buildTypeScheme :: [TypeVar] -> Type -> TypeScheme
+buildTypeScheme vars typ =
+  let constraints = typeVarsToConstraints vars
+  in if L.null constraints
+     then Types.poly (typeVarNames vars) typ
+     else Types.polyConstrained (fmap (\tv -> (typeVarName tv, typeVarClasses tv)) vars) typ
+
+instance IsString (TermCoder Term) where fromString = variable
+
 comparison :: TermCoder Comparison
 comparison = TermCoder (TypeVariable _Comparison) encode decode
   where
@@ -98,6 +69,36 @@ decimal = TermCoder Types.decimal encode decode
   where
     encode _cx g = ExtractCore.decimal g
     decode _cx = Right . Terms.decimal
+
+-- | Synthesize a minimal PrimitiveDefinition from a name and TypeScheme.
+-- Used by the prim0/prim1/prim2/prim3 helpers to bridge the kernel-shape change
+-- before the per-primitive metadata audit (description, isPure/isTotal exceptions,
+-- defaultImplementation) is performed.
+defaultPrimitiveDefinition :: Name -> TypeScheme -> PrimitiveDefinition
+defaultPrimitiveDefinition name typ = PrimitiveDefinition {
+  primitiveDefinitionName = name,
+  primitiveDefinitionSignature = typeSchemeToTermSignature typ,
+  primitiveDefinitionMetadata = Nothing,
+  primitiveDefinitionIsPure = True,
+  primitiveDefinitionIsTotal = True,
+  primitiveDefinitionDefaultImplementation = Nothing}
+
+-- | Mark the value parameters at the given (0-based) positions of a primitive's
+-- signature as lazy. Used at the prim*-based registration sites in
+-- Hydra.Sources.Libraries to record which arguments coders must thunk in hosts
+-- that distinguish strict from lazy evaluation (issue #391). The kernel DSL
+-- sources (Hydra.Sources.Kernel.Lib.*) carry the same flags via lazySig; this
+-- keeps the Haskell-host bootstrapGraph in agreement with the JSON.
+lazyArgs :: [Int] -> Primitive -> Primitive
+lazyArgs idxs p = p { primitiveDefinition = markLazyDef (primitiveDefinition p) }
+  where
+    markLazyDef d = d {
+      primitiveDefinitionSignature = markLazySig (primitiveDefinitionSignature d) }
+    markLazySig s = s {
+      Typing.termSignatureParameters =
+        zipWith markParam [0..] (Typing.termSignatureParameters s) }
+    markParam i param =
+      if i `elem` idxs then param { Typing.parameterIsLazy = True } else param
 
 either_ :: TermCoder x -> TermCoder y -> TermCoder (Prelude.Either x y)
 either_ xCoder yCoder = TermCoder (Types.either_ (termCoderType xCoder) (termCoderType yCoder)) encode decode
@@ -114,6 +115,18 @@ either_ xCoder yCoder = TermCoder (Types.either_ (termCoderType xCoder) (termCod
         yTerm <- termCoderDecode yCoder cx y
         return $ Terms.right yTerm
 
+float32 :: TermCoder Float
+float32 = TermCoder Types.float32 encode decode
+  where
+    encode _cx g = ExtractCore.float32 g
+    decode _cx = Right . Terms.float32
+
+float64 :: TermCoder Double
+float64 = TermCoder Types.float64 encode decode
+  where
+    encode _cx g = ExtractCore.float64 g
+    decode _cx = Right . Terms.float64
+
 floatType :: TermCoder FloatType
 floatType = TermCoder (TypeVariable _FloatType) encode decode
   where
@@ -128,18 +141,6 @@ floatValue = TermCoder (TypeVariable _FloatValue) encode decode
     encode _cx g = ExtractCore.floatValue g
     decode _cx = Right . Terms.float
 
-float32 :: TermCoder Float
-float32 = TermCoder Types.float32 encode decode
-  where
-    encode _cx g = ExtractCore.float32 g
-    decode _cx = Right . Terms.float32
-
-float64 :: TermCoder Double
-float64 = TermCoder Types.float64 encode decode
-  where
-    encode _cx g = ExtractCore.float64 g
-    decode _cx = Right . Terms.float64
-
 function :: TermCoder x -> TermCoder y -> TermCoder (x -> y)
 function dom cod = TermCoder (Types.function (termCoderType dom) (termCoderType cod)) encode decode
   where
@@ -149,7 +150,7 @@ function dom cod = TermCoder (Types.function (termCoderType dom) (termCoderType 
 -- | A TermCoder for function types, using a reducer to bridge term-level functions to native functions.
 --   The reducer is called to evaluate function application at the term level.
 --   Failures in reduction or encoding/decoding will result in a runtime error.
-functionWithReduce :: (Context.Context -> Graph -> Term -> Either Error.Error Term) -> TermCoder x -> TermCoder y -> TermCoder (x -> y)
+functionWithReduce :: (Typing.InferenceContext -> Graph -> Term -> Either Error.Error Term) -> TermCoder x -> TermCoder y -> TermCoder (x -> y)
 functionWithReduce reduce dom cod = TermCoder (Types.function (termCoderType dom) (termCoderType cod)) encode decode
   where
     encode cx g funTerm = Right $ \x ->
@@ -163,26 +164,6 @@ functionWithReduce reduce dom cod = TermCoder (Types.function (termCoderType dom
            Left _ -> error "functionWithReduce: failed to decode result"
            Right v -> v
     decode cx _val = Left $ otherErr cx "cannot decode functions to terms"
-
-integerType :: TermCoder IntegerType
-integerType = TermCoder (TypeVariable _IntegerType) encode decode
-  where
-    encode _cx g term = case DecodeCore.integerType g term of
-      Left err -> Left $ Error.ErrorDecoding err
-      Right v -> Right v
-    decode _cx = Right . EncodeCore.integerType
-
-integerValue :: TermCoder IntegerValue
-integerValue = TermCoder (TypeVariable _IntegerValue) encode decode
-  where
-    encode _cx g = ExtractCore.integerValue g
-    decode _cx = Right . Terms.integer
-
-int8 :: TermCoder Int8
-int8 = TermCoder Types.int8 encode decode
-  where
-    encode _cx g = ExtractCore.int8 g
-    decode _cx = Right . Terms.int8
 
 int16 :: TermCoder Int16
 int16 = TermCoder Types.int16 encode decode
@@ -201,6 +182,26 @@ int64 = TermCoder Types.int64 encode decode
   where
     encode _cx g = ExtractCore.int64 g
     decode _cx = Right . Terms.int64
+
+int8 :: TermCoder Int8
+int8 = TermCoder Types.int8 encode decode
+  where
+    encode _cx g = ExtractCore.int8 g
+    decode _cx = Right . Terms.int8
+
+integerType :: TermCoder IntegerType
+integerType = TermCoder (TypeVariable _IntegerType) encode decode
+  where
+    encode _cx g term = case DecodeCore.integerType g term of
+      Left err -> Left $ Error.ErrorDecoding err
+      Right v -> Right v
+    decode _cx = Right . EncodeCore.integerType
+
+integerValue :: TermCoder IntegerValue
+integerValue = TermCoder (TypeVariable _IntegerValue) encode decode
+  where
+    encode _cx g = ExtractCore.integerValue g
+    decode _cx = Right . Terms.integer
 
 list :: TermCoder x -> TermCoder [x]
 list els = TermCoder (Types.list $ termCoderType els) encode decode
@@ -241,6 +242,16 @@ optional mel = TermCoder (Types.optional $ termCoderType mel) encode decode
       Nothing -> pure Nothing
       Just v -> Just <$> termCoderDecode mel cx v
 
+-- | A helper to create an Error from a string message and context
+otherErr :: Typing.InferenceContext -> String -> Error.Error
+otherErr _cx msg = Error.ErrorOther (Error.OtherError msg)
+
+-- | A type variable specification with optional class constraints
+data TypeVar = TypeVar {
+  typeVarName :: String,
+  typeVarClasses :: [Name]
+}
+
 pair :: TermCoder x -> TermCoder y -> TermCoder (x, y)
 pair xCoder yCoder = TermCoder (Types.pair (termCoderType xCoder) (termCoderType yCoder)) encode decode
   where
@@ -251,13 +262,13 @@ pair xCoder yCoder = TermCoder (Types.pair (termCoderType xCoder) (termCoderType
       return $ Terms.pair xTerm yTerm
 
 prim0 :: Name -> x -> [TypeVar] -> TermCoder x -> Primitive
-prim0 name value vars output = Primitive name typ impl
+prim0 name value vars output = Primitive (defaultPrimitiveDefinition name typ) impl
   where
     typ = buildTypeScheme vars $ termCoderType output
     impl cx _g _args = termCoderDecode output cx value
 
 prim1 :: Name -> (x -> y) -> [TypeVar] -> TermCoder x -> TermCoder y -> Primitive
-prim1 name compute vars input1 output = Primitive name typ impl
+prim1 name compute vars input1 output = Primitive (defaultPrimitiveDefinition name typ) impl
   where
     typ = buildTypeScheme vars $ Types.functionMany [
       termCoderType input1,
@@ -268,7 +279,7 @@ prim1 name compute vars input1 output = Primitive name typ impl
       termCoderDecode output cx $ compute arg1
 
 prim2 :: Name -> (x -> y -> z) -> [TypeVar] -> TermCoder x -> TermCoder y -> TermCoder z -> Primitive
-prim2 name compute vars input1 input2 output = Primitive name typ impl
+prim2 name compute vars input1 input2 output = Primitive (defaultPrimitiveDefinition name typ) impl
   where
     typ = buildTypeScheme vars $ Types.functionMany [
       termCoderType input1,
@@ -281,7 +292,7 @@ prim2 name compute vars input1 input2 output = Primitive name typ impl
       termCoderDecode output cx $ compute arg1 arg2
 
 prim3 :: Name -> (w -> x -> y -> z) -> [TypeVar] -> TermCoder w -> TermCoder x -> TermCoder y -> TermCoder z -> Primitive
-prim3 name compute vars input1 input2 input3 output = Primitive name typ impl
+prim3 name compute vars input1 input2 input3 output = Primitive (defaultPrimitiveDefinition name typ) impl
   where
     typ = buildTypeScheme vars $ Types.functionMany [
       termCoderType input1,
@@ -313,6 +324,15 @@ term = TermCoder (TypeVariable _Term) encode decode
     encode _cx _g = Right
     decode _cx = Right
 
+-- | Get just the variable names from a list of TypeVars
+typeVarNames :: [TypeVar] -> [String]
+typeVarNames = fmap typeVarName
+
+-- | Convert a list of TypeVars to the format needed by polyConstrained
+-- Filters out variables with no constraints
+typeVarsToConstraints :: [TypeVar] -> [(String, [Name])]
+typeVarsToConstraints = filter (not . L.null . snd) . fmap (\tv -> (typeVarName tv, typeVarClasses tv))
+
 type_ :: TermCoder Type
 type_ = TermCoder (TypeVariable _Type) encode decode
   where
@@ -320,12 +340,6 @@ type_ = TermCoder (TypeVariable _Type) encode decode
       Left err -> Left $ Error.ErrorDecoding err
       Right v -> Right v
     decode _cx = Right . EncodeCore.type_
-
-uint8 :: TermCoder Int16
-uint8 = TermCoder Types.uint8 encode decode
-  where
-    encode _cx g = ExtractCore.uint8 g
-    decode _cx = Right . Terms.uint8
 
 uint16 :: TermCoder Int
 uint16 = TermCoder Types.uint16 encode decode
@@ -344,6 +358,24 @@ uint64 = TermCoder Types.uint64 encode decode
   where
     encode _cx g = ExtractCore.uint64 g
     decode _cx = Right . Terms.uint64
+
+uint8 :: TermCoder Int16
+uint8 = TermCoder Types.uint8 encode decode
+  where
+    encode _cx g = ExtractCore.uint8 g
+    decode _cx = Right . Terms.uint8
+
+-- | Create an unconstrained type variable
+v :: String -> TypeVar
+v name = TypeVar name []
+
+-- | Create a type variable with Eq constraint
+vEq :: String -> TypeVar
+vEq name = TypeVar name [Name "equality"]
+
+-- | Create a type variable with Ord constraint
+vOrd :: String -> TypeVar
+vOrd name = TypeVar name [Name "ordering"]
 
 variable :: String -> TermCoder Term
 variable v = TermCoder (Types.var v) encode decode

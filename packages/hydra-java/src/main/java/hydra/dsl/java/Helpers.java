@@ -1,4 +1,5 @@
 package hydra.dsl.java;
+import hydra.Scoping;
 import hydra.core.Name;
 import hydra.core.Term;
 import hydra.core.Type;
@@ -6,10 +7,12 @@ import hydra.core.TypeScheme;
 import hydra.core.TypeVariableMetadata;
 import hydra.dsl.Terms;
 import hydra.dsl.Types;
+import hydra.packaging.EntityMetadata;
 import hydra.packaging.Definition;
 import hydra.packaging.ModuleName;
 import hydra.packaging.TermDefinition;
 import hydra.packaging.TypeDefinition;
+import hydra.typing.TermSignature;
 import hydra.util.Maybe;
 
 import java.util.Collections;
@@ -65,7 +68,7 @@ public final class Helpers {
             Collections.emptyList(),
             typ,
             Maybe.<Map<Name, TypeVariableMetadata>>nothing());
-        return new Definition.Type(new TypeDefinition(fqName, ts));
+        return new Definition.Type(new TypeDefinition(fqName, Maybe.<EntityMetadata>nothing(), ts));
     }
 
     /**
@@ -76,8 +79,9 @@ public final class Helpers {
         Name fqName = new Name(ns.value + "." + localName);
         return new Definition.Term(new TermDefinition(
             fqName,
+            Maybe.<EntityMetadata>nothing(),
             term,
-            Maybe.<TypeScheme>nothing()));
+            Maybe.<TermSignature>nothing()));
     }
 
     /** Build a term Definition with a pre-computed TypeScheme. */
@@ -85,8 +89,9 @@ public final class Helpers {
         Name fqName = new Name(ns.value + "." + localName);
         return new Definition.Term(new TermDefinition(
             fqName,
+            Maybe.<EntityMetadata>nothing(),
             term,
-            Maybe.<TypeScheme>just(ts)));
+            Maybe.<TermSignature>just(Scoping.typeSchemeToTermSignature(ts))));
     }
 
     /** Build a TypeScheme from a variables list and a body type. */

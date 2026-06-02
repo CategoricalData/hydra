@@ -55,7 +55,7 @@ import qualified Data.Maybe              as Y
 ns :: ModuleName
 ns = ModuleName "hydra.lib.defaults.logic"
 
-define :: String -> TTerm a -> TTermDefinition a
+define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModuleName ns
 
 module_ :: Module
@@ -63,7 +63,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> (kernelTypesModuleNames),
-            moduleDescription = Just ("Default term-level implementations of Logic functions for the Hydra interpreter.")}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just ("Default term-level implementations of Logic functions for the Hydra interpreter."))}
   where
     definitions = [
       toDefinition and_,
@@ -72,7 +72,7 @@ module_ = Module {
 
 -- | Interpreter-friendly logical AND.
 -- and a b = ifElse a b false
-and_ :: TTermDefinition (Context -> Graph -> Term -> Term -> Either Error Term)
+and_ :: TypedTermDefinition (InferenceContext -> Graph -> Term -> Term -> Either Error Term)
 and_ = define "and" $
   doc "Interpreter-friendly logical AND." $
   "cx" ~> "g" ~>
@@ -87,7 +87,7 @@ and_ = define "and" $
 
 -- | Interpreter-friendly logical NOT.
 -- not a = ifElse a false true
-not_ :: TTermDefinition (Context -> Graph -> Term -> Either Error Term)
+not_ :: TypedTermDefinition (InferenceContext -> Graph -> Term -> Either Error Term)
 not_ = define "not" $
   doc "Interpreter-friendly logical NOT." $
   "cx" ~> "g" ~>
@@ -102,7 +102,7 @@ not_ = define "not" $
 
 -- | Interpreter-friendly logical OR.
 -- or a b = ifElse a true b
-or_ :: TTermDefinition (Context -> Graph -> Term -> Term -> Either Error Term)
+or_ :: TypedTermDefinition (InferenceContext -> Graph -> Term -> Term -> Either Error Term)
 or_ = define "or" $
   doc "Interpreter-friendly logical OR." $
   "cx" ~> "g" ~>

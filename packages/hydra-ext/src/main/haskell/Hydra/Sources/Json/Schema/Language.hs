@@ -86,11 +86,11 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = [toDefinition jsonSchemaLanguage],
             moduleDependencies = Bootstrap.unqualifiedDep <$> ([Reflect.ns] L.++ KernelTypes.kernelTypesModuleNames),
-            moduleDescription = Just "Language constraints for JSON Schema"}
-define :: String -> TTerm a -> TTermDefinition a
+            moduleMetadata = Bootstrap.descriptionMetadata (Just "Language constraints for JSON Schema")}
+define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModule module_
 
-jsonSchemaLanguage :: TTermDefinition Language
+jsonSchemaLanguage :: TypedTermDefinition Language
 jsonSchemaLanguage = define "jsonSchemaLanguage" $
   doc "Language constraints for JSON Schema" $ lets [
   "literalVariants">: Sets.fromList $ list [

@@ -14,7 +14,7 @@
                     "type": {
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "ModuleName mapping for code generation"}}}],
-                        "body": {"application": {"argument": {"literal": {"string": {}}}, "function": {"variable": "hydra.util.Namespaces"}}}}}},
+                        "body": {"application": {"argument": {"literal": {"string": {}}}, "function": {"variable": "hydra.util.ModuleNames"}}}}}},
                   {
                     "name": "boundTypeVariables",
                     "type": {
@@ -26,5 +26,5 @@
                             "second": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"literal": {"string": {}}}}}}}}}}]}}},
           "variables": []}}}],
   "dependencies": [{"module": "hydra.core"}, {"module": "hydra.packaging"}, {"module": "hydra.util"}],
-  "description": "Type definitions for C++ code generation environment",
+  "metadata": {"comments": [], "description": "Type definitions for C++ code generation environment", "seeAlso": []},
   "name": "hydra.cpp.environment"}

@@ -5,13 +5,12 @@ module Hydra.Sources.Java.Utils where
 
 -- Standard imports for term-level sources outside of the kernel
 import Hydra.Kernel
-import           Hydra.Dsl.Bootstrap (unqualifiedDep)
+import           Hydra.Dsl.Bootstrap (unqualifiedDep, descriptionMetadata)
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Meta.Lib.Strings                as Strings
 import           Hydra.Dsl.Meta.Phantoms                   as Phantoms
 import qualified Hydra.Dsl.Meta.Lib.Eithers                as Eithers
 import qualified Hydra.Dsl.Meta.Lib.Equality               as Equality
-import qualified Hydra.Dsl.Meta.Context                    as Ctx
 import qualified Hydra.Dsl.Errors                      as Error
 import qualified Hydra.Dsl.Meta.Lib.Lists                  as Lists
 import qualified Hydra.Dsl.Meta.Lib.Literals               as Literals
@@ -44,9 +43,6 @@ import qualified Hydra.Sources.Java.Names as JavaNamesSource
 import qualified Hydra.Sources.Java.Serde as JavaSerdeSource
 
 
-def :: String -> TTerm a -> TTermDefinition a
-def = definitionInModule module_
-
 ns :: ModuleName
 ns = ModuleName "hydra.java.utils"
 
@@ -55,7 +51,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = unqualifiedDep <$> ([moduleName JavaLanguageSource.module_, JavaNamesSource.ns, JavaSerdeSource.ns, Formatting.ns, Names.ns, Serialization.ns] L.++ (JavaEnvironmentSource.ns:JavaSyntax.ns:KernelTypes.kernelTypesModuleNames)),
-            moduleDescription = Just "Java utilities for constructing Java syntax trees"}
+            moduleMetadata = descriptionMetadata (Just "Java utilities for constructing Java syntax trees")}
   where
     definitions = [
       toDefinition addExpressions,
@@ -195,7 +191,7 @@ module_ = Module {
       toDefinition visitorTypeVariable]
 
 
-addExpressions :: TTermDefinition ([Java.MultiplicativeExpression] -> Java.AdditiveExpression)
+addExpressions :: TypedTermDefinition ([Java.MultiplicativeExpression] -> Java.AdditiveExpression)
 addExpressions = def "addExpressions" $
   lambda "exprs" $ lets [
     "dummyMult">: JavaDsl.literalToMultiplicativeExpression (JavaDsl.literalInteger (JavaDsl.integerLiteral (bigint 0)))] $
@@ -206,7 +202,7 @@ addExpressions = def "addExpressions" $
       (Lists.drop (int32 1) (var "exprs"))
 
 -- | Add a variable to the in-scope set and return updated aliases
-addInScopeVar :: TTermDefinition (Name -> JavaHelpers.Aliases -> JavaHelpers.Aliases)
+addInScopeVar :: TypedTermDefinition (Name -> JavaHelpers.Aliases -> JavaHelpers.Aliases)
 addInScopeVar = def "addInScopeVar" $
   lambda "name" $ lambda "aliases" $
     record JavaHelpers._Aliases [
@@ -238,14 +234,14 @@ addInScopeVar = def "addInScopeVar" $
         project JavaHelpers._Aliases JavaHelpers._Aliases_thunkedVars @@ var "aliases"]
 
 -- | Add multiple variables to the in-scope set
-addInScopeVars :: TTermDefinition ([Name] -> JavaHelpers.Aliases -> JavaHelpers.Aliases)
+addInScopeVars :: TypedTermDefinition ([Name] -> JavaHelpers.Aliases -> JavaHelpers.Aliases)
 addInScopeVars = def "addInScopeVars" $
   lambda "names" $ lambda "aliases" $
     Lists.foldl (lambda "a" $ lambda "n" $ addInScopeVar @@ var "n" @@ var "a")
       (var "aliases") (var "names")
 
 -- | Add a reference type as a type argument to an existing Java type
-addJavaTypeParameter :: TTermDefinition (Java.ReferenceType -> Java.Type -> Context -> Either Error Java.Type)
+addJavaTypeParameter :: TypedTermDefinition (Java.ReferenceType -> Java.Type -> InferenceContext -> Either Error Java.Type)
 addJavaTypeParameter = def "addJavaTypeParameter" $
   lambda "rt" $ lambda "t" $ "cx" ~>
   cases Java._Type (var "t") Nothing [
@@ -264,16 +260,16 @@ addJavaTypeParameter = def "addJavaTypeParameter" $
                     (JavaDsl.classType (var "anns") (var "qual") (var "id")
                       (Lists.concat2 (var "args") (list [JavaDsl.typeArgumentReference (var "rt")])))))),
             Java._ClassOrInterfaceType_interface>>: constant $
-              Ctx.failInContext (Error.errorOther $ Error.otherError $ string "expected a Java class type") (var "cx")],
+              left (Error.errorOther $ Error.otherError $ string "expected a Java class type")],
         Java._ReferenceType_variable>>: lambda "tv" $
           right (javaTypeVariableToType @@ var "tv"),
         Java._ReferenceType_array>>: constant $
-          Ctx.failInContext (Error.errorOther $ Error.otherError $ string "expected a Java class or interface type, or a variable") (var "cx")],
+          left (Error.errorOther $ Error.otherError $ string "expected a Java class or interface type, or a variable")],
     Java._Type_primitive>>: constant $
-      Ctx.failInContext (Error.errorOther $ Error.otherError $ string "expected a reference type") (var "cx")]
+      left (Error.errorOther $ Error.otherError $ string "expected a reference type")]
 
 -- | Register a variable rename
-addVarRename :: TTermDefinition (Name -> Name -> JavaHelpers.Aliases -> JavaHelpers.Aliases)
+addVarRename :: TypedTermDefinition (Name -> Name -> JavaHelpers.Aliases -> JavaHelpers.Aliases)
 addVarRename = def "addVarRename" $
   lambda "original" $ lambda "renamed" $ lambda "aliases" $
     record JavaHelpers._Aliases [
@@ -305,32 +301,35 @@ addVarRename = def "addVarRename" $
       JavaHelpers._Aliases_thunkedVars>>:
         project JavaHelpers._Aliases JavaHelpers._Aliases_thunkedVars @@ var "aliases"]
 
-fieldExpression :: TTermDefinition (Java.Identifier -> Java.Identifier -> Java.ExpressionName)
+def :: String -> TypedTerm a -> TypedTermDefinition a
+def = definitionInModule module_
+
+fieldExpression :: TypedTermDefinition (Java.Identifier -> Java.Identifier -> Java.ExpressionName)
 fieldExpression = def "fieldExpression" $
   lambda "varId" $ lambda "fieldId" $
     JavaDsl.expressionName (just (JavaDsl.ambiguousName (list [var "varId"]))) (var "fieldId")
 
-fieldNameToJavaExpression :: TTermDefinition (Name -> Java.Expression)
+fieldNameToJavaExpression :: TypedTermDefinition (Name -> Java.Expression)
 fieldNameToJavaExpression = def "fieldNameToJavaExpression" $
   lambda "fname" $ JavaDsl.postfixToExpression
     (JavaDsl.postfixExpressionName
       (javaIdentifierToJavaExpressionName @@ (fieldNameToJavaIdentifier @@ var "fname")))
 
-fieldNameToJavaIdentifier :: TTermDefinition (Name -> Java.Identifier)
+fieldNameToJavaIdentifier :: TypedTermDefinition (Name -> Java.Identifier)
 fieldNameToJavaIdentifier = def "fieldNameToJavaIdentifier" $
   lambda "fname" $ javaIdentifier @@ (Core.unName $ var "fname")
 
-fieldNameToJavaVariableDeclarator :: TTermDefinition (Name -> Java.VariableDeclarator)
+fieldNameToJavaVariableDeclarator :: TypedTermDefinition (Name -> Java.VariableDeclarator)
 fieldNameToJavaVariableDeclarator = def "fieldNameToJavaVariableDeclarator" $
   lambda "fname" $ javaVariableDeclarator @@ (javaIdentifier @@ (Core.unName $ var "fname")) @@ nothing
 
-fieldNameToJavaVariableDeclaratorId :: TTermDefinition (Name -> Java.VariableDeclaratorId)
+fieldNameToJavaVariableDeclaratorId :: TypedTermDefinition (Name -> Java.VariableDeclaratorId)
 fieldNameToJavaVariableDeclaratorId = def "fieldNameToJavaVariableDeclaratorId" $
   lambda "fname" $ javaVariableDeclaratorId @@ (javaIdentifier @@ (Core.unName $ var "fname"))
 
 -- | Like varDeclarationStatement, but with 'final' modifier.
 --   Used in TCO while loops to create effectively-final snapshots of loop variables.
-finalVarDeclarationStatement :: TTermDefinition (Java.Identifier -> Java.Expression -> Java.BlockStatement)
+finalVarDeclarationStatement :: TypedTermDefinition (Java.Identifier -> Java.Expression -> Java.BlockStatement)
 finalVarDeclarationStatement = def "finalVarDeclarationStatement" $
   lambda "id" $ lambda "rhs" $
     JavaDsl.blockStatementLocalVariableDeclaration
@@ -342,25 +341,25 @@ finalVarDeclarationStatement = def "finalVarDeclarationStatement" $
             (just $ JavaDsl.variableInitializerExpression (var "rhs"))])))
 
 -- | Create an initial Aliases for a module with all fields set to empty/default
-importAliasesForModule :: TTermDefinition (Module -> JavaHelpers.Aliases)
+importAliasesForModule :: TypedTermDefinition (Module -> JavaHelpers.Aliases)
 importAliasesForModule = def "importAliasesForModule" $
   lambda "mod" $
     record JavaHelpers._Aliases [
       JavaHelpers._Aliases_currentNamespace>>: Packaging.moduleName (var "mod"),
-      JavaHelpers._Aliases_packages>>: (Maps.empty :: TTerm (M.Map ModuleName Java.PackageName)),
-      JavaHelpers._Aliases_branchVars>>: (Sets.empty :: TTerm (S.Set Name)),
-      JavaHelpers._Aliases_recursiveVars>>: (Sets.empty :: TTerm (S.Set Name)),
-      JavaHelpers._Aliases_inScopeTypeParams>>: (Sets.empty :: TTerm (S.Set Name)),
-      JavaHelpers._Aliases_polymorphicLocals>>: (Sets.empty :: TTerm (S.Set Name)),
-      JavaHelpers._Aliases_inScopeJavaVars>>: (Sets.empty :: TTerm (S.Set Name)),
-      JavaHelpers._Aliases_varRenames>>: (Maps.empty :: TTerm (M.Map Name Name)),
-      JavaHelpers._Aliases_lambdaVars>>: (Sets.empty :: TTerm (S.Set Name)),
-      JavaHelpers._Aliases_typeVarSubst>>: (Maps.empty :: TTerm (M.Map Name Name)),
-      JavaHelpers._Aliases_trustedTypeVars>>: (Sets.empty :: TTerm (S.Set Name)),
-      JavaHelpers._Aliases_methodCodomain>>: (nothing :: TTerm (Maybe Type)),
-      JavaHelpers._Aliases_thunkedVars>>: (Sets.empty :: TTerm (S.Set Name))]
+      JavaHelpers._Aliases_packages>>: (Maps.empty :: TypedTerm (M.Map ModuleName Java.PackageName)),
+      JavaHelpers._Aliases_branchVars>>: (Sets.empty :: TypedTerm (S.Set Name)),
+      JavaHelpers._Aliases_recursiveVars>>: (Sets.empty :: TypedTerm (S.Set Name)),
+      JavaHelpers._Aliases_inScopeTypeParams>>: (Sets.empty :: TypedTerm (S.Set Name)),
+      JavaHelpers._Aliases_polymorphicLocals>>: (Sets.empty :: TypedTerm (S.Set Name)),
+      JavaHelpers._Aliases_inScopeJavaVars>>: (Sets.empty :: TypedTerm (S.Set Name)),
+      JavaHelpers._Aliases_varRenames>>: (Maps.empty :: TypedTerm (M.Map Name Name)),
+      JavaHelpers._Aliases_lambdaVars>>: (Sets.empty :: TypedTerm (S.Set Name)),
+      JavaHelpers._Aliases_typeVarSubst>>: (Maps.empty :: TypedTerm (M.Map Name Name)),
+      JavaHelpers._Aliases_trustedTypeVars>>: (Sets.empty :: TypedTerm (S.Set Name)),
+      JavaHelpers._Aliases_methodCodomain>>: (nothing :: TypedTerm (Maybe Type)),
+      JavaHelpers._Aliases_thunkedVars>>: (Sets.empty :: TypedTerm (S.Set Name))]
 
-interfaceMethodDeclaration :: TTermDefinition ([Java.InterfaceMethodModifier] -> [Java.TypeParameter] -> String
+interfaceMethodDeclaration :: TypedTermDefinition ([Java.InterfaceMethodModifier] -> [Java.TypeParameter] -> String
   -> [Java.FormalParameter] -> Java.Result -> Maybe [Java.BlockStatement] -> Java.InterfaceMemberDeclaration)
 interfaceMethodDeclaration = def "interfaceMethodDeclaration" $
   lambda "mods" $ lambda "tparams" $ lambda "methodName" $ lambda "params" $ lambda "result" $ lambda "stmts" $
@@ -369,20 +368,20 @@ interfaceMethodDeclaration = def "interfaceMethodDeclaration" $
         (javaMethodHeader @@ var "tparams" @@ var "methodName" @@ var "params" @@ var "result")
         (javaMethodBody @@ var "stmts"))
 
-isEscaped :: TTermDefinition (String -> Bool)
+isEscaped :: TypedTermDefinition (String -> Bool)
 isEscaped = def "isEscaped" $
   lambda "s" $ Equality.equal (Maybes.fromMaybe (int32 0) (Strings.maybeCharAt (int32 0) (var "s"))) (int32 36)
 
-javaAdditiveExpressionToJavaExpression :: TTermDefinition (Java.AdditiveExpression -> Java.Expression)
+javaAdditiveExpressionToJavaExpression :: TypedTermDefinition (Java.AdditiveExpression -> Java.Expression)
 javaAdditiveExpressionToJavaExpression = def "javaAdditiveExpressionToJavaExpression" $
   lambda "ae" $ JavaDsl.additiveToExpression (var "ae")
 
 -- | Create an array creation expression for primitive byte arrays with an initializer
-javaArrayCreation :: TTermDefinition (Java.PrimitiveTypeWithAnnotations -> Maybe Java.ArrayInitializer -> Java.Expression)
+javaArrayCreation :: TypedTermDefinition (Java.PrimitiveTypeWithAnnotations -> Maybe Java.ArrayInitializer -> Java.Expression)
 javaArrayCreation = def "javaArrayCreation" $
   lambda "primType" $ lambda "minit" $ lets [
     "init_">: Maybes.cases (var "minit")
-      (JavaDsl.arrayInitializer (list ([] :: [TTerm Java.VariableInitializer])))
+      (JavaDsl.arrayInitializer (list ([] :: [TypedTerm Java.VariableInitializer])))
       (lambda "i" $ var "i")] $
     javaPrimaryToJavaExpression @@
       (JavaDsl.primaryArrayCreation
@@ -391,16 +390,16 @@ javaArrayCreation = def "javaArrayCreation" $
             (record Java._ArrayCreationExpressionWithInitializer_Primitive [
               Java._ArrayCreationExpressionWithInitializer_Primitive_type>>: var "primType",
               Java._ArrayCreationExpressionWithInitializer_Primitive_dims>>:
-                list ([] :: [TTerm Java.Dims]),
+                list ([] :: [TypedTerm Java.Dims]),
               Java._ArrayCreationExpressionWithInitializer_Primitive_array>>: var "init_"]))))
 
 -- | Create an array initializer from a list of expressions
-javaArrayInitializer :: TTermDefinition ([Java.Expression] -> Java.ArrayInitializer)
+javaArrayInitializer :: TypedTermDefinition ([Java.Expression] -> Java.ArrayInitializer)
 javaArrayInitializer = def "javaArrayInitializer" $
   lambda "exprs" $ wrap Java._ArrayInitializer
     (list [Lists.map (lambda "e" $ JavaDsl.variableInitializerExpression (var "e")) (var "exprs")])
 
-javaAssignmentStatement :: TTermDefinition (Java.LeftHandSide -> Java.Expression -> Java.Statement)
+javaAssignmentStatement :: TypedTermDefinition (Java.LeftHandSide -> Java.Expression -> Java.Statement)
 javaAssignmentStatement = def "javaAssignmentStatement" $
   lambda "lhs" $ lambda "rhs" $
     JavaDsl.statementWithoutTrailing
@@ -409,53 +408,53 @@ javaAssignmentStatement = def "javaAssignmentStatement" $
           (JavaDsl.stmtExprAssignment
             (JavaDsl.assignment (var "lhs") JavaDsl.assignmentOperatorSimple (var "rhs")))))
 
-javaBoolean :: TTermDefinition (Bool -> Java.Literal)
+javaBoolean :: TypedTermDefinition (Bool -> Java.Literal)
 javaBoolean = def "javaBoolean" $
   lambda "b" $ JavaDsl.literalBoolean (var "b")
 
-javaBooleanExpression :: TTermDefinition (Bool -> Java.Expression)
+javaBooleanExpression :: TypedTermDefinition (Bool -> Java.Expression)
 javaBooleanExpression = def "javaBooleanExpression" $
   lambda "b" $ javaPrimaryToJavaExpression @@ (javaLiteralToJavaPrimary @@ (javaBoolean @@ var "b"))
 
-javaBooleanType :: TTermDefinition Java.Type
+javaBooleanType :: TypedTermDefinition Java.Type
 javaBooleanType = def "javaBooleanType" $
   javaPrimitiveTypeToJavaType @@ JavaDsl.primitiveTypeBoolean
 
 -- | Java byte primitive type
-javaBytePrimitiveType :: TTermDefinition Java.PrimitiveTypeWithAnnotations
+javaBytePrimitiveType :: TypedTermDefinition Java.PrimitiveTypeWithAnnotations
 javaBytePrimitiveType = def "javaBytePrimitiveType" $
   JavaDsl.primitiveTypeWithAnnotations
     (JavaDsl.primitiveTypeNumeric (JavaDsl.numericTypeIntegral JavaDsl.integralTypeByte))
-    (list ([] :: [TTerm Java.Annotation]))
+    (list ([] :: [TypedTerm Java.Annotation]))
 
-javaCastExpression :: TTermDefinition (Java.ReferenceType -> Java.UnaryExpression -> Java.CastExpression)
+javaCastExpression :: TypedTermDefinition (Java.ReferenceType -> Java.UnaryExpression -> Java.CastExpression)
 javaCastExpression = def "javaCastExpression" $
   lambda "rt" $ lambda "expr" $
     JavaDsl.castExpressionNotPlusMinus
       (JavaDsl.castExpressionNotPlusMinus_
-        (JavaDsl.castExpressionRefAndBounds (var "rt") (list ([] :: [TTerm Java.AdditionalBound])))
+        (JavaDsl.castExpressionRefAndBounds (var "rt") (list ([] :: [TypedTerm Java.AdditionalBound])))
         (var "expr"))
 
-javaCastExpressionToJavaExpression :: TTermDefinition (Java.CastExpression -> Java.Expression)
+javaCastExpressionToJavaExpression :: TypedTermDefinition (Java.CastExpression -> Java.Expression)
 javaCastExpressionToJavaExpression = def "javaCastExpressionToJavaExpression" $
   lambda "ce" $ JavaDsl.castExpressionToExpression (var "ce")
 
-javaCastPrimitive :: TTermDefinition (Java.PrimitiveType -> Java.UnaryExpression -> Java.CastExpression)
+javaCastPrimitive :: TypedTermDefinition (Java.PrimitiveType -> Java.UnaryExpression -> Java.CastExpression)
 javaCastPrimitive = def "javaCastPrimitive" $
   lambda "pt" $ lambda "expr" $
     JavaDsl.castExpressionPrimitive
       (JavaDsl.castExpressionPrimitive_
-        (JavaDsl.primitiveTypeWithAnnotations (var "pt") (list ([] :: [TTerm Java.Annotation])))
+        (JavaDsl.primitiveTypeWithAnnotations (var "pt") (list ([] :: [TypedTerm Java.Annotation])))
         (var "expr"))
 
 -- | Build a Java class declaration with optional superclass
-javaClassDeclaration :: TTermDefinition (JavaHelpers.Aliases -> [Java.TypeParameter] -> Name -> [Java.ClassModifier]
+javaClassDeclaration :: TypedTermDefinition (JavaHelpers.Aliases -> [Java.TypeParameter] -> Name -> [Java.ClassModifier]
   -> Maybe Name -> [Java.InterfaceType] -> [Java.ClassBodyDeclarationWithComments] -> Java.ClassDeclaration)
 javaClassDeclaration = def "javaClassDeclaration" $
   lambda "aliases" $ lambda "tparams" $ lambda "elName" $ lambda "mods" $
     lambda "supname" $ lambda "impls" $ lambda "bodyDecls" $ lets [
     "extends_">: Maybes.map
-      (lambda "n" $ nameToJavaClassType @@ var "aliases" @@ boolean True @@ list ([] :: [TTerm Java.TypeArgument]) @@ var "n" @@ nothing)
+      (lambda "n" $ nameToJavaClassType @@ var "aliases" @@ boolean True @@ list ([] :: [TypedTerm Java.TypeArgument]) @@ var "n" @@ nothing)
       (var "supname")] $
     inject Java._ClassDeclaration Java._ClassDeclaration_normal
       (record Java._NormalClassDeclaration [
@@ -464,10 +463,10 @@ javaClassDeclaration = def "javaClassDeclaration" $
         Java._NormalClassDeclaration_parameters>>: var "tparams",
         Java._NormalClassDeclaration_extends>>: var "extends_",
         Java._NormalClassDeclaration_implements>>: var "impls",
-        Java._NormalClassDeclaration_permits>>: list ([] :: [TTerm Java.TypeName]),
+        Java._NormalClassDeclaration_permits>>: list ([] :: [TypedTerm Java.TypeName]),
         Java._NormalClassDeclaration_body>>: JavaDsl.classBody (var "bodyDecls")])
 
-javaClassType :: TTermDefinition ([Java.ReferenceType] -> Maybe Java.PackageName -> String -> Java.ClassType)
+javaClassType :: TypedTermDefinition ([Java.ReferenceType] -> Maybe Java.PackageName -> String -> Java.ClassType)
 javaClassType = def "javaClassType" $
   lambda "args" $ lambda "pkg" $ lambda "id" $ lets [
     "qual">: Maybes.cases (var "pkg")
@@ -476,20 +475,20 @@ javaClassType = def "javaClassType" $
     "targs">: Lists.map
       (lambda "rt" $ JavaDsl.typeArgumentReference (var "rt"))
       (var "args")] $
-    JavaDsl.classType (list ([] :: [TTerm Java.Annotation])) (var "qual")
+    JavaDsl.classType (list ([] :: [TypedTerm Java.Annotation])) (var "qual")
       (javaTypeIdentifier @@ var "id") (var "targs")
 
-javaClassTypeToJavaType :: TTermDefinition (Java.ClassType -> Java.Type)
+javaClassTypeToJavaType :: TypedTermDefinition (Java.ClassType -> Java.Type)
 javaClassTypeToJavaType = def "javaClassTypeToJavaType" $
   lambda "ct" $ JavaDsl.typeReference
     (JavaDsl.referenceTypeClassOrInterface
       (JavaDsl.classOrInterfaceTypeClass (var "ct")))
 
-javaConditionalAndExpressionToJavaExpression :: TTermDefinition (Java.ConditionalAndExpression -> Java.Expression)
+javaConditionalAndExpressionToJavaExpression :: TypedTermDefinition (Java.ConditionalAndExpression -> Java.Expression)
 javaConditionalAndExpressionToJavaExpression = def "javaConditionalAndExpressionToJavaExpression" $
   lambda "cae" $ JavaDsl.conditionalAndToExpression (var "cae")
 
-javaConstructorCall :: TTermDefinition (Java.ClassOrInterfaceTypeToInstantiate -> [Java.Expression] -> Maybe Java.ClassBody -> Java.Expression)
+javaConstructorCall :: TypedTermDefinition (Java.ClassOrInterfaceTypeToInstantiate -> [Java.Expression] -> Maybe Java.ClassBody -> Java.Expression)
 javaConstructorCall = def "javaConstructorCall" $
   lambda "ci" $ lambda "args" $ lambda "mbody" $
     JavaDsl.primaryToExpression
@@ -497,60 +496,60 @@ javaConstructorCall = def "javaConstructorCall" $
         (JavaDsl.primaryClassInstance
           (JavaDsl.classInstanceCreationExpression nothing
             (JavaDsl.unqualifiedClassInstanceCreationExpression
-              (list ([] :: [TTerm Java.TypeArgument])) (var "ci") (var "args") (var "mbody")))))
+              (list ([] :: [TypedTerm Java.TypeArgument])) (var "ci") (var "args") (var "mbody")))))
 
-javaConstructorName :: TTermDefinition (Java.Identifier -> Maybe Java.TypeArgumentsOrDiamond -> Java.ClassOrInterfaceTypeToInstantiate)
+javaConstructorName :: TypedTermDefinition (Java.Identifier -> Maybe Java.TypeArgumentsOrDiamond -> Java.ClassOrInterfaceTypeToInstantiate)
 javaConstructorName = def "javaConstructorName" $
   lambda "id" $ lambda "targs" $
     JavaDsl.classOrInterfaceTypeToInstantiate
-      (list [JavaDsl.annotatedIdentifier (list ([] :: [TTerm Java.Annotation])) (var "id")])
+      (list [JavaDsl.annotatedIdentifier (list ([] :: [TypedTerm Java.Annotation])) (var "id")])
       (var "targs")
 
-javaDeclName :: TTermDefinition (Name -> Java.TypeIdentifier)
+javaDeclName :: TypedTermDefinition (Name -> Java.TypeIdentifier)
 javaDeclName = def "javaDeclName" $
   lambda "name" $ JavaDsl.typeIdentifier (javaVariableName @@ var "name")
 
 -- | Create a double cast expression: first cast to raw type, then to target type
-javaDoubleCastExpression :: TTermDefinition (Java.ReferenceType -> Java.ReferenceType -> Java.UnaryExpression -> Java.CastExpression)
+javaDoubleCastExpression :: TypedTermDefinition (Java.ReferenceType -> Java.ReferenceType -> Java.UnaryExpression -> Java.CastExpression)
 javaDoubleCastExpression = def "javaDoubleCastExpression" $
   lambda "rawRt" $ lambda "targetRt" $ lambda "expr" $ lets [
     "firstCast">: javaCastExpressionToJavaExpression @@ (javaCastExpression @@ var "rawRt" @@ var "expr")] $
     javaCastExpression @@ var "targetRt" @@ (javaExpressionToJavaUnaryExpression @@ var "firstCast")
 
 -- | Create a double cast expression and convert to Java expression
-javaDoubleCastExpressionToJavaExpression :: TTermDefinition (Java.ReferenceType -> Java.ReferenceType -> Java.UnaryExpression -> Java.Expression)
+javaDoubleCastExpressionToJavaExpression :: TypedTermDefinition (Java.ReferenceType -> Java.ReferenceType -> Java.UnaryExpression -> Java.Expression)
 javaDoubleCastExpressionToJavaExpression = def "javaDoubleCastExpressionToJavaExpression" $
   lambda "rawRt" $ lambda "targetRt" $ lambda "expr" $
     javaCastExpressionToJavaExpression @@ (javaDoubleCastExpression @@ var "rawRt" @@ var "targetRt" @@ var "expr")
 
-javaEmptyStatement :: TTermDefinition Java.Statement
+javaEmptyStatement :: TypedTermDefinition Java.Statement
 javaEmptyStatement = def "javaEmptyStatement" $
   JavaDsl.statementWithoutTrailing JavaDsl.stmtEmpty
 
-javaEqualityExpressionToJavaExpression :: TTermDefinition (Java.EqualityExpression -> Java.Expression)
+javaEqualityExpressionToJavaExpression :: TypedTermDefinition (Java.EqualityExpression -> Java.Expression)
 javaEqualityExpressionToJavaExpression = def "javaEqualityExpressionToJavaExpression" $
   lambda "ee" $ JavaDsl.equalityToExpression (var "ee")
 
-javaEqualityExpressionToJavaInclusiveOrExpression :: TTermDefinition (Java.EqualityExpression -> Java.InclusiveOrExpression)
+javaEqualityExpressionToJavaInclusiveOrExpression :: TypedTermDefinition (Java.EqualityExpression -> Java.InclusiveOrExpression)
 javaEqualityExpressionToJavaInclusiveOrExpression = def "javaEqualityExpressionToJavaInclusiveOrExpression" $
   lambda "ee" $ JavaDsl.equalityToInclusiveOr (var "ee")
 
-javaEquals :: TTermDefinition (Java.EqualityExpression -> Java.RelationalExpression -> Java.EqualityExpression)
+javaEquals :: TypedTermDefinition (Java.EqualityExpression -> Java.RelationalExpression -> Java.EqualityExpression)
 javaEquals = def "javaEquals" $
   lambda "lhs" $ lambda "rhs" $
     JavaDsl.equalityExpressionEqual
       (JavaDsl.equalityExpressionBinary (var "lhs") (var "rhs"))
 
-javaEqualsNull :: TTermDefinition (Java.EqualityExpression -> Java.EqualityExpression)
+javaEqualsNull :: TypedTermDefinition (Java.EqualityExpression -> Java.EqualityExpression)
 javaEqualsNull = def "javaEqualsNull" $
   lambda "lhs" $ javaEquals @@ var "lhs" @@
     (javaLiteralToJavaRelationalExpression @@ JavaDsl.literalNull)
 
-javaExpressionNameToJavaExpression :: TTermDefinition (Java.ExpressionName -> Java.Expression)
+javaExpressionNameToJavaExpression :: TypedTermDefinition (Java.ExpressionName -> Java.Expression)
 javaExpressionNameToJavaExpression = def "javaExpressionNameToJavaExpression" $
   lambda "en" $ JavaDsl.expressionNameToExpression (var "en")
 
-javaExpressionToJavaPrimary :: TTermDefinition (Java.Expression -> Java.Primary)
+javaExpressionToJavaPrimary :: TypedTermDefinition (Java.Expression -> Java.Primary)
 javaExpressionToJavaPrimary = def "javaExpressionToJavaPrimary" $
   doc "Convert an Expression to a Primary, avoiding unnecessary parentheses when the expression is already a simple primary chain" $
   lambda "e" $
@@ -594,60 +593,60 @@ javaExpressionToJavaPrimary = def "javaExpressionToJavaPrimary" $
                                               cases Java._PostfixExpression (var "pf") (Just $ var "fallback") [
                                                 Java._PostfixExpression_primary>>: "p" ~> var "p"]]]]]]]]]]]
 
-javaExpressionToJavaUnaryExpression :: TTermDefinition (Java.Expression -> Java.UnaryExpression)
+javaExpressionToJavaUnaryExpression :: TypedTermDefinition (Java.Expression -> Java.UnaryExpression)
 javaExpressionToJavaUnaryExpression = def "javaExpressionToJavaUnaryExpression" $
   lambda "e" $ JavaDsl.expressionToUnary (var "e")
 
-javaFieldAccessToJavaExpression :: TTermDefinition (Java.FieldAccess -> Java.Expression)
+javaFieldAccessToJavaExpression :: TypedTermDefinition (Java.FieldAccess -> Java.Expression)
 javaFieldAccessToJavaExpression = def "javaFieldAccessToJavaExpression" $
   lambda "fa" $ JavaDsl.fieldAccessToExpression (var "fa")
 
-javaIdentifier :: TTermDefinition (String -> Java.Identifier)
+javaIdentifier :: TypedTermDefinition (String -> Java.Identifier)
 javaIdentifier = def "javaIdentifier" $
   lambda "s" $ JavaDsl.identifier (sanitizeJavaName @@ var "s")
 
-javaIdentifierToJavaExpression :: TTermDefinition (Java.Identifier -> Java.Expression)
+javaIdentifierToJavaExpression :: TypedTermDefinition (Java.Identifier -> Java.Expression)
 javaIdentifierToJavaExpression = def "javaIdentifierToJavaExpression" $
   lambda "id" $ JavaDsl.identifierToExpression (var "id")
 
-javaIdentifierToJavaExpressionName :: TTermDefinition (Java.Identifier -> Java.ExpressionName)
+javaIdentifierToJavaExpressionName :: TypedTermDefinition (Java.Identifier -> Java.ExpressionName)
 javaIdentifierToJavaExpressionName = def "javaIdentifierToJavaExpressionName" $
   lambda "id" $ JavaDsl.expressionName nothing (var "id")
 
-javaIdentifierToJavaRelationalExpression :: TTermDefinition (Java.Identifier -> Java.RelationalExpression)
+javaIdentifierToJavaRelationalExpression :: TypedTermDefinition (Java.Identifier -> Java.RelationalExpression)
 javaIdentifierToJavaRelationalExpression = def "javaIdentifierToJavaRelationalExpression" $
   lambda "id" $ JavaDsl.identifierToRelationalExpression (var "id")
 
-javaIdentifierToJavaUnaryExpression :: TTermDefinition (Java.Identifier -> Java.UnaryExpression)
+javaIdentifierToJavaUnaryExpression :: TypedTermDefinition (Java.Identifier -> Java.UnaryExpression)
 javaIdentifierToJavaUnaryExpression = def "javaIdentifierToJavaUnaryExpression" $
   lambda "id" $ JavaDsl.identifierToUnary (var "id")
 
-javaInstanceOf :: TTermDefinition (Java.RelationalExpression -> Java.ReferenceType -> Java.RelationalExpression)
+javaInstanceOf :: TypedTermDefinition (Java.RelationalExpression -> Java.ReferenceType -> Java.RelationalExpression)
 javaInstanceOf = def "javaInstanceOf" $
   lambda "lhs" $ lambda "rhs" $
     JavaDsl.relationalExpressionInstanceOf
       (JavaDsl.relationalExpressionInstanceOf_ (var "lhs") (var "rhs"))
 
-javaInt :: TTermDefinition (Int -> Java.Literal)
+javaInt :: TypedTermDefinition (Int -> Java.Literal)
 javaInt = def "javaInt" $
   lambda "i" $ JavaDsl.literalInteger (JavaDsl.integerLiteral (var "i"))
 
-javaIntExpression :: TTermDefinition (Int -> Java.Expression)
+javaIntExpression :: TypedTermDefinition (Int -> Java.Expression)
 javaIntExpression = def "javaIntExpression" $
   lambda "i" $ javaPrimaryToJavaExpression @@ (javaLiteralToJavaPrimary @@ (javaInt @@ var "i"))
 
-javaIntType :: TTermDefinition Java.Type
+javaIntType :: TypedTermDefinition Java.Type
 javaIntType = def "javaIntType" $
   javaPrimitiveTypeToJavaType @@
     JavaDsl.primitiveTypeNumeric (JavaDsl.numericTypeIntegral JavaDsl.integralTypeInt)
 
-javaInterfaceDeclarationToJavaClassBodyDeclaration :: TTermDefinition (Java.NormalInterfaceDeclaration -> Java.ClassBodyDeclaration)
+javaInterfaceDeclarationToJavaClassBodyDeclaration :: TypedTermDefinition (Java.NormalInterfaceDeclaration -> Java.ClassBodyDeclaration)
 javaInterfaceDeclarationToJavaClassBodyDeclaration = def "javaInterfaceDeclarationToJavaClassBodyDeclaration" $
   lambda "nid" $ JavaDsl.classBodyDeclClassMember
     (JavaDsl.classMemberDeclInterface
       (JavaDsl.interfaceDeclarationNormalInterface (var "nid")))
 
-javaLambda :: TTermDefinition (Name -> Java.Expression -> Java.Expression)
+javaLambda :: TypedTermDefinition (Name -> Java.Expression -> Java.Expression)
 javaLambda = def "javaLambda" $
   lambda "v" $ lambda "body" $
     JavaDsl.expressionLambda
@@ -655,7 +654,7 @@ javaLambda = def "javaLambda" $
         (JavaDsl.lambdaParametersSingle (variableToJavaIdentifier @@ var "v"))
         (JavaDsl.lambdaBodyExpression (var "body")))
 
-javaLambdaFromBlock :: TTermDefinition (Name -> Java.Block -> Java.Expression)
+javaLambdaFromBlock :: TypedTermDefinition (Name -> Java.Block -> Java.Expression)
 javaLambdaFromBlock = def "javaLambdaFromBlock" $
   lambda "v" $ lambda "block" $
     JavaDsl.expressionLambda
@@ -663,112 +662,112 @@ javaLambdaFromBlock = def "javaLambdaFromBlock" $
         (JavaDsl.lambdaParametersSingle (variableToJavaIdentifier @@ var "v"))
         (JavaDsl.lambdaBodyBlock (var "block")))
 
-javaLiteralToJavaExpression :: TTermDefinition (Java.Literal -> Java.Expression)
+javaLiteralToJavaExpression :: TypedTermDefinition (Java.Literal -> Java.Expression)
 javaLiteralToJavaExpression = def "javaLiteralToJavaExpression" $
   lambda "lit" $ JavaDsl.literalToExpression (var "lit")
 
-javaLiteralToJavaMultiplicativeExpression :: TTermDefinition (Java.Literal -> Java.MultiplicativeExpression)
+javaLiteralToJavaMultiplicativeExpression :: TypedTermDefinition (Java.Literal -> Java.MultiplicativeExpression)
 javaLiteralToJavaMultiplicativeExpression = def "javaLiteralToJavaMultiplicativeExpression" $
   lambda "lit" $ JavaDsl.literalToMultiplicativeExpression (var "lit")
 
-javaLiteralToJavaPrimary :: TTermDefinition (Java.Literal -> Java.Primary)
+javaLiteralToJavaPrimary :: TypedTermDefinition (Java.Literal -> Java.Primary)
 javaLiteralToJavaPrimary = def "javaLiteralToJavaPrimary" $
   lambda "lit" $ JavaDsl.literalToPrimary (var "lit")
 
-javaLiteralToJavaRelationalExpression :: TTermDefinition (Java.Literal -> Java.RelationalExpression)
+javaLiteralToJavaRelationalExpression :: TypedTermDefinition (Java.Literal -> Java.RelationalExpression)
 javaLiteralToJavaRelationalExpression = def "javaLiteralToJavaRelationalExpression" $
   lambda "lit" $ JavaDsl.literalToRelationalExpression (var "lit")
 
-javaMemberField :: TTermDefinition ([Java.FieldModifier] -> Java.Type -> Java.VariableDeclarator -> Java.ClassBodyDeclaration)
+javaMemberField :: TypedTermDefinition ([Java.FieldModifier] -> Java.Type -> Java.VariableDeclarator -> Java.ClassBodyDeclaration)
 javaMemberField = def "javaMemberField" $
   lambda "mods" $ lambda "jt" $ lambda "v" $
     JavaDsl.classBodyDeclClassMember
       (JavaDsl.classMemberDeclField
         (JavaDsl.fieldDeclaration (var "mods") (JavaDsl.unannType (var "jt")) (list [var "v"])))
 
-javaMethodBody :: TTermDefinition (Maybe [Java.BlockStatement] -> Java.MethodBody)
+javaMethodBody :: TypedTermDefinition (Maybe [Java.BlockStatement] -> Java.MethodBody)
 javaMethodBody = def "javaMethodBody" $
   lambda "mstmts" $ Maybes.cases (var "mstmts")
     JavaDsl.methodBodyNone
     (lambda "stmts" $ JavaDsl.methodBodyBlock (JavaDsl.block (var "stmts")))
 
-javaMethodDeclarationToJavaClassBodyDeclaration :: TTermDefinition (Java.MethodDeclaration -> Java.ClassBodyDeclaration)
+javaMethodDeclarationToJavaClassBodyDeclaration :: TypedTermDefinition (Java.MethodDeclaration -> Java.ClassBodyDeclaration)
 javaMethodDeclarationToJavaClassBodyDeclaration = def "javaMethodDeclarationToJavaClassBodyDeclaration" $
   lambda "md" $ JavaDsl.classBodyDeclClassMember (JavaDsl.classMemberDeclMethod (var "md"))
 
-javaMethodHeader :: TTermDefinition ([Java.TypeParameter] -> String -> [Java.FormalParameter] -> Java.Result -> Java.MethodHeader)
+javaMethodHeader :: TypedTermDefinition ([Java.TypeParameter] -> String -> [Java.FormalParameter] -> Java.Result -> Java.MethodHeader)
 javaMethodHeader = def "javaMethodHeader" $
   lambda "tparams" $ lambda "methodName" $ lambda "params" $ lambda "result" $
     JavaDsl.methodHeader (var "tparams") (var "result")
       (JavaDsl.methodDeclarator (JavaDsl.identifier (var "methodName")) nothing (var "params"))
       nothing
 
-javaMethodInvocationToJavaExpression :: TTermDefinition (Java.MethodInvocation -> Java.Expression)
+javaMethodInvocationToJavaExpression :: TypedTermDefinition (Java.MethodInvocation -> Java.Expression)
 javaMethodInvocationToJavaExpression = def "javaMethodInvocationToJavaExpression" $
   lambda "mi" $ JavaDsl.methodInvocationToExpression (var "mi")
 
-javaMethodInvocationToJavaPostfixExpression :: TTermDefinition (Java.MethodInvocation -> Java.PostfixExpression)
+javaMethodInvocationToJavaPostfixExpression :: TypedTermDefinition (Java.MethodInvocation -> Java.PostfixExpression)
 javaMethodInvocationToJavaPostfixExpression = def "javaMethodInvocationToJavaPostfixExpression" $
   lambda "mi" $ JavaDsl.methodInvocationToPostfix (var "mi")
 
-javaMethodInvocationToJavaPrimary :: TTermDefinition (Java.MethodInvocation -> Java.Primary)
+javaMethodInvocationToJavaPrimary :: TypedTermDefinition (Java.MethodInvocation -> Java.Primary)
 javaMethodInvocationToJavaPrimary = def "javaMethodInvocationToJavaPrimary" $
   lambda "mi" $ JavaDsl.methodInvocationToPrimary (var "mi")
 
-javaMethodInvocationToJavaStatement :: TTermDefinition (Java.MethodInvocation -> Java.Statement)
+javaMethodInvocationToJavaStatement :: TypedTermDefinition (Java.MethodInvocation -> Java.Statement)
 javaMethodInvocationToJavaStatement = def "javaMethodInvocationToJavaStatement" $
   lambda "mi" $ JavaDsl.methodInvocationToStatement (var "mi")
 
-javaMultiplicativeExpressionToJavaRelationalExpression :: TTermDefinition (Java.MultiplicativeExpression -> Java.RelationalExpression)
+javaMultiplicativeExpressionToJavaRelationalExpression :: TypedTermDefinition (Java.MultiplicativeExpression -> Java.RelationalExpression)
 javaMultiplicativeExpressionToJavaRelationalExpression = def "javaMultiplicativeExpressionToJavaRelationalExpression" $
   lambda "me" $ JavaDsl.relationalExpressionSimple
     (JavaDsl.shiftExpressionUnary
       (JavaDsl.additiveExpressionUnary (var "me")))
 
-javaPackageDeclaration :: TTermDefinition (ModuleName -> Java.PackageDeclaration)
+javaPackageDeclaration :: TypedTermDefinition (ModuleName -> Java.PackageDeclaration)
 javaPackageDeclaration = def "javaPackageDeclaration" $
   lambda "ns" $ JavaDsl.packageDeclaration
-    (list ([] :: [TTerm Java.PackageModifier]))
+    (list ([] :: [TypedTerm Java.PackageModifier]))
     (Lists.map (lambda "s" $ JavaDsl.identifier (var "s")) (Strings.splitOn (string ".") (Packaging.unModuleName $ var "ns")))
 
-javaPostfixExpressionToJavaEqualityExpression :: TTermDefinition (Java.PostfixExpression -> Java.EqualityExpression)
+javaPostfixExpressionToJavaEqualityExpression :: TypedTermDefinition (Java.PostfixExpression -> Java.EqualityExpression)
 javaPostfixExpressionToJavaEqualityExpression = def "javaPostfixExpressionToJavaEqualityExpression" $
   lambda "pe" $ JavaDsl.equalityExpressionUnary
     (JavaDsl.postfixToRelationalExpression (var "pe"))
 
-javaPostfixExpressionToJavaExpression :: TTermDefinition (Java.PostfixExpression -> Java.Expression)
+javaPostfixExpressionToJavaExpression :: TypedTermDefinition (Java.PostfixExpression -> Java.Expression)
 javaPostfixExpressionToJavaExpression = def "javaPostfixExpressionToJavaExpression" $
   lambda "pe" $ JavaDsl.postfixToExpression (var "pe")
 
-javaPostfixExpressionToJavaInclusiveOrExpression :: TTermDefinition (Java.PostfixExpression -> Java.InclusiveOrExpression)
+javaPostfixExpressionToJavaInclusiveOrExpression :: TypedTermDefinition (Java.PostfixExpression -> Java.InclusiveOrExpression)
 javaPostfixExpressionToJavaInclusiveOrExpression = def "javaPostfixExpressionToJavaInclusiveOrExpression" $
   lambda "pe" $ JavaDsl.postfixToInclusiveOr (var "pe")
 
-javaPostfixExpressionToJavaRelationalExpression :: TTermDefinition (Java.PostfixExpression -> Java.RelationalExpression)
+javaPostfixExpressionToJavaRelationalExpression :: TypedTermDefinition (Java.PostfixExpression -> Java.RelationalExpression)
 javaPostfixExpressionToJavaRelationalExpression = def "javaPostfixExpressionToJavaRelationalExpression" $
   lambda "pe" $ JavaDsl.postfixToRelationalExpression (var "pe")
 
-javaPostfixExpressionToJavaUnaryExpression :: TTermDefinition (Java.PostfixExpression -> Java.UnaryExpression)
+javaPostfixExpressionToJavaUnaryExpression :: TypedTermDefinition (Java.PostfixExpression -> Java.UnaryExpression)
 javaPostfixExpressionToJavaUnaryExpression = def "javaPostfixExpressionToJavaUnaryExpression" $
   lambda "pe" $ JavaDsl.unaryExpressionOther
     (JavaDsl.unaryExpressionNotPlusMinusPostfix (var "pe"))
 
-javaPrimaryToJavaExpression :: TTermDefinition (Java.Primary -> Java.Expression)
+javaPrimaryToJavaExpression :: TypedTermDefinition (Java.Primary -> Java.Expression)
 javaPrimaryToJavaExpression = def "javaPrimaryToJavaExpression" $
   lambda "p" $ JavaDsl.primaryToExpression (var "p")
 
-javaPrimaryToJavaUnaryExpression :: TTermDefinition (Java.Primary -> Java.UnaryExpression)
+javaPrimaryToJavaUnaryExpression :: TypedTermDefinition (Java.Primary -> Java.UnaryExpression)
 javaPrimaryToJavaUnaryExpression = def "javaPrimaryToJavaUnaryExpression" $
   lambda "p" $ JavaDsl.unaryExpressionOther
     (JavaDsl.unaryExpressionNotPlusMinusPostfix
       (JavaDsl.postfixExpressionPrimary (var "p")))
 
-javaPrimitiveTypeToJavaType :: TTermDefinition (Java.PrimitiveType -> Java.Type)
+javaPrimitiveTypeToJavaType :: TypedTermDefinition (Java.PrimitiveType -> Java.Type)
 javaPrimitiveTypeToJavaType = def "javaPrimitiveTypeToJavaType" $
   lambda "pt" $ JavaDsl.typePrimitive
-    (JavaDsl.primitiveTypeWithAnnotations (var "pt") (list ([] :: [TTerm Java.Annotation])))
+    (JavaDsl.primitiveTypeWithAnnotations (var "pt") (list ([] :: [TypedTerm Java.Annotation])))
 
-javaRefType :: TTermDefinition ([Java.ReferenceType] -> Maybe Java.PackageName -> String -> Java.Type)
+javaRefType :: TypedTermDefinition ([Java.ReferenceType] -> Maybe Java.PackageName -> String -> Java.Type)
 javaRefType = def "javaRefType" $
   lambda "args" $ lambda "pkg" $ lambda "id" $
     JavaDsl.typeReference
@@ -777,7 +776,7 @@ javaRefType = def "javaRefType" $
           (javaClassType @@ var "args" @@ var "pkg" @@ var "id")))
 
 -- | Extract the raw type (without type arguments) from a reference type
-javaReferenceTypeToRawType :: TTermDefinition (Java.ReferenceType -> Java.ReferenceType)
+javaReferenceTypeToRawType :: TypedTermDefinition (Java.ReferenceType -> Java.ReferenceType)
 javaReferenceTypeToRawType = def "javaReferenceTypeToRawType" $
   lambda "rt" $ cases Java._ReferenceType (var "rt")
     (Just $ var "rt") [
@@ -790,7 +789,7 @@ javaReferenceTypeToRawType = def "javaReferenceTypeToRawType" $
           JavaDsl.referenceTypeClassOrInterface
             (JavaDsl.classOrInterfaceTypeClass
               (JavaDsl.classType (var "anns") (var "qual") (var "id")
-                (list ([] :: [TTerm Java.TypeArgument])))),
+                (list ([] :: [TypedTerm Java.TypeArgument])))),
         Java._ClassOrInterfaceType_interface>>: lambda "it" $ lets [
           "ct">: unwrap Java._InterfaceType @@ var "it",
           "anns">: project Java._ClassType Java._ClassType_annotations @@ var "ct",
@@ -800,158 +799,158 @@ javaReferenceTypeToRawType = def "javaReferenceTypeToRawType" $
             (inject Java._ClassOrInterfaceType Java._ClassOrInterfaceType_interface
               (JavaDsl.interfaceType
                 (JavaDsl.classType (var "anns") (var "qual") (var "id")
-                  (list ([] :: [TTerm Java.TypeArgument])))))]]
+                  (list ([] :: [TypedTerm Java.TypeArgument])))))]]
 
-javaRelationalExpressionToJavaEqualityExpression :: TTermDefinition (Java.RelationalExpression -> Java.EqualityExpression)
+javaRelationalExpressionToJavaEqualityExpression :: TypedTermDefinition (Java.RelationalExpression -> Java.EqualityExpression)
 javaRelationalExpressionToJavaEqualityExpression = def "javaRelationalExpressionToJavaEqualityExpression" $
   lambda "re" $ JavaDsl.equalityExpressionUnary (var "re")
 
-javaRelationalExpressionToJavaExpression :: TTermDefinition (Java.RelationalExpression -> Java.Expression)
+javaRelationalExpressionToJavaExpression :: TypedTermDefinition (Java.RelationalExpression -> Java.Expression)
 javaRelationalExpressionToJavaExpression = def "javaRelationalExpressionToJavaExpression" $
   lambda "re" $ javaEqualityExpressionToJavaExpression @@
     (JavaDsl.equalityExpressionUnary (var "re"))
 
-javaRelationalExpressionToJavaUnaryExpression :: TTermDefinition (Java.RelationalExpression -> Java.UnaryExpression)
+javaRelationalExpressionToJavaUnaryExpression :: TypedTermDefinition (Java.RelationalExpression -> Java.UnaryExpression)
 javaRelationalExpressionToJavaUnaryExpression = def "javaRelationalExpressionToJavaUnaryExpression" $
   lambda "re" $ JavaDsl.relationalToUnary (var "re")
 
-javaReturnStatement :: TTermDefinition (Maybe Java.Expression -> Java.Statement)
+javaReturnStatement :: TypedTermDefinition (Maybe Java.Expression -> Java.Statement)
 javaReturnStatement = def "javaReturnStatement" $
   lambda "mex" $ JavaDsl.statementWithoutTrailing
     (JavaDsl.stmtReturn (JavaDsl.returnStatement (var "mex")))
 
-javaStatementsToBlock :: TTermDefinition ([Java.Statement] -> Java.Block)
+javaStatementsToBlock :: TypedTermDefinition ([Java.Statement] -> Java.Block)
 javaStatementsToBlock = def "javaStatementsToBlock" $
   lambda "stmts" $ JavaDsl.block
     (Lists.map (lambda "s" $ JavaDsl.blockStatementStatement (var "s")) (var "stmts"))
 
-javaString :: TTermDefinition (String -> Java.Literal)
+javaString :: TypedTermDefinition (String -> Java.Literal)
 javaString = def "javaString" $
   lambda "s" $ JavaDsl.literalString (JavaDsl.stringLiteral (var "s"))
 
 -- | Convert a string to a multiplicative expression (for string concatenation)
-javaStringMultiplicativeExpression :: TTermDefinition (String -> Java.MultiplicativeExpression)
+javaStringMultiplicativeExpression :: TypedTermDefinition (String -> Java.MultiplicativeExpression)
 javaStringMultiplicativeExpression = def "javaStringMultiplicativeExpression" $
   lambda "s" $ javaLiteralToJavaMultiplicativeExpression @@ (javaString @@ var "s")
 
-javaThis :: TTermDefinition Java.Expression
+javaThis :: TypedTermDefinition Java.Expression
 javaThis = def "javaThis" $
   JavaDsl.primaryToExpression
     (JavaDsl.primaryNoNewArray JavaDsl.primaryThis)
 
-javaThrowIllegalArgumentException :: TTermDefinition ([Java.Expression] -> Java.Statement)
+javaThrowIllegalArgumentException :: TypedTermDefinition ([Java.Expression] -> Java.Statement)
 javaThrowIllegalArgumentException = def "javaThrowIllegalArgumentException" $
   lambda "args" $ javaThrowStatement @@
     (javaConstructorCall @@
       (javaConstructorName @@ JavaDsl.identifier (string "IllegalArgumentException") @@ nothing) @@
       var "args" @@ nothing)
 
-javaThrowIllegalStateException :: TTermDefinition ([Java.Expression] -> Java.Statement)
+javaThrowIllegalStateException :: TypedTermDefinition ([Java.Expression] -> Java.Statement)
 javaThrowIllegalStateException = def "javaThrowIllegalStateException" $
   lambda "args" $ javaThrowStatement @@
     (javaConstructorCall @@
       (javaConstructorName @@ JavaDsl.identifier (string "IllegalStateException") @@ nothing) @@
       var "args" @@ nothing)
 
-javaThrowStatement :: TTermDefinition (Java.Expression -> Java.Statement)
+javaThrowStatement :: TypedTermDefinition (Java.Expression -> Java.Statement)
 javaThrowStatement = def "javaThrowStatement" $
   lambda "e" $ JavaDsl.statementWithoutTrailing
     (JavaDsl.stmtThrow (JavaDsl.throwStatement (var "e")))
 
 -- | Build a Java Type from a type name (for use as formal parameter types)
-javaTypeFromTypeName :: TTermDefinition (JavaHelpers.Aliases -> Name -> Java.Type)
+javaTypeFromTypeName :: TypedTermDefinition (JavaHelpers.Aliases -> Name -> Java.Type)
 javaTypeFromTypeName = def "javaTypeFromTypeName" $
   lambda "aliases" $ lambda "elName" $
     javaTypeVariableToType @@
       (JavaDsl.typeVariable
-        (list ([] :: [TTerm Java.Annotation]))
+        (list ([] :: [TypedTerm Java.Annotation]))
         (nameToJavaTypeIdentifier @@ var "aliases" @@ boolean False @@ var "elName"))
 
-javaTypeIdentifier :: TTermDefinition (String -> Java.TypeIdentifier)
+javaTypeIdentifier :: TypedTermDefinition (String -> Java.TypeIdentifier)
 javaTypeIdentifier = def "javaTypeIdentifier" $
   lambda "s" $ JavaDsl.typeIdentifier (JavaDsl.identifier (var "s"))
 
-javaTypeIdentifierToJavaTypeArgument :: TTermDefinition (Java.TypeIdentifier -> Java.TypeArgument)
+javaTypeIdentifierToJavaTypeArgument :: TypedTermDefinition (Java.TypeIdentifier -> Java.TypeArgument)
 javaTypeIdentifierToJavaTypeArgument = def "javaTypeIdentifierToJavaTypeArgument" $
   lambda "id" $ JavaDsl.typeArgumentReference
     (JavaDsl.referenceTypeVariable
-      (JavaDsl.typeVariable (list ([] :: [TTerm Java.Annotation])) (var "id")))
+      (JavaDsl.typeVariable (list ([] :: [TypedTerm Java.Annotation])) (var "id")))
 
-javaTypeName :: TTermDefinition (Java.Identifier -> Java.TypeName)
+javaTypeName :: TypedTermDefinition (Java.Identifier -> Java.TypeName)
 javaTypeName = def "javaTypeName" $
   lambda "id" $ JavaDsl.typeName (JavaDsl.typeIdentifier (var "id")) nothing
 
-javaTypeParameter :: TTermDefinition (String -> Java.TypeParameter)
+javaTypeParameter :: TypedTermDefinition (String -> Java.TypeParameter)
 javaTypeParameter = def "javaTypeParameter" $
   lambda "v" $ JavaDsl.typeParameter
-    (list ([] :: [TTerm Java.TypeParameterModifier]))
+    (list ([] :: [TypedTerm Java.TypeParameterModifier]))
     (javaTypeIdentifier @@ var "v")
     nothing
 
-javaTypeToJavaFormalParameter :: TTermDefinition (Java.Type -> Name -> Java.FormalParameter)
+javaTypeToJavaFormalParameter :: TypedTermDefinition (Java.Type -> Name -> Java.FormalParameter)
 javaTypeToJavaFormalParameter = def "javaTypeToJavaFormalParameter" $
   lambda "jt" $ lambda "fname" $
     JavaDsl.formalParameterSimple
-      (JavaDsl.formalParameterSimple_ (list ([] :: [TTerm Java.VariableModifier]))
+      (JavaDsl.formalParameterSimple_ (list ([] :: [TypedTerm Java.VariableModifier]))
         (JavaDsl.unannType (var "jt"))
         (fieldNameToJavaVariableDeclaratorId @@ var "fname"))
 
 -- | Extract the reference type from a Java type, failing if it's a primitive type
-javaTypeToJavaReferenceType :: TTermDefinition (Java.Type -> Context -> Either Error Java.ReferenceType)
+javaTypeToJavaReferenceType :: TypedTermDefinition (Java.Type -> InferenceContext -> Either Error Java.ReferenceType)
 javaTypeToJavaReferenceType = def "javaTypeToJavaReferenceType" $
   lambda "t" $ "cx" ~>
   cases Java._Type (var "t") Nothing [
     Java._Type_reference>>: lambda "rt" $ right (var "rt"),
     Java._Type_primitive>>: constant $
-      Ctx.failInContext (Error.errorOther $ Error.otherError $ string "expected a Java reference type") (var "cx")]
+      left (Error.errorOther $ Error.otherError $ string "expected a Java reference type")]
 
-javaTypeToJavaResult :: TTermDefinition (Java.Type -> Java.Result)
+javaTypeToJavaResult :: TypedTermDefinition (Java.Type -> Java.Result)
 javaTypeToJavaResult = def "javaTypeToJavaResult" $
   lambda "jt" $ JavaDsl.resultType (JavaDsl.unannType (var "jt"))
 
-javaTypeToJavaTypeArgument :: TTermDefinition (Java.Type -> Java.TypeArgument)
+javaTypeToJavaTypeArgument :: TypedTermDefinition (Java.Type -> Java.TypeArgument)
 javaTypeToJavaTypeArgument = def "javaTypeToJavaTypeArgument" $
   lambda "t" $ cases Java._Type (var "t") Nothing [
     Java._Type_reference>>: lambda "rt" $ JavaDsl.typeArgumentReference (var "rt"),
     Java._Type_primitive>>: constant $
       JavaDsl.typeArgumentWildcard
-        (JavaDsl.wildcard (list ([] :: [TTerm Java.Annotation])) nothing)]
+        (JavaDsl.wildcard (list ([] :: [TypedTerm Java.Annotation])) nothing)]
 
-javaTypeVariable :: TTermDefinition (String -> Java.ReferenceType)
+javaTypeVariable :: TypedTermDefinition (String -> Java.ReferenceType)
 javaTypeVariable = def "javaTypeVariable" $
   lambda "v" $ JavaDsl.referenceTypeVariable
-    (JavaDsl.typeVariable (list ([] :: [TTerm Java.Annotation]))
+    (JavaDsl.typeVariable (list ([] :: [TypedTerm Java.Annotation]))
       (javaTypeIdentifier @@ (Formatting.capitalize @@ var "v")))
 
-javaTypeVariableToType :: TTermDefinition (Java.TypeVariable -> Java.Type)
+javaTypeVariableToType :: TypedTermDefinition (Java.TypeVariable -> Java.Type)
 javaTypeVariableToType = def "javaTypeVariableToType" $
   lambda "tv" $ JavaDsl.typeReference (JavaDsl.referenceTypeVariable (var "tv"))
 
-javaUnaryExpressionToJavaExpression :: TTermDefinition (Java.UnaryExpression -> Java.Expression)
+javaUnaryExpressionToJavaExpression :: TypedTermDefinition (Java.UnaryExpression -> Java.Expression)
 javaUnaryExpressionToJavaExpression = def "javaUnaryExpressionToJavaExpression" $
   lambda "ue" $ JavaDsl.unaryToExpression (var "ue")
 
-javaUnaryExpressionToJavaRelationalExpression :: TTermDefinition (Java.UnaryExpression -> Java.RelationalExpression)
+javaUnaryExpressionToJavaRelationalExpression :: TypedTermDefinition (Java.UnaryExpression -> Java.RelationalExpression)
 javaUnaryExpressionToJavaRelationalExpression = def "javaUnaryExpressionToJavaRelationalExpression" $
   lambda "ue" $ JavaDsl.relationalExpressionSimple
     (JavaDsl.shiftExpressionUnary
       (JavaDsl.additiveExpressionUnary
         (JavaDsl.multiplicativeExpressionUnary (var "ue"))))
 
-javaVariableDeclarator :: TTermDefinition (Java.Identifier -> Maybe Java.VariableInitializer -> Java.VariableDeclarator)
+javaVariableDeclarator :: TypedTermDefinition (Java.Identifier -> Maybe Java.VariableInitializer -> Java.VariableDeclarator)
 javaVariableDeclarator = def "javaVariableDeclarator" $
   lambda "id" $ lambda "minit" $ JavaDsl.variableDeclarator (javaVariableDeclaratorId @@ var "id") (var "minit")
 
-javaVariableDeclaratorId :: TTermDefinition (Java.Identifier -> Java.VariableDeclaratorId)
+javaVariableDeclaratorId :: TypedTermDefinition (Java.Identifier -> Java.VariableDeclaratorId)
 javaVariableDeclaratorId = def "javaVariableDeclaratorId" $
   lambda "id" $ JavaDsl.variableDeclaratorId (var "id") nothing
 
-javaVariableName :: TTermDefinition (Name -> Java.Identifier)
+javaVariableName :: TypedTermDefinition (Name -> Java.Identifier)
 javaVariableName = def "javaVariableName" $
   lambda "name" $ javaIdentifier @@ (Names.localNameOf @@ var "name")
 
 -- | Look up the Java variable name for a Hydra variable, applying any renames
-lookupJavaVarName :: TTermDefinition (JavaHelpers.Aliases -> Name -> Name)
+lookupJavaVarName :: TypedTermDefinition (JavaHelpers.Aliases -> Name -> Name)
 lookupJavaVarName = def "lookupJavaVarName" $
   lambda "aliases" $ lambda "name" $
     Maybes.cases
@@ -961,12 +960,12 @@ lookupJavaVarName = def "lookupJavaVarName" $
       (lambda "renamed" $ var "renamed")
 
 -- | Build a Java constructor declaration
-makeConstructor :: TTermDefinition (JavaHelpers.Aliases -> Name -> Bool -> [Java.FormalParameter]
+makeConstructor :: TypedTermDefinition (JavaHelpers.Aliases -> Name -> Bool -> [Java.FormalParameter]
   -> [Java.BlockStatement] -> Java.ClassBodyDeclaration)
 makeConstructor = def "makeConstructor" $
   lambda "aliases" $ lambda "elName" $ lambda "private" $ lambda "params" $ lambda "stmts" $ lets [
     "nm">: JavaDsl.simpleTypeName (nameToJavaTypeIdentifier @@ var "aliases" @@ boolean False @@ var "elName"),
-    "cons">: JavaDsl.constructorDeclarator (list ([] :: [TTerm Java.TypeParameter])) (var "nm") nothing (var "params"),
+    "cons">: JavaDsl.constructorDeclarator (list ([] :: [TypedTerm Java.TypeParameter])) (var "nm") nothing (var "params"),
     "mods">: list [Logic.ifElse (var "private")
       (inject Java._ConstructorModifier Java._ConstructorModifier_private unit)
       (inject Java._ConstructorModifier Java._ConstructorModifier_public unit)],
@@ -974,7 +973,7 @@ makeConstructor = def "makeConstructor" $
     inject Java._ClassBodyDeclaration Java._ClassBodyDeclaration_constructorDeclaration
       (JavaDsl.constructorDeclaration (var "mods") (var "cons") nothing (var "body"))
 
-methodDeclaration :: TTermDefinition ([Java.MethodModifier] -> [Java.TypeParameter] -> [Java.Annotation]
+methodDeclaration :: TypedTermDefinition ([Java.MethodModifier] -> [Java.TypeParameter] -> [Java.Annotation]
   -> String -> [Java.FormalParameter] -> Java.Result -> Maybe [Java.BlockStatement] -> Java.ClassBodyDeclaration)
 methodDeclaration = def "methodDeclaration" $
   lambda "mods" $ lambda "tparams" $ lambda "anns" $ lambda "methodName" $ lambda "params" $ lambda "result" $ lambda "stmts" $
@@ -983,7 +982,7 @@ methodDeclaration = def "methodDeclaration" $
         (javaMethodHeader @@ var "tparams" @@ var "methodName" @@ var "params" @@ var "result")
         (javaMethodBody @@ var "stmts"))
 
-methodInvocation :: TTermDefinition (Maybe (Either Java.ExpressionName Java.Primary) -> Java.Identifier -> [Java.Expression] -> Java.MethodInvocation)
+methodInvocation :: TypedTermDefinition (Maybe (Either Java.ExpressionName Java.Primary) -> Java.Identifier -> [Java.Expression] -> Java.MethodInvocation)
 methodInvocation = def "methodInvocation" $
   lambda "lhs" $ lambda "methodName" $ lambda "args" $ lets [
     "header">: Maybes.cases (var "lhs")
@@ -994,11 +993,11 @@ methodInvocation = def "methodInvocation" $
             (lambda "en" $ JavaDsl.methodInvocationVariantExpression (var "en"))
             (lambda "p" $ JavaDsl.methodInvocationVariantPrimary (var "p"))
             (var "either"))
-          (list ([] :: [TTerm Java.TypeArgument]))
+          (list ([] :: [TypedTerm Java.TypeArgument]))
           (var "methodName")))] $
     JavaDsl.methodInvocation_ (var "header") (var "args")
 
-methodInvocationStatic :: TTermDefinition (Java.Identifier -> Java.Identifier -> [Java.Expression] -> Java.MethodInvocation)
+methodInvocationStatic :: TypedTermDefinition (Java.Identifier -> Java.Identifier -> [Java.Expression] -> Java.MethodInvocation)
 methodInvocationStatic = def "methodInvocationStatic" $
   lambda "self" $ lambda "methodName" $ lambda "args" $
     methodInvocation @@
@@ -1007,7 +1006,7 @@ methodInvocationStatic = def "methodInvocationStatic" $
       var "args"
 
 -- | Create a static method invocation with explicit type arguments
-methodInvocationStaticWithTypeArgs :: TTermDefinition (Java.Identifier -> Java.Identifier -> [Java.TypeArgument] -> [Java.Expression] -> Java.MethodInvocation)
+methodInvocationStaticWithTypeArgs :: TypedTermDefinition (Java.Identifier -> Java.Identifier -> [Java.TypeArgument] -> [Java.Expression] -> Java.MethodInvocation)
 methodInvocationStaticWithTypeArgs = def "methodInvocationStaticWithTypeArgs" $
   lambda "self" $ lambda "methodName" $ lambda "targs" $ lambda "args" $ lets [
     "header">: JavaDsl.methodInvocationHeaderComplex
@@ -1019,16 +1018,16 @@ methodInvocationStaticWithTypeArgs = def "methodInvocationStaticWithTypeArgs" $
     JavaDsl.methodInvocation_ (var "header") (var "args")
 
 -- | Build a Java ClassType from a Hydra name, with type arguments and optional inner class suffix
-nameToJavaClassType :: TTermDefinition (JavaHelpers.Aliases -> Bool -> [Java.TypeArgument] -> Name -> Maybe String -> Java.ClassType)
+nameToJavaClassType :: TypedTermDefinition (JavaHelpers.Aliases -> Bool -> [Java.TypeArgument] -> Name -> Maybe String -> Java.ClassType)
 nameToJavaClassType = def "nameToJavaClassType" $
   lambda "aliases" $ lambda "qualify" $ lambda "args" $ lambda "name" $ lambda "mlocal" $ lets [
     "result">: nameToQualifiedJavaName @@ var "aliases" @@ var "qualify" @@ var "name" @@ var "mlocal",
     "id">: Pairs.first (var "result"),
     "pkg">: Pairs.second (var "result")] $
-    JavaDsl.classType (list ([] :: [TTerm Java.Annotation])) (var "pkg") (var "id") (var "args")
+    JavaDsl.classType (list ([] :: [TypedTerm Java.Annotation])) (var "pkg") (var "id") (var "args")
 
 -- | Build a Java Identifier from a Hydra name, using the Aliases for package resolution
-nameToJavaName :: TTermDefinition (JavaHelpers.Aliases -> Name -> Java.Identifier)
+nameToJavaName :: TypedTermDefinition (JavaHelpers.Aliases -> Name -> Java.Identifier)
 nameToJavaName = def "nameToJavaName" $
   lambda "aliases" $ lambda "name" $ lets [
     "qn">: Names.qualifyName @@ var "name",
@@ -1050,7 +1049,7 @@ nameToJavaName = def "nameToJavaName" $
           JavaDsl.identifier (Strings.intercalate (string ".") (var "allParts"))))
 
 -- | Build a Java ReferenceType from a Hydra name
-nameToJavaReferenceType :: TTermDefinition (JavaHelpers.Aliases -> Bool -> [Java.TypeArgument] -> Name -> Maybe String -> Java.ReferenceType)
+nameToJavaReferenceType :: TypedTermDefinition (JavaHelpers.Aliases -> Bool -> [Java.TypeArgument] -> Name -> Maybe String -> Java.ReferenceType)
 nameToJavaReferenceType = def "nameToJavaReferenceType" $
   lambda "aliases" $ lambda "qualify" $ lambda "args" $ lambda "name" $ lambda "mlocal" $
     JavaDsl.referenceTypeClassOrInterface
@@ -1058,7 +1057,7 @@ nameToJavaReferenceType = def "nameToJavaReferenceType" $
         (nameToJavaClassType @@ var "aliases" @@ var "qualify" @@ var "args" @@ var "name" @@ var "mlocal"))
 
 -- | Get the Java TypeIdentifier for a Hydra name
-nameToJavaTypeIdentifier :: TTermDefinition (JavaHelpers.Aliases -> Bool -> Name -> Java.TypeIdentifier)
+nameToJavaTypeIdentifier :: TypedTermDefinition (JavaHelpers.Aliases -> Bool -> Name -> Java.TypeIdentifier)
 nameToJavaTypeIdentifier = def "nameToJavaTypeIdentifier" $
   lambda "aliases" $ lambda "qualify" $ lambda "name" $
     Pairs.first (nameToQualifiedJavaName @@ var "aliases" @@ var "qualify" @@ var "name" @@ nothing)
@@ -1066,7 +1065,7 @@ nameToJavaTypeIdentifier = def "nameToJavaTypeIdentifier" $
 -- | Compute the qualified Java name (TypeIdentifier, ClassTypeQualifier) for a Hydra name.
 --   If qualify is True, the namespace is converted to a package qualifier.
 --   mlocal is an optional local suffix (for inner class names).
-nameToQualifiedJavaName :: TTermDefinition (JavaHelpers.Aliases -> Bool -> Name -> Maybe String
+nameToQualifiedJavaName :: TypedTermDefinition (JavaHelpers.Aliases -> Bool -> Name -> Maybe String
   -> (Java.TypeIdentifier, Java.ClassTypeQualifier))
 nameToQualifiedJavaName = def "nameToQualifiedJavaName" $
   lambda "aliases" $ lambda "qualify" $ lambda "name" $ lambda "mlocal" $ lets [
@@ -1093,16 +1092,16 @@ nameToQualifiedJavaName = def "nameToQualifiedJavaName" $
       (lambda "l" $ (sanitizeJavaName @@ var "local") ++ string "." ++ (sanitizeJavaName @@ var "l")))] $
     pair (var "jid") (var "pkg")
 
-overrideAnnotation :: TTermDefinition Java.Annotation
+overrideAnnotation :: TypedTermDefinition Java.Annotation
 overrideAnnotation = def "overrideAnnotation" $
   JavaDsl.annotationMarker
     (JavaDsl.markerAnnotation (javaTypeName @@ JavaDsl.identifier (string "Override")))
 
-referenceTypeToResult :: TTermDefinition (Java.ReferenceType -> Java.Result)
+referenceTypeToResult :: TypedTermDefinition (Java.ReferenceType -> Java.Result)
 referenceTypeToResult = def "referenceTypeToResult" $
   lambda "rt" $ javaTypeToJavaResult @@ JavaDsl.typeReference (var "rt")
 
-sanitizeJavaName :: TTermDefinition (String -> String)
+sanitizeJavaName :: TypedTermDefinition (String -> String)
 sanitizeJavaName = def "sanitizeJavaName" $
   lambda "name" $
     Logic.ifElse (isEscaped @@ var "name")
@@ -1112,7 +1111,7 @@ sanitizeJavaName = def "sanitizeJavaName" $
         (Formatting.sanitizeWithUnderscores @@ JavaLanguageSource.reservedWords @@ var "name"))
 
 -- | The @SuppressWarnings("unchecked") annotation
-suppressWarningsUncheckedAnnotation :: TTermDefinition Java.Annotation
+suppressWarningsUncheckedAnnotation :: TypedTermDefinition Java.Annotation
 suppressWarningsUncheckedAnnotation = def "suppressWarningsUncheckedAnnotation" $
   inject Java._Annotation Java._Annotation_singleElement
     (record Java._SingleElementAnnotation [
@@ -1127,7 +1126,7 @@ suppressWarningsUncheckedAnnotation = def "suppressWarningsUncheckedAnnotation" 
                     (javaLiteralToJavaPrimary @@ (javaString @@ string "unchecked")))])]))))])
 
 -- | Build the accept method for the visitor pattern
-toAcceptMethod :: TTermDefinition (Bool -> [Java.TypeParameter] -> Java.ClassBodyDeclaration)
+toAcceptMethod :: TypedTermDefinition (Bool -> [Java.TypeParameter] -> Java.ClassBodyDeclaration)
 toAcceptMethod = def "toAcceptMethod" $
   lambda "abstract" $ lambda "vtparams" $ lets [
     "mods">: Logic.ifElse (var "abstract")
@@ -1136,14 +1135,14 @@ toAcceptMethod = def "toAcceptMethod" $
       (list [inject Java._MethodModifier Java._MethodModifier_public unit]),
     "tparams">: list [javaTypeParameter @@ asTerm JavaNamesSource.visitorReturnParameter],
     "anns">: Logic.ifElse (var "abstract")
-      (list ([] :: [TTerm Java.Annotation]))
+      (list ([] :: [TypedTerm Java.Annotation]))
       (list [asTerm overrideAnnotation]),
     "typeArgs">: Lists.map
       (lambda "tp" $ JavaDsl.typeArgumentReference (typeParameterToReferenceType @@ var "tp"))
       (var "vtparams"),
     "ref">: javaClassTypeToJavaType @@
       (JavaDsl.classType
-        (list ([] :: [TTerm Java.Annotation]))
+        (list ([] :: [TypedTerm Java.Annotation]))
         JavaDsl.classTypeQualifierNone
         (javaTypeIdentifier @@ asTerm JavaNamesSource.visitorName)
         (Lists.concat2 (var "typeArgs") (list [JavaDsl.typeArgumentReference (asTerm visitorTypeVariable)]))),
@@ -1153,13 +1152,13 @@ toAcceptMethod = def "toAcceptMethod" $
       (methodInvocationStatic @@ JavaDsl.identifier (string "visitor") @@ JavaDsl.identifier (asTerm JavaNamesSource.visitMethodName)
         @@ list [asTerm javaThis]),
     "body">: Logic.ifElse (var "abstract")
-      (nothing :: TTerm (Maybe [Java.BlockStatement]))
+      (nothing :: TypedTerm (Maybe [Java.BlockStatement]))
       (just (list [JavaDsl.blockStatementStatement (javaReturnStatement @@ just (var "returnExpr"))]))] $
     methodDeclaration @@ var "mods" @@ var "tparams" @@ var "anns"
       @@ asTerm JavaNamesSource.acceptMethodName @@ list [var "param"] @@ var "result" @@ var "body"
 
 -- | Create an assignment statement that assigns a field name to 'this.fieldName'
-toAssignStmt :: TTermDefinition (Name -> Java.Statement)
+toAssignStmt :: TypedTermDefinition (Name -> Java.Statement)
 toAssignStmt = def "toAssignStmt" $
   lambda "fname" $ lets [
     "id">: fieldNameToJavaIdentifier @@ var "fname",
@@ -1172,7 +1171,7 @@ toAssignStmt = def "toAssignStmt" $
     javaAssignmentStatement @@ var "lhs" @@ var "rhs"
 
 -- | Convert a Java Type to an array type
-toJavaArrayType :: TTermDefinition (Java.Type -> Context -> Either Error Java.Type)
+toJavaArrayType :: TypedTermDefinition (Java.Type -> InferenceContext -> Either Error Java.Type)
 toJavaArrayType = def "toJavaArrayType" $
   lambda "t" $ "cx" ~>
   cases Java._Type (var "t") Nothing [
@@ -1181,43 +1180,43 @@ toJavaArrayType = def "toJavaArrayType" $
         Java._ReferenceType_classOrInterface>>: lambda "cit" $
           right (JavaDsl.typeReference (JavaDsl.referenceTypeArray
             (JavaDsl.arrayType
-              (JavaDsl.dims (list [list ([] :: [TTerm Java.Annotation])]))
+              (JavaDsl.dims (list [list ([] :: [TypedTerm Java.Annotation])]))
               (inject Java._ArrayType_Variant Java._ArrayType_Variant_classOrInterface (var "cit"))))),
         Java._ReferenceType_array>>: lambda "at" $ lets [
           "oldDims">: unwrap Java._Dims @@ (project Java._ArrayType Java._ArrayType_dims @@ var "at"),
-          "newDims">: JavaDsl.dims (Lists.concat2 (var "oldDims") (list [list ([] :: [TTerm Java.Annotation])])),
+          "newDims">: JavaDsl.dims (Lists.concat2 (var "oldDims") (list [list ([] :: [TypedTerm Java.Annotation])])),
           "variant">: project Java._ArrayType Java._ArrayType_variant @@ var "at"] $
           right (JavaDsl.typeReference (JavaDsl.referenceTypeArray
             (JavaDsl.arrayType (var "newDims") (var "variant")))),
         Java._ReferenceType_variable>>: constant $
-          Ctx.failInContext (Error.errorOther $ Error.otherError $ string "don't know how to make Java reference type into array type") (var "cx")],
+          left (Error.errorOther $ Error.otherError $ string "don't know how to make Java reference type into array type")],
     Java._Type_primitive>>: constant $
-      Ctx.failInContext (Error.errorOther $ Error.otherError $ string "don't know how to make Java type into array type") (var "cx")]
+      left (Error.errorOther $ Error.otherError $ string "don't know how to make Java type into array type")]
 
-typeParameterToReferenceType :: TTermDefinition (Java.TypeParameter -> Java.ReferenceType)
+typeParameterToReferenceType :: TypedTermDefinition (Java.TypeParameter -> Java.ReferenceType)
 typeParameterToReferenceType = def "typeParameterToReferenceType" $
   lambda "tp" $ javaTypeVariable @@
     (JavaDsl.unIdentifier
       (JavaDsl.unTypeIdentifier
         (JavaDsl.typeParameterIdentifier (var "tp"))))
 
-typeParameterToTypeArgument :: TTermDefinition (Java.TypeParameter -> Java.TypeArgument)
+typeParameterToTypeArgument :: TypedTermDefinition (Java.TypeParameter -> Java.TypeArgument)
 typeParameterToTypeArgument = def "typeParameterToTypeArgument" $
   lambda "tp" $ javaTypeIdentifierToJavaTypeArgument @@
     (JavaDsl.typeParameterIdentifier (var "tp"))
 
 -- | Extract the string name from a TypeParameter
-unTypeParameter :: TTermDefinition (Java.TypeParameter -> String)
+unTypeParameter :: TypedTermDefinition (Java.TypeParameter -> String)
 unTypeParameter = def "unTypeParameter" $
   lambda "tp" $
     JavaDsl.unIdentifier (JavaDsl.unTypeIdentifier (JavaDsl.typeParameterIdentifier (var "tp")))
 
-unescape :: TTermDefinition (String -> String)
+unescape :: TypedTermDefinition (String -> String)
 unescape = def "unescape" $
   lambda "s" $ Strings.fromList (Lists.drop (int32 1) (Strings.toList (var "s")))
 
 -- | Generate a unique variable name that doesn't conflict with in-scope names
-uniqueVarName :: TTermDefinition (JavaHelpers.Aliases -> Name -> Name)
+uniqueVarName :: TypedTermDefinition (JavaHelpers.Aliases -> Name -> Name)
 uniqueVarName = def "uniqueVarName" $
   lambda "aliases" $ lambda "name" $
     Logic.ifElse
@@ -1227,7 +1226,7 @@ uniqueVarName = def "uniqueVarName" $
       (var "name")
 
 -- | Helper for uniqueVarName
-uniqueVarName_go :: TTermDefinition (JavaHelpers.Aliases -> String -> Int -> Name)
+uniqueVarName_go :: TypedTermDefinition (JavaHelpers.Aliases -> String -> Int -> Name)
 uniqueVarName_go = def "uniqueVarName_go" $
   lambda "aliases" $ lambda "base" $ lambda "n" $ lets [
     "candidate">: wrap _Name (Strings.cat2 (var "base") (Literals.showInt32 (var "n")))] $
@@ -1237,19 +1236,19 @@ uniqueVarName_go = def "uniqueVarName_go" $
       (uniqueVarName_go @@ var "aliases" @@ var "base" @@ Math.add (var "n") (int32 1))
       (var "candidate")
 
-varDeclarationStatement :: TTermDefinition (Java.Identifier -> Java.Expression -> Java.BlockStatement)
+varDeclarationStatement :: TypedTermDefinition (Java.Identifier -> Java.Expression -> Java.BlockStatement)
 varDeclarationStatement = def "varDeclarationStatement" $
   lambda "id" $ lambda "rhs" $
     JavaDsl.blockStatementLocalVariableDeclaration
       (JavaDsl.localVariableDeclarationStatement
         (JavaDsl.localVariableDeclaration
-          (list ([] :: [TTerm Java.VariableModifier]))
+          (list ([] :: [TypedTerm Java.VariableModifier]))
           JavaDsl.localVariableTypeVar
           (list [javaVariableDeclarator @@ var "id" @@
             (just $ JavaDsl.variableInitializerExpression (var "rhs"))])))
 
 -- | Create a variable declaration statement with an explicit type
-variableDeclarationStatement :: TTermDefinition (JavaHelpers.Aliases -> Java.Type -> Java.Identifier -> Java.Expression -> Java.BlockStatement)
+variableDeclarationStatement :: TypedTermDefinition (JavaHelpers.Aliases -> Java.Type -> Java.Identifier -> Java.Expression -> Java.BlockStatement)
 variableDeclarationStatement = def "variableDeclarationStatement" $
   lambda "aliases" $ lambda "jtype" $ lambda "id" $ lambda "rhs" $ lets [
     "init_">: JavaDsl.variableInitializerExpression (var "rhs"),
@@ -1257,11 +1256,11 @@ variableDeclarationStatement = def "variableDeclarationStatement" $
     JavaDsl.blockStatementLocalVariableDeclaration
       (JavaDsl.localVariableDeclarationStatement
         (JavaDsl.localVariableDeclaration
-          (list ([] :: [TTerm Java.VariableModifier]))
+          (list ([] :: [TypedTerm Java.VariableModifier]))
           (JavaDsl.localVariableTypeType (JavaDsl.unannType (var "jtype")))
           (list [var "vdec"])))
 
-variableToJavaIdentifier :: TTermDefinition (Name -> Java.Identifier)
+variableToJavaIdentifier :: TypedTermDefinition (Name -> Java.Identifier)
 variableToJavaIdentifier = def "variableToJavaIdentifier" $
   lambda "name" $ lets [
     "v">: Core.unName $ var "name"] $
@@ -1270,7 +1269,7 @@ variableToJavaIdentifier = def "variableToJavaIdentifier" $
       (JavaDsl.identifier (sanitizeJavaName @@ var "v"))
 
 -- | Compute the class name for a union variant
-variantClassName :: TTermDefinition (Bool -> Name -> Name -> Name)
+variantClassName :: TypedTermDefinition (Bool -> Name -> Name -> Name)
 variantClassName = def "variantClassName" $
   lambda "qualify" $ lambda "elName" $ lambda "fname" $ lets [
     "qn">: Names.qualifyName @@ var "elName",
@@ -1285,6 +1284,6 @@ variantClassName = def "variantClassName" $
     Names.unqualifyName @@ Packaging.qualifiedName (var "ns_") (var "local1")
 
 -- | The reference type for the visitor return type variable "r"
-visitorTypeVariable :: TTermDefinition Java.ReferenceType
+visitorTypeVariable :: TypedTermDefinition Java.ReferenceType
 visitorTypeVariable = def "visitorTypeVariable" $
   javaTypeVariable @@ string "r"

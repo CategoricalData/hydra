@@ -9,7 +9,7 @@ module Hydra.Sources.Test.Json.Roundtrip where
 
 -- Standard imports for tests
 import Hydra.Kernel
-import           Hydra.Dsl.Bootstrap (unqualifiedDep)
+import           Hydra.Dsl.Bootstrap (unqualifiedDep, descriptionMetadata)
 import Hydra.Dsl.Meta.Testing                 as Testing
 import Hydra.Dsl.Meta.Terms                   as Terms hiding ((@@))
 import Hydra.Sources.Kernel.Types.All
@@ -41,17 +41,17 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = unqualifiedDep <$> ([ShowCore.ns, ModuleName "hydra.json.encode", ModuleName "hydra.json.decode"] ++ kernelTypesModuleNames),
-            moduleDescription = (Just "Round-trip test cases for JSON encoding and decoding")}
+            moduleMetadata = descriptionMetadata ((Just "Round-trip test cases for JSON encoding and decoding"))}
   where
     definitions = [
         Phantoms.toDefinition allTests]
 
-define :: String -> TTerm a -> TTermDefinition a
+define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModule module_
 
 -- Local alias for polymorphic application
 
-allTests :: TTermDefinition TestGroup
+allTests :: TypedTermDefinition TestGroup
 allTests = define "allTests" $
     Phantoms.doc "Round-trip test cases for JSON encoding and decoding" $
     supergroup "JSON round-trip" [
@@ -63,7 +63,7 @@ allTests = define "allTests" $
 
 -- Helper for creating JSON round-trip test cases (universal)
 -- Encodes term to JSON, decodes back, shows both and compares.
-roundtripTest :: String -> TTerm Type -> TTerm Term -> TTerm TestCaseWithMetadata
+roundtripTest :: String -> TypedTerm Type -> TypedTerm Term -> TypedTerm TestCaseWithMetadata
 roundtripTest testName typ term = universalCase testName
   (Eithers.either_
     (Phantoms.lambda "e" $ Phantoms.var "e")
@@ -79,7 +79,7 @@ roundtripTest testName typ term = universalCase testName
 -- Literal types
 ----------------------------------------
 
-literalRoundtripGroup :: TTerm TestGroup
+literalRoundtripGroup :: TypedTerm TestGroup
 literalRoundtripGroup = subgroup "literal types" [
     -- Booleans
     roundtripTest "boolean true" T.boolean (boolean True),
@@ -124,7 +124,7 @@ literalRoundtripGroup = subgroup "literal types" [
 -- preserve large-integer precision, but dialects like Scheme/Common Lisp/Emacs Lisp emit
 -- decimal literals as Double and lose it before the round trip begins, so we don't test
 -- values outside Double's exact range at this level.
-decimalRoundtripGroup :: TTerm TestGroup
+decimalRoundtripGroup :: TypedTerm TestGroup
 decimalRoundtripGroup = subgroup "decimal precision" [
     roundtripTest "decimal zero" T.decimal (decimal 0),
     roundtripTest "decimal whole" T.decimal (decimal 42),
@@ -143,7 +143,7 @@ decimalRoundtripGroup = subgroup "decimal precision" [
 -- Collection types
 ----------------------------------------
 
-collectionRoundtripGroup :: TTerm TestGroup
+collectionRoundtripGroup :: TypedTerm TestGroup
 collectionRoundtripGroup = subgroup "collection types" [
     -- Lists
     roundtripTest "list of integers"
@@ -171,7 +171,7 @@ collectionRoundtripGroup = subgroup "collection types" [
 -- Optional types
 ----------------------------------------
 
-optionalRoundtripGroup :: TTerm TestGroup
+optionalRoundtripGroup :: TypedTerm TestGroup
 optionalRoundtripGroup = subgroup "optional types" [
     -- Simple Maybe (idiomatic encoding: null for Nothing, plain value for Just)
     roundtripTest "optional string with value"
@@ -199,7 +199,7 @@ optionalRoundtripGroup = subgroup "optional types" [
 -- Record types with optional fields
 ----------------------------------------
 
-recordRoundtripGroup :: TTerm TestGroup
+recordRoundtripGroup :: TypedTerm TestGroup
 recordRoundtripGroup = subgroup "record types" [
     -- Record with all required fields
     roundtripTest "record with required fields"

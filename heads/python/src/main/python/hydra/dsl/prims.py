@@ -7,7 +7,7 @@ from typing import TypeVar, cast
 import hydra.dsl.terms as terms
 import hydra.dsl.types as types
 import hydra.extract.core as extract
-from hydra.context import Context
+from hydra.typing import InferenceContext
 from hydra.core import (
     Application,
     FloatType,
@@ -24,6 +24,8 @@ from hydra.core import (
 from hydra.dsl.python import FrozenDict, Maybe, Just, Nothing, frozenlist, Either, Left, Right
 from hydra.errors import Error, ErrorOther, OtherError
 from hydra.graph import Graph, Primitive, TermCoder
+from hydra.packaging import PrimitiveDefinition
+from hydra.scoping import type_scheme_to_term_signature
 from hydra.util import Comparison
 
 A = TypeVar("A")
@@ -35,7 +37,7 @@ X = TypeVar("X")
 Y = TypeVar("Y")
 
 
-def other_err(cx: Context, msg: str) -> Error:
+def other_err(cx: InferenceContext, msg: str) -> Error:
     """Create an Error (Other) from a string message."""
     return ErrorOther(OtherError(msg))
 
@@ -80,6 +82,32 @@ def type_vars_to_constraints(vars: list[TypeVar_]) -> list[tuple[str, list[Name]
     Filters out variables with no constraints.
     """
     return [(tv.name, tv.classes) for tv in vars if tv.classes]
+
+
+def default_primitive_definition(name: Name, typ, lazy_args: list[int] = []) -> PrimitiveDefinition:
+    """Build a PrimitiveDefinition with default metadata (mirrors Haskell default). For #156.
+
+    lazy_args: 0-based positions of value parameters that must be passed lazily (thunked) at call
+    sites in hosts that distinguish strict from lazy evaluation (#391). type_scheme_to_term_signature
+    cannot infer laziness, so the per-primitive lazy_args records it for coders. Mirrors
+    Hydra.Dsl.Prims.lazyArgs on the Haskell host.
+    """
+    sig = type_scheme_to_term_signature(typ)
+    if lazy_args:
+        import dataclasses
+        new_params = [
+            dataclasses.replace(p, is_lazy=True) if i in lazy_args else p
+            for i, p in enumerate(sig.parameters)
+        ]
+        sig = dataclasses.replace(sig, parameters=new_params)
+    return PrimitiveDefinition(
+        name=name,
+        signature=sig,
+        metadata=Nothing(),
+        is_pure=True,
+        is_total=True,
+        default_implementation=Nothing(),
+    )
 
 
 # Basic numeric types
@@ -519,12 +547,13 @@ def prim0(
         name: Name, value: Callable[[], A], variables: list[TypeVar_], output: TermCoder[A]
 ) -> Primitive:
     """Create a 0-argument primitive function."""
-    def impl(cx: Context, g: Graph, args: frozenlist[Term]) -> Either[Error, Term]:
+    def impl(cx: InferenceContext, g: Graph, args: frozenlist[Term]) -> Either[Error, Term]:
         result = output.decode(cx, value())
         return result
 
     return Primitive(
-        name=name, type_scheme=build_type_scheme(variables, output.type), implementation=impl
+        definition=default_primitive_definition(name, build_type_scheme(variables, output.type)),
+        implementation=impl,
     )
 
 
@@ -536,7 +565,7 @@ def prim1(
         output: TermCoder[B],
 ) -> Primitive:
     """Create a 1-argument primitive function."""
-    def impl(cx: Context, g: Graph, args: frozenlist[Term]) -> Either[Error, Term]:
+    def impl(cx: InferenceContext, g: Graph, args: frozenlist[Term]) -> Either[Error, Term]:
         def go():
             r = extract.n_args(name, 1, args)
             match r:
@@ -554,8 +583,7 @@ def prim1(
         return go()
 
     return Primitive(
-        name=name,
-        type_scheme=build_type_scheme(variables, types.function(input1.type, output.type)),
+        definition=default_primitive_definition(name, build_type_scheme(variables, types.function(input1.type, output.type))),
         implementation=impl,
     )
 
@@ -567,9 +595,10 @@ def prim2(
         input1: TermCoder[A],
         input2: TermCoder[B],
         output: TermCoder[C],
+        lazy_args: list[int] = [],
 ) -> Primitive:
-    """Create a 2-argument primitive function."""
-    def impl(cx: Context, g: Graph, args: frozenlist[Term]) -> Either[Error, Term]:
+    """Create a 2-argument primitive function. lazy_args: 0-based lazy parameter positions (#391)."""
+    def impl(cx: InferenceContext, g: Graph, args: frozenlist[Term]) -> Either[Error, Term]:
         def go():
             r = extract.n_args(name, 2, args)
             match r:
@@ -593,11 +622,10 @@ def prim2(
         return go()
 
     return Primitive(
-        name=name,
-        type_scheme=build_type_scheme(
+        definition=default_primitive_definition(name, build_type_scheme(
             variables,
             types.function(input1.type, types.function(input2.type, output.type)),
-        ),
+        ), lazy_args),
         implementation=impl,
     )
 
@@ -610,9 +638,10 @@ def prim3(
         input2: TermCoder[B],
         input3: TermCoder[C],
         output: TermCoder[D],
+        lazy_args: list[int] = [],
 ) -> Primitive:
-    """Create a 3-argument primitive function."""
-    def impl(cx: Context, g: Graph, args: frozenlist[Term]) -> Either[Error, Term]:
+    """Create a 3-argument primitive function. lazy_args: 0-based lazy parameter positions (#391)."""
+    def impl(cx: InferenceContext, g: Graph, args: frozenlist[Term]) -> Either[Error, Term]:
         def go():
             r = extract.n_args(name, 3, args)
             match r:
@@ -642,14 +671,13 @@ def prim3(
         return go()
 
     return Primitive(
-        name=name,
-        type_scheme=build_type_scheme(
+        definition=default_primitive_definition(name, build_type_scheme(
             variables,
             types.function(
                 input1.type,
                 types.function(input2.type, types.function(input3.type, output.type)),
             ),
-        ),
+        ), lazy_args),
         implementation=impl,
     )
 

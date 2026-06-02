@@ -1,29 +1,34 @@
 module Hydra.Sources.Kernel.Types.Packaging where
 
 -- Standard type-level kernel imports
-import           Hydra.Kernel hiding (packageName, packageModules, packageDependencies, packageDescription)
+import           Hydra.Kernel hiding (packageName, packageModules, packageDependencies, packageDescription, primitiveDefinition)
 import           Hydra.Dsl.Annotations (doc)
 import           Hydra.Dsl.Bootstrap
 import           Hydra.Dsl.Types ((>:), (@@), (~>))
 import qualified Hydra.Dsl.Types as T
 import qualified Hydra.Sources.Kernel.Types.Core as Core
+import qualified Hydra.Sources.Kernel.Types.Typing as Typing
 
 
 ns :: ModuleName
 ns = ModuleName "hydra.packaging"
 
-define :: String -> Type -> Binding
+define :: String -> Type -> TypeDefinition
 define = defineType ns
 
 module_ :: Module
 module_ = Module {
             moduleName = ns,
-            moduleDefinitions = (map toTypeDef definitions),
-            moduleDependencies = unqualifiedDep <$> [Core.ns],
-            moduleDescription = Just "A model for Hydra namespaces, modules, and packages"}
+            moduleDefinitions = (DefinitionType <$> definitions),
+            moduleDependencies = unqualifiedDep <$> [Core.ns, Typing.ns],
+            moduleMetadata = descriptionMetadata (Just "A model for Hydra module names, modules, and packages")}
   where
     definitions = [
       definition,
+      definitionReference,
+      entityLifecycle,
+      entityMetadata,
+      entityReference,
       fileExtension,
       module',
       moduleDependency,
@@ -32,36 +37,101 @@ module_ = Module {
       packageDependency,
       packageName,
       packageVersionSpecifier,
+      primitiveDefinition,
       qualifiedName,
       termDefinition,
-      typeDefinition]
+      typeDefinition,
+      version]
 
-definition :: Binding
+definition :: TypeDefinition
 definition = define "Definition" $
-  doc "A definition, which may be either a term or type definition" $
+  doc "A definition, which may be either a term, type, or primitive definition" $
   T.union [
     "term">:
       doc "A term definition"
       termDefinition,
     "type">:
       doc "A type definition"
-      typeDefinition]
+      typeDefinition,
+    "primitive">:
+      doc "A primitive definition"
+      primitiveDefinition]
 
-fileExtension :: Binding
+definitionReference :: TypeDefinition
+definitionReference = define "DefinitionReference" $
+  doc "A typed reference to a definition: a type, a term, or a primitive, identified by name" $
+  T.union [
+    "type">:
+      doc "A reference to a type definition, by name"
+      Core.name,
+    "term">:
+      doc "A reference to a term definition, by name"
+      Core.name,
+    "primitive">:
+      doc "A reference to a primitive definition, by name"
+      Core.name]
+
+entityLifecycle :: TypeDefinition
+entityLifecycle = define "EntityLifecycle" $
+  doc ("Version-lifecycle milestones for a packaging entity. Each milestone is independently optional;"
+    ++ " further milestones (e.g. stableSince, removedSince) may be added without changing dependent types.") $
+  T.record [
+    "availableSince">:
+      doc "The version in which the entity was introduced, if known." $
+      T.maybe version,
+    "deprecatedSince">:
+      doc "The version in which the entity was deprecated, if applicable." $
+      T.maybe version]
+
+entityMetadata :: TypeDefinition
+entityMetadata = define "EntityMetadata" $
+  doc ("Documentation and lifecycle metadata attachable to a packaging entity (package, module, or definition)."
+    ++ " Bundling these fields in one type lets future metadata be added without changing the field shape of"
+    ++ " the entities that carry it.") $
+  T.record [
+    "description">:
+      doc "An optional, concise one-line human-readable summary of the entity." $
+      T.maybe T.string,
+    "comments">:
+      doc ("Zero or more long-form prose paragraphs: cross-cutting semantic conventions, caveats, and"
+        ++ " references that would otherwise be repeated across the entity's constituents.") $
+      T.list T.string,
+    "seeAlso">:
+      doc "Typed cross-references to related entities, for navigation and documentation." $
+      T.list entityReference,
+    "lifecycle">:
+      doc "Optional version-lifecycle milestones for the entity." $
+      T.maybe entityLifecycle]
+
+entityReference :: TypeDefinition
+entityReference = define "EntityReference" $
+  doc "A typed reference to a packaging entity: a package, a module, or a definition" $
+  T.union [
+    "package">:
+      doc "A reference to a package, by name"
+      packageName,
+    "module">:
+      doc "A reference to a module, by name"
+      moduleNameDef,
+    "definition">:
+      doc "A reference to a definition (type, term, or primitive)"
+      definitionReference]
+
+fileExtension :: TypeDefinition
 fileExtension = define "FileExtension" $
   doc "A file extension (without the dot), e.g. \"json\" or \"py\"" $
   T.wrap T.string
 
-module' :: Binding
+module' :: TypeDefinition
 module' = define "Module" $
-  doc "A logical collection of elements in the same namespace, having dependencies on zero or more other modules" $
+  doc "A logical collection of elements sharing a common module name, having dependencies on zero or more other modules" $
   T.record [
-    "description">:
-      doc "An optional human-readable description of the module" $
-      T.maybe T.string,
     "name">:
       doc "The name of the module, which is also the common prefix for all element names in the module"
       moduleNameDef,
+    "metadata">:
+      doc "Optional documentation and lifecycle metadata for the module" $
+      T.maybe entityMetadata,
     "dependencies">:
       doc "Any modules which this module directly depends on" $
       T.list moduleDependency,
@@ -69,7 +139,7 @@ module' = define "Module" $
       doc "The definitions in this module" $
       T.list definition]
 
-moduleDependency :: Binding
+moduleDependency :: TypeDefinition
 moduleDependency = define "ModuleDependency" $
   doc ("A dependency on another module, identified by its name and"
     ++ " (optionally) the package which provides it. When the package is omitted,"
@@ -84,29 +154,29 @@ moduleDependency = define "ModuleDependency" $
       doc "The package providing the depended-on module, if disambiguation is required" $
       T.maybe packageName]
 
-moduleNameDef :: Binding
+moduleNameDef :: TypeDefinition
 moduleNameDef = define "ModuleName" $
   doc "The unique name of a module; a prefix for the names of elements defined in the module." $
   T.wrap T.string
 
-package :: Binding
+package :: TypeDefinition
 package = define "Package" $
   doc "A package, which is a named collection of modules with metadata and dependencies" $
   T.record [
     "name">:
       doc "The name of the package"
       packageName,
-    "modules">:
-      doc "The modules in this package" $
-      T.list module',
+    "metadata">:
+      doc "Optional documentation and lifecycle metadata for the package" $
+      T.maybe entityMetadata,
     "dependencies">:
       doc "The packages which this package depends on" $
       T.list packageDependency,
-    "description">:
-      doc "An optional human-readable description of the package" $
-      T.maybe T.string]
+    "modules">:
+      doc "The modules in this package" $
+      T.list module']
 
-packageDependency :: Binding
+packageDependency :: TypeDefinition
 packageDependency = define "PackageDependency" $
   doc "A dependency on another package, identified by name and constrained by an optional version specifier" $
   T.record [
@@ -117,12 +187,12 @@ packageDependency = define "PackageDependency" $
       doc "The version-range constraint on the depended-on package"
       packageVersionSpecifier]
 
-packageName :: Binding
+packageName :: TypeDefinition
 packageName = define "PackageName" $
   doc "The unique name of a package, e.g. \"hydra-kernel\" or \"hydra-python\"" $
   T.wrap T.string
 
-packageVersionSpecifier :: Binding
+packageVersionSpecifier :: TypeDefinition
 packageVersionSpecifier = define "PackageVersionSpecifier" $
   doc ("A specifier constraining acceptable versions of a depended-on package."
     ++ " Currently only the `any` (unit) specifier is defined; future variants"
@@ -133,7 +203,30 @@ packageVersionSpecifier = define "PackageVersionSpecifier" $
       doc "Any version of the package satisfies the dependency" $
       T.unit]
 
-qualifiedName :: Binding
+primitiveDefinition :: TypeDefinition
+primitiveDefinition = define "PrimitiveDefinition" $
+  doc "A primitive definition: the universal, host-independent declarative metadata for a primitive, including name, signature, documentation and lifecycle metadata, totality and purity flags, and an optional default implementation expressed as a Hydra term." $
+  T.record [
+    "name">:
+      doc "The name of the primitive"
+      Core.name,
+    "signature">:
+      doc "The signature of the primitive (always explicit, never inferred)"
+      Typing.termSignature,
+    "metadata">:
+      doc "Optional documentation and lifecycle metadata for the primitive (description, long-form comments, cross-references, version milestones)." $
+      T.maybe entityMetadata,
+    "isPure">:
+      doc "Whether the primitive is pure (referentially transparent, no observable side effects). Defaults to true."
+      T.boolean,
+    "isTotal">:
+      doc "Whether the primitive is total (terminates on every input of its declared type). Defaults to true."
+      T.boolean,
+    "defaultImplementation">:
+      doc "An optional cross-compilable reference implementation of the primitive, expressed as a Hydra term. Used by interpreters lacking a native implementation and as a proof-friendly reference. Distinct from the per-host Primitive.implementation." $
+      T.maybe Core.term]
+
+qualifiedName :: TypeDefinition
 qualifiedName = define "QualifiedName" $
   doc "A qualified name consisting of an optional module name together with a mandatory local name" $
   T.record [
@@ -144,27 +237,38 @@ qualifiedName = define "QualifiedName" $
       doc "The local name"
       T.string]
 
-termDefinition :: Binding
+termDefinition :: TypeDefinition
 termDefinition = define "TermDefinition" $
-  doc "A term-level definition, including a name, a term, and the type scheme of the term" $
+  doc "A term-level definition, including a name, a term, and an optional signature" $
   T.record [
     "name">:
       doc "The name of the term"
       Core.name,
+    "metadata">:
+      doc "Optional documentation and lifecycle metadata for the term definition" $
+      T.maybe entityMetadata,
     "term">:
       doc "The term being defined"
       Core.term,
-    "typeScheme">:
-      doc "The type scheme of the term, including any class constraints" $
-      T.maybe Core.typeScheme]
+    "signature">:
+      doc "The optional signature of the term. When absent, the signature is to be inferred." $
+      T.maybe Typing.termSignature]
 
-typeDefinition :: Binding
+typeDefinition :: TypeDefinition
 typeDefinition = define "TypeDefinition" $
   doc "A type-level definition, including a name and the type scheme" $
   T.record [
     "name">:
       doc "The name of the type"
       Core.name,
+    "metadata">:
+      doc "Optional documentation and lifecycle metadata for the type definition" $
+      T.maybe entityMetadata,
     "typeScheme">:
       doc "The type scheme being defined"
       Core.typeScheme]
+
+version :: TypeDefinition
+version = define "Version" $
+  doc "A version string, e.g. \"0.15\" or \"1.0.0\"." $
+  T.wrap T.string

@@ -4,7 +4,7 @@ This recipe explains how to extend Hydra's common test suite with new test cases
 
 ## Background
 
-Hydra's [common test suite](../../wiki/Testing.md#common-test-suite) is designed to run identically in all language
+Hydra's [common test suite](https://github.com/CategoricalData/hydra/wiki/Testing#common-test-suite) is designed to run identically in all language
 implementations (Haskell, Java, Python, Scala, and Lisp).
 Tests are written in Hydra's term-encoded DSL in [packages/hydra-kernel/src/main/haskell/Hydra/Sources/Test/][sources-test]
 and code-generated into each target language.
@@ -14,11 +14,11 @@ and code-generated into each target language.
 This recipe covers that workflow, plus a special section on migrating existing Haskell-specific tests to the common
 suite.
 
-For more context on Hydra's testing strategy, see [Testing in Hydra](../../wiki/Testing.md).
+For more context on Hydra's testing strategy, see [Testing in Hydra](https://github.com/CategoricalData/hydra/wiki/Testing).
 
 ## Prerequisites
 
-- Familiarity with [Hydra's core concepts](../../wiki/Concepts.md)
+- Familiarity with [Hydra's core concepts](https://github.com/CategoricalData/hydra/wiki/Concepts)
 - Understanding of term-encoded DSLs ([TTerms][tterms], [TTypes][ttypes])
 - Knowledge of the area you're testing (e.g., type inference, library functions, formatting)
 
@@ -42,7 +42,7 @@ Test modules are organized in [Hydra/Sources/Test/][sources-test]:
 [test-lib]: https://github.com/CategoricalData/hydra/tree/main/packages/hydra-kernel/src/main/haskell/Hydra/Sources/Test/Lib
 [test-formatting]: https://github.com/CategoricalData/hydra/blob/main/packages/hydra-kernel/src/main/haskell/Hydra/Sources/Test/Formatting.hs
 
-See [Testing.md](../../wiki/Testing.md#test-categories) for the full list.
+See [Testing.md](https://github.com/CategoricalData/hydra/wiki/Testing#test-categories) for the full list.
 
 ### 2. Verify DSL coverage (rarely needed)
 
@@ -54,21 +54,21 @@ If you must add DSL functions:
 In [TTerms.hs][tterms]:
 ```haskell
 -- Example: Adding constructors for Either
-left :: TTerm Term -> TTerm Term
+left :: TypedTerm Term -> TypedTerm Term
 left t = Core.termEither $ Phantoms.left t
 
-right :: TTerm Term -> TTerm Term
+right :: TypedTerm Term -> TypedTerm Term
 right t = Core.termEither $ Phantoms.right t
 ```
 
 In [TTypes.hs][ttypes]:
 ```haskell
 -- Example: Adding a type constructor
-either :: TTerm Type -> TTerm Type -> TTerm Type
+either :: TypedTerm Type -> TypedTerm Type -> TypedTerm Type
 either leftType rightType = Core.typeFunction _Either [leftType, rightType]
 ```
 
-Pattern: Import `qualified Hydra.Dsl.Meta.Core as Core`, use `Core.*` functions, return `TTerm` phantom types.
+Pattern: Import `qualified Hydra.Dsl.Meta.Core as Core`, use `Core.*` functions, return `TypedTerm` phantom types.
 
 **Note**: As Hydra matures, DSL extensions should become increasingly rare.
 Most new tests can be written using existing DSL functions.
@@ -158,7 +158,7 @@ Common issues when tests fail:
 
 **General debugging:**
 - Compare verbose test output with expected values
-- Use `unTTerm` to extract `Term` from `TTerm` for inspection
+- Use `unTypedTerm` to extract `Term` from `TypedTerm` for inspection
 - Create minimal test cases to isolate the issue
 - Look at similar passing tests in the same module for patterns
 
@@ -203,7 +203,7 @@ Migrate tests when:
    |-------------------------|------------------------------|
    | `Terms.lambda "x"` | `lambda "x"` |
    | `Types.int32` | `T.int32` |
-   | Direct `Term` values | `TTerm Term` phantom types |
+   | Direct `Term` values | `TypedTerm Term` phantom types |
    | Haskell test framework calls | `checkWithType`, `primCase`, etc. |
 
 5. **Migrate in batches** - Add 5-10 test cases at a time
@@ -292,9 +292,9 @@ When writing test cases for `hydra.lib.math` primitives that use transcendental 
 
 ## See also
 
-- [Testing in Hydra](../../wiki/Testing.md) - Complete testing documentation
-- [Common test suite](../../wiki/Testing.md#common-test-suite) - Test suite structure and categories
-- [Adding new tests](../../wiki/Testing.md#adding-new-tests) - Official guide for test creation
+- [Testing in Hydra](https://github.com/CategoricalData/hydra/wiki/Testing) - Complete testing documentation
+- [Common test suite](https://github.com/CategoricalData/hydra/wiki/Testing#common-test-suite) - Test suite structure and categories
+- [Adding new tests](https://github.com/CategoricalData/hydra/wiki/Testing#adding-new-tests) - Official guide for test creation
 
 ## Key files
 

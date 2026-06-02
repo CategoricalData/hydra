@@ -85,15 +85,12 @@ import qualified Hydra.Sources.Kernel.Terms.Parsers        as Parsers
 import qualified Hydra.Json.Model as J
 
 
-jsonParserDefinition :: String -> TTerm a -> TTermDefinition a
-jsonParserDefinition = definitionInModule module_
-
 module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> ([Parsers.ns] L.++ KernelTypes.kernelTypesModuleNames),
-            moduleDescription = Just "JSON parser using Hydra parser combinators"}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just "JSON parser using Hydra parser combinators")}
   where
     ns = ModuleName "hydra.json.parser"
     definitions = [
@@ -116,56 +113,53 @@ module_ = Module {
       toDefinition token,
       toDefinition whitespace]
 
-define :: String -> TTerm a -> TTermDefinition a
+define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModule module_
 
 -- | ASCII code points for common characters
-spaceCode, tabCode, newlineCode, returnCode :: TTerm Int
+spaceCode, tabCode, newlineCode, returnCode :: TypedTerm Int
 spaceCode = int32 32      -- ' '
 tabCode = int32 9         -- '\t'
 newlineCode = int32 10    -- '\n'
 returnCode = int32 13     -- '\r'
 
-quoteCode, backslashCode, colonCode, commaCode :: TTerm Int
+quoteCode, backslashCode, colonCode, commaCode :: TypedTerm Int
 quoteCode = int32 34      -- '"'
 backslashCode = int32 92  -- '\\'
 colonCode = int32 58      -- ':'
 commaCode = int32 44      -- ','
 
-bracketOpenCode, bracketCloseCode, braceOpenCode, braceCloseCode :: TTerm Int
+bracketOpenCode, bracketCloseCode, braceOpenCode, braceCloseCode :: TypedTerm Int
 bracketOpenCode = int32 91   -- '['
 bracketCloseCode = int32 93  -- ']'
 braceOpenCode = int32 123    -- '{'
 braceCloseCode = int32 125   -- '}'
 
-zeroCode, nineCode, minusCode, plusCode, dotCode :: TTerm Int
+zeroCode, nineCode, minusCode, plusCode, dotCode :: TypedTerm Int
 zeroCode = int32 48       -- '0'
 nineCode = int32 57       -- '9'
 minusCode = int32 45      -- '-'
 plusCode = int32 43       -- '+'
 dotCode = int32 46        -- '.'
 
-letterELower, letterEUpper :: TTerm Int
+letterELower, letterEUpper :: TypedTerm Int
 letterELower = int32 101  -- 'e'
 letterEUpper = int32 69   -- 'E'
 
-letterNCode, letterUCode, letterLCode :: TTerm Int
+letterNCode, letterUCode, letterLCode :: TypedTerm Int
 letterNCode = int32 110   -- 'n'
 letterUCode = int32 117   -- 'u'
 letterLCode = int32 108   -- 'l'
 
-letterTCode, letterRCode, letterFCode, letterACode, letterSCode :: TTerm Int
+letterTCode, letterRCode, letterFCode, letterACode, letterSCode :: TypedTerm Int
 letterTCode = int32 116   -- 't'
 letterRCode = int32 114   -- 'r'
 letterFCode = int32 102   -- 'f'
 letterACode = int32 97    -- 'a'
 letterSCode = int32 115   -- 's'
 
-letterBCode :: TTerm Int
-letterBCode = int32 98    -- 'b'
-
 -- | Parse a single digit (0-9)
-digit :: TTermDefinition (Parser Int)
+digit :: TypedTermDefinition (Parser Int)
 digit = define "digit" $
   doc "Parse a single digit (0-9)" $
   Parsers.satisfy @@ ("c" ~>
@@ -175,7 +169,7 @@ digit = define "digit" $
 
 -- | Parse one or more digits and convert to string
 -- | Parse one or more digits and convert to string
-digits :: TTermDefinition (Parser String)
+digits :: TypedTermDefinition (Parser String)
 digits = define "digits" $
   doc "Parse one or more digits as a string" $
   Parsers.map @@ (reify Strings.fromList) @@
@@ -183,7 +177,7 @@ digits = define "digits" $
 
 -- | Parse the integer part of a JSON number
 -- | Parse a JSON array
-jsonArray :: TTermDefinition (Parser J.Value)
+jsonArray :: TypedTermDefinition (Parser J.Value)
 jsonArray = define "jsonArray" $
   doc "Parse a JSON array" $
   Parsers.map @@ (reify Json.valueArray) @@
@@ -196,7 +190,7 @@ jsonArray = define "jsonArray" $
 
 -- | Parse a JSON key-value pair
 -- | Parse JSON boolean
-jsonBool :: TTermDefinition (Parser J.Value)
+jsonBool :: TypedTermDefinition (Parser J.Value)
 jsonBool = define "jsonBool" $
   doc "Parse JSON boolean (true or false)" $
   Parsers.alt
@@ -207,7 +201,7 @@ jsonBool = define "jsonBool" $
 
 -- | Parse a single digit (0-9)
 -- | Parse a JSON escape character
-jsonEscapeChar :: TTermDefinition (Parser Int)
+jsonEscapeChar :: TypedTermDefinition (Parser Int)
 jsonEscapeChar = define "jsonEscapeChar" $
   doc "Parse a JSON escape sequence after the backslash" $
   Parsers.choice @@ list [
@@ -223,7 +217,7 @@ jsonEscapeChar = define "jsonEscapeChar" $
 
 -- | Parse a single JSON string character
 -- | Parse the exponent part of a JSON number
-jsonExponentPart :: TTermDefinition (Parser (Maybe String))
+jsonExponentPart :: TypedTermDefinition (Parser (Maybe String))
 jsonExponentPart = define "jsonExponentPart" $
   doc "Parse the optional exponent part of a JSON number" $
   Parsers.optional @@
@@ -247,7 +241,7 @@ jsonExponentPart = define "jsonExponentPart" $
 
 -- | Parse a JSON number
 -- | Parse the fractional part of a JSON number
-jsonFractionPart :: TTermDefinition (Parser (Maybe String))
+jsonFractionPart :: TypedTermDefinition (Parser (Maybe String))
 jsonFractionPart = define "jsonFractionPart" $
   doc "Parse the optional fractional part of a JSON number" $
   Parsers.optional @@
@@ -256,7 +250,7 @@ jsonFractionPart = define "jsonFractionPart" $
 
 -- | Parse the exponent part of a JSON number
 -- | Parse the integer part of a JSON number
-jsonIntegerPart :: TTermDefinition (Parser String)
+jsonIntegerPart :: TypedTermDefinition (Parser String)
 jsonIntegerPart = define "jsonIntegerPart" $
   doc "Parse the integer part of a JSON number (optional minus, then digits)" $
   Parsers.bind @@
@@ -271,7 +265,7 @@ jsonIntegerPart = define "jsonIntegerPart" $
 
 -- | Parse the fractional part of a JSON number
 -- | Parse a JSON key-value pair
-jsonKeyValue :: TTermDefinition (Parser (String, J.Value))
+jsonKeyValue :: TypedTermDefinition (Parser (String, J.Value))
 jsonKeyValue = define "jsonKeyValue" $
   doc "Parse a JSON object key-value pair" $
   Parsers.bind @@
@@ -286,7 +280,7 @@ jsonKeyValue = define "jsonKeyValue" $
 
 -- | Parse a JSON object
 -- | Parse JSON null
-jsonNull :: TTermDefinition (Parser J.Value)
+jsonNull :: TypedTermDefinition (Parser J.Value)
 jsonNull = define "jsonNull" $
   doc "Parse JSON null value" $
   Parsers.map @@ (constant Json.valueNull) @@
@@ -294,7 +288,7 @@ jsonNull = define "jsonNull" $
 
 -- | Parse JSON boolean
 -- | Parse a JSON number
-jsonNumber :: TTermDefinition (Parser J.Value)
+jsonNumber :: TypedTermDefinition (Parser J.Value)
 jsonNumber = define "jsonNumber" $
   doc "Parse a JSON number (integer, decimal, or scientific notation)" $
   token @@
@@ -310,7 +304,7 @@ jsonNumber = define "jsonNumber" $
 
 -- | Parse a JSON escape character
 -- | Parse a JSON object
-jsonObject :: TTermDefinition (Parser J.Value)
+jsonObject :: TypedTermDefinition (Parser J.Value)
 jsonObject = define "jsonObject" $
   doc "Parse a JSON object" $
   Parsers.map @@ (reify Json.valueObject <.> reify Maps.fromList) @@
@@ -321,9 +315,12 @@ jsonObject = define "jsonObject" $
           @@ jsonKeyValue
           @@ (token @@ (Parsers.char @@ commaCode))))
 
+jsonParserDefinition :: String -> TypedTerm a -> TypedTermDefinition a
+jsonParserDefinition = definitionInModule module_
+
 -- | Parse any JSON value
 -- | Parse a JSON string
-jsonString :: TTermDefinition (Parser J.Value)
+jsonString :: TypedTermDefinition (Parser J.Value)
 jsonString = define "jsonString" $
   doc "Parse a JSON string value" $
   token @@
@@ -334,7 +331,7 @@ jsonString = define "jsonString" $
 
 -- | Parse a JSON array
 -- | Parse a single JSON string character
-jsonStringChar :: TTermDefinition (Parser Int)
+jsonStringChar :: TypedTermDefinition (Parser Int)
 jsonStringChar = define "jsonStringChar" $
   doc "Parse a single character in a JSON string (handling escapes)" $
   Parsers.alt @@
@@ -349,7 +346,7 @@ jsonStringChar = define "jsonStringChar" $
 
 -- | Parse a JSON string
 -- | Parse any JSON value
-jsonValue :: TTermDefinition (Parser J.Value)
+jsonValue :: TypedTermDefinition (Parser J.Value)
 jsonValue = define "jsonValue" $
   doc "Parse any JSON value" $
   Parsers.choice @@ list [
@@ -360,9 +357,12 @@ jsonValue = define "jsonValue" $
     jsonArray,
     jsonObject]
 
+letterBCode :: TypedTerm Int
+letterBCode = int32 98    -- 'b'
+
 -- | Parse a JSON document (value with optional surrounding whitespace)
 -- | Parse a JSON document (value with optional surrounding whitespace)
-parseJson :: TTermDefinition (String -> ParseResult J.Value)
+parseJson :: TypedTermDefinition (String -> ParseResult J.Value)
 parseJson = define "parseJson" $
   doc "Parse a JSON document from a string" $
   "input" ~>
@@ -374,7 +374,7 @@ parseJson = define "parseJson" $
               Parsers.pure @@ var "v"))))) @@
       (var "input")
 -- | Parse a token followed by optional whitespace
-token :: TTermDefinition (Parser a -> Parser a)
+token :: TypedTermDefinition (Parser a -> Parser a)
 token = define "token" $
   doc "Parse a token followed by optional whitespace" $
   "p" ~>
@@ -384,7 +384,7 @@ token = define "token" $
 
 -- | Parse JSON null
 -- | Parse zero or more whitespace characters
-whitespace :: TTermDefinition (Parser ())
+whitespace :: TypedTermDefinition (Parser ())
 whitespace = define "whitespace" $
   doc "Parse zero or more JSON whitespace characters (space, tab, newline, carriage return)" $
   Parsers.map @@ (constant unit) @@

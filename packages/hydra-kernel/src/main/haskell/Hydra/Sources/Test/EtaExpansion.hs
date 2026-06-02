@@ -3,7 +3,7 @@ module Hydra.Sources.Test.EtaExpansion where
 
 -- Standard imports for term-encoded tests
 import Hydra.Kernel
-import           Hydra.Dsl.Bootstrap (unqualifiedDep)
+import           Hydra.Dsl.Bootstrap (unqualifiedDep, descriptionMetadata)
 import Hydra.Dsl.Meta.Testing                 as Testing hiding (checkTest, noChange)
 import Hydra.Dsl.Meta.Terms                   as Terms
 import Hydra.Sources.Kernel.Types.All
@@ -33,18 +33,18 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = unqualifiedDep <$> ([TestGraph.ns, ModuleName "hydra.reduction", ModuleName "hydra.show.core", ModuleName "hydra.test.testTypes"] ++ kernelTypesModuleNames),
-            moduleDescription = (Just "Test cases for eta expansion of terms")}
+            moduleMetadata = descriptionMetadata ((Just "Test cases for eta expansion of terms"))}
   where
     definitions = [
       Phantoms.toDefinition allTests]
 
-define :: String -> TTerm a -> TTermDefinition a
+define :: String -> TypedTerm a -> TypedTermDefinition a
 define = Phantoms.definitionInModule module_
 
-allTests :: TTermDefinition TestGroup
+allTests :: TypedTermDefinition TestGroup
 allTests = define "allTests" $
   Phantoms.doc "Test cases for eta expansion of terms" $
-  testGroup (Phantoms.string "eta expansion") Phantoms.nothing (Phantoms.list subgroups) (Phantoms.list ([] :: [TTerm TestCaseWithMetadata]))
+  testGroup (Phantoms.string "eta expansion") Phantoms.nothing (Phantoms.list subgroups) (Phantoms.list ([] :: [TypedTerm TestCaseWithMetadata]))
   where
     subgroups = [
       partialApplicationOfPrimitives,
@@ -54,7 +54,7 @@ allTests = define "allTests" $
       caseStatements,
       nonExpansionOfEliminations]
 
-    partialApplicationOfPrimitives = testGroup (Phantoms.string "Partial application of primitives") Phantoms.nothing (Phantoms.list subgroups') (Phantoms.list ([] :: [TTerm TestCaseWithMetadata]))
+    partialApplicationOfPrimitives = testGroup (Phantoms.string "Partial application of primitives") Phantoms.nothing (Phantoms.list subgroups') (Phantoms.list ([] :: [TypedTerm TestCaseWithMetadata]))
       where
         subgroups' = [
           barePrimitives,
@@ -62,13 +62,13 @@ allTests = define "allTests" $
           fullyAppliedPrimitives,
           recordProjections]
 
-        barePrimitives = testGroup (Phantoms.string "Bare primitives are not expanded") Phantoms.nothing (Phantoms.list ([] :: [TTerm TestGroup])) (Phantoms.list [
+        barePrimitives = testGroup (Phantoms.string "Bare primitives are not expanded") Phantoms.nothing (Phantoms.list ([] :: [TypedTerm TestGroup])) (Phantoms.list [
           noChange "unary primitive"
             toLower,
           noChange "binary primitive"
             splitOn])
 
-        partiallyAppliedPrimitives = testGroup (Phantoms.string "Partially applied primitives expand with lambdas") Phantoms.nothing (Phantoms.list ([] :: [TTerm TestGroup])) (Phantoms.list [
+        partiallyAppliedPrimitives = testGroup (Phantoms.string "Partially applied primitives expand with lambdas") Phantoms.nothing (Phantoms.list ([] :: [TypedTerm TestGroup])) (Phantoms.list [
           testCase "binary primitive with one argument"
             (splitOn @@ string "foo")
             (lambda "v1" $ splitOn @@ string "foo" @@ var "v1"),
@@ -76,13 +76,13 @@ allTests = define "allTests" $
             (foldl @@ var "f")
             (lambda "v1" $ lambda "v2" $ foldl @@ var "f" @@ var "v1" @@ var "v2")])
 
-        fullyAppliedPrimitives = testGroup (Phantoms.string "Fully applied primitives are not expanded") Phantoms.nothing (Phantoms.list ([] :: [TTerm TestGroup])) (Phantoms.list [
+        fullyAppliedPrimitives = testGroup (Phantoms.string "Fully applied primitives are not expanded") Phantoms.nothing (Phantoms.list ([] :: [TypedTerm TestGroup])) (Phantoms.list [
           noChange "unary primitive"
             (toLower @@ string "FOO"),
           noChange "binary primitive"
             (splitOn @@ string "," @@ string "a,b,c")])
 
-        recordProjections = testGroup (Phantoms.string "Record projections") Phantoms.nothing (Phantoms.list subgroups'') (Phantoms.list ([] :: [TTerm TestCaseWithMetadata]))
+        recordProjections = testGroup (Phantoms.string "Record projections") Phantoms.nothing (Phantoms.list subgroups'') (Phantoms.list ([] :: [TypedTerm TestCaseWithMetadata]))
           where
             subgroups'' = [
               bareProjections,
@@ -90,19 +90,19 @@ allTests = define "allTests" $
               nestedProjections,
               functionValuedProjections]
 
-            bareProjections = testGroup (Phantoms.string "Bare projections expand with a lambda") Phantoms.nothing (Phantoms.list ([] :: [TTerm TestGroup])) (Phantoms.list [
+            bareProjections = testGroup (Phantoms.string "Bare projections expand with a lambda") Phantoms.nothing (Phantoms.list ([] :: [TypedTerm TestGroup])) (Phantoms.list [
               testCase "projection without argument"
                 (project TestTypes.testTypePersonName (Core.name (Phantoms.string "firstName")))
                 (lambda "v1" $ project TestTypes.testTypePersonName (Core.name (Phantoms.string "firstName")) @@ var "v1")])
 
-            appliedProjections = testGroup (Phantoms.string "Applied projections are not expanded") Phantoms.nothing (Phantoms.list ([] :: [TTerm TestGroup])) (Phantoms.list [
+            appliedProjections = testGroup (Phantoms.string "Applied projections are not expanded") Phantoms.nothing (Phantoms.list ([] :: [TypedTerm TestGroup])) (Phantoms.list [
               noChange "projection with argument"
                 (project TestTypes.testTypePersonName (Core.name (Phantoms.string "firstName")) @@ var "person"),
               noChange "projection applied to a record"
                 (project TestTypes.testTypePersonName (Core.name (Phantoms.string "firstName")) @@
                   record TestTypes.testTypePersonName ["firstName">: string "John", "lastName">: string "Doe"])])
 
-            nestedProjections = testGroup (Phantoms.string "Projections nested in other structures") Phantoms.nothing (Phantoms.list ([] :: [TTerm TestGroup])) (Phantoms.list [
+            nestedProjections = testGroup (Phantoms.string "Projections nested in other structures") Phantoms.nothing (Phantoms.list ([] :: [TypedTerm TestGroup])) (Phantoms.list [
               testCase "projection in a list"
                 (list [project TestTypes.testTypePersonName (Core.name (Phantoms.string "firstName")), toLower])
                 (list [lambda "v1" $ project TestTypes.testTypePersonName (Core.name (Phantoms.string "firstName")) @@ var "v1", toLower]),
@@ -116,7 +116,7 @@ allTests = define "allTests" $
                 (lambda "x" $ project TestTypes.testTypePersonName (Core.name (Phantoms.string "firstName")))
                 (lambda "x" $ lambda "v1" $ project TestTypes.testTypePersonName (Core.name (Phantoms.string "firstName")) @@ var "v1")])
 
-            functionValuedProjections = testGroup (Phantoms.string "Function-valued projections") Phantoms.nothing (Phantoms.list ([] :: [TTerm TestGroup])) (Phantoms.list [
+            functionValuedProjections = testGroup (Phantoms.string "Function-valued projections") Phantoms.nothing (Phantoms.list ([] :: [TypedTerm TestGroup])) (Phantoms.list [
               noChange "projection of function-valued field applied to arguments should not be expanded"
                 (tyapps
                     (project TestTypes.testTypeTripleName (Core.name (Phantoms.string "first")))
@@ -126,13 +126,13 @@ allTests = define "allTests" $
                     [T.function T.string T.string, T.string, T.string]
                   @@ string "DATA")])
 
-    polymorphicTerms = testGroup (Phantoms.string "Polymorphic terms (System F)") Phantoms.nothing (Phantoms.list subgroups') (Phantoms.list ([] :: [TTerm TestCaseWithMetadata]))
+    polymorphicTerms = testGroup (Phantoms.string "Polymorphic terms (System F)") Phantoms.nothing (Phantoms.list subgroups') (Phantoms.list ([] :: [TypedTerm TestCaseWithMetadata]))
       where
         subgroups' = [
           typeLambdasInLetBindings,
           typeApplicationsOfPolymorphicBindings]
 
-        typeLambdasInLetBindings = testGroup (Phantoms.string "Type lambdas in let bindings") Phantoms.nothing (Phantoms.list ([] :: [TTerm TestGroup])) (Phantoms.list [
+        typeLambdasInLetBindings = testGroup (Phantoms.string "Type lambdas in let bindings") Phantoms.nothing (Phantoms.list ([] :: [TypedTerm TestGroup])) (Phantoms.list [
           noChange "polymorphic identity function"
             (letsTyped [("id", tylam "a" (lambda "x" $ var "x"), T.poly ["a"] (T.function (T.var "a") (T.var "a")))]
               (var "id")),
@@ -147,7 +147,7 @@ allTests = define "allTests" $
             (letsTyped [("getter", lambda "v1" $ project TestTypes.testTypePersonName (Core.name (Phantoms.string "firstName")) @@ var "v1", T.mono (T.function (T.var "Person") T.string))]
               (var "getter"))])
 
-        typeApplicationsOfPolymorphicBindings = testGroup (Phantoms.string "Type applications of polymorphic bindings") Phantoms.nothing (Phantoms.list ([] :: [TTerm TestGroup])) (Phantoms.list [
+        typeApplicationsOfPolymorphicBindings = testGroup (Phantoms.string "Type applications of polymorphic bindings") Phantoms.nothing (Phantoms.list ([] :: [TypedTerm TestGroup])) (Phantoms.list [
           noChange "polymorphic variable with type application"
             (letsTyped [("id", tylam "a" (lambda "x" $ var "x"), T.poly ["a"] (T.function (T.var "a") (T.var "a")))]
               (var "id" `tyapp` T.string)),
@@ -171,11 +171,11 @@ allTests = define "allTests" $
             (letsTyped [("id", tylam "a" (lambda "x" $ var "x"), T.poly ["a"] (T.function (T.var "a") (T.var "a")))]
               (((var "id" `tyapp` (T.function T.string (T.function T.string (T.list T.string)))) @@ splitOn) @@ string "," @@ string "foo,bar"))])
 
-    higherOrderFunctions = testGroup (Phantoms.string "Higher-Order Functions") Phantoms.nothing (Phantoms.list subgroups') (Phantoms.list ([] :: [TTerm TestCaseWithMetadata]))
+    higherOrderFunctions = testGroup (Phantoms.string "Higher-Order Functions") Phantoms.nothing (Phantoms.list subgroups') (Phantoms.list ([] :: [TypedTerm TestCaseWithMetadata]))
       where
         subgroups' = [functionsThatReturnFunctions]
 
-        functionsThatReturnFunctions = testGroup (Phantoms.string "Functions that return functions") Phantoms.nothing (Phantoms.list ([] :: [TTerm TestGroup])) (Phantoms.list [
+        functionsThatReturnFunctions = testGroup (Phantoms.string "Functions that return functions") Phantoms.nothing (Phantoms.list ([] :: [TypedTerm TestGroup])) (Phantoms.list [
           noChange "lambda returning bare binary primitive"
             (lambda "x" splitOn),
           noChange "lambda returning bare unary primitive"
@@ -195,11 +195,11 @@ allTests = define "allTests" $
             (lambda "x" $ lambda "y" $ lambda "z" $ splitOn @@ var "x")
             (lambda "x" $ lambda "y" $ lambda "z" $ lambda "v1" $ splitOn @@ var "x" @@ var "v1")])
 
-    letTerms = testGroup (Phantoms.string "Let terms") Phantoms.nothing (Phantoms.list subgroups') (Phantoms.list ([] :: [TTerm TestCaseWithMetadata]))
+    letTerms = testGroup (Phantoms.string "Let terms") Phantoms.nothing (Phantoms.list subgroups') (Phantoms.list ([] :: [TypedTerm TestCaseWithMetadata]))
       where
         subgroups' = [partialApplicationOfLetBoundFunction]
 
-        partialApplicationOfLetBoundFunction = testGroup (Phantoms.string "partial application of a let-bound function") Phantoms.nothing (Phantoms.list ([] :: [TTerm TestGroup])) (Phantoms.list [
+        partialApplicationOfLetBoundFunction = testGroup (Phantoms.string "partial application of a let-bound function") Phantoms.nothing (Phantoms.list ([] :: [TypedTerm TestGroup])) (Phantoms.list [
           testCase "simple"
             (letsTyped
               [("helper",
@@ -254,7 +254,7 @@ allTests = define "allTests" $
                 T.mono $ T.functionMany [T.string, T.string, T.string])] $
               unit)])
 
-    caseStatements = testGroup (Phantoms.string "Case statements") Phantoms.nothing (Phantoms.list subgroups') (Phantoms.list ([] :: [TTerm TestCaseWithMetadata]))
+    caseStatements = testGroup (Phantoms.string "Case statements") Phantoms.nothing (Phantoms.list subgroups') (Phantoms.list ([] :: [TypedTerm TestCaseWithMetadata]))
       where
         subgroups' = [
           monomorphicAtTopLevel,
@@ -262,7 +262,7 @@ allTests = define "allTests" $
           polymorphicInLetBinding,
           forcedExpansionInCaseBranches]
 
-        monomorphicAtTopLevel = testGroup (Phantoms.string "monomorphic at top level") Phantoms.nothing (Phantoms.list ([] :: [TTerm TestGroup])) (Phantoms.list [
+        monomorphicAtTopLevel = testGroup (Phantoms.string "monomorphic at top level") Phantoms.nothing (Phantoms.list ([] :: [TypedTerm TestGroup])) (Phantoms.list [
           testCase "non-applied case statement"
             (match TestTypes.testTypeUnionMonomorphicName
               (just $ string "other") [
@@ -282,7 +282,7 @@ allTests = define "allTests" $
                 "string">: lambdaTyped "s" T.string $ var "s"])
               @@ var "x")])
 
-        monomorphicInLetBinding = testGroup (Phantoms.string "monomorphic in let binding") Phantoms.nothing (Phantoms.list ([] :: [TTerm TestGroup])) (Phantoms.list [
+        monomorphicInLetBinding = testGroup (Phantoms.string "monomorphic in let binding") Phantoms.nothing (Phantoms.list ([] :: [TypedTerm TestGroup])) (Phantoms.list [
           testCase "non-applied case statement"
             (letsTyped [
                 ("test",
@@ -317,7 +317,7 @@ allTests = define "allTests" $
                  T.mono $ T.function T.string T.string)]
               (string "ignored"))])
 
-        polymorphicInLetBinding = testGroup (Phantoms.string "polymorphic in let binding") Phantoms.nothing (Phantoms.list ([] :: [TTerm TestGroup])) (Phantoms.list [
+        polymorphicInLetBinding = testGroup (Phantoms.string "polymorphic in let binding") Phantoms.nothing (Phantoms.list ([] :: [TypedTerm TestGroup])) (Phantoms.list [
           testCase "non-applied UnionPolymorphicRecursive"
             (letsTyped [
                 ("test",
@@ -364,7 +364,7 @@ allTests = define "allTests" $
                T.poly ["t1"] $ T.function (T.apply (Core.typeVariable TestTypes.testTypeUnionPolymorphicRecursiveName) (T.var "t1")) T.string)] $
               tyapp (var "test") $ T.var "t0")])
 
-        forcedExpansionInCaseBranches = testGroup (Phantoms.string "Forced expansion in case statement branches") Phantoms.nothing (Phantoms.list ([] :: [TTerm TestGroup])) (Phantoms.list [
+        forcedExpansionInCaseBranches = testGroup (Phantoms.string "Forced expansion in case statement branches") Phantoms.nothing (Phantoms.list ([] :: [TypedTerm TestGroup])) (Phantoms.list [
           testCase "variable reference in case branch is expanded"
             (letsTyped [("handler", toLower, T.mono (T.function T.string T.string))] $
               match TestTypes.testTypeUnionMonomorphicName nothing
@@ -390,12 +390,12 @@ allTests = define "allTests" $
           noChange "bare primitive outside case branch is not expanded"
             toLower])
 
-    nonExpansionOfEliminations = testGroup (Phantoms.string "Non-expansion of eliminations which produce functions") Phantoms.nothing (Phantoms.list ([] :: [TTerm TestGroup])) (Phantoms.list [
+    nonExpansionOfEliminations = testGroup (Phantoms.string "Non-expansion of eliminations which produce functions") Phantoms.nothing (Phantoms.list ([] :: [TypedTerm TestGroup])) (Phantoms.list [
       noChangeDisabled "applied case statement"
         (tylams ["t0"] $
           lambdaTyped "dir" (T.var "hydra.coders.CoderDirection") $
             lambdaTyped "coder" (T.applys (T.var "hydra.coders.Coder") (T.var <$> ["t0", "t0"])) $
-              lambdaTyped "cx" (T.var "hydra.context.Context") $
+              lambdaTyped "cx" (T.var "hydra.typing.InferenceContext") $
                 lambdaTyped "v1" (T.var "t0") $
                   match (Core.nameLift _CoderDirection)
                     nothing [
@@ -416,24 +416,13 @@ allTests = define "allTests" $
 -- Helpers
 
 -- | Reference to hydra.reduction.etaExpandTypedTerm
-etaExpandRef :: TTerm (Context -> Graph -> Term -> Either Error Term)
-etaExpandRef = TTerm $ TermVariable $ Name "hydra.reduction.etaExpandTypedTerm"
+etaExpandRef :: TypedTerm (InferenceContext -> Graph -> Term -> Either Error Term)
+etaExpandRef = TypedTerm $ TermVariable $ Name "hydra.reduction.etaExpandTypedTerm"
 
-testCase :: String -> TTerm Term -> TTerm Term -> TTerm TestCaseWithMetadata
-testCase name input output = universalCase name
-    (retype $ Eithers.either_
-      (Phantoms.lambda "e" (Strings.cat2 (Phantoms.string "ETA ERROR: ") (Phantoms.string "failed")))
-      (Phantoms.lambda "result" (showTermRef Phantoms.@@ Phantoms.var "result"))
-      (etaExpandRef Phantoms.@@ testContextRef Phantoms.@@ testGraphRef Phantoms.@@ input))
-    (retype $ showTermRef Phantoms.@@ output)
-  where
-    retype :: TTerm x -> TTerm String
-    retype (TTerm x) = TTerm x
-
-noChange :: String -> TTerm Term -> TTerm TestCaseWithMetadata
+noChange :: String -> TypedTerm Term -> TypedTerm TestCaseWithMetadata
 noChange name term = testCase name term term
 
-noChangeDisabled :: String -> TTerm Term -> TTerm TestCaseWithMetadata
+noChangeDisabled :: String -> TypedTerm Term -> TypedTerm TestCaseWithMetadata
 noChangeDisabled name term = testCaseWithMetadata (Phantoms.string name)
   (testCaseUniversal $ universalTestCase
     (retype $ Eithers.either_
@@ -441,13 +430,24 @@ noChangeDisabled name term = testCaseWithMetadata (Phantoms.string name)
       (Phantoms.lambda "result" (showTermRef Phantoms.@@ Phantoms.var "result"))
       (etaExpandRef Phantoms.@@ testContextRef Phantoms.@@ testGraphRef Phantoms.@@ term))
     (retype $ showTermRef Phantoms.@@ term))
-  (Phantoms.nothing :: TTerm (Maybe String)) (Phantoms.list [tag . unTag $ tag_disabled])
+  (Phantoms.nothing :: TypedTerm (Maybe String)) (Phantoms.list [tag . unTag $ tag_disabled])
   where
-    retype :: TTerm x -> TTerm String
-    retype (TTerm x) = TTerm x
+    retype :: TypedTerm x -> TypedTerm String
+    retype (TypedTerm x) = TypedTerm x
 
 cat = primitive $ _strings_cat
 foldl = primitive $ _lists_foldl
 splitOn = primitive $ _strings_splitOn
 toLower = primitive $ _strings_toLower
 --toLower = Core.termFunction $ Core.functionPrimitive $ Core.name (Phantoms.string "hydra.lib.strings.toLower")
+
+testCase :: String -> TypedTerm Term -> TypedTerm Term -> TypedTerm TestCaseWithMetadata
+testCase name input output = universalCase name
+    (retype $ Eithers.either_
+      (Phantoms.lambda "e" (Strings.cat2 (Phantoms.string "ETA ERROR: ") (Phantoms.string "failed")))
+      (Phantoms.lambda "result" (showTermRef Phantoms.@@ Phantoms.var "result"))
+      (etaExpandRef Phantoms.@@ testContextRef Phantoms.@@ testGraphRef Phantoms.@@ input))
+    (retype $ showTermRef Phantoms.@@ output)
+  where
+    retype :: TypedTerm x -> TypedTerm String
+    retype (TypedTerm x) = TypedTerm x

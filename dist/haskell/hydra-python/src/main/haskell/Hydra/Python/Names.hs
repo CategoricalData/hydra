@@ -2,22 +2,42 @@
 -- | Python naming utilities: encoding Hydra names as Python names
 
 module Hydra.Python.Names where
+import qualified Hydra.Ast as Ast
+import qualified Hydra.Classes as Classes
+import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
+import qualified Hydra.Error.Checking as Checking
+import qualified Hydra.Error.Core as ErrorCore
+import qualified Hydra.Error.Packaging as ErrorPackaging
+import qualified Hydra.Errors as Errors
 import qualified Hydra.Formatting as Formatting
-import qualified Hydra.Lib.Equality as Equality
-import qualified Hydra.Lib.Lists as Lists
-import qualified Hydra.Lib.Logic as Logic
-import qualified Hydra.Lib.Maps as Maps
-import qualified Hydra.Lib.Maybes as Maybes
-import qualified Hydra.Lib.Pairs as Pairs
-import qualified Hydra.Lib.Strings as Strings
+import qualified Hydra.Graph as Graph
+import qualified Hydra.Json.Model as Model
+import qualified Hydra.Haskell.Lib.Equality as Equality
+import qualified Hydra.Haskell.Lib.Lists as Lists
+import qualified Hydra.Haskell.Lib.Logic as Logic
+import qualified Hydra.Haskell.Lib.Maps as Maps
+import qualified Hydra.Haskell.Lib.Maybes as Maybes
+import qualified Hydra.Haskell.Lib.Pairs as Pairs
+import qualified Hydra.Haskell.Lib.Strings as Strings
 import qualified Hydra.Names as Names
 import qualified Hydra.Packaging as Packaging
+import qualified Hydra.Parsing as Parsing
+import qualified Hydra.Paths as Paths
 import qualified Hydra.Python.Environment as Environment
 import qualified Hydra.Python.Language as Language
 import qualified Hydra.Python.Serde as Serde
 import qualified Hydra.Python.Syntax as Syntax
+import qualified Hydra.Query as Query
+import qualified Hydra.Relational as Relational
+import qualified Hydra.Tabular as Tabular
+import qualified Hydra.Testing as Testing
+import qualified Hydra.Topology as Topology
+import qualified Hydra.Typed as Typed
+import qualified Hydra.Typing as Typing
 import qualified Hydra.Util as Util
+import qualified Hydra.Validation as Validation
+import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 -- | Generate a constant name for a field definition
@@ -38,7 +58,7 @@ encodeName :: Bool -> Util.CaseConvention -> Environment.PythonEnvironment -> Co
 encodeName isQualified conv env name =
 
       let namespaces = Environment.pythonEnvironmentNamespaces env
-          focusPair = Util.namespacesFocus namespaces
+          focusPair = Util.moduleNamesFocus namespaces
           focusNs = Pairs.first focusPair
           boundVars = Pairs.second (Environment.pythonEnvironmentBoundTypeVariables env)
           qualName = Names.qualifyName name
@@ -53,13 +73,15 @@ encodeNameQualified :: Environment.PythonEnvironment -> Core.Name -> Syntax.Name
 encodeNameQualified env name =
 
       let namespaces = Environment.pythonEnvironmentNamespaces env
-          focusPair = Util.namespacesFocus namespaces
+          focusPair = Util.moduleNamesFocus namespaces
           focusNs = Pairs.first focusPair
           boundVars = Pairs.second (Environment.pythonEnvironmentBoundTypeVariables env)
           qualName = Names.qualifyName name
           mns = Packaging.qualifiedNameModuleName qualName
           local = Packaging.qualifiedNameLocal qualName
-      in (Maybes.maybe (Logic.ifElse (Equality.equal mns (Just focusNs)) (Syntax.Name (Logic.ifElse useFutureAnnotations local (Serde.escapePythonString True local))) (Syntax.Name (Strings.intercalate "." (Lists.map sanitizePythonName (Strings.splitOn "." (Core.unName name)))))) (\n -> n) (Maps.lookup name boundVars))
+          pyNs =
+                  \nsVal -> Strings.intercalate "." (Lists.map (Formatting.convertCase Util.CaseConventionCamel Util.CaseConventionLowerSnake) (Strings.splitOn "." (Packaging.unModuleName nsVal)))
+      in (Maybes.maybe (Logic.ifElse (Equality.equal mns (Just focusNs)) (Syntax.Name (Logic.ifElse useFutureAnnotations local (Serde.escapePythonString True local))) (Maybes.maybe (Syntax.Name (sanitizePythonName local)) (\nsVal -> Syntax.Name (Strings.cat2 (pyNs nsVal) (Strings.cat2 "." (sanitizePythonName local)))) mns)) (\n -> n) (Maps.lookup name boundVars))
 -- | Encode a namespace as a Python dotted name
 encodeNamespace :: Packaging.ModuleName -> Syntax.DottedName
 encodeNamespace nsVal =
@@ -107,9 +129,9 @@ variableReference conv quoted env name =
                                       Syntax.powerRhs = Nothing}))}}}}}},
                         Syntax.comparisonRhs = []})]])
           namespaces = Environment.pythonEnvironmentNamespaces env
-          focusPair = Util.namespacesFocus namespaces
+          focusPair = Util.moduleNamesFocus namespaces
           focusNs = Pairs.first focusPair
-          mns = Names.namespaceOf name
+          mns = Names.moduleNameOf name
           sameNamespace = Maybes.maybe False (\ns -> Equality.equal ns focusNs) mns
       in (Logic.ifElse (Logic.and quoted sameNamespace) (Syntax.ExpressionSimple (Syntax.Disjunction [
         Syntax.Conjunction [

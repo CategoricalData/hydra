@@ -3,7 +3,7 @@ module Hydra.Demos.Genpg.Examples.Sales.Mapping where
 import Hydra.Core (Term)
 import Hydra.Pg.Model (Edge, LazyGraph, Vertex)
 import Hydra.Formatting (decapitalize)
-import Hydra.Phantoms (TTerm)
+import Hydra.Typed (TypedTerm)
 import Hydra.Dsl.Meta.Phantoms ((@@), constant, just, lambda, nothing, string, var)
 import Hydra.Dsl.Pg.Mappings (column, edge, edgeNoId, graph, property, vertex)
 import qualified Hydra.Dsl.Meta.Lib.Literals as Literals
@@ -13,7 +13,7 @@ import Hydra.Demos.Genpg.Examples.Sales.GraphSchema
 
 -- Helpers -----------------------
 
-labeledIntId :: String -> TTerm (r -> Maybe Int) -> TTerm (r -> String)
+labeledIntId :: String -> TypedTerm (r -> Maybe Int) -> TypedTerm (r -> String)
 labeledIntId itype iid = lambda "r" $ Maybes.map
   (lambda "i" $ Strings.concat [
     string $ decapitalize itype,

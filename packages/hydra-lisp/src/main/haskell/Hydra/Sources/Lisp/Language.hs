@@ -78,7 +78,7 @@ import qualified Data.Set                                  as S
 import qualified Data.Maybe                                as Y
 
 
-define :: String -> TTerm a -> TTermDefinition a
+define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModule module_
 
 module_ :: Module
@@ -86,7 +86,7 @@ module_ = Module {
             moduleName = (ModuleName "hydra.lisp.language"),
             moduleDefinitions = [toDefinition lispLanguage, toDefinition lispReservedWords],
             moduleDependencies = Bootstrap.unqualifiedDep <$> ([Lexical.ns] L.++ KernelTypes.kernelTypesModuleNames),
-            moduleDescription = Just "Language constraints and reserved words for Lisp (covering Clojure, Emacs Lisp, Common Lisp, and Scheme)"}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just "Language constraints and reserved words for Lisp (covering Clojure, Emacs Lisp, Common Lisp, and Scheme)")}
 -- | Language constraints for Lisp.
 --
 -- Lisp is dynamically typed, so all Hydra types must be represented at the term level
@@ -131,7 +131,7 @@ module_ = Module {
 --   Wrap                 -> value (transparent)
 --   Unit                 -> nil / '()
 
-lispLanguage :: TTermDefinition Language
+lispLanguage :: TypedTermDefinition Language
 lispLanguage = define "lispLanguage" $
     doc "Language constraints for Lisp" $ lets [
 -- newtype unwrapping (transparent)
@@ -203,7 +203,7 @@ lispLanguage = define "lispLanguage" $
         (var "typeVariants")
         (var "typePredicate"))
 
-lispReservedWords :: TTermDefinition (S.Set String)
+lispReservedWords :: TypedTermDefinition (S.Set String)
 lispReservedWords = define "lispReservedWords" $
   doc "A set of reserved words across all four Lisp dialects" $
   lets [

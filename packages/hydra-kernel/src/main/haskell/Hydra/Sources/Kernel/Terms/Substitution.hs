@@ -66,7 +66,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> ([Rewriting.ns, Variables.ns] L.++ kernelTypesModuleNames),
-            moduleDescription = Just ("Variable substitution in type and term expressions.")}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just ("Variable substitution in type and term expressions."))}
   where
    definitions = [
      toDefinition composeTypeSubst,
@@ -85,10 +85,10 @@ module_ = Module {
      toDefinition substituteInConstraints,
      toDefinition substituteInTerm]
 
-define :: String -> TTerm a -> TTermDefinition a
+define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModule module_
 
-composeTypeSubst :: TTermDefinition (TypeSubst -> TypeSubst -> TypeSubst)
+composeTypeSubst :: TypedTermDefinition (TypeSubst -> TypeSubst -> TypeSubst)
 composeTypeSubst = define "composeTypeSubst" $
   doc "Compose two type substitutions" $
   lambdas ["s1", "s2"] $
@@ -102,13 +102,13 @@ composeTypeSubst = define "composeTypeSubst" $
     composeTypeSubstNonEmpty @@ var "s1" @@ var "s2"
 
 -- | Helper for composeTypeSubst when both substitutions are non-empty
-composeTypeSubstList :: TTermDefinition ([TypeSubst] -> TypeSubst)
+composeTypeSubstList :: TypedTermDefinition ([TypeSubst] -> TypeSubst)
 composeTypeSubstList = define "composeTypeSubstList" $
   doc "Compose a list of type substitutions" $
   Phantoms.fold (composeTypeSubst) @@ idTypeSubst
 
 -- | Helper for composeTypeSubst when both substitutions are non-empty
-composeTypeSubstNonEmpty :: TTermDefinition (TypeSubst -> TypeSubst -> TypeSubst)
+composeTypeSubstNonEmpty :: TypedTermDefinition (TypeSubst -> TypeSubst -> TypeSubst)
 composeTypeSubstNonEmpty = define "composeTypeSubstNonEmpty" $
   doc "Compose two non-empty type substitutions (internal helper)" $
   lambdas ["s1", "s2"] $ lets [
@@ -116,12 +116,12 @@ composeTypeSubstNonEmpty = define "composeTypeSubstNonEmpty" $
     "withExtra">: Maps.filterWithKey (var "isExtra") (Typing.unTypeSubst $ var "s2")] $
     Typing.typeSubst $ Maps.union (var "withExtra") $ Maps.map (substInType @@ var "s2") $ Typing.unTypeSubst $ var "s1"
 
-idTypeSubst :: TTermDefinition TypeSubst
+idTypeSubst :: TypedTermDefinition TypeSubst
 idTypeSubst = define "idTypeSubst" $
   doc "The identity type substitution" $
   Typing.typeSubst Maps.empty
 
-singletonTypeSubst :: TTermDefinition (Name -> Type -> TypeSubst)
+singletonTypeSubst :: TypedTermDefinition (Name -> Type -> TypeSubst)
 singletonTypeSubst = define "singletonTypeSubst" $
   doc "Create a type substitution with a single variable mapping" $
   lambdas ["v", "t"] $ Typing.typeSubst $ Maps.singleton (var "v") (var "t")
@@ -129,7 +129,7 @@ singletonTypeSubst = define "singletonTypeSubst" $
 -- | Apply a type substitution to a map of class constraints.
 -- When a type variable is mapped to another type variable, the constraint is transferred to the new variable.
 -- When a type variable is mapped to a complex type, the constraint is propagated to all free variables in that type.
-substInClassConstraints :: TTermDefinition (TypeSubst -> M.Map Name TypeVariableMetadata -> M.Map Name TypeVariableMetadata)
+substInClassConstraints :: TypedTermDefinition (TypeSubst -> M.Map Name TypeVariableMetadata -> M.Map Name TypeVariableMetadata)
 substInClassConstraints = define "substInClassConstraints" $
   doc "Apply a type substitution to class constraints, propagating to free variables" $
   "subst" ~> "constraints" ~>
@@ -139,7 +139,7 @@ substInClassConstraints = define "substInClassConstraints" $
     Maybes.maybe
       (Maps.insert (var "varName") (var "metadata") (var "acc"))
       ("existing" ~>
-        "merged" <~ Core.typeVariableMetadata (Sets.union (Core.typeVariableMetadataClasses $ var "existing") (Core.typeVariableMetadataClasses $ var "metadata")) $
+        "merged" <~ Core.typeVariableMetadata (Lists.nub $ Lists.concat2 (Core.typeVariableMetadataClasses $ var "existing") (Core.typeVariableMetadataClasses $ var "metadata")) $
         Maps.insert (var "varName") (var "merged") (var "acc"))
       (Maps.lookup (var "varName") (var "acc"))) $
   -- For each (varName, metadata) in constraints:
@@ -164,7 +164,7 @@ substInClassConstraints = define "substInClassConstraints" $
     Maps.empty
     (Maps.toList $ var "constraints")
 
-substInContext :: TTermDefinition (TypeSubst -> Graph -> Graph)
+substInContext :: TypedTermDefinition (TypeSubst -> Graph -> Graph)
 substInContext = define "substInContext" $
   doc "Apply a type substitution to a graph's bound types and class constraints" $
   lambdas ["subst", "cx"] $
@@ -174,7 +174,7 @@ substInContext = define "substInContext" $
     Graph.graphWithClassConstraints (var "cx2") (var "newClassConstraints")
 
 -- W: subst'
-substInType :: TTermDefinition (TypeSubst -> Type -> Type)
+substInType :: TypedTermDefinition (TypeSubst -> Type -> Type)
 substInType = define "substInType" $
   doc "Apply a type substitution to a type" $
   "subst" ~> "typ0" ~>
@@ -186,7 +186,7 @@ substInType = define "substInType" $
 
 -- | Helper for substInType when substitution is non-empty
 -- | Helper for substInType when substitution is non-empty
-substInTypeNonEmpty :: TTermDefinition (TypeSubst -> Type -> Type)
+substInTypeNonEmpty :: TypedTermDefinition (TypeSubst -> Type -> Type)
 substInTypeNonEmpty = define "substInTypeNonEmpty" $
   doc "Apply a non-empty type substitution to a type (internal helper)" $
   "subst" ~> "typ0" ~>
@@ -207,7 +207,7 @@ substInTypeNonEmpty = define "substInTypeNonEmpty" $
       "removeVar">: lambdas ["v"] $ Typing.typeSubst $ Maps.delete (var "v") (Typing.unTypeSubst $ var "subst")] $
       (Rewriting.rewriteType) @@ var "rewrite" @@ var "typ0"
 
-substInTypeScheme :: TTermDefinition (TypeSubst -> TypeScheme -> TypeScheme)
+substInTypeScheme :: TypedTermDefinition (TypeSubst -> TypeScheme -> TypeScheme)
 substInTypeScheme = define "substInTypeScheme" $
   doc ("Apply a type substitution to a type scheme. The scheme's quantifier"
     <> " variables shadow the substitution: any name in typeSchemeVariables is"
@@ -225,7 +225,7 @@ substInTypeScheme = define "substInTypeScheme" $
       -- Also apply the substitution to the constraints
       (Maybes.map (substInClassConstraints @@ var "scopedSubst") (Core.typeSchemeConstraints $ var "ts"))
 
-substTypesInTerm :: TTermDefinition (TypeSubst -> Term -> Term)
+substTypesInTerm :: TypedTermDefinition (TypeSubst -> Term -> Term)
 substTypesInTerm = define "substTypesInTerm" $
   doc "Apply a type substitution to the type annotations within a term" $
   "subst" ~> "term0" ~> lets [
@@ -260,11 +260,11 @@ substTypesInTerm = define "substTypesInTerm" $
         _Term_typeApplication>>: "ta" ~> var "forTypeApplication" @@ var "ta",
         _Term_typeLambda>>: "tl" ~> var "forTypeLambda" @@ var "tl"]] $
     Rewriting.rewriteTerm @@ var "rewrite" @@ var "term0"
-substituteInBinding :: TTermDefinition (TermSubst -> Binding -> Binding)
+substituteInBinding :: TypedTermDefinition (TermSubst -> Binding -> Binding)
 substituteInBinding = define "substituteInBinding" $
   doc "Apply a term substitution to a binding" $
   "subst" ~> "b" ~> Core.bindingWithTerm (var "b") (substituteInTerm @@ var "subst" @@ (Core.bindingTerm $ var "b"))
-substituteInConstraint :: TTermDefinition (TypeSubst -> TypeConstraint -> TypeConstraint)
+substituteInConstraint :: TypedTermDefinition (TypeSubst -> TypeConstraint -> TypeConstraint)
 substituteInConstraint = define "substituteInConstraint" $
   doc "Apply a type substitution to a type constraint" $
   lambdas ["subst", "c"] $ Typing.typeConstraint
@@ -272,7 +272,7 @@ substituteInConstraint = define "substituteInConstraint" $
     (substInType @@ var "subst" @@ (Typing.typeConstraintRight $ var "c"))
     (Typing.typeConstraintComment $ var "c")
 
-substituteInConstraints :: TTermDefinition (TypeSubst -> [TypeConstraint] -> [TypeConstraint])
+substituteInConstraints :: TypedTermDefinition (TypeSubst -> [TypeConstraint] -> [TypeConstraint])
 substituteInConstraints = define "substituteInConstraints" $
   doc "Apply a type substitution to a list of type constraints" $
   lambdas ["subst", "cs"] $ Lists.map (substituteInConstraint @@ var "subst") (var "cs")
@@ -281,7 +281,7 @@ substituteInConstraints = define "substituteInConstraints" $
 -- When a type variable is mapped to another type variable, the constraint is transferred to the new variable.
 -- When a type variable is mapped to a complex type, the constraint is propagated to all free variables in that type.
 
-substituteInTerm :: TTermDefinition (TermSubst -> Term -> Term)
+substituteInTerm :: TypedTermDefinition (TermSubst -> Term -> Term)
 substituteInTerm = define "substituteInTerm" $
   doc "Apply a term substitution to a term" $
   "subst" ~> "term0" ~> lets [

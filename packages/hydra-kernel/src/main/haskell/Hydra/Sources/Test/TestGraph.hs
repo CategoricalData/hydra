@@ -2,7 +2,7 @@ module Hydra.Sources.Test.TestGraph where
 
 -- Standard imports for kernel test fixtures
 import Hydra.Kernel
-import           Hydra.Dsl.Bootstrap (unqualifiedDep)
+import           Hydra.Dsl.Bootstrap (unqualifiedDep, descriptionMetadata)
 import Hydra.Dsl.Meta.Testing                 as Testing
 import Hydra.Dsl.Meta.Terms                   as Terms hiding ((@@))
 import Hydra.Sources.Kernel.Types.All
@@ -44,39 +44,42 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = unqualifiedDep <$> ([TestTerms.ns, TestTypes.ns, TestEnv.ns, Lexical.ns] L.++ kernelTypesModuleNames),
-            moduleDescription = Just ("A module defining the graph used in the test suite.")}
+            moduleMetadata = descriptionMetadata (Just ("A module defining the graph used in the test suite."))}
   where
    definitions = [
      Phantoms.toDefinition testTerms,
      Phantoms.toDefinition testTypes,
-     Phantoms.toDefinition testNamespace,
-     Phantoms.toDefinition testSchemaNamespace,
+     Phantoms.toDefinition testModuleName,
+     Phantoms.toDefinition testSchemaModuleName,
      Phantoms.toDefinition testGraph,
      Phantoms.toDefinition testContext]
 
-define :: String -> TTerm a -> TTermDefinition a
+define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModule module_
 
-testTerms :: TTermDefinition (M.Map Name Term)
+-- | The test context. Emits a reference to the hand-written
+-- Hydra.Test.TestEnv.testContext.
+testContext :: TypedTermDefinition InferenceContext
+testContext = define "testContext" $ asTerm TestEnv.testContext
+
+-- | The test graph. Emits a call to the hand-written
+-- Hydra.Test.TestEnv.testGraph (applied to testTypes and testTerms).
+testGraph :: TypedTermDefinition Graph
+testGraph = define "testGraph" $
+  TestEnv.testGraph @@ testTypes @@ testTerms
+
+testModuleName :: TypedTermDefinition ModuleName
+testModuleName = define "testModuleName" $ DPackaging.moduleName2 $ Phantoms.string "testGraph"
+
+testSchemaModuleName :: TypedTermDefinition ModuleName
+testSchemaModuleName = define "testSchemaModuleName" $ DPackaging.moduleName2 $ Phantoms.string "testSchemaGraph"
+
+testTerms :: TypedTermDefinition (M.Map Name Term)
 testTerms = define "testTerms" $
   Maps.fromList $ Phantoms.list [
     Phantoms.pair (name "testDataArthur") TestTerms.testDataArthur]
 
-testNamespace :: TTermDefinition ModuleName
-testNamespace = define "testNamespace" $ DPackaging.moduleName2 $ Phantoms.string "testGraph"
-
--- | The test graph. Emits a call to the hand-written
--- Hydra.Test.TestEnv.testGraph (applied to testTypes and testTerms).
-testGraph :: TTermDefinition Graph
-testGraph = define "testGraph" $
-  TestEnv.testGraph @@ testTypes @@ testTerms
-
--- | The test context. Emits a reference to the hand-written
--- Hydra.Test.TestEnv.testContext.
-testContext :: TTermDefinition Context
-testContext = define "testContext" $ asTerm TestEnv.testContext
-
-testTypes :: TTermDefinition (M.Map Name Type)
+testTypes :: TypedTermDefinition (M.Map Name Type)
 testTypes = define "testTypes" $
   Maps.fromList $ Phantoms.list [
     Phantoms.pair TestTypes.testTypeBuddyListAName TestTypes.testTypeBuddyListA,
@@ -101,6 +104,3 @@ testTypes = define "testTypes" $
     Phantoms.pair TestTypes.testTypeUnionMonomorphicName TestTypes.testTypeUnionMonomorphic,
     Phantoms.pair TestTypes.testTypeUnionPolymorphicRecursiveName TestTypes.testTypeUnionPolymorphicRecursive,
     Phantoms.pair TestTypes.testTypeUnitName TestTypes.testTypeUnit]
-
-testSchemaNamespace :: TTermDefinition ModuleName
-testSchemaNamespace = define "testSchemaNamespace" $ DPackaging.moduleName2 $ Phantoms.string "testSchemaGraph"

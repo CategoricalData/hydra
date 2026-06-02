@@ -6,24 +6,24 @@ import           Hydra.Dsl.Annotations (doc)
 import           Hydra.Dsl.Bootstrap
 import           Hydra.Dsl.Types ((>:), (@@), (~>))
 import qualified Hydra.Dsl.Types as T
-import qualified Hydra.Sources.Kernel.Types.Context as Context
 import qualified Hydra.Sources.Kernel.Types.Core as Core
 import qualified Hydra.Sources.Kernel.Types.Errors as Error
 import qualified Hydra.Sources.Kernel.Types.Packaging as Packaging
+import qualified Hydra.Sources.Kernel.Types.Typing as Typing
 
 
 ns :: ModuleName
 ns = ModuleName "hydra.graph"
 
-define :: String -> Type -> Binding
+define :: String -> Type -> TypeDefinition
 define = defineType ns
 
 module_ :: Module
 module_ = Module {
             moduleName = ns,
-            moduleDefinitions = (map toTypeDef definitions),
-            moduleDependencies = unqualifiedDep <$> [Context.ns, Core.ns, Error.ns, Packaging.ns],
-            moduleDescription = Just "The extension to graphs of Hydra's core type system (hydra.core)"}
+            moduleDefinitions = (DefinitionType <$> definitions),
+            moduleDependencies = unqualifiedDep <$> [Core.ns, Error.ns, Packaging.ns, Typing.ns],
+            moduleMetadata = descriptionMetadata (Just "The extension to graphs of Hydra's core type system (hydra.core)")}
   where
     definitions = [
       graph,
@@ -31,7 +31,7 @@ module_ = Module {
       primitive,
       termCoder]
 
-graph :: Binding
+graph :: TypeDefinition
 graph = define "Graph" $
   doc "A graph, or lexical environment which binds names to terms, types, primitives, and metadata" $
   T.record [
@@ -61,7 +61,7 @@ graph = define "Graph" $
       doc "The set of type variables introduced specifically by type lambdas" $
       T.set Core.name]
 
-library :: Binding
+library :: TypeDefinition
 library = define "Library" $
   doc "A library of primitive functions" $
   T.record [
@@ -75,25 +75,22 @@ library = define "Library" $
       doc "The primitives defined in this library" $
       T.list primitive]
 
-primitive :: Binding
+primitive :: TypeDefinition
 primitive = define "Primitive" $
-  doc "A built-in function or constant" $
+  doc "A built-in function or constant, consisting of the host-independent PrimitiveDefinition (name, signature, metadata) plus a host-specific implementation." $
   T.record [
-    "name">:
-      doc "The unique name of the primitive function"
-      Core.name,
-    "typeScheme">:
-      doc "The type scheme of the primitive function"
-      Core.typeScheme,
+    "definition">:
+      doc "The host-independent declarative metadata for the primitive: name, description, signature, totality and purity flags, and an optional reference implementation."
+      Packaging.primitiveDefinition,
     "implementation">:
       doc ("A concrete implementation of the primitive function."
-        ++ " The Context and Graph parameters are needed by higher-order primitives"
+        ++ " The InferenceContext and Graph parameters are needed by higher-order primitives"
         ++ " (e.g. lists.map, lists.foldl, eithers.bind) which must evaluate function arguments"
         ++ " via term reduction; the Graph provides variable and primitive bindings,"
-        ++ " while the Context supports tracing and error reporting.") $
-      Context.context ~> graph ~> T.list Core.term ~> T.either_ Error.error_ Core.term]
+        ++ " while the InferenceContext supports subterm-path tracing for error reporting.") $
+      Typing.inferenceContext ~> graph ~> T.list Core.term ~> T.either_ Error.error_ Core.term]
 
-termCoder :: Binding
+termCoder :: TypeDefinition
 termCoder = define "TermCoder" $
   doc "A type together with a coder for mapping terms into arguments for primitive functions, and mapping computed results into terms." $
   T.forAll "a" $ T.record [
@@ -102,7 +99,7 @@ termCoder = define "TermCoder" $
       Core.type_,
     "encode">:
       doc "An encode function from terms to native values" $
-      Context.context ~> graph ~> Core.term ~> T.either_ Error.error_ "a",
+      Typing.inferenceContext ~> graph ~> Core.term ~> T.either_ Error.error_ "a",
     "decode">:
       doc "A decode function from native values to terms" $
-      Context.context ~> "a" ~> T.either_ Error.error_ Core.term]
+      Typing.inferenceContext ~> "a" ~> T.either_ Error.error_ Core.term]

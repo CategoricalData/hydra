@@ -83,7 +83,7 @@ import qualified Hydra.Rdf.Syntax as Rdf
 import qualified Hydra.Sources.Rdf.Syntax as RdfSyntax
 
 
-define :: String -> TTerm a -> TTermDefinition a
+define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModule module_
 
 ns :: ModuleName
@@ -94,7 +94,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> ([Serialization.ns] L.++ (RdfSyntax.ns:KernelTypes.kernelTypesModuleNames)),
-            moduleDescription = Just "Serialization functions for converting RDF graphs to N-Triples format expressions"}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just "Serialization functions for converting RDF graphs to N-Triples format expressions")}
   where
     definitions = [
       toDefinition escapeIriChar,
@@ -114,11 +114,19 @@ module_ = Module {
       toDefinition tripleToExpr]
 
 
+blankNodeToExpr :: TypedTermDefinition (Rdf.BlankNode -> Expr)
+blankNodeToExpr = define "blankNodeToExpr" $
+  doc "Convert a blank node to an expression" $
+  lambda "bnode" $
+    Serialization.noSep @@ list [
+      Serialization.cst @@ string "_:",
+      Serialization.cst @@ (unwrap Rdf._BlankNode @@ var "bnode")]
+
 -- | Escape a single IRI character (as code point). The N-Triples IRIREF
 --   production excludes #x00-#x20 and <>"{}|^`\\; those characters are emitted
 --   as UCHAR (\\u00XX). All other code points (including all of Unicode >= 0x80)
 --   pass through verbatim.
-escapeIriChar :: TTermDefinition (Int -> String)
+escapeIriChar :: TypedTermDefinition (Int -> String)
 escapeIriChar = define "escapeIriChar" $
   doc "Escape a single IRI character code to a string" $
   lambda "c" $
@@ -136,7 +144,7 @@ escapeIriChar = define "escapeIriChar" $
       (uchar4 @@ var "c")
       (Strings.fromList $ list [var "c"])
 
-escapeIriStr :: TTermDefinition (String -> String)
+escapeIriStr :: TypedTermDefinition (String -> String)
 escapeIriStr = define "escapeIriStr" $
   doc "Escape a string for use in an N-Triples IRI. Disallowed characters are emitted as 4-digit UCHAR escapes." $
   lambda "s" $
@@ -144,7 +152,7 @@ escapeIriStr = define "escapeIriStr" $
 
 -- | Escape a single literal character. Handles \", \\, \n, \r;
 --   non-ASCII code points pass through (N-Triples allows any Unicode code point in literals).
-escapeLiteralChar :: TTermDefinition (Int -> String)
+escapeLiteralChar :: TypedTermDefinition (Int -> String)
 escapeLiteralChar = define "escapeLiteralChar" $
   doc "Escape a single literal character code to a string" $
   lambda "c" $
@@ -158,14 +166,20 @@ escapeLiteralChar = define "escapeLiteralChar" $
             (string "\\r")
             (Strings.fromList $ list [var "c"]))))
 
-escapeLiteralString :: TTermDefinition (String -> String)
+escapeLiteralString :: TypedTermDefinition (String -> String)
 escapeLiteralString = define "escapeLiteralString" $
   doc "Escape a string for use in an N-Triples literal" $
   lambda "s" $
     Strings.cat (Lists.map escapeLiteralChar (Strings.toList (var "s")))
 
+graphToExpr :: TypedTermDefinition (Rdf.Graph -> Expr)
+graphToExpr = define "graphToExpr" $
+  doc "Convert an RDF graph to an expression" $
+  lambda "g" $
+    Serialization.newlineSep @@ (Lists.map tripleToExpr (Sets.toList (unwrap Rdf._Graph @@ var "g")))
+
 -- | Convert a value 0-15 to an uppercase hex digit code point ('0'-'9' or 'A'-'F').
-hexDigit :: TTermDefinition (Int -> Int)
+hexDigit :: TypedTermDefinition (Int -> Int)
 hexDigit = define "hexDigit" $
   doc "Convert a value 0-15 to an uppercase hex digit code point" $
   lambda "n" $
@@ -173,45 +187,7 @@ hexDigit = define "hexDigit" $
       (Math.add (var "n") (int32 48))                        -- '0'
       (Math.add (Math.sub (var "n") (int32 10)) (int32 65))  -- 'A'
 
--- | Convert an RDF graph to an N-Triples string
-rdfGraphToNtriples :: TTermDefinition (Rdf.Graph -> String)
-rdfGraphToNtriples = define "rdfGraphToNtriples" $
-  doc "Convert an RDF graph to an N-Triples string" $
-  lambda "g" $
-    Serialization.printExpr @@ (graphToExpr @@ var "g")
-
--- | Encode a code point in the range 0..0xFFFF as a 4-digit UCHAR (\\uXXXX).
---   Inputs above 0xFFFF would need the 8-digit \\U form; this helper is used only
---   for the IRIREF disallowed set, which is entirely <= 0x7F.
-uchar4 :: TTermDefinition (Int -> String)
-uchar4 = define "uchar4" $
-  doc "Format a code point as a 4-digit UCHAR escape sequence" $
-  lambda "c" $
-    "d3" <~ Maybes.fromMaybe (int32 0) (Math.maybeDiv (var "c") (int32 4096)) $    -- c / 16^3
-    "r3" <~ Maybes.fromMaybe (int32 0) (Math.maybeMod (var "c") (int32 4096)) $
-    "d2" <~ Maybes.fromMaybe (int32 0) (Math.maybeDiv (var "r3") (int32 256)) $    -- r3 / 16^2
-    "r2" <~ Maybes.fromMaybe (int32 0) (Math.maybeMod (var "r3") (int32 256)) $
-    "d1" <~ Maybes.fromMaybe (int32 0) (Math.maybeDiv (var "r2") (int32 16)) $     -- r2 / 16
-    "d0" <~ Maybes.fromMaybe (int32 0) (Math.maybeMod (var "r2") (int32 16)) $
-    Strings.cat2 (string "\\u")
-      (Strings.fromList $ list [hexDigit @@ var "d3", hexDigit @@ var "d2",
-                                hexDigit @@ var "d1", hexDigit @@ var "d0"])
-
-blankNodeToExpr :: TTermDefinition (Rdf.BlankNode -> Expr)
-blankNodeToExpr = define "blankNodeToExpr" $
-  doc "Convert a blank node to an expression" $
-  lambda "bnode" $
-    Serialization.noSep @@ list [
-      Serialization.cst @@ string "_:",
-      Serialization.cst @@ (unwrap Rdf._BlankNode @@ var "bnode")]
-
-graphToExpr :: TTermDefinition (Rdf.Graph -> Expr)
-graphToExpr = define "graphToExpr" $
-  doc "Convert an RDF graph to an expression" $
-  lambda "g" $
-    Serialization.newlineSep @@ (Lists.map tripleToExpr (Sets.toList (unwrap Rdf._Graph @@ var "g")))
-
-iriToExpr :: TTermDefinition (Rdf.Iri -> Expr)
+iriToExpr :: TypedTermDefinition (Rdf.Iri -> Expr)
 iriToExpr = define "iriToExpr" $
   doc "Convert an IRI to an expression" $
   lambda "iri" $
@@ -220,7 +196,7 @@ iriToExpr = define "iriToExpr" $
       Serialization.cst @@ (escapeIriStr @@ (unwrap Rdf._Iri @@ var "iri")),
       Serialization.cst @@ string ">"]
 
-languageTagToExpr :: TTermDefinition (Rdf.LanguageTag -> Expr)
+languageTagToExpr :: TypedTermDefinition (Rdf.LanguageTag -> Expr)
 languageTagToExpr = define "languageTagToExpr" $
   doc "Convert a language tag to an expression" $
   lambda "lang" $
@@ -228,7 +204,7 @@ languageTagToExpr = define "languageTagToExpr" $
       Serialization.cst @@ string "@",
       Serialization.cst @@ (unwrap Rdf._LanguageTag @@ var "lang")]
 
-literalToExpr :: TTermDefinition (Rdf.Literal -> Expr)
+literalToExpr :: TypedTermDefinition (Rdf.Literal -> Expr)
 literalToExpr = define "literalToExpr" $
   doc "Convert a literal to an expression" $
   lambda "lit" $ lets [
@@ -243,7 +219,7 @@ literalToExpr = define "literalToExpr" $
       (var "lang")] $
     Serialization.noSep @@ list [var "lexExpr", var "suffix"]
 
-nodeToExpr :: TTermDefinition (Rdf.Node -> Expr)
+nodeToExpr :: TypedTermDefinition (Rdf.Node -> Expr)
 nodeToExpr = define "nodeToExpr" $
   doc "Convert a node to an expression" $
   lambda "n" $
@@ -252,7 +228,14 @@ nodeToExpr = define "nodeToExpr" $
       Rdf._Node_bnode>>: lambda "bnode" $ blankNodeToExpr @@ var "bnode",
       Rdf._Node_literal>>: lambda "lit" $ literalToExpr @@ var "lit"]
 
-resourceToExpr :: TTermDefinition (Rdf.Resource -> Expr)
+-- | Convert an RDF graph to an N-Triples string
+rdfGraphToNtriples :: TypedTermDefinition (Rdf.Graph -> String)
+rdfGraphToNtriples = define "rdfGraphToNtriples" $
+  doc "Convert an RDF graph to an N-Triples string" $
+  lambda "g" $
+    Serialization.printExpr @@ (graphToExpr @@ var "g")
+
+resourceToExpr :: TypedTermDefinition (Rdf.Resource -> Expr)
 resourceToExpr = define "resourceToExpr" $
   doc "Convert a resource to an expression" $
   lambda "r" $
@@ -260,7 +243,7 @@ resourceToExpr = define "resourceToExpr" $
       Rdf._Resource_iri>>: lambda "iri" $ iriToExpr @@ var "iri",
       Rdf._Resource_bnode>>: lambda "bnode" $ blankNodeToExpr @@ var "bnode"]
 
-tripleToExpr :: TTermDefinition (Rdf.Triple -> Expr)
+tripleToExpr :: TypedTermDefinition (Rdf.Triple -> Expr)
 tripleToExpr = define "tripleToExpr" $
   doc "Convert a triple to an expression" $
   lambda "t" $ lets [
@@ -272,3 +255,20 @@ tripleToExpr = define "tripleToExpr" $
       iriToExpr @@ var "pred",
       nodeToExpr @@ var "obj",
       Serialization.cst @@ string "."]
+
+-- | Encode a code point in the range 0..0xFFFF as a 4-digit UCHAR (\\uXXXX).
+--   Inputs above 0xFFFF would need the 8-digit \\U form; this helper is used only
+--   for the IRIREF disallowed set, which is entirely <= 0x7F.
+uchar4 :: TypedTermDefinition (Int -> String)
+uchar4 = define "uchar4" $
+  doc "Format a code point as a 4-digit UCHAR escape sequence" $
+  lambda "c" $
+    "d3" <~ Maybes.fromMaybe (int32 0) (Math.maybeDiv (var "c") (int32 4096)) $    -- c / 16^3
+    "r3" <~ Maybes.fromMaybe (int32 0) (Math.maybeMod (var "c") (int32 4096)) $
+    "d2" <~ Maybes.fromMaybe (int32 0) (Math.maybeDiv (var "r3") (int32 256)) $    -- r3 / 16^2
+    "r2" <~ Maybes.fromMaybe (int32 0) (Math.maybeMod (var "r3") (int32 256)) $
+    "d1" <~ Maybes.fromMaybe (int32 0) (Math.maybeDiv (var "r2") (int32 16)) $     -- r2 / 16
+    "d0" <~ Maybes.fromMaybe (int32 0) (Math.maybeMod (var "r2") (int32 16)) $
+    Strings.cat2 (string "\\u")
+      (Strings.fromList $ list [hexDigit @@ var "d3", hexDigit @@ var "d2",
+                                hexDigit @@ var "d1", hexDigit @@ var "d0"])

@@ -21,10 +21,11 @@ import hydra.dsl.meta.lib.Pairs;
 import hydra.dsl.meta.lib.Sets;
 import hydra.dsl.meta.lib.Strings;
 import hydra.packaging.Definition;
+import hydra.packaging.EntityMetadata;
 import hydra.packaging.Module;
 import hydra.packaging.ModuleName;
 import hydra.packaging.ModuleDependency;
-import hydra.phantoms.TTerm;
+import hydra.typed.TypedTerm;
 import hydra.util.Maybe;
 
 import java.util.Arrays;
@@ -43,99 +44,99 @@ public class Testing {
     public static final ModuleName NS = new ModuleName("hydra.java.testing");
 
     // ---- Primitive references ----
-    private static TTerm<?> prim(String fqName) { return var(fqName); }
+    private static TypedTerm<?> prim(String fqName) { return var(fqName); }
 
-    private static TTerm<?> stringsCat2(TTerm<?> a, TTerm<?> b) {
+    private static TypedTerm<?> stringsCat2(TypedTerm<?> a, TypedTerm<?> b) {
         return apply(prim("hydra.lib.strings.cat2"), a, b);
     }
-    private static TTerm<?> stringsCat(TTerm<?> list) {
+    private static TypedTerm<?> stringsCat(TypedTerm<?> list) {
         return apply(prim("hydra.lib.strings.cat"), list);
     }
-    private static TTerm<?> stringsIntercalate(TTerm<?> sep, TTerm<?> list) {
+    private static TypedTerm<?> stringsIntercalate(TypedTerm<?> sep, TypedTerm<?> list) {
         return apply(prim("hydra.lib.strings.intercalate"), sep, list);
     }
-    private static TTerm<?> stringsSplitOn(TTerm<?> sep, TTerm<?> s) {
+    private static TypedTerm<?> stringsSplitOn(TypedTerm<?> sep, TypedTerm<?> s) {
         return apply(prim("hydra.lib.strings.splitOn"), sep, s);
     }
-    private static TTerm<?> listsConcat(TTerm<?> list) {
+    private static TypedTerm<?> listsConcat(TypedTerm<?> list) {
         return apply(prim("hydra.lib.lists.concat"), list);
     }
-    private static TTerm<?> listsConcat2(TTerm<?> a, TTerm<?> b) {
+    private static TypedTerm<?> listsConcat2(TypedTerm<?> a, TypedTerm<?> b) {
         return apply(prim("hydra.lib.lists.concat2"), a, b);
     }
-    private static TTerm<?> listsDrop(TTerm<?> n, TTerm<?> list) {
+    private static TypedTerm<?> listsDrop(TypedTerm<?> n, TypedTerm<?> list) {
         return apply(prim("hydra.lib.lists.drop"), n, list);
     }
-    private static TTerm<?> listsMap(TTerm<?> f, TTerm<?> list) {
+    private static TypedTerm<?> listsMap(TypedTerm<?> f, TypedTerm<?> list) {
         return apply(prim("hydra.lib.lists.map"), f, list);
     }
-    private static TTerm<?> listsNull(TTerm<?> list) {
+    private static TypedTerm<?> listsNull(TypedTerm<?> list) {
         return apply(prim("hydra.lib.lists.null"), list);
     }
-    private static TTerm<?> listsMaybeLast(TTerm<?> list) {
+    private static TypedTerm<?> listsMaybeLast(TypedTerm<?> list) {
         return apply(prim("hydra.lib.lists.maybeLast"), list);
     }
-    private static TTerm<?> listsMaybeInit(TTerm<?> list) {
+    private static TypedTerm<?> listsMaybeInit(TypedTerm<?> list) {
         return apply(prim("hydra.lib.lists.maybeInit"), list);
     }
-    private static TTerm<?> maybesFromMaybe(TTerm<?> dflt, TTerm<?> m) {
+    private static TypedTerm<?> maybesFromMaybe(TypedTerm<?> dflt, TypedTerm<?> m) {
         return apply(prim("hydra.lib.maybes.fromMaybe"), dflt, m);
     }
-    private static TTerm<?> eithersBind(TTerm<?> e, TTerm<?> f) {
+    private static TypedTerm<?> eithersBind(TypedTerm<?> e, TypedTerm<?> f) {
         return apply(prim("hydra.lib.eithers.bind"), e, f);
     }
-    private static TTerm<?> eithersMap(TTerm<?> f, TTerm<?> e) {
+    private static TypedTerm<?> eithersMap(TypedTerm<?> f, TypedTerm<?> e) {
         return apply(prim("hydra.lib.eithers.map"), f, e);
     }
-    private static TTerm<?> eithersMapList(TTerm<?> f, TTerm<?> list) {
+    private static TypedTerm<?> eithersMapList(TypedTerm<?> f, TypedTerm<?> list) {
         return apply(prim("hydra.lib.eithers.mapList"), f, list);
     }
-    private static TTerm<?> logicIfElse(TTerm<?> cond, TTerm<?> t, TTerm<?> f) {
+    private static TypedTerm<?> logicIfElse(TypedTerm<?> cond, TypedTerm<?> t, TypedTerm<?> f) {
         return apply(prim("hydra.lib.logic.ifElse"), cond, t, f);
     }
-    private static TTerm<?> logicOr(TTerm<?> a, TTerm<?> b) {
+    private static TypedTerm<?> logicOr(TypedTerm<?> a, TypedTerm<?> b) {
         return apply(prim("hydra.lib.logic.or"), a, b);
     }
-    private static TTerm<?> equalityEqual(TTerm<?> a, TTerm<?> b) {
+    private static TypedTerm<?> equalityEqual(TypedTerm<?> a, TypedTerm<?> b) {
         return apply(prim("hydra.lib.equality.equal"), a, b);
     }
-    private static TTerm<?> formattingCapitalize(TTerm<?> s) {
+    private static TypedTerm<?> formattingCapitalize(TypedTerm<?> s) {
         return apply(prim("hydra.formatting.capitalize"), s);
     }
-    private static TTerm<?> formattingNonAlnumToUnderscores(TTerm<?> s) {
+    private static TypedTerm<?> formattingNonAlnumToUnderscores(TypedTerm<?> s) {
         return apply(prim("hydra.formatting.nonAlnumToUnderscores"), s);
     }
-    private static TTerm<?> formattingConvertCase(TTerm<?> from, TTerm<?> to, TTerm<?> s) {
+    private static TypedTerm<?> formattingConvertCase(TypedTerm<?> from, TypedTerm<?> to, TypedTerm<?> s) {
         return apply(prim("hydra.formatting.convertCase"), from, to, s);
     }
-    private static TTerm<?> packagingModuleNamespace(TTerm<?> m) {
+    private static TypedTerm<?> packagingModuleNamespace(TypedTerm<?> m) {
         return apply(
             project("hydra.packaging.Module", "name"),
             m);
     }
-    private static TTerm<?> unwrapNamespace(TTerm<?> ns) {
+    private static TypedTerm<?> unwrapNamespace(TypedTerm<?> ns) {
         return Packaging.unModuleName(tterm(ns.value));
     }
-    private static TTerm<?> caseConventionLowerSnake() {
+    private static TypedTerm<?> caseConventionLowerSnake() {
         return injectUnit("hydra.util.CaseConvention", "lowerSnake");
     }
-    private static TTerm<?> caseConventionPascal() {
+    private static TypedTerm<?> caseConventionPascal() {
         return injectUnit("hydra.util.CaseConvention", "pascal");
     }
-    private static TTerm<?> rightTerm(TTerm<?> t) {
+    private static TypedTerm<?> rightTerm(TypedTerm<?> t) {
         return Phantoms.right(t);
     }
 
     // ---- Right-side helpers ----
     /** {@code replaceChar old new s = Strings.intercalate new (Strings.splitOn old s)} */
-    private static TTerm<?> replaceChar(TTerm<?> oldChar, TTerm<?> newChar, TTerm<?> s) {
+    private static TypedTerm<?> replaceChar(TypedTerm<?> oldChar, TypedTerm<?> newChar, TypedTerm<?> s) {
         return stringsIntercalate(newChar, stringsSplitOn(oldChar, s));
     }
 
     // ---- Definitions ----
 
     private static Definition buildJavaTestModule() {
-        TTerm<?> body = doc(
+        TypedTerm<?> body = doc(
             "Build the complete Java test module content",
             lambda("testModule", lambda("testGroup", lambda("testBody",
                 let(
@@ -177,15 +178,15 @@ public class Testing {
     }
 
     private static Definition formatJavaTestName() {
-        TTerm<?> name = var("name");
-        TTerm<?> replaced =
+        TypedTerm<?> name = var("name");
+        TypedTerm<?> replaced =
             replaceChar(string("-"), string(" Neg"),
                 replaceChar(string("."), string("Dot"),
                     replaceChar(string("+"), string(" Plus"),
                         replaceChar(string("/"), string(" Div"),
                             replaceChar(string("*"), string(" Mul"),
                                 replaceChar(string("#"), string(" Num"), name))))));
-        TTerm<?> body = doc(
+        TypedTerm<?> body = doc(
             "Format a test name for Java (PascalCase method name with 'test' prefix)",
             lambda("name",
                 let(
@@ -201,7 +202,7 @@ public class Testing {
     }
 
     private static Definition generateJavaTestCase() {
-        TTerm<?> universalBranch = lambda("ucase",
+        TypedTerm<?> universalBranch = lambda("ucase",
             let(
                 Arrays.<hydra.core.Field>asList(
                     field("actual_", apply(
@@ -229,7 +230,7 @@ public class Testing {
                     stringsCat(list(string("            "), var("actual_"), string(");"))),
                     string("    }")))));
 
-        TTerm<?> body = doc(
+        TypedTerm<?> body = doc(
             "Generate a single JUnit test case from a test case with metadata",
             lambda("groupPath", lambda("tcm",
                 let(
@@ -245,7 +246,7 @@ public class Testing {
     }
 
     private static Definition generateJavaTestFile() {
-        TTerm<?> body = doc(
+        TypedTerm<?> body = doc(
             "Generate a Java test file for a test group",
             lambda("testModule", lambda("testGroup", lambda("_g",
                 apply(
@@ -257,7 +258,7 @@ public class Testing {
 
     private static Definition generateJavaTestGroupHierarchy() {
         // Inner lambda that walks one subgroup
-        TTerm<?> subgroupBlock = lambda("subgroup",
+        TypedTerm<?> subgroupBlock = lambda("subgroup",
             let(
                 Arrays.<hydra.core.Field>asList(
                     field("groupName", apply(
@@ -272,7 +273,7 @@ public class Testing {
                         listsConcat2(var("groupPath"), list(var("groupName"))),
                         var("subgroup")))));
 
-        TTerm<?> body = doc(
+        TypedTerm<?> body = doc(
             "Generate test hierarchy for Java with nested subgroups",
             lambda("groupPath", lambda("testGroup",
                 let(
@@ -314,7 +315,7 @@ public class Testing {
     }
 
     private static Definition generateTestFileWithJavaCodec() {
-        TTerm<?> body = doc(
+        TypedTerm<?> body = doc(
             "Generate a complete test file for Java",
             lambda("testModule", lambda("testGroup",
                 eithersMap(
@@ -347,7 +348,7 @@ public class Testing {
     }
 
     private static Definition namespaceToJavaClassName() {
-        TTerm<?> body = doc(
+        TypedTerm<?> body = doc(
             "Convert namespace to Java class name",
             lambda("ns_",
                 stringsIntercalate(string("."),
@@ -381,7 +382,6 @@ public class Testing {
         new ModuleName("hydra.ast"),
         new ModuleName("hydra.classes"),
         new ModuleName("hydra.coders"),
-        new ModuleName("hydra.context"),
         new ModuleName("hydra.core"),
         new ModuleName("hydra.error.checking"),
         new ModuleName("hydra.error.core"),
@@ -391,20 +391,24 @@ public class Testing {
         new ModuleName("hydra.json.model"),
         new ModuleName("hydra.packaging"),
         new ModuleName("hydra.parsing"),
-        new ModuleName("hydra.phantoms"),
         new ModuleName("hydra.query"),
         new ModuleName("hydra.relational"),
         new ModuleName("hydra.tabular"),
         new ModuleName("hydra.testing"),
         new ModuleName("hydra.topology"),
+        new ModuleName("hydra.typed"),
         new ModuleName("hydra.typing"),
         new ModuleName("hydra.util"),
         new ModuleName("hydra.validation"),
         new ModuleName("hydra.variants"));
 
     public static final Module module_ = new Module(
-        Maybe.just("Java test code generation codec for JUnit-based generation tests"),
         NS,
+        Maybe.just(new EntityMetadata(
+            Maybe.just("Java test code generation codec for JUnit-based generation tests"),
+            java.util.List.of(),
+            java.util.List.of(),
+            Maybe.nothing())),
         DEPENDENCIES,
         DEFINITIONS);
 }

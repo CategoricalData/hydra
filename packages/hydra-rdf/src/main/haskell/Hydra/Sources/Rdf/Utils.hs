@@ -82,7 +82,7 @@ import qualified Hydra.Rdf.Syntax as Rdf
 import qualified Hydra.Sources.Rdf.Syntax as RdfSyntax
 
 
-define :: String -> TTerm a -> TTermDefinition a
+define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModule module_
 
 ns :: ModuleName
@@ -92,8 +92,8 @@ module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Formatting.ns, Names.ns, Annotations.ns] L.++ (RdfSyntax.ns:KernelTypes.kernelTypesModuleNames)),
-            moduleDescription = Just "Utility functions for working with RDF graphs and descriptions"}
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Formatting.ns, Names.ns] L.++ (RdfSyntax.ns:KernelTypes.kernelTypesModuleNames)),
+            moduleMetadata = Bootstrap.descriptionMetadata (Just "Utility functions for working with RDF graphs and descriptions")}
   where
     definitions = [
       toDefinition descriptionsToGraph,
@@ -104,7 +104,6 @@ module_ = Module {
       toDefinition forObjects,
       toDefinition iri,
       toDefinition keyIri,
-      toDefinition key_rdfBlankNodeCounter,
       toDefinition mergeGraphs,
       toDefinition nameToIri,
       toDefinition nextBlankNode,
@@ -117,14 +116,14 @@ module_ = Module {
 
 
 -- | Convert a list of descriptions to an RDF graph
-descriptionsToGraph :: TTermDefinition ([Rdf.Description] -> Rdf.Graph)
+descriptionsToGraph :: TypedTermDefinition ([Rdf.Description] -> Rdf.Graph)
 descriptionsToGraph = define "descriptionsToGraph" $
   doc "Convert a list of descriptions to an RDF graph" $
   lambda "ds" $
     wrap Rdf._Graph (Sets.fromList (triplesOf @@ var "ds"))
 
 -- | Create an empty description with the given node
-emptyDescription :: TTermDefinition (Rdf.Node -> Rdf.Description)
+emptyDescription :: TypedTermDefinition (Rdf.Node -> Rdf.Description)
 emptyDescription = define "emptyDescription" $
   doc "Create an empty description with a given node" $
   lambda "node" $
@@ -133,19 +132,19 @@ emptyDescription = define "emptyDescription" $
       Rdf._Description_graph>>: emptyRdfGraph]
 
 -- | An empty LangStrings value
-emptyLangStrings :: TTermDefinition Rdf.LangStrings
+emptyLangStrings :: TypedTermDefinition Rdf.LangStrings
 emptyLangStrings = define "emptyLangStrings" $
   doc "An empty LangStrings value" $
   wrap Rdf._LangStrings Maps.empty
 
 -- | An empty RDF graph
-emptyRdfGraph :: TTermDefinition Rdf.Graph
+emptyRdfGraph :: TypedTermDefinition Rdf.Graph
 emptyRdfGraph = define "emptyRdfGraph" $
   doc "An empty RDF graph" $
   wrap Rdf._Graph Sets.empty
 
 -- | Encode a Hydra literal as an RDF literal
-encodeLiteral :: TTermDefinition (Literal -> Rdf.Literal)
+encodeLiteral :: TypedTermDefinition (Literal -> Rdf.Literal)
 encodeLiteral = define "encodeLiteral" $
   doc "Encode a Hydra literal as an RDF literal" $
   lambda "lit" $
@@ -226,7 +225,7 @@ encodeLiteral = define "encodeLiteral" $
           Rdf._Literal_languageTag>>: nothing]]
 
 -- | Create triples from a subject, predicate, and list of object nodes
-forObjects :: TTermDefinition (Rdf.Resource -> Rdf.Iri -> [Rdf.Node] -> [Rdf.Triple])
+forObjects :: TypedTermDefinition (Rdf.Resource -> Rdf.Iri -> [Rdf.Node] -> [Rdf.Triple])
 forObjects = define "forObjects" $
   doc "Create triples from a subject, predicate, and list of object nodes" $
   lambda "subj" $ lambda "pred" $ lambda "objs" $
@@ -238,27 +237,21 @@ forObjects = define "forObjects" $
       (var "objs")
 
 -- | Construct an IRI from a namespace and local name
-iri :: TTermDefinition (String -> String -> Rdf.Iri)
+iri :: TypedTermDefinition (String -> String -> Rdf.Iri)
 iri = define "iri" $
   doc "Construct an IRI from a namespace and local name" $
   lambda "ns" $ lambda "local" $
     wrap Rdf._Iri (Strings.cat2 (var "ns") (var "local"))
 
 -- | Construct a key IRI from a local name
-keyIri :: TTermDefinition (String -> Rdf.Iri)
+keyIri :: TypedTermDefinition (String -> Rdf.Iri)
 keyIri = define "keyIri" $
   doc "Construct a key IRI from a local name" $
   lambda "local" $
     iri @@ string "urn:key:" @@ var "local"
 
--- | The key used for tracking blank node counters
-key_rdfBlankNodeCounter :: TTermDefinition Name
-key_rdfBlankNodeCounter = define "key_rdfBlankNodeCounter" $
-  doc "The key used for tracking blank node counters" $
-  wrap _Name $ string "rdfBlankNodeCounter"
-
 -- | Merge a list of RDF graphs into a single graph
-mergeGraphs :: TTermDefinition ([Rdf.Graph] -> Rdf.Graph)
+mergeGraphs :: TypedTermDefinition ([Rdf.Graph] -> Rdf.Graph)
 mergeGraphs = define "mergeGraphs" $
   doc "Merge a list of RDF graphs into a single graph" $
   lambda "graphs" $
@@ -266,27 +259,24 @@ mergeGraphs = define "mergeGraphs" $
       (Sets.unions (Lists.map (unwrap Rdf._Graph) (var "graphs")))
 
 -- | Convert a Hydra name to an RDF IRI
-nameToIri :: TTermDefinition (Name -> Rdf.Iri)
+nameToIri :: TypedTermDefinition (Name -> Rdf.Iri)
 nameToIri = define "nameToIri" $
   doc "Convert a Hydra name to an RDF IRI" $
   lambda "name" $
     wrap Rdf._Iri (Strings.cat2 (string "urn:") (Core.unName $ var "name"))
 
--- | Generate the next blank node and an updated context
-nextBlankNode :: TTermDefinition (Context -> (Rdf.Resource, Context))
+-- | Generate the next blank node and an updated counter
+nextBlankNode :: TypedTermDefinition (I.Int32 -> (Rdf.Resource, I.Int32))
 nextBlankNode = define "nextBlankNode" $
-  doc "Generate the next blank node and an updated context" $
-  lambda "cx" $ lets [
-    "result">: Annotations.nextCount @@ key_rdfBlankNodeCounter @@ var "cx",
-    "count">: Pairs.first (var "result"),
-    "cx'">: Pairs.second (var "result")] $
+  doc "Generate the next blank node and an incremented counter" $
+  lambda "counter" $
     pair
       (inject Rdf._Resource Rdf._Resource_bnode
-        (wrap Rdf._BlankNode (Strings.cat2 (string "b") (Literals.showInt32 (var "count")))))
-      (var "cx'")
+        (wrap Rdf._BlankNode (Strings.cat2 (string "b") (Literals.showInt32 (var "counter")))))
+      (Math.add (var "counter") (int32 1))
 
 -- | Construct a property IRI from a record name and field name
-propertyIri :: TTermDefinition (Name -> Name -> Rdf.Iri)
+propertyIri :: TypedTermDefinition (Name -> Name -> Rdf.Iri)
 propertyIri = define "propertyIri" $
   doc "Construct a property IRI from a record name and field name" $
   lambda "rname" $ lambda "fname" $ lets [
@@ -302,14 +292,14 @@ propertyIri = define "propertyIri" $
         Formatting.capitalize @@ (Core.unName $ var "fname")])
 
 -- | Construct an RDF namespace IRI
-rdfIri :: TTermDefinition (String -> Rdf.Iri)
+rdfIri :: TypedTermDefinition (String -> Rdf.Iri)
 rdfIri = define "rdfIri" $
   doc "Construct an RDF namespace IRI" $
   lambda "local" $
     iri @@ string "http://www.w3.org/1999/02/22-rdf-syntax-ns#" @@ var "local"
 
 -- | Convert a resource to a node
-resourceToNode :: TTermDefinition (Rdf.Resource -> Rdf.Node)
+resourceToNode :: TypedTermDefinition (Rdf.Resource -> Rdf.Node)
 resourceToNode = define "resourceToNode" $
   doc "Convert a resource to a node" $
   lambda "r" $
@@ -318,14 +308,14 @@ resourceToNode = define "resourceToNode" $
       Rdf._Resource_bnode>>: lambda "b" $ inject Rdf._Node Rdf._Node_bnode (var "b")]
 
 -- | Extract subjects from a list of descriptions
-subjectsOf :: TTermDefinition ([Rdf.Description] -> [Rdf.Node])
+subjectsOf :: TypedTermDefinition ([Rdf.Description] -> [Rdf.Node])
 subjectsOf = define "subjectsOf" $
   doc "Extract subjects from a list of descriptions" $
   lambda "descs" $
     Lists.map (project Rdf._Description Rdf._Description_subject) (var "descs")
 
 -- | Extract all triples from a list of descriptions
-triplesOf :: TTermDefinition ([Rdf.Description] -> [Rdf.Triple])
+triplesOf :: TypedTermDefinition ([Rdf.Description] -> [Rdf.Triple])
 triplesOf = define "triplesOf" $
   doc "Extract all triples from a list of descriptions" $
   lambda "descs" $
@@ -334,7 +324,7 @@ triplesOf = define "triplesOf" $
       (var "descs"))
 
 -- | Construct an XML Schema datatype IRI
-xmlSchemaDatatypeIri :: TTermDefinition (String -> Rdf.Iri)
+xmlSchemaDatatypeIri :: TypedTermDefinition (String -> Rdf.Iri)
 xmlSchemaDatatypeIri = define "xmlSchemaDatatypeIri" $
   doc "Construct an XML Schema datatype IRI" $
   lambda "local" $

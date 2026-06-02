@@ -3,26 +3,45 @@
 
 module Hydra.Dsls where
 import qualified Hydra.Annotations as Annotations
+import qualified Hydra.Ast as Ast
+import qualified Hydra.Coders as Coders
 import qualified Hydra.Constants as Constants
 import qualified Hydra.Core as Core
 import qualified Hydra.Decode.Core as DecodeCore
 import qualified Hydra.Encode.Core as EncodeCore
+import qualified Hydra.Error.Checking as Checking
+import qualified Hydra.Error.Core as ErrorCore
+import qualified Hydra.Error.Packaging as ErrorPackaging
 import qualified Hydra.Errors as Errors
 import qualified Hydra.Formatting as Formatting
 import qualified Hydra.Graph as Graph
+import qualified Hydra.Json.Model as Model
 import qualified Hydra.Lexical as Lexical
-import qualified Hydra.Lib.Eithers as Eithers
-import qualified Hydra.Lib.Equality as Equality
-import qualified Hydra.Lib.Lists as Lists
-import qualified Hydra.Lib.Logic as Logic
-import qualified Hydra.Lib.Maps as Maps
-import qualified Hydra.Lib.Maybes as Maybes
-import qualified Hydra.Lib.Pairs as Pairs
-import qualified Hydra.Lib.Sets as Sets
-import qualified Hydra.Lib.Strings as Strings
+import qualified Hydra.Haskell.Lib.Eithers as Eithers
+import qualified Hydra.Haskell.Lib.Equality as Equality
+import qualified Hydra.Haskell.Lib.Lists as Lists
+import qualified Hydra.Haskell.Lib.Logic as Logic
+import qualified Hydra.Haskell.Lib.Maps as Maps
+import qualified Hydra.Haskell.Lib.Maybes as Maybes
+import qualified Hydra.Haskell.Lib.Pairs as Pairs
+import qualified Hydra.Haskell.Lib.Sets as Sets
+import qualified Hydra.Haskell.Lib.Strings as Strings
 import qualified Hydra.Names as Names
 import qualified Hydra.Packaging as Packaging
+import qualified Hydra.Parsing as Parsing
+import qualified Hydra.Paths as Paths
+import qualified Hydra.Query as Query
+import qualified Hydra.Relational as Relational
+import qualified Hydra.Scoping as Scoping
 import qualified Hydra.Strip as Strip
+import qualified Hydra.Tabular as Tabular
+import qualified Hydra.Testing as Testing
+import qualified Hydra.Topology as Topology
+import qualified Hydra.Typed as Typed
+import qualified Hydra.Typing as Typing
+import qualified Hydra.Util as Util
+import qualified Hydra.Validation as Validation
+import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 -- | Collect forall type variable names from a type
@@ -94,22 +113,27 @@ dslModule cx graph mod =
             Core.typeSchemeBody = (Core.TypeVariable (Core.Name "hydra.core.Type")),
             Core.typeSchemeConstraints = Nothing}))}) (Packaging.typeDefinitionName v0) (Core.typeSchemeBody (Packaging.typeDefinitionTypeScheme v0)))
       _ -> Nothing) (Packaging.moduleDefinitions mod)))) (\typeBindings -> Logic.ifElse (Lists.null typeBindings) (Right Nothing) (Eithers.bind (Eithers.mapList (\b -> Eithers.bimap (\_e -> Errors.ErrorDecoding _e) (\x -> x) (generateBindingsForType cx graph b)) typeBindings) (\dslBindings -> Right (Just (Packaging.Module {
-      Packaging.moduleDescription = (Just (Strings.cat [
-        "DSL functions for ",
-        (Packaging.unModuleName (Packaging.moduleName mod))])),
-      Packaging.moduleName = (dslNamespace (Packaging.moduleName mod)),
+      Packaging.moduleName = (dslModuleName (Packaging.moduleName mod)),
+      Packaging.moduleMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just (Strings.cat [
+          "DSL functions for ",
+          (Packaging.unModuleName (Packaging.moduleName mod))])),
+        Packaging.entityMetadataComments = [],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.moduleDependencies = (Lists.map (\ns -> Packaging.ModuleDependency {
         Packaging.moduleDependencyModule = ns,
         Packaging.moduleDependencyPackage = Nothing}) (Lists.nub (Lists.concat2 [
         Packaging.moduleName mod,
-        (Packaging.ModuleName "hydra.phantoms")] (Lists.concat2 (Lists.map (\dep -> Packaging.moduleDependencyModule dep) (Packaging.moduleDependencies mod)) (Lists.map dslNamespace (Lists.map (\dep -> Packaging.moduleDependencyModule dep) (Packaging.moduleDependencies mod))))))),
+        (Packaging.ModuleName "hydra.typed")] (Lists.concat2 (Lists.map (\dep -> Packaging.moduleDependencyModule dep) (Packaging.moduleDependencies mod)) (Lists.map dslModuleName (Lists.map (\dep -> Packaging.moduleDependencyModule dep) (Packaging.moduleDependencies mod))))))),
       Packaging.moduleDefinitions = (Lists.map (\b -> Packaging.DefinitionTerm (Packaging.TermDefinition {
         Packaging.termDefinitionName = (Core.bindingName b),
+        Packaging.termDefinitionMetadata = Nothing,
         Packaging.termDefinitionTerm = (Core.bindingTerm b),
-        Packaging.termDefinitionTypeScheme = (Core.bindingTypeScheme b)})) (deduplicateBindings (Lists.concat dslBindings)))})))))
--- | Generate a DSL module namespace from a source module namespace
-dslNamespace :: Packaging.ModuleName -> Packaging.ModuleName
-dslNamespace ns =
+        Packaging.termDefinitionSignature = (Maybes.map Scoping.typeSchemeToTermSignature (Core.bindingTypeScheme b))})) (deduplicateBindings (Lists.concat dslBindings)))})))))
+-- | Generate a DSL module name from a source module name
+dslModuleName :: Packaging.ModuleName -> Packaging.ModuleName
+dslModuleName ns =
 
       let parts = Strings.splitOn "." (Packaging.unModuleName ns)
           prefixFull =
@@ -119,19 +143,19 @@ dslNamespace ns =
       in (Maybes.maybe prefixFull (\ht -> Logic.ifElse (Equality.equal (Pairs.first ht) "hydra") (Packaging.ModuleName (Strings.cat [
         "hydra.dsl.",
         (Strings.intercalate "." (Pairs.second ht))])) prefixFull) (Lists.uncons parts))
--- | Build a TypeScheme with TTerm-wrapped parameter and result types
+-- | Build a TypeScheme with TypedTerm-wrapped parameter and result types
 dslTypeScheme :: Core.Type -> [Core.Type] -> Core.Type -> Core.TypeScheme
 dslTypeScheme origType paramTypes resultType =
 
       let typeVars = collectForallVars origType
           wrappedResult =
                   Core.TypeApplication (Core.ApplicationType {
-                    Core.applicationTypeFunction = (Core.TypeVariable (Core.Name "hydra.phantoms.TTerm")),
+                    Core.applicationTypeFunction = (Core.TypeVariable (Core.Name "hydra.typed.TypedTerm")),
                     Core.applicationTypeArgument = resultType})
           funType =
                   Lists.foldr (\paramType -> \acc -> Core.TypeFunction (Core.FunctionType {
                     Core.functionTypeDomain = (Core.TypeApplication (Core.ApplicationType {
-                      Core.applicationTypeFunction = (Core.TypeVariable (Core.Name "hydra.phantoms.TTerm")),
+                      Core.applicationTypeFunction = (Core.TypeVariable (Core.Name "hydra.typed.TypedTerm")),
                       Core.applicationTypeArgument = paramType})),
                     Core.functionTypeCodomain = acc})) wrappedResult paramTypes
       in Core.TypeScheme {
@@ -169,14 +193,14 @@ generateRecordAccessor origType typeName ft =
           accessorName = dslDefinitionName typeName accessorLocalName
           paramDomain =
                   Core.TypeApplication (Core.ApplicationType {
-                    Core.applicationTypeFunction = (Core.TypeVariable (Core.Name "hydra.phantoms.TTerm")),
+                    Core.applicationTypeFunction = (Core.TypeVariable (Core.Name "hydra.typed.TypedTerm")),
                     Core.applicationTypeArgument = (nominalResultType typeName origType)})
           rawBody =
                   Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "x"),
                     Core.lambdaDomain = (Just paramDomain),
                     Core.lambdaBody = (Core.TermWrap (Core.WrappedTerm {
-                      Core.wrappedTermTypeName = (Core.Name "hydra.phantoms.TTerm"),
+                      Core.wrappedTermTypeName = (Core.Name "hydra.typed.TypedTerm"),
                       Core.wrappedTermBody = (Core.TermInject (Core.Injection {
                         Core.injectionTypeName = (Core.Name "hydra.core.Term"),
                         Core.injectionField = Core.Field {
@@ -206,7 +230,7 @@ generateRecordAccessor origType typeName ft =
                               Core.Field {
                                 Core.fieldName = (Core.Name "argument"),
                                 Core.fieldTerm = (Core.TermApplication (Core.Application {
-                                  Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.phantoms.TTerm")),
+                                  Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.typed.TypedTerm")),
                                   Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}]}))}}))}))})
           description =
                   Strings.cat [
@@ -237,11 +261,11 @@ generateRecordConstructor origType typeName fieldTypes =
                   Core.Field {
                     Core.fieldName = (Core.Name "term"),
                     Core.fieldTerm = (Core.TermApplication (Core.Application {
-                      Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.phantoms.TTerm")),
+                      Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.typed.TypedTerm")),
                       Core.applicationArgument = (Core.TermVariable (Core.Name (Formatting.decapitalize (Names.localNameOf (Core.fieldTypeName ft)))))}))}]})) fieldTypes
           recordTerm =
                   Core.TermWrap (Core.WrappedTerm {
-                    Core.wrappedTermTypeName = (Core.Name "hydra.phantoms.TTerm"),
+                    Core.wrappedTermTypeName = (Core.Name "hydra.typed.TypedTerm"),
                     Core.wrappedTermBody = (Core.TermInject (Core.Injection {
                       Core.injectionTypeName = (Core.Name "hydra.core.Term"),
                       Core.injectionField = Core.Field {
@@ -261,7 +285,7 @@ generateRecordConstructor origType typeName fieldTypes =
                   Lists.map (\ft -> (
                     Formatting.decapitalize (Names.localNameOf (Core.fieldTypeName ft)),
                     (Core.TypeApplication (Core.ApplicationType {
-                      Core.applicationTypeFunction = (Core.TypeVariable (Core.Name "hydra.phantoms.TTerm")),
+                      Core.applicationTypeFunction = (Core.TypeVariable (Core.Name "hydra.typed.TypedTerm")),
                       Core.applicationTypeArgument = (Core.fieldTypeType ft)})))) fieldTypes
           rawBody =
                   Lists.foldl (\acc -> \pp -> Core.TermLambda (Core.Lambda {
@@ -304,7 +328,7 @@ generateRecordWithUpdater origType typeName allFields targetField =
                       Core.Field {
                         Core.fieldName = (Core.Name "term"),
                         Core.fieldTerm = (Logic.ifElse (Equality.equal (Core.unName (Core.fieldTypeName ft)) (Core.unName targetFieldName)) (Core.TermApplication (Core.Application {
-                          Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.phantoms.TTerm")),
+                          Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.typed.TypedTerm")),
                           Core.applicationArgument = (Core.TermVariable (Core.Name "newVal"))})) (Core.TermInject (Core.Injection {
                           Core.injectionTypeName = (Core.Name "hydra.core.Term"),
                           Core.injectionField = Core.Field {
@@ -334,15 +358,15 @@ generateRecordWithUpdater origType typeName allFields targetField =
                                 Core.Field {
                                   Core.fieldName = (Core.Name "argument"),
                                   Core.fieldTerm = (Core.TermApplication (Core.Application {
-                                    Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.phantoms.TTerm")),
+                                    Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.typed.TypedTerm")),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "original"))}))}]}))}})))}]})) allFields
           recDomain =
                   Core.TypeApplication (Core.ApplicationType {
-                    Core.applicationTypeFunction = (Core.TypeVariable (Core.Name "hydra.phantoms.TTerm")),
+                    Core.applicationTypeFunction = (Core.TypeVariable (Core.Name "hydra.typed.TypedTerm")),
                     Core.applicationTypeArgument = (nominalResultType typeName origType)})
           fieldDomain =
                   Core.TypeApplication (Core.ApplicationType {
-                    Core.applicationTypeFunction = (Core.TypeVariable (Core.Name "hydra.phantoms.TTerm")),
+                    Core.applicationTypeFunction = (Core.TypeVariable (Core.Name "hydra.typed.TypedTerm")),
                     Core.applicationTypeArgument = (Core.fieldTypeType targetField)})
           rawBody =
                   Core.TermLambda (Core.Lambda {
@@ -352,7 +376,7 @@ generateRecordWithUpdater origType typeName allFields targetField =
                       Core.lambdaParameter = (Core.Name "newVal"),
                       Core.lambdaDomain = (Just fieldDomain),
                       Core.lambdaBody = (Core.TermWrap (Core.WrappedTerm {
-                        Core.wrappedTermTypeName = (Core.Name "hydra.phantoms.TTerm"),
+                        Core.wrappedTermTypeName = (Core.Name "hydra.typed.TypedTerm"),
                         Core.wrappedTermBody = (Core.TermInject (Core.Injection {
                           Core.injectionTypeName = (Core.Name "hydra.core.Term"),
                           Core.injectionField = Core.Field {
@@ -405,11 +429,11 @@ generateUnionInjector origType typeName ft =
                     Core.injectionField = Core.Field {
                       Core.fieldName = (Core.Name "unit"),
                       Core.fieldTerm = Core.TermUnit}})) (Core.TermApplication (Core.Application {
-                    Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.phantoms.TTerm")),
+                    Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.typed.TypedTerm")),
                     Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))
           injectionTerm =
                   Core.TermWrap (Core.WrappedTerm {
-                    Core.wrappedTermTypeName = (Core.Name "hydra.phantoms.TTerm"),
+                    Core.wrappedTermTypeName = (Core.Name "hydra.typed.TypedTerm"),
                     Core.wrappedTermBody = (Core.TermInject (Core.Injection {
                       Core.injectionTypeName = (Core.Name "hydra.core.Term"),
                       Core.injectionField = Core.Field {
@@ -437,7 +461,7 @@ generateUnionInjector origType typeName ft =
                                     Core.fieldTerm = dFieldValue}]}))}]}))}}))})
           variantDomain =
                   Core.TypeApplication (Core.ApplicationType {
-                    Core.applicationTypeFunction = (Core.TypeVariable (Core.Name "hydra.phantoms.TTerm")),
+                    Core.applicationTypeFunction = (Core.TypeVariable (Core.Name "hydra.typed.TypedTerm")),
                     Core.applicationTypeArgument = (Core.fieldTypeType ft)})
           rawBody =
                   Logic.ifElse isUnit injectionTerm (Core.TermLambda (Core.Lambda {
@@ -472,14 +496,14 @@ generateWrappedTypeAccessors origType typeName innerType =
           wrapperType = nominalResultType typeName origType
           wrapDomain =
                   Core.TypeApplication (Core.ApplicationType {
-                    Core.applicationTypeFunction = (Core.TypeVariable (Core.Name "hydra.phantoms.TTerm")),
+                    Core.applicationTypeFunction = (Core.TypeVariable (Core.Name "hydra.typed.TypedTerm")),
                     Core.applicationTypeArgument = innerType})
           rawWrapBody =
                   Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "x"),
                     Core.lambdaDomain = (Just wrapDomain),
                     Core.lambdaBody = (Core.TermWrap (Core.WrappedTerm {
-                      Core.wrappedTermTypeName = (Core.Name "hydra.phantoms.TTerm"),
+                      Core.wrappedTermTypeName = (Core.Name "hydra.typed.TypedTerm"),
                       Core.wrappedTermBody = (Core.TermInject (Core.Injection {
                         Core.injectionTypeName = (Core.Name "hydra.core.Term"),
                         Core.injectionField = Core.Field {
@@ -495,7 +519,7 @@ generateWrappedTypeAccessors origType typeName innerType =
                               Core.Field {
                                 Core.fieldName = (Core.Name "body"),
                                 Core.fieldTerm = (Core.TermApplication (Core.Application {
-                                  Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.phantoms.TTerm")),
+                                  Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.typed.TypedTerm")),
                                   Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}]}))}}))}))})
           wrapDescription =
                   Strings.cat [
@@ -505,14 +529,14 @@ generateWrappedTypeAccessors origType typeName innerType =
           wrapBody = Annotations.setTermDescription (Just wrapDescription) rawWrapBody
           unwrapDomain =
                   Core.TypeApplication (Core.ApplicationType {
-                    Core.applicationTypeFunction = (Core.TypeVariable (Core.Name "hydra.phantoms.TTerm")),
+                    Core.applicationTypeFunction = (Core.TypeVariable (Core.Name "hydra.typed.TypedTerm")),
                     Core.applicationTypeArgument = wrapperType})
           rawUnwrapBody =
                   Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "x"),
                     Core.lambdaDomain = (Just unwrapDomain),
                     Core.lambdaBody = (Core.TermWrap (Core.WrappedTerm {
-                      Core.wrappedTermTypeName = (Core.Name "hydra.phantoms.TTerm"),
+                      Core.wrappedTermTypeName = (Core.Name "hydra.typed.TypedTerm"),
                       Core.wrappedTermBody = (Core.TermInject (Core.Injection {
                         Core.injectionTypeName = (Core.Name "hydra.core.Term"),
                         Core.injectionField = Core.Field {
@@ -532,7 +556,7 @@ generateWrappedTypeAccessors origType typeName innerType =
                               Core.Field {
                                 Core.fieldName = (Core.Name "argument"),
                                 Core.fieldTerm = (Core.TermApplication (Core.Application {
-                                  Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.phantoms.TTerm")),
+                                  Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.typed.TypedTerm")),
                                   Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}]}))}}))}))})
           unwrapDescription =
                   Strings.cat [
@@ -556,8 +580,8 @@ generateWrappedTypeAccessors origType typeName innerType =
 isDslEligibleBinding :: t0 -> t1 -> Core.Binding -> Either t2 (Maybe Core.Binding)
 isDslEligibleBinding cx graph b =
 
-      let ns = Names.namespaceOf (Core.bindingName b)
-      in (Logic.ifElse (Equality.equal (Maybes.maybe "" Packaging.unModuleName ns) "hydra.phantoms") (Right Nothing) (Right (Just b)))
+      let ns = Names.moduleNameOf (Core.bindingName b)
+      in (Logic.ifElse (Equality.equal (Maybes.maybe "" Packaging.unModuleName ns) "hydra.typed") (Right Nothing) (Right (Just b)))
 -- | Build the nominal result type with type applications for forall variables
 nominalResultType :: Core.Name -> Core.Type -> Core.Type
 nominalResultType typeName origType =

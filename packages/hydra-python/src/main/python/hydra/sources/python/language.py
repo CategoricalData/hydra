@@ -7,7 +7,7 @@ path produces JSON byte-equivalent to the Haskell-generated language.json.
 
 from hydra.core import Name
 from hydra.dsl.python import Just
-from hydra.packaging import Module, ModuleName
+from hydra.packaging import EntityMetadata, Module, ModuleName
 
 import hydra.dsl.meta.lib.lists as Lists
 import hydra.dsl.meta.lib.sets as Sets
@@ -26,7 +26,7 @@ from hydra.sources.python._source_dsl import KERNEL_TYPES_NAMESPACES, unqualifie
 
 
 def _python_language_term():
-    """The body of the pythonLanguage definition (a TTerm Language)."""
+    """The body of the pythonLanguage definition (a TypedTerm Language)."""
     return doc(
         "Language constraints for Python 3",
         lets(
@@ -117,7 +117,7 @@ def _python_language_term():
 
 
 def _python_reserved_words_term():
-    """The body of the pythonReservedWords definition (a TTerm (Set String))."""
+    """The body of the pythonReservedWords definition (a TypedTerm (Set String))."""
     keywords = [
         "False", "None", "True", "and", "as", "assert", "async", "await", "break",
         "class", "continue", "def", "del", "elif", "else", "except", "finally",
@@ -167,8 +167,12 @@ def _build_module() -> Module:
     # We need a placeholder module first because definition_in_module needs it.
     # Mirror Haskell pattern: define = definitionInModule module_; build defs; then module_ uses them.
     placeholder = Module(
-        Just("Language constraints and reserved words for Python 3"),
         _NS,
+        Just(EntityMetadata(
+            Just("Language constraints and reserved words for Python 3"),
+            (),
+            (),
+            Nothing())),
         [unqualified_dep(LEXICAL_NS)] + KERNEL_TYPES_NAMESPACES,
         (),  # filled in below
     )
@@ -177,8 +181,8 @@ def _build_module() -> Module:
     python_reserved_words = definition_in_module(
         placeholder, "pythonReservedWords", _python_reserved_words_term())
     return Module(
-        placeholder.description,
         placeholder.name,
+        placeholder.metadata,
         placeholder.dependencies,
         (
             to_definition(python_language),

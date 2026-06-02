@@ -3,6 +3,7 @@
     {
       "term": {
         "name": "hydra.test.json.roundtrip.allTests",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Round-trip test cases for JSON encoding and decoding"}}}],
@@ -7324,8 +7325,7 @@
                   {
                     "name": "cases",
                     "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}],
-                "typeName": "hydra.testing.TestGroup"}}}},
-        "typeScheme": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}}],
+                "typeName": "hydra.testing.TestGroup"}}}}}}],
   "dependencies": [
     {"module": "hydra.show.core"},
     {"module": "hydra.json.encode"},
@@ -7333,7 +7333,6 @@
     {"module": "hydra.paths"},
     {"module": "hydra.ast"},
     {"module": "hydra.coders"},
-    {"module": "hydra.context"},
     {"module": "hydra.core"},
     {"module": "hydra.error.checking"},
     {"module": "hydra.error.core"},
@@ -7343,15 +7342,15 @@
     {"module": "hydra.json.model"},
     {"module": "hydra.packaging"},
     {"module": "hydra.parsing"},
-    {"module": "hydra.phantoms"},
     {"module": "hydra.query"},
     {"module": "hydra.relational"},
     {"module": "hydra.tabular"},
     {"module": "hydra.testing"},
     {"module": "hydra.topology"},
+    {"module": "hydra.typed"},
     {"module": "hydra.typing"},
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "description": "Round-trip test cases for JSON encoding and decoding",
+  "metadata": {"comments": [], "description": "Round-trip test cases for JSON encoding and decoding", "seeAlso": []},
   "name": "hydra.test.json.roundtrip"}

@@ -4,14 +4,12 @@ module Hydra.Dsl.Bootstrap (
   module Hydra.Dsl.AsType,
   bootstrapGraph,
   datatype,
+  descriptionMetadata,
   qualify,
   qualifiedDep,
   typeref,
   defineType,
-  toTypeDef,
   unqualifiedDep,
-  use,
-  useType,
 ) where
 
 import Hydra.Util
@@ -23,8 +21,6 @@ import Hydra.Lexical
 import Hydra.Annotations
 import Hydra.Packaging
 import Hydra.Sources.Libraries
-import qualified Hydra.Decode.Core as Decode
-import qualified Hydra.Encode.Core as Encode
 
 import qualified Data.List as L
 import qualified Data.Map as M
@@ -39,23 +35,28 @@ bootstrapGraph = Graph {
   graphClassConstraints = M.empty,
   graphLambdaVariables = S.empty,
   graphMetadata = M.empty,
-  graphPrimitives = M.fromList $ fmap (\p -> (primitiveName p, p)) (L.concat (libraryPrimitives <$> standardLibraries)),
+  graphPrimitives = M.fromList $ fmap (\p -> (primitiveDefinitionName (primitiveDefinition p), p)) (L.concat (libraryPrimitives <$> standardLibraries)),
   graphSchemaTypes = M.empty,
   graphTypeVariables = S.empty}
 
-datatype :: ModuleName -> String -> Type -> Binding
-datatype gname lname typ = Binding {
-    bindingName = elName,
-    bindingTerm = normalizeTermAnnotations (TermAnnotated (AnnotatedTerm {
-      annotatedTermBody = Encode.type_ typ,
-      annotatedTermAnnotation = M.fromList [
-        (Name "type", TermVariable (Name "hydra.core.Type"))]})),
-    bindingTypeScheme = Just (TypeScheme {
+-- | Define a type in a namespace, producing a TypeDefinition directly.
+datatype :: ModuleName -> String -> Type -> TypeDefinition
+datatype gname lname typ = TypeDefinition {
+    typeDefinitionName = qualify gname (Name lname),
+    typeDefinitionMetadata = Nothing,
+    typeDefinitionTypeScheme = TypeScheme {
       typeSchemeVariables = [],
-      typeSchemeBody = TypeVariable (Name "hydra.core.Type"),
-      typeSchemeConstraints = Nothing})}
-  where
-    elName = qualify gname (Name lname)
+      typeSchemeBody = typ,
+      typeSchemeConstraints = Nothing}}
+
+-- | Define a type in a namespace
+defineType :: ModuleName -> String -> Type -> TypeDefinition
+defineType = datatype
+
+-- | A module dependency qualified by the providing package, for disambiguation.
+-- Not yet used, but retained for forthcoming package-qualified dependency resolution.
+qualifiedDep :: PackageName -> ModuleName -> ModuleDependency
+qualifiedDep pkg ns = ModuleDependency ns (Just pkg)
 
 qualify :: ModuleName -> Name -> Name
 qualify (ModuleName gname) (Name lname) = Name $ gname ++ "." ++ lname
@@ -63,36 +64,13 @@ qualify (ModuleName gname) (Name lname) = Name $ gname ++ "." ++ lname
 typeref :: ModuleName -> String -> Type
 typeref ns = TypeVariable . qualify ns . Name
 
--- | New DSL helpers (Option 1 from dsl-redesign-options.md)
-
--- | Define a type in a namespace
-defineType :: ModuleName -> String -> Type -> Binding
-defineType = datatype
-
--- | Convert a type Binding (from defineType) to a type Definition.
--- The Binding must have been created by defineType/datatype, which stores
--- the type encoded as a term. We decode it back.
-toTypeDef :: Binding -> Definition
-toTypeDef b = case Decode.type_ bootstrapGraph (stripAnnotations $ bindingTerm b) of
-  Right typ -> DefinitionType $ TypeDefinition (bindingName b) (TypeScheme [] typ Nothing)
-  Left err -> error $ "toTypeDef: failed to decode type from binding "
-    ++ show (bindingName b) ++ ": " ++ show err
-  where
-    stripAnnotations (TermAnnotated (AnnotatedTerm body _)) = stripAnnotations body
-    stripAnnotations t = t
-
--- | Reference a type by its binding
-use :: Binding -> Type
-use b = TypeVariable (bindingName b)
-
--- | Reference a type in a namespace (old style, for migration)
-useType :: ModuleName -> String -> Type
-useType = typeref
-
 -- | An unqualified module dependency (package omitted; resolver searches all packages in scope)
 unqualifiedDep :: ModuleName -> ModuleDependency
 unqualifiedDep ns = ModuleDependency ns Nothing
 
--- | A module dependency qualified by the providing package, for disambiguation
-qualifiedDep :: PackageName -> ModuleName -> ModuleDependency
-qualifiedDep pkg ns = ModuleDependency ns (Just pkg)
+-- | Wrap an optional description string as entity metadata carrying only that description.
+-- Used to migrate the former Module/Package `description` field into the `metadata` field
+-- without data loss; a Nothing description yields no metadata.
+descriptionMetadata :: Maybe String -> Maybe EntityMetadata
+descriptionMetadata Nothing = Nothing
+descriptionMetadata desc = Just (EntityMetadata desc [] [] Nothing)

@@ -9,7 +9,7 @@ import Hydra.Kernel
 import Hydra.Packaging (_Module)
 import Hydra.Sources.All (kernelModules)
 import Hydra.Generation (modulesToGraph)
-import Hydra.Codegen (namespaceToPath)
+import Hydra.Codegen (moduleNameToPath)
 import qualified Hydra.Json.Model as Json
 import qualified Hydra.Json.Decode as JsonDecode
 import qualified Hydra.Decode.Packaging as DecodePackaging
@@ -147,7 +147,7 @@ main = do
   results <- forM kernelModules $ \origMod -> do
     let ns = moduleName origMod
         nsStr = unModuleName ns
-        filePath = basePath </> namespaceToPath ns ++ ".json"
+        filePath = basePath </> moduleNameToPath ns ++ ".json"
 
     exists <- doesFileExist filePath
     if not exists
@@ -237,7 +237,7 @@ stripTypeAnnotations m = m {
   where
     stripDef (DefinitionTerm td) = DefinitionTerm td {
       termDefinitionTerm = Strip.removeTypesFromTerm (termDefinitionTerm td),
-      termDefinitionTypeScheme = Just $ TypeScheme [] (TypeVariable $ Name "hydra.core.Unit") Nothing }
+      termDefinitionSignature = Just $ typeSchemeToTermSignature $ TypeScheme [] (TypeVariable $ Name "hydra.core.Unit") Nothing }
     stripDef d = d
 
 -- | Find the first difference between two modules
@@ -249,8 +249,8 @@ findDifference orig decoded
       "element count differs: " ++ show (length (moduleDefinitions orig)) ++ " vs " ++ show (length (moduleDefinitions decoded))
   | moduleDependencies orig /= moduleDependencies decoded =
       "dependencies differ"
-  | moduleDescription orig /= moduleDescription decoded =
-      "description differs"
+  | moduleMetadata orig /= moduleMetadata decoded =
+      "metadata differs"
   | otherwise =
       "elements differ (checking first mismatch...)" ++ findElementDiff (moduleDefinitions orig) (moduleDefinitions decoded)
 

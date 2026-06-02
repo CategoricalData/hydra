@@ -57,8 +57,9 @@ RUN_DIR=$(create_run_dir /tmp/hydra-genpg "$TAG")
 # ============================================================================
 
 demo_header "Building"
-cd "$REPO_ROOT"
+cd "$REPO_ROOT/heads/java"
 ./gradlew :hydra-java:compileJava --quiet 2>&1
+cd "$REPO_ROOT"
 
 JAVA_CP="$(build_java_classpath commons-text commons-csv commons-lang3)"
 
