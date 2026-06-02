@@ -177,7 +177,7 @@ public class BenchInference {
                 String local = td.name.value.substring(td.name.value.lastIndexOf('.') + 1);
                 Name newName = new Name(targetNs.value + "." + local);
                 renamed.add(new Definition.Term(
-                        new TermDefinition(newName, hydra.util.Maybe.nothing(), td.term, td.signature)));
+                        new TermDefinition(newName, hydra.util.Maybe.nothing(), td.signature, td.body)));
             } else {
                 renamed.add(d);
             }
