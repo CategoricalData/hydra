@@ -76,6 +76,12 @@ jobs:
             echo "::error::Generated files (dist/json/ and/or dist/haskell/) differ from the committed tree."
             echo "::error::Run bin/sync.sh locally and commit the result."
             git diff --stat dist/json/ dist/haskell/
+            echo "::group::Full diff (first 400 lines — DEBUG, temporary)"
+            git --no-pager diff dist/json/ dist/haskell/ | head -400
+            echo "::endgroup::"
+            echo "::group::GHC / stack versions (DEBUG, temporary)"
+            stack --version; stack exec -- ghc --version
+            echo "::endgroup::"
             exit 1
           fi
       - name: Stack tests
