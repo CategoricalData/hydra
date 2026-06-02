@@ -4,14 +4,19 @@
 module Hydra.Sources.Encode.Testing where
 import qualified Hydra.Core as Core
 import qualified Hydra.Packaging as Packaging
+import qualified Hydra.Typing as Typing
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 import qualified Data.Map as M
 module_ :: Packaging.Module
 module_ =
     Packaging.Module {
-      Packaging.moduleDescription = (Just "Term encoders for hydra.testing"),
       Packaging.moduleName = (Packaging.ModuleName "hydra.encode.testing"),
+      Packaging.moduleMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "Term encoders for hydra.testing"),
+        Packaging.entityMetadataComments = [],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.moduleDependencies = [
         Packaging.ModuleDependency {
           Packaging.moduleDependencyModule = (Packaging.ModuleName "hydra.encode.core"),
@@ -22,6 +27,7 @@ module_ =
       Packaging.moduleDefinitions = [
         Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.encode.testing.tag"),
+          Packaging.termDefinitionMetadata = Nothing,
           Packaging.termDefinitionTerm = (Core.TermAnnotated (Core.AnnotatedTerm {
             Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
               Core.lambdaParameter = (Core.Name "x"),
@@ -58,9 +64,14 @@ module_ =
                             Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))}}))})),
             Core.annotatedTermAnnotation = (M.fromList [
               (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Encoder for hydra.testing.Tag")))])})),
-          Packaging.termDefinitionTypeScheme = (Just (Core.TypeScheme {
-            Core.typeSchemeVariables = [],
-            Core.typeSchemeBody = (Core.TypeFunction (Core.FunctionType {
-              Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.testing.Tag")),
-              Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "hydra.core.Term"))})),
-            Core.typeSchemeConstraints = Nothing}))})]}
+          Packaging.termDefinitionSignature = (Just (Typing.TermSignature {
+            Typing.termSignatureTypeParameters = [],
+            Typing.termSignatureParameters = [
+              Typing.Parameter {
+                Typing.parameterName = (Core.Name "arg0"),
+                Typing.parameterDescription = Nothing,
+                Typing.parameterType = (Core.TypeVariable (Core.Name "hydra.testing.Tag")),
+                Typing.parameterIsLazy = False}],
+            Typing.termSignatureResult = Typing.Result {
+              Typing.resultDescription = Nothing,
+              Typing.resultType = (Core.TypeVariable (Core.Name "hydra.core.Term"))}}))})]}

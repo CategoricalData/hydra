@@ -4,16 +4,13 @@ module Hydra.Sources.Kernel.Terms.Annotations where
 -- Standard imports for kernel terms modules
 import Hydra.Kernel hiding (
   aggregateAnnotations, commentsFromBinding, commentsFromFieldType,
-  debugIf, failOnFlag, getDebugId,
-  getAttr, getAttrWithDefault, getCount,
   getDescription, getTermAnnotation, getTermDescription,
   getType, getTypeAnnotation, getTypeClasses,
-  getTypeDescription, isNativeType, hasDescription, hasFlag,
-  hasTypeDescription, nextCount,
-  normalizeTermAnnotations, normalizeTypeAnnotations, putAttr, putCount,
-  resetCount, setAnnotation,
+  getTypeDescription, isNativeType, hasDescription,
+  hasTypeDescription,
+  normalizeTermAnnotations, normalizeTypeAnnotations, setAnnotation,
   setDescription, setTermAnnotation, setTermDescription, setType, setTypeAnnotation, setTypeClasses,
-  setTypeDescription, termAnnotationInternal, typeAnnotationInternal, whenFlag)
+  setTypeDescription, termAnnotationInternal, typeAnnotationInternal)
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Paths    as Paths
 import qualified Hydra.Dsl.Annotations       as Annotations
@@ -21,7 +18,6 @@ import qualified Hydra.Dsl.Ast          as Ast
 import qualified Hydra.Dsl.Bootstrap         as Bootstrap
 import qualified Hydra.Dsl.Coders       as Coders
 import qualified Hydra.Dsl.Util      as Util
-import qualified Hydra.Dsl.Meta.Context      as Ctx
 import qualified Hydra.Dsl.Meta.Core         as Core
 import qualified Hydra.Dsl.Meta.Graph        as Graph
 import qualified Hydra.Dsl.Json.Model         as Json
@@ -83,18 +79,12 @@ module_ = Module {
             moduleDefinitions = definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> ([Constants.ns, moduleName DecodeCore.module_, moduleName EncodeCore.module_, ExtractCore.ns, Lexical.ns,
       Strip.ns, ShowCore.ns, ShowError.ns] L.++ kernelTypesModuleNames),
-            moduleDescription = Just "Utilities for reading and writing type and term annotations"}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just "Utilities for reading and writing type and term annotations")}
   where
    definitions = [
      toDefinition aggregateAnnotations,
      toDefinition commentsFromBinding,
      toDefinition commentsFromFieldType,
-     toDefinition debugIf,
-     toDefinition failOnFlag,
-     toDefinition getAttr,
-     toDefinition getAttrWithDefault,
-     toDefinition getCount,
-     toDefinition getDebugId,
      toDefinition getDescription,
      toDefinition getTermAnnotation,
      toDefinition getTermDescription,
@@ -103,15 +93,10 @@ module_ = Module {
      toDefinition getTypeClasses,
      toDefinition getTypeDescription,
      toDefinition hasDescription,
-     toDefinition hasFlag,
      toDefinition hasTypeDescription,
      toDefinition isNativeType,
-     toDefinition nextCount,
      toDefinition normalizeTermAnnotations,
      toDefinition normalizeTypeAnnotations,
-     toDefinition putAttr,
-     toDefinition putCount,
-     toDefinition resetCount,
      toDefinition setAnnotation,
      toDefinition setDescription,
      toDefinition setTermAnnotation,
@@ -121,16 +106,12 @@ module_ = Module {
      toDefinition setTypeClasses,
      toDefinition setTypeDescription,
      toDefinition termAnnotationInternal,
-     toDefinition typeAnnotationInternal,
-     toDefinition whenFlag]
+     toDefinition typeAnnotationInternal]
 
-define :: String -> TTerm a -> TTermDefinition a
+define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModule module_
 
-formatError :: TTerm (Error -> String)
-formatError = "e" ~> ShowError.error_ @@ var "e"
-
-aggregateAnnotations :: TTermDefinition ((x -> Maybe y) -> (y -> x) -> (y -> M.Map Name Term) -> x -> M.Map Name Term)
+aggregateAnnotations :: TypedTermDefinition ((x -> Maybe y) -> (y -> x) -> (y -> M.Map Name Term) -> x -> M.Map Name Term)
 aggregateAnnotations = define "aggregateAnnotations" $
   doc "Aggregate annotations from nested structures" $
   "getValue" ~> "getX" ~> "getAnns" ~> "t" ~>
@@ -139,72 +120,24 @@ aggregateAnnotations = define "aggregateAnnotations" $
       @@ Lists.cons (Maps.toList (var "getAnns" @@ var "yy")) (var "rest")
       @@ (var "getX" @@ var "yy")))
     (var "getValue" @@ var "t")) $
-  Maps.fromList (Lists.concat (var "toPairs" @@ list ([] :: [TTerm [(Name, Term)]]) @@ var "t"))
+  Maps.fromList (Lists.concat (var "toPairs" @@ list ([] :: [TypedTerm [(Name, Term)]]) @@ var "t"))
 
-commentsFromBinding :: TTermDefinition (Context -> Graph -> Binding -> Either Error (Maybe String))
+commentsFromBinding :: TypedTermDefinition (InferenceContext -> Graph -> Binding -> Either Error (Maybe String))
 commentsFromBinding = define "commentsFromBinding" $
   doc "Extract comments/description from a Binding" $
   "cx" ~> "g" ~> "b" ~>
   getTermDescription @@ var "cx" @@ var "g" @@ (Core.bindingTerm $ var "b")
 
-commentsFromFieldType :: TTermDefinition (Context -> Graph -> FieldType -> Either Error (Maybe String))
+commentsFromFieldType :: TypedTermDefinition (InferenceContext -> Graph -> FieldType -> Either Error (Maybe String))
 commentsFromFieldType = define "commentsFromFieldType" $
   doc "Extract comments/description from a FieldType" $
   "cx" ~> "g" ~> "ft" ~>
   getTypeDescription @@ var "cx" @@ var "g" @@ (Core.fieldTypeType $ var "ft")
 
-debugIf :: TTermDefinition (Context -> String -> String -> Prelude.Either Error ())
-debugIf = define "debugIf" $
-  doc "Debug if the debug ID matches (Either version)" $
-  "cx" ~> "debugId" ~> "message" ~>
-  "mid" <<~ getDebugId @@ var "cx" $
-  Logic.ifElse (Equality.equal (var "mid") (just $ var "debugId"))
-    (Ctx.failInContext (Error.errorOther $ Error.otherError (var "message")) (var "cx"))
-    (right unit)
+formatError :: TypedTerm (Error -> String)
+formatError = "e" ~> ShowError.error_ @@ var "e"
 
-failOnFlag :: TTermDefinition (Context -> Name -> String -> Prelude.Either Error ())
-failOnFlag = define "failOnFlag" $
-  doc "Fail if the given flag is set (Either version)" $
-  "cx" ~> "flag" ~> "msg" ~>
-  "val" <<~ hasFlag @@ var "cx" @@ var "flag" $
-  Logic.ifElse (var "val")
-    (Ctx.failInContext (Error.errorOther $ Error.otherError (var "msg")) (var "cx"))
-    (right unit)
-
-getAttr :: TTermDefinition (Name -> Context -> Maybe Term)
-getAttr = define "getAttr" $
-  doc "Get an attribute from a context (pure version)" $
-  "key" ~> "cx" ~>
-  Maps.lookup (var "key") (Ctx.contextOther (var "cx"))
-
-getAttrWithDefault :: TTermDefinition (Name -> Term -> Context -> Term)
-getAttrWithDefault = define "getAttrWithDefault" $
-  doc "Get an attribute with a default value from context (pure version)" $
-  "key" ~> "def" ~> "cx" ~>
-  Maybes.fromMaybe (var "def") (getAttr @@ var "key" @@ var "cx")
-
-getCount :: TTermDefinition (Name -> Context -> Int)
-getCount = define "getCount" $
-  doc "Get a counter value from context (pure version)" $
-  "key" ~> "cx" ~>
-  Maybes.maybe
-    (int32 0)
-    ("term" ~> cases _Term (var "term") (Just (int32 0)) [
-      _Term_literal>>: "lit" ~> cases _Literal (var "lit") (Just (int32 0)) [
-        _Literal_integer>>: "iv" ~> cases _IntegerValue (var "iv") (Just (int32 0)) [
-          _IntegerValue_int32>>: "i" ~> var "i"]]])
-    (Maps.lookup (var "key") (Ctx.contextOther (var "cx")))
-
-getDebugId :: TTermDefinition (Context -> Prelude.Either Error (Maybe String))
-getDebugId = define "getDebugId" $
-  doc "Get the debug ID from context (Either version)" $
-  "cx" ~>
-  Maybes.maybe
-    (right nothing)
-    ("term" ~> Eithers.map (reify just) (ExtractCore.string @@ Graph.emptyGraph @@ var "term"))
-    (getAttr @@ Constants.keyDebugId @@ var "cx")
-
-getDescription :: TTermDefinition (Context -> Graph -> M.Map Name Term -> Prelude.Either Error (Maybe String))
+getDescription :: TypedTermDefinition (InferenceContext -> Graph -> M.Map Name Term -> Prelude.Either Error (Maybe String))
 getDescription = define "getDescription" $
   doc "Get description from annotations map (Either version)" $
   "cx" ~> "graph" ~> "anns" ~>
@@ -213,12 +146,12 @@ getDescription = define "getDescription" $
     ("term" ~> Eithers.map (reify just) (ExtractCore.string @@ var "graph" @@ var "term"))
     (Maps.lookup (Core.nameLift keyDescription) (var "anns"))
 
-getTermAnnotation :: TTermDefinition (Name -> Term -> Maybe Term)
+getTermAnnotation :: TypedTermDefinition (Name -> Term -> Maybe Term)
 getTermAnnotation = define "getTermAnnotation" $
   doc "Get a term annotation" $
   "key" ~> "term" ~> Maps.lookup (var "key") (termAnnotationInternal @@ var "term")
 
-getTermDescription :: TTermDefinition (Context -> Graph -> Term -> Prelude.Either Error (Maybe String))
+getTermDescription :: TypedTermDefinition (InferenceContext -> Graph -> Term -> Prelude.Either Error (Maybe String))
 getTermDescription = define "getTermDescription" $
   doc "Get term description (Either version)" $
   "cx" ~> "graph" ~> "term" ~>
@@ -228,7 +161,7 @@ getTermDescription = define "getTermDescription" $
     _Term_typeApplication>>: "ta" ~> var "peel" @@ Core.typeApplicationTermBody (var "ta")]) $
   getDescription @@ var "cx" @@ var "graph" @@ (termAnnotationInternal @@ (var "peel" @@ var "term"))
 
-getType :: TTermDefinition (Graph -> M.Map Name Term -> Prelude.Either DecodingError (Maybe Type))
+getType :: TypedTermDefinition (Graph -> M.Map Name Term -> Prelude.Either DecodingError (Maybe Type))
 getType = define "getType" $
   doc "Get type from annotations" $
   "graph" ~> "anns" ~>
@@ -237,12 +170,12 @@ getType = define "getType" $
     ("dat" ~> Eithers.map (reify just) (decoderFor _Type @@ var "graph" @@ var "dat"))
     (Maps.lookup (Constants.keyType) (var "anns"))
 
-getTypeAnnotation :: TTermDefinition (Name -> Type -> Maybe Term)
+getTypeAnnotation :: TypedTermDefinition (Name -> Type -> Maybe Term)
 getTypeAnnotation = define "getTypeAnnotation" $
   doc "Get a type annotation" $
   "key" ~> "typ" ~> Maps.lookup (var "key") (typeAnnotationInternal @@ var "typ")
 
-getTypeClasses :: TTermDefinition (Context -> Graph -> Term -> Prelude.Either Error (M.Map Name (S.Set Name)))
+getTypeClasses :: TypedTermDefinition (InferenceContext -> Graph -> Term -> Prelude.Either Error (M.Map Name (S.Set Name)))
 getTypeClasses = define "getTypeClasses" $
   doc "Get type classes from term. Each Set Name contains bare class identifiers (#275)." $
   "cx" ~> "graph" ~> "term" ~>
@@ -260,30 +193,23 @@ getTypeClasses = define "getTypeClasses" $
         @@ (var "term"))
     (getTermAnnotation @@ Constants.keyClasses @@ var "term")
 
-getTypeDescription :: TTermDefinition (Context -> Graph -> Type -> Prelude.Either Error (Maybe String))
+getTypeDescription :: TypedTermDefinition (InferenceContext -> Graph -> Type -> Prelude.Either Error (Maybe String))
 getTypeDescription = define "getTypeDescription" $
   doc "Get type description (Either version)" $
   "cx" ~> "graph" ~> "typ" ~>
   getDescription @@ var "cx" @@ var "graph" @@ (typeAnnotationInternal @@ var "typ")
 
-hasDescription :: TTermDefinition (M.Map Name Term -> Bool)
+hasDescription :: TypedTermDefinition (M.Map Name Term -> Bool)
 hasDescription = define "hasDescription" $
   doc "Check if annotations contain description" $
   "anns" ~> Maybes.isJust (Maps.lookup (Constants.keyDescription) (var "anns"))
 
-hasFlag :: TTermDefinition (Context -> Name -> Prelude.Either Error Bool)
-hasFlag = define "hasFlag" $
-  doc "Check if flag is set (Either version)" $
-  "cx" ~> "flag" ~>
-  "term" <~ getAttrWithDefault @@ var "flag" @@ Core.false @@ var "cx" $
-  ExtractCore.boolean @@ Graph.emptyGraph @@ var "term"
-
-hasTypeDescription :: TTermDefinition (Type -> Bool)
+hasTypeDescription :: TypedTermDefinition (Type -> Bool)
 hasTypeDescription = define "hasTypeDescription" $
   doc "Check if type has description" $
   "typ" ~> hasDescription @@ (typeAnnotationInternal @@ var "typ")
 
-isNativeType :: TTermDefinition (Binding -> Bool)
+isNativeType :: TypedTermDefinition (Binding -> Bool)
 isNativeType = define "isNativeType" $
   doc ("For a typed term, decide whether a coder should encode it as a native type expression,"
     <> " or as a Hydra type expression.") $
@@ -294,18 +220,11 @@ isNativeType = define "isNativeType" $
       (getTermAnnotation @@ Constants.keyFirstClassType @@ (Core.bindingTerm (var "el")))) $
   Maybes.maybe false
     ("ts" ~> Logic.and
-      (Equality.equal (var "ts") (Core.typeScheme (list ([] :: [TTerm Name])) (Core.typeVariable (Core.nameLift _Type)) Phantoms.nothing))
+      (Equality.equal (var "ts") (Core.typeScheme (list ([] :: [TypedTerm Name])) (Core.typeVariable (Core.nameLift _Type)) Phantoms.nothing))
       (Logic.not (var "isFlaggedAsFirstClassType")))
     (Core.bindingTypeScheme (var "el"))
 
-nextCount :: TTermDefinition (Name -> Context -> (Int, Context))
-nextCount = define "nextCount" $
-  doc "Return a zero-indexed counter for the given key and updated context (pure version)" $
-  "key" ~> "cx" ~>
-  "count" <~ getCount @@ var "key" @@ var "cx" $
-  pair (var "count") (putCount @@ var "key" @@ Math.add (var "count") (int32 1) @@ var "cx")
-
-normalizeTermAnnotations :: TTermDefinition (Term -> Term)
+normalizeTermAnnotations :: TypedTermDefinition (Term -> Term)
 normalizeTermAnnotations = define "normalizeTermAnnotations" $
   doc "Normalize term annotations" $
   "term" ~>
@@ -315,7 +234,7 @@ normalizeTermAnnotations = define "normalizeTermAnnotations" $
     (var "stripped")
     (Core.termAnnotated (Core.annotatedTerm (var "stripped") (var "anns")))
 
-normalizeTypeAnnotations :: TTermDefinition (Type -> Type)
+normalizeTypeAnnotations :: TypedTermDefinition (Type -> Type)
 normalizeTypeAnnotations = define "normalizeTypeAnnotations" $
   doc "Normalize type annotations" $
   "typ" ~>
@@ -325,36 +244,19 @@ normalizeTypeAnnotations = define "normalizeTypeAnnotations" $
     (var "stripped")
     (Core.typeAnnotated (Core.annotatedType (var "stripped") (var "anns")))
 
-putAttr :: TTermDefinition (Name -> Term -> Context -> Context)
-putAttr = define "putAttr" $
-  doc "Set an attribute in a context" $
-  "key" ~> "val" ~> "cx" ~>
-  Ctx.contextWithOther (var "cx") (Maps.insert (var "key") (var "val") (Ctx.contextOther (var "cx")))
-
-putCount :: TTermDefinition (Name -> Int -> Context -> Context)
-putCount = define "putCount" $
-  doc "Set counter value in context" $
-  "key" ~> "count" ~> "cx" ~>
-  putAttr @@ var "key" @@ (Core.termLiteral (Core.literalInteger (Core.integerValueInt32 (var "count")))) @@ var "cx"
-
-resetCount :: TTermDefinition (Name -> Context -> Context)
-resetCount = define "resetCount" $
-  doc "Reset counter to zero in context" $
-  "key" ~> "cx" ~> putAttr @@ var "key" @@ MetaTerms.int32 0 @@ var "cx"
-
-setAnnotation :: TTermDefinition (Name -> Maybe Term -> M.Map Name Term -> M.Map Name Term)
+setAnnotation :: TypedTermDefinition (Name -> Maybe Term -> M.Map Name Term -> M.Map Name Term)
 setAnnotation = define "setAnnotation" $
   doc "Set annotation in map" $
   "key" ~> "val" ~> "m" ~> Maps.alter (constant (var "val")) (var "key") (var "m")
 
-setDescription :: TTermDefinition (Maybe String -> M.Map Name Term -> M.Map Name Term)
+setDescription :: TypedTermDefinition (Maybe String -> M.Map Name Term -> M.Map Name Term)
 setDescription = define "setDescription" $
   doc "Set description in annotations" $
   "d" ~> setAnnotation
     @@ Constants.keyDescription
     @@ Maybes.map (reify Core.termLiteral <.> reify Core.literalString) (var "d")
 
-setTermAnnotation :: TTermDefinition (Name -> Maybe Term -> Term -> Term)
+setTermAnnotation :: TypedTermDefinition (Name -> Maybe Term -> Term -> Term)
 setTermAnnotation = define "setTermAnnotation" $
   doc "Set term annotation" $
   "key" ~> "val" ~> "term" ~>
@@ -364,19 +266,19 @@ setTermAnnotation = define "setTermAnnotation" $
     (var "term'")
     (Core.termAnnotated (Core.annotatedTerm (var "term'") (var "anns")))
 
-setTermDescription :: TTermDefinition (Maybe String -> Term -> Term)
+setTermDescription :: TypedTermDefinition (Maybe String -> Term -> Term)
 setTermDescription = define "setTermDescription" $
   doc "Set term description" $
   "d" ~> setTermAnnotation
     @@ Constants.keyDescription
     @@ Maybes.map ("s" ~> Core.termLiteral (Core.literalString (var "s"))) (var "d")
 
-setType :: TTermDefinition (Maybe Type -> M.Map Name Term -> M.Map Name Term)
+setType :: TypedTermDefinition (Maybe Type -> M.Map Name Term -> M.Map Name Term)
 setType = define "setType" $
   doc "Set type in annotations" $
   "mt" ~> setAnnotation @@ Constants.keyType @@ Maybes.map (encoderFor _Type) (var "mt")
 
-setTypeAnnotation :: TTermDefinition (Name -> Maybe Term -> Type -> Type)
+setTypeAnnotation :: TypedTermDefinition (Name -> Maybe Term -> Type -> Type)
 setTypeAnnotation = define "setTypeAnnotation" $
   doc "Set type annotation" $
   "key" ~> "val" ~> "typ" ~>
@@ -386,7 +288,7 @@ setTypeAnnotation = define "setTypeAnnotation" $
     (var "typ'")
     (Core.typeAnnotated (Core.annotatedType (var "typ'") (var "anns")))
 
-setTypeClasses :: TTermDefinition (M.Map Name (S.Set Name) -> Term -> Term)
+setTypeClasses :: TypedTermDefinition (M.Map Name (S.Set Name) -> Term -> Term)
 setTypeClasses = define "setTypeClasses" $
   doc "Set type classes on term. The Set Name carries bare class identifiers (#275)." $
   "m" ~> "term" ~>
@@ -401,14 +303,14 @@ setTypeClasses = define "setTypeClasses" $
     (just (Core.termMap (Maps.fromList (Lists.map (var "encodePair") (Maps.toList (var "m")))))) $
   setTermAnnotation @@ Constants.keyClasses @@ var "encoded" @@ var "term"
 
-setTypeDescription :: TTermDefinition (Maybe String -> Type -> Type)
+setTypeDescription :: TypedTermDefinition (Maybe String -> Type -> Type)
 setTypeDescription = define "setTypeDescription" $
   doc "Set type description" $
   "d" ~> setTypeAnnotation
     @@ Constants.keyDescription
     @@ Maybes.map (reify Core.termLiteral <.> reify Core.literalString) (var "d")
 
-termAnnotationInternal :: TTermDefinition (Term -> M.Map Name Term)
+termAnnotationInternal :: TypedTermDefinition (Term -> M.Map Name Term)
 termAnnotationInternal = define "termAnnotationInternal" $
   doc "Get internal term annotations" $
   "term" ~>
@@ -421,7 +323,7 @@ termAnnotationInternal = define "termAnnotationInternal" $
     @@ ("at" ~> Core.annotatedTermAnnotation $ var "at")
     @@ var "term"
 
-typeAnnotationInternal :: TTermDefinition (Type -> M.Map Name Term)
+typeAnnotationInternal :: TypedTermDefinition (Type -> M.Map Name Term)
 typeAnnotationInternal = define "typeAnnotationInternal" $
   doc "Get internal type annotations" $
   "typ" ~>
@@ -434,20 +336,13 @@ typeAnnotationInternal = define "typeAnnotationInternal" $
     @@ ("at" ~> Core.annotatedTypeAnnotation $ var "at")
     @@ var "typ"
 
-whenFlag :: TTermDefinition (Context -> Name -> Prelude.Either Error a -> Prelude.Either Error a -> Prelude.Either Error a)
-whenFlag = define "whenFlag" $
-  doc "Execute different branches based on flag (Either version)" $
-  "cx" ~> "flag" ~> "ethen" ~> "eelse" ~>
-  "b" <<~ hasFlag @@ var "cx" @@ var "flag" $
-  Logic.ifElse (var "b") (var "ethen") (var "eelse")
-
 -- | Helper (not a registered definition) for creating a type binding from a name and type.
 -- This was previously the deprecated "typeElement" definition.
-typeBinding :: TTerm (Name -> Type -> Binding)
+typeBinding :: TypedTerm (Name -> Type -> Binding)
 typeBinding =
   "name" ~> "typ" ~>
   "schemaTerm" <~ Core.termVariable (Core.nameLift _Type) $
   "dataTerm" <~ normalizeTermAnnotations @@ (Core.termAnnotated (Core.annotatedTerm
     (encoderFor _Type @@ var "typ")
     (Maps.fromList (list [pair (Constants.keyType) (var "schemaTerm")])))) $
-  Core.binding (var "name") (var "dataTerm") (just (Core.typeScheme (list ([] :: [TTerm Name])) (Core.typeVariable $ Core.nameLift _Type) Phantoms.nothing))
+  Core.binding (var "name") (var "dataTerm") (just (Core.typeScheme (list ([] :: [TypedTerm Name])) (Core.typeVariable $ Core.nameLift _Type) Phantoms.nothing))

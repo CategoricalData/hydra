@@ -78,7 +78,7 @@ import qualified Data.Set                                  as S
 import qualified Data.Maybe                                as Y
 
 
-define :: String -> TTerm a -> TTermDefinition a
+define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModule module_
 
 module_ :: Module
@@ -86,8 +86,8 @@ module_ = Module {
             moduleName = (ModuleName "hydra.python.language"),
             moduleDefinitions = [toDefinition pythonLanguage, toDefinition pythonReservedWords],
             moduleDependencies = Bootstrap.unqualifiedDep <$> ([Lexical.ns] L.++ KernelTypes.kernelTypesModuleNames),
-            moduleDescription = Just "Language constraints and reserved words for Python 3"}
-pythonLanguage :: TTermDefinition Language
+            moduleMetadata = Bootstrap.descriptionMetadata (Just "Language constraints and reserved words for Python 3")}
+pythonLanguage :: TypedTermDefinition Language
 pythonLanguage = define "pythonLanguage" $
     doc "Language constraints for Python 3" $ lets [
     "literalVariants">: Sets.fromList $ list [
@@ -156,7 +156,7 @@ pythonLanguage = define "pythonLanguage" $
         (var "typeVariants")
         (var "typePredicate"))
 
-pythonReservedWords :: TTermDefinition (S.Set String)
+pythonReservedWords :: TypedTermDefinition (S.Set String)
 pythonReservedWords = define "pythonReservedWords" $
   doc "A set of reserved words in Python" $
   lets [

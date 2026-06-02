@@ -8,13 +8,13 @@ import qualified Hydra.Cpp.Language as Language
 import qualified Hydra.Cpp.Syntax as Syntax
 import qualified Hydra.Cpp.Utils as Utils
 import qualified Hydra.Formatting as Formatting
-import qualified Hydra.Lib.Equality as Equality
-import qualified Hydra.Lib.Lists as Lists
-import qualified Hydra.Lib.Logic as Logic
-import qualified Hydra.Lib.Maps as Maps
-import qualified Hydra.Lib.Maybes as Maybes
-import qualified Hydra.Lib.Pairs as Pairs
-import qualified Hydra.Lib.Strings as Strings
+import qualified Hydra.Haskell.Lib.Equality as Equality
+import qualified Hydra.Haskell.Lib.Lists as Lists
+import qualified Hydra.Haskell.Lib.Logic as Logic
+import qualified Hydra.Haskell.Lib.Maps as Maps
+import qualified Hydra.Haskell.Lib.Maybes as Maybes
+import qualified Hydra.Haskell.Lib.Pairs as Pairs
+import qualified Hydra.Haskell.Lib.Strings as Strings
 import qualified Hydra.Names as Names
 import qualified Hydra.Packaging as Packaging
 import qualified Hydra.Util as Util
@@ -39,7 +39,7 @@ encodeFieldName env fname = encodeName False Util.CaseConventionLowerSnake env f
 encodeName :: Bool -> Util.CaseConvention -> Environment.CppEnvironment -> Core.Name -> String
 encodeName isQualified conv env name =
 
-      let focusNs = Pairs.first (Util.namespacesFocus (Environment.cppEnvironmentNamespaces env))
+      let focusNs = Pairs.first (Util.moduleNamesFocus (Environment.cppEnvironmentNamespaces env))
           boundVars = Pairs.second (Environment.cppEnvironmentBoundTypeVariables env)
           qualName = Names.qualifyName name
           mns = Packaging.qualifiedNameModuleName qualName
@@ -53,7 +53,7 @@ encodeNameQualified :: Environment.CppEnvironment -> Core.Name -> String
 encodeNameQualified env name =
 
       let boundVars = Pairs.second (Environment.cppEnvironmentBoundTypeVariables env)
-          focusNs = Pairs.first (Util.namespacesFocus (Environment.cppEnvironmentNamespaces env))
+          focusNs = Pairs.first (Util.moduleNamesFocus (Environment.cppEnvironmentNamespaces env))
           qualName = Names.qualifyName name
           mns = Packaging.qualifiedNameModuleName qualName
           local = Packaging.qualifiedNameLocal qualName

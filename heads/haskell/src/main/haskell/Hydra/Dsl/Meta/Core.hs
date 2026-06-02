@@ -2,7 +2,7 @@
 
 -- | Haskell-specific convenience layer over the generated Hydra.Dsl.Core module.
 -- Re-exports all generated DSL functions and adds AsTerm-flexible overrides
--- for functions commonly called with TBinding arguments.
+-- for functions commonly called with TypedBinding arguments.
 
 module Hydra.Dsl.Meta.Core (
   module Hydra.Dsl.Core,
@@ -26,31 +26,31 @@ import Prelude hiding (map, product)
 
 
 -- | AsTerm-flexible overrides of generated functions.
--- These allow passing TBinding values where TTerm is expected.
+-- These allow passing TypedBinding values where TypedTerm is expected.
 
-binding :: AsTerm t Term => TTerm Name -> t -> TTerm (Maybe TypeScheme) -> TTerm Binding
+binding :: AsTerm t Term => TypedTerm Name -> t -> TypedTerm (Maybe TypeScheme) -> TypedTerm Binding
 binding n t ts = Gen.binding n (asTerm t) ts
 
-injection :: AsTerm t Name => t -> TTerm Field -> TTerm Injection
-injection n f = Gen.injection (asTerm n) f
-
-typeVariable :: AsTerm t Name => t -> TTerm Type
-typeVariable n = Gen.typeVariable (asTerm n)
-
-
--- | Non-standard helpers (used in kernel source modules)
-
-equalName_ :: TTerm Name -> TTerm Name -> TTerm Bool
-equalName_ left right = Equality.equal (Gen.unName left) (Gen.unName right)
-
-equalNameList_ :: TTerm [Name] -> TTerm [Name] -> TTerm Bool
+equalNameList_ :: TypedTerm [Name] -> TypedTerm [Name] -> TypedTerm Bool
 equalNameList_ lefts rights = Logic.and
   (Equality.equal (Lists.length lefts) (Lists.length rights))
   (Logic.ands $ Lists.zipWith equalName lefts rights)
   where
     equalName = "left" ~> "right" ~> Equality.equal
-      (Gen.unName (var "left" :: TTerm Name))
-      (Gen.unName (var "right" :: TTerm Name))
+      (Gen.unName (var "left" :: TypedTerm Name))
+      (Gen.unName (var "right" :: TypedTerm Name))
 
-false :: TTerm Term
-false = termLiteral $ literalBoolean $ TTerm $ TermLiteral $ LiteralBoolean False
+equalName_ :: TypedTerm Name -> TypedTerm Name -> TypedTerm Bool
+equalName_ left right = Equality.equal (Gen.unName left) (Gen.unName right)
+
+false :: TypedTerm Term
+false = termLiteral $ literalBoolean $ TypedTerm $ TermLiteral $ LiteralBoolean False
+
+injection :: AsTerm t Name => t -> TypedTerm Field -> TypedTerm Injection
+injection n f = Gen.injection (asTerm n) f
+
+typeVariable :: AsTerm t Name => t -> TypedTerm Type
+typeVariable n = Gen.typeVariable (asTerm n)
+
+
+-- | Non-standard helpers (used in kernel source modules)

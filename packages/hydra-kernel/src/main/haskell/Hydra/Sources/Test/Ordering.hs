@@ -5,7 +5,7 @@ module Hydra.Sources.Test.Ordering where
 
 -- Standard imports for term-encoded tests
 import Hydra.Kernel
-import           Hydra.Dsl.Bootstrap (unqualifiedDep)
+import           Hydra.Dsl.Bootstrap (unqualifiedDep, descriptionMetadata)
 import Hydra.Dsl.Meta.Testing                 as Testing
 import Hydra.Dsl.Meta.Terms                   as Terms
 import Hydra.Sources.Kernel.Types.All
@@ -33,27 +33,37 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = unqualifiedDep <$> ([ModuleName "hydra.reduction", ModuleName "hydra.show.core", ShowUtil.ns, ModuleName "hydra.test.testTypes"] ++ kernelTypesModuleNames),
-            moduleDescription = Just "Test cases for Ord instance comparisons on complex Hydra types"}
+            moduleMetadata = descriptionMetadata (Just "Test cases for Ord instance comparisons on complex Hydra types")}
   where
     definitions = [Phantoms.toDefinition allTests]
 
-showBool :: TTerm (Bool -> String)
-showBool = Phantoms.lambda "b" $ Literals.showBoolean (Phantoms.var "b")
+allTests :: TypedTermDefinition TestGroup
+allTests = definitionInModule module_ "allTests" $
+    Phantoms.doc "Test cases for Ord instance comparisons on complex Hydra types" $
+    supergroup "ordering" [
+      nameComparisonTests,
+      literalComparisonTests,
+      -- Note: typeComparisonTests and termComparisonTests are excluded because
+      -- comparing Type and Term values (meta-level structures) causes issues
+      -- with the kernel test generator's schema type inference
+      recordComparisonTests,
+      polymorphicComparisonTests,
+      unionComparisonTests]
 
-compResult :: String -> TTerm Comparison
+compResult :: String -> TypedTerm Comparison
 compResult "lessThan" = Phantoms.injectUnit _Comparison _Comparison_lessThan
 compResult "equalTo" = Phantoms.injectUnit _Comparison _Comparison_equalTo
 compResult "greaterThan" = Phantoms.injectUnit _Comparison _Comparison_greaterThan
 compResult _ = error "Invalid comparison"
 
 -- Test comparing two values
-compareTest :: String -> TTerm a -> TTerm a -> String -> TTerm TestCaseWithMetadata
+compareTest :: String -> TypedTerm a -> TypedTerm a -> String -> TypedTerm TestCaseWithMetadata
 compareTest testName x y resultField = evalPair testName (asTerm ShowUtil.comparison)
   (Equality.compare x y)
   (compResult resultField)
 
 -- Test equality
-equalTest :: String -> TTerm a -> TTerm a -> Bool -> TTerm TestCaseWithMetadata
+equalTest :: String -> TypedTerm a -> TypedTerm a -> Bool -> TypedTerm TestCaseWithMetadata
 equalTest testName x y result = evalPair testName showBool
   (Equality.equal x y)
   (Phantoms.boolean result)
@@ -62,7 +72,58 @@ equalTest testName x y result = evalPair testName showBool
 -- Name comparison tests
 -- ============================================================
 
-nameComparisonTests :: TTerm TestGroup
+-- Helper to build a LatLonPoly record term with type application
+latLonPolyInt32Term :: Int -> Int -> TypedTerm Term
+latLonPolyInt32Term lat lon = tyapp
+  (record TestTypes.testTypeLatLonPolyName [
+    "lat" >: int32 (fromIntegral lat),
+    "lon" >: int32 (fromIntegral lon)])
+  T.int32
+
+latLonPolyStringTerm :: String -> String -> TypedTerm Term
+latLonPolyStringTerm lat lon = tyapp
+  (record TestTypes.testTypeLatLonPolyName [
+    "lat" >: string lat,
+    "lon" >: string lon])
+  T.string
+
+-- Helper to build a LatLon record term
+latLonTerm :: Float -> Float -> TypedTerm Term
+latLonTerm lat lon = record TestTypes.testTypeLatLonName [
+  "lat" >: float32 (realToFrac lat),
+  "lon" >: float32 (realToFrac lon)]
+
+literalComparisonTests :: TypedTerm TestGroup
+literalComparisonTests = subgroup "Literal comparison" [
+  -- Integer literals
+  compareTest "int32 literal less than"
+    (Core.termLiteral $ Core.literalInteger $ Core.integerValueInt32 $ Phantoms.int32 10)
+    (Core.termLiteral $ Core.literalInteger $ Core.integerValueInt32 $ Phantoms.int32 20)
+    "lessThan",
+  compareTest "int32 literal equal"
+    (Core.termLiteral $ Core.literalInteger $ Core.integerValueInt32 $ Phantoms.int32 42)
+    (Core.termLiteral $ Core.literalInteger $ Core.integerValueInt32 $ Phantoms.int32 42)
+    "equalTo",
+  -- String literals
+  compareTest "string literal less than"
+    (Core.termLiteral $ Core.literalString $ Phantoms.string "aaa")
+    (Core.termLiteral $ Core.literalString $ Phantoms.string "bbb")
+    "lessThan",
+  -- Boolean literals
+  compareTest "boolean false < true"
+    (Core.termLiteral $ Core.literalBoolean Phantoms.false)
+    (Core.termLiteral $ Core.literalBoolean Phantoms.true)
+    "lessThan",
+  compareTest "boolean true == true"
+    (Core.termLiteral $ Core.literalBoolean Phantoms.true)
+    (Core.termLiteral $ Core.literalBoolean Phantoms.true)
+    "equalTo"]
+
+-- ============================================================
+-- Type comparison tests
+-- ============================================================
+
+nameComparisonTests :: TypedTerm TestGroup
 nameComparisonTests = subgroup "Name comparison" [
   -- Compare two names (using nameTerm which creates a Name wrapped term)
   compareTest "name less than (alphabetic)"
@@ -100,186 +161,32 @@ nameComparisonTests = subgroup "Name comparison" [
 -- Literal comparison tests
 -- ============================================================
 
-literalComparisonTests :: TTerm TestGroup
-literalComparisonTests = subgroup "Literal comparison" [
-  -- Integer literals
-  compareTest "int32 literal less than"
-    (Core.termLiteral $ Core.literalInteger $ Core.integerValueInt32 $ Phantoms.int32 10)
-    (Core.termLiteral $ Core.literalInteger $ Core.integerValueInt32 $ Phantoms.int32 20)
-    "lessThan",
-  compareTest "int32 literal equal"
-    (Core.termLiteral $ Core.literalInteger $ Core.integerValueInt32 $ Phantoms.int32 42)
-    (Core.termLiteral $ Core.literalInteger $ Core.integerValueInt32 $ Phantoms.int32 42)
-    "equalTo",
-  -- String literals
-  compareTest "string literal less than"
-    (Core.termLiteral $ Core.literalString $ Phantoms.string "aaa")
-    (Core.termLiteral $ Core.literalString $ Phantoms.string "bbb")
-    "lessThan",
-  -- Boolean literals
-  compareTest "boolean false < true"
-    (Core.termLiteral $ Core.literalBoolean Phantoms.false)
-    (Core.termLiteral $ Core.literalBoolean Phantoms.true)
-    "lessThan",
-  compareTest "boolean true == true"
-    (Core.termLiteral $ Core.literalBoolean Phantoms.true)
-    (Core.termLiteral $ Core.literalBoolean Phantoms.true)
-    "equalTo"]
+numberFloatTerm :: Float -> TypedTerm Term
+numberFloatTerm f = inject TestTypes.testTypeNumberName "float" (float32 (realToFrac f))
 
--- ============================================================
--- Type comparison tests
--- ============================================================
+-- Helper for Number union (int vs float)
+numberIntTerm :: Int -> TypedTerm Term
+numberIntTerm n = inject TestTypes.testTypeNumberName "int" (int32 (fromIntegral n))
 
-typeComparisonTests :: TTerm TestGroup
-typeComparisonTests = subgroup "Type comparison" [
-  -- Primitive types
-  compareTest "type int32 vs string"
-    T.int32
-    T.string
-    "lessThan",  -- int32 < string lexicographically in the Type union
-  compareTest "type equal (int32)"
-    T.int32
-    T.int32
-    "equalTo",
-  -- List types
-  compareTest "list type comparison by element"
-    (T.list T.int32)
-    (T.list T.string)
-    "lessThan",  -- list<int32> < list<string>
-  compareTest "list type equal"
-    (T.list T.int32)
-    (T.list T.int32)
-    "equalTo",
-  -- Equality tests
-  equalTest "type equality true" 
-    T.int32
-    T.int32
-    True,
-  equalTest "type equality false" 
-    T.int32
-    T.string
-    False]
+personOrSomethingOtherListTerm :: [TypedTerm Term] -> TypedTerm Term
+personOrSomethingOtherListTerm persons = tyapp
+  (inject TestTypes.testTypePersonOrSomethingName "other" (list persons))
+  (T.list $ Core.typeVariable TestTypes.testTypePersonName)
 
--- ============================================================
--- Term comparison tests
--- ============================================================
-
-termComparisonTests :: TTerm TestGroup
-termComparisonTests = subgroup "Term comparison" [
-  -- Integer term literals
-  compareTest "term int32 42 vs 43"
-    (Core.termLiteral $ Core.literalInteger $ Core.integerValueInt32 $ Phantoms.int32 42)
-    (Core.termLiteral $ Core.literalInteger $ Core.integerValueInt32 $ Phantoms.int32 43)
-    "lessThan",
-  compareTest "term int32 equal"
-    (Core.termLiteral $ Core.literalInteger $ Core.integerValueInt32 $ Phantoms.int32 42)
-    (Core.termLiteral $ Core.literalInteger $ Core.integerValueInt32 $ Phantoms.int32 42)
-    "equalTo",
-  -- String term literals
-  compareTest "term string a vs b"
-    (Core.termLiteral $ Core.literalString $ Phantoms.string "a")
-    (Core.termLiteral $ Core.literalString $ Phantoms.string "b")
-    "lessThan",
-  -- List terms
-  compareTest "term list [1] vs [2]"
-    (Core.termList $ Phantoms.list [Core.termLiteral $ Core.literalInteger $ Core.integerValueInt32 $ Phantoms.int32 1])
-    (Core.termList $ Phantoms.list [Core.termLiteral $ Core.literalInteger $ Core.integerValueInt32 $ Phantoms.int32 2])
-    "lessThan",
-  compareTest "term list equal"
-    (Core.termList $ Phantoms.list [Core.termLiteral $ Core.literalInteger $ Core.integerValueInt32 $ Phantoms.int32 1])
-    (Core.termList $ Phantoms.list [Core.termLiteral $ Core.literalInteger $ Core.integerValueInt32 $ Phantoms.int32 1])
-    "equalTo"]
-
--- ============================================================
--- Custom record type comparison tests (monomorphic)
--- ============================================================
+-- Helper to build a PersonOrSomething union term
+personOrSomethingPersonTerm :: String -> String -> Int -> TypedTerm Term
+personOrSomethingPersonTerm firstName lastName age = tyapp
+  (inject TestTypes.testTypePersonOrSomethingName "person" (personTerm firstName lastName age))
+  (T.list $ Core.typeVariable TestTypes.testTypePersonName)
 
 -- Helper to build a Person record term
-personTerm :: String -> String -> Int -> TTerm Term
+personTerm :: String -> String -> Int -> TypedTerm Term
 personTerm firstName lastName age = record TestTypes.testTypePersonName [
   "firstName" >: string firstName,
   "lastName" >: string lastName,
   "age" >: int32 (fromIntegral age)]
 
--- Helper to build a LatLon record term
-latLonTerm :: Float -> Float -> TTerm Term
-latLonTerm lat lon = record TestTypes.testTypeLatLonName [
-  "lat" >: float32 (realToFrac lat),
-  "lon" >: float32 (realToFrac lon)]
-
-recordComparisonTests :: TTerm TestGroup
-recordComparisonTests = subgroup "Record comparison (monomorphic)" [
-  -- Person records - compared field by field
-  compareTest "person less than by firstName"
-    (personTerm "Alice" "Smith" 30)
-    (personTerm "Bob" "Smith" 30)
-    "lessThan",
-  compareTest "person less than by lastName"
-    (personTerm "Alice" "Jones" 30)
-    (personTerm "Alice" "Smith" 30)
-    "lessThan",
-  compareTest "person less than by age"
-    (personTerm "Alice" "Smith" 25)
-    (personTerm "Alice" "Smith" 30)
-    "lessThan",
-  compareTest "person equal"
-    (personTerm "Alice" "Smith" 30)
-    (personTerm "Alice" "Smith" 30)
-    "equalTo",
-  -- LatLon records
-  compareTest "latLon less than by lat"
-    (latLonTerm 10.0 20.0)
-    (latLonTerm 15.0 20.0)
-    "lessThan",
-  compareTest "latLon less than by lon"
-    (latLonTerm 10.0 20.0)
-    (latLonTerm 10.0 25.0)
-    "lessThan",
-  compareTest "latLon equal"
-    (latLonTerm 10.0 20.0)
-    (latLonTerm 10.0 20.0)
-    "equalTo",
-  -- Equality tests
-  equalTest "person equality true" 
-    (personTerm "Alice" "Smith" 30)
-    (personTerm "Alice" "Smith" 30)
-    True,
-  equalTest "person equality false" 
-    (personTerm "Alice" "Smith" 30)
-    (personTerm "Bob" "Smith" 30)
-    False]
-
--- ============================================================
--- Polymorphic type comparison tests
--- ============================================================
-
--- Helper to build a LatLonPoly record term with type application
-latLonPolyInt32Term :: Int -> Int -> TTerm Term
-latLonPolyInt32Term lat lon = tyapp
-  (record TestTypes.testTypeLatLonPolyName [
-    "lat" >: int32 (fromIntegral lat),
-    "lon" >: int32 (fromIntegral lon)])
-  T.int32
-
-latLonPolyStringTerm :: String -> String -> TTerm Term
-latLonPolyStringTerm lat lon = tyapp
-  (record TestTypes.testTypeLatLonPolyName [
-    "lat" >: string lat,
-    "lon" >: string lon])
-  T.string
-
--- Helper to build a PersonOrSomething union term
-personOrSomethingPersonTerm :: String -> String -> Int -> TTerm Term
-personOrSomethingPersonTerm firstName lastName age = tyapp
-  (inject TestTypes.testTypePersonOrSomethingName "person" (personTerm firstName lastName age))
-  (T.list $ Core.typeVariable TestTypes.testTypePersonName)
-
-personOrSomethingOtherListTerm :: [TTerm Term] -> TTerm Term
-personOrSomethingOtherListTerm persons = tyapp
-  (inject TestTypes.testTypePersonOrSomethingName "other" (list persons))
-  (T.list $ Core.typeVariable TestTypes.testTypePersonName)
-
-polymorphicComparisonTests :: TTerm TestGroup
+polymorphicComparisonTests :: TypedTerm TestGroup
 polymorphicComparisonTests = subgroup "Polymorphic type comparison" [
   -- LatLonPoly Int32
   compareTest "LatLonPoly Int32 less than by lat"
@@ -326,14 +233,120 @@ polymorphicComparisonTests = subgroup "Polymorphic type comparison" [
 -- Union type comparison tests
 -- ============================================================
 
--- Helper for Number union (int vs float)
-numberIntTerm :: Int -> TTerm Term
-numberIntTerm n = inject TestTypes.testTypeNumberName "int" (int32 (fromIntegral n))
+recordComparisonTests :: TypedTerm TestGroup
+recordComparisonTests = subgroup "Record comparison (monomorphic)" [
+  -- Person records - compared field by field
+  compareTest "person less than by firstName"
+    (personTerm "Alice" "Smith" 30)
+    (personTerm "Bob" "Smith" 30)
+    "lessThan",
+  compareTest "person less than by lastName"
+    (personTerm "Alice" "Jones" 30)
+    (personTerm "Alice" "Smith" 30)
+    "lessThan",
+  compareTest "person less than by age"
+    (personTerm "Alice" "Smith" 25)
+    (personTerm "Alice" "Smith" 30)
+    "lessThan",
+  compareTest "person equal"
+    (personTerm "Alice" "Smith" 30)
+    (personTerm "Alice" "Smith" 30)
+    "equalTo",
+  -- LatLon records
+  compareTest "latLon less than by lat"
+    (latLonTerm 10.0 20.0)
+    (latLonTerm 15.0 20.0)
+    "lessThan",
+  compareTest "latLon less than by lon"
+    (latLonTerm 10.0 20.0)
+    (latLonTerm 10.0 25.0)
+    "lessThan",
+  compareTest "latLon equal"
+    (latLonTerm 10.0 20.0)
+    (latLonTerm 10.0 20.0)
+    "equalTo",
+  -- Equality tests
+  equalTest "person equality true" 
+    (personTerm "Alice" "Smith" 30)
+    (personTerm "Alice" "Smith" 30)
+    True,
+  equalTest "person equality false" 
+    (personTerm "Alice" "Smith" 30)
+    (personTerm "Bob" "Smith" 30)
+    False]
 
-numberFloatTerm :: Float -> TTerm Term
-numberFloatTerm f = inject TestTypes.testTypeNumberName "float" (float32 (realToFrac f))
+-- ============================================================
+-- Polymorphic type comparison tests
+-- ============================================================
 
-unionComparisonTests :: TTerm TestGroup
+showBool :: TypedTerm (Bool -> String)
+showBool = Phantoms.lambda "b" $ Literals.showBoolean (Phantoms.var "b")
+
+termComparisonTests :: TypedTerm TestGroup
+termComparisonTests = subgroup "Term comparison" [
+  -- Integer term literals
+  compareTest "term int32 42 vs 43"
+    (Core.termLiteral $ Core.literalInteger $ Core.integerValueInt32 $ Phantoms.int32 42)
+    (Core.termLiteral $ Core.literalInteger $ Core.integerValueInt32 $ Phantoms.int32 43)
+    "lessThan",
+  compareTest "term int32 equal"
+    (Core.termLiteral $ Core.literalInteger $ Core.integerValueInt32 $ Phantoms.int32 42)
+    (Core.termLiteral $ Core.literalInteger $ Core.integerValueInt32 $ Phantoms.int32 42)
+    "equalTo",
+  -- String term literals
+  compareTest "term string a vs b"
+    (Core.termLiteral $ Core.literalString $ Phantoms.string "a")
+    (Core.termLiteral $ Core.literalString $ Phantoms.string "b")
+    "lessThan",
+  -- List terms
+  compareTest "term list [1] vs [2]"
+    (Core.termList $ Phantoms.list [Core.termLiteral $ Core.literalInteger $ Core.integerValueInt32 $ Phantoms.int32 1])
+    (Core.termList $ Phantoms.list [Core.termLiteral $ Core.literalInteger $ Core.integerValueInt32 $ Phantoms.int32 2])
+    "lessThan",
+  compareTest "term list equal"
+    (Core.termList $ Phantoms.list [Core.termLiteral $ Core.literalInteger $ Core.integerValueInt32 $ Phantoms.int32 1])
+    (Core.termList $ Phantoms.list [Core.termLiteral $ Core.literalInteger $ Core.integerValueInt32 $ Phantoms.int32 1])
+    "equalTo"]
+
+-- ============================================================
+-- Custom record type comparison tests (monomorphic)
+-- ============================================================
+
+typeComparisonTests :: TypedTerm TestGroup
+typeComparisonTests = subgroup "Type comparison" [
+  -- Primitive types
+  compareTest "type int32 vs string"
+    T.int32
+    T.string
+    "lessThan",  -- int32 < string lexicographically in the Type union
+  compareTest "type equal (int32)"
+    T.int32
+    T.int32
+    "equalTo",
+  -- List types
+  compareTest "list type comparison by element"
+    (T.list T.int32)
+    (T.list T.string)
+    "lessThan",  -- list<int32> < list<string>
+  compareTest "list type equal"
+    (T.list T.int32)
+    (T.list T.int32)
+    "equalTo",
+  -- Equality tests
+  equalTest "type equality true" 
+    T.int32
+    T.int32
+    True,
+  equalTest "type equality false" 
+    T.int32
+    T.string
+    False]
+
+-- ============================================================
+-- Term comparison tests
+-- ============================================================
+
+unionComparisonTests :: TypedTerm TestGroup
 unionComparisonTests = subgroup "Union comparison" [
   -- Same variant, different values
   compareTest "Number int variant less than"
@@ -370,16 +383,3 @@ unionComparisonTests = subgroup "Union comparison" [
 -- ============================================================
 -- All tests
 -- ============================================================
-
-allTests :: TTermDefinition TestGroup
-allTests = definitionInModule module_ "allTests" $
-    Phantoms.doc "Test cases for Ord instance comparisons on complex Hydra types" $
-    supergroup "ordering" [
-      nameComparisonTests,
-      literalComparisonTests,
-      -- Note: typeComparisonTests and termComparisonTests are excluded because
-      -- comparing Type and Term values (meta-level structures) causes issues
-      -- with the kernel test generator's schema type inference
-      recordComparisonTests,
-      polymorphicComparisonTests,
-      unionComparisonTests]

@@ -63,7 +63,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> (kernelTypesModuleNames),
-            moduleDescription = Just "String formatting types and functions."}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just "String formatting types and functions.")}
   where
     definitions = [
       toDefinition capitalize,
@@ -85,22 +85,22 @@ module_ = Module {
       toDefinition withCharacterAliases,
       toDefinition wrapLine]
 
-define :: String -> TTerm a -> TTermDefinition a
+define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModule module_
 
-capitalize :: TTermDefinition (String -> String)
+capitalize :: TypedTermDefinition (String -> String)
 capitalize = define "capitalize" $
   doc "Capitalize the first letter of a string" $
   mapFirstLetter @@ primitive _strings_toUpper
 
-convertCase :: TTermDefinition (CaseConvention -> CaseConvention -> String -> String)
+convertCase :: TypedTermDefinition (CaseConvention -> CaseConvention -> String -> String)
 convertCase = define "convertCase" $
   doc "Convert a string from one case convention to another" $
   lambdas ["from", "to", "original"] $ lets [
     "parts">: lets [
       "byCaps">: lets [
         "splitOnUppercase">: lambda "acc" $ lambda "c" $ Lists.concat2
-          (Logic.ifElse (Chars.isUpper $ var "c") emptyParts (list ([] :: [TTerm [Char]])))
+          (Logic.ifElse (Chars.isUpper $ var "c") emptyParts (list ([] :: [TypedTerm [Char]])))
           (Maybes.fromMaybe (var "acc") $
             Maybes.map ("uc" ~>
               Lists.cons (Lists.cons (var "c") (Pairs.first $ var "uc"))
@@ -121,9 +121,9 @@ convertCase = define "convertCase" $
       _CaseConvention_upperSnake>>: constant $ Strings.intercalate (string "_") (Lists.map (primitive _strings_toUpper) $ var "parts")
       ]) @@ var "to"
   where
-    emptyParts = list [list ([] :: [TTerm Char])]
+    emptyParts = list [list ([] :: [TypedTerm Char])]
 
-convertCaseCamelOrUnderscoreToLowerSnake :: TTermDefinition (String -> String)
+convertCaseCamelOrUnderscoreToLowerSnake :: TypedTermDefinition (String -> String)
 convertCaseCamelOrUnderscoreToLowerSnake = define "convertCaseCamelOrUnderscoreToLowerSnake" $
   doc "Convert a string from camel case (possibly with underscores) to lower snake case. Splits on underscores first, then converts each part from camel case." $
   lambda "s" $
@@ -131,27 +131,27 @@ convertCaseCamelOrUnderscoreToLowerSnake = define "convertCaseCamelOrUnderscoreT
     "snakeParts" <~ Lists.map (lambda "p" $ convertCaseCamelToLowerSnake @@ var "p") (var "parts") $
     Strings.intercalate (string "_") (var "snakeParts")
 
-convertCaseCamelToLowerSnake :: TTermDefinition (String -> String)
+convertCaseCamelToLowerSnake :: TypedTermDefinition (String -> String)
 convertCaseCamelToLowerSnake = define "convertCaseCamelToLowerSnake" $
   doc "Convert a string from camel case to lower snake case" $
   convertCase @@ Util.caseConventionCamel @@ Util.caseConventionLowerSnake
 
-convertCaseCamelToUpperSnake :: TTermDefinition (String -> String)
+convertCaseCamelToUpperSnake :: TypedTermDefinition (String -> String)
 convertCaseCamelToUpperSnake = define "convertCaseCamelToUpperSnake" $
   doc "Convert a string from camel case to upper snake case" $
   convertCase @@ Util.caseConventionCamel @@ Util.caseConventionUpperSnake
 
-convertCasePascalToUpperSnake :: TTermDefinition (String -> String)
+convertCasePascalToUpperSnake :: TypedTermDefinition (String -> String)
 convertCasePascalToUpperSnake = define "convertCasePascalToUpperSnake" $
   doc "Convert a string from pascal case to upper snake case" $
   convertCase @@ Util.caseConventionPascal @@ Util.caseConventionUpperSnake
 
-decapitalize :: TTermDefinition (String -> String)
+decapitalize :: TypedTermDefinition (String -> String)
 decapitalize = define "decapitalize" $
   doc "Decapitalize the first letter of a string" $
   mapFirstLetter @@ primitive _strings_toLower
 
-escapeWithUnderscore :: TTermDefinition (S.Set String -> String -> String)
+escapeWithUnderscore :: TypedTermDefinition (S.Set String -> String -> String)
 escapeWithUnderscore = define "escapeWithUnderscore" $
   doc "Escape reserved words by appending an underscore" $
   lambdas ["reserved", "s"] $
@@ -159,21 +159,20 @@ escapeWithUnderscore = define "escapeWithUnderscore" $
       (var "s" ++ string "_")
       (var "s")
 
-indentLines :: TTermDefinition (String -> String)
+indentLines :: TypedTermDefinition (String -> String)
 indentLines = define "indentLines" $
   doc "Indent each line of a string with four spaces" $
   lambda "s" $ lets [
     "indent">: lambda "l" $ string "    " ++ var "l"]
     $ Strings.unlines $ Lists.map (var "indent") $ Strings.lines $ var "s"
 
-javaStyleComment :: TTermDefinition (String -> String)
+javaStyleComment :: TypedTermDefinition (String -> String)
 javaStyleComment = define "javaStyleComment" $
   doc "Format a string as a Java-style block comment" $
   lambda "s" $ string "/**\n" ++ string " * " ++ var "s" ++ string "\n */"
 
 -- TODO: simplify this helper
--- TODO: simplify this helper
-mapFirstLetter :: TTermDefinition ((String -> String) -> String -> String)
+mapFirstLetter :: TypedTermDefinition ((String -> String) -> String -> String)
 mapFirstLetter = define "mapFirstLetter" $
   doc "A helper which maps the first letter of a string to another string" $
   "mapping" ~> "s" ~>
@@ -187,7 +186,7 @@ mapFirstLetter = define "mapFirstLetter" $
          Strings.cat2 (var "firstLetter") (Strings.fromList (Pairs.second $ var "uc")))
          (Lists.uncons $ var "list"))
 
-nonAlnumToUnderscores :: TTermDefinition (String -> String)
+nonAlnumToUnderscores :: TypedTermDefinition (String -> String)
 nonAlnumToUnderscores = define "nonAlnumToUnderscores" $
   doc "Replace sequences of non-alphanumeric characters with single underscores" $
   "input" ~>
@@ -204,10 +203,10 @@ nonAlnumToUnderscores = define "nonAlnumToUnderscores" $
       (Logic.ifElse (var "b")
         (pair (var "s") (boolean True))
         (pair (Lists.cons (char '_') (var "s")) (boolean True)))) $
-  "result" <~ Lists.foldl (var "replace") (pair (list ([] :: [TTerm Char])) (boolean False)) (Strings.toList $ var "input") $
+  "result" <~ Lists.foldl (var "replace") (pair (list ([] :: [TypedTerm Char])) (boolean False)) (Strings.toList $ var "input") $
   Strings.fromList $ Lists.reverse $ Pairs.first $ var "result"
 
-normalizeComment :: TTermDefinition (String -> String)
+normalizeComment :: TypedTermDefinition (String -> String)
 normalizeComment = define "normalizeComment" $
   doc "Normalize a comment string for consistent output across coders" $
   "s" ~>
@@ -228,12 +227,12 @@ normalizeComment = define "normalizeComment" $
          (var "appended"))
        (Strings.maybeCharAt (var "lastIdx") (var "stripped")))
 
-sanitizeWithUnderscores :: TTermDefinition (S.Set String -> String -> String)
+sanitizeWithUnderscores :: TypedTermDefinition (S.Set String -> String -> String)
 sanitizeWithUnderscores = define "sanitizeWithUnderscores" $
   doc "Sanitize a string by replacing non-alphanumeric characters and escaping reserved words" $
   "reserved" ~> "s" ~> escapeWithUnderscore @@ var "reserved" @@ (nonAlnumToUnderscores @@ var "s")
 
-showList :: TTermDefinition ((a -> String) -> [a] -> String)
+showList :: TypedTermDefinition ((a -> String) -> [a] -> String)
 showList = define "showList" $
   doc "Format a list of elements as a bracketed, comma-separated string" $
   "f" ~> "els" ~> Strings.cat $ list [
@@ -241,13 +240,13 @@ showList = define "showList" $
     Strings.intercalate (string ", ") $ Lists.map (var "f") $ var "els",
     string "]"]
 
-stripLeadingAndTrailingWhitespace :: TTermDefinition (String -> String)
+stripLeadingAndTrailingWhitespace :: TypedTermDefinition (String -> String)
 stripLeadingAndTrailingWhitespace = define "stripLeadingAndTrailingWhitespace" $
   doc "Remove leading and trailing whitespace from a string" $
   "s" ~> Strings.fromList $ Lists.dropWhile (reify Chars.isSpace) $ Lists.reverse $
     Lists.dropWhile (reify Chars.isSpace) $ Lists.reverse $ Strings.toList $ var "s"
 
-withCharacterAliases :: TTermDefinition (String -> String)
+withCharacterAliases :: TypedTermDefinition (String -> String)
 withCharacterAliases = define "withCharacterAliases" $
   doc "Replace special characters with their alphanumeric aliases" $
   lambda "original" $ lets [
@@ -292,7 +291,7 @@ withCharacterAliases = define "withCharacterAliases" $
     $ Strings.fromList $ Lists.filter (reify Chars.isAlphaNum) $ Lists.concat $
       Lists.map (var "alias") $ Strings.toList $ var "original"
 
-wrapLine :: TTermDefinition (Int -> String -> String)
+wrapLine :: TypedTermDefinition (Int -> String -> String)
 wrapLine = define "wrapLine" $
   doc "A simple soft line wrap which is suitable for code comments" $
   lambdas ["maxlen", "input"] $ lets [
@@ -313,4 +312,4 @@ wrapLine = define "wrapLine" $
             (Maybes.map
               ("pfxInit" ~> var "helper" @@ (Lists.cons (var "pfxInit") (var "prev")) @@ (Lists.concat2 (var "suffix") ((Lists.drop (var "maxlen") (var "rem")))))
               (Lists.maybeInit $ var "prefix"))))]
-    $ Strings.fromList $ Lists.intercalate (list [char '\n']) $ var "helper" @@ (list ([] :: [TTerm Char])) @@ (Strings.toList $ var "input")
+    $ Strings.fromList $ Lists.intercalate (list [char '\n']) $ var "helper" @@ (list ([] :: [TypedTerm Char])) @@ (Strings.toList $ var "input")

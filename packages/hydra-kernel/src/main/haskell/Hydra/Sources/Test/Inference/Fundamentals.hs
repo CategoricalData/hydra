@@ -2,7 +2,7 @@ module Hydra.Sources.Test.Inference.Fundamentals where
 
 -- Standard imports for term-encoded tests
 import Hydra.Kernel
-import           Hydra.Dsl.Bootstrap (unqualifiedDep)
+import           Hydra.Dsl.Bootstrap (unqualifiedDep, descriptionMetadata)
 import Hydra.Dsl.Meta.Testing                 as Testing
 import Hydra.Dsl.Meta.Terms                   as Terms
 import Hydra.Sources.Kernel.Types.All
@@ -24,7 +24,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = unqualifiedDep <$> ([TestGraph.ns, ModuleName "hydra.inference", ModuleName "hydra.show.core"] ++ kernelTypesModuleNames),
-            moduleDescription = (Just "Inference tests for fundamental language features")}
+            moduleMetadata = descriptionMetadata ((Just "Inference tests for fundamental language features"))}
   where
     definitions = [
       Phantoms.toDefinition allTests,
@@ -35,10 +35,10 @@ module_ = Module {
       Phantoms.toDefinition testGroupForPolymorphism,
       Phantoms.toDefinition testGroupForPrimitives]
 
-define :: String -> TTerm a -> TTermDefinition a
+define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModule module_
 
-allTests :: TTermDefinition TestGroup
+allTests :: TypedTermDefinition TestGroup
 allTests = define "allTests" $
   Phantoms.doc "Fundamental language feature tests" $
   supergroup "Fundamentals" [
@@ -49,7 +49,7 @@ allTests = define "allTests" $
     testGroupForPolymorphism,
     testGroupForPrimitives]
 
-testGroupForLambdas :: TTermDefinition TestGroup
+testGroupForLambdas :: TypedTermDefinition TestGroup
 testGroupForLambdas = define "testGroupForLambdas" $
   supergroup "Lambdas" [
     subgroup "Simple lambdas" [
@@ -73,7 +73,7 @@ testGroupForLambdas = define "testGroupForLambdas" $
         (lambda "x" $ lambda "x" $ primitive _math_add @@ var "x" @@ int32 42)
         ["t0"] (T.function (T.var "t0") (T.function T.int32 T.int32))]]
 
-testGroupForLet :: TTermDefinition TestGroup
+testGroupForLet :: TypedTermDefinition TestGroup
 testGroupForLet = define "testGroupForLet" $
   supergroup "Let terms" [
 
@@ -448,7 +448,7 @@ testGroupForLet = define "testGroupForLet" $
     s = primitive _math_negate
     p = primitive _math_negate
 
-testGroupForLiterals :: TTermDefinition TestGroup
+testGroupForLiterals :: TypedTermDefinition TestGroup
 testGroupForLiterals = define "testGroupForLiterals" $
   subgroup "Literals" [
     expectMono 1 []
@@ -464,7 +464,7 @@ testGroupForLiterals = define "testGroupForLiterals" $
       (float64 42.0)
       T.float64]
 
-testGroupForPathologicalTerms :: TTermDefinition TestGroup
+testGroupForPathologicalTerms :: TypedTermDefinition TestGroup
 testGroupForPathologicalTerms = define "testGroupForPathologicalTerms" $
   supergroup "Pathological terms" [
 
@@ -522,7 +522,7 @@ testGroupForPathologicalTerms = define "testGroupForPathologicalTerms" $
           $ var "build" @@ int32 0)
         (T.list T.int32)]]
 
-testGroupForPolymorphism :: TTermDefinition TestGroup
+testGroupForPolymorphism :: TypedTermDefinition TestGroup
 testGroupForPolymorphism = define "testGroupForPolymorphism" $
   supergroup "Polymorphism" [
 
@@ -619,7 +619,7 @@ testGroupForPolymorphism = define "testGroupForPolymorphism" $
         (primitive _eithers_isLeft)
         ["t0", "t1"] (T.function (T.either_ (T.var "t0") (T.var "t1")) T.boolean)]]
 
-testGroupForPrimitives :: TTermDefinition TestGroup
+testGroupForPrimitives :: TypedTermDefinition TestGroup
 testGroupForPrimitives = define "testGroupForPrimitives" $
   supergroup "Primitives" [
 

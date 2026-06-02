@@ -6,7 +6,7 @@ Serializes the Python syntax model into properly formatted Python source code.
 
 from hydra.core import Name
 from hydra.dsl.python import Just, Nothing
-from hydra.packaging import Module, ModuleName
+from hydra.packaging import EntityMetadata, Module, ModuleName
 
 import hydra.dsl.meta.lib.equality as Equality
 import hydra.dsl.meta.lib.lists as Lists
@@ -62,8 +62,12 @@ DEPENDENCIES = [
 
 
 _PLACEHOLDER = Module(
-    Just("Python serializer: converts Python AST to concrete syntax"),
     NS,
+    Just(EntityMetadata(
+        Just("Python serializer: converts Python AST to concrete syntax"),
+        (),
+        (),
+        Nothing())),
     DEPENDENCIES,
     (),
 )
@@ -2398,8 +2402,8 @@ def _to_python_comments():
 
 def _build_module() -> Module:
     return Module(
-        _PLACEHOLDER.description,
         _PLACEHOLDER.name,
+        _PLACEHOLDER.metadata,
         _PLACEHOLDER.dependencies,
         (
             to_definition(_annotated_rhs_to_expr()),

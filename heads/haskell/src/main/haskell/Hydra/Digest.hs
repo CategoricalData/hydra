@@ -5,10 +5,11 @@
 -- the caller short-circuits. Otherwise it falls through to full inference
 -- and overwrites the digest on success.
 
+{-# LANGUAGE ScopedTypeVariables #-}
 module Hydra.Digest (
     -- v1 API (backwards-compatible namespace → hash map)
     DigestMap,
-    discoverNamespaceFiles,
+    discoverModuleNameFiles,
     hashFile,
     hashUniverse,
     readDigest,
@@ -31,6 +32,12 @@ module Hydra.Digest (
     digestsMatch,
     verifyOutputsExist,
     generatorStamp,
+    -- Shared orphan-reconcile helpers (used by digest-check and the JSON
+    -- write path; see #393 / #405)
+    listFilesRecursive,
+    pruneEmptyDirs,
+    makeRelativeTo,
+    reconcileOrphans,
 ) where
 
 import Hydra.Packaging (Module(..), ModuleName(..))
@@ -39,6 +46,7 @@ import qualified Data.ByteString.Lazy as BL
 import qualified Data.ByteString.Lazy.Char8 as BLC
 import qualified Data.Digest.Pure.SHA as SHA
 import qualified Data.Map as M
+import qualified Data.Set as S
 import qualified Data.List as L
 import qualified Data.Maybe as Y
 import qualified System.Directory as SD
@@ -59,35 +67,65 @@ packagesRoot :: FilePath
 packagesRoot = ".." FP.</> ".." FP.</> "packages"
 
 
--- | Walk packages/*/src/main/haskell/Hydra/Sources/ to build a namespace →
--- file map. Each source file must declare its namespace with a top-level
--- line of the form: ns = ModuleName "hydra.foo.bar"
+-- | Walk packages/*/src/main/haskell/Hydra/Sources/ (Haskell DSL sources) and
+-- packages/*/src/main/{java,python}/hydra/sources/ (native coder sources) to
+-- build a namespace → file map. Each source file declares its namespace with
+-- one of the recognized idioms (see 'extractNs' / 'extractNativeNs').
 --
--- Files without a recognizable ns declaration are silently skipped.
-discoverNamespaceFiles :: IO (M.Map ModuleName FilePath)
-discoverNamespaceFiles = do
+-- Native (.java/.py) sources are scanned because hydra-java/hydra-python are
+-- self-hosted: their canonical hydra.<lang>.* modules are authored natively
+-- (#344), not as Haskell DSL. Without scanning them, a change to e.g.
+-- Coder.java would never invalidate the per-package input digest, so the
+-- freshness gate would skip regeneration even though the coder changed (#400).
+--
+-- Files without a recognizable namespace declaration are silently skipped.
+discoverModuleNameFiles :: IO (M.Map ModuleName FilePath)
+discoverModuleNameFiles = do
     exists <- SD.doesDirectoryExist packagesRoot
     if not exists then return M.empty else do
       pkgs <- SD.listDirectory packagesRoot
-      pairs <- L.concat <$> mapM scanPackage pkgs
-      return $ M.fromList pairs
+      hsPairs     <- L.concat <$> mapM scanPackage pkgs
+      nativePairs <- L.concat <$> mapM scanNativePackage pkgs
+      -- Native sources are the authoritative owners of hydra.<lang>.* (#344),
+      -- so they take precedence over any stale legacy Haskell DSL copy of the
+      -- same namespace. M.union is left-biased, so list native pairs first.
+      return $ M.union (M.fromList nativePairs) (M.fromList hsPairs)
   where
     scanPackage pkg = do
       let srcDir = packagesRoot FP.</> pkg FP.</> "src" FP.</> "main"
                                FP.</> "haskell" FP.</> "Hydra" FP.</> "Sources"
       isDir <- SD.doesDirectoryExist srcDir
       if not isDir then return [] else do
-        files <- listHaskellFiles srcDir
+        files <- listFilesWithSuffix ".hs" srcDir
         Y.catMaybes <$> mapM extractNs files
 
-    listHaskellFiles dir = do
+    -- Scan a package's native (.java/.py) self-host coder sources, which live
+    -- under packages/<pkg>/src/main/<lang>/hydra/sources/. Only hydra-java and
+    -- hydra-python currently have these; other packages have no such dir and
+    -- yield [].
+    scanNativePackage pkg = do
+      let javaDir = packagesRoot FP.</> pkg FP.</> "src" FP.</> "main"
+                                FP.</> "java" FP.</> "hydra" FP.</> "sources"
+          pyDir   = packagesRoot FP.</> pkg FP.</> "src" FP.</> "main"
+                                FP.</> "python" FP.</> "hydra" FP.</> "sources"
+      javaPairs <- scanNativeDir ".java" extractNativeNs javaDir
+      pyPairs   <- scanNativeDir ".py"   extractNativeNs pyDir
+      return $ javaPairs ++ pyPairs
+
+    scanNativeDir suffix extract dir = do
+      isDir <- SD.doesDirectoryExist dir
+      if not isDir then return [] else do
+        files <- listFilesWithSuffix suffix dir
+        Y.catMaybes <$> mapM extract files
+
+    listFilesWithSuffix suffix dir = do
       entries <- SD.listDirectory dir
       subResults <- CM.forM entries $ \e -> do
         let p = dir FP.</> e
         isDir <- SD.doesDirectoryExist p
         if isDir
-          then listHaskellFiles p
-          else if ".hs" `L.isSuffixOf` e then return [p] else return []
+          then listFilesWithSuffix suffix p
+          else if suffix `L.isSuffixOf` e then return [p] else return []
       return $ concat subResults
 
     extractNs :: FilePath -> IO (Maybe (ModuleName, FilePath))
@@ -110,6 +148,36 @@ discoverNamespaceFiles = do
               try1 = (s RE.=~ pat1 :: [[String]])
               try2 = (s RE.=~ pat2 :: [[String]])
           in case (try1, try2) of
+               (([_, nsName]:_), _) -> return $ Just (ModuleName nsName, fp)
+               (_, ([_, nsName]:_)) -> return $ Just (ModuleName nsName, fp)
+               _                    -> return Nothing
+
+    -- Extract the namespace a native (.java/.py) coder source defines for
+    -- itself. Two idioms, one per host language:
+    --   * Java:   `ModuleName NS = new ModuleName("hydra.java.<x>")`
+    --   * Python: `NS = ModuleName("hydra.python.<x>")` (optionally `_NS`),
+    --             at column 0.
+    -- Both files also reference OTHER modules via `new ModuleName("...")`
+    -- (Java) or `<NAME>_NS = ModuleName("...")` (Python) as dependency
+    -- declarations; the patterns below are anchored to the file's own `NS`
+    -- field so those dependency references are not mistaken for the owner.
+    extractNativeNs :: FilePath -> IO (Maybe (ModuleName, FilePath))
+    extractNativeNs fp = do
+      content <- E.try (readFile fp) :: IO (Either E.SomeException String)
+      case content of
+        Left _ -> return Nothing
+        Right s ->
+          -- `ModuleName NS = new ModuleName("...")` — the space before `NS`
+          -- (in `ModuleName NS`) ensures we don't match the dependency fields,
+          -- whose names end in `_NS` (e.g. `ModuleName SYNTAX_NS = ...`,
+          -- `ModuleName CORE_NS = ...`).
+          let javaPat = "ModuleName NS = new ModuleName\\(\"([^\"]+)\"\\)" :: String
+              -- `^_?NS = ModuleName("...")` — top-level, optional leading
+              -- underscore (e.g. language.py uses `_NS`).
+              pyPat   = "^_?NS = ModuleName\\(\"([^\"]+)\"\\)" :: String
+              tryJava = (s RE.=~ javaPat :: [[String]])
+              tryPy   = (s RE.=~ pyPat   :: [[String]])
+          in case (tryJava, tryPy) of
                (([_, nsName]:_), _) -> return $ Just (ModuleName nsName, fp)
                (_, ([_, nsName]:_)) -> return $ Just (ModuleName nsName, fp)
                _                    -> return Nothing
@@ -451,6 +519,17 @@ writeDigestV2 path d = do
 -- output, and generator fields all match. Output hashes are NOT
 -- compared against the filesystem here — see 'verifyOutputsExist'
 -- for that.
+--
+-- INVARIANT: this is an explicit ALLOWLIST of the fields that gate
+-- freshness. It must never become a whole-'Digest' equality (@a == b@) or
+-- a hash of the serialized digest file. Any *informational* metadata we
+-- add to the digest (e.g. a 'generation' record's host, timestamp, or
+-- hydraVersion) must be OMITTED here, or it becomes gating. That would be
+-- wrong: a timestamp varies across byte-identical rebuilds, and 'host'
+-- varies across hosts that — by the self-hosting contract — produce
+-- identical output, so gating on either causes spurious cache misses and
+-- punishes self-hosting. A field gates iff it appears below; add a field
+-- here only if it is deterministic AND content-determining.
 digestsMatch :: Digest -> Digest -> Bool
 digestsMatch a b =
     digestInputs a == digestInputs b
@@ -624,3 +703,89 @@ findIndex needle hay =
           | take n rest == needle = Just ix
           | otherwise = go (ix + 1) (drop 1 rest)
     in go 0 hay
+
+
+----------------------------------------------------------------------
+-- Shared orphan-reconcile helpers (#393 / #405).
+--
+-- A keep-set-based prune: given an output directory and the set of files
+-- that legitimately belong in it, delete everything else (the orphans).
+-- Used by:
+--   * digest-check fresh — the per-language target trees, keyed on the
+--     recorded output digest (#393).
+--   * the JSON write path — the dist/json/<pkg> trees, keyed on the
+--     in-memory module emission set (#405).
+-- Factored here so the two callers share one implementation.
+----------------------------------------------------------------------
+
+-- | Recursively list every regular file under a directory.
+-- Skips dotfiles and dot-directories.
+listFilesRecursive :: FilePath -> IO [FilePath]
+listFilesRecursive root = do
+    exists <- SD.doesDirectoryExist root
+    if not exists then return [] else go root
+  where
+    go dir = do
+      entries <- SD.listDirectory dir
+      fmap concat $ CM.forM entries $ \e ->
+        if "." `L.isPrefixOf` e
+          then return []
+          else do
+            let p = dir FP.</> e
+            isDir <- SD.doesDirectoryExist p
+            if isDir
+              then go p
+              else do
+                isFile <- SD.doesFileExist p
+                return (if isFile then [p] else [])
+
+-- | Remove any empty subdirectories under 'dir' (depth-first). 'dir'
+-- itself is left alone; only its descendants are pruned. Used by the
+-- orphan reconcile to clean up directories emptied by orphan deletion
+-- (e.g. a renamed-away namespace dir). Best-effort: failures (e.g. a
+-- directory that isn't actually empty due to a race) are ignored.
+pruneEmptyDirs :: FilePath -> IO ()
+pruneEmptyDirs dir = do
+    entries <- SD.listDirectory dir `E.catch` \(_ :: E.IOException) -> return []
+    CM.forM_ entries $ \e -> do
+      let p = dir FP.</> e
+      isDir <- SD.doesDirectoryExist p
+      CM.when isDir $ do
+        pruneEmptyDirs p
+        children <- SD.listDirectory p `E.catch` \(_ :: E.IOException) -> return []
+        CM.when (null children) $
+          SD.removeDirectory p `E.catch` \(_ :: E.IOException) -> return ()
+
+-- | Compute 'path' relative to 'base'. If 'path' isn't under 'base',
+-- returns 'path' unchanged (callers should guard against that, but the
+-- fallback keeps us from producing absolute paths accidentally).
+makeRelativeTo :: FilePath -> FilePath -> FilePath
+makeRelativeTo base path =
+    let prefix = if not (null base) && last base == '/' then base else base ++ "/"
+    in if prefix `L.isPrefixOf` path
+         then drop (length prefix) path
+         else path
+
+-- | Delete every regular file under 'outputDir' whose path (relative to
+-- 'outputDir', normalised) is not in 'keepRel', then prune any emptied
+-- subdirectories. Files listed in 'protectRel' (relative, normalised) are
+-- never deleted even if absent from the keep-set — used to shield a digest
+-- file or other sidecar living inside the output dir. Returns the list of
+-- deleted (absolute) paths so the caller can report them.
+--
+-- Deletion is best-effort (IOExceptions are swallowed) so a transient
+-- failure on one file doesn't abort the whole reconcile.
+reconcileOrphans :: FilePath -> S.Set FilePath -> S.Set FilePath -> IO [FilePath]
+reconcileOrphans outputDir keepRel protectRel = do
+    onDiskAbs <- listFilesRecursive outputDir
+    let orphans =
+          [ p
+          | p <- onDiskAbs
+          , let rel = FP.normalise (makeRelativeTo outputDir p)
+          , not (S.member rel keepRel)
+          , not (S.member rel protectRel)
+          ]
+    CM.forM_ orphans $ \p ->
+      SD.removeFile p `E.catch` \(_ :: E.IOException) -> return ()
+    CM.unless (null orphans) $ pruneEmptyDirs outputDir
+    return orphans

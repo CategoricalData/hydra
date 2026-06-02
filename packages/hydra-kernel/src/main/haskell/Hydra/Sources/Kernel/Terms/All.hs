@@ -26,7 +26,21 @@ import qualified Hydra.Sources.Kernel.Terms.Languages       as Languages
 import qualified Hydra.Sources.Kernel.Terms.Lexical         as Lexical
 import qualified Hydra.Sources.Kernel.Terms.Literals        as Literals
 
-import qualified Hydra.Sources.Kernel.Lib.Names             as LibNames
+import qualified Hydra.Sources.Kernel.Lib.Chars             as LibChars
+import qualified Hydra.Sources.Kernel.Lib.Eithers           as LibEithers
+import qualified Hydra.Sources.Kernel.Lib.Equality          as LibEquality
+import qualified Hydra.Sources.Kernel.Lib.Lists              as LibLists
+import qualified Hydra.Sources.Kernel.Lib.Literals          as LibLiterals
+import qualified Hydra.Sources.Kernel.Lib.Logic             as LibLogic
+import qualified Hydra.Sources.Kernel.Lib.Maps              as LibMaps
+import qualified Hydra.Sources.Kernel.Lib.Math              as LibMath
+import qualified Hydra.Sources.Kernel.Lib.Maybes            as LibMaybes
+-- Hydra.Sources.Kernel.Lib.Names is a Haskell-side derived index (no
+-- module_ declaration; no kernel-module emission).
+import qualified Hydra.Sources.Kernel.Lib.Pairs             as LibPairs
+import qualified Hydra.Sources.Kernel.Lib.Regex             as LibRegex
+import qualified Hydra.Sources.Kernel.Lib.Sets              as LibSets
+import qualified Hydra.Sources.Kernel.Lib.Strings           as LibStrings
 import qualified Hydra.Sources.Kernel.Terms.Names           as Names
 import qualified Hydra.Sources.Kernel.Terms.Parsers         as Parsers
 import qualified Hydra.Sources.Kernel.Terms.Predicates     as Predicates
@@ -58,7 +72,6 @@ import qualified Hydra.Sources.Kernel.Terms.Validate.Packaging as ValidatePackag
 import qualified Hydra.Sources.Decode.Paths          as DecodePaths
 import qualified Hydra.Sources.Decode.Ast           as DecodeAst
 import qualified Hydra.Sources.Decode.Coders        as DecodeCoders
-import qualified Hydra.Sources.Decode.Context       as DecodeContext
 import qualified Hydra.Sources.Decode.Core          as DecodeCore
 import qualified Hydra.Sources.Decode.Errors         as DecodeErrors
 import qualified Hydra.Sources.Decode.Error.Checking as DecodeErrorChecking
@@ -66,12 +79,12 @@ import qualified Hydra.Sources.Decode.Error.Core   as DecodeErrorCore
 import qualified Hydra.Sources.Decode.Json.Model    as DecodeJson
 import qualified Hydra.Sources.Decode.Packaging      as DecodeModule
 import qualified Hydra.Sources.Decode.Parsing       as DecodeParsing
-import qualified Hydra.Sources.Decode.Phantoms      as DecodePhantoms
 import qualified Hydra.Sources.Decode.Query         as DecodeQuery
 import qualified Hydra.Sources.Decode.Relational    as DecodeRelational
 import qualified Hydra.Sources.Decode.Tabular       as DecodeTabular
 import qualified Hydra.Sources.Decode.Testing       as DecodeTesting
 import qualified Hydra.Sources.Decode.Topology      as DecodeTopology
+import qualified Hydra.Sources.Decode.Typed         as DecodeTyped
 import qualified Hydra.Sources.Decode.Typing        as DecodeTyping
 import qualified Hydra.Sources.Decode.Util          as DecodeUtil
 import qualified Hydra.Sources.Decode.Variants      as DecodeVariants
@@ -80,7 +93,6 @@ import qualified Hydra.Sources.Decode.Variants      as DecodeVariants
 import qualified Hydra.Sources.Encode.Paths          as EncodePaths
 import qualified Hydra.Sources.Encode.Ast           as EncodeAst
 import qualified Hydra.Sources.Encode.Coders        as EncodeCoders
-import qualified Hydra.Sources.Encode.Context       as EncodeContext
 import qualified Hydra.Sources.Encode.Core          as EncodeCore
 import qualified Hydra.Sources.Encode.Errors         as EncodeErrors
 import qualified Hydra.Sources.Encode.Error.Checking as EncodeErrorChecking
@@ -88,12 +100,12 @@ import qualified Hydra.Sources.Encode.Error.Core   as EncodeErrorCore
 import qualified Hydra.Sources.Encode.Json.Model    as EncodeJson
 import qualified Hydra.Sources.Encode.Packaging      as EncodeModule
 import qualified Hydra.Sources.Encode.Parsing       as EncodeParsing
-import qualified Hydra.Sources.Encode.Phantoms      as EncodePhantoms
 import qualified Hydra.Sources.Encode.Query         as EncodeQuery
 import qualified Hydra.Sources.Encode.Relational    as EncodeRelational
 import qualified Hydra.Sources.Encode.Tabular       as EncodeTabular
 import qualified Hydra.Sources.Encode.Testing       as EncodeTesting
 import qualified Hydra.Sources.Encode.Topology      as EncodeTopology
+import qualified Hydra.Sources.Encode.Typed         as EncodeTyped
 import qualified Hydra.Sources.Encode.Typing        as EncodeTyping
 import qualified Hydra.Sources.Encode.Util          as EncodeUtil
 import qualified Hydra.Sources.Encode.Variants      as EncodeVariants
@@ -125,7 +137,19 @@ kernelPrimaryTermsModules = [
   Inference.module_,
   Languages.module_,
   Lexical.module_,
-  LibNames.module_,
+  LibChars.module_,
+  LibEithers.module_,
+  LibEquality.module_,
+  LibLists.module_,
+  LibLiterals.module_,
+  LibLogic.module_,
+  LibMaps.module_,
+  LibMath.module_,
+  LibMaybes.module_,
+  LibPairs.module_,
+  LibRegex.module_,
+  LibSets.module_,
+  LibStrings.module_,
   Literals.module_,
 
   Names.module_,
@@ -160,7 +184,6 @@ kernelDecodingModules = [
   DecodePaths.module_,
   DecodeAst.module_,
   DecodeCoders.module_,
-  DecodeContext.module_,
   DecodeCore.module_,
   DecodeErrors.module_,
   DecodeErrorChecking.module_,
@@ -168,12 +191,12 @@ kernelDecodingModules = [
   DecodeJson.module_,
   DecodeModule.module_,
   DecodeParsing.module_,
-  DecodePhantoms.module_,
   DecodeQuery.module_,
   DecodeRelational.module_,
   DecodeTabular.module_,
     DecodeTesting.module_,
   DecodeTopology.module_,
+  DecodeTyped.module_,
   DecodeTyping.module_,
   DecodeUtil.module_,
   DecodeVariants.module_]
@@ -183,7 +206,6 @@ kernelEncodingModules = [
   EncodePaths.module_,
   EncodeAst.module_,
   EncodeCoders.module_,
-  EncodeContext.module_,
   EncodeCore.module_,
   EncodeErrors.module_,
   EncodeErrorChecking.module_,
@@ -191,12 +213,12 @@ kernelEncodingModules = [
   EncodeJson.module_,
   EncodeModule.module_,
   EncodeParsing.module_,
-  EncodePhantoms.module_,
   EncodeQuery.module_,
   EncodeRelational.module_,
   EncodeTabular.module_,
     EncodeTesting.module_,
   EncodeTopology.module_,
+  EncodeTyped.module_,
   EncodeTyping.module_,
   EncodeUtil.module_,
   EncodeVariants.module_]

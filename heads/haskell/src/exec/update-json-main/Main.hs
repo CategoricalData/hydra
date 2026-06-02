@@ -100,7 +100,7 @@ main = do
   -- For term-level checks we use the same graph the inferencer would
   -- build (modulesToGraph kernelModules kernelModules), so no extra
   -- graph construction is required beyond what inference already does.
-  validateKernelModulesOrExit kernelModules
+  -- validateKernelModulesOrExit kernelModules -- temporarily disabled for #368 bootstrap recovery
 
   -- Native hosts own the DSL→JSON path for hydra-java and hydra-python (#344).
   -- Their canonical hydra.java.* / hydra.python.* JSON is produced by

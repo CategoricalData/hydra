@@ -5,11 +5,10 @@ module Hydra.Sources.Haskell.Testing where
 
 -- Standard imports for term-level sources outside of the kernel
 import Hydra.Kernel
-import           Hydra.Dsl.Bootstrap (unqualifiedDep)
+import           Hydra.Dsl.Bootstrap (unqualifiedDep, descriptionMetadata)
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Meta.Lib.Strings                as Strings
 import           Hydra.Dsl.Meta.Phantoms                   as Phantoms
-import qualified Hydra.Dsl.Meta.Context                    as Ctx
 import qualified Hydra.Dsl.Meta.Core                       as Core
 import qualified Hydra.Dsl.Meta.Lib.Eithers                as Eithers
 import qualified Hydra.Dsl.Meta.Lib.Equality               as Equality
@@ -26,6 +25,7 @@ import qualified Hydra.Dsl.Util                       as Util
 import qualified Hydra.Sources.Kernel.Terms.Constants      as Constants
 import qualified Hydra.Sources.Kernel.Terms.Formatting     as Formatting
 import qualified Hydra.Sources.Kernel.Terms.Lexical        as Lexical
+import qualified Hydra.Sources.Kernel.Terms.Scoping        as Scoping
 import qualified Hydra.Sources.Kernel.Terms.Names          as Names
 import qualified Hydra.Sources.Kernel.Terms.Dependencies   as Dependencies
 import qualified Hydra.Sources.Kernel.Terms.Rewriting      as Rewriting
@@ -44,7 +44,7 @@ import qualified Hydra.Sources.Haskell.Syntax as HaskellSyntax
 import qualified Hydra.Sources.Haskell.Utils as HaskellUtilsSource
 
 
-define :: String -> TTerm a -> TTermDefinition a
+define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModule module_
 
 
@@ -56,7 +56,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = unqualifiedDep <$> ([HaskellUtilsSource.ns, Formatting.ns, Names.ns, Constants.ns, Dependencies.ns, Predicates.ns, Rewriting.ns, ShowError.ns, Lexical.ns, Strip.ns, ModuleName "hydra.decode.core"] L.++ (HaskellSyntax.ns:KernelTypes.kernelTypesModuleNames)),
-            moduleDescription = Just "Haskell test code generation for HSpec-based generation tests"}
+            moduleMetadata = descriptionMetadata (Just "Haskell test code generation for HSpec-based generation tests")}
   where
     definitions = [
       toDefinition addNamespacesToNamespaces,
@@ -75,21 +75,21 @@ module_ = Module {
 
 
 -- | Add namespaces from a set of names to existing namespaces
-addNamespacesToNamespaces :: TTermDefinition (Namespaces H.ModuleName -> S.Set Name -> Namespaces H.ModuleName)
+addNamespacesToNamespaces :: TypedTermDefinition (ModuleNames H.ModuleName -> S.Set Name -> ModuleNames H.ModuleName)
 addNamespacesToNamespaces = define "addNamespacesToNamespaces" $
   doc "Add namespaces from a set of names to existing namespaces" $
   lambda "ns0" $ lambda "names" $ lets [
-    "newNamespaces">: Sets.fromList (Maybes.cat (Lists.map Names.namespaceOf (Sets.toList (var "names")))),
+    "newNamespaces">: Sets.fromList (Maybes.cat (Lists.map Names.moduleNameOf (Sets.toList (var "names")))),
     "toModuleName">: lambda "namespace" $
       wrap H._ModuleName (Formatting.capitalize @@ (Maybes.fromMaybe (unwrap _ModuleName @@ var "namespace") (Lists.maybeLast (Strings.splitOn (string ".") (unwrap _ModuleName @@ var "namespace"))))),
     "newMappings">: Maps.fromList (Lists.map (lambda "ns_" $ pair (var "ns_") (var "toModuleName" @@ var "ns_")) (Sets.toList (var "newNamespaces")))] $
-    record _Namespaces [
-      _Namespaces_focus>>: project _Namespaces _Namespaces_focus @@ var "ns0",
-      _Namespaces_mapping>>: Maps.union (project _Namespaces _Namespaces_mapping @@ var "ns0") (var "newMappings")]
+    record _ModuleNames [
+      _ModuleNames_focus>>: project _ModuleNames _ModuleNames_focus @@ var "ns0",
+      _ModuleNames_mapping>>: Maps.union (project _ModuleNames _ModuleNames_mapping @@ var "ns0") (var "newMappings")]
 
 
 -- | Build namespaces for a test group including encoded term references
-buildNamespacesForTestGroup :: TTermDefinition (Module -> TestGroup -> Graph -> Either String (Namespaces H.ModuleName))
+buildNamespacesForTestGroup :: TypedTermDefinition (Module -> TestGroup -> Graph -> Either String (ModuleNames H.ModuleName))
 buildNamespacesForTestGroup = define "buildNamespacesForTestGroup" $
   doc "Build namespaces for a test group including encoded term references" $
   lambda "mod" $ lambda "tgroup" $ lambda "graph_" $ lets [
@@ -103,25 +103,25 @@ buildNamespacesForTestGroup = define "buildNamespacesForTestGroup" $
           _Binding_typeScheme>>: nothing])
       (var "testTerms"),
     "tempModule">: record _Module [
-      _Module_description>>: project _Module _Module_description @@ var "mod",
       _Module_name>>: Packaging.moduleName (var "mod"),
+      _Module_metadata>>: project _Module _Module_metadata @@ var "mod",
       _Module_dependencies>>: project _Module _Module_dependencies @@ var "mod",
       _Module_definitions>>: Lists.map ("b" ~> Packaging.definitionTerm (Packaging.termDefinition
-        (Core.bindingName $ var "b") (Core.bindingTerm $ var "b")
-        (Core.bindingTypeScheme $ var "b")))
+        (Core.bindingName $ var "b") nothing (Core.bindingTerm $ var "b")
+        (Maybes.map Scoping.typeSchemeToTermSignature $ Core.bindingTypeScheme $ var "b")))
         (var "testBindings")]] $
     Eithers.bind
       (Eithers.bimap
         (lambda "e" $ ShowError.error_ @@ var "e")
         (lambda "a" $ var "a")
-        (HaskellUtilsSource.namespacesForModule @@ var "tempModule" @@ asTerm Lexical.emptyContext @@ var "graph_"))
+        (HaskellUtilsSource.namespacesForModule @@ var "tempModule" @@ asTerm Lexical.emptyInferenceContext @@ var "graph_"))
       (lambda "baseNamespaces" $ lets [
         "encodedNames">: Sets.unions (Lists.map (lambda "t" $ extractEncodedTermVariableNames @@ var "graph_" @@ var "t") (var "testTerms"))] $
         right (addNamespacesToNamespaces @@ var "baseNamespaces" @@ var "encodedNames"))
 
 
 -- | Build the complete test module for Haskell HSpec
-buildTestModule :: TTermDefinition (Module -> TestGroup -> String -> Namespaces H.ModuleName -> String)
+buildTestModule :: TypedTermDefinition (Module -> TestGroup -> String -> ModuleNames H.ModuleName -> String)
 buildTestModule = define "buildTestModule" $
   doc "Build the complete test module for Haskell HSpec" $
   lambda "testModule" $ lambda "testGroup" $ lambda "testBody" $ lambda "namespaces" $ lets [
@@ -155,7 +155,7 @@ buildTestModule = define "buildTestModule" $
 
 
 -- | Collect variable names from encoded terms within a single term node
-collectNames :: TTermDefinition (Graph -> S.Set Name -> Term -> S.Set Name)
+collectNames :: TypedTermDefinition (Graph -> S.Set Name -> Term -> S.Set Name)
 collectNames = define "collectNames" $
   doc "Collect variable names from encoded terms within a single term node" $
   lambda "graf" $ lambda "names" $ lambda "t" $
@@ -172,7 +172,7 @@ collectNames = define "collectNames" $
 
 
 -- | Collect all test cases from a test group (recursively)
-collectTestCases :: TTermDefinition (TestGroup -> [TestCaseWithMetadata])
+collectTestCases :: TypedTermDefinition (TestGroup -> [TestCaseWithMetadata])
 collectTestCases = define "collectTestCases" $
   doc "Collect all test cases from a test group recursively" $
   lambda "tg" $
@@ -182,7 +182,7 @@ collectTestCases = define "collectTestCases" $
 
 
 -- | Extract all variable names from term-encoded terms in a given term
-extractEncodedTermVariableNames :: TTermDefinition (Graph -> Term -> S.Set Name)
+extractEncodedTermVariableNames :: TypedTermDefinition (Graph -> Term -> S.Set Name)
 extractEncodedTermVariableNames = define "extractEncodedTermVariableNames" $
   doc "Extract all variable names from term-encoded terms in a given term" $
   lambda "graf" $ lambda "term" $
@@ -190,19 +190,19 @@ extractEncodedTermVariableNames = define "extractEncodedTermVariableNames" $
 
 
 -- | Extract terms from a test case
-extractTestTerms :: TTermDefinition (TestCaseWithMetadata -> [Term])
+extractTestTerms :: TypedTermDefinition (TestCaseWithMetadata -> [Term])
 extractTestTerms = define "extractTestTerms" $
   doc "Extract input and output terms from a test case" $
   lambda "tcm" $
-    list ([] :: [TTerm Term])
+    list ([] :: [TypedTerm Term])
 
 
 -- | Find necessary imports for Haskell based on referenced names
-findHaskellImports :: TTermDefinition (Namespaces H.ModuleName -> S.Set Name -> [String])
+findHaskellImports :: TypedTermDefinition (ModuleNames H.ModuleName -> S.Set Name -> [String])
 findHaskellImports = define "findHaskellImports" $
   doc "Find necessary imports for Haskell based on referenced names" $
   lambda "namespaces" $ lambda "names_" $ lets [
-    "mapping_">: project _Namespaces _Namespaces_mapping @@ var "namespaces",
+    "mapping_">: project _ModuleNames _ModuleNames_mapping @@ var "namespaces",
     "filtered">: Maps.filterWithKey
       (lambda "ns_" $ lambda "_v" $
         Logic.not (Equality.equal
@@ -219,7 +219,7 @@ findHaskellImports = define "findHaskellImports" $
 
 
 -- | Generate a Haskell test file for a test group, with type inference and namespace building
-generateHaskellTestFile :: TTermDefinition (Module -> TestGroup -> Graph -> Either String (String, String))
+generateHaskellTestFile :: TypedTermDefinition (Module -> TestGroup -> Graph -> Either String (String, String))
 generateHaskellTestFile = define "generateHaskellTestFile" $
   doc "Generate a Haskell test file for a test group, with type inference and namespace building" $
   lambda "testModule" $ lambda "testGroup" $ lambda "g" $
@@ -230,7 +230,7 @@ generateHaskellTestFile = define "generateHaskellTestFile" $
 
 
 -- | Generate a single HSpec test case from a universal test case
-generateTestCase :: TTermDefinition (Int -> TestCaseWithMetadata -> Either String [String])
+generateTestCase :: TypedTermDefinition (Int -> TestCaseWithMetadata -> Either String [String])
 generateTestCase = define "generateTestCase" $
   doc "Generate a single HSpec test case from a universal test case" $
   lambda "depth" $ lambda "tcm" $ lets [
@@ -246,7 +246,7 @@ generateTestCase = define "generateTestCase" $
 
 
 -- | Generate a complete Haskell test file
-generateTestFile :: TTermDefinition (Module -> TestGroup -> Namespaces H.ModuleName -> Either String (String, String))
+generateTestFile :: TypedTermDefinition (Module -> TestGroup -> ModuleNames H.ModuleName -> Either String (String, String))
 generateTestFile = define "generateTestFile" $
   doc "Generate a complete Haskell test file" $
   lambda "testModule" $ lambda "testGroup" $ lambda "namespaces" $
@@ -255,13 +255,13 @@ generateTestFile = define "generateTestFile" $
         "testModuleContent">: buildTestModule @@ var "testModule" @@ var "testGroup" @@ var "testBody" @@ var "namespaces",
         "ns_">: Packaging.moduleName (var "testModule"),
         "specNs">: wrap _ModuleName (Strings.cat2 (unwrap _ModuleName @@ var "ns_") (string "Spec")),
-        "filePath">: Names.namespaceToFilePath @@ Util.caseConventionPascal @@ (wrap _FileExtension (string "hs")) @@ var "specNs"] $
+        "filePath">: Names.moduleNameToFilePath @@ Util.caseConventionPascal @@ (wrap _FileExtension (string "hs")) @@ var "specNs"] $
         pair (var "filePath") (var "testModuleContent"))
       (generateTestGroupHierarchy @@ int32 1 @@ var "testGroup")
 
 
 -- | Generate test hierarchy preserving the structure with H.describe blocks for subgroups
-generateTestGroupHierarchy :: TTermDefinition (Int -> TestGroup -> Either String String)
+generateTestGroupHierarchy :: TypedTermDefinition (Int -> TestGroup -> Either String String)
 generateTestGroupHierarchy = define "generateTestGroupHierarchy" $
   doc "Generate test hierarchy preserving the structure with H.describe blocks for subgroups" $
   lambda "depth" $ lambda "testGroup" $ lets [
@@ -303,7 +303,7 @@ generateTestGroupHierarchy = define "generateTestGroupHierarchy" $
 
 
 -- | Convert namespace to Haskell module name
-namespaceToModuleName :: TTermDefinition (ModuleName -> String)
+namespaceToModuleName :: TypedTermDefinition (ModuleName -> String)
 namespaceToModuleName = define "namespaceToModuleName" $
   doc "Convert namespace to Haskell module name" $
   lambda "ns_" $

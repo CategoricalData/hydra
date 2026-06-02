@@ -1,5 +1,5 @@
 -- | Haskell-specific convenience layer over the generated Hydra.Dsl.Variants module.
--- Adds Haskell enum -> TTerm converter functions.
+-- Adds Haskell enum -> TypedTerm converter functions.
 
 module Hydra.Dsl.Meta.Variants (
   module Hydra.Dsl.Variants,
@@ -11,8 +11,8 @@ import Hydra.Dsl.Meta.Phantoms
 import Hydra.Dsl.Variants
 
 
--- | Convert a Haskell LiteralVariant to a TTerm
-literalVariant :: LiteralVariant -> TTerm LiteralVariant
+-- | Convert a Haskell LiteralVariant to a TypedTerm
+literalVariant :: LiteralVariant -> TypedTerm LiteralVariant
 literalVariant v = injectUnit _LiteralVariant $ case v of
   LiteralVariantBinary -> _LiteralVariant_binary
   LiteralVariantBoolean -> _LiteralVariant_boolean
@@ -21,8 +21,8 @@ literalVariant v = injectUnit _LiteralVariant $ case v of
   LiteralVariantInteger -> _LiteralVariant_integer
   LiteralVariantString -> _LiteralVariant_string
 
--- | Convert a Haskell TermVariant to a TTerm
-termVariant :: TermVariant -> TTerm TermVariant
+-- | Convert a Haskell TermVariant to a TypedTerm
+termVariant :: TermVariant -> TypedTerm TermVariant
 termVariant v = injectUnit _TermVariant $ case v of
   TermVariantAnnotated -> _TermVariant_annotated
   TermVariantApplication -> _TermVariant_application
@@ -46,8 +46,8 @@ termVariant v = injectUnit _TermVariant $ case v of
   TermVariantVariable -> _TermVariant_variable
   TermVariantWrap -> _TermVariant_wrap
 
--- | Convert a Haskell TypeVariant to a TTerm
-typeVariant :: TypeVariant -> TTerm TypeVariant
+-- | Convert a Haskell TypeVariant to a TypedTerm
+typeVariant :: TypeVariant -> TypedTerm TypeVariant
 typeVariant v = injectUnit _TypeVariant $ case v of
   TypeVariantAnnotated -> _TypeVariant_annotated
   TypeVariantApplication -> _TypeVariant_application

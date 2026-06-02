@@ -17,7 +17,6 @@ import qualified Hydra.Dsl.Ast                        as Ast
 import qualified Hydra.Dsl.Meta.Base                       as MetaBase
 import qualified Hydra.Dsl.Coders                     as Coders
 import qualified Hydra.Dsl.Util                    as Util
-import qualified Hydra.Dsl.Meta.Context                    as Ctx
 import qualified Hydra.Dsl.Meta.Core                       as Core
 import qualified Hydra.Dsl.Errors                      as Error
 import qualified Hydra.Dsl.Meta.Graph                      as Graph
@@ -94,7 +93,7 @@ import qualified Hydra.Sources.Test.Utils as TestUtils
 import qualified Hydra.Sources.Kernel.Terms.Serialization  as SerializationSource
 
 
-define :: String -> TTerm a -> TTermDefinition a
+define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModule module_
 
 
@@ -106,7 +105,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> ([SerializationSource.ns, TestUtils.ns, Formatting.ns, Names.ns, Constants.ns] L.++ (JavaSyntax.ns:KernelTypes.kernelTypesModuleNames)),
-            moduleDescription = Just "Java test code generation codec for JUnit-based generation tests"}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just "Java test code generation codec for JUnit-based generation tests")}
   where
     definitions = [
       toDefinition buildJavaTestModule,
@@ -120,13 +119,13 @@ module_ = Module {
 
 
 -- | Build complete Java test module
-buildJavaTestModule :: TTermDefinition (Module -> TestGroup -> String -> String)
+buildJavaTestModule :: TypedTermDefinition (Module -> TestGroup -> String -> String)
 buildJavaTestModule = define "buildJavaTestModule" $
   doc "Build the complete Java test module content" $
   lambda "testModule" $ lambda "testGroup" $ lambda "testBody" $ lets [
     "ns_">: Packaging.moduleName (var "testModule"),
     "parts">: Strings.splitOn (string ".") (unwrap _ModuleName @@ var "ns_"),
-    "packageName">: Strings.intercalate (string ".") (Maybes.fromMaybe (list ([] :: [TTerm String])) (Lists.maybeInit (var "parts"))),
+    "packageName">: Strings.intercalate (string ".") (Maybes.fromMaybe (list ([] :: [TypedTerm String])) (Lists.maybeInit (var "parts"))),
     "className_">: Strings.cat2 (Formatting.capitalize @@ (Maybes.fromMaybe (string "") (Lists.maybeLast (var "parts")))) (string "Test"),
     "groupName_">: project _TestGroup _TestGroup_name @@ var "testGroup",
     "standardImports">: list [
@@ -147,7 +146,7 @@ buildJavaTestModule = define "buildJavaTestModule" $
 
 
 -- | Find necessary imports for Java test files
-findJavaImports :: TTermDefinition [String]
+findJavaImports :: TypedTermDefinition [String]
 findJavaImports = define "findJavaImports" $
   doc "Standard imports for Java JUnit test files" $
   list [
@@ -157,7 +156,7 @@ findJavaImports = define "findJavaImports" $
 
 
 -- | Format a test name for Java (camelCase method name)
-formatJavaTestName :: TTermDefinition (String -> String)
+formatJavaTestName :: TypedTermDefinition (String -> String)
 formatJavaTestName = define "formatJavaTestName" $
   doc "Format a test name for Java (PascalCase method name with 'test' prefix)" $
   lambda "name" $ lets [
@@ -175,7 +174,7 @@ formatJavaTestName = define "formatJavaTestName" $
 
 
 -- | Generate a single test case for Java/JUnit
-generateJavaTestCase :: TTermDefinition ([String] -> TestCaseWithMetadata -> Either String [String])
+generateJavaTestCase :: TypedTermDefinition ([String] -> TestCaseWithMetadata -> Either String [String])
 generateJavaTestCase = define "generateJavaTestCase" $
   doc "Generate a single JUnit test case from a test case with metadata" $
   lambda "groupPath" $ lambda "tcm" $ lets [
@@ -199,7 +198,7 @@ generateJavaTestCase = define "generateJavaTestCase" $
 
 
 -- | Generate Java test file for a test group
-generateJavaTestFile :: TTermDefinition (Module -> TestGroup -> Graph -> Either String (String, String))
+generateJavaTestFile :: TypedTermDefinition (Module -> TestGroup -> Graph -> Either String (String, String))
 generateJavaTestFile = define "generateJavaTestFile" $
   doc "Generate a Java test file for a test group" $
   lambda "testModule" $ lambda "testGroup" $ lambda "_g" $
@@ -207,7 +206,7 @@ generateJavaTestFile = define "generateJavaTestFile" $
 
 
 -- | Generate Java test group hierarchy
-generateJavaTestGroupHierarchy :: TTermDefinition ([String] -> TestGroup -> Either String String)
+generateJavaTestGroupHierarchy :: TypedTermDefinition ([String] -> TestGroup -> Either String String)
 generateJavaTestGroupHierarchy = define "generateJavaTestGroupHierarchy" $
   doc "Generate test hierarchy for Java with nested subgroups" $
   lambda "groupPath" $ lambda "testGroup" $ lets [
@@ -244,7 +243,7 @@ generateJavaTestGroupHierarchy = define "generateJavaTestGroupHierarchy" $
 
 
 -- | Generate test file using Java codec
-generateTestFileWithJavaCodec :: TTermDefinition (Module -> TestGroup -> Either String (String, String))
+generateTestFileWithJavaCodec :: TypedTermDefinition (Module -> TestGroup -> Either String (String, String))
 generateTestFileWithJavaCodec = define "generateTestFileWithJavaCodec" $
   doc "Generate a complete test file for Java" $
   lambda "testModule" $ lambda "testGroup" $
@@ -253,16 +252,16 @@ generateTestFileWithJavaCodec = define "generateTestFileWithJavaCodec" $
         "testModuleContent">: buildJavaTestModule @@ var "testModule" @@ var "testGroup" @@ var "testBody",
         "ns_">: Packaging.moduleName (var "testModule"),
         "parts">: Strings.splitOn (string ".") (unwrap _ModuleName @@ var "ns_"),
-        "dirParts">: Lists.drop (int32 1) (Maybes.fromMaybe (list ([] :: [TTerm String])) (Lists.maybeInit (var "parts"))),
+        "dirParts">: Lists.drop (int32 1) (Maybes.fromMaybe (list ([] :: [TypedTerm String])) (Lists.maybeInit (var "parts"))),
         "className_">: Strings.cat2 (Formatting.capitalize @@ (Maybes.fromMaybe (string "") (Lists.maybeLast (var "parts")))) (string "Test"),
         "fileName">: Strings.cat2 (var "className_") (string ".java"),
         "filePath">: Strings.cat (list [Strings.intercalate (string "/") (var "dirParts"), string "/", var "fileName"])] $
         Phantoms.pair (var "filePath") (var "testModuleContent"))
-      (generateJavaTestGroupHierarchy @@ list ([] :: [TTerm String]) @@ var "testGroup")
+      (generateJavaTestGroupHierarchy @@ list ([] :: [TypedTerm String]) @@ var "testGroup")
 
 
 -- | Convert namespace to Java class name
-namespaceToJavaClassName :: TTermDefinition (ModuleName -> String)
+namespaceToJavaClassName :: TypedTermDefinition (ModuleName -> String)
 namespaceToJavaClassName = define "namespaceToJavaClassName" $
   doc "Convert namespace to Java class name" $
   lambda "ns_" $

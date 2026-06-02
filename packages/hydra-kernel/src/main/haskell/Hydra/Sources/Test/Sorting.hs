@@ -7,7 +7,7 @@ module Hydra.Sources.Test.Sorting where
 
 -- Standard imports for shallow DSL tests
 import Hydra.Kernel
-import           Hydra.Dsl.Bootstrap (unqualifiedDep)
+import           Hydra.Dsl.Bootstrap (unqualifiedDep, descriptionMetadata)
 import Hydra.Dsl.Meta.Testing                 as Testing
 import Hydra.Sources.Kernel.Types.All
 import qualified Hydra.Dsl.Meta.Core          as Core
@@ -32,7 +32,7 @@ import qualified Data.Int as I
 
 
 -- Note: We use Int for input types in helpers because int32 expects Int
--- and produces TTerm I.Int32. The test data literals (1, 2, 3) are polymorphic.
+-- and produces TypedTerm I.Int32. The test data literals (1, 2, 3) are polymorphic.
 
 ns :: ModuleName
 ns = ModuleName "hydra.test.sorting"
@@ -42,66 +42,66 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = unqualifiedDep <$> ([SortingModule.ns, ShowCore.ns] ++ kernelTypesModuleNames),
-            moduleDescription = (Just "Test cases for topological sorting algorithms")}
+            moduleMetadata = descriptionMetadata ((Just "Test cases for topological sorting algorithms"))}
   where
     definitions = [Phantoms.toDefinition allTests]
 
-define :: String -> TTerm a -> TTermDefinition a
+define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModule module_
 
-allTests :: TTermDefinition TestGroup
+-- Helper to create adjacency list
+adj :: [(Int, [Int])] -> TypedTerm [(Int, [Int])]
+adj pairs = list [pair (int32 n) (list (int32 <$> deps)) | (n, deps) <- pairs]
+
+allTests :: TypedTermDefinition TestGroup
 allTests = define "allTests" $
     doc "Test cases for topological sorting" $
     supergroup "sorting" [
       topologicalSortGroup,
       topologicalSortSCCGroup]
 
--- | Show a list of Int32 as a string like "[1, 2, 3]"
-showIntList :: TTerm [Int] -> TTerm String
-showIntList xs = ShowCore.list_ @@ reify Literals.showInt32 @@ xs
+-- Helper for Left result (cycles)
+cycles :: [[Int]] -> TypedTerm (Either [[Int]] [Int])
+cycles cs = left $ list [list (int32 <$> c) | c <- cs]
 
--- | Show a list of lists of Int32 as a string like "[[1, 2], [3]]"
-showIntListList :: TTerm [[Int]] -> TTerm String
-showIntListList xs = ShowCore.list_ @@ reify showIntList @@ xs
+-- Helper for SCC result
+sccs :: [[Int]] -> TypedTerm [[Int]]
+sccs cs = list [list (int32 <$> c) | c <- cs]
 
 -- | Show Either [[Int]] [Int] as "left([[1, 2]])" or "right([1, 2, 3])"
-showEitherResult :: TTerm (Either [[Int]] [Int]) -> TTerm String
+showEitherResult :: TypedTerm (Either [[Int]] [Int]) -> TypedTerm String
 showEitherResult = Eithers.either_
   (lambda "cs" (Strings.cat2 (string "left(") (Strings.cat2 (showIntListList (var "cs")) (string ")"))))
   (lambda "xs" (Strings.cat2 (string "right(") (Strings.cat2 (showIntList (var "xs")) (string ")"))))
 
--- Helper to create adjacency list
-adj :: [(Int, [Int])] -> TTerm [(Int, [Int])]
-adj pairs = list [pair (int32 n) (list (int32 <$> deps)) | (n, deps) <- pairs]
+-- | Show a list of Int32 as a string like "[1, 2, 3]"
+showIntList :: TypedTerm [Int] -> TypedTerm String
+showIntList xs = ShowCore.list_ @@ reify Literals.showInt32 @@ xs
+
+-- | Show a list of lists of Int32 as a string like "[[1, 2], [3]]"
+showIntListList :: TypedTerm [[Int]] -> TypedTerm String
+showIntListList xs = ShowCore.list_ @@ reify showIntList @@ xs
 
 -- Universal sort test case
-sortCase :: String -> TTerm [(Int, [Int])] -> TTerm (Either [[Int]] [Int]) -> TTerm TestCaseWithMetadata
+sortCase :: String -> TypedTerm [(Int, [Int])] -> TypedTerm (Either [[Int]] [Int]) -> TypedTerm TestCaseWithMetadata
 sortCase cname adjList expected =
   universalCase cname
     (showEitherResult (SortingModule.topologicalSort @@ adjList))
     (showEitherResult expected)
 
 -- Universal SCC test case
-sortSCCCase :: String -> TTerm [(Int, [Int])] -> TTerm [[Int]] -> TTerm TestCaseWithMetadata
+sortSCCCase :: String -> TypedTerm [(Int, [Int])] -> TypedTerm [[Int]] -> TypedTerm TestCaseWithMetadata
 sortSCCCase cname adjList expected =
   universalCase cname
     (showIntListList (SortingModule.topologicalSortComponents @@ adjList))
     (showIntListList expected)
 
 -- Helper for Right result (sorted list)
-sorted :: [Int] -> TTerm (Either [[Int]] [Int])
+sorted :: [Int] -> TypedTerm (Either [[Int]] [Int])
 sorted xs = right $ list (int32 <$> xs)
 
--- Helper for Left result (cycles)
-cycles :: [[Int]] -> TTerm (Either [[Int]] [Int])
-cycles cs = left $ list [list (int32 <$> c) | c <- cs]
-
--- Helper for SCC result
-sccs :: [[Int]] -> TTerm [[Int]]
-sccs cs = list [list (int32 <$> c) | c <- cs]
-
 -- | Test cases for topological sort (without cycles)
-topologicalSortGroup :: TTerm TestGroup
+topologicalSortGroup :: TypedTerm TestGroup
 topologicalSortGroup = subgroup "topological sort" [
     -- Discrete sets (no dependencies)
     sortCase "empty set"
@@ -137,7 +137,7 @@ topologicalSortGroup = subgroup "topological sort" [
       (cycles [[2, 3]])]
 
 -- | Test cases for topological sort with strongly connected component detection
-topologicalSortSCCGroup :: TTerm TestGroup
+topologicalSortSCCGroup :: TypedTerm TestGroup
 topologicalSortSCCGroup = subgroup "topological sort SCC" [
     -- Discrete sets
     sortSCCCase "empty set"

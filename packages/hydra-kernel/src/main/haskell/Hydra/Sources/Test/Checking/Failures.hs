@@ -4,7 +4,7 @@ module Hydra.Sources.Test.Checking.Failures where
 
 -- Standard imports for term-encoded tests
 import Hydra.Kernel
-import           Hydra.Dsl.Bootstrap (unqualifiedDep)
+import           Hydra.Dsl.Bootstrap (unqualifiedDep, descriptionMetadata)
 import Hydra.Dsl.Meta.Testing                 as Testing
 import Hydra.Dsl.Meta.Terms                   as Terms
 import Hydra.Sources.Kernel.Types.All
@@ -26,17 +26,17 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = unqualifiedDep <$> ([TestGraph.ns, ModuleName "hydra.rewriting"] ++ kernelTypesModuleNames),
-            moduleDescription = (Just "Type checking failure test cases")}
+            moduleMetadata = descriptionMetadata ((Just "Type checking failure test cases"))}
   where
     definitions = [
       Phantoms.toDefinition allTests,
       Phantoms.toDefinition failOnUntypedTests,
       Phantoms.toDefinition untypedLambdasTests]
 
-define :: String -> TTerm a -> TTermDefinition a
+define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModule module_
 
-allTests :: TTermDefinition TestGroup
+allTests :: TypedTermDefinition TestGroup
 allTests = define "allTests" $
   Phantoms.doc "Type checking failure test cases" $
   supergroup "Failures" [
@@ -46,11 +46,11 @@ allTests = define "allTests" $
 
 ------ Fail on untyped (pre-inference) terms ------
 
-failOnUntypedTests :: TTermDefinition TestGroup
+failOnUntypedTests :: TypedTermDefinition TestGroup
 failOnUntypedTests = define "failOnUntypedTests" $
   supergroup "Fail on untyped (pre-inference) terms" [
     untypedLambdasTests]
 
-untypedLambdasTests :: TTermDefinition TestGroup
+untypedLambdasTests :: TypedTermDefinition TestGroup
 untypedLambdasTests = define "untypedLambdasTests" $
-  subgroup "Untyped lambdas" ([] :: [TTerm TestCaseWithMetadata])
+  subgroup "Untyped lambdas" ([] :: [TypedTerm TestCaseWithMetadata])

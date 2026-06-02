@@ -3,7 +3,7 @@
 All notable changes to the Hydra project are documented in this file.
 
 This changelog tracks changes across all Hydra implementations
-(Haskell, Java, Python, Scala, Clojure, Common Lisp, Emacs Lisp, Scheme)
+(Haskell, Java, Python, Scala, TypeScript, Clojure, Common Lisp, Emacs Lisp, Scheme)
 and supporting infrastructure.
 
 The format is inspired by [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
@@ -15,11 +15,12 @@ they are documented here for completeness.
 
 ---
 
-## [Unreleased] (in development for 0.16.0)
+## [0.16.0] - TBD
 
-In progress on the `staging` branch.
+Release candidate. Set the release date when 0.16.0 is tagged.
 Major themes: kernel-oriented validation rules, JSON Schema coder promotion,
-homogenization of writer conventions, and a unified `Module.dependencies` field.
+homogenization of writer conventions, a unified `Module.dependencies` field,
+and primitive-metadata reification.
 
 ### Highlights
 
@@ -27,6 +28,13 @@ homogenization of writer conventions, and a unified `Module.dependencies` field.
 - **JSON Schema coder promoted** to a fully functional DSL coder (#350).
 - **Homogenized writer conventions** across all target languages (#339).
 - **Unified `Module.dependencies`** (replaces split term/type dependency fields) (#354).
+- **`PrimitiveDefinition` and per-namespace registry modules** (#156).
+- **Host-independent specifications for every standard-library primitive** (#319):
+  240 primitives across 13 `hydra.lib.*` namespaces carry per-primitive `comments` prose
+  citing IEEE 754, Unicode, and `Data.*` semantics as appropriate.
+- **TypeScript head completion** (#126): passes the common test suite as a
+  target, and as a host can bootstrap every other head except Java (#390
+  tracks the remaining V8 stack-budget constraint).
 
 ### New features
 
@@ -35,6 +43,25 @@ homogenization of writer conventions, and a unified `Module.dependencies` field.
   `doc` annotations on every kernel definition (#352).
 - JSON Schema coder promotion (#350): full DSL-based coder; `forall` and type
   application support; schema/language namespaces lifted.
+- `PrimitiveDefinition` reified in `hydra.packaging` and per-namespace
+  registry modules under `Hydra/Sources/Kernel/Lib/<Sub>.hs` (#156):
+  the 13 `hydra.lib.<sub>` modules are the canonical primitive registry,
+  declaring name, description, signature, isPure / isTotal flags, and an
+  optional `defaultImplementation` per primitive. Adds `TermSignature`
+  and `TypeClassConstraint`; `Primitive` restructured to
+  `{ definition, implementation }`; `TermDefinition.typeScheme` replaced
+  by `TermDefinition.signature`. Resolves #156.
+- Host-independent specifications for every standard-library primitive (#319):
+  populated the `PrimitiveDefinition.comments` field for all 240 primitives
+  across 13 `hydra.lib.*` namespaces, citing authoritative external sources
+  (IEEE 754-2019 for floating-point operations; Unicode general categories
+  and simple case mapping for character predicates; Haskell `Data.List` /
+  `Data.Map.Strict` / `Data.Set` / `Data.Char` / `Data.Either` / `Data.Maybe`
+  for collection and either/maybe semantics) and explicitly flagging
+  host-defined behavior (regex syntax, special-value literal capitalization).
+  Threaded the `comments` argument through `toPrimitive` and
+  `toPrimitiveNoDefault` helpers and through each `Lib/<Sub>.hs` `primNoDef`.
+  Resolves #319.
 
 ### Improvements
 

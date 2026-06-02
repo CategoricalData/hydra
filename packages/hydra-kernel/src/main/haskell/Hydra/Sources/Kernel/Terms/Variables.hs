@@ -74,7 +74,7 @@ import qualified Hydra.Sources.Kernel.Terms.Sorting as Sorting
 ns :: ModuleName
 ns = ModuleName "hydra.variables"
 
-define :: String -> TTerm a -> TTermDefinition a
+define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModuleName ns
 
 module_ :: Module
@@ -82,7 +82,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> ([Names.ns, Rewriting.ns] L.++ kernelTypesModuleNames),
-            moduleDescription = Just ("Free variable analysis, term-level substitution, and unshadowing")}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just ("Free variable analysis, term-level substitution, and unshadowing"))}
   where
    definitions = [
      toDefinition freeTypeVariablesInTerm,
@@ -101,7 +101,7 @@ module_ = Module {
      toDefinition substituteVariables,
      toDefinition unshadowVariables]
 
-freeTypeVariablesInTerm :: TTermDefinition (Term -> S.Set Name)
+freeTypeVariablesInTerm :: TypedTermDefinition (Term -> S.Set Name)
 freeTypeVariablesInTerm = define "freeTypeVariablesInTerm" $
   doc ("Get the set of free type variables in a term (including schema names, where they appear in type annotations)."
     <> " In this context, only the type schemes of let bindings can bind type variables; type lambdas do not.") $
@@ -141,7 +141,7 @@ freeTypeVariablesInTerm = define "freeTypeVariablesInTerm" $
           (var "recurse" @@ (Core.typeLambdaBody $ var "tl"))]) $
   var "getAll" @@ Sets.empty @@ var "term0"
 
-freeVariablesInTerm :: TTermDefinition (Term -> S.Set Name)
+freeVariablesInTerm :: TypedTermDefinition (Term -> S.Set Name)
 freeVariablesInTerm = define "freeVariablesInTerm" $
   doc "Find the free variables (i.e. variables not bound by a lambda or let) in a term" $
   "term" ~>
@@ -161,7 +161,7 @@ freeVariablesInTerm = define "freeVariablesInTerm" $
       (Sets.fromList (Lists.map (reify Core.bindingName) (Core.letBindings $ var "l"))),
     _Term_variable>>: "v" ~> Sets.singleton $ var "v"]
 
-freeVariablesInType :: TTermDefinition (Type -> S.Set Name)
+freeVariablesInType :: TypedTermDefinition (Type -> S.Set Name)
 freeVariablesInType = define "freeVariablesInType" $
   doc "Find the free variables (i.e. variables not bound by a lambda or let) in a type" $
   "typ" ~>
@@ -178,7 +178,7 @@ freeVariablesInType = define "freeVariablesInType" $
   where
     recurse = freeVariablesInType
 
-freeVariablesInTypeOrdered :: TTermDefinition (Type -> [Name])
+freeVariablesInTypeOrdered :: TypedTermDefinition (Type -> [Name])
 freeVariablesInTypeOrdered = define "freeVariablesInTypeOrdered" $
   doc "Find the free variables in a type in deterministic left-to-right order" $
   "typ" ~>
@@ -188,15 +188,31 @@ freeVariablesInTypeOrdered = define "freeVariablesInTypeOrdered" $
               Rewriting.subtypes @@ var "t") [
       _Type_variable>>: "v" ~>
         Logic.ifElse (Sets.member (var "v") (var "boundVars"))
-          (list ([] :: [TTerm Name]))
+          (list ([] :: [TypedTerm Name]))
           (list [var "v"]),
       _Type_forall>>: "ft" ~>
         var "collectVars" @@
           (Sets.insert (Core.forallTypeParameter $ var "ft") (var "boundVars")) @@
           (Core.forallTypeBody $ var "ft")]) $
-  (Lists.nub :: TTerm [Name] -> TTerm [Name]) $ var "collectVars" @@ Sets.empty @@ var "typ"
+  (Lists.nub :: TypedTerm [Name] -> TypedTerm [Name]) $ var "collectVars" @@ Sets.empty @@ var "typ"
 
-freeVariablesInTypeSimple :: TTermDefinition (Type -> S.Set Name)
+freeVariablesInTypeScheme :: TypedTermDefinition (TypeScheme -> S.Set Name)
+freeVariablesInTypeScheme = define "freeVariablesInTypeScheme" $
+  doc "Find free variables in a type scheme" $
+  "ts" ~>
+  "vars" <~ Core.typeSchemeVariables (var "ts") $
+  "t" <~ Core.typeSchemeBody (var "ts") $
+  Sets.difference (freeVariablesInType @@ var "t") (Sets.fromList $ var "vars")
+
+freeVariablesInTypeSchemeSimple :: TypedTermDefinition (TypeScheme -> S.Set Name)
+freeVariablesInTypeSchemeSimple = define "freeVariablesInTypeSchemeSimple" $
+  doc "Find free variables in a type scheme (simple version)" $
+  "ts" ~>
+  "vars" <~ Core.typeSchemeVariables (var "ts") $
+  "t" <~ Core.typeSchemeBody (var "ts") $
+  Sets.difference (freeVariablesInTypeSimple @@ var "t") (Sets.fromList $ var "vars")
+
+freeVariablesInTypeSimple :: TypedTermDefinition (Type -> S.Set Name)
 freeVariablesInTypeSimple = define "freeVariablesInTypeSimple" $
   doc "Same as freeVariablesInType, but ignores the binding action of lambda types" $
   "typ" ~>
@@ -205,29 +221,13 @@ freeVariablesInTypeSimple = define "freeVariablesInTypeSimple" $
     _Type_variable>>: "v" ~> Sets.insert (var "v") (var "types")]) $
   Rewriting.foldOverType @@ Coders.traversalOrderPre @@ var "helper" @@ Sets.empty @@ var "typ"
 
-freeVariablesInTypeScheme :: TTermDefinition (TypeScheme -> S.Set Name)
-freeVariablesInTypeScheme = define "freeVariablesInTypeScheme" $
-  doc "Find free variables in a type scheme" $
-  "ts" ~>
-  "vars" <~ Core.typeSchemeVariables (var "ts") $
-  "t" <~ Core.typeSchemeBody (var "ts") $
-  Sets.difference (freeVariablesInType @@ var "t") (Sets.fromList $ var "vars")
-
-freeVariablesInTypeSchemeSimple :: TTermDefinition (TypeScheme -> S.Set Name)
-freeVariablesInTypeSchemeSimple = define "freeVariablesInTypeSchemeSimple" $
-  doc "Find free variables in a type scheme (simple version)" $
-  "ts" ~>
-  "vars" <~ Core.typeSchemeVariables (var "ts") $
-  "t" <~ Core.typeSchemeBody (var "ts") $
-  Sets.difference (freeVariablesInTypeSimple @@ var "t") (Sets.fromList $ var "vars")
-
-isFreeVariableInTerm :: TTermDefinition (Name -> Term -> Bool)
+isFreeVariableInTerm :: TypedTermDefinition (Name -> Term -> Bool)
 isFreeVariableInTerm = define "isFreeVariableInTerm" $
  doc "Check whether a variable is free (not bound) in a term" $
  "v" ~> "term" ~>
    Logic.not $ Sets.member (var "v") (freeVariablesInTerm @@ var "term")
 
-normalizeTypeVariablesInTerm :: TTermDefinition (Term -> Term)
+normalizeTypeVariablesInTerm :: TypedTermDefinition (Term -> Term)
 normalizeTypeVariablesInTerm = define "normalizeTypeVariablesInTerm" $
   doc "Recursively replace the type variables of let bindings with the systematic type variables t0, t1, t2, ..." $
   "term" ~>
@@ -280,7 +280,7 @@ normalizeTypeVariablesInTerm = define "normalizeTypeVariablesInTerm" $
                   @@ (Math.add (var "i") (int32 1))
                   @@ (Math.sub (var "rem") (int32 1))
                   @@ (Lists.cons (var "ti") (var "acc2")))) $
-            "newVars"  <~ var "gen" @@ (int32 0) @@ (var "k") @@ (list ([] :: [TTerm Name])) $
+            "newVars"  <~ var "gen" @@ (int32 0) @@ (var "k") @@ (list ([] :: [TypedTerm Name])) $
             "newSubst" <~ Maps.union (Maps.fromList $ Lists.zip (var "vars") (var "newVars")) (var "subst") $
             "newBound" <~ Sets.union (var "boundVars") (Sets.fromList (var "newVars")) $
             "newVal"   <~ var "rewriteWithSubst" @@ (pair (pair (var "newSubst") (var "newBound")) (Math.add (var "next") (var "k"))) @@ (Core.bindingTerm $ var "b") $
@@ -308,7 +308,7 @@ normalizeTypeVariablesInTerm = define "normalizeTypeVariablesInTerm" $
                -- Typed binding: allocate |vars| fresh t{next+i}; bump 'next' only for the binding's TERM
                ("ts" ~> var "withType" @@ var "ts"))
           (Lists.uncons $ var "bs")) $
-        "bindings1" <~ var "step" @@ (list ([] :: [TTerm Binding])) @@ (var "bindings0") $
+        "bindings1" <~ var "step" @@ (list ([] :: [TypedTerm Binding])) @@ (var "bindings0") $
         Core.termLet $ Core.let_
           (var "bindings1")
           -- Body sees the original 'next' (binding lambdas don't bind in the body)
@@ -328,7 +328,7 @@ normalizeTypeVariablesInTerm = define "normalizeTypeVariablesInTerm" $
   -- initial state: ((emptySubst, emptyBound), next=0)
   var "rewriteWithSubst" @@ (pair (pair Maps.empty Sets.empty) (int32 0)) @@ var "term"
 
-replaceFreeTermVariable :: TTermDefinition (Name -> Term -> Term -> Term)
+replaceFreeTermVariable :: TypedTermDefinition (Name -> Term -> Term -> Term)
 replaceFreeTermVariable = define "replaceFreeTermVariable" $
   doc "Replace a free variable in a term" $
   "vold" ~> "tnew" ~> "term" ~>
@@ -345,7 +345,7 @@ replaceFreeTermVariable = define "replaceFreeTermVariable" $
         (Core.termVariable $ var "v")]) $
   Rewriting.rewriteTerm @@ var "rewrite" @@ var "term"
 
-replaceFreeTypeVariable :: TTermDefinition (Name -> Type -> Type -> Type)
+replaceFreeTypeVariable :: TypedTermDefinition (Name -> Type -> Type -> Type)
 replaceFreeTypeVariable = define "replaceFreeTypeVariable" $
   doc "Replace free occurrences of a name in a type" $
   "v" ~> "rep" ~> "typ" ~>
@@ -363,7 +363,7 @@ replaceFreeTypeVariable = define "replaceFreeTypeVariable" $
       (var "t")]) $
   Rewriting.rewriteType @@ var "mapExpr" @@ var "typ"
 
-substituteTypeVariables :: TTermDefinition (M.Map Name Name -> Type -> Type)
+substituteTypeVariables :: TypedTermDefinition (M.Map Name Name -> Type -> Type)
 substituteTypeVariables = define "substituteTypeVariables" $
   doc "Substitute type variables in a type" $
   "subst" ~> "typ" ~>
@@ -373,7 +373,7 @@ substituteTypeVariables = define "substituteTypeVariables" $
       Core.typeVariable $ Maybes.fromMaybe (var "n") $ Maps.lookup (var "n") (var "subst")]) $
   Rewriting.rewriteType @@ var "replace" @@ var "typ"
 
-substituteVariable :: TTermDefinition (Name -> Name -> Term -> Term)
+substituteVariable :: TypedTermDefinition (Name -> Name -> Term -> Term)
 substituteVariable = define "substituteVariable" $
   doc "Substitute one variable for another in a term" $
   "from" ~> "to" ~> "term" ~>
@@ -388,7 +388,7 @@ substituteVariable = define "substituteVariable" $
         (var "recurse" @@ var "term")]) $
   Rewriting.rewriteTerm @@ var "replace" @@ var "term"
 
-substituteVariables :: TTermDefinition (M.Map Name Name -> Term -> Term)
+substituteVariables :: TypedTermDefinition (M.Map Name Name -> Term -> Term)
 substituteVariables = define "substituteVariables" $
   doc "Substitute multiple variables in a term" $
   "subst" ~> "term" ~>
@@ -404,7 +404,7 @@ substituteVariables = define "substituteVariables" $
           (Maps.lookup (Core.lambdaParameter $ var "l") (var "subst"))]) $
   Rewriting.rewriteTerm @@ var "replace" @@ var "term"
 
-unshadowVariables :: TTermDefinition (Term -> Term)
+unshadowVariables :: TypedTermDefinition (Term -> Term)
 unshadowVariables = define "unshadowVariables" $
   doc ("Rename all shadowed variables (both lambda parameters and let-bound variables"
     <> " that shadow lambda parameters) in a term.") $

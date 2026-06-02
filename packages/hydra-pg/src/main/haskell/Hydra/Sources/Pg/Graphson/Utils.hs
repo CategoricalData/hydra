@@ -22,7 +22,6 @@ import qualified Hydra.Dsl.Json.Model                       as Json
 import qualified Hydra.Dsl.Meta.Lib.Chars                  as Chars
 import qualified Hydra.Dsl.Meta.Lib.Eithers                as Eithers
 import qualified Hydra.Dsl.Meta.Lib.Equality               as Equality
-import qualified Hydra.Dsl.Meta.Context                    as Ctx
 import qualified Hydra.Dsl.Errors                      as Error
 import qualified Hydra.Dsl.Meta.Lib.Lists                  as Lists
 import qualified Hydra.Dsl.Meta.Lib.Literals               as Literals
@@ -101,7 +100,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> (([GraphsonConstruct.ns, Strip.ns] L.++ (kernelTypesModuleNames L.++ [GraphsonSyntax.ns, PgModel.ns, JsonModel.ns]))),
-            moduleDescription = Just "Utility functions for GraphSON encoding and property graph conversion."}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just "Utility functions for GraphSON encoding and property graph conversion.")}
   where
     definitions = [
       toDefinition elementsToVerticesWithAdjacentEdges,
@@ -109,65 +108,11 @@ module_ = Module {
       toDefinition encodeTermValue,
       toDefinition pgElementsToGraphson]
 
-define :: String -> TTerm a -> TTermDefinition a
+define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModule module_
 
--- Type references
-gson :: String -> Type
-gson = Bootstrap.typeref GraphsonSyntax.ns
-
-pg :: String -> Type
-pg = Bootstrap.typeref PgModel.ns
-
-jsonValue :: Type
-jsonValue = Bootstrap.typeref JsonModel.ns "Value"
-
--- | Encode a String value to GraphSON
-encodeStringValue :: TTermDefinition (String -> Either Error G.Value)
-encodeStringValue = define "encodeStringValue" $
-  doc "Encode a String value as a GraphSON Value" $
-  "s" ~>
-    right $ inject G._Value G._Value_string (var "s")
-
--- | Encode a Term value to GraphSON
-encodeTermValue :: TTermDefinition (Term -> Either Error G.Value)
-encodeTermValue = define "encodeTermValue" $
-  doc "Encode a Hydra Term as a GraphSON Value. Supports literals and unit values." $
-  "term" ~>
-    match _Term (Just $ left (Error.errorOther $ Error.otherError (string "unsupported term variant for GraphSON encoding"))) [
-      _Term_literal>>: "lit" ~>
-        match _Literal (Just $ left (Error.errorOther $ Error.otherError (string "unsupported literal type for GraphSON encoding"))) [
-          _Literal_binary>>: "b" ~>
-            right $ inject G._Value G._Value_binary (Literals.binaryToString $ var "b"),
-          _Literal_boolean>>: "b" ~>
-            right $ inject G._Value G._Value_boolean (var "b"),
-          _Literal_float>>: "fv" ~>
-            match _FloatValue (Just $ left (Error.errorOther $ Error.otherError (string "unsupported float type"))) [
-              _FloatValue_float32>>: "f" ~>
-                right $ inject G._Value G._Value_float
-                  (inject G._FloatValue G._FloatValue_finite (var "f")),
-              _FloatValue_float64>>: "f" ~>
-                right $ inject G._Value G._Value_double
-                  (inject G._DoubleValue G._DoubleValue_finite (var "f"))]
-            @@ var "fv",
-          _Literal_integer>>: "iv" ~>
-            match _IntegerValue (Just $ left (Error.errorOther $ Error.otherError (string "unsupported integer type"))) [
-              _IntegerValue_bigint>>: "i" ~>
-                right $ inject G._Value G._Value_bigInteger (var "i"),
-              _IntegerValue_int32>>: "i" ~>
-                right $ inject G._Value G._Value_integer (var "i"),
-              _IntegerValue_int64>>: "i" ~>
-                right $ inject G._Value G._Value_long (var "i")]
-            @@ var "iv",
-          _Literal_string>>: "s" ~>
-            right $ inject G._Value G._Value_string (var "s")]
-        @@ var "lit",
-      _Term_unit>>: constant $
-        right $ injectUnit G._Value G._Value_null]
-    @@ (Strip.deannotateTerm @@ var "term")
-
 -- | Convert a list of PG elements to vertices with adjacent edges
-elementsToVerticesWithAdjacentEdges :: TTermDefinition ([PG.Element v] -> [PG.VertexWithAdjacentEdges v])
+elementsToVerticesWithAdjacentEdges :: TypedTermDefinition ([PG.Element v] -> [PG.VertexWithAdjacentEdges v])
 elementsToVerticesWithAdjacentEdges = define "elementsToVerticesWithAdjacentEdges" $
   doc "Convert a list of property graph elements to a list of vertices with their adjacent edges" $
   "els" ~>
@@ -184,7 +129,7 @@ elementsToVerticesWithAdjacentEdges = define "elementsToVerticesWithAdjacentEdge
               (Pairs.first $ var "acc")
               (Lists.cons (var "e") (Pairs.second $ var "acc"))]
         @@ var "el")
-      (pair (list ([] :: [TTerm (PG.Vertex v)])) (list ([] :: [TTerm (PG.Edge v)])))
+      (pair (list ([] :: [TypedTerm (PG.Vertex v)])) (list ([] :: [TypedTerm (PG.Edge v)])))
       (var "els")) $
     -- Note: foldl with cons reverses the list, so we reverse back to preserve input order
     "vertices" <~ (Lists.reverse $ Pairs.first $ var "partitioned") $
@@ -196,8 +141,8 @@ elementsToVerticesWithAdjacentEdges = define "elementsToVerticesWithAdjacentEdge
           (project PG._Vertex PG._Vertex_id @@ var "v")
           (record PG._VertexWithAdjacentEdges [
             PG._VertexWithAdjacentEdges_vertex>>: var "v",
-            PG._VertexWithAdjacentEdges_ins>>: list ([] :: [TTerm (PG.AdjacentEdge v)]),
-            PG._VertexWithAdjacentEdges_outs>>: list ([] :: [TTerm (PG.AdjacentEdge v)])]))
+            PG._VertexWithAdjacentEdges_ins>>: list ([] :: [TypedTerm (PG.AdjacentEdge v)]),
+            PG._VertexWithAdjacentEdges_outs>>: list ([] :: [TypedTerm (PG.AdjacentEdge v)])]))
       (var "vertices")) $
     -- Add edges to the vertex map
     "vertexMap1" <~ (Lists.foldl
@@ -245,8 +190,62 @@ elementsToVerticesWithAdjacentEdges = define "elementsToVerticesWithAdjacentEdge
       (var "edges")) $
     Maps.elems (var "vertexMap1")
 
+-- | Encode a String value to GraphSON
+encodeStringValue :: TypedTermDefinition (String -> Either Error G.Value)
+encodeStringValue = define "encodeStringValue" $
+  doc "Encode a String value as a GraphSON Value" $
+  "s" ~>
+    right $ inject G._Value G._Value_string (var "s")
+
+-- | Encode a Term value to GraphSON
+encodeTermValue :: TypedTermDefinition (Term -> Either Error G.Value)
+encodeTermValue = define "encodeTermValue" $
+  doc "Encode a Hydra Term as a GraphSON Value. Supports literals and unit values." $
+  "term" ~>
+    match _Term (Just $ left (Error.errorOther $ Error.otherError (string "unsupported term variant for GraphSON encoding"))) [
+      _Term_literal>>: "lit" ~>
+        match _Literal (Just $ left (Error.errorOther $ Error.otherError (string "unsupported literal type for GraphSON encoding"))) [
+          _Literal_binary>>: "b" ~>
+            right $ inject G._Value G._Value_binary (Literals.binaryToString $ var "b"),
+          _Literal_boolean>>: "b" ~>
+            right $ inject G._Value G._Value_boolean (var "b"),
+          _Literal_float>>: "fv" ~>
+            match _FloatValue (Just $ left (Error.errorOther $ Error.otherError (string "unsupported float type"))) [
+              _FloatValue_float32>>: "f" ~>
+                right $ inject G._Value G._Value_float
+                  (inject G._FloatValue G._FloatValue_finite (var "f")),
+              _FloatValue_float64>>: "f" ~>
+                right $ inject G._Value G._Value_double
+                  (inject G._DoubleValue G._DoubleValue_finite (var "f"))]
+            @@ var "fv",
+          _Literal_integer>>: "iv" ~>
+            match _IntegerValue (Just $ left (Error.errorOther $ Error.otherError (string "unsupported integer type"))) [
+              _IntegerValue_bigint>>: "i" ~>
+                right $ inject G._Value G._Value_bigInteger (var "i"),
+              _IntegerValue_int32>>: "i" ~>
+                right $ inject G._Value G._Value_integer (var "i"),
+              _IntegerValue_int64>>: "i" ~>
+                right $ inject G._Value G._Value_long (var "i")]
+            @@ var "iv",
+          _Literal_string>>: "s" ~>
+            right $ inject G._Value G._Value_string (var "s")]
+        @@ var "lit",
+      _Term_unit>>: constant $
+        right $ injectUnit G._Value G._Value_null]
+    @@ (Strip.deannotateTerm @@ var "term")
+
+-- Type references
+gson :: String -> Type
+gson = Bootstrap.typeref GraphsonSyntax.ns
+
+jsonValue :: Type
+jsonValue = Bootstrap.typeref JsonModel.ns "Value"
+
+pg :: String -> Type
+pg = Bootstrap.typeref PgModel.ns
+
 -- | Convert PG elements to GraphSON JSON values
-pgElementsToGraphson :: TTermDefinition ((v -> Either Error G.Value) -> [PG.Element v] -> Either Error [JM.Value])
+pgElementsToGraphson :: TypedTermDefinition ((v -> Either Error G.Value) -> [PG.Element v] -> Either Error [JM.Value])
 pgElementsToGraphson = define "pgElementsToGraphson" $
   doc "Convert property graph elements to a list of GraphSON JSON values" $
   "encodeValue" ~> "els" ~>

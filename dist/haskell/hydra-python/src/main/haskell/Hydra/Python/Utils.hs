@@ -3,20 +3,41 @@
 
 module Hydra.Python.Utils where
 import qualified Hydra.Analysis as Analysis
-import qualified Hydra.Lib.Equality as Equality
-import qualified Hydra.Lib.Lists as Lists
-import qualified Hydra.Lib.Logic as Logic
-import qualified Hydra.Lib.Maps as Maps
-import qualified Hydra.Lib.Maybes as Maybes
-import qualified Hydra.Lib.Pairs as Pairs
-import qualified Hydra.Lib.Strings as Strings
+import qualified Hydra.Ast as Ast
+import qualified Hydra.Classes as Classes
+import qualified Hydra.Coders as Coders
+import qualified Hydra.Core as Core
+import qualified Hydra.Error.Checking as Checking
+import qualified Hydra.Error.Core as ErrorCore
+import qualified Hydra.Error.Packaging as ErrorPackaging
+import qualified Hydra.Errors as Errors
+import qualified Hydra.Graph as Graph
+import qualified Hydra.Json.Model as Model
+import qualified Hydra.Haskell.Lib.Equality as Equality
+import qualified Hydra.Haskell.Lib.Lists as Lists
+import qualified Hydra.Haskell.Lib.Logic as Logic
+import qualified Hydra.Haskell.Lib.Maps as Maps
+import qualified Hydra.Haskell.Lib.Maybes as Maybes
+import qualified Hydra.Haskell.Lib.Pairs as Pairs
+import qualified Hydra.Haskell.Lib.Strings as Strings
 import qualified Hydra.Packaging as Packaging
+import qualified Hydra.Parsing as Parsing
+import qualified Hydra.Paths as Paths
 import qualified Hydra.Python.Environment as Environment
 import qualified Hydra.Python.Names as Names
 import qualified Hydra.Python.Serde as Serde
 import qualified Hydra.Python.Syntax as Syntax
+import qualified Hydra.Query as Query
+import qualified Hydra.Relational as Relational
 import qualified Hydra.Serialization as Serialization
+import qualified Hydra.Tabular as Tabular
+import qualified Hydra.Testing as Testing
+import qualified Hydra.Topology as Topology
+import qualified Hydra.Typed as Typed
+import qualified Hydra.Typing as Typing
 import qualified Hydra.Util as Util
+import qualified Hydra.Validation as Validation
+import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 -- | Annotate an expression with an optional comment using Annotated[]
@@ -117,14 +138,14 @@ dottedAssignmentStatement obj attr expr =
 doubleQuotedString :: String -> Syntax.Expression
 doubleQuotedString s = stringToPyExpression Syntax.QuoteStyleDouble s
 -- | Find all namespaces referenced by a list of definitions, plus the core namespace
-findNamespaces :: Packaging.ModuleName -> [Packaging.Definition] -> Util.Namespaces Syntax.DottedName
+findNamespaces :: Packaging.ModuleName -> [Packaging.Definition] -> Util.ModuleNames Syntax.DottedName
 findNamespaces focusNs defs =
 
       let coreNs = Packaging.ModuleName "hydra.core"
-          namespaces = Analysis.namespacesForDefinitions Names.encodeNamespace focusNs defs
-      in (Logic.ifElse (Equality.equal (Packaging.unModuleName (Pairs.first (Util.namespacesFocus namespaces))) (Packaging.unModuleName coreNs)) namespaces (Util.Namespaces {
-        Util.namespacesFocus = (Util.namespacesFocus namespaces),
-        Util.namespacesMapping = (Maps.insert coreNs (Names.encodeNamespace coreNs) (Util.namespacesMapping namespaces))}))
+          namespaces = Analysis.moduleNamesForDefinitions Names.encodeNamespace focusNs defs
+      in (Logic.ifElse (Equality.equal (Packaging.unModuleName (Pairs.first (Util.moduleNamesFocus namespaces))) (Packaging.unModuleName coreNs)) namespaces (Util.ModuleNames {
+        Util.moduleNamesFocus = (Util.moduleNamesFocus namespaces),
+        Util.moduleNamesMapping = (Maps.insert coreNs (Names.encodeNamespace coreNs) (Util.moduleNamesMapping namespaces))}))
 -- | Create a function call expression
 functionCall :: Syntax.Primary -> [Syntax.Expression] -> Syntax.Expression
 functionCall func args = pyPrimaryToPyExpression (primaryWithRhs func (Syntax.PrimaryRhsCall (pyExpressionsToPyArgs args)))

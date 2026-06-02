@@ -79,9 +79,9 @@ object Generation:
       case other => other
 
   private def decodeBinaryInModule(mod: Module): Module =
-    Module(mod.description, mod.name, mod.dependencies, mod.definitions.map {
+    Module(mod.name, mod.metadata, mod.dependencies, mod.definitions.map {
       case Definition.term(td) =>
-        Definition.term(hydra.packaging.TermDefinition(td.name, decodeBinaryLiterals(td.term), td.typeScheme))
+        Definition.term(hydra.packaging.TermDefinition(td.name, None, decodeBinaryLiterals(td.term), td.signature))
       case other => other
     })
 
@@ -103,7 +103,7 @@ object Generation:
     val bsGraph = bootstrapGraph()
     namespaces.flatMap { ns =>
       val filePath = jsonDir + File.separator +
-        hydra.codegen.namespaceToPath(ns) + ".json"
+        hydra.codegen.moduleNameToPath(ns) + ".json"
       val file = new File(filePath)
       if !file.exists() then
         throw new RuntimeException(s"Missing module file: $filePath")
@@ -132,7 +132,7 @@ object Generation:
 
   /** Generate source files and write them to disk. Returns number of files written. */
   def generateSources(
-      coder: Module => Seq[Definition] => hydra.context.Context => Graph =>
+      coder: Module => Seq[Definition] => hydra.typing.InferenceContext => Graph =>
         Either[hydra.errors.Error, Map[String, String]],
       language: hydra.coders.Language,
       doInfer: Boolean,
@@ -142,7 +142,7 @@ object Generation:
       basePath: String,
       universe: Seq[Module],
       modsToGenerate: Seq[Module]): Int =
-    val cx = hydra.context.Context(Seq.empty, Seq.empty, Map.empty)
+    val cx = hydra.typing.InferenceContext(0, Seq.empty)
     val bsGraph = bootstrapGraph()
     hydra.codegen.generateSourceFiles(
       coder)(language)(doInfer)(doExpand)(doHoistCaseStatements)(doHoistPolymorphicLetBindings)(

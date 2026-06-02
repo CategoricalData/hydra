@@ -6,21 +6,22 @@ import qualified Hydra.Core as Core
 import qualified Hydra.Environment as Environment
 import qualified Hydra.Errors as Errors
 import qualified Hydra.Formatting as Formatting
-import qualified Hydra.Lib.Eithers as Eithers
-import qualified Hydra.Lib.Equality as Equality
-import qualified Hydra.Lib.Lists as Lists
-import qualified Hydra.Lib.Literals as Literals
-import qualified Hydra.Lib.Logic as Logic
-import qualified Hydra.Lib.Maps as Maps
-import qualified Hydra.Lib.Maybes as Maybes
-import qualified Hydra.Lib.Pairs as Pairs
-import qualified Hydra.Lib.Sets as Sets
-import qualified Hydra.Lib.Strings as Strings
+import qualified Hydra.Haskell.Lib.Eithers as Eithers
+import qualified Hydra.Haskell.Lib.Equality as Equality
+import qualified Hydra.Haskell.Lib.Lists as Lists
+import qualified Hydra.Haskell.Lib.Literals as Literals
+import qualified Hydra.Haskell.Lib.Logic as Logic
+import qualified Hydra.Haskell.Lib.Maps as Maps
+import qualified Hydra.Haskell.Lib.Maybes as Maybes
+import qualified Hydra.Haskell.Lib.Pairs as Pairs
+import qualified Hydra.Haskell.Lib.Sets as Sets
+import qualified Hydra.Haskell.Lib.Strings as Strings
 import qualified Hydra.Names as Names
 import qualified Hydra.Packaging as Packaging
 import qualified Hydra.Rust.Language as Language
 import qualified Hydra.Rust.Serde as Serde
 import qualified Hydra.Rust.Syntax as Syntax
+import qualified Hydra.Scoping as Scoping
 import qualified Hydra.Serialization as Serialization
 import qualified Hydra.Strip as Strip
 import qualified Hydra.Util as Util
@@ -212,7 +213,7 @@ encodeTermDefinition cx g tdef =
           term = Packaging.termDefinitionTerm tdef
           lname = Formatting.convertCaseCamelToLowerSnake (Names.localNameOf name)
           typ =
-                  Maybes.maybe (Core.TypeVariable (Core.Name "hydra.core.Unit")) Core.typeSchemeBody (Packaging.termDefinitionTypeScheme tdef)
+                  Maybes.maybe (Core.TypeVariable (Core.Name "hydra.core.Unit")) Core.typeSchemeBody (Maybes.map Scoping.termSignatureToTypeScheme (Packaging.termDefinitionSignature tdef))
       in (Eithers.bind (encodeTerm cx g term) (\body -> Eithers.bind (encodeType cx g typ) (\retType -> Right (Syntax.ItemWithComments {
         Syntax.itemWithCommentsDoc = Nothing,
         Syntax.itemWithCommentsVisibility = Syntax.VisibilityPublic,
@@ -370,7 +371,7 @@ moduleToRust mod defs cx g =
                   Syntax.crateItems = allItems}
             code = Serialization.printExpr (Serialization.parenthesize (Serde.crateToExpr crate))
             filePath =
-                    Names.namespaceToFilePath Util.CaseConventionLowerSnake (Packaging.FileExtension "rs") (Packaging.moduleName mod)
+                    Names.moduleNameToFilePath Util.CaseConventionLowerSnake (Packaging.FileExtension "rs") (Packaging.moduleName mod)
         in (Right (Maps.singleton filePath code)))))
 rustApply1 :: String -> Syntax.Type -> Syntax.Type
 rustApply1 name arg =

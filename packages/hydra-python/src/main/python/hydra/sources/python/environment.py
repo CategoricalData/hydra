@@ -5,7 +5,7 @@ Mirror of packages/hydra-python/src/main/haskell/Hydra/Sources/Python/Environmen
 
 from hydra.core import Name, Type, TypeScheme
 from hydra.dsl.python import Just, Nothing
-from hydra.packaging import (
+from hydra.packaging import (EntityMetadata, 
     DefinitionType,
     Module,
     ModuleName,
@@ -58,7 +58,7 @@ def _def(local_name: str, typ: Type) -> DefinitionType:
     """Build a DefinitionType for a named type definition."""
     name = Name(f"{NS.value}.{local_name}")
     ts = TypeScheme((), typ, Nothing())
-    return DefinitionType(TypeDefinition(name, ts))
+    return DefinitionType(TypeDefinition(name, Nothing(), ts))
 
 
 # ----------------------------------------------------------------------
@@ -88,7 +88,7 @@ def _python_environment():
                     "namespaces",
                     Annotations.doc(
                         "ModuleName mapping for imports",
-                        T.apply(_util("Namespaces"), _syntax("DottedName")),
+                        T.apply(_util("ModuleNames"), _syntax("DottedName")),
                     ),
                 ),
                 T.field(
@@ -133,7 +133,7 @@ def _python_module_metadata():
                     "namespaces",
                     Annotations.doc(
                         "ModuleName mapping for imports",
-                        T.apply(_util("Namespaces"), _syntax("DottedName")),
+                        T.apply(_util("ModuleNames"), _syntax("DottedName")),
                     ),
                 ),
                 T.field(
@@ -185,8 +185,12 @@ def _python_version():
 
 def _build_module() -> Module:
     return Module(
-        Just("Environment types for Python code generation"),
         NS,
+        Just(EntityMetadata(
+            Just("Environment types for Python code generation"),
+            (),
+            (),
+            Nothing())),
         DEPENDENCIES,
         (
             _python_version(),

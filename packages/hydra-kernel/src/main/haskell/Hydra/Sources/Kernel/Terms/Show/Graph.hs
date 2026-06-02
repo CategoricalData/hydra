@@ -61,15 +61,15 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> ([ShowCore.ns] L.++ kernelTypesModuleNames),
-            moduleDescription = Just "String representations of hydra.graph types"}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just "String representations of hydra.graph types")}
   where
    definitions = [
      toDefinition graph]
 
-define :: String -> TTerm a -> TTermDefinition a
+define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModule module_
 
-graph :: TTermDefinition ([Binding] -> String)
+graph :: TypedTermDefinition ([Binding] -> String)
 graph = define "graph" $
   doc "Show a list of bindings as a string" $
   lambda "elements" $ lets [

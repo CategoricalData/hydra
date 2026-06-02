@@ -1,5 +1,5 @@
 ---
-description: Run bin/sync-typescript.sh — regenerates the TypeScript-only sync matrix (hosts × targets = typescript × typescript). Thin wrapper around bin/sync.sh.
+description: Run bin/sync-typescript.sh — regenerates the TypeScript-only sync matrix (hosts × targets = typescript × typescript). Thin wrapper around bin/sync.sh. Does NOT run target tests — use /test typescript for that.
 allowed-tools:
   - Bash(bin/sync-typescript.sh*)
   - Read
@@ -25,6 +25,11 @@ Extra flags (e.g. `--no-tests`) are forwarded. Runs:
 TypeScript is a "head bud" — Phase 4 (`host=typescript`) is skipped
 because the TS runtime cannot yet host generation of coder packages in
 TypeScript's own language. See issue #126.
+
+This script does **not** run the TypeScript test suite. To validate the
+generated code, run the TypeScript head's test entry point or do a
+`/bootstrap typescript`. (Pending #387: `/test typescript` will roll
+sync + tests into one step.)
 
 ## First-run gotcha
 

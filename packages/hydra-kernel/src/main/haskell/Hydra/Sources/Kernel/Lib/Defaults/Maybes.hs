@@ -51,7 +51,6 @@ import qualified Data.Map                as M
 import qualified Data.Set                as S
 import qualified Data.Maybe              as Y
 
-import qualified Hydra.Dsl.Meta.Context      as Ctx
 import qualified Hydra.Dsl.Errors       as Error
 import qualified Hydra.Sources.Kernel.Terms.Extract.Core as ExtractCore
 import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
@@ -59,7 +58,7 @@ import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
 ns :: ModuleName
 ns = ModuleName "hydra.lib.defaults.maybes"
 
-define :: String -> TTerm a -> TTermDefinition a
+define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModuleName ns
 
 module_ :: Module
@@ -67,7 +66,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> ([ExtractCore.ns, ShowCore.ns] L.++ kernelTypesModuleNames),
-            moduleDescription = Just ("Default term-level implementations of Maybe functions for the Hydra interpreter.")}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just ("Default term-level implementations of Maybe functions for the Hydra interpreter."))}
   where
     definitions = [
       toDefinition apply_,
@@ -89,7 +88,7 @@ module_ = Module {
 -- apply (Just f) (Just x) = Just (f x); otherwise Nothing
 -- We manually construct the result because the nested lambda would be flattened in Python.
 -- The logic is: apply (Just f) (Just x) = Just (f x)
-apply_ :: TTermDefinition (Context -> Graph -> Term -> Term -> Either Error Term)
+apply_ :: TypedTermDefinition (InferenceContext -> Graph -> Term -> Term -> Either Error Term)
 apply_ = define "apply" $
   doc "Interpreter-friendly applicative apply for Maybe terms." $
   "cx" ~> "g" ~> "funOptTerm" ~> "argOptTerm" ~>
@@ -107,7 +106,7 @@ apply_ = define "apply" $
 
 -- | Interpreter-friendly monadic bind for Maybe terms.
 -- bind (Just x) f = f x; bind Nothing f = Nothing
-bind_ :: TTermDefinition (Context -> Graph -> Term -> Term -> Either Error Term)
+bind_ :: TypedTermDefinition (InferenceContext -> Graph -> Term -> Term -> Either Error Term)
 bind_ = define "bind" $
   doc "Interpreter-friendly monadic bind for Maybe terms." $
   "cx" ~> "g" ~> "optTerm" ~> "funTerm" ~>
@@ -119,9 +118,24 @@ bind_ = define "bind" $
         ("val" ~> Core.termApplication $ Core.application (var "funTerm") (var "val"))
         (var "m")]
 
+-- | Interpreter-friendly case analysis for Maybe terms (cases variant).
+-- Takes optTerm, defaultTerm, funTerm - returns defaultTerm if Nothing,
+-- or applies funTerm to the value if Just.
+cases_ :: TypedTermDefinition (InferenceContext -> Graph -> Term -> Term -> Term -> Either Error Term)
+cases_ = define "cases" $
+  doc "Interpreter-friendly case analysis for Maybe terms (cases argument order)." $
+  "cx" ~> "g" ~> "optTerm" ~> "defaultTerm" ~> "funTerm" ~>
+  cases _Term (var "optTerm")
+    (Just (ExtractCore.unexpected (string "optional value") (ShowCore.term @@ var "optTerm"))) [
+    _Term_maybe>>: "m" ~>
+      right $ Maybes.maybe
+        (var "defaultTerm")
+        ("val" ~> Core.termApplication $ Core.application (var "funTerm") (var "val"))
+        (var "m")]
+
 -- | Interpreter-friendly cat (catMaybes) for list of Maybe terms.
 -- Filters out Nothings and unwraps Justs.
-cat_ :: TTermDefinition (Context -> Graph -> Term -> Either Error Term)
+cat_ :: TypedTermDefinition (InferenceContext -> Graph -> Term -> Either Error Term)
 cat_ = define "cat" $
   doc "Interpreter-friendly cat for list of Maybe terms." $
   "cx" ~> "g" ~>
@@ -137,27 +151,26 @@ cat_ = define "cat" $
             (var "acc")
             ("v" ~> Lists.concat2 (var "acc") (Lists.pure (var "v")))
             (var "m")])
-    (list ([] :: [TTerm Term]))
+    (list ([] :: [TypedTerm Term]))
     (var "elements")
 
--- | Interpreter-friendly case analysis for Maybe terms (cases variant).
--- Takes optTerm, defaultTerm, funTerm - returns defaultTerm if Nothing,
--- or applies funTerm to the value if Just.
-cases_ :: TTermDefinition (Context -> Graph -> Term -> Term -> Term -> Either Error Term)
-cases_ = define "cases" $
-  doc "Interpreter-friendly case analysis for Maybe terms (cases argument order)." $
-  "cx" ~> "g" ~> "optTerm" ~> "defaultTerm" ~> "funTerm" ~>
-  cases _Term (var "optTerm")
-    (Just (ExtractCore.unexpected (string "optional value") (ShowCore.term @@ var "optTerm"))) [
-    _Term_maybe>>: "m" ~>
-      right $ Maybes.maybe
-        (var "defaultTerm")
-        ("val" ~> Core.termApplication $ Core.application (var "funTerm") (var "val"))
-        (var "m")]
+-- | Interpreter-friendly Kleisli composition for Maybe.
+-- compose f g x = bind (f x) g
+compose_ :: TypedTermDefinition (InferenceContext -> Graph -> Term -> Term -> Term -> Either Error Term)
+compose_ = define "compose" $
+  doc "Interpreter-friendly Kleisli composition for Maybe." $
+  "cx" ~> "g" ~> "funF" ~> "funG" ~> "xTerm" ~>
+  -- Compute: bind (f x) g
+  -- This builds the term: bind @ (funF @ xTerm) @ funG
+  right $ Core.termApplication $ Core.application
+    (Core.termApplication $ Core.application
+      (Core.termVariable $ wrap _Name $ string "hydra.lib.maybes.bind")
+      (Core.termApplication $ Core.application (var "funF") (var "xTerm")))
+    (var "funG")
 
 -- | Interpreter-friendly fromJust for Maybe terms.
 -- Extracts the value from Just, or errors on Nothing.
-fromJust_ :: TTermDefinition (Context -> Graph -> Term -> Either Error Term)
+fromJust_ :: TypedTermDefinition (InferenceContext -> Graph -> Term -> Either Error Term)
 fromJust_ = define "fromJust" $
   doc "Interpreter-friendly fromJust for Maybe terms." $
   "cx" ~> "g" ~>
@@ -172,7 +185,7 @@ fromJust_ = define "fromJust" $
 
 -- | Interpreter-friendly fromMaybe for Maybe terms.
 -- Returns the contained value or a default.
-fromMaybe_ :: TTermDefinition (Context -> Graph -> Term -> Term -> Either Error Term)
+fromMaybe_ :: TypedTermDefinition (InferenceContext -> Graph -> Term -> Term -> Either Error Term)
 fromMaybe_ = define "fromMaybe" $
   doc "Interpreter-friendly fromMaybe for Maybe terms." $
   "cx" ~> "g" ~>
@@ -186,7 +199,7 @@ fromMaybe_ = define "fromMaybe" $
         (var "m")]
 
 -- | Interpreter-friendly isJust for Maybe terms.
-isJust_ :: TTermDefinition (Context -> Graph -> Term -> Either Error Term)
+isJust_ :: TypedTermDefinition (InferenceContext -> Graph -> Term -> Either Error Term)
 isJust_ = define "isJust" $
   doc "Interpreter-friendly isJust for Maybe terms." $
   "cx" ~> "g" ~>
@@ -200,7 +213,7 @@ isJust_ = define "isJust" $
         (var "m")]
 
 -- | Interpreter-friendly isNothing for Maybe terms.
-isNothing_ :: TTermDefinition (Context -> Graph -> Term -> Either Error Term)
+isNothing_ :: TypedTermDefinition (InferenceContext -> Graph -> Term -> Either Error Term)
 isNothing_ = define "isNothing" $
   doc "Interpreter-friendly isNothing for Maybe terms." $
   "cx" ~> "g" ~>
@@ -213,36 +226,9 @@ isNothing_ = define "isNothing" $
         ("_" ~> Core.termLiteral $ Core.literalBoolean $ MetaLiterals.boolean False)
         (var "m")]
 
--- | Interpreter-friendly Kleisli composition for Maybe.
--- compose f g x = bind (f x) g
-compose_ :: TTermDefinition (Context -> Graph -> Term -> Term -> Term -> Either Error Term)
-compose_ = define "compose" $
-  doc "Interpreter-friendly Kleisli composition for Maybe." $
-  "cx" ~> "g" ~> "funF" ~> "funG" ~> "xTerm" ~>
-  -- Compute: bind (f x) g
-  -- This builds the term: bind @ (funF @ xTerm) @ funG
-  right $ Core.termApplication $ Core.application
-    (Core.termApplication $ Core.application
-      (Core.termVariable $ wrap _Name $ string "hydra.lib.maybes.bind")
-      (Core.termApplication $ Core.application (var "funF") (var "xTerm")))
-    (var "funG")
-
--- | Interpreter-friendly map for Maybe terms.
--- Returns Nothing if Nothing, or Just (fun val) if Just val.
-map_ :: TTermDefinition (Context -> Graph -> Term -> Term -> Either Error Term)
-map_ = define "map" $
-  doc "Interpreter-friendly map for Maybe terms." $
-  "cx" ~> "g" ~> "funTerm" ~> "optTerm" ~>
-  cases _Term (var "optTerm")
-    (Just (ExtractCore.unexpected (string "optional value") (ShowCore.term @@ var "optTerm"))) [
-    _Term_maybe>>: "m" ~>
-      right $ Core.termMaybe $ Maybes.map
-        ("val" ~> Core.termApplication $ Core.application (var "funTerm") (var "val"))
-        (var "m")]
-
 -- | Interpreter-friendly mapMaybe for List terms.
 -- Applies funTerm to each element, keeping only Just results.
-mapMaybe_ :: TTermDefinition (Context -> Graph -> Term -> Term -> Either Error Term)
+mapMaybe_ :: TypedTermDefinition (InferenceContext -> Graph -> Term -> Term -> Either Error Term)
 mapMaybe_ = define "mapMaybe" $
   doc "Interpreter-friendly mapMaybe for List terms." $
   "cx" ~> "g" ~> "funTerm" ~> "listTerm" ~>
@@ -254,10 +240,23 @@ mapMaybe_ = define "mapMaybe" $
       ("el" ~> Core.termApplication $ Core.application (var "funTerm") (var "el"))
       (var "elements"))
 
+-- | Interpreter-friendly map for Maybe terms.
+-- Returns Nothing if Nothing, or Just (fun val) if Just val.
+map_ :: TypedTermDefinition (InferenceContext -> Graph -> Term -> Term -> Either Error Term)
+map_ = define "map" $
+  doc "Interpreter-friendly map for Maybe terms." $
+  "cx" ~> "g" ~> "funTerm" ~> "optTerm" ~>
+  cases _Term (var "optTerm")
+    (Just (ExtractCore.unexpected (string "optional value") (ShowCore.term @@ var "optTerm"))) [
+    _Term_maybe>>: "m" ~>
+      right $ Core.termMaybe $ Maybes.map
+        ("val" ~> Core.termApplication $ Core.application (var "funTerm") (var "val"))
+        (var "m")]
+
 -- | Interpreter-friendly case analysis for Maybe terms.
 -- Takes defaultTerm, funTerm, optTerm - returns defaultTerm if Nothing,
 -- or applies funTerm to the value if Just.
-maybe_ :: TTermDefinition (Context -> Graph -> Term -> Term -> Term -> Either Error Term)
+maybe_ :: TypedTermDefinition (InferenceContext -> Graph -> Term -> Term -> Term -> Either Error Term)
 maybe_ = define "maybe" $
   doc "Interpreter-friendly case analysis for Maybe terms." $
   "cx" ~> "g" ~> "defaultTerm" ~> "funTerm" ~> "optTerm" ~>
@@ -271,7 +270,7 @@ maybe_ = define "maybe" $
 
 -- | Interpreter-friendly pure for Maybe terms.
 -- Wraps a value in Just.
-pure_ :: TTermDefinition (Context -> Graph -> Term -> Either Error Term)
+pure_ :: TypedTermDefinition (InferenceContext -> Graph -> Term -> Either Error Term)
 pure_ = define "pure" $
   doc "Interpreter-friendly pure for Maybe terms." $
   "cx" ~> "g" ~>
@@ -280,7 +279,7 @@ pure_ = define "pure" $
 
 -- | Interpreter-friendly toList for Maybe terms.
 -- Just x -> [x], Nothing -> []
-toList_ :: TTermDefinition (Context -> Graph -> Term -> Either Error Term)
+toList_ :: TypedTermDefinition (InferenceContext -> Graph -> Term -> Either Error Term)
 toList_ = define "toList" $
   doc "Interpreter-friendly toList for Maybe terms." $
   "cx" ~> "g" ~>
@@ -289,6 +288,6 @@ toList_ = define "toList" $
     (Just (ExtractCore.unexpected (string "optional value") (ShowCore.term @@ var "optTerm"))) [
     _Term_maybe>>: "m" ~>
       right $ Core.termList $ Maybes.maybe
-        (list ([] :: [TTerm Term]))
+        (list ([] :: [TypedTerm Term]))
         ("val" ~> Lists.pure (var "val"))
         (var "m")]

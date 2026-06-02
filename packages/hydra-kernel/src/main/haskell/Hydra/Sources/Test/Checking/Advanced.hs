@@ -4,7 +4,7 @@ module Hydra.Sources.Test.Checking.Advanced where
 
 -- Standard imports for term-encoded tests
 import Hydra.Kernel
-import           Hydra.Dsl.Bootstrap (unqualifiedDep)
+import           Hydra.Dsl.Bootstrap (unqualifiedDep, descriptionMetadata)
 import Hydra.Dsl.Meta.Testing                 as Testing
 import Hydra.Dsl.Meta.Terms                   as Terms
 import Hydra.Sources.Kernel.Types.All
@@ -26,7 +26,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = unqualifiedDep <$> ([TestGraph.ns, ModuleName "hydra.rewriting", ModuleName "hydra.inference", ModuleName "hydra.scoping", ModuleName "hydra.show.core", ModuleName "hydra.test.testTypes"] ++ kernelTypesModuleNames),
-            moduleDescription = (Just "Advanced type checking test cases: annotated terms and flows")}
+            moduleMetadata = descriptionMetadata ((Just "Advanced type checking test cases: annotated terms and flows"))}
   where
     definitions = [
       Phantoms.toDefinition allTests,
@@ -35,10 +35,10 @@ module_ = Module {
       Phantoms.toDefinition nestedAnnotationsTests,
       Phantoms.toDefinition annotationsInComplexContextsTests]
 
-define :: String -> TTerm a -> TTermDefinition a
+define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModule module_
 
-allTests :: TTermDefinition TestGroup
+allTests :: TypedTermDefinition TestGroup
 allTests = define "allTests" $
   Phantoms.doc "Advanced type checking test cases" $
   supergroup "Advanced" [
@@ -48,50 +48,14 @@ allTests = define "allTests" $
 
 ------ Annotated terms ------
 
-annotatedTermsTests :: TTermDefinition TestGroup
+annotatedTermsTests :: TypedTermDefinition TestGroup
 annotatedTermsTests = define "annotatedTermsTests" $
   supergroup "Annotated terms" [
     topLevelAnnotationsTests,
     nestedAnnotationsTests,
     annotationsInComplexContextsTests]
 
-topLevelAnnotationsTests :: TTermDefinition TestGroup
-topLevelAnnotationsTests = define "topLevelAnnotationsTests" $
-  subgroup "Top-level annotations" [
-    noChange "annotated literal"
-      (annotated (int32 42) mapTermEmpty)
-      T.int32,
-    noChange "annotated list"
-      (annotated (list [string "a", string "b"]) mapTermEmpty)
-      (T.list T.string),
-    noChange "annotated record"
-      (annotated (record TestTypes.testTypePersonName [
-        "firstName">: string "John",
-        "lastName">: string "Doe",
-        "age">: int32 25]) mapTermEmpty)
-      (Core.typeVariable TestTypes.testTypePersonName),
-    checkTest "annotated lambda" []
-      (annotated (lambda "x" $ var "x") mapTermEmpty)
-      (annotated (tylam "t0" $ lambdaTyped "x" (T.var "t0") $ var "x") mapTermEmpty)
-      (T.forAlls ["t0"] $ T.function (T.var "t0") (T.var "t0"))]
-
-nestedAnnotationsTests :: TTermDefinition TestGroup
-nestedAnnotationsTests = define "nestedAnnotationsTests" $
-  subgroup "Nested annotations" [
-    noChange "annotation within annotation"
-      (annotated (annotated (int32 100) mapTermEmpty) mapTermEmpty)
-      T.int32,
-    checkTest "annotated terms in tuple" []
-      (tuple [annotated (int32 1) mapTermEmpty,
-              annotated (string "hello") mapTermEmpty])
-      (tyapps (pair (annotated (int32 1) mapTermEmpty) (annotated (string "hello") mapTermEmpty)) [T.int32, T.string])
-      (T.pair T.int32 T.string),
-    checkTest "annotated term in function application" []
-      (annotated (lambda "x" $ var "x") mapTermEmpty @@ annotated (int32 42) mapTermEmpty)
-      (annotated (lambdaTyped "x" T.int32 $ var "x") mapTermEmpty @@ annotated (int32 42) mapTermEmpty)
-      T.int32]
-
-annotationsInComplexContextsTests :: TTermDefinition TestGroup
+annotationsInComplexContextsTests :: TypedTermDefinition TestGroup
 annotationsInComplexContextsTests = define "annotationsInComplexContextsTests" $
   subgroup "Annotations in complex contexts" [
     checkTest "annotated let binding" []
@@ -123,3 +87,39 @@ annotationsInComplexContextsTests = define "annotationsInComplexContextsTests" $
 --      Types.int32
 
 
+
+nestedAnnotationsTests :: TypedTermDefinition TestGroup
+nestedAnnotationsTests = define "nestedAnnotationsTests" $
+  subgroup "Nested annotations" [
+    noChange "annotation within annotation"
+      (annotated (annotated (int32 100) mapTermEmpty) mapTermEmpty)
+      T.int32,
+    checkTest "annotated terms in tuple" []
+      (tuple [annotated (int32 1) mapTermEmpty,
+              annotated (string "hello") mapTermEmpty])
+      (tyapps (pair (annotated (int32 1) mapTermEmpty) (annotated (string "hello") mapTermEmpty)) [T.int32, T.string])
+      (T.pair T.int32 T.string),
+    checkTest "annotated term in function application" []
+      (annotated (lambda "x" $ var "x") mapTermEmpty @@ annotated (int32 42) mapTermEmpty)
+      (annotated (lambdaTyped "x" T.int32 $ var "x") mapTermEmpty @@ annotated (int32 42) mapTermEmpty)
+      T.int32]
+
+topLevelAnnotationsTests :: TypedTermDefinition TestGroup
+topLevelAnnotationsTests = define "topLevelAnnotationsTests" $
+  subgroup "Top-level annotations" [
+    noChange "annotated literal"
+      (annotated (int32 42) mapTermEmpty)
+      T.int32,
+    noChange "annotated list"
+      (annotated (list [string "a", string "b"]) mapTermEmpty)
+      (T.list T.string),
+    noChange "annotated record"
+      (annotated (record TestTypes.testTypePersonName [
+        "firstName">: string "John",
+        "lastName">: string "Doe",
+        "age">: int32 25]) mapTermEmpty)
+      (Core.typeVariable TestTypes.testTypePersonName),
+    checkTest "annotated lambda" []
+      (annotated (lambda "x" $ var "x") mapTermEmpty)
+      (annotated (tylam "t0" $ lambdaTyped "x" (T.var "t0") $ var "x") mapTermEmpty)
+      (T.forAlls ["t0"] $ T.function (T.var "t0") (T.var "t0"))]

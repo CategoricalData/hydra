@@ -14,7 +14,7 @@ object Libraries:
 
   // ===== Infrastructure =====
 
-  private type Impl = hydra.context.Context => hydra.graph.Graph => Seq[Term] => Either[hydra.errors.Error, Term]
+  private type Impl = hydra.typing.InferenceContext => hydra.graph.Graph => Seq[Term] => Either[hydra.errors.Error, Term]
 
   private val stubImpl: Impl =
     _ => _ => _ => Left(hydra.errors.Error.other("stub primitive"))
@@ -24,15 +24,15 @@ object Libraries:
   private type E = Either[hydra.errors.Error, Term]
 
   // Reduce a term using the full reducer
-  private def reduce(cx: hydra.context.Context, g: hydra.graph.Graph, t: Term): E =
+  private def reduce(cx: hydra.typing.InferenceContext, g: hydra.graph.Graph, t: Term): E =
     hydra.reduction.reduceTerm(cx)(g)(true)(t)
 
   // Apply a function term to an argument and reduce
-  private def applyAndReduce(cx: hydra.context.Context, g: hydra.graph.Graph, f: Term, x: Term): E =
+  private def applyAndReduce(cx: hydra.typing.InferenceContext, g: hydra.graph.Graph, f: Term, x: Term): E =
     reduce(cx, g, Term.application(Application(f, x)))
 
   // Apply a curried function to two arguments and reduce
-  private def apply2AndReduce(cx: hydra.context.Context, g: hydra.graph.Graph, f: Term, x: Term, y: Term): E =
+  private def apply2AndReduce(cx: hydra.typing.InferenceContext, g: hydra.graph.Graph, f: Term, x: Term, y: Term): E =
     reduce(cx, g, Term.application(Application(Term.application(Application(f, x)), y)))
 
   private def impl0(t: => Term): Impl = _ => _ => _ => ok(t)
@@ -166,7 +166,7 @@ object Libraries:
   // --- Higher-order traversal helpers ---
 
   /** Apply predicate to each element, collecting those where it returns true. */
-  private def filterList(cx: hydra.context.Context, g: hydra.graph.Graph, p: Term, xs: Seq[Term]): E =
+  private def filterList(cx: hydra.typing.InferenceContext, g: hydra.graph.Graph, p: Term, xs: Seq[Term]): E =
     xs.foldLeft[E](ok(mkList(Seq.empty))) { (accE, x) =>
       for {
         acc <- accE
@@ -175,7 +175,7 @@ object Libraries:
     }
 
   /** Apply predicate to each element, partitioning into (true, false). */
-  private def partitionList(cx: hydra.context.Context, g: hydra.graph.Graph, p: Term, xs: Seq[Term]): E =
+  private def partitionList(cx: hydra.typing.InferenceContext, g: hydra.graph.Graph, p: Term, xs: Seq[Term]): E =
     xs.foldLeft[E](ok(mkPairTerm(mkList(Seq.empty), mkList(Seq.empty)))) { (accE, x) =>
       for {
         acc <- accE
@@ -197,11 +197,20 @@ object Libraries:
 
   // --- Primitive constructors ---
 
+  private def mkPrimDef(name: String, ts: TypeScheme): hydra.packaging.PrimitiveDefinition =
+    hydra.packaging.PrimitiveDefinition(
+      name,
+      hydra.scoping.typeSchemeToTermSignature(ts),
+      None,
+      true,
+      true,
+      None)
+
   private def mkPrim(name: String, ts: TypeScheme): Primitive =
-    Primitive(name, ts, stubImpl)
+    Primitive(mkPrimDef(name, ts), stubImpl)
 
   private def mkPrimImpl(name: String, ts: TypeScheme, impl: Impl): Primitive =
-    Primitive(name, ts, impl)
+    Primitive(mkPrimDef(name, ts), impl)
 
   // Type construction helpers
   private def tVar(n: String): Type = Type.variable(n)
@@ -236,7 +245,7 @@ object Libraries:
   private def tSchemeConstrained(vars: Seq[(String, Seq[String])], t: Type): TypeScheme =
     val varNames = vars.map(_._1)
     val constraints = vars.collect { case (name, classes) if classes.nonEmpty =>
-      name -> TypeVariableMetadata(classes.toSet)
+      name -> TypeVariableMetadata(classes.map(c => TypeClassConstraint.simple(c)))
     }.toMap
     TypeScheme(varNames, t, if constraints.isEmpty then None else Some(constraints))
 

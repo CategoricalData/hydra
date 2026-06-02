@@ -50,11 +50,11 @@ full checklist.
 ### Running tests
 
 ```bash
-# From the repo root
-./gradlew :packages:hydra-java:test
+# From the Java head
+(cd heads/java && ./gradlew :hydra-java:test)
 
 # With detailed failure output
-./gradlew :packages:hydra-java:test --tests "*TestSuiteRunner*" --info 2>&1 | grep -A 20 "FAILED"
+(cd heads/java && ./gradlew :hydra-java:test --tests "*TestSuiteRunner*" --info) 2>&1 | grep -A 20 "FAILED"
 ```
 
 The test runner is at `heads/java/src/test/java/hydra/TestSuiteRunner.java`. It dispatches
@@ -233,6 +233,25 @@ that head's own test driver:
 
 The full cross-host bootstrap demo (`bin/run-bootstrapping-demo.sh`) is a
 heavier validation that exercises cross-host code generation plus tests.
+
+### `verify-json-kernel` reports `element count differs: N vs M`
+
+As of [#392](https://github.com/CategoricalData/hydra/issues/392), the sync
+reconciles this automatically — you should rarely see it surface.
+
+Step 3 of `sync-haskell.sh` verifies that each committed
+`dist/json/hydra-kernel/.../<module>.json` matches what the source DSL produces.
+A merge that updated source DSL but not the corresponding JSON (or vice versa)
+leaves them out of sync. The verify step now detects the drift, runs
+`update-json-kernel` (the authoritative DSL → JSON writer for that tree),
+logs the changed files, re-verifies, and continues. The regenerated `dist/json`
+is left in your working tree to review and commit.
+
+If the sync instead *fails* after reconciliation with "still reports drift after
+update-json-kernel regenerated the JSON", that is a genuine generator bug —
+non-deterministic DSL → JSON output — not recoverable drift. Investigate the
+kernel JSON generator (`Hydra.Generation.writeModulesJson` and the encoders it
+calls) before re-running; re-running will not help.
 
 ## Bootstrap problems
 

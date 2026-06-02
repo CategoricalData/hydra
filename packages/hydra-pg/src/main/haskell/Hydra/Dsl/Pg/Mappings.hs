@@ -2,7 +2,7 @@
 module Hydra.Dsl.Pg.Mappings where
 
 import Hydra.Core
-import Hydra.Phantoms
+import Hydra.Typed
 import Hydra.Rewriting
 import Hydra.Pg.Model
 import Hydra.Dsl.Meta.Phantoms
@@ -22,14 +22,14 @@ replaceTableName tableName = rewriteTerm $ \recurse term -> case term of
 -- * Graph construction functions
 
 -- | Create a mapping function that selects a specified column from a table
-column :: String -> TTerm (r -> Maybe a)
+column :: String -> TypedTerm (r -> Maybe a)
 column sourceColumn = project (Name temporaryTableName) (Name sourceColumn)
 
 -- | Create an edge with the given label, ID, source vertex, target vertex, and properties
 -- Example: edge "social_network.csv" "knows" (constant unit) (column "person_1") (column "person_2")
 --            [property "since" $ column "knows_since"]
-edge :: String -> String -> TTerm e -> TTerm vo -> TTerm vi -> [Property Term] -> Edge Term
-edge tableName label (TTerm idValue) (TTerm outValue) (TTerm inValue) propertiesList = Edge
+edge :: String -> String -> TypedTerm e -> TypedTerm vo -> TypedTerm vi -> [Property Term] -> Edge Term
+edge tableName label (TypedTerm idValue) (TypedTerm outValue) (TypedTerm inValue) propertiesList = Edge
   (EdgeLabel label)
   (replaceTableName tableName idValue)
   (replaceTableName tableName outValue)
@@ -39,7 +39,7 @@ edge tableName label (TTerm idValue) (TTerm outValue) (TTerm inValue) properties
 -- | Create an edge with a unit ID (when the edge id isn't significant)
 -- Example: simpleEdge "social_network.csv" "knows" (column "person_1") (column "person_2")
 --            [property "since" $ column "knows_since"]
-edgeNoId :: String -> String -> TTerm vo -> TTerm vi -> [Property Term] -> Edge Term
+edgeNoId :: String -> String -> TypedTerm vo -> TypedTerm vi -> [Property Term] -> Edge Term
 edgeNoId tableName label = edge tableName label (constant unit)
 
 -- | Create a lazy graph from vertices and edges, without enforcing id uniqueness
@@ -53,13 +53,13 @@ graph = LazyGraph
 
 -- | Create a property with the given key and value
 -- Example: property "name" (string "John")
-property :: String -> TTerm v -> Property Term
-property key (TTerm value) = Property (PropertyKey key) value
+property :: String -> TypedTerm v -> Property Term
+property key (TypedTerm value) = Property (PropertyKey key) value
 
 -- | Create a vertex derived from the given table with the given label, ID, and properties
 -- Example: vertex "people.csv" "Person" personId [property "name" (column "full_name"), property "age" (column "age)]
-vertex :: String -> String -> TTerm v -> [Property Term] -> Vertex Term
-vertex tableName label (TTerm idValue) propertiesList = Vertex
+vertex :: String -> String -> TypedTerm v -> [Property Term] -> Vertex Term
+vertex tableName label (TypedTerm idValue) propertiesList = Vertex
   (VertexLabel label)
   (replaceTableName tableName idValue)
   (M.fromList $ fmap (\(Property k v) -> (k, replaceTableName tableName v)) propertiesList)

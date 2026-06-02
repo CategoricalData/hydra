@@ -29,21 +29,21 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> kernelTypesModuleNames,
-            moduleDescription = Just "Registry of Hydra's built-in type classes."}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just "Registry of Hydra's built-in type classes.")}
   where
     definitions = [
       toDefinition equality,
       toDefinition ordering]
 
-define :: String -> TTerm a -> TTermDefinition a
+define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModule module_
 
-equality :: TTermDefinition TypeClass
+equality :: TypedTermDefinition TypeClass
 equality = define "equality" $
   doc "The equality type class: instances support structural equality." $
   Typing.typeClass (string "Equality: instances support structural equality.")
 
-ordering :: TTermDefinition TypeClass
+ordering :: TypedTermDefinition TypeClass
 ordering = define "ordering" $
   doc "The ordering type class: instances support total ordering (and equality)." $
   Typing.typeClass (string "Ordering: instances support total ordering (and equality).")

@@ -218,6 +218,7 @@ echo ""
     hydra:exe:update-json-main \
     hydra:exe:update-json-test \
     hydra:exe:update-json-manifest \
+    hydra:exe:update-json-kernel \
     hydra:exe:verify-json-kernel \
     hydra:exe:bootstrap-from-json \
     hydra:exe:digest-check) || exit 1
@@ -270,6 +271,44 @@ else
     banner1 "Phase 1: DSL → JSON + Haskell kernel"
     echo ""
     "$HYDRA_HASKELL_DIR/bin/sync-haskell.sh" $NO_TESTS_FLAG
+fi
+
+# ────────────────────────────────────────────────────────────────────
+# Phase 1.5: Auto-heal stale hydra-java / hydra-python coder JSON (#406).
+# ────────────────────────────────────────────────────────────────────
+# Per #344, Phase 1 re-exports the hydra.java.* / hydra.python.* coder JSON
+# only on cold-start (HYDRA_INCLUDE_JAVA_PYTHON, set above when a sentinel is
+# missing). On a WARM tree it skips them — but dist/json/hydra-{java,python}/
+# coder.json feeds Phase 2's dist/haskell/hydra-{java,python}/Coder.hs, which
+# is compiled into the core `hydra` library. When a kernel rename ripples into
+# the coders, that warm-skip leaves the coder JSON stale against the just-
+# regenerated kernel; Phase 2 then emits a Coder.hs referencing a renamed-away
+# field and the next `stack build` dies (#406).
+#
+# The native Phase 5 generator (the authoritative writer post-#344, and the
+# sole writer once the legacy Haskell coder DSL is deleted) cannot run here:
+# it needs the host built (Phase 4 output), which needs this library. So we
+# heal in place: detect staleness against the now-fresh kernel JSON and re-run
+# update-json-main --include-java-python (the JSON-write step only — Phase 0
+# already built the executable) so Phase 2 translates fresh coder JSON.
+#
+# check-java-python-json-fresh.py keys on the translated kernel JSON (the
+# rename signal that survives the legacy-DSL deletion), so this gate is
+# correct both today and after that deletion. The cold-start branch above
+# already re-exported; there we only stamp the cache.
+JP_FRESH_CHECK="$HYDRA_ROOT/bin/lib/check-java-python-json-fresh.py"
+if [ -x "$JP_FRESH_CHECK" ]; then
+    if [ "${HYDRA_INCLUDE_JAVA_PYTHON:-0}" = "1" ]; then
+        # Cold-start (or already forced): Phase 1 wrote fresh coder JSON. Stamp.
+        "$JP_FRESH_CHECK" "$HYDRA_ROOT" --record || true
+    elif ! "$JP_FRESH_CHECK" "$HYDRA_ROOT"; then
+        banner1 "Phase 1.5: re-exporting stale hydra-java/hydra-python coder JSON (#406)"
+        echo ""
+        ( cd "$HYDRA_HASKELL_DIR" \
+            && stack exec update-json-main -- --include-java-python ) || exit 1
+        "$JP_FRESH_CHECK" "$HYDRA_ROOT" --record || true
+        echo ""
+    fi
 fi
 
 # ────────────────────────────────────────────────────────────────────
@@ -406,7 +445,7 @@ done
 # that language is a host).
 
 # Sentinels indicating each native host is fully built (i.e. has the host's
-# hydra-<lang> dist with the DSL meta-modules a self-host run needs).
+# hydra-<lang> dist with the DSL meta-modules a native DSL→JSON run needs).
 JAVA_HOST_SENTINEL="$HYDRA_ROOT/dist/java/hydra-java/src/main/java/hydra/dsl/java/Syntax.java"
 PYTHON_HOST_SENTINEL="$HYDRA_ROOT/dist/python/hydra-python/src/main/python/hydra/dsl/python/syntax.py"
 
@@ -427,6 +466,18 @@ native_generate_and_report() {
         echo "  skipping: $json_dir not present"
         return 0
     fi
+
+    # Phase 5 freshness gate: skip the demo entirely when every input is
+    # byte-identical to the last successful run. The demo's outputs are a
+    # pure function of the hashed inputs, so a hash match guarantees the
+    # current dist/json/hydra-<lang>/ is correct. Set HYDRA_FORCE_PHASE5=1
+    # to bypass (e.g. to validate the cached output really is reproducible).
+    if [ "${HYDRA_FORCE_PHASE5:-0}" != "1" ]; then
+        if python3 "$HYDRA_ROOT/bin/lib/check-phase5-fresh.py" "$HYDRA_ROOT" "$lang"; then
+            return 0
+        fi
+    fi
+
     local snap_dir; snap_dir=$(mktemp -d)
     cp -R "$json_dir"/. "$snap_dir/"
 
@@ -452,9 +503,40 @@ native_generate_and_report() {
         # state is consistent.
         echo "  hydra-$lang: regenerating dist/$lang/hydra-$lang from native JSON..."
         "$HYDRA_ROOT/heads/$lang/bin/assemble-distribution.sh" "hydra-$lang"
+
+        # Phase 5 runs last, but its output (dist/json/hydra-<lang>/) is an
+        # input to the Phase 2 build of dist/haskell/hydra-<lang>/ — the Haskell
+        # coder that bootstrap-from-json compiles. So in this interim dual-write
+        # state (Phase 1 writes coder.json from the legacy Haskell DSL, Phase 5
+        # overwrites it from the native sources), a native coder change reaches
+        # dist/haskell only if we re-assemble it here from the just-written
+        # native JSON; otherwise it lags to the next sync and the CI consistency
+        # gate (git diff dist/json dist/haskell) fails.
+        #
+        # This re-assemble flows through the normal freshness gate: Phase 1's
+        # update-json-main now folds the native hydra.<lang>.* source hashes into
+        # dist/json/hydra-<lang>/build/main/digest.json (the assembler's input
+        # digest), so assemble_check_fresh correctly sees the change and rebuilds.
+        # No output-digest force-drop is needed (that was the #400 workaround,
+        # now removed — the input digest is honest).
+        #
+        # TODO(post-0.16): once the legacy Haskell DSL copies for hydra-java /
+        # hydra-python are deleted, the native generators become the sole writers
+        # of dist/json/hydra-<lang>/. At that point move this native DSL→JSON step
+        # ahead of Phase 2 (so dist/haskell builds from the native JSON in the
+        # same pass) and delete this re-assemble block entirely — there will be
+        # no remaining producer ordering to reconcile.
+        echo "  hydra-$lang: regenerating dist/haskell/hydra-$lang from native JSON..."
+        "$HYDRA_ROOT/heads/haskell/bin/assemble-distribution.sh" "hydra-$lang"
+        echo "  hydra-$lang: rebuilding Haskell executables so bootstrap-from-json embeds the new coder..."
+        ( cd "$HYDRA_ROOT/heads/haskell" && stack build )
     else
         echo "  hydra-$lang: native output matches snapshot on all $total JSON files."
     fi
+
+    # Record the input hash so the next sync can skip this demo when
+    # nothing relevant has changed.
+    python3 "$HYDRA_ROOT/bin/lib/check-phase5-fresh.py" "$HYDRA_ROOT" "$lang" --record
 }
 
 # Phase 5 is always run for hydra-java and hydra-python (#344): the native
@@ -462,18 +544,18 @@ native_generate_and_report() {
 # JSON on a cold-start bootstrap (when no JSON exists). In any warm state,
 # native is the only writer — drift from the legacy Haskell DSL is silently
 # accepted because the Haskell DSL never runs.
-banner1 "Phase 5: Native DSL→JSON for self-hosted coders (#344)"
+banner1 "Phase 5: Native DSL→JSON for Java/Python coders (#344)"
 echo ""
 # HYDRA_IN_SYNC tells the generator scripts not to re-invoke sync.sh
 # (which would recurse). Standalone invocations of those scripts run
 # sync.sh themselves to ensure the cross-language dist trees their
 # gradle compile imports from are populated.
 export HYDRA_IN_SYNC=1
-# Skip a language's native self-host pass entirely when that language
+# Skip a language's native DSL→JSON pass entirely when that language
 # is not in HOSTS — e.g. a TypeScript-only sync (--hosts typescript)
 # has no reason to spin up Java's full kernel build or Python's pypy
-# self-host demo, and on a tree where both heads were built previously
-# the sentinel-based skip alone won't catch them.
+# driver, and on a tree where both heads were built previously the
+# sentinel-based skip alone won't catch them.
 if printf '%s\n' $HOSTS | grep -qx java; then
     echo "--- hydra-java (native Java DSL → JSON) ---"
     native_generate_and_report java \

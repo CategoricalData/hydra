@@ -17,9 +17,9 @@ sys.setrecursionlimit(10000)
 from hydra.annotations import is_native_type
 from hydra.codegen import (
     generate_source_files,
-    namespace_to_path,
+    module_name_to_path,
 )
-from hydra.context import Context
+from hydra.typing import InferenceContext
 from hydra.core import Binding
 from hydra.dsl.python import FrozenDict, Just, Left, Nothing, Right
 from hydra.graph import Graph
@@ -40,8 +40,8 @@ def bootstrap_schema_map():
     suitable for the JSON decoder.
 
     The bootstrap type map contains types from the kernel modules needed to
-    decode Module from JSON: hydra.context, hydra.core,
-    hydra.error, hydra.graph, hydra.module, and hydra.util.
+    decode Module from JSON: hydra.core, hydra.error,
+    hydra.graph, hydra.module, hydra.typing, and hydra.util.
     """
     from hydra.json.bootstrap import types_by_name
 
@@ -68,8 +68,8 @@ def bootstrap_graph():
 
 
 def empty_context():
-    """Create an empty Context."""
-    return Context(trace=(), messages=(), other=FrozenDict({}))
+    """Create an empty InferenceContext."""
+    return InferenceContext(fresh_type_variable_count=0, trace=())
 
 
 def unwrap_either(result):
@@ -160,7 +160,7 @@ def load_modules_from_json(base_path, namespaces):
     schema_map = bootstrap_schema_map()
     modules = []
     for ns in namespaces:
-        file_path = os.path.join(base_path, namespace_to_path(ns) + ".json")
+        file_path = os.path.join(base_path, module_name_to_path(ns) + ".json")
         json_val = parse_json_file(file_path)
         mod = decode_module(bs_graph, schema_map, json_val)
         print(f"  Loaded: {ns.value}")
@@ -169,7 +169,7 @@ def load_modules_from_json(base_path, namespaces):
 
 
 def read_manifest_field(base_path, field_name):
-    """Read a field from manifest.json as a list of Namespaces."""
+    """Read a field from manifest.json as a list of module names."""
     manifest_path = os.path.join(base_path, "manifest.json")
     with open(manifest_path, "r", encoding="utf-8") as f:
         manifest = json.load(f)
@@ -214,10 +214,10 @@ def strip_term_types(m):
         if isinstance(d, DefinitionTerm):
             td = d.value
             new_term = remove_types_from_term(td.term)
-            stripped.append(DefinitionTerm(TermDefinition(td.name, new_term, Nothing())))
+            stripped.append(DefinitionTerm(TermDefinition(td.name, Nothing(), new_term, Nothing())))
         else:
             stripped.append(d)
-    return Module(m.description, m.name, m.dependencies, tuple(stripped))
+    return Module(m.name, m.metadata, m.dependencies, tuple(stripped))
 
 
 def strip_all_term_types(modules):
@@ -278,12 +278,18 @@ def write_scala(base_path, universe, mods):
 
 
 def write_typescript(base_path, universe, mods):
-    """Generate TypeScript source files from modules."""
+    """Generate TypeScript source files from modules.
+
+    do_hoist_case_statements=True mirrors the per-target dispatch in
+    heads/typescript/.../bootstrap.ts. Hoisting pulls cases out of inline
+    IIFEs into top-level helpers, saving stack frames when the TS runtime
+    walks deeply-nested terms (e.g. when TS hosts the Java coder).
+    """
     from hydra.type_script.coder import module_to_type_script
     from hydra.type_script.language import type_script_language
     generate_sources(
         module_to_type_script, type_script_language(),
-        False, True, False, False,
+        False, True, True, False,
         base_path, universe, mods)
 
 
@@ -294,7 +300,7 @@ def write_lisp_dialect(base_path, dialect_name, ext, universe, mods):
     from hydra.lisp.serde import program_to_expr
     from hydra.lisp.syntax import Dialect
     from hydra.serialization import print_expr, parenthesize
-    from hydra.names import namespace_to_file_path
+    from hydra.names import module_name_to_file_path
     from hydra.packaging import FileExtension, ModuleName
     from hydra.util import CaseConvention
 
@@ -315,7 +321,7 @@ def write_lisp_dialect(base_path, dialect_name, ext, universe, mods):
                 return result
             case Right(value=program):
                 code = print_expr(parenthesize(program_to_expr(program)))
-                file_path = namespace_to_file_path(case_conv, FileExtension(ext), mod.name)
+                file_path = module_name_to_file_path(case_conv, FileExtension(ext), mod.name)
                 return Right(FrozenDict({file_path: code}))
 
     generate_sources(
@@ -529,7 +535,6 @@ def infer_and_write_by_package(
     """
     from hydra import codegen
     from hydra import sorting as Sorting
-    from hydra.context import Context
     from hydra.dsl.python import FrozenDict, Left, Right
 
     seed_ns = {m.name.value for m in seed_acc}
@@ -570,7 +575,7 @@ def infer_and_write_by_package(
     print(f"  Per-package inference: {len(ordered)} packages in dep order: "
           f"{' -> '.join(ordered)}", flush=True)
 
-    ctx = Context((), (), FrozenDict({}))
+    ctx = InferenceContext(fresh_type_variable_count=0, trace=())
     bs_graph = bootstrap_graph()
     acc = list(seed_acc)
     inferred_all = []
@@ -600,7 +605,102 @@ def infer_and_write_by_package(
             _write_package_split_json(dist_json_root, typed_universe, inferred, to_write)
         acc = acc + inferred
         inferred_all.extend(inferred)
+    # #405: prune orphaned JSON for the packages this generator wrote. The
+    # native Python generator owns hydra.python.* (this package's mods are its
+    # keep-set); reconcile deletes stale .json under the owned namespace dirs.
+    # Prefix-scoped so the Haskell-written hydra/dsl/python/ wrappers and the
+    # separately-written manifest.json are never touched (they live outside the
+    # hydra/python/ owned dirs). Mirrors Hydra.Generation.reconcilePackageJsonOrphans.
+    _reconcile_package_json_orphans(dist_json_root, pkg_to_mods)
     return inferred_all
+
+
+def _second_level_dir(rel):
+    """First two path segments of a relative path as "seg1/seg2"
+    (e.g. "hydra/python/coder.json" -> "hydra/python"), or None if fewer than
+    two segments."""
+    forward = rel.replace(os.sep, "/")
+    parts = forward.split("/")
+    if len(parts) < 2:
+        return None
+    return parts[0] + "/" + parts[1]
+
+
+def _reconcile_package_json_orphans(dist_json_root, pkg_to_mods):
+    """Delete orphaned .json files left behind when a module is dropped from
+    this generator's emission set, mirroring the Haskell-side #405 reconcile
+    (Hydra.Generation.reconcilePackageJsonOrphans + Hydra.Digest.reconcileOrphans).
+
+    For each package the native generator wrote, the keep-set is the set of
+    <module_name_to_path ns>.json paths for its written modules. The prune is
+    PREFIX-SCOPED to the second-level namespace directories those files occupy
+    (e.g. hydra/python/); any .json under those dirs not in the keep-set is an
+    orphan and is deleted. Files outside the owned dirs — the Haskell-written
+    hydra/dsl/python/ DSL wrappers and the top-level manifest.json — are out of
+    scope and survive, which is required during the transition where both the
+    native generator and the Haskell DSL pass write into one package dir (#344).
+    Best-effort: I/O failures on individual files are swallowed.
+    """
+    for pkg, pkg_mods in pkg_to_mods.items():
+        if not pkg_mods:
+            continue
+        pkg_dir = os.path.join(dist_json_root, pkg, "src", "main", "json")
+        if not os.path.isdir(pkg_dir):
+            continue
+
+        keep_rel = set()
+        owned_prefixes = set()
+        for m in pkg_mods:
+            rel = module_name_to_path(m.name) + ".json"
+            keep_rel.add(rel.replace(os.sep, "/"))
+            prefix = _second_level_dir(rel)
+            if prefix is not None:
+                owned_prefixes.add(prefix)
+        if not owned_prefixes:
+            continue
+
+        pruned = 0
+        for abs_path in _list_json_files_recursive(pkg_dir):
+            rel = os.path.relpath(abs_path, pkg_dir).replace(os.sep, "/")
+            owned = any(rel == pre or rel.startswith(pre + "/") for pre in owned_prefixes)
+            if not owned:
+                continue
+            if rel in keep_rel:
+                continue
+            try:
+                os.remove(abs_path)
+                print(f"    pruned orphan JSON (#405): {abs_path}", flush=True)
+                pruned += 1
+            except OSError:
+                pass  # best-effort
+        if pruned > 0:
+            print(f"  {pkg}: pruned {pruned} orphaned JSON file(s) under "
+                  f"{', '.join(sorted(owned_prefixes))} (#405)", flush=True)
+            _prune_empty_dirs(pkg_dir)
+
+
+def _list_json_files_recursive(root):
+    """Every regular .json file under root, skipping dotfiles/dot-directories."""
+    out = []
+    for dirpath, dirnames, filenames in os.walk(root):
+        dirnames[:] = [d for d in dirnames if not d.startswith(".")]
+        for fn in filenames:
+            if fn.endswith(".json") and not fn.startswith("."):
+                out.append(os.path.join(dirpath, fn))
+    return out
+
+
+def _prune_empty_dirs(root):
+    """Remove empty subdirectories under root (depth-first); root itself is
+    left alone. Best-effort."""
+    for dirpath, dirnames, filenames in os.walk(root, topdown=False):
+        if dirpath == root:
+            continue
+        try:
+            if not os.listdir(dirpath):
+                os.rmdir(dirpath)
+        except OSError:
+            pass  # best-effort
 
 
 def _write_package_split_json(dist_json_root, universe_mods, universe_for_schema, to_write):
@@ -621,7 +721,7 @@ def _write_package_split_json(dist_json_root, universe_mods, universe_for_schema
             result = codegen.module_to_json(schema_map, m)
             match result:
                 case Right(value=json_str):
-                    file_path = os.path.join(pkg_dir, namespace_to_path(m.name) + ".json")
+                    file_path = os.path.join(pkg_dir, module_name_to_path(m.name) + ".json")
                     os.makedirs(os.path.dirname(file_path), exist_ok=True)
                     new_content = json_str + "\n"
                     if os.path.exists(file_path):

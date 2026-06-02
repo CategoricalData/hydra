@@ -17,62 +17,62 @@ import Prelude hiding (map)
 
 -- Custom helpers
 
-argsPositionalOnly :: TTerm [Py.PosArg] -> TTerm Py.Args
+argsPositionalOnly :: TypedTerm [Py.PosArg] -> TypedTerm Py.Args
 argsPositionalOnly pos = args pos
-  (list ([] :: [TTerm Py.KwargOrStarred]))
-  (list ([] :: [TTerm Py.KwargOrDoubleStarred]))
+  (list ([] :: [TypedTerm Py.KwargOrStarred]))
+  (list ([] :: [TypedTerm Py.KwargOrDoubleStarred]))
 
-classPatternSimple :: TTerm Py.NameOrAttribute -> TTerm Py.ClassPattern
+classPatternSimple :: TypedTerm Py.NameOrAttribute -> TypedTerm Py.ClassPattern
 classPatternSimple nameOrAttr = classPattern nameOrAttr nothing nothing
 
-classPatternWithKeywords :: TTerm Py.NameOrAttribute -> TTerm Py.KeywordPatterns -> TTerm Py.ClassPattern
+classPatternWithKeywords :: TypedTerm Py.NameOrAttribute -> TypedTerm Py.KeywordPatterns -> TypedTerm Py.ClassPattern
 classPatternWithKeywords nameOrAttr kwPatterns = classPattern nameOrAttr nothing (just kwPatterns)
 
-compPairEq :: TTerm Py.BitwiseOr -> TTerm Py.CompareOpBitwiseOrPair
+compPairEq :: TypedTerm Py.BitwiseOr -> TypedTerm Py.CompareOpBitwiseOrPair
 compPairEq rhs = compareOpBitwiseOrPair compareOpEq rhs
 
-doubleQuotedString :: TTerm String -> TTerm Py.String_
+doubleQuotedString :: TypedTerm String -> TypedTerm Py.String_
 doubleQuotedString val = string_ val quoteStyleDouble
 
-functionDefRawSimple :: TTerm Py.Name -> TTerm (Maybe Py.Parameters) -> TTerm Py.Block -> TTerm Py.FunctionDefRaw
-functionDefRawSimple name_ params block_ = functionDefRaw false name_ (list ([] :: [TTerm Py.TypeParameter])) params nothing nothing block_
+functionDefRawSimple :: TypedTerm Py.Name -> TypedTerm (Maybe Py.Parameters) -> TypedTerm Py.Block -> TypedTerm Py.FunctionDefRaw
+functionDefRawSimple name_ params block_ = functionDefRaw false name_ (list ([] :: [TypedTerm Py.TypeParameter])) params nothing nothing block_
 
-functionDefinitionSimple :: TTerm Py.FunctionDefRaw -> TTerm Py.FunctionDefinition
+functionDefinitionSimple :: TypedTerm Py.FunctionDefRaw -> TypedTerm Py.FunctionDefinition
 functionDefinitionSimple raw = functionDefinition nothing raw
 
-lambdaParametersEmpty :: TTerm Py.LambdaParameters
+lambdaParametersEmpty :: TypedTerm Py.LambdaParameters
 lambdaParametersEmpty = lambdaParameters nothing
-  (list ([] :: [TTerm Py.LambdaParamNoDefault]))
-  (list ([] :: [TTerm Py.LambdaParamWithDefault]))
+  (list ([] :: [TypedTerm Py.LambdaParamNoDefault]))
+  (list ([] :: [TypedTerm Py.LambdaParamWithDefault]))
   nothing
 
-lambdaParametersSimple :: TTerm [Py.LambdaParamNoDefault] -> TTerm Py.LambdaParameters
+lambdaParametersSimple :: TypedTerm [Py.LambdaParamNoDefault] -> TypedTerm Py.LambdaParameters
 lambdaParametersSimple params = lambdaParameters nothing params
-  (list ([] :: [TTerm Py.LambdaParamWithDefault]))
+  (list ([] :: [TypedTerm Py.LambdaParamWithDefault]))
   nothing
 
-lambda_ :: TTerm Py.LambdaParameters -> TTerm Py.Expression -> TTerm Py.Lambda
+lambda_ :: TypedTerm Py.LambdaParameters -> TypedTerm Py.Expression -> TypedTerm Py.Lambda
 lambda_ = Gen.lambda
 
-list_ :: TTerm [Py.StarNamedExpression] -> TTerm Py.List
+list_ :: TypedTerm [Py.StarNamedExpression] -> TypedTerm Py.List
 list_ = wrap Py._List
 
-paramNoDefaultParametersSimple :: TTerm [Py.ParamNoDefault] -> TTerm Py.ParamNoDefaultParameters
-paramNoDefaultParametersSimple noDefault = paramNoDefaultParameters noDefault (list ([] :: [TTerm Py.ParamWithDefault])) nothing
+paramNoDefaultParametersSimple :: TypedTerm [Py.ParamNoDefault] -> TypedTerm Py.ParamNoDefaultParameters
+paramNoDefaultParametersSimple noDefault = paramNoDefaultParameters noDefault (list ([] :: [TypedTerm Py.ParamWithDefault])) nothing
 
-paramNoDefaultSimple :: TTerm Py.Param -> TTerm Py.ParamNoDefault
+paramNoDefaultSimple :: TypedTerm Py.Param -> TypedTerm Py.ParamNoDefault
 paramNoDefaultSimple p = paramNoDefault p nothing
 
-paramSimple :: TTerm Py.Name -> TTerm Py.Param
+paramSimple :: TypedTerm Py.Name -> TypedTerm Py.Param
 paramSimple n = param n nothing
 
-simpleTypeParameterSimple :: TTerm Py.Name -> TTerm Py.SimpleTypeParameter
+simpleTypeParameterSimple :: TypedTerm Py.Name -> TypedTerm Py.SimpleTypeParameter
 simpleTypeParameterSimple n = simpleTypeParameter n nothing nothing
 
-sliceSlice :: TTerm Py.SliceExpression -> TTerm Py.Slice
+sliceSlice :: TypedTerm Py.SliceExpression -> TypedTerm Py.Slice
 sliceSlice = inject Py._Slice Py._Slice_slice_
 
-string_ :: TTerm String -> TTerm Py.QuoteStyle -> TTerm Py.String_
+string_ :: TypedTerm String -> TypedTerm Py.QuoteStyle -> TypedTerm Py.String_
 string_ val style = record Py._String [
   Py._String_value>>: val,
   Py._String_prefix>>: nothing,
@@ -80,73 +80,73 @@ string_ val style = record Py._String [
 
 -- Like `string_`, but with an explicit prefix (`r` / `b` / `rb` / `u`) attached.
 -- Used by raw triple-quoted docstrings to suppress backslash-escape interpretation.
-prefixedString_ :: TTerm Py.StringPrefix -> TTerm String -> TTerm Py.QuoteStyle -> TTerm Py.String_
+prefixedString_ :: TypedTerm Py.StringPrefix -> TypedTerm String -> TypedTerm Py.QuoteStyle -> TypedTerm Py.String_
 prefixedString_ prefix_ val style = record Py._String [
   Py._String_value>>: val,
   Py._String_prefix>>: just prefix_,
   Py._String_quoteStyle>>: style]
 
-untypedAssignmentSimple :: TTerm [Py.StarTarget] -> TTerm Py.AnnotatedRhs -> TTerm Py.UntypedAssignment
+untypedAssignmentSimple :: TypedTerm [Py.StarTarget] -> TypedTerm Py.AnnotatedRhs -> TypedTerm Py.UntypedAssignment
 untypedAssignmentSimple targets rhs = untypedAssignment targets rhs nothing
 
 -- Expression conversion pipeline: Primary -> ... -> Expression
 
-pyPrimaryToPyExpression :: TTerm Py.Primary -> TTerm Py.Expression
+pyPrimaryToPyExpression :: TypedTerm Py.Primary -> TypedTerm Py.Expression
 pyPrimaryToPyExpression p = expressionSimple (pyPrimaryToPyDisjunction p)
 
-pyPrimaryToPyDisjunction :: TTerm Py.Primary -> TTerm Py.Disjunction
+pyPrimaryToPyDisjunction :: TypedTerm Py.Primary -> TypedTerm Py.Disjunction
 pyPrimaryToPyDisjunction p = wrap Py._Disjunction (list [pyPrimaryToPyConjunction p])
 
-pyPrimaryToPyConjunction :: TTerm Py.Primary -> TTerm Py.Conjunction
+pyPrimaryToPyConjunction :: TypedTerm Py.Primary -> TypedTerm Py.Conjunction
 pyPrimaryToPyConjunction p = wrap Py._Conjunction (list [pyPrimaryToPyInversion p])
 
-pyPrimaryToPyInversion :: TTerm Py.Primary -> TTerm Py.Inversion
+pyPrimaryToPyInversion :: TypedTerm Py.Primary -> TypedTerm Py.Inversion
 pyPrimaryToPyInversion p = inversionSimple (pyPrimaryToPyComparison p)
 
-pyPrimaryToPyComparison :: TTerm Py.Primary -> TTerm Py.Comparison
-pyPrimaryToPyComparison p = comparison (pyPrimaryToPyBitwiseOr p) (list ([] :: [TTerm Py.CompareOpBitwiseOrPair]))
+pyPrimaryToPyComparison :: TypedTerm Py.Primary -> TypedTerm Py.Comparison
+pyPrimaryToPyComparison p = comparison (pyPrimaryToPyBitwiseOr p) (list ([] :: [TypedTerm Py.CompareOpBitwiseOrPair]))
 
-pyPrimaryToPyBitwiseOr :: TTerm Py.Primary -> TTerm Py.BitwiseOr
+pyPrimaryToPyBitwiseOr :: TypedTerm Py.Primary -> TypedTerm Py.BitwiseOr
 pyPrimaryToPyBitwiseOr p = bitwiseOr nothing (pyPrimaryToPyBitwiseXor p)
 
-pyPrimaryToPyBitwiseXor :: TTerm Py.Primary -> TTerm Py.BitwiseXor
+pyPrimaryToPyBitwiseXor :: TypedTerm Py.Primary -> TypedTerm Py.BitwiseXor
 pyPrimaryToPyBitwiseXor p = bitwiseXor nothing (pyPrimaryToPyBitwiseAnd p)
 
-pyPrimaryToPyBitwiseAnd :: TTerm Py.Primary -> TTerm Py.BitwiseAnd
+pyPrimaryToPyBitwiseAnd :: TypedTerm Py.Primary -> TypedTerm Py.BitwiseAnd
 pyPrimaryToPyBitwiseAnd p = bitwiseAnd nothing (pyPrimaryToPyShiftExpression p)
 
-pyPrimaryToPyShiftExpression :: TTerm Py.Primary -> TTerm Py.ShiftExpression
+pyPrimaryToPyShiftExpression :: TypedTerm Py.Primary -> TypedTerm Py.ShiftExpression
 pyPrimaryToPyShiftExpression p = shiftExpression nothing (pyPrimaryToPySum p)
 
-pyPrimaryToPySum :: TTerm Py.Primary -> TTerm Py.Sum
+pyPrimaryToPySum :: TypedTerm Py.Primary -> TypedTerm Py.Sum
 pyPrimaryToPySum p = Gen.sum nothing (pyPrimaryToPyTerm p)
 
-pyPrimaryToPyTerm :: TTerm Py.Primary -> TTerm Py.Term
+pyPrimaryToPyTerm :: TypedTerm Py.Primary -> TypedTerm Py.Term
 pyPrimaryToPyTerm p = Gen.term nothing (pyPrimaryToPyFactor p)
 
-pyPrimaryToPyFactor :: TTerm Py.Primary -> TTerm Py.Factor
+pyPrimaryToPyFactor :: TypedTerm Py.Primary -> TypedTerm Py.Factor
 pyPrimaryToPyFactor p = factorSimple (pyPrimaryToPyPower p)
 
-pyPrimaryToPyPower :: TTerm Py.Primary -> TTerm Py.Power
+pyPrimaryToPyPower :: TypedTerm Py.Primary -> TypedTerm Py.Power
 pyPrimaryToPyPower p = power (pyPrimaryToPyAwaitPrimary p) nothing
 
-pyPrimaryToPyAwaitPrimary :: TTerm Py.Primary -> TTerm Py.AwaitPrimary
+pyPrimaryToPyAwaitPrimary :: TypedTerm Py.Primary -> TypedTerm Py.AwaitPrimary
 pyPrimaryToPyAwaitPrimary p = awaitPrimary false p
 
-pyComparisonToPyExpression :: TTerm Py.Comparison -> TTerm Py.Expression
+pyComparisonToPyExpression :: TypedTerm Py.Comparison -> TypedTerm Py.Expression
 pyComparisonToPyExpression c = expressionSimple
   (wrap Py._Disjunction (list [
     wrap Py._Conjunction (list [
       inversionSimple c])]))
 
-pyNameToPyPrimary :: TTerm Py.Name -> TTerm Py.Primary
+pyNameToPyPrimary :: TypedTerm Py.Name -> TypedTerm Py.Primary
 pyNameToPyPrimary n = primarySimple (atomName n)
 
-pyNameToPyExpression :: TTerm Py.Name -> TTerm Py.Expression
+pyNameToPyExpression :: TypedTerm Py.Name -> TypedTerm Py.Expression
 pyNameToPyExpression n = pyPrimaryToPyExpression (pyNameToPyPrimary n)
 
-pyStringToPyExpression :: TTerm Py.String_ -> TTerm Py.Expression
+pyStringToPyExpression :: TypedTerm Py.String_ -> TypedTerm Py.Expression
 pyStringToPyExpression s = pyPrimaryToPyExpression (primarySimple (atomString s))
 
-raiseExpressionException :: TTerm Py.RaiseExpression -> TTerm Py.Expression
+raiseExpressionException :: TypedTerm Py.RaiseExpression -> TypedTerm Py.Expression
 raiseExpressionException re = project Py._RaiseExpression Py._RaiseExpression_expression @@ re

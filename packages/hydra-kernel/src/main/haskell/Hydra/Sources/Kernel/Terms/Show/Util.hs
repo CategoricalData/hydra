@@ -60,16 +60,16 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> (kernelTypesModuleNames),
-            moduleDescription = Just "String representations of hydra.util types"}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just "String representations of hydra.util types")}
   where
    definitions = [
      toDefinition caseConvention,
      toDefinition comparison]
 
-define :: String -> TTerm a -> TTermDefinition a
+define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModule module_
 
-caseConvention :: TTermDefinition (CaseConvention -> String)
+caseConvention :: TypedTermDefinition (CaseConvention -> String)
 caseConvention = define "caseConvention" $
   doc "Show a case convention as a string" $
   "c" ~> cases _CaseConvention (var "c") Nothing [
@@ -78,7 +78,7 @@ caseConvention = define "caseConvention" $
     _CaseConvention_camel>>: constant (string "camelCase"),
     _CaseConvention_pascal>>: constant (string "PascalCase")]
 
-comparison :: TTermDefinition (Comparison -> String)
+comparison :: TypedTermDefinition (Comparison -> String)
 comparison = define "comparison" $
   doc "Show a comparison result as a string" $
   "c" ~> cases _Comparison (var "c") Nothing [

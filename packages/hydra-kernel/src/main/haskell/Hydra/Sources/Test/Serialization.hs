@@ -5,9 +5,9 @@
 -- Note: This module supersedes the Haskell-specific Hydra.SerializationSpec tests.
 module Hydra.Sources.Test.Serialization where
 
--- Standard imports for deep DSL tests (produces TTerm a with specific types)
+-- Standard imports for deep DSL tests (produces TypedTerm a with specific types)
 import Hydra.Kernel
-import           Hydra.Dsl.Bootstrap (unqualifiedDep)
+import           Hydra.Dsl.Bootstrap (unqualifiedDep, descriptionMetadata)
 import Hydra.Dsl.Meta.Testing                 as Testing
 import Hydra.Dsl.Meta.Phantoms                as Phantoms hiding ((++))
 import Hydra.Sources.Kernel.Types.All
@@ -37,7 +37,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = unqualifiedDep <$> ([Serialization.ns] ++ kernelTypesModuleNames),
-            moduleDescription = (Just "Test cases for AST serialization")}
+            moduleMetadata = descriptionMetadata ((Just "Test cases for AST serialization"))}
   where
     definitions = [
       Phantoms.toDefinition arrowOp,
@@ -48,10 +48,10 @@ module_ = Module {
       Phantoms.toDefinition caseOp,
       Phantoms.toDefinition allTests]
 
-define :: String -> TTerm a -> TTermDefinition a
+define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModule module_
 
-allTests :: TTermDefinition TestGroup
+allTests :: TypedTermDefinition TestGroup
 allTests = define "allTests" $
     doc "Test cases for AST serialization" $
     supergroup "serialization" [
@@ -61,83 +61,13 @@ allTests = define "allTests" $
       listGroup,
       precedenceGroup]
 
--- Helper for building an infix expression: ifx op lhs rhs
-infixExpr :: AsTerm t Op => t -> TTerm Expr -> TTerm Expr -> TTerm Expr
-infixExpr opExpr lhs rhs = Serialization.ifx @@ asTerm opExpr @@ lhs @@ rhs
-
--- Universal serialization test case: printExpr (parenthesize expr) == expected
-serCase :: String -> TTerm Expr -> TTerm String -> TTerm TestCaseWithMetadata
-serCase cname expr expected = universalCase cname (Serialization.printExpr @@ (Serialization.parenthesize @@ expr)) expected
-
--- Helper for building a constant expression
-cstExpr :: TTerm String -> TTerm Expr
-cstExpr s = Serialization.cst @@ s
-
--- Helper for building a numeric expression
-numExpr :: Int -> TTerm Expr
-numExpr n = Serialization.num @@ int32 n
-
--- Helper for building a space-separated expression
-spaceSepExpr :: [TTerm Expr] -> TTerm Expr
-spaceSepExpr exprs = Serialization.spaceSep @@ list exprs
-
--- Helper for building a newline-separated expression
-newlineSepExpr :: [TTerm Expr] -> TTerm Expr
-newlineSepExpr exprs = Serialization.newlineSep @@ list exprs
-
--- Helper for building a bracket list
-bracketListExpr :: AsTerm t BlockStyle => t -> [TTerm Expr] -> TTerm Expr
-bracketListExpr style exprs = Serialization.bracketList @@ asTerm style @@ list exprs
-
--- Inline style (reference to kernel)
-inlineBlockStyle :: TTermDefinition BlockStyle
-inlineBlockStyle = Serialization.inlineStyle
-
 -- Test operators defined locally to avoid a dependency on hydra.haskell.operators
-arrowOp :: TTermDefinition Op
+arrowOp :: TypedTermDefinition Op
 arrowOp = define "arrowOp" $
   Serialization.op @@ string "->" @@ (Math.negate $ int32 1) @@ Ast.associativityRight
 
-gtOp :: TTermDefinition Op
-gtOp = define "gtOp" $
-  Serialization.op @@ string ">" @@ int32 4 @@ Ast.associativityNone
-
-plusOp :: TTermDefinition Op
-plusOp = define "plusOp" $
-  Serialization.op @@ string "+" @@ int32 6 @@ Ast.associativityBoth
-
-multOp :: TTermDefinition Op
-multOp = define "multOp" $
-  Serialization.op @@ string "*" @@ int32 7 @@ Ast.associativityBoth
-
-lambdaOp :: TTermDefinition Op
-lambdaOp = define "lambdaOp" $
-  Serialization.op @@ string "->" @@ (Math.negate $ int32 1) @@ Ast.associativityRight
-
-caseOp :: TTermDefinition Op
-caseOp = define "caseOp" $
-  Serialization.op @@ string "->" @@ int32 0 @@ Ast.associativityNone
-
--- Helper for lambda expressions: \vars -> body
--- lambdaExpr ["x", "y"] body = ifx lambdaOp (cst "\x y") body
-lambdaExpr :: [String] -> TTerm Expr -> TTerm Expr
-lambdaExpr vars body = infixExpr lambdaOp (cstExpr $ string ("\\" ++ unwords vars)) body
-
--- Helper for case statements
--- This creates: case cond of { pattern1 -> expr1; pattern2 -> expr2; ... }
-casesExpr :: TTerm Expr -> [(TTerm Expr, TTerm Expr)] -> TTerm Expr
-casesExpr cond branches = infixExpr ofOp lhs rhs
-  where
-    lhs = spaceSepExpr [cstExpr $ string "case", cond]
-    rhs = newlineSepExpr [infixExpr caseOp pat expr | (pat, expr) <- branches]
-    ofOp = Ast.op
-      (Ast.symbol $ string "of")
-      (Ast.padding Ast.wsSpace (Ast.wsBreakAndIndent $ string "  "))
-      (Ast.precedence $ int32 0)
-      Ast.associativityNone
-
 -- | Test cases for associativity
-associativityGroup :: TTerm TestGroup
+associativityGroup :: TypedTerm TestGroup
 associativityGroup = subgroup "associativity" [
     serCase "right-associative operator"
       -- (a -> b) -> c -> d
@@ -145,8 +75,16 @@ associativityGroup = subgroup "associativity" [
                          (infixExpr arrowOp (cstExpr $ string "c") (cstExpr $ string "d")))
       (string "(a -> b) -> c -> d")]
 
+-- Helper for building a bracket list
+bracketListExpr :: AsTerm t BlockStyle => t -> [TypedTerm Expr] -> TypedTerm Expr
+bracketListExpr style exprs = Serialization.bracketList @@ asTerm style @@ list exprs
+
+caseOp :: TypedTermDefinition Op
+caseOp = define "caseOp" $
+  Serialization.op @@ string "->" @@ int32 0 @@ Ast.associativityNone
+
 -- | Test cases for case statements
-caseStatementGroup :: TTerm TestGroup
+caseStatementGroup :: TypedTerm TestGroup
 caseStatementGroup = subgroup "case statements" [
     serCase "simple case statement"
       (casesExpr (infixExpr gtOp (cstExpr $ string "x") (numExpr 42))
@@ -163,15 +101,53 @@ caseStatementGroup = subgroup "case statements" [
                   (cstExpr $ string "False", cstExpr $ string "Small")])
       (string "case x > 42 of\n  True -> case x > 100 of\n    True -> ReallyBig\n    False -> Big\n  False -> Small")]
 
+-- Helper for case statements
+-- This creates: case cond of { pattern1 -> expr1; pattern2 -> expr2; ... }
+casesExpr :: TypedTerm Expr -> [(TypedTerm Expr, TypedTerm Expr)] -> TypedTerm Expr
+casesExpr cond branches = infixExpr ofOp lhs rhs
+  where
+    lhs = spaceSepExpr [cstExpr $ string "case", cond]
+    rhs = newlineSepExpr [infixExpr caseOp pat expr | (pat, expr) <- branches]
+    ofOp = Ast.op
+      (Ast.symbol $ string "of")
+      (Ast.padding Ast.wsSpace (Ast.wsBreakAndIndent $ string "  "))
+      (Ast.precedence $ int32 0)
+      Ast.associativityNone
+
+-- Helper for building a constant expression
+cstExpr :: TypedTerm String -> TypedTerm Expr
+cstExpr s = Serialization.cst @@ s
+
+gtOp :: TypedTermDefinition Op
+gtOp = define "gtOp" $
+  Serialization.op @@ string ">" @@ int32 4 @@ Ast.associativityNone
+
+-- Helper for building an infix expression: ifx op lhs rhs
+infixExpr :: AsTerm t Op => t -> TypedTerm Expr -> TypedTerm Expr -> TypedTerm Expr
+infixExpr opExpr lhs rhs = Serialization.ifx @@ asTerm opExpr @@ lhs @@ rhs
+
+-- Inline style (reference to kernel)
+inlineBlockStyle :: TypedTermDefinition BlockStyle
+inlineBlockStyle = Serialization.inlineStyle
+
+-- Helper for lambda expressions: \vars -> body
+-- lambdaExpr ["x", "y"] body = ifx lambdaOp (cst "\x y") body
+lambdaExpr :: [String] -> TypedTerm Expr -> TypedTerm Expr
+lambdaExpr vars body = infixExpr lambdaOp (cstExpr $ string ("\\" ++ unwords vars)) body
+
 -- | Test cases for lambda expressions
-lambdaGroup :: TTerm TestGroup
+lambdaGroup :: TypedTerm TestGroup
 lambdaGroup = subgroup "lambdas" [
     serCase "simple lambda"
       (lambdaExpr ["x", "y"] (infixExpr plusOp (cstExpr $ string "x") (cstExpr $ string "y")))
       (string "\\x y -> x + y")]
 
+lambdaOp :: TypedTermDefinition Op
+lambdaOp = define "lambdaOp" $
+  Serialization.op @@ string "->" @@ (Math.negate $ int32 1) @@ Ast.associativityRight
+
 -- | Test cases for list expressions
-listGroup :: TTerm TestGroup
+listGroup :: TypedTerm TestGroup
 listGroup = subgroup "lists" [
     serCase "empty list"
       (bracketListExpr inlineBlockStyle [])
@@ -196,8 +172,24 @@ listGroup = subgroup "lists" [
          numExpr 2])
       (string "[[1, (2 + 3) * (1 + 10)], 2]")]
 
+multOp :: TypedTermDefinition Op
+multOp = define "multOp" $
+  Serialization.op @@ string "*" @@ int32 7 @@ Ast.associativityBoth
+
+-- Helper for building a newline-separated expression
+newlineSepExpr :: [TypedTerm Expr] -> TypedTerm Expr
+newlineSepExpr exprs = Serialization.newlineSep @@ list exprs
+
+-- Helper for building a numeric expression
+numExpr :: Int -> TypedTerm Expr
+numExpr n = Serialization.num @@ int32 n
+
+plusOp :: TypedTermDefinition Op
+plusOp = define "plusOp" $
+  Serialization.op @@ string "+" @@ int32 6 @@ Ast.associativityBoth
+
 -- | Test cases for operator precedence
-precedenceGroup :: TTerm TestGroup
+precedenceGroup :: TypedTerm TestGroup
 precedenceGroup = subgroup "precedence" [
     serCase "operators with different precedence - no parens needed"
       (infixExpr plusOp
@@ -221,3 +213,11 @@ precedenceGroup = subgroup "precedence" [
         (infixExpr multOp (cstExpr $ string "x") (cstExpr $ string "y"))
         (cstExpr $ string "z"))
       (string "x * y * z")]
+
+-- Universal serialization test case: printExpr (parenthesize expr) == expected
+serCase :: String -> TypedTerm Expr -> TypedTerm String -> TypedTerm TestCaseWithMetadata
+serCase cname expr expected = universalCase cname (Serialization.printExpr @@ (Serialization.parenthesize @@ expr)) expected
+
+-- Helper for building a space-separated expression
+spaceSepExpr :: [TypedTerm Expr] -> TypedTerm Expr
+spaceSepExpr exprs = Serialization.spaceSep @@ list exprs

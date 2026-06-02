@@ -14,7 +14,7 @@ import java.util.function.Function;
 import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.optional;
 import static hydra.dsl.Types.scheme;
-import hydra.context.Context;
+import hydra.typing.InferenceContext;
 import hydra.errors.Error_;
 import hydra.util.Either;
 
@@ -47,14 +47,14 @@ public class Bind extends PrimitiveFunction {
      * @return a function that performs monadic bind on optional values
      */
     @Override
-    protected Function<List<Term>, Function<Context, Function<Graph, Either<Error_, Term>>>> implementation() {
+    protected Function<List<Term>, Function<InferenceContext, Function<Graph, Either<Error_, Term>>>> implementation() {
         return args -> cx -> graph -> hydra.lib.eithers.Bind.apply(hydra.extract.Core.maybeTerm(t -> Either.right(t), graph, args.get(0)), arg -> {
                 if (arg.isNothing()) {
                     return Either.right(Terms.optional(Maybe.nothing()));
                 }
                 Term val = arg.fromJust();
                 Either<Error_, Term> r = hydra.Reduction.reduceTerm(
-                    hydra.Lexical.emptyContext(), graph, true, Terms.apply(args.get(1), val));
+                    hydra.Lexical.emptyInferenceContext(), graph, true, Terms.apply(args.get(1), val));
                 if (r.isLeft()) return (Either) r;
                 Either<Error_, Maybe<Term>> maybeResult = hydra.extract.Core.maybeTerm(
                     t -> Either.right(t), graph, ((Either.Right<Error_, Term>) r).value);

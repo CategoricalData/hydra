@@ -4,7 +4,7 @@ module Hydra.Sources.Test.Checking.Collections where
 
 -- Standard imports for term-encoded tests
 import Hydra.Kernel
-import           Hydra.Dsl.Bootstrap (unqualifiedDep)
+import           Hydra.Dsl.Bootstrap (unqualifiedDep, descriptionMetadata)
 import Hydra.Dsl.Meta.Testing                 as Testing
 import Hydra.Dsl.Meta.Terms                   as Terms
 import Hydra.Sources.Kernel.Types.All
@@ -26,7 +26,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = unqualifiedDep <$> ([TestGraph.ns, ModuleName "hydra.rewriting", ModuleName "hydra.inference", ModuleName "hydra.scoping", ModuleName "hydra.show.core", ModuleName "hydra.test.testTypes"] ++ kernelTypesModuleNames),
-            moduleDescription = (Just "Collection type checking test cases: lists, sets, maps")}
+            moduleMetadata = descriptionMetadata ((Just "Collection type checking test cases: lists, sets, maps"))}
   where
     definitions = [
       Phantoms.toDefinition allTests,
@@ -48,10 +48,10 @@ module_ = Module {
       Phantoms.toDefinition nestedSetsTests,
       Phantoms.toDefinition setsWithComplexTypesTests]
 
-define :: String -> TTerm a -> TTermDefinition a
+define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModule module_
 
-allTests :: TTermDefinition TestGroup
+allTests :: TypedTermDefinition TestGroup
 allTests = define "allTests" $
   supergroup "Collections" [
   listsTests,
@@ -62,32 +62,7 @@ allTests = define "allTests" $
 
 ------ Lists ------
 
-listsTests :: TTermDefinition TestGroup
-listsTests = define "listsTests" $
-  supergroup "Lists" [
-  listsOfLiteralsTests,
-  emptyListsTests,
-  polymorphicListsTests,
-  nestedListsTests,
-  listsInComplexContextsTests]
-
-listsOfLiteralsTests :: TTermDefinition TestGroup
-listsOfLiteralsTests = define "listsOfLiteralsTests" $
-  subgroup "Lists of literals" [
-  noChange "int list"
-    (list [int32 1, int32 2])
-    (T.list T.int32),
-  noChange "string list"
-    (list [string "hello", string "world"])
-    (T.list T.string),
-  noChange "single element list"
-    (list [bigint 42])
-    (T.list T.bigint),
-  noChange "mixed numeric types"
-    (list [float32 1.0, float32 2.5, float32 3.14])
-    (T.list T.float32)]
-
-emptyListsTests :: TTermDefinition TestGroup
+emptyListsTests :: TypedTermDefinition TestGroup
 emptyListsTests = define "emptyListsTests" $
   subgroup "Empty lists" [
   checkTest "empty list" []
@@ -104,7 +79,57 @@ emptyListsTests = define "emptyListsTests" $
     (tylam "t0" $ tyapps (pair (tyapp (list []) (T.var "t0")) (string "context")) [T.list $ T.var "t0", T.string])
     (T.forAll "t0" $ T.pair (T.list $ T.var "t0") T.string)]
 
-polymorphicListsTests :: TTermDefinition TestGroup
+listsInComplexContextsTests :: TypedTermDefinition TestGroup
+listsInComplexContextsTests = define "listsInComplexContextsTests" $
+  subgroup "Lists in complex contexts" [
+  checkTest "multiple lists in tuple" []
+    (tuple [
+      list [int32 1, int32 2],
+      list [string "a", string "b"]])
+    (tyapps (pair (list [int32 1, int32 2]) (list [string "a", string "b"])) [T.list T.int32, T.list T.string])
+    (T.pair (T.list T.int32) (T.list T.string))]
+
+listsOfLiteralsTests :: TypedTermDefinition TestGroup
+listsOfLiteralsTests = define "listsOfLiteralsTests" $
+  subgroup "Lists of literals" [
+  noChange "int list"
+    (list [int32 1, int32 2])
+    (T.list T.int32),
+  noChange "string list"
+    (list [string "hello", string "world"])
+    (T.list T.string),
+  noChange "single element list"
+    (list [bigint 42])
+    (T.list T.bigint),
+  noChange "mixed numeric types"
+    (list [float32 1.0, float32 2.5, float32 3.14])
+    (T.list T.float32)]
+
+listsTests :: TypedTermDefinition TestGroup
+listsTests = define "listsTests" $
+  supergroup "Lists" [
+  listsOfLiteralsTests,
+  emptyListsTests,
+  polymorphicListsTests,
+  nestedListsTests,
+  listsInComplexContextsTests]
+
+nestedListsTests :: TypedTermDefinition TestGroup
+nestedListsTests = define "nestedListsTests" $
+  subgroup "Nested lists" [
+  noChange "list of lists"
+    (list [list [int32 1], list [int32 2, int32 3]])
+    (T.list $ T.list T.int32),
+  checkTest "empty nested lists" []
+    (list [list [], list []])
+    (tylam "t0" $ list [tyapp (list []) (T.var "t0"), tyapp (list []) (T.var "t0")])
+    (T.forAll "t0" $ T.list $ T.list $ T.var "t0"),
+  checkTest "nested polymorphic" []
+    (lambda "x" $ list [list [var "x"]])
+    (tylam "t0" $ lambdaTyped "x" (T.var "t0") $ list [list [var "x"]])
+    (T.forAll "t0" $ T.function (T.var "t0") (T.list $ T.list $ T.var "t0"))]
+
+polymorphicListsTests :: TypedTermDefinition TestGroup
 polymorphicListsTests = define "polymorphicListsTests" $
   subgroup "Polymorphic lists" [
   checkTest "list from lambda" []
@@ -120,81 +145,9 @@ polymorphicListsTests = define "polymorphicListsTests" $
     (tylam "t0" $ lambdaTyped "x" (T.var "t0") $ lambdaTyped "y" (T.var "t0") $ list [var "x", var "y"])
     (T.forAll "t0" $ T.function (T.var "t0") (T.function (T.var "t0") (T.list $ T.var "t0")))]
 
-nestedListsTests :: TTermDefinition TestGroup
-nestedListsTests = define "nestedListsTests" $
-  subgroup "Nested lists" [
-  noChange "list of lists"
-    (list [list [int32 1], list [int32 2, int32 3]])
-    (T.list $ T.list T.int32),
-  checkTest "empty nested lists" []
-    (list [list [], list []])
-    (tylam "t0" $ list [tyapp (list []) (T.var "t0"), tyapp (list []) (T.var "t0")])
-    (T.forAll "t0" $ T.list $ T.list $ T.var "t0"),
-  checkTest "nested polymorphic" []
-    (lambda "x" $ list [list [var "x"]])
-    (tylam "t0" $ lambdaTyped "x" (T.var "t0") $ list [list [var "x"]])
-    (T.forAll "t0" $ T.function (T.var "t0") (T.list $ T.list $ T.var "t0"))]
-
-listsInComplexContextsTests :: TTermDefinition TestGroup
-listsInComplexContextsTests = define "listsInComplexContextsTests" $
-  subgroup "Lists in complex contexts" [
-  checkTest "multiple lists in tuple" []
-    (tuple [
-      list [int32 1, int32 2],
-      list [string "a", string "b"]])
-    (tyapps (pair (list [int32 1, int32 2]) (list [string "a", string "b"])) [T.list T.int32, T.list T.string])
-    (T.pair (T.list T.int32) (T.list T.string))]
-
 ------ Maps ------
 
-mapsTests :: TTermDefinition TestGroup
-mapsTests = define "mapsTests" $
-  supergroup "Maps" [
-  monomorphicMapsTests,
-  polymorphicMapsTests,
-  mapsInComplexContextsTests,
-  mapsWithComplexTypesTests]
-
-monomorphicMapsTests :: TTermDefinition TestGroup
-monomorphicMapsTests = define "monomorphicMapsTests" $
-  subgroup "Monomorphic maps" [
-  checkTest "empty map" []
-    (mapTerm [])
-    (tylams ["t0", "t1"] $ tyapps (mapTerm []) [T.var "t0", T.var "t1"])
-    (T.forAlls ["t0", "t1"] $ T.map (T.var "t0") (T.var "t1")),
-  noChange "int to string map"
-    (mapTerm [(int32 1, string "one"),
-                        (int32 2, string "two")])
-    (T.map T.int32 T.string),
-  noChange "string to int map"
-    (mapTerm [(string "a", int32 1),
-                        (string "b", int32 2)])
-    (T.map T.string T.int32),
-  noChange "single entry map"
-    (mapTerm [(bigint 42, boolean True)])
-    (T.map T.bigint T.boolean)]
-
-polymorphicMapsTests :: TTermDefinition TestGroup
-polymorphicMapsTests = define "polymorphicMapsTests" $
-  subgroup "Polymorphic maps" [
-  checkTest "map from lambda keys" []
-    (lambda "k" $ mapTerm [(var "k", string "value")])
-    (tylam "t0" $ lambdaTyped "k" (T.var "t0") $ mapTerm [(var "k", string "value")])
-    (T.forAll "t0" $ T.function (T.var "t0") (T.map (T.var "t0") T.string)),
-  checkTest "map from lambda values" []
-    (lambda "v" $ mapTerm [(string "key", var "v")])
-    (tylam "t0" $ lambdaTyped "v" (T.var "t0") $ mapTerm [(string "key", var "v")])
-    (T.forAll "t0" $ T.function (T.var "t0") (T.map T.string (T.var "t0"))),
-  checkTest "map from lambda both" []
-    (lambda "k" $ lambda "v" $ mapTerm [(var "k", var "v")])
-    (tylams ["t0", "t1"] $ lambdaTyped "k" (T.var "t0") $ lambdaTyped "v" (T.var "t1") $ mapTerm [(var "k", var "v")])
-    (T.forAlls ["t0", "t1"] $ T.function (T.var "t0") (T.function (T.var "t1") (T.map (T.var "t0") (T.var "t1")))),
-  checkTest "map with repeated variables" []
-    (lambda "x" $ mapTerm [(var "x", var "x")])
-    (tylam "t0" $ lambdaTyped "x" (T.var "t0") $ mapTerm [(var "x", var "x")])
-    (T.forAll "t0" $ T.function (T.var "t0") (T.map (T.var "t0") (T.var "t0")))]
-
-mapsInComplexContextsTests :: TTermDefinition TestGroup
+mapsInComplexContextsTests :: TypedTermDefinition TestGroup
 mapsInComplexContextsTests = define "mapsInComplexContextsTests" $
   subgroup "Maps in complex contexts" [
   checkTest "map in tuple" []
@@ -215,7 +168,15 @@ mapsInComplexContextsTests = define "mapsInComplexContextsTests" $
       var "lookup")
     (T.map T.string T.int32)]
 
-mapsWithComplexTypesTests :: TTermDefinition TestGroup
+mapsTests :: TypedTermDefinition TestGroup
+mapsTests = define "mapsTests" $
+  supergroup "Maps" [
+  monomorphicMapsTests,
+  polymorphicMapsTests,
+  mapsInComplexContextsTests,
+  mapsWithComplexTypesTests]
+
+mapsWithComplexTypesTests :: TypedTermDefinition TestGroup
 mapsWithComplexTypesTests = define "mapsWithComplexTypesTests" $
   subgroup "Maps with complex types" [
   noChange "map of records"
@@ -234,18 +195,48 @@ mapsWithComplexTypesTests = define "mapsWithComplexTypesTests" $
     (mapTerm [(string "coords", tyapps (pair (int32 10) (int32 20)) [T.int32, T.int32])])
     (T.map T.string (T.pair T.int32 T.int32))]
 
+monomorphicMapsTests :: TypedTermDefinition TestGroup
+monomorphicMapsTests = define "monomorphicMapsTests" $
+  subgroup "Monomorphic maps" [
+  checkTest "empty map" []
+    (mapTerm [])
+    (tylams ["t0", "t1"] $ tyapps (mapTerm []) [T.var "t0", T.var "t1"])
+    (T.forAlls ["t0", "t1"] $ T.map (T.var "t0") (T.var "t1")),
+  noChange "int to string map"
+    (mapTerm [(int32 1, string "one"),
+                        (int32 2, string "two")])
+    (T.map T.int32 T.string),
+  noChange "string to int map"
+    (mapTerm [(string "a", int32 1),
+                        (string "b", int32 2)])
+    (T.map T.string T.int32),
+  noChange "single entry map"
+    (mapTerm [(bigint 42, boolean True)])
+    (T.map T.bigint T.boolean)]
+
+polymorphicMapsTests :: TypedTermDefinition TestGroup
+polymorphicMapsTests = define "polymorphicMapsTests" $
+  subgroup "Polymorphic maps" [
+  checkTest "map from lambda keys" []
+    (lambda "k" $ mapTerm [(var "k", string "value")])
+    (tylam "t0" $ lambdaTyped "k" (T.var "t0") $ mapTerm [(var "k", string "value")])
+    (T.forAll "t0" $ T.function (T.var "t0") (T.map (T.var "t0") T.string)),
+  checkTest "map from lambda values" []
+    (lambda "v" $ mapTerm [(string "key", var "v")])
+    (tylam "t0" $ lambdaTyped "v" (T.var "t0") $ mapTerm [(string "key", var "v")])
+    (T.forAll "t0" $ T.function (T.var "t0") (T.map T.string (T.var "t0"))),
+  checkTest "map from lambda both" []
+    (lambda "k" $ lambda "v" $ mapTerm [(var "k", var "v")])
+    (tylams ["t0", "t1"] $ lambdaTyped "k" (T.var "t0") $ lambdaTyped "v" (T.var "t1") $ mapTerm [(var "k", var "v")])
+    (T.forAlls ["t0", "t1"] $ T.function (T.var "t0") (T.function (T.var "t1") (T.map (T.var "t0") (T.var "t1")))),
+  checkTest "map with repeated variables" []
+    (lambda "x" $ mapTerm [(var "x", var "x")])
+    (tylam "t0" $ lambdaTyped "x" (T.var "t0") $ mapTerm [(var "x", var "x")])
+    (T.forAll "t0" $ T.function (T.var "t0") (T.map (T.var "t0") (T.var "t0")))]
+
 ------ Sets ------
 
-setsTests :: TTermDefinition TestGroup
-setsTests = define "setsTests" $
-  supergroup "Sets" [
-  monomorphicSetsTests,
-  polymorphicSetsTests,
-  setsInComplexContextsTests,
-  nestedSetsTests,
-  setsWithComplexTypesTests]
-
-monomorphicSetsTests :: TTermDefinition TestGroup
+monomorphicSetsTests :: TypedTermDefinition TestGroup
 monomorphicSetsTests = define "monomorphicSetsTests" $
   subgroup "Monomorphic sets" [
   checkTest "empty set" []
@@ -262,38 +253,7 @@ monomorphicSetsTests = define "monomorphicSetsTests" $
     (Terms.set [boolean True])
     (T.set T.boolean)]
 
-polymorphicSetsTests :: TTermDefinition TestGroup
-polymorphicSetsTests = define "polymorphicSetsTests" $
-  subgroup "Polymorphic sets" [
-  checkTest "set from lambda" []
-    (lambda "x" $ Terms.set [var "x"])
-    (tylam "t0" $ lambdaTyped "x" (T.var "t0") $ Terms.set [var "x"])
-    (T.forAll "t0" $ T.function (T.var "t0") (T.set $ T.var "t0")),
-  checkTest "set with repeated variable" []
-    (lambda "x" $ Terms.set [var "x", var "x"])
-    (tylam "t0" $ lambdaTyped "x" (T.var "t0") $ Terms.set [var "x", var "x"])
-    (T.forAll "t0" $ T.function (T.var "t0") (T.set $ T.var "t0")),
-  checkTest "set from two variables" []
-    (lambda "x" $ lambda "y" $ Terms.set [var "x", var "y"])
-    (tylam "t0" $ lambdaTyped "x" (T.var "t0") $ lambdaTyped "y" (T.var "t0") $ Terms.set [var "x", var "y"])
-    (T.forAll "t0" $ T.function (T.var "t0") (T.function (T.var "t0") (T.set $ T.var "t0")))]
-
-setsInComplexContextsTests :: TTermDefinition TestGroup
-setsInComplexContextsTests = define "setsInComplexContextsTests" $
-  subgroup "Sets in complex contexts" [
-  checkTest "set in tuple" []
-    (tuple [Terms.set [int32 1, int32 2], string "context"])
-    (tyapps (pair (Terms.set [int32 1, int32 2]) (string "context")) [T.set T.int32, T.string])
-    (T.pair (T.set T.int32) T.string),
-  checkTest "set in let binding" []
-    (lets ["numbers">: Terms.set [int32 10, int32 20, int32 30]] $
-      var "numbers")
-    (letsTyped [("numbers", Terms.set [int32 10, int32 20, int32 30],
-      T.mono $ T.set T.int32)] $
-      var "numbers")
-    (T.set T.int32)]
-
-nestedSetsTests :: TTermDefinition TestGroup
+nestedSetsTests :: TypedTermDefinition TestGroup
 nestedSetsTests = define "nestedSetsTests" $
   subgroup "Nested sets" [
   noChange "set of lists"
@@ -313,7 +273,47 @@ nestedSetsTests = define "nestedSetsTests" $
     (Terms.set [Terms.set [string "nested"]])
     (T.set $ T.set T.string)]
 
-setsWithComplexTypesTests :: TTermDefinition TestGroup
+polymorphicSetsTests :: TypedTermDefinition TestGroup
+polymorphicSetsTests = define "polymorphicSetsTests" $
+  subgroup "Polymorphic sets" [
+  checkTest "set from lambda" []
+    (lambda "x" $ Terms.set [var "x"])
+    (tylam "t0" $ lambdaTyped "x" (T.var "t0") $ Terms.set [var "x"])
+    (T.forAll "t0" $ T.function (T.var "t0") (T.set $ T.var "t0")),
+  checkTest "set with repeated variable" []
+    (lambda "x" $ Terms.set [var "x", var "x"])
+    (tylam "t0" $ lambdaTyped "x" (T.var "t0") $ Terms.set [var "x", var "x"])
+    (T.forAll "t0" $ T.function (T.var "t0") (T.set $ T.var "t0")),
+  checkTest "set from two variables" []
+    (lambda "x" $ lambda "y" $ Terms.set [var "x", var "y"])
+    (tylam "t0" $ lambdaTyped "x" (T.var "t0") $ lambdaTyped "y" (T.var "t0") $ Terms.set [var "x", var "y"])
+    (T.forAll "t0" $ T.function (T.var "t0") (T.function (T.var "t0") (T.set $ T.var "t0")))]
+
+setsInComplexContextsTests :: TypedTermDefinition TestGroup
+setsInComplexContextsTests = define "setsInComplexContextsTests" $
+  subgroup "Sets in complex contexts" [
+  checkTest "set in tuple" []
+    (tuple [Terms.set [int32 1, int32 2], string "context"])
+    (tyapps (pair (Terms.set [int32 1, int32 2]) (string "context")) [T.set T.int32, T.string])
+    (T.pair (T.set T.int32) T.string),
+  checkTest "set in let binding" []
+    (lets ["numbers">: Terms.set [int32 10, int32 20, int32 30]] $
+      var "numbers")
+    (letsTyped [("numbers", Terms.set [int32 10, int32 20, int32 30],
+      T.mono $ T.set T.int32)] $
+      var "numbers")
+    (T.set T.int32)]
+
+setsTests :: TypedTermDefinition TestGroup
+setsTests = define "setsTests" $
+  supergroup "Sets" [
+  monomorphicSetsTests,
+  polymorphicSetsTests,
+  setsInComplexContextsTests,
+  nestedSetsTests,
+  setsWithComplexTypesTests]
+
+setsWithComplexTypesTests :: TypedTermDefinition TestGroup
 setsWithComplexTypesTests = define "setsWithComplexTypesTests" $
   subgroup "Sets with complex types" [
   noChange "set of records"

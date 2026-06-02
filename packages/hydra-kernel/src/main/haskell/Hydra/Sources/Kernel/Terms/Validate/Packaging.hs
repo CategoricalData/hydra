@@ -2,7 +2,7 @@ module Hydra.Sources.Kernel.Terms.Validate.Packaging where
 
 -- Standard imports for kernel terms modules
 import Hydra.Kernel
-import           Hydra.Dsl.Bootstrap (unqualifiedDep)
+import           Hydra.Dsl.Bootstrap (unqualifiedDep, descriptionMetadata)
 import Hydra.Error.Packaging (
   InvalidModuleError, InvalidPackageError,
   _InvalidModuleError,
@@ -54,7 +54,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = unqualifiedDep <$> ([Annotations.ns, Constants.ns, Formatting.ns, Names.ns] L.++ kernelTypesModuleNames),
-            moduleDescription = Just "Validation functions for modules and packages"}
+            moduleMetadata = descriptionMetadata (Just "Validation functions for modules and packages")}
   where
     definitions = [
       toDefinition appendFindingModule,
@@ -77,65 +77,11 @@ module_ = Module {
       toDefinition module',
       toDefinition package]
 
-define :: String -> TTerm a -> TTermDefinition a
+define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModule module_
 
 -- ============================================================================
 -- Profile helpers (host-side)
--- ============================================================================
-
--- | Compose a fully qualified rule identifier from a union-type qualified
--- name and a variant local name, joined with '.'. Mirrors the
--- 'qualifiedRule' helper in Validate/Core.hs. Used at profile-construction
--- time to derive rule IDs like
--- 'hydra.error.packaging.InvalidModuleError.duplicateDefinitionName' from
--- the generated _InvalidModuleError and _InvalidModuleError_duplicateDefinitionName
--- constants.
-qualifiedRule :: Name -> Name -> Name
-qualifiedRule (Name u) (Name v) = Name (L.concat [u, ".", v])
-
--- | Wrap a leaf-shaped 'Maybe InvalidModuleError' finding with the rule that
--- produced it, gated by the active profile. If the rule's qualified name is
--- not in either errorRules or warningRules, the inner finding expression is
--- never evaluated. When the rule is enabled and the inner finding is Just,
--- returns 'Just (ruleName, payload)'; otherwise 'Nothing'.
-guardedModuleRule
-  :: TTerm ValidationProfile
-  -> Name -- ^ Union-type qualified name (e.g. _InvalidModuleError).
-  -> Name -- ^ Variant local name (e.g. _InvalidModuleError_duplicateDefinitionName).
-  -> TTerm (Maybe InvalidModuleError) -- ^ The leaf-shaped finding term.
-  -> TTerm (Maybe (Name, InvalidModuleError))
-guardedModuleRule profile unionName variantName findingExpr =
-  Logic.ifElse (enabledPackaging @@ profile @@ ruleNameTerm)
-    (Maybes.map ("f" ~> pair ruleNameTerm (var "f")) findingExpr)
-    nothing
-  where
-    ruleNameTerm = nameLift (qualifiedRule unionName variantName)
-
--- | Package-side counterpart of 'guardedModuleRule'.
-guardedPackageRule
-  :: TTerm ValidationProfile
-  -> Name
-  -> Name
-  -> TTerm (Maybe InvalidPackageError)
-  -> TTerm (Maybe (Name, InvalidPackageError))
-guardedPackageRule profile unionName variantName findingExpr =
-  Logic.ifElse (enabledPackaging @@ profile @@ ruleNameTerm)
-    (Maybes.map ("f" ~> pair ruleNameTerm (var "f")) findingExpr)
-    nothing
-  where
-    ruleNameTerm = nameLift (qualifiedRule unionName variantName)
-
--- | An empty ValidationResult (no errors, no warnings) parameterized by 'e'.
--- Used as the initial accumulator. Defined locally to avoid a cross-module
--- term dependency on hydra.validate.core.
-emptyResult :: TTerm (ValidationResult e)
-emptyResult = Validation.validationResult
-  (list ([] :: [TTerm e]))
-  (list ([] :: [TTerm e]))
-
--- ============================================================================
--- Profile-aware helpers (DSL definitions)
 -- ============================================================================
 
 -- | Classify a rule-tagged 'Maybe (Name, InvalidModuleError)' finding against
@@ -145,7 +91,7 @@ emptyResult = Validation.validationResult
 -- 'warningRules' go to the warnings list. Each list respects its bound
 -- ('maxErrors' / 'maxWarnings'); attempting to append past a bound is a
 -- silent drop. A 'Nothing' input leaves the accumulator unchanged.
-appendFindingModule :: TTermDefinition (
+appendFindingModule :: TypedTermDefinition (
   ValidationProfile
   -> ValidationResult InvalidModuleError
   -> Maybe (Name, InvalidModuleError)
@@ -175,7 +121,7 @@ appendFindingModule = define "appendFindingModule" $
           (var "acc")))
 
 -- | Package-side counterpart of 'appendFindingModule'.
-appendFindingPackage :: TTermDefinition (
+appendFindingPackage :: TypedTermDefinition (
   ValidationProfile
   -> ValidationResult InvalidPackageError
   -> Maybe (Name, InvalidPackageError)
@@ -204,20 +150,11 @@ appendFindingPackage = define "appendFindingPackage" $
             (var "acc"))
           (var "acc")))
 
--- | Extract the name from a Definition (term or type)
-definitionName :: TTermDefinition (Definition -> Name)
-definitionName = define "definitionName" $
-  doc "Extract the name from a definition" $
-  "def" ~>
-  cases _Definition (var "def") Nothing [
-    _Definition_term>>: "td" ~> Packaging.termDefinitionName (var "td"),
-    _Definition_type>>: "td" ~> Packaging.typeDefinitionName (var "td")]
-
 -- | Check for module namespaces that would conflict when mapped to a target language's
 -- directory structure. Two namespaces conflict if they are identical when lowercased,
 -- e.g. hydra.fooBar and hydra.foobar, or hydra.Foo.Bar and hydra.foo.bar.
 -- Fails on the first conflict found.
-checkConflictingModuleNames :: TTermDefinition (Package -> Maybe InvalidPackageError)
+checkConflictingModuleNames :: TypedTermDefinition (Package -> Maybe InvalidPackageError)
 checkConflictingModuleNames = define "checkConflictingModuleNames" $
   doc "Check for module namespaces that conflict when mapped to target language paths" $
   "pkg" ~>
@@ -248,7 +185,7 @@ checkConflictingModuleNames = define "checkConflictingModuleNames" $
 -- For each union type, the capitalized type local name concatenated with
 -- the capitalized variant field name must not collide with any other type
 -- definition's local name in the same module.
-checkConflictingVariantNames :: TTermDefinition (Module -> Maybe InvalidModuleError)
+checkConflictingVariantNames :: TypedTermDefinition (Module -> Maybe InvalidModuleError)
 checkConflictingVariantNames = define "checkConflictingVariantNames" $
   doc "Check for union variant names that, when mapped to constructor names, conflict with other type definitions" $
   "mod" ~>
@@ -301,7 +238,7 @@ checkConflictingVariantNames = define "checkConflictingVariantNames" $
 -- or whose top-level annotation map lacks the description key, is reported as missing
 -- documentation. This validator does not descend into the body of a term or type.
 -- Fails on the first undocumented definition found.
-checkDefinitionDocumentation :: TTermDefinition (Module -> Maybe InvalidModuleError)
+checkDefinitionDocumentation :: TypedTermDefinition (Module -> Maybe InvalidModuleError)
 checkDefinitionDocumentation = define "checkDefinitionDocumentation" $
   doc "Check that every top-level definition is wrapped in a description annotation" $
   "mod" ~>
@@ -320,7 +257,13 @@ checkDefinitionDocumentation = define "checkDefinitionDocumentation" $
               "typ" <~ (Core.typeSchemeBody $ Packaging.typeDefinitionTypeScheme (var "td")) $
               cases _Type (var "typ") (Just false) [
                 _Type_annotated>>: "at" ~>
-                  Annotations.hasDescription @@ (Core.annotatedTypeAnnotation $ var "at")]] $
+                  Annotations.hasDescription @@ (Core.annotatedTypeAnnotation $ var "at")],
+            _Definition_primitive>>: "pd" ~>
+              Maybes.maybe false
+                ("em" ~> Logic.not (Equality.equal
+                  (Maybes.fromMaybe (string "") (Packaging.entityMetadataDescription $ var "em"))
+                  (string "")))
+                (Packaging.primitiveDefinitionMetadata $ var "pd")] $
           Logic.ifElse (var "documented")
             nothing
             (just $ ErrorPackaging.invalidModuleErrorMissingDocumentation $
@@ -332,7 +275,7 @@ checkDefinitionDocumentation = define "checkDefinitionDocumentation" $
 -- | Check that all definition names in a module have the module's name as a prefix.
 -- For a module named foo.bar, every definition name must have the form foo.bar.xyz.
 -- Fails on the first definition that violates this constraint.
-checkDefinitionModuleNames :: TTermDefinition (Module -> Maybe InvalidModuleError)
+checkDefinitionModuleNames :: TypedTermDefinition (Module -> Maybe InvalidModuleError)
 checkDefinitionModuleNames = define "checkDefinitionModuleNames" $
   doc "Check that all definition names in a module have the module's name as a prefix" $
   "mod" ~>
@@ -358,7 +301,7 @@ checkDefinitionModuleNames = define "checkDefinitionModuleNames" $
 -- | Check that every term-level definition's local name matches the camelCase regex
 -- and every type-level definition's local name matches the PascalCase regex.
 -- Fails on the first definition whose name violates the convention.
-checkDefinitionNameConvention :: TTermDefinition (Module -> Maybe InvalidModuleError)
+checkDefinitionNameConvention :: TypedTermDefinition (Module -> Maybe InvalidModuleError)
 checkDefinitionNameConvention = define "checkDefinitionNameConvention" $
   doc "Check that term definitions have camelCase local names and type definitions have PascalCase local names" $
   "mod" ~>
@@ -370,10 +313,12 @@ checkDefinitionNameConvention = define "checkDefinitionNameConvention" $
           "local" <~ (Names.localNameOf @@ var "name") $
           "expected" <~ cases _Definition (var "def") (Just Util.caseConventionCamel) [
             _Definition_term>>: constant Util.caseConventionCamel,
-            _Definition_type>>: constant Util.caseConventionPascal] $
+            _Definition_type>>: constant Util.caseConventionPascal,
+            _Definition_primitive>>: constant Util.caseConventionCamel] $
           "pattern" <~ cases _Definition (var "def") (Just (Phantoms.asTerm Constants.regexCamelCase)) [
             _Definition_term>>: constant (Phantoms.asTerm Constants.regexCamelCase),
-            _Definition_type>>: constant (Phantoms.asTerm Constants.regexPascalCase)] $
+            _Definition_type>>: constant (Phantoms.asTerm Constants.regexPascalCase),
+            _Definition_primitive>>: constant (Phantoms.asTerm Constants.regexCamelCase)] $
           Logic.ifElse (Regex.matches (var "pattern") (var "local"))
             nothing
             (just $ ErrorPackaging.invalidModuleErrorInvalidDefinitionName $
@@ -393,7 +338,7 @@ checkDefinitionNameConvention = define "checkDefinitionNameConvention" $
 -- modules (e.g. 'hydra.dsl.*', 'hydra.encode.*', 'hydra.decode.*') deliberately use
 -- a semantic grouping by source type and would always fail this check; do not run
 -- it against them.
-checkDefinitionOrdering :: TTermDefinition (Module -> Maybe InvalidModuleError)
+checkDefinitionOrdering :: TypedTermDefinition (Module -> Maybe InvalidModuleError)
 checkDefinitionOrdering = define "checkDefinitionOrdering" $
   doc "Check that a module's definitions list is sorted in ascending lexicographic order by local name" $
   "mod" ~>
@@ -428,7 +373,7 @@ checkDefinitionOrdering = define "checkDefinitionOrdering" $
 
 -- | Check for duplicate definition names in a module.
 -- Fails on the first duplicate found.
-checkDuplicateDefinitionNames :: TTermDefinition (Module -> Maybe InvalidModuleError)
+checkDuplicateDefinitionNames :: TypedTermDefinition (Module -> Maybe InvalidModuleError)
 checkDuplicateDefinitionNames = define "checkDuplicateDefinitionNames" $
   doc "Check for duplicate definition names in a module" $
   "mod" ~>
@@ -455,7 +400,7 @@ checkDuplicateDefinitionNames = define "checkDuplicateDefinitionNames" $
 
 -- | Check for duplicate module namespaces in a package.
 -- Fails on the first duplicate found.
-checkDuplicateModuleNames :: TTermDefinition (Package -> Maybe InvalidPackageError)
+checkDuplicateModuleNames :: TypedTermDefinition (Package -> Maybe InvalidPackageError)
 checkDuplicateModuleNames = define "checkDuplicateModuleNames" $
   doc "Check for duplicate module namespaces in a package" $
   "pkg" ~>
@@ -477,7 +422,7 @@ checkDuplicateModuleNames = define "checkDuplicateModuleNames" $
 
 -- | Check that the module's namespace matches the dotted-lowercase namespace regex
 -- (dot-separated lowercase segments, each starting with a letter).
-checkModuleNameConvention :: TTermDefinition (Module -> Maybe InvalidModuleError)
+checkModuleNameConvention :: TypedTermDefinition (Module -> Maybe InvalidModuleError)
 checkModuleNameConvention = define "checkModuleNameConvention" $
   doc "Check that the module's namespace matches the dotted-lowercase naming convention" $
   "mod" ~>
@@ -489,7 +434,7 @@ checkModuleNameConvention = define "checkModuleNameConvention" $
 
 -- | Check that the package's name matches the hyphen-separated lowercase package-name regex
 -- (hyphen-separated lowercase segments, each starting with a letter).
-checkPackageNameConvention :: TTermDefinition (Package -> Maybe InvalidPackageError)
+checkPackageNameConvention :: TypedTermDefinition (Package -> Maybe InvalidPackageError)
 checkPackageNameConvention = define "checkPackageNameConvention" $
   doc "Check that the package's name matches the hyphen-separated lowercase naming convention" $
   "pkg" ~>
@@ -503,12 +448,34 @@ checkPackageNameConvention = define "checkPackageNameConvention" $
 -- ValidationProfile-aware orchestrators
 -- ============================================================================
 
+-- | Extract the name from a Definition (term or type)
+definitionName :: TypedTermDefinition (Definition -> Name)
+definitionName = define "definitionName" $
+  doc "Extract the name from a definition" $
+  "def" ~>
+  cases _Definition (var "def") Nothing [
+    _Definition_term>>: "td" ~> Packaging.termDefinitionName (var "td"),
+    _Definition_type>>: "td" ~> Packaging.typeDefinitionName (var "td"),
+    _Definition_primitive>>: "pd" ~> Packaging.primitiveDefinitionName (var "pd")]
+
+-- | An empty ValidationResult (no errors, no warnings) parameterized by 'e'.
+-- Used as the initial accumulator. Defined locally to avoid a cross-module
+-- term dependency on hydra.validate.core.
+emptyResult :: TypedTerm (ValidationResult e)
+emptyResult = Validation.validationResult
+  (list ([] :: [TypedTerm e]))
+  (list ([] :: [TypedTerm e]))
+
+-- ============================================================================
+-- Profile-aware helpers (DSL definitions)
+-- ============================================================================
+
 -- | Test whether a rule is active in a profile (in either errorRules or
 -- warningRules). Rules that are inactive are skipped entirely. Local
 -- counterpart of 'enabled' in Validate/Core.hs; named 'enabledPackaging'
 -- to avoid name clash if both modules are imported into the same scope
 -- through 'Hydra.Validate.Packaging' / 'Hydra.Validate.Core'.
-enabledPackaging :: TTermDefinition (ValidationProfile -> Name -> Bool)
+enabledPackaging :: TypedTermDefinition (ValidationProfile -> Name -> Bool)
 enabledPackaging = define "enabledPackaging" $
   doc "True iff the given rule name appears in the profile's errorRules or warningRules." $
   "p" ~> "ruleName" ~>
@@ -525,7 +492,7 @@ enabledPackaging = define "enabledPackaging" $
 -- Callers who want a less strict profile (e.g. non-kernel modules where
 -- naming-convention or alphabetical-ordering violations should not block)
 -- should construct their own profile by removing rules from this one.
-kernelDefaultPackagingProfile :: TTermDefinition ValidationProfile
+kernelDefaultPackagingProfile :: TypedTermDefinition ValidationProfile
 kernelDefaultPackagingProfile = define "kernelDefaultPackagingProfile" $
   doc "The default validation profile for module/package validation. Every kernel-shipped check classified as an error; no warnings; maxErrors=1, maxWarnings=20." $
   Validation.validationProfile
@@ -533,6 +500,36 @@ kernelDefaultPackagingProfile = define "kernelDefaultPackagingProfile" $
     Sets.empty
     (int32 1)
     (int32 20)
+
+-- | Validate a module against the kernel-default packaging profile,
+-- returning the first error found or 'Nothing' if valid. Equivalent to
+-- 'module'' applied to 'kernelDefaultPackagingProfile' with an empty
+-- accumulator, then head-extracted; provided as a named entry point for
+-- the common case of validating a kernel module under the strict
+-- kernel-shipped rule set.
+--
+-- Intended for hand-written Source modules only (the ones that contribute
+-- to 'Sources.kernelModules'). Do not apply to generator-derived modules
+-- such as the 'hydra.dsl.*', 'hydra.encode.*', or 'hydra.decode.*'
+-- families: their 'definitions' lists follow a semantic grouping which
+-- would fail 'checkDefinitionOrdering'. Callers wanting custom rule
+-- sets, multi-error accumulation, or warnings should use 'module'' with
+-- an explicit 'ValidationProfile'.
+kernelModule :: TypedTermDefinition (Module -> Maybe InvalidModuleError)
+kernelModule = define "kernelModule" $
+  doc "Validate a kernel module against all kernel-default packaging rules; returns the first error found or nothing if valid. Convenience wrapper around 'module'' with 'kernelDefaultPackagingProfile'." $
+  "mod" ~>
+  Lists.maybeHead $ Validation.validationResultErrors $
+    module' @@ kernelDefaultPackagingProfile @@ emptyResult @@ var "mod"
+
+-- | Validate a package against the kernel-default packaging profile.
+-- See 'kernelModule' for the rationale and applicability constraints.
+kernelPackage :: TypedTermDefinition (Package -> Maybe InvalidPackageError)
+kernelPackage = define "kernelPackage" $
+  doc "Validate a kernel package against all kernel-default packaging rules; returns the first error found or nothing if valid. Convenience wrapper around 'package' with 'kernelDefaultPackagingProfile'." $
+  "pkg" ~>
+  Lists.maybeHead $ Validation.validationResultErrors $
+    package @@ kernelDefaultPackagingProfile @@ emptyResult @@ var "pkg"
 
 -- | The full set of rule names classified as errors in
 -- 'kernelDefaultPackagingProfile'. Single source of truth: any rule
@@ -568,7 +565,7 @@ kernelPackagingRuleNames = L.concat
 -- bounded by 'maxErrors' / 'maxWarnings'. Errors hard-stop the rule
 -- sequence once the cap is reached; warnings continue accumulating up to
 -- 'maxWarnings' but never cause termination.
-module' :: TTermDefinition (
+module' :: TypedTermDefinition (
   ValidationProfile
   -> ValidationResult InvalidModuleError
   -> Module
@@ -610,7 +607,7 @@ module' = define "module" $
 -- package-level rules first, then walks the package's modules, lifting
 -- each module-level error/warning into an InvalidPackageError via
 -- 'invalidModule'. Hard-stops once the errors list reaches 'maxErrors'.
-package :: TTermDefinition (
+package :: TypedTermDefinition (
   ValidationProfile
   -> ValidationResult InvalidPackageError
   -> Package
@@ -672,32 +669,44 @@ package = define "package" $
 -- Convenience entry points (kernel-strict)
 -- ============================================================================
 
--- | Validate a module against the kernel-default packaging profile,
--- returning the first error found or 'Nothing' if valid. Equivalent to
--- 'module'' applied to 'kernelDefaultPackagingProfile' with an empty
--- accumulator, then head-extracted; provided as a named entry point for
--- the common case of validating a kernel module under the strict
--- kernel-shipped rule set.
---
--- Intended for hand-written Source modules only (the ones that contribute
--- to 'Sources.kernelModules'). Do not apply to generator-derived modules
--- such as the 'hydra.dsl.*', 'hydra.encode.*', or 'hydra.decode.*'
--- families: their 'definitions' lists follow a semantic grouping which
--- would fail 'checkDefinitionOrdering'. Callers wanting custom rule
--- sets, multi-error accumulation, or warnings should use 'module'' with
--- an explicit 'ValidationProfile'.
-kernelModule :: TTermDefinition (Module -> Maybe InvalidModuleError)
-kernelModule = define "kernelModule" $
-  doc "Validate a kernel module against all kernel-default packaging rules; returns the first error found or nothing if valid. Convenience wrapper around 'module'' with 'kernelDefaultPackagingProfile'." $
-  "mod" ~>
-  Lists.maybeHead $ Validation.validationResultErrors $
-    module' @@ kernelDefaultPackagingProfile @@ emptyResult @@ var "mod"
+-- | Compose a fully qualified rule identifier from a union-type qualified
+-- name and a variant local name, joined with '.'. Mirrors the
+-- 'qualifiedRule' helper in Validate/Core.hs. Used at profile-construction
+-- time to derive rule IDs like
+-- 'hydra.error.packaging.InvalidModuleError.duplicateDefinitionName' from
+-- the generated _InvalidModuleError and _InvalidModuleError_duplicateDefinitionName
+-- constants.
+qualifiedRule :: Name -> Name -> Name
+qualifiedRule (Name u) (Name v) = Name (L.concat [u, ".", v])
 
--- | Validate a package against the kernel-default packaging profile.
--- See 'kernelModule' for the rationale and applicability constraints.
-kernelPackage :: TTermDefinition (Package -> Maybe InvalidPackageError)
-kernelPackage = define "kernelPackage" $
-  doc "Validate a kernel package against all kernel-default packaging rules; returns the first error found or nothing if valid. Convenience wrapper around 'package' with 'kernelDefaultPackagingProfile'." $
-  "pkg" ~>
-  Lists.maybeHead $ Validation.validationResultErrors $
-    package @@ kernelDefaultPackagingProfile @@ emptyResult @@ var "pkg"
+-- | Wrap a leaf-shaped 'Maybe InvalidModuleError' finding with the rule that
+-- produced it, gated by the active profile. If the rule's qualified name is
+-- not in either errorRules or warningRules, the inner finding expression is
+-- never evaluated. When the rule is enabled and the inner finding is Just,
+-- returns 'Just (ruleName, payload)'; otherwise 'Nothing'.
+guardedModuleRule
+  :: TypedTerm ValidationProfile
+  -> Name -- ^ Union-type qualified name (e.g. _InvalidModuleError).
+  -> Name -- ^ Variant local name (e.g. _InvalidModuleError_duplicateDefinitionName).
+  -> TypedTerm (Maybe InvalidModuleError) -- ^ The leaf-shaped finding term.
+  -> TypedTerm (Maybe (Name, InvalidModuleError))
+guardedModuleRule profile unionName variantName findingExpr =
+  Logic.ifElse (enabledPackaging @@ profile @@ ruleNameTerm)
+    (Maybes.map ("f" ~> pair ruleNameTerm (var "f")) findingExpr)
+    nothing
+  where
+    ruleNameTerm = nameLift (qualifiedRule unionName variantName)
+
+-- | Package-side counterpart of 'guardedModuleRule'.
+guardedPackageRule
+  :: TypedTerm ValidationProfile
+  -> Name
+  -> Name
+  -> TypedTerm (Maybe InvalidPackageError)
+  -> TypedTerm (Maybe (Name, InvalidPackageError))
+guardedPackageRule profile unionName variantName findingExpr =
+  Logic.ifElse (enabledPackaging @@ profile @@ ruleNameTerm)
+    (Maybes.map ("f" ~> pair ruleNameTerm (var "f")) findingExpr)
+    nothing
+  where
+    ruleNameTerm = nameLift (qualifiedRule unionName variantName)

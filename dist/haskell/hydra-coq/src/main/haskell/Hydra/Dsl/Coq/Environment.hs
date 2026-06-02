@@ -6,65 +6,65 @@ module Hydra.Dsl.Coq.Environment where
 
 import qualified Hydra.Coq.Environment as Environment
 import qualified Hydra.Core as Core
-import qualified Hydra.Phantoms as Phantoms
+import qualified Hydra.Typed as Phantoms
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 import qualified Data.Map as M
 import qualified Data.Set as S
 
-coqEnvironment :: Phantoms.TTerm String -> Phantoms.TTerm (M.Map String Int) -> Phantoms.TTerm (S.Set String) -> Phantoms.TTerm (S.Set String) -> Phantoms.TTerm Environment.CoqEnvironment
+coqEnvironment :: Phantoms.TypedTerm String -> Phantoms.TypedTerm (M.Map String Int) -> Phantoms.TypedTerm (S.Set String) -> Phantoms.TypedTerm (S.Set String) -> Phantoms.TypedTerm Environment.CoqEnvironment
 coqEnvironment currentNamespace constructorCounts ambiguousNames sanitizedAccessors =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.coq.environment.CoqEnvironment"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "currentNamespace"),
-          Core.fieldTerm = (Phantoms.unTTerm currentNamespace)},
+          Core.fieldTerm = (Phantoms.unTypedTerm currentNamespace)},
         Core.Field {
           Core.fieldName = (Core.Name "constructorCounts"),
-          Core.fieldTerm = (Phantoms.unTTerm constructorCounts)},
+          Core.fieldTerm = (Phantoms.unTypedTerm constructorCounts)},
         Core.Field {
           Core.fieldName = (Core.Name "ambiguousNames"),
-          Core.fieldTerm = (Phantoms.unTTerm ambiguousNames)},
+          Core.fieldTerm = (Phantoms.unTypedTerm ambiguousNames)},
         Core.Field {
           Core.fieldName = (Core.Name "sanitizedAccessors"),
-          Core.fieldTerm = (Phantoms.unTTerm sanitizedAccessors)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm sanitizedAccessors)}]}))
 
-coqEnvironmentAmbiguousNames :: Phantoms.TTerm Environment.CoqEnvironment -> Phantoms.TTerm (S.Set String)
+coqEnvironmentAmbiguousNames :: Phantoms.TypedTerm Environment.CoqEnvironment -> Phantoms.TypedTerm (S.Set String)
 coqEnvironmentAmbiguousNames x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.environment.CoqEnvironment"),
         Core.projectionFieldName = (Core.Name "ambiguousNames")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-coqEnvironmentConstructorCounts :: Phantoms.TTerm Environment.CoqEnvironment -> Phantoms.TTerm (M.Map String Int)
+coqEnvironmentConstructorCounts :: Phantoms.TypedTerm Environment.CoqEnvironment -> Phantoms.TypedTerm (M.Map String Int)
 coqEnvironmentConstructorCounts x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.environment.CoqEnvironment"),
         Core.projectionFieldName = (Core.Name "constructorCounts")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-coqEnvironmentCurrentNamespace :: Phantoms.TTerm Environment.CoqEnvironment -> Phantoms.TTerm String
+coqEnvironmentCurrentNamespace :: Phantoms.TypedTerm Environment.CoqEnvironment -> Phantoms.TypedTerm String
 coqEnvironmentCurrentNamespace x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.environment.CoqEnvironment"),
         Core.projectionFieldName = (Core.Name "currentNamespace")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-coqEnvironmentSanitizedAccessors :: Phantoms.TTerm Environment.CoqEnvironment -> Phantoms.TTerm (S.Set String)
+coqEnvironmentSanitizedAccessors :: Phantoms.TypedTerm Environment.CoqEnvironment -> Phantoms.TypedTerm (S.Set String)
 coqEnvironmentSanitizedAccessors x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.environment.CoqEnvironment"),
         Core.projectionFieldName = (Core.Name "sanitizedAccessors")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-coqEnvironmentWithAmbiguousNames :: Phantoms.TTerm Environment.CoqEnvironment -> Phantoms.TTerm (S.Set String) -> Phantoms.TTerm Environment.CoqEnvironment
+coqEnvironmentWithAmbiguousNames :: Phantoms.TypedTerm Environment.CoqEnvironment -> Phantoms.TypedTerm (S.Set String) -> Phantoms.TypedTerm Environment.CoqEnvironment
 coqEnvironmentWithAmbiguousNames original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.coq.environment.CoqEnvironment"),
       Core.recordFields = [
         Core.Field {
@@ -73,28 +73,28 @@ coqEnvironmentWithAmbiguousNames original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.environment.CoqEnvironment"),
               Core.projectionFieldName = (Core.Name "currentNamespace")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "constructorCounts"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.environment.CoqEnvironment"),
               Core.projectionFieldName = (Core.Name "constructorCounts")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "ambiguousNames"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "sanitizedAccessors"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.environment.CoqEnvironment"),
               Core.projectionFieldName = (Core.Name "sanitizedAccessors")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))}]}))
 
-coqEnvironmentWithConstructorCounts :: Phantoms.TTerm Environment.CoqEnvironment -> Phantoms.TTerm (M.Map String Int) -> Phantoms.TTerm Environment.CoqEnvironment
+coqEnvironmentWithConstructorCounts :: Phantoms.TypedTerm Environment.CoqEnvironment -> Phantoms.TypedTerm (M.Map String Int) -> Phantoms.TypedTerm Environment.CoqEnvironment
 coqEnvironmentWithConstructorCounts original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.coq.environment.CoqEnvironment"),
       Core.recordFields = [
         Core.Field {
@@ -103,58 +103,58 @@ coqEnvironmentWithConstructorCounts original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.environment.CoqEnvironment"),
               Core.projectionFieldName = (Core.Name "currentNamespace")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "constructorCounts"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "ambiguousNames"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.environment.CoqEnvironment"),
               Core.projectionFieldName = (Core.Name "ambiguousNames")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "sanitizedAccessors"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.environment.CoqEnvironment"),
               Core.projectionFieldName = (Core.Name "sanitizedAccessors")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))}]}))
 
-coqEnvironmentWithCurrentNamespace :: Phantoms.TTerm Environment.CoqEnvironment -> Phantoms.TTerm String -> Phantoms.TTerm Environment.CoqEnvironment
+coqEnvironmentWithCurrentNamespace :: Phantoms.TypedTerm Environment.CoqEnvironment -> Phantoms.TypedTerm String -> Phantoms.TypedTerm Environment.CoqEnvironment
 coqEnvironmentWithCurrentNamespace original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.coq.environment.CoqEnvironment"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "currentNamespace"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "constructorCounts"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.environment.CoqEnvironment"),
               Core.projectionFieldName = (Core.Name "constructorCounts")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "ambiguousNames"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.environment.CoqEnvironment"),
               Core.projectionFieldName = (Core.Name "ambiguousNames")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "sanitizedAccessors"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.environment.CoqEnvironment"),
               Core.projectionFieldName = (Core.Name "sanitizedAccessors")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))}]}))
 
-coqEnvironmentWithSanitizedAccessors :: Phantoms.TTerm Environment.CoqEnvironment -> Phantoms.TTerm (S.Set String) -> Phantoms.TTerm Environment.CoqEnvironment
+coqEnvironmentWithSanitizedAccessors :: Phantoms.TypedTerm Environment.CoqEnvironment -> Phantoms.TypedTerm (S.Set String) -> Phantoms.TypedTerm Environment.CoqEnvironment
 coqEnvironmentWithSanitizedAccessors original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.coq.environment.CoqEnvironment"),
       Core.recordFields = [
         Core.Field {
@@ -163,21 +163,21 @@ coqEnvironmentWithSanitizedAccessors original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.environment.CoqEnvironment"),
               Core.projectionFieldName = (Core.Name "currentNamespace")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "constructorCounts"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.environment.CoqEnvironment"),
               Core.projectionFieldName = (Core.Name "constructorCounts")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "ambiguousNames"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.environment.CoqEnvironment"),
               Core.projectionFieldName = (Core.Name "ambiguousNames")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "sanitizedAccessors"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)}]}))

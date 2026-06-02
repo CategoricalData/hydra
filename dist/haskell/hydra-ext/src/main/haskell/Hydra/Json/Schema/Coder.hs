@@ -12,15 +12,15 @@ import qualified Hydra.Graph as Graph
 import qualified Hydra.Json.Model as Model
 import qualified Hydra.Json.Schema as Schema
 import qualified Hydra.Json.Schema.Serde as Serde
-import qualified Hydra.Lib.Eithers as Eithers
-import qualified Hydra.Lib.Equality as Equality
-import qualified Hydra.Lib.Lists as Lists
-import qualified Hydra.Lib.Logic as Logic
-import qualified Hydra.Lib.Maps as Maps
-import qualified Hydra.Lib.Maybes as Maybes
-import qualified Hydra.Lib.Pairs as Pairs
-import qualified Hydra.Lib.Sets as Sets
-import qualified Hydra.Lib.Strings as Strings
+import qualified Hydra.Haskell.Lib.Eithers as Eithers
+import qualified Hydra.Haskell.Lib.Equality as Equality
+import qualified Hydra.Haskell.Lib.Lists as Lists
+import qualified Hydra.Haskell.Lib.Logic as Logic
+import qualified Hydra.Haskell.Lib.Maps as Maps
+import qualified Hydra.Haskell.Lib.Maybes as Maybes
+import qualified Hydra.Haskell.Lib.Pairs as Pairs
+import qualified Hydra.Haskell.Lib.Sets as Sets
+import qualified Hydra.Haskell.Lib.Strings as Strings
 import qualified Hydra.Names as Names
 import qualified Hydra.Packaging as Packaging
 import qualified Hydra.Predicates as Predicates
@@ -146,7 +146,7 @@ nameToPath name =
           mns = Packaging.qualifiedNameModuleName qn
           local = Packaging.qualifiedNameLocal qn
           nsPart = Maybes.maybe "" (\ns -> Strings.cat2 (Packaging.unModuleName ns) ".") mns
-      in (Names.namespaceToFilePath Util.CaseConventionCamel (Packaging.FileExtension "json") (Packaging.ModuleName (Strings.cat2 nsPart local)))
+      in (Names.moduleNameToFilePath Util.CaseConventionCamel (Packaging.FileExtension "json") (Packaging.ModuleName (Strings.cat2 nsPart local)))
 -- | Build the JSON Schema restriction list for a pair type
 pairRestrictions :: Bool -> [Schema.Restriction] -> [Schema.Restriction] -> [Schema.Restriction]
 pairRestrictions optional firstRes secondRes =

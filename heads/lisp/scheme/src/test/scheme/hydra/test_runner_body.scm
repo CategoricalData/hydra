@@ -276,7 +276,7 @@
   *test-graph*)
 
 (define (empty-context)
-  (make-hydra_context_context '() '() hydra_lib_maps_empty))
+  (make-hydra_typing_inference_context 0 '()))
 
 ;; Build an empty graph with standard primitives (for hoisting tests)
 (define (empty-graph)
@@ -1512,8 +1512,7 @@
            (full (string-append path " > " tname))
            (tags (hydra_testing_test_case_with_metadata-tags tcase))
            (disabled? (member "disabled" tags))
-           (tc (hydra_testing_test_case_with_metadata-case tcase))
-           (_ (when (eq? (car tc) 'universal) (display (string-append "TRACE: " tname "\n")))))
+           (tc (hydra_testing_test_case_with_metadata-case tcase)))
       (if disabled?
           (list 0 0 1)
           (let ((case-type (car tc))

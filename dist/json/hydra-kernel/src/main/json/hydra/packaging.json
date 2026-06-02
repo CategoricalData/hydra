@@ -7,7 +7,9 @@
           "body": {
             "annotated": {
               "annotation": [
-                {"key": "description", "value": {"literal": {"string": "A definition, which may be either a term or type definition"}}}],
+                {
+                  "key": "description",
+                  "value": {"literal": {"string": "A definition, which may be either a term, type, or primitive definition"}}}],
               "body": {
                 "union": [
                   {
@@ -21,7 +23,155 @@
                     "type": {
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "A type definition"}}}],
-                        "body": {"variable": "hydra.packaging.TypeDefinition"}}}}]}}},
+                        "body": {"variable": "hydra.packaging.TypeDefinition"}}}},
+                  {
+                    "name": "primitive",
+                    "type": {
+                      "annotated": {
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "A primitive definition"}}}],
+                        "body": {"variable": "hydra.packaging.PrimitiveDefinition"}}}}]}}},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.packaging.DefinitionReference",
+        "typeScheme": {
+          "body": {
+            "annotated": {
+              "annotation": [
+                {
+                  "key": "description",
+                  "value": {"literal": {"string": "A typed reference to a definition: a type, a term, or a primitive, identified by name"}}}],
+              "body": {
+                "union": [
+                  {
+                    "name": "type",
+                    "type": {
+                      "annotated": {
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "A reference to a type definition, by name"}}}],
+                        "body": {"variable": "hydra.core.Name"}}}},
+                  {
+                    "name": "term",
+                    "type": {
+                      "annotated": {
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "A reference to a term definition, by name"}}}],
+                        "body": {"variable": "hydra.core.Name"}}}},
+                  {
+                    "name": "primitive",
+                    "type": {
+                      "annotated": {
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "A reference to a primitive definition, by name"}}}],
+                        "body": {"variable": "hydra.core.Name"}}}}]}}},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.packaging.EntityLifecycle",
+        "typeScheme": {
+          "body": {
+            "annotated": {
+              "annotation": [
+                {
+                  "key": "description",
+                  "value": {
+                    "literal": {
+                      "string": "Version-lifecycle milestones for a packaging entity. Each milestone is independently optional; further milestones (e.g. stableSince, removedSince) may be added without changing dependent types."}}}],
+              "body": {
+                "record": [
+                  {
+                    "name": "availableSince",
+                    "type": {
+                      "annotated": {
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The version in which the entity was introduced, if known."}}}],
+                        "body": {"maybe": {"variable": "hydra.packaging.Version"}}}}},
+                  {
+                    "name": "deprecatedSince",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "key": "description",
+                            "value": {"literal": {"string": "The version in which the entity was deprecated, if applicable."}}}],
+                        "body": {"maybe": {"variable": "hydra.packaging.Version"}}}}}]}}},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.packaging.EntityMetadata",
+        "typeScheme": {
+          "body": {
+            "annotated": {
+              "annotation": [
+                {
+                  "key": "description",
+                  "value": {
+                    "literal": {
+                      "string": "Documentation and lifecycle metadata attachable to a packaging entity (package, module, or definition). Bundling these fields in one type lets future metadata be added without changing the field shape of the entities that carry it."}}}],
+              "body": {
+                "record": [
+                  {
+                    "name": "description",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "key": "description",
+                            "value": {"literal": {"string": "An optional, concise one-line human-readable summary of the entity."}}}],
+                        "body": {"maybe": {"literal": {"string": {}}}}}}},
+                  {
+                    "name": "comments",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "key": "description",
+                            "value": {
+                              "literal": {
+                                "string": "Zero or more long-form prose paragraphs: cross-cutting semantic conventions, caveats, and references that would otherwise be repeated across the entity's constituents."}}}],
+                        "body": {"list": {"literal": {"string": {}}}}}}},
+                  {
+                    "name": "seeAlso",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "key": "description",
+                            "value": {"literal": {"string": "Typed cross-references to related entities, for navigation and documentation."}}}],
+                        "body": {"list": {"variable": "hydra.packaging.EntityReference"}}}}},
+                  {
+                    "name": "lifecycle",
+                    "type": {
+                      "annotated": {
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "Optional version-lifecycle milestones for the entity."}}}],
+                        "body": {"maybe": {"variable": "hydra.packaging.EntityLifecycle"}}}}}]}}},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.packaging.EntityReference",
+        "typeScheme": {
+          "body": {
+            "annotated": {
+              "annotation": [
+                {
+                  "key": "description",
+                  "value": {"literal": {"string": "A typed reference to a packaging entity: a package, a module, or a definition"}}}],
+              "body": {
+                "union": [
+                  {
+                    "name": "package",
+                    "type": {
+                      "annotated": {
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "A reference to a package, by name"}}}],
+                        "body": {"variable": "hydra.packaging.PackageName"}}}},
+                  {
+                    "name": "module",
+                    "type": {
+                      "annotated": {
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "A reference to a module, by name"}}}],
+                        "body": {"variable": "hydra.packaging.ModuleName"}}}},
+                  {
+                    "name": "definition",
+                    "type": {
+                      "annotated": {
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "A reference to a definition (type, term, or primitive)"}}}],
+                        "body": {"variable": "hydra.packaging.DefinitionReference"}}}}]}}},
           "variables": []}}},
     {
       "type": {
@@ -43,15 +193,10 @@
                 {
                   "key": "description",
                   "value": {
-                    "literal": {"string": "A logical collection of elements in the same namespace, having dependencies on zero or more other modules"}}}],
+                    "literal": {
+                      "string": "A logical collection of elements sharing a common module name, having dependencies on zero or more other modules"}}}],
               "body": {
                 "record": [
-                  {
-                    "name": "description",
-                    "type": {
-                      "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "An optional human-readable description of the module"}}}],
-                        "body": {"maybe": {"literal": {"string": {}}}}}}},
                   {
                     "name": "name",
                     "type": {
@@ -61,6 +206,13 @@
                             "key": "description",
                             "value": {"literal": {"string": "The name of the module, which is also the common prefix for all element names in the module"}}}],
                         "body": {"variable": "hydra.packaging.ModuleName"}}}},
+                  {
+                    "name": "metadata",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {"key": "description", "value": {"literal": {"string": "Optional documentation and lifecycle metadata for the module"}}}],
+                        "body": {"maybe": {"variable": "hydra.packaging.EntityMetadata"}}}}},
                   {
                     "name": "dependencies",
                     "type": {
@@ -135,11 +287,14 @@
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the package"}}}],
                         "body": {"variable": "hydra.packaging.PackageName"}}}},
                   {
-                    "name": "modules",
+                    "name": "metadata",
                     "type": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The modules in this package"}}}],
-                        "body": {"list": {"variable": "hydra.packaging.Module"}}}}},
+                        "annotation": [
+                          {
+                            "key": "description",
+                            "value": {"literal": {"string": "Optional documentation and lifecycle metadata for the package"}}}],
+                        "body": {"maybe": {"variable": "hydra.packaging.EntityMetadata"}}}}},
                   {
                     "name": "dependencies",
                     "type": {
@@ -147,11 +302,11 @@
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The packages which this package depends on"}}}],
                         "body": {"list": {"variable": "hydra.packaging.PackageDependency"}}}}},
                   {
-                    "name": "description",
+                    "name": "modules",
                     "type": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "An optional human-readable description of the package"}}}],
-                        "body": {"maybe": {"literal": {"string": {}}}}}}}]}}},
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The modules in this package"}}}],
+                        "body": {"list": {"variable": "hydra.packaging.Module"}}}}}]}}},
           "variables": []}}},
     {
       "type": {
@@ -214,6 +369,78 @@
           "variables": []}}},
     {
       "type": {
+        "name": "hydra.packaging.PrimitiveDefinition",
+        "typeScheme": {
+          "body": {
+            "annotated": {
+              "annotation": [
+                {
+                  "key": "description",
+                  "value": {
+                    "literal": {
+                      "string": "A primitive definition: the universal, host-independent declarative metadata for a primitive, including name, signature, documentation and lifecycle metadata, totality and purity flags, and an optional default implementation expressed as a Hydra term."}}}],
+              "body": {
+                "record": [
+                  {
+                    "name": "name",
+                    "type": {
+                      "annotated": {
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the primitive"}}}],
+                        "body": {"variable": "hydra.core.Name"}}}},
+                  {
+                    "name": "signature",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "key": "description",
+                            "value": {"literal": {"string": "The signature of the primitive (always explicit, never inferred)"}}}],
+                        "body": {"variable": "hydra.typing.TermSignature"}}}},
+                  {
+                    "name": "metadata",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "key": "description",
+                            "value": {
+                              "literal": {
+                                "string": "Optional documentation and lifecycle metadata for the primitive (description, long-form comments, cross-references, version milestones)."}}}],
+                        "body": {"maybe": {"variable": "hydra.packaging.EntityMetadata"}}}}},
+                  {
+                    "name": "isPure",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "key": "description",
+                            "value": {
+                              "literal": {"string": "Whether the primitive is pure (referentially transparent, no observable side effects). Defaults to true."}}}],
+                        "body": {"literal": {"boolean": {}}}}}},
+                  {
+                    "name": "isTotal",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "key": "description",
+                            "value": {
+                              "literal": {"string": "Whether the primitive is total (terminates on every input of its declared type). Defaults to true."}}}],
+                        "body": {"literal": {"boolean": {}}}}}},
+                  {
+                    "name": "defaultImplementation",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "key": "description",
+                            "value": {
+                              "literal": {
+                                "string": "An optional cross-compilable reference implementation of the primitive, expressed as a Hydra term. Used by interpreters lacking a native implementation and as a proof-friendly reference. Distinct from the per-host Primitive.implementation."}}}],
+                        "body": {"maybe": {"variable": "hydra.core.Term"}}}}}]}}},
+          "variables": []}}},
+    {
+      "type": {
         "name": "hydra.packaging.QualifiedName",
         "typeScheme": {
           "body": {
@@ -246,7 +473,7 @@
               "annotation": [
                 {
                   "key": "description",
-                  "value": {"literal": {"string": "A term-level definition, including a name, a term, and the type scheme of the term"}}}],
+                  "value": {"literal": {"string": "A term-level definition, including a name, a term, and an optional signature"}}}],
               "body": {
                 "record": [
                   {
@@ -256,18 +483,29 @@
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the term"}}}],
                         "body": {"variable": "hydra.core.Name"}}}},
                   {
+                    "name": "metadata",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "key": "description",
+                            "value": {"literal": {"string": "Optional documentation and lifecycle metadata for the term definition"}}}],
+                        "body": {"maybe": {"variable": "hydra.packaging.EntityMetadata"}}}}},
+                  {
                     "name": "term",
                     "type": {
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The term being defined"}}}],
                         "body": {"variable": "hydra.core.Term"}}}},
                   {
-                    "name": "typeScheme",
+                    "name": "signature",
                     "type": {
                       "annotated": {
                         "annotation": [
-                          {"key": "description", "value": {"literal": {"string": "The type scheme of the term, including any class constraints"}}}],
-                        "body": {"maybe": {"variable": "hydra.core.TypeScheme"}}}}}]}}},
+                          {
+                            "key": "description",
+                            "value": {"literal": {"string": "The optional signature of the term. When absent, the signature is to be inferred."}}}],
+                        "body": {"maybe": {"variable": "hydra.typing.TermSignature"}}}}}]}}},
           "variables": []}}},
     {
       "type": {
@@ -288,12 +526,30 @@
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the type"}}}],
                         "body": {"variable": "hydra.core.Name"}}}},
                   {
+                    "name": "metadata",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "key": "description",
+                            "value": {"literal": {"string": "Optional documentation and lifecycle metadata for the type definition"}}}],
+                        "body": {"maybe": {"variable": "hydra.packaging.EntityMetadata"}}}}},
+                  {
                     "name": "typeScheme",
                     "type": {
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The type scheme being defined"}}}],
                         "body": {"variable": "hydra.core.TypeScheme"}}}}]}}},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.packaging.Version",
+        "typeScheme": {
+          "body": {
+            "annotated": {
+              "annotation": [{"key": "description", "value": {"literal": {"string": "A version string, e.g. \"0.15\" or \"1.0.0\"."}}}],
+              "body": {"wrap": {"literal": {"string": {}}}}}},
           "variables": []}}}],
-  "dependencies": [{"module": "hydra.core"}],
-  "description": "A model for Hydra namespaces, modules, and packages",
+  "dependencies": [{"module": "hydra.core"}, {"module": "hydra.typing"}],
+  "metadata": {"comments": [], "description": "A model for Hydra module names, modules, and packages", "seeAlso": []},
   "name": "hydra.packaging"}

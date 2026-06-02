@@ -16,22 +16,22 @@ import qualified Data.Maybe                      as Y
 ns :: ModuleName
 ns = ModuleName "hydra.protobuf.sourceContext"
 
-define :: String -> Type -> Binding
+define :: String -> Type -> TypeDefinition
 define = defineType ns
-
-pbSourceContext :: String -> Type
-pbSourceContext = typeref ns
 
 module_ :: Module
 module_ = Module {
             moduleName = ns,
-            moduleDefinitions = (map toTypeDef definitions),
+            moduleDefinitions = (DefinitionType <$> definitions),
             moduleDependencies = unqualifiedDep <$> [Core.ns],
-            moduleDescription = Just "Based on https://github.com/protocolbuffers/protobuf/blob/main/src/google/protobuf/source_context.proto"}
+            moduleMetadata = descriptionMetadata (Just "Based on https://github.com/protocolbuffers/protobuf/blob/main/src/google/protobuf/source_context.proto")}
   where
     definitions = [sourceContext]
 
-sourceContext :: Binding
+pbSourceContext :: String -> Type
+pbSourceContext = typeref ns
+
+sourceContext :: TypeDefinition
 sourceContext = define "SourceContext" $
   doc ("`SourceContext` represents information about the source of a " ++
        "protobuf element, like the file in which it is defined.") $

@@ -9,17 +9,18 @@ import qualified Hydra.Coq.Syntax as Syntax
 import qualified Hydra.Coq.Utils as Utils
 import qualified Hydra.Core as Core
 import qualified Hydra.Formatting as Formatting
-import qualified Hydra.Lib.Equality as Equality
-import qualified Hydra.Lib.Lists as Lists
-import qualified Hydra.Lib.Literals as Literals
-import qualified Hydra.Lib.Logic as Logic
-import qualified Hydra.Lib.Maps as Maps
-import qualified Hydra.Lib.Math as Math
-import qualified Hydra.Lib.Maybes as Maybes
-import qualified Hydra.Lib.Pairs as Pairs
-import qualified Hydra.Lib.Sets as Sets
-import qualified Hydra.Lib.Strings as Strings
+import qualified Hydra.Haskell.Lib.Equality as Equality
+import qualified Hydra.Haskell.Lib.Lists as Lists
+import qualified Hydra.Haskell.Lib.Literals as Literals
+import qualified Hydra.Haskell.Lib.Logic as Logic
+import qualified Hydra.Haskell.Lib.Maps as Maps
+import qualified Hydra.Haskell.Lib.Math as Math
+import qualified Hydra.Haskell.Lib.Maybes as Maybes
+import qualified Hydra.Haskell.Lib.Pairs as Pairs
+import qualified Hydra.Haskell.Lib.Sets as Sets
+import qualified Hydra.Haskell.Lib.Strings as Strings
 import qualified Hydra.Packaging as Packaging
+import qualified Hydra.Scoping as Scoping
 import qualified Hydra.Serialization as Serialization
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
@@ -683,7 +684,7 @@ moduleToCoq fieldMap constrCounts ambiguousNames globalSanitizedAcc mod_ defs =
                   Maybes.maybe "" (\d -> Strings.cat [
                     "(* ",
                     d,
-                    " *)\n\n"]) (Packaging.moduleDescription mod_)
+                    " *)\n\n"]) ((Maybes.bind (Packaging.moduleMetadata mod_) Packaging.entityMetadataDescription))
           axiomOnlyModules =
                   [
                     "hydra.hoisting",
@@ -696,7 +697,8 @@ moduleToCoq fieldMap constrCounts ambiguousNames globalSanitizedAcc mod_ defs =
           termDefs =
                   Maybes.cat (Lists.map (\def_ -> case def_ of
                     Packaging.DefinitionTerm v0 ->
-                      let mts = Packaging.termDefinitionTypeScheme v0
+                      let msig = Packaging.termDefinitionSignature v0
+                          mts = Maybes.map Scoping.termSignatureToTypeScheme msig
                           vs = Maybes.maybe [] (\ts -> Core.typeSchemeVariables ts) mts
                           mty = Maybes.map (\ts -> Core.typeSchemeBody ts) mts
                       in (Just (Utils.localName (Core.unName (Packaging.termDefinitionName v0)), (Packaging.termDefinitionTerm v0, (vs, mty))))

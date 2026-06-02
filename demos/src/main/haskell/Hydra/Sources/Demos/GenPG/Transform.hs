@@ -14,7 +14,6 @@ import qualified Hydra.Dsl.Ast                        as Ast
 import qualified Hydra.Dsl.Meta.Base                       as MetaBase
 import qualified Hydra.Dsl.Coders                     as Coders
 import qualified Hydra.Dsl.Util                    as Util
-import qualified Hydra.Dsl.Meta.Context                    as Ctx
 import qualified Hydra.Dsl.Errors                      as Error
 import qualified Hydra.Dsl.Meta.Core                       as Core
 import qualified Hydra.Dsl.Meta.Graph                      as Graph
@@ -99,7 +98,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> ([Reduction.ns, Rewriting.ns, Strip.ns, ExtractCore.ns] L.++ (kernelTypesModuleNames L.++ [PgModel.ns, TabularModel.ns, RelationalModel.ns])),
-            moduleDescription = Just "Functions for transforming property graph mappings into property graph elements."}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just "Functions for transforming property graph mappings into property graph elements.")}
   where
     definitions = [
       toDefinition concatPairs,
@@ -129,7 +128,7 @@ module_ = Module {
       toDefinition transformRecord,
       toDefinition transformTableRows]
 
-define :: String -> TTerm a -> TTermDefinition a
+define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModule module_
 
 -- Type references
@@ -140,7 +139,7 @@ tab :: String -> Type
 tab = Bootstrap.typeref TabularModel.ns
 
 -- | Evaluate properties by applying each spec to the record and extracting optional values
-evaluateProperties :: TTermDefinition (Context -> Graph -> M.Map PG.PropertyKey Term -> Term -> Either Error (M.Map PG.PropertyKey Term))
+evaluateProperties :: TypedTermDefinition (InferenceContext -> Graph -> M.Map PG.PropertyKey Term -> Term -> Either Error (M.Map PG.PropertyKey Term))
 evaluateProperties = define "evaluateProperties" $
   doc "Evaluate property specifications against a record term" $
   "cx" ~> "g" ~> "specs" ~> "record" ~>
@@ -163,7 +162,7 @@ evaluateProperties = define "evaluateProperties" $
         (Maps.toList $ var "specs"))
 
 -- | Evaluate an edge specification against a record term
-evaluateEdge :: TTermDefinition (Context -> Graph -> PG.Edge Term -> Term -> Either Error (Maybe (PG.Edge Term)))
+evaluateEdge :: TypedTermDefinition (InferenceContext -> Graph -> PG.Edge Term -> Term -> Either Error (Maybe (PG.Edge Term)))
 evaluateEdge = define "evaluateEdge" $
   doc "Evaluate an edge specification against a record term to produce an optional edge" $
   "cx" ~> "g" ~> "edgeSpec" ~> "record" ~>
@@ -204,7 +203,7 @@ evaluateEdge = define "evaluateEdge" $
                             (var "mInId"))))))
 
 -- | Evaluate a vertex specification against a record term
-evaluateVertex :: TTermDefinition (Context -> Graph -> PG.Vertex Term -> Term -> Either Error (Maybe (PG.Vertex Term)))
+evaluateVertex :: TypedTermDefinition (InferenceContext -> Graph -> PG.Vertex Term -> Term -> Either Error (Maybe (PG.Vertex Term)))
 evaluateVertex = define "evaluateVertex" $
   doc "Evaluate a vertex specification against a record term to produce an optional vertex" $
   "cx" ~> "g" ~> "vertexSpec" ~> "record" ~>
@@ -230,7 +229,7 @@ evaluateVertex = define "evaluateVertex" $
                 (var "mId")))
 
 -- | Check if an element is an edge
-elementIsEdge :: TTermDefinition (PG.Element a -> Bool)
+elementIsEdge :: TypedTermDefinition (PG.Element a -> Bool)
 elementIsEdge = define "elementIsEdge" $
   doc "Check if an element is an edge" $
   "el" ~>
@@ -239,7 +238,7 @@ elementIsEdge = define "elementIsEdge" $
     @@ var "el"
 
 -- | Check if an element is a vertex
-elementIsVertex :: TTermDefinition (PG.Element a -> Bool)
+elementIsVertex :: TypedTermDefinition (PG.Element a -> Bool)
 elementIsVertex = define "elementIsVertex" $
   doc "Check if an element is a vertex" $
   "el" ~>
@@ -248,7 +247,7 @@ elementIsVertex = define "elementIsVertex" $
     @@ var "el"
 
 -- | Find table names referenced in a term by looking for record projections
-findTablesInTerm :: TTermDefinition (Term -> S.Set String)
+findTablesInTerm :: TypedTermDefinition (Term -> S.Set String)
 findTablesInTerm = define "findTablesInTerm" $
   doc "Find table names referenced in a term by looking for record projections" $
   "term" ~>
@@ -264,14 +263,14 @@ findTablesInTerm = define "findTablesInTerm" $
       @@ var "term"
 
 -- | Find table names referenced in multiple terms
-findTablesInTerms :: TTermDefinition ([Term] -> S.Set String)
+findTablesInTerms :: TypedTermDefinition ([Term] -> S.Set String)
 findTablesInTerms = define "findTablesInTerms" $
   doc "Find table names referenced in multiple terms" $
   "terms" ~>
     Sets.unions $ Lists.map findTablesInTerm (var "terms")
 
 -- | Get the table name for an edge specification
-tableForEdge :: TTermDefinition (PG.Edge Term -> Either String String)
+tableForEdge :: TypedTermDefinition (PG.Edge Term -> Either String String)
 tableForEdge = define "tableForEdge" $
   doc "Get the table name for an edge specification. Returns an error if not exactly one table is referenced." $
   "edge" ~>
@@ -294,7 +293,7 @@ tableForEdge = define "tableForEdge" $
         string " edges has wrong number of tables"])
 
 -- | Get the table name for a vertex specification
-tableForVertex :: TTermDefinition (PG.Vertex Term -> Either String String)
+tableForVertex :: TypedTermDefinition (PG.Vertex Term -> Either String String)
 tableForVertex = define "tableForVertex" $
   doc "Get the table name for a vertex specification. Returns an error if not exactly one table is referenced." $
   "vertex" ~>
@@ -313,7 +312,7 @@ tableForVertex = define "tableForVertex" $
         string " vertices has wrong number of tables"])
 
 -- | Group element specifications by their source table
-elementSpecsByTable :: TTermDefinition (PG.LazyGraph Term -> Either String (M.Map String ([PG.Vertex Term], [PG.Edge Term])))
+elementSpecsByTable :: TypedTermDefinition (PG.LazyGraph Term -> Either String (M.Map String ([PG.Vertex Term], [PG.Edge Term])))
 elementSpecsByTable = define "elementSpecsByTable" $
   doc "Group element specifications by their source table" $
   "graph" ~>
@@ -336,7 +335,7 @@ elementSpecsByTable = define "elementSpecsByTable" $
               "table" <~ Pairs.first (var "p") $
               "v" <~ Pairs.second (var "p") $
               "existing" <~ Maps.lookup (var "table") (var "m") $
-              "current" <~ Maybes.fromMaybe (pair (list ([] :: [TTerm (PG.Vertex Term)])) (list ([] :: [TTerm (PG.Edge Term)]))) (var "existing") $
+              "current" <~ Maybes.fromMaybe (pair (list ([] :: [TypedTerm (PG.Vertex Term)])) (list ([] :: [TypedTerm (PG.Edge Term)]))) (var "existing") $
               Maps.insert (var "table")
                 (pair
                   (Lists.cons (var "v") (Pairs.first $ var "current"))
@@ -346,7 +345,7 @@ elementSpecsByTable = define "elementSpecsByTable" $
               "table" <~ Pairs.first (var "p") $
               "e" <~ Pairs.second (var "p") $
               "existing" <~ Maps.lookup (var "table") (var "m") $
-              "current" <~ Maybes.fromMaybe (pair (list ([] :: [TTerm (PG.Vertex Term)])) (list ([] :: [TTerm (PG.Edge Term)]))) (var "existing") $
+              "current" <~ Maybes.fromMaybe (pair (list ([] :: [TypedTerm (PG.Vertex Term)])) (list ([] :: [TypedTerm (PG.Edge Term)]))) (var "existing") $
               Maps.insert (var "table")
                 (pair
                   (Pairs.first $ var "current")
@@ -356,7 +355,7 @@ elementSpecsByTable = define "elementSpecsByTable" $
             right $ Lists.foldl (var "addEdge") (var "vertexMap") (var "edgePairs")))
 
 -- | Convert a data row to a record term given a table type
-termRowToRecord :: TTermDefinition (Tab.TableType -> Tab.DataRow Term -> Term)
+termRowToRecord :: TypedTermDefinition (Tab.TableType -> Tab.DataRow Term -> Term)
 termRowToRecord = define "termRowToRecord" $
   doc "Convert a data row to a record term given a table type" $
   "tableType" ~> "row" ~>
@@ -372,7 +371,7 @@ termRowToRecord = define "termRowToRecord" $
         (var "cells")
 
 -- | Transform a record through vertex and edge specifications
-transformRecord :: TTermDefinition (Context -> Graph -> [PG.Vertex Term] -> [PG.Edge Term] -> Term -> Either Error ([PG.Vertex Term], [PG.Edge Term]))
+transformRecord :: TypedTermDefinition (InferenceContext -> Graph -> [PG.Vertex Term] -> [PG.Edge Term] -> Term -> Either Error ([PG.Vertex Term], [PG.Edge Term]))
 transformRecord = define "transformRecord" $
   doc "Transform a record through vertex and edge specifications to produce vertices and edges" $
   "cx" ~> "g" ~> "vspecs" ~> "especs" ~> "record" ~>
@@ -390,14 +389,14 @@ transformRecord = define "transformRecord" $
 -- | Parse a CSV line into a list of optional string values
 -- Empty fields become Nothing, non-empty fields become Just value
 -- Handles quoted fields (double-quote to escape quotes within quoted fields)
-parseCsvLine :: TTermDefinition (String -> Either String [Maybe String])
+parseCsvLine :: TypedTermDefinition (String -> Either String [Maybe String])
 parseCsvLine = define "parseCsvLine" $
   doc "Parse a CSV line into fields. Empty fields become Nothing." $
   "line" ~>
     -- State is (accumulator, currentField, inQuotes) as a nested pair
     -- ((acc, field), inQuotes)
     "chars" <~ Strings.toList (var "line") $
-    "initState" <~ pair (pair (list ([] :: [TTerm (Maybe String)])) (string "")) (boolean False) $
+    "initState" <~ pair (pair (list ([] :: [TypedTerm (Maybe String)])) (string "")) (boolean False) $
     "finalState" <~ Lists.foldl parseCsvChar (var "initState") (var "chars") $
     -- Extract final state
     "acc" <~ Pairs.first (Pairs.first $ var "finalState") $
@@ -410,7 +409,7 @@ parseCsvLine = define "parseCsvLine" $
 
 -- | Process a single character during CSV parsing
 -- State: ((accumulator, currentField), inQuotes)
-parseCsvChar :: TTermDefinition ((([Maybe String], String), Bool) -> Int -> (([Maybe String], String), Bool))
+parseCsvChar :: TypedTermDefinition ((([Maybe String], String), Bool) -> Int -> (([Maybe String], String), Bool))
 parseCsvChar = define "parseCsvChar" $
   doc "Process a single character during CSV parsing" $
   "state" ~> "c" ~>
@@ -435,7 +434,7 @@ parseCsvChar = define "parseCsvChar" $
             pair (pair (var "acc") (Strings.cat2 (var "field") (Strings.fromList $ list [var "c"]))) (var "inQuotes")))
 
 -- | Normalize a CSV field - empty string becomes Nothing, otherwise Just
-normalizeField :: TTermDefinition (String -> Maybe String)
+normalizeField :: TypedTermDefinition (String -> Maybe String)
 normalizeField = define "normalizeField" $
   doc "Normalize a CSV field value - empty becomes Nothing" $
   "s" ~>
@@ -444,7 +443,7 @@ normalizeField = define "normalizeField" $
       (just $ var "s")
 
 -- | Concatenate two pairs of lists (used for accumulating vertices and edges)
-concatPairs :: TTermDefinition (([a], [b]) -> ([a], [b]) -> ([a], [b]))
+concatPairs :: TypedTermDefinition (([a], [b]) -> ([a], [b]) -> ([a], [b]))
 concatPairs = define "concatPairs" $
   doc "Concatenate two pairs of lists" $
   "acc" ~> "p" ~>
@@ -453,7 +452,7 @@ concatPairs = define "concatPairs" $
       (Lists.concat2 (Pairs.second $ var "acc") (Pairs.second $ var "p"))
 
 -- | Build a map from table name to table type for efficient lookup
-tableTypesByName :: TTermDefinition ([Tab.TableType] -> M.Map Rel.RelationName Tab.TableType)
+tableTypesByName :: TypedTermDefinition ([Tab.TableType] -> M.Map Rel.RelationName Tab.TableType)
 tableTypesByName = define "tableTypesByName" $
   doc "Build a map from table name to table type" $
   "tableTypes" ~>
@@ -462,7 +461,7 @@ tableTypesByName = define "tableTypesByName" $
       (var "tableTypes")
 
 -- | Strip leading and trailing whitespace from a string
-stripWhitespace :: TTermDefinition (String -> String)
+stripWhitespace :: TypedTermDefinition (String -> String)
 stripWhitespace = define "stripWhitespace" $
   doc "Strip leading and trailing whitespace from a string" $
   "s" ~>
@@ -474,14 +473,14 @@ stripWhitespace = define "stripWhitespace" $
     Strings.fromList (var "trimRight")
 
 -- | Check if any element in a list satisfies a predicate
-listAny :: TTermDefinition ((a -> Bool) -> [a] -> Bool)
+listAny :: TypedTermDefinition ((a -> Bool) -> [a] -> Bool)
 listAny = define "listAny" $
   doc "Check if any element in a list satisfies a predicate" $
   "pred" ~> "xs" ~>
     Logic.not $ Lists.null $ Lists.filter (var "pred") (var "xs")
 
 -- | Parse a single CSV line, returning Nothing for empty/whitespace-only lines
-parseSingleLine :: TTermDefinition (String -> Either String (Maybe [Maybe String]))
+parseSingleLine :: TypedTermDefinition (String -> Either String (Maybe [Maybe String]))
 parseSingleLine = define "parseSingleLine" $
   doc "Parse a single CSV line, returning Nothing for empty lines" $
   "line" ~>
@@ -493,7 +492,7 @@ parseSingleLine = define "parseSingleLine" $
 -- | Parse raw CSV lines into a Table of strings
 -- Takes: hasHeader flag, list of raw lines
 -- Returns: Either error or Table String
-parseTableLines :: TTermDefinition (Bool -> [String] -> Either String (Tab.Table String))
+parseTableLines :: TypedTermDefinition (Bool -> [String] -> Either String (Tab.Table String))
 parseTableLines = define "parseTableLines" $
   doc "Parse raw CSV lines into a Table of strings" $
   "hasHeader" ~> "rawLines" ~>
@@ -525,18 +524,18 @@ parseTableLines = define "parseTableLines" $
 
 -- | Transform all rows from a decoded table through vertex/edge specs
 -- This is the pure part of table transformation (runs in Either monad)
-transformTableRows :: TTermDefinition (Context -> Graph -> [PG.Vertex Term] -> [PG.Edge Term] -> Tab.TableType -> [Tab.DataRow Term] -> Either Error ([PG.Vertex Term], [PG.Edge Term]))
+transformTableRows :: TypedTermDefinition (InferenceContext -> Graph -> [PG.Vertex Term] -> [PG.Edge Term] -> Tab.TableType -> [Tab.DataRow Term] -> Either Error ([PG.Vertex Term], [PG.Edge Term]))
 transformTableRows = define "transformTableRows" $
   doc "Transform all rows from a table through vertex/edge specifications" $
   "cx" ~> "g" ~> "vspecs" ~> "especs" ~> "tableType" ~> "rows" ~>
     Eithers.map
-      ("pairs" ~> Lists.foldl concatPairs (pair (list ([] :: [TTerm (PG.Vertex Term)])) (list ([] :: [TTerm (PG.Edge Term)]))) (var "pairs"))
+      ("pairs" ~> Lists.foldl concatPairs (pair (list ([] :: [TypedTerm (PG.Vertex Term)])) (list ([] :: [TypedTerm (PG.Edge Term)]))) (var "pairs"))
       (Eithers.mapList
         ("row" ~> transformRecord @@ var "cx" @@ var "g" @@ var "vspecs" @@ var "especs" @@ (termRowToRecord @@ var "tableType" @@ var "row"))
         (var "rows"))
 
 -- | Construct a LazyGraph from lists of vertices and edges
-makeLazyGraph :: TTermDefinition ([PG.Vertex Term] -> [PG.Edge Term] -> PG.LazyGraph Term)
+makeLazyGraph :: TypedTermDefinition ([PG.Vertex Term] -> [PG.Edge Term] -> PG.LazyGraph Term)
 makeLazyGraph = define "makeLazyGraph" $
   doc "Construct a LazyGraph from vertices and edges" $
   "vertices" ~> "edges" ~>
@@ -548,7 +547,7 @@ makeLazyGraph = define "makeLazyGraph" $
 -- Table Decoding (pure functions)
 
 -- | Decode a table of strings into a table of terms based on column types
-decodeTable :: TTermDefinition (Tab.TableType -> Tab.Table String -> Either String (Tab.Table Term))
+decodeTable :: TypedTermDefinition (Tab.TableType -> Tab.Table String -> Either String (Tab.Table Term))
 decodeTable = define "decodeTable" $
   doc "Decode a table of strings into a table of terms based on column type specifications" $
   "tableType" ~> "table" ~>
@@ -565,7 +564,7 @@ decodeTable = define "decodeTable" $
         (var "rows"))
 
 -- | Decode a single row based on column types
-decodeRow :: TTermDefinition ([Tab.ColumnType] -> Tab.DataRow String -> Either String (Tab.DataRow Term))
+decodeRow :: TypedTermDefinition ([Tab.ColumnType] -> Tab.DataRow String -> Either String (Tab.DataRow Term))
 decodeRow = define "decodeRow" $
   doc "Decode a single data row based on column types" $
   "colTypes" ~> "row" ~>
@@ -580,7 +579,7 @@ decodeRow = define "decodeRow" $
         (Lists.zip (var "colTypes") (var "cells")))
 
 -- | Decode a single cell value based on its column type
-decodeCell :: TTermDefinition (Tab.ColumnType -> Maybe String -> Either String (Maybe Term))
+decodeCell :: TypedTermDefinition (Tab.ColumnType -> Maybe String -> Either String (Maybe Term))
 decodeCell = define "decodeCell" $
   doc "Decode a single cell value based on its column type" $
   "colType" ~> "mvalue" ~>

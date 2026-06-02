@@ -3,23 +3,40 @@
 
 module Hydra.Validate.Packaging where
 import qualified Hydra.Annotations as Annotations
+import qualified Hydra.Ast as Ast
+import qualified Hydra.Coders as Coders
 import qualified Hydra.Constants as Constants
 import qualified Hydra.Core as Core
+import qualified Hydra.Error.Checking as Checking
+import qualified Hydra.Error.Core as ErrorCore
 import qualified Hydra.Error.Packaging as ErrorPackaging
+import qualified Hydra.Errors as Errors
 import qualified Hydra.Formatting as Formatting
-import qualified Hydra.Lib.Equality as Equality
-import qualified Hydra.Lib.Lists as Lists
-import qualified Hydra.Lib.Logic as Logic
-import qualified Hydra.Lib.Maps as Maps
-import qualified Hydra.Lib.Maybes as Maybes
-import qualified Hydra.Lib.Pairs as Pairs
-import qualified Hydra.Lib.Regex as Regex
-import qualified Hydra.Lib.Sets as Sets
-import qualified Hydra.Lib.Strings as Strings
+import qualified Hydra.Graph as Graph
+import qualified Hydra.Json.Model as Model
+import qualified Hydra.Haskell.Lib.Equality as Equality
+import qualified Hydra.Haskell.Lib.Lists as Lists
+import qualified Hydra.Haskell.Lib.Logic as Logic
+import qualified Hydra.Haskell.Lib.Maps as Maps
+import qualified Hydra.Haskell.Lib.Maybes as Maybes
+import qualified Hydra.Haskell.Lib.Pairs as Pairs
+import qualified Hydra.Haskell.Lib.Regex as Regex
+import qualified Hydra.Haskell.Lib.Sets as Sets
+import qualified Hydra.Haskell.Lib.Strings as Strings
 import qualified Hydra.Names as Names
 import qualified Hydra.Packaging as Packaging
+import qualified Hydra.Parsing as Parsing
+import qualified Hydra.Paths as Paths
+import qualified Hydra.Query as Query
+import qualified Hydra.Relational as Relational
+import qualified Hydra.Tabular as Tabular
+import qualified Hydra.Testing as Testing
+import qualified Hydra.Topology as Topology
+import qualified Hydra.Typed as Typed
+import qualified Hydra.Typing as Typing
 import qualified Hydra.Util as Util
 import qualified Hydra.Validation as Validation
+import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 -- | Append a rule-tagged InvalidModuleError finding to a ValidationResult, classifying as error or warning per the profile and respecting maxErrors/maxWarnings bounds.
@@ -109,6 +126,7 @@ checkDefinitionDocumentation mod =
                         in case typ of
                           Core.TypeAnnotated v1 -> Annotations.hasDescription (Core.annotatedTypeAnnotation v1)
                           _ -> False
+                      Packaging.DefinitionPrimitive v0 -> Maybes.maybe False (\em -> Logic.not (Equality.equal (Maybes.fromMaybe "" (Packaging.entityMetadataDescription em)) "")) (Packaging.primitiveDefinitionMetadata v0)
                       _ -> False
         in (Logic.ifElse documented Nothing (Just (ErrorPackaging.InvalidModuleErrorMissingDocumentation (ErrorPackaging.MissingDocumentationError {
           ErrorPackaging.missingDocumentationErrorModuleName = ns,
@@ -139,11 +157,13 @@ checkDefinitionNameConvention mod =
                     case def of
                       Packaging.DefinitionTerm _ -> Util.CaseConventionCamel
                       Packaging.DefinitionType _ -> Util.CaseConventionPascal
+                      Packaging.DefinitionPrimitive _ -> Util.CaseConventionCamel
                       _ -> Util.CaseConventionCamel
             pattern =
                     case def of
                       Packaging.DefinitionTerm _ -> Constants.regexCamelCase
                       Packaging.DefinitionType _ -> Constants.regexPascalCase
+                      Packaging.DefinitionPrimitive _ -> Constants.regexCamelCase
                       _ -> Constants.regexCamelCase
         in (Logic.ifElse (Regex.matches pattern local) Nothing (Just (ErrorPackaging.InvalidModuleErrorInvalidDefinitionName (ErrorPackaging.InvalidDefinitionNameError {
           ErrorPackaging.invalidDefinitionNameErrorModuleName = ns,
@@ -222,6 +242,7 @@ definitionName def =
     case def of
       Packaging.DefinitionTerm v0 -> Packaging.termDefinitionName v0
       Packaging.DefinitionType v0 -> Packaging.typeDefinitionName v0
+      Packaging.DefinitionPrimitive v0 -> Packaging.primitiveDefinitionName v0
 -- | True iff the given rule name appears in the profile's errorRules or warningRules.
 enabledPackaging :: Validation.ValidationProfile -> Core.Name -> Bool
 enabledPackaging p ruleName =

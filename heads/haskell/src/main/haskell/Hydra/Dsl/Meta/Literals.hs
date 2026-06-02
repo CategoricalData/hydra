@@ -2,7 +2,7 @@
 
 module Hydra.Dsl.Meta.Literals where
 
-import Hydra.Phantoms
+import Hydra.Typed
 import qualified Hydra.Dsl.Terms as Terms
 
 import Data.Int
@@ -13,68 +13,68 @@ import qualified Data.Scientific as Sci
 -- Binary is now properly represented as ByteString
 type Binary = B.ByteString
 
-bigint :: Integer -> TTerm Integer
-bigint = TTerm . Terms.bigint
+bigint :: Integer -> TypedTerm Integer
+bigint = TypedTerm . Terms.bigint
 
-binary :: Binary -> TTerm Binary
-binary = TTerm . Terms.binary
+binary :: Binary -> TypedTerm Binary
+binary = TypedTerm . Terms.binary
 
-bool :: Bool -> TTerm Bool
-bool = TTerm . Terms.boolean
+bool :: Bool -> TypedTerm Bool
+bool = TypedTerm . Terms.boolean
 
-boolean :: Bool -> TTerm Bool
+boolean :: Bool -> TypedTerm Bool
 boolean = bool
 
-char :: Char -> TTerm Int
-char = TTerm . Terms.char
+char :: Char -> TypedTerm Int
+char = TypedTerm . Terms.char
 
-decimal :: Sci.Scientific -> TTerm Sci.Scientific
-decimal = TTerm . Terms.decimal
+decimal :: Sci.Scientific -> TypedTerm Sci.Scientific
+decimal = TypedTerm . Terms.decimal
 
-double :: Double -> TTerm Double
+double :: Double -> TypedTerm Double
 double = float64
 
-false :: TTerm Bool
+false :: TypedTerm Bool
 false = bool False
 
-float :: Float -> TTerm Float
+float :: Float -> TypedTerm Float
 float = float32
 
-float32 :: Float -> TTerm Float
-float32 = TTerm . Terms.float32
+float32 :: Float -> TypedTerm Float
+float32 = TypedTerm . Terms.float32
 
-float64 :: Double -> TTerm Double
-float64 = TTerm . Terms.float64
+float64 :: Double -> TypedTerm Double
+float64 = TypedTerm . Terms.float64
 
-int :: Int -> TTerm Int
+int :: Int -> TypedTerm Int
 int = int32
 
-int8 :: Int8 -> TTerm Int8
-int8 = TTerm . Terms.int8
+int16 :: Int16 -> TypedTerm Int16
+int16 = TypedTerm . Terms.int16
 
-int16 :: Int16 -> TTerm Int16
-int16 = TTerm . Terms.int16
+int32 :: Int -> TypedTerm Int
+int32 = TypedTerm . Terms.int32
 
-int32 :: Int -> TTerm Int
-int32 = TTerm . Terms.int32
+int64 :: Int64 -> TypedTerm Int64
+int64 = TypedTerm . Terms.int64
 
-int64 :: Int64 -> TTerm Int64
-int64 = TTerm . Terms.int64
+int8 :: Int8 -> TypedTerm Int8
+int8 = TypedTerm . Terms.int8
 
-string :: String -> TTerm String
-string = TTerm . Terms.string
+string :: String -> TypedTerm String
+string = TypedTerm . Terms.string
 
-true :: TTerm Bool
+true :: TypedTerm Bool
 true = bool True
 
-uint8 :: Int16 -> TTerm Int16
-uint8 = TTerm . Terms.uint8
+uint16 :: Int -> TypedTerm Int
+uint16 = TypedTerm . Terms.uint16
 
-uint16 :: Int -> TTerm Int
-uint16 = TTerm . Terms.uint16
+uint32 :: Int64 -> TypedTerm Int64
+uint32 = TypedTerm . Terms.uint32
 
-uint32 :: Int64 -> TTerm Int64
-uint32 = TTerm . Terms.uint32
+uint64 :: Integer -> TypedTerm Integer
+uint64 = TypedTerm . Terms.uint64
 
-uint64 :: Integer -> TTerm Integer
-uint64 = TTerm . Terms.uint64
+uint8 :: Int16 -> TypedTerm Int16
+uint8 = TypedTerm . Terms.uint8

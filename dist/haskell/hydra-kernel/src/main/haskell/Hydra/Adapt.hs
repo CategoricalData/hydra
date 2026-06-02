@@ -2,37 +2,55 @@
 -- | Simple, one-way adapters for types and terms
 
 module Hydra.Adapt where
+import qualified Hydra.Ast as Ast
 import qualified Hydra.Coders as Coders
-import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
 import qualified Hydra.Dependencies as Dependencies
 import qualified Hydra.Environment as Environment
+import qualified Hydra.Error.Checking as Checking
+import qualified Hydra.Error.Core as ErrorCore
+import qualified Hydra.Error.Packaging as ErrorPackaging
 import qualified Hydra.Errors as Errors
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Hoisting as Hoisting
 import qualified Hydra.Inference as Inference
+import qualified Hydra.Json.Model as Model
 import qualified Hydra.Lexical as Lexical
-import qualified Hydra.Lib.Eithers as Eithers
-import qualified Hydra.Lib.Equality as Equality
-import qualified Hydra.Lib.Lists as Lists
-import qualified Hydra.Lib.Literals as LibLiterals
-import qualified Hydra.Lib.Logic as Logic
-import qualified Hydra.Lib.Maps as Maps
-import qualified Hydra.Lib.Maybes as Maybes
-import qualified Hydra.Lib.Pairs as Pairs
-import qualified Hydra.Lib.Sets as Sets
-import qualified Hydra.Lib.Strings as Strings
+import qualified Hydra.Haskell.Lib.Eithers as Eithers
+import qualified Hydra.Haskell.Lib.Equality as Equality
+import qualified Hydra.Haskell.Lib.Lists as Lists
+import qualified Hydra.Haskell.Lib.Literals as LibLiterals
+import qualified Hydra.Haskell.Lib.Logic as Logic
+import qualified Hydra.Haskell.Lib.Maps as Maps
+import qualified Hydra.Haskell.Lib.Maybes as Maybes
+import qualified Hydra.Haskell.Lib.Pairs as Pairs
+import qualified Hydra.Haskell.Lib.Sets as Sets
+import qualified Hydra.Haskell.Lib.Strings as Strings
 import qualified Hydra.Literals as Literals
 import qualified Hydra.Names as Names
 import qualified Hydra.Packaging as Packaging
+import qualified Hydra.Parsing as Parsing
+import qualified Hydra.Paths as Paths
+import qualified Hydra.Query as Query
 import qualified Hydra.Reduction as Reduction
 import qualified Hydra.Reflect as Reflect
+import qualified Hydra.Relational as Relational
 import qualified Hydra.Resolution as Resolution
 import qualified Hydra.Rewriting as Rewriting
 import qualified Hydra.Scoping as Scoping
 import qualified Hydra.Show.Core as ShowCore
+import qualified Hydra.Show.Errors as ShowErrors
+import qualified Hydra.Show.Graph as ShowGraph
 import qualified Hydra.Strip as Strip
+import qualified Hydra.Tabular as Tabular
+import qualified Hydra.Testing as Testing
+import qualified Hydra.Topology as Topology
+import qualified Hydra.Typed as Typed
+import qualified Hydra.Typing as Typing
+import qualified Hydra.Util as Util
+import qualified Hydra.Validation as Validation
 import qualified Hydra.Variables as Variables
+import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 import qualified Data.Map as M
@@ -197,11 +215,19 @@ adaptNestedTypes constraints litmap recurse term =
 adaptPrimitive :: Coders.LanguageConstraints -> M.Map Core.LiteralType Core.LiteralType -> Graph.Primitive -> Either Errors.Error Graph.Primitive
 adaptPrimitive constraints litmap prim0 =
 
-      let ts0 = Graph.primitiveTypeScheme prim0
-      in (Eithers.bind (adaptTypeScheme constraints litmap ts0) (\ts1 -> Right (Graph.Primitive {
-        Graph.primitiveName = (Graph.primitiveName prim0),
-        Graph.primitiveTypeScheme = ts1,
-        Graph.primitiveImplementation = (Graph.primitiveImplementation prim0)})))
+      let def0 = Graph.primitiveDefinition prim0
+      in (Eithers.bind (adaptTermSignature constraints litmap (Packaging.primitiveDefinitionSignature def0)) (\sig1 ->
+        let def1 =
+                Packaging.PrimitiveDefinition {
+                  Packaging.primitiveDefinitionName = (Packaging.primitiveDefinitionName def0),
+                  Packaging.primitiveDefinitionSignature = sig1,
+                  Packaging.primitiveDefinitionMetadata = (Packaging.primitiveDefinitionMetadata def0),
+                  Packaging.primitiveDefinitionIsPure = (Packaging.primitiveDefinitionIsPure def0),
+                  Packaging.primitiveDefinitionIsTotal = (Packaging.primitiveDefinitionIsTotal def0),
+                  Packaging.primitiveDefinitionDefaultImplementation = (Packaging.primitiveDefinitionDefaultImplementation def0)}
+        in (Right (Graph.Primitive {
+          Graph.primitiveDefinition = def1,
+          Graph.primitiveImplementation = (Graph.primitiveImplementation prim0)}))))
 -- | Adapt a term using the given language constraints
 adaptTerm :: Coders.LanguageConstraints -> M.Map Core.LiteralType Core.LiteralType -> t0 -> Graph.Graph -> Core.Term -> Either Errors.Error Core.Term
 adaptTerm constraints litmap cx graph term0 =
@@ -238,6 +264,21 @@ adaptTermForLanguage lang cx g term =
       let constraints = Coders.languageConstraints lang
           litmap = adaptLiteralTypesMap constraints
       in (adaptTerm constraints litmap cx g term)
+-- | Adapt the types within a term signature to the given language constraints, in place. Parameter names, descriptions, and per-parameter isLazy flags, as well as type parameters, are preserved; only the parameter and result types are adapted. Unlike routing through TypeScheme (the type-only view), this retains the full TermSignature metadata, including primitive laziness flags.
+adaptTermSignature :: Coders.LanguageConstraints -> M.Map Core.LiteralType Core.LiteralType -> Typing.TermSignature -> Either Errors.Error Typing.TermSignature
+adaptTermSignature constraints litmap sig0 =
+
+      let result0 = Typing.termSignatureResult sig0
+      in (Eithers.bind (adaptType constraints litmap (Typing.resultType result0)) (\resultType1 -> Eithers.bind (Eithers.mapList (\p -> Eithers.map (\ty1 -> Typing.Parameter {
+        Typing.parameterName = (Typing.parameterName p),
+        Typing.parameterDescription = (Typing.parameterDescription p),
+        Typing.parameterType = ty1,
+        Typing.parameterIsLazy = (Typing.parameterIsLazy p)}) (adaptType constraints litmap (Typing.parameterType p))) (Typing.termSignatureParameters sig0)) (\params1 -> Right (Typing.TermSignature {
+        Typing.termSignatureTypeParameters = (Typing.termSignatureTypeParameters sig0),
+        Typing.termSignatureParameters = params1,
+        Typing.termSignatureResult = Typing.Result {
+          Typing.resultDescription = (Typing.resultDescription result0),
+          Typing.resultType = resultType1}}))))
 -- | Adapt a type using the given language constraints
 adaptType :: Coders.LanguageConstraints -> M.Map Core.LiteralType Core.LiteralType -> Core.Type -> Either Errors.Error Core.Type
 adaptType constraints litmap type0 =
@@ -283,12 +324,12 @@ composeCoders c1 c2 =
       Coders.coderEncode = (\cx -> \a -> Eithers.bind (Coders.coderEncode c1 cx a) (\b1 -> Coders.coderEncode c2 cx b1)),
       Coders.coderDecode = (\cx -> \c -> Eithers.bind (Coders.coderDecode c2 cx c) (\b2 -> Coders.coderDecode c1 cx b2))}
 -- | Given a data graph along with language constraints, original ordered bindings, and a designated list of namespaces, adapt the graph to the language constraints, then return the processed graph along with term definitions grouped by namespace (in the order of the input namespaces). Inference is performed before adaptation if bindings lack type annotations. Hoisting must preserve type schemes; if any binding loses its type scheme after hoisting, the pipeline fails. Adaptation preserves type application/lambda wrappers and adapts embedded types. Post-adaptation inference is performed to ensure binding TypeSchemes are fully consistent. The doExpand flag controls eta expansion. The doHoistCaseStatements flag controls case statement hoisting (needed for Python). The doHoistPolymorphicLetBindings flag controls polymorphic let binding hoisting (needed for Java). The originalBindings parameter provides the original ordered bindings (from module elements).
-dataGraphToDefinitions :: Coders.LanguageConstraints -> Bool -> Bool -> Bool -> Bool -> [Core.Binding] -> Graph.Graph -> [Packaging.ModuleName] -> Context.Context -> Either Errors.Error (Graph.Graph, [[Packaging.TermDefinition]])
+dataGraphToDefinitions :: Coders.LanguageConstraints -> Bool -> Bool -> Bool -> Bool -> [Core.Binding] -> Graph.Graph -> [Packaging.ModuleName] -> Typing.InferenceContext -> Either Errors.Error (Graph.Graph, [[Packaging.TermDefinition]])
 dataGraphToDefinitions constraints doInfer doExpand doHoistCaseStatements doHoistPolymorphicLetBindings originalBindings graph0 namespaces cx =
 
       let namespacesSet = Sets.fromList namespaces
           isParentBinding =
-                  \b -> Maybes.maybe False (\ns -> Sets.member ns namespacesSet) (Names.namespaceOf (Core.bindingName b))
+                  \b -> Maybes.maybe False (\ns -> Sets.member ns namespacesSet) (Names.moduleNameOf (Core.bindingName b))
           hoistCases =
                   \bindings ->
                     let stripped =
@@ -380,15 +421,16 @@ dataGraphToDefinitions constraints doInfer doExpand doHoistCaseStatements doHois
               toDef =
                       \el -> Maybes.map (\ts -> Packaging.TermDefinition {
                         Packaging.termDefinitionName = (Core.bindingName el),
+                        Packaging.termDefinitionMetadata = Nothing,
                         Packaging.termDefinitionTerm = (Core.bindingTerm el),
-                        Packaging.termDefinitionTypeScheme = (Just ts)}) (Core.bindingTypeScheme el)
+                        Packaging.termDefinitionSignature = (Just (Scoping.typeSchemeToTermSignature ts))}) (Core.bindingTypeScheme el)
               selectedElements =
-                      Lists.filter (\el -> Maybes.maybe False (\ns -> Sets.member ns namespacesSet) (Names.namespaceOf (Core.bindingName el))) bins5
+                      Lists.filter (\el -> Maybes.maybe False (\ns -> Sets.member ns namespacesSet) (Names.moduleNameOf (Core.bindingName el))) bins5
               elementsByNamespace =
                       Lists.foldl (\acc -> \el -> Maybes.maybe acc (\ns ->
                         let existing = Maybes.maybe [] Equality.identity (Maps.lookup ns acc)
                         in (Maps.insert ns (Lists.concat2 existing [
-                          el]) acc)) (Names.namespaceOf (Core.bindingName el))) Maps.empty selectedElements
+                          el]) acc)) (Names.moduleNameOf (Core.bindingName el))) Maps.empty selectedElements
               defsGrouped =
                       Lists.map (\ns ->
                         let elsForNs = Maybes.maybe [] Equality.identity (Maps.lookup ns elementsByNamespace)
@@ -635,6 +677,7 @@ schemaGraphToDefinitions constraints graph nameLists cx =
         let toDef =
                 \pair -> Packaging.TypeDefinition {
                   Packaging.typeDefinitionName = (Pairs.first pair),
+                  Packaging.typeDefinitionMetadata = Nothing,
                   Packaging.typeDefinitionTypeScheme = Core.TypeScheme {
                     Core.typeSchemeVariables = [],
                     Core.typeSchemeBody = (Pairs.second pair),

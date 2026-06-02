@@ -5,7 +5,7 @@ module Hydra.Sources.Test.Unification where
 
 -- Standard imports for tests
 import Hydra.Kernel
-import           Hydra.Dsl.Bootstrap (unqualifiedDep)
+import           Hydra.Dsl.Bootstrap (unqualifiedDep, descriptionMetadata)
 import Hydra.Dsl.Meta.Testing                 as Testing
 import Hydra.Dsl.Meta.Terms                   as Terms hiding ((@@))
 import Hydra.Sources.Kernel.Types.All
@@ -41,47 +41,158 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = unqualifiedDep <$> ([UnificationModule.ns, Lexical.ns, ShowCore.ns] ++ kernelTypesModuleNames),
-            moduleDescription = (Just "Test cases for type unification operations")}
+            moduleMetadata = descriptionMetadata ((Just "Test cases for type unification operations"))}
   where
     definitions = [Phantoms.toDefinition allTests]
 
-define :: String -> TTerm a -> TTermDefinition a
+define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModule module_
 
 -- Helper to build names
-nm :: String -> TTerm Name
+nm :: String -> TypedTerm Name
 nm s = Core.name $ Phantoms.string s
 
 -- Local alias for polymorphic application
 
--- | Universal variableOccursInType test case
-variableOccursCase :: String -> TTerm Name -> TTerm Type -> TTerm Bool -> TTerm TestCaseWithMetadata
-variableOccursCase cname variable typ expected =
-  universalCase cname
-    (Literals.showBoolean (UnificationModule.variableOccursInType @@ variable @@ typ))
-    (Literals.showBoolean expected)
+allTests :: TypedTermDefinition TestGroup
+allTests = define "allTests" $
+    Phantoms.doc "Test cases for type unification operations" $
+    supergroup "unification" [
+      variableOccursInTypeTests,
+      unifyTypesTests,
+      joinTypesTests]
 
 -- | Build schema types map from a list of names.
 -- Each name gets TypeScheme [] (TypeVariable name) Nothing
-buildSchemaMap :: TTerm [Name] -> TTerm (M.Map Name TypeScheme)
+buildSchemaMap :: TypedTerm [Name] -> TypedTerm (M.Map Name TypeScheme)
 buildSchemaMap names = Maps.fromList (Lists.map
   (Phantoms.lambda "n" $ Phantoms.pair (Phantoms.var "n") (T.mono (Core.typeVariable (Phantoms.var "n"))))
   names)
 
--- | Show a TypeSubst as a sorted string like "{a: int32, b: string}"
-showTypeSubst :: TTerm TypeSubst -> TTerm String
-showTypeSubst ts = Strings.cat (Phantoms.list [
-  Phantoms.string "{",
-  Strings.intercalate (Phantoms.string ", ")
-    (Lists.map (Phantoms.lambda "p" $ Strings.cat (Phantoms.list [
-      Core.unName (Pairs.first (Phantoms.var "p")),
-      Phantoms.string ": ",
-      ShowCore.type_ @@ Pairs.second (Phantoms.var "p")]))
-      (Maps.toList (Typing.unTypeSubst ts))),
-  Phantoms.string "}"])
+-- Helper to create type constraints
+constraint :: TypedTerm Type -> TypedTerm Type -> TypedTerm TypeConstraint
+constraint left right = Phantoms.record _TypeConstraint [
+  Phantoms.field _TypeConstraint_left left,
+  Phantoms.field _TypeConstraint_right right,
+  Phantoms.field _TypeConstraint_comment (Phantoms.string "join types; test")]
+
+-- Helper: empty substitution (success with no bindings)
+emptySubst :: [(TypedTerm Name, TypedTerm Type)]
+emptySubst = []
+
+-- | Universal joinTypes test case (expecting success)
+joinTypesCase :: String -> TypedTerm Type -> TypedTerm Type -> TypedTerm [TypeConstraint] -> TypedTerm TestCaseWithMetadata
+joinTypesCase cname left right constraints = universalCase cname
+  (Eithers.either_
+    (Phantoms.lambda "_" $ Phantoms.string "failure")
+    (Phantoms.lambda "cs" $ showConstraints (Phantoms.var "cs"))
+    (UnificationModule.joinTypes @@ Lexical.emptyInferenceContext @@ left @@ right @@ Phantoms.string "test"))
+  (showConstraints constraints)
+
+-- | Universal joinTypes test case (expecting failure)
+joinTypesFailCase :: String -> TypedTerm Type -> TypedTerm Type -> TypedTerm TestCaseWithMetadata
+joinTypesFailCase cname left right = universalCase cname
+  (Eithers.either_
+    (Phantoms.lambda "_" $ Phantoms.string "failure")
+    (Phantoms.lambda "cs" $ showConstraints (Phantoms.var "cs"))
+    (UnificationModule.joinTypes @@ Lexical.emptyInferenceContext @@ left @@ right @@ Phantoms.string "test"))
+  (Phantoms.string "failure")
+
+-- ============================================================
+-- variableOccursInType tests
+-- ============================================================
+
+joinTypesTests :: TypedTerm TestGroup
+joinTypesTests = subgroup "joinTypes" [
+  -- Identical primitive types produce no constraints
+  joinTypesCase "join identical int32"
+    T.int32
+    T.int32
+    noConstraints,
+
+  joinTypesCase "join identical string"
+    T.string
+    T.string
+    noConstraints,
+
+  -- Note: joinTypes doesn't handle type variables directly - those are handled by unifyTypeConstraints.
+  -- Testing variable joining with joinTypes would fail because it's not the right level of abstraction.
+
+  -- List types produce constraint on element types
+  joinTypesCase "join list types"
+    (T.list (T.var "a"))
+    (T.list T.int32)
+    (Phantoms.list [constraint (T.var "a") T.int32]),
+
+  -- Function types produce constraints on domain and codomain
+  joinTypesCase "join function types"
+    (T.function (T.var "a") (T.var "b"))
+    (T.function T.int32 T.string)
+    (Phantoms.list [constraint (T.var "a") T.int32, constraint (T.var "b") T.string]),
+
+  -- Optional types
+  joinTypesCase "join optional types"
+    (T.optional (T.var "a"))
+    (T.optional T.int32)
+    (Phantoms.list [constraint (T.var "a") T.int32]),
+
+  -- Pair types
+  joinTypesCase "join pair types"
+    (T.pair (T.var "a") (T.var "b"))
+    (T.pair T.int32 T.string)
+    (Phantoms.list [constraint (T.var "a") T.int32, constraint (T.var "b") T.string]),
+
+  -- Either types
+  joinTypesCase "join either types"
+    (T.either_ (T.var "a") (T.var "b"))
+    (T.either_ T.int32 T.string)
+    (Phantoms.list [constraint (T.var "a") T.int32, constraint (T.var "b") T.string]),
+
+  -- Map types
+  joinTypesCase "join map types"
+    (T.map (T.var "k") (T.var "v"))
+    (T.map T.string T.int32)
+    (Phantoms.list [constraint (T.var "k") T.string, constraint (T.var "v") T.int32]),
+
+  -- Set types
+  joinTypesCase "join set types"
+    (T.set (T.var "a"))
+    (T.set T.int32)
+    (Phantoms.list [constraint (T.var "a") T.int32]),
+
+  -- Unit types
+  joinTypesCase "join unit types"
+    T.unit
+    T.unit
+    noConstraints,
+
+  -- Failure cases
+  joinTypesFailCase "fail to join int32 with string"
+    T.int32
+    T.string,
+
+  joinTypesFailCase "fail to join list with function"
+    (T.list T.int32)
+    (T.function T.int32 T.int32),
+
+  joinTypesFailCase "fail to join pair with either"
+    (T.pair T.int32 T.string)
+    (T.either_ T.int32 T.string)]
+
+-- ============================================================
+-- All tests
+-- ============================================================
+
+-- Helper for empty constraint list
+noConstraints :: TypedTerm [TypeConstraint]
+noConstraints = Phantoms.list ([] :: [TypedTerm TypeConstraint])
+
+-- Helper: empty schema types list
+noSchema :: TypedTerm [Name]
+noSchema = Phantoms.list ([] :: [TypedTerm Name])
 
 -- | Show a list of TypeConstraints as "[(left ~ right), ...]"
-showConstraints :: TTerm [TypeConstraint] -> TTerm String
+showConstraints :: TypedTerm [TypeConstraint] -> TypedTerm String
 showConstraints cs = Strings.cat (Phantoms.list [
   Phantoms.string "[",
   Strings.intercalate (Phantoms.string ", ")
@@ -94,188 +205,37 @@ showConstraints cs = Strings.cat (Phantoms.list [
       cs),
   Phantoms.string "]"])
 
+-- | Show a TypeSubst as a sorted string like "{a: int32, b: string}"
+showTypeSubst :: TypedTerm TypeSubst -> TypedTerm String
+showTypeSubst ts = Strings.cat (Phantoms.list [
+  Phantoms.string "{",
+  Strings.intercalate (Phantoms.string ", ")
+    (Lists.map (Phantoms.lambda "p" $ Strings.cat (Phantoms.list [
+      Core.unName (Pairs.first (Phantoms.var "p")),
+      Phantoms.string ": ",
+      ShowCore.type_ @@ Pairs.second (Phantoms.var "p")]))
+      (Maps.toList (Typing.unTypeSubst ts))),
+  Phantoms.string "}"])
+
 -- | Universal unifyTypes test case (expecting success)
-unifyTypesCase :: String -> TTerm [Name] -> TTerm Type -> TTerm Type -> [(TTerm Name, TTerm Type)] -> TTerm TestCaseWithMetadata
+unifyTypesCase :: String -> TypedTerm [Name] -> TypedTerm Type -> TypedTerm Type -> [(TypedTerm Name, TypedTerm Type)] -> TypedTerm TestCaseWithMetadata
 unifyTypesCase cname schemaTypes left right substPairs = universalCase cname
   (Eithers.either_
     (Phantoms.lambda "_" $ Phantoms.string "failure")
     (Phantoms.lambda "ts" $ showTypeSubst (Phantoms.var "ts"))
-    (UnificationModule.unifyTypes @@ Lexical.emptyContext @@ buildSchemaMap schemaTypes @@ left @@ right @@ Phantoms.string "test"))
+    (UnificationModule.unifyTypes @@ Lexical.emptyInferenceContext @@ buildSchemaMap schemaTypes @@ left @@ right @@ Phantoms.string "test"))
   (showTypeSubst (Phantoms.wrap _TypeSubst (Phantoms.map (M.fromList substPairs))))
 
 -- | Universal unifyTypes test case (expecting failure)
-unifyTypesFailCase :: String -> TTerm [Name] -> TTerm Type -> TTerm Type -> String -> TTerm TestCaseWithMetadata
+unifyTypesFailCase :: String -> TypedTerm [Name] -> TypedTerm Type -> TypedTerm Type -> String -> TypedTerm TestCaseWithMetadata
 unifyTypesFailCase cname schemaTypes left right _errSubstring = universalCase cname
   (Eithers.either_
     (Phantoms.lambda "_" $ Phantoms.string "failure")
     (Phantoms.lambda "ts" $ showTypeSubst (Phantoms.var "ts"))
-    (UnificationModule.unifyTypes @@ Lexical.emptyContext @@ buildSchemaMap schemaTypes @@ left @@ right @@ Phantoms.string "test"))
+    (UnificationModule.unifyTypes @@ Lexical.emptyInferenceContext @@ buildSchemaMap schemaTypes @@ left @@ right @@ Phantoms.string "test"))
   (Phantoms.string "failure")
 
--- | Universal joinTypes test case (expecting success)
-joinTypesCase :: String -> TTerm Type -> TTerm Type -> TTerm [TypeConstraint] -> TTerm TestCaseWithMetadata
-joinTypesCase cname left right constraints = universalCase cname
-  (Eithers.either_
-    (Phantoms.lambda "_" $ Phantoms.string "failure")
-    (Phantoms.lambda "cs" $ showConstraints (Phantoms.var "cs"))
-    (UnificationModule.joinTypes @@ Lexical.emptyContext @@ left @@ right @@ Phantoms.string "test"))
-  (showConstraints constraints)
-
--- | Universal joinTypes test case (expecting failure)
-joinTypesFailCase :: String -> TTerm Type -> TTerm Type -> TTerm TestCaseWithMetadata
-joinTypesFailCase cname left right = universalCase cname
-  (Eithers.either_
-    (Phantoms.lambda "_" $ Phantoms.string "failure")
-    (Phantoms.lambda "cs" $ showConstraints (Phantoms.var "cs"))
-    (UnificationModule.joinTypes @@ Lexical.emptyContext @@ left @@ right @@ Phantoms.string "test"))
-  (Phantoms.string "failure")
-
--- ============================================================
--- variableOccursInType tests
--- ============================================================
-
-variableOccursInTypeTests :: TTerm TestGroup
-variableOccursInTypeTests = subgroup "variableOccursInType" [
-  -- Variable occurs in itself
-  variableOccursCase "variable occurs in itself"
-    (nm "a")
-    (T.var "a")
-    Phantoms.true,
-
-  -- Variable does not occur in different variable
-  variableOccursCase "variable does not occur in different variable"
-    (nm "a")
-    (T.var "b")
-    Phantoms.false,
-
-  -- Variable does not occur in primitive type
-  variableOccursCase "variable does not occur in int32"
-    (nm "a")
-    T.int32
-    Phantoms.false,
-
-  variableOccursCase "variable does not occur in string"
-    (nm "a")
-    T.string
-    Phantoms.false,
-
-  -- Variable occurs in list type
-  variableOccursCase "variable occurs in list element type"
-    (nm "a")
-    (T.list (T.var "a"))
-    Phantoms.true,
-
-  variableOccursCase "variable does not occur in list of different type"
-    (nm "a")
-    (T.list (T.var "b"))
-    Phantoms.false,
-
-  -- Variable occurs in function type
-  variableOccursCase "variable occurs in function domain"
-    (nm "a")
-    (T.function (T.var "a") T.int32)
-    Phantoms.true,
-
-  variableOccursCase "variable occurs in function codomain"
-    (nm "a")
-    (T.function T.int32 (T.var "a"))
-    Phantoms.true,
-
-  variableOccursCase "variable does not occur in function with different vars"
-    (nm "a")
-    (T.function (T.var "b") (T.var "c"))
-    Phantoms.false,
-
-  -- Variable occurs in optional type
-  variableOccursCase "variable occurs in optional type"
-    (nm "a")
-    (T.optional (T.var "a"))
-    Phantoms.true,
-
-  -- Variable occurs in pair type
-  variableOccursCase "variable occurs in pair first"
-    (nm "a")
-    (T.pair (T.var "a") T.int32)
-    Phantoms.true,
-
-  variableOccursCase "variable occurs in pair second"
-    (nm "a")
-    (T.pair T.int32 (T.var "a"))
-    Phantoms.true,
-
-  -- Variable occurs in either type
-  variableOccursCase "variable occurs in either left"
-    (nm "a")
-    (T.either_ (T.var "a") T.int32)
-    Phantoms.true,
-
-  variableOccursCase "variable occurs in either right"
-    (nm "a")
-    (T.either_ T.int32 (T.var "a"))
-    Phantoms.true,
-
-  -- Variable occurs in map type
-  variableOccursCase "variable occurs in map key type"
-    (nm "a")
-    (T.map (T.var "a") T.int32)
-    Phantoms.true,
-
-  variableOccursCase "variable occurs in map value type"
-    (nm "a")
-    (T.map T.string (T.var "a"))
-    Phantoms.true,
-
-  -- Variable occurs in set type
-  variableOccursCase "variable occurs in set type"
-    (nm "a")
-    (T.set (T.var "a"))
-    Phantoms.true,
-
-  -- Nested structures
-  variableOccursCase "variable occurs in nested list"
-    (nm "a")
-    (T.list (T.list (T.var "a")))
-    Phantoms.true,
-
-  variableOccursCase "variable occurs in list of functions"
-    (nm "a")
-    (T.list (T.function T.int32 (T.var "a")))
-    Phantoms.true,
-
-  variableOccursCase "variable does not occur in complex type without it"
-    (nm "a")
-    (T.function (T.list T.int32) (T.optional (T.pair T.string (T.var "b"))))
-    Phantoms.false,
-
-  variableOccursCase "variable occurs deep in complex type"
-    (nm "a")
-    (T.function (T.list T.int32) (T.optional (T.pair T.string (T.var "a"))))
-    Phantoms.true,
-
-  -- Forall types (note: no distinction between free and bound)
-  variableOccursCase "variable occurs in forAll body"
-    (nm "a")
-    (T.forAll "b" (T.function (T.var "b") (T.var "a")))
-    Phantoms.true,
-
-  variableOccursCase "variable occurs in forAll bound position"
-    (nm "a")
-    (T.forAll "a" (T.function (T.var "a") (T.var "a")))
-    Phantoms.true]
-
--- ============================================================
--- unifyTypes tests
--- ============================================================
-
--- Helper: empty schema types list
-noSchema :: TTerm [Name]
-noSchema = Phantoms.list ([] :: [TTerm Name])
-
--- Helper: empty substitution (success with no bindings)
-emptySubst :: [(TTerm Name, TTerm Type)]
-emptySubst = []
-
-unifyTypesTests :: TTerm TestGroup
+unifyTypesTests :: TypedTerm TestGroup
 unifyTypesTests = subgroup "unifyTypes" [
   -- Identical types unify with empty substitution
   unifyTypesCase "unify identical int32 types"
@@ -408,102 +368,142 @@ unifyTypesTests = subgroup "unifyTypes" [
 -- joinTypes tests
 -- ============================================================
 
--- Helper to create type constraints
-constraint :: TTerm Type -> TTerm Type -> TTerm TypeConstraint
-constraint left right = Phantoms.record _TypeConstraint [
-  Phantoms.field _TypeConstraint_left left,
-  Phantoms.field _TypeConstraint_right right,
-  Phantoms.field _TypeConstraint_comment (Phantoms.string "join types; test")]
+-- | Universal variableOccursInType test case
+variableOccursCase :: String -> TypedTerm Name -> TypedTerm Type -> TypedTerm Bool -> TypedTerm TestCaseWithMetadata
+variableOccursCase cname variable typ expected =
+  universalCase cname
+    (Literals.showBoolean (UnificationModule.variableOccursInType @@ variable @@ typ))
+    (Literals.showBoolean expected)
 
--- Helper for empty constraint list
-noConstraints :: TTerm [TypeConstraint]
-noConstraints = Phantoms.list ([] :: [TTerm TypeConstraint])
+variableOccursInTypeTests :: TypedTerm TestGroup
+variableOccursInTypeTests = subgroup "variableOccursInType" [
+  -- Variable occurs in itself
+  variableOccursCase "variable occurs in itself"
+    (nm "a")
+    (T.var "a")
+    Phantoms.true,
 
-joinTypesTests :: TTerm TestGroup
-joinTypesTests = subgroup "joinTypes" [
-  -- Identical primitive types produce no constraints
-  joinTypesCase "join identical int32"
+  -- Variable does not occur in different variable
+  variableOccursCase "variable does not occur in different variable"
+    (nm "a")
+    (T.var "b")
+    Phantoms.false,
+
+  -- Variable does not occur in primitive type
+  variableOccursCase "variable does not occur in int32"
+    (nm "a")
     T.int32
-    T.int32
-    noConstraints,
+    Phantoms.false,
 
-  joinTypesCase "join identical string"
+  variableOccursCase "variable does not occur in string"
+    (nm "a")
     T.string
-    T.string
-    noConstraints,
+    Phantoms.false,
 
-  -- Note: joinTypes doesn't handle type variables directly - those are handled by unifyTypeConstraints.
-  -- Testing variable joining with joinTypes would fail because it's not the right level of abstraction.
-
-  -- List types produce constraint on element types
-  joinTypesCase "join list types"
+  -- Variable occurs in list type
+  variableOccursCase "variable occurs in list element type"
+    (nm "a")
     (T.list (T.var "a"))
-    (T.list T.int32)
-    (Phantoms.list [constraint (T.var "a") T.int32]),
+    Phantoms.true,
 
-  -- Function types produce constraints on domain and codomain
-  joinTypesCase "join function types"
-    (T.function (T.var "a") (T.var "b"))
-    (T.function T.int32 T.string)
-    (Phantoms.list [constraint (T.var "a") T.int32, constraint (T.var "b") T.string]),
+  variableOccursCase "variable does not occur in list of different type"
+    (nm "a")
+    (T.list (T.var "b"))
+    Phantoms.false,
 
-  -- Optional types
-  joinTypesCase "join optional types"
+  -- Variable occurs in function type
+  variableOccursCase "variable occurs in function domain"
+    (nm "a")
+    (T.function (T.var "a") T.int32)
+    Phantoms.true,
+
+  variableOccursCase "variable occurs in function codomain"
+    (nm "a")
+    (T.function T.int32 (T.var "a"))
+    Phantoms.true,
+
+  variableOccursCase "variable does not occur in function with different vars"
+    (nm "a")
+    (T.function (T.var "b") (T.var "c"))
+    Phantoms.false,
+
+  -- Variable occurs in optional type
+  variableOccursCase "variable occurs in optional type"
+    (nm "a")
     (T.optional (T.var "a"))
-    (T.optional T.int32)
-    (Phantoms.list [constraint (T.var "a") T.int32]),
+    Phantoms.true,
 
-  -- Pair types
-  joinTypesCase "join pair types"
-    (T.pair (T.var "a") (T.var "b"))
-    (T.pair T.int32 T.string)
-    (Phantoms.list [constraint (T.var "a") T.int32, constraint (T.var "b") T.string]),
+  -- Variable occurs in pair type
+  variableOccursCase "variable occurs in pair first"
+    (nm "a")
+    (T.pair (T.var "a") T.int32)
+    Phantoms.true,
 
-  -- Either types
-  joinTypesCase "join either types"
-    (T.either_ (T.var "a") (T.var "b"))
-    (T.either_ T.int32 T.string)
-    (Phantoms.list [constraint (T.var "a") T.int32, constraint (T.var "b") T.string]),
+  variableOccursCase "variable occurs in pair second"
+    (nm "a")
+    (T.pair T.int32 (T.var "a"))
+    Phantoms.true,
 
-  -- Map types
-  joinTypesCase "join map types"
-    (T.map (T.var "k") (T.var "v"))
-    (T.map T.string T.int32)
-    (Phantoms.list [constraint (T.var "k") T.string, constraint (T.var "v") T.int32]),
+  -- Variable occurs in either type
+  variableOccursCase "variable occurs in either left"
+    (nm "a")
+    (T.either_ (T.var "a") T.int32)
+    Phantoms.true,
 
-  -- Set types
-  joinTypesCase "join set types"
+  variableOccursCase "variable occurs in either right"
+    (nm "a")
+    (T.either_ T.int32 (T.var "a"))
+    Phantoms.true,
+
+  -- Variable occurs in map type
+  variableOccursCase "variable occurs in map key type"
+    (nm "a")
+    (T.map (T.var "a") T.int32)
+    Phantoms.true,
+
+  variableOccursCase "variable occurs in map value type"
+    (nm "a")
+    (T.map T.string (T.var "a"))
+    Phantoms.true,
+
+  -- Variable occurs in set type
+  variableOccursCase "variable occurs in set type"
+    (nm "a")
     (T.set (T.var "a"))
-    (T.set T.int32)
-    (Phantoms.list [constraint (T.var "a") T.int32]),
+    Phantoms.true,
 
-  -- Unit types
-  joinTypesCase "join unit types"
-    T.unit
-    T.unit
-    noConstraints,
+  -- Nested structures
+  variableOccursCase "variable occurs in nested list"
+    (nm "a")
+    (T.list (T.list (T.var "a")))
+    Phantoms.true,
 
-  -- Failure cases
-  joinTypesFailCase "fail to join int32 with string"
-    T.int32
-    T.string,
+  variableOccursCase "variable occurs in list of functions"
+    (nm "a")
+    (T.list (T.function T.int32 (T.var "a")))
+    Phantoms.true,
 
-  joinTypesFailCase "fail to join list with function"
-    (T.list T.int32)
-    (T.function T.int32 T.int32),
+  variableOccursCase "variable does not occur in complex type without it"
+    (nm "a")
+    (T.function (T.list T.int32) (T.optional (T.pair T.string (T.var "b"))))
+    Phantoms.false,
 
-  joinTypesFailCase "fail to join pair with either"
-    (T.pair T.int32 T.string)
-    (T.either_ T.int32 T.string)]
+  variableOccursCase "variable occurs deep in complex type"
+    (nm "a")
+    (T.function (T.list T.int32) (T.optional (T.pair T.string (T.var "a"))))
+    Phantoms.true,
+
+  -- Forall types (note: no distinction between free and bound)
+  variableOccursCase "variable occurs in forAll body"
+    (nm "a")
+    (T.forAll "b" (T.function (T.var "b") (T.var "a")))
+    Phantoms.true,
+
+  variableOccursCase "variable occurs in forAll bound position"
+    (nm "a")
+    (T.forAll "a" (T.function (T.var "a") (T.var "a")))
+    Phantoms.true]
 
 -- ============================================================
--- All tests
+-- unifyTypes tests
 -- ============================================================
-
-allTests :: TTermDefinition TestGroup
-allTests = define "allTests" $
-    Phantoms.doc "Test cases for type unification operations" $
-    supergroup "unification" [
-      variableOccursInTypeTests,
-      unifyTypesTests,
-      joinTypesTests]

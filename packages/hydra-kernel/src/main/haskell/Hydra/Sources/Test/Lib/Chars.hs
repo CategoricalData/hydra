@@ -2,7 +2,7 @@ module Hydra.Sources.Test.Lib.Chars where
 
 -- Standard imports for term-encoded tests
 import Hydra.Kernel
-import           Hydra.Dsl.Bootstrap (unqualifiedDep)
+import           Hydra.Dsl.Bootstrap (unqualifiedDep, descriptionMetadata)
 import Hydra.Dsl.Meta.Testing                 as Testing
 import Hydra.Dsl.Meta.Terms                   as Terms
 import Hydra.Sources.Kernel.Types.All
@@ -29,63 +29,13 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = unqualifiedDep <$> [ModuleName "hydra.reduction", ModuleName "hydra.show.core", ModuleName "hydra.core", ModuleName "hydra.errors", ModuleName "hydra.test.testGraph", ModuleName "hydra.testing"],
-            moduleDescription = Just "Test cases for hydra.lib.chars primitives"}
+            moduleMetadata = descriptionMetadata (Just "Test cases for hydra.lib.chars primitives")}
   where
     definitions = [Phantoms.toDefinition allTests]
 
 -- Test groups for hydra.lib.chars primitives
 
-charsIsAlphaNum :: TTerm TestGroup
-charsIsAlphaNum = subgroup "isAlphaNum" [
-  test "letter" (ord 'a') true,
-  test "digit" (ord '5') true,
-  test "space" (ord ' ') false,
-  test "punctuation" (ord '.') false]
-  where
-    test name x result = primCase name _chars_isAlphaNum [int32 x] result
-
-charsIsLower :: TTerm TestGroup
-charsIsLower = subgroup "isLower" [
-  test "lowercase" (ord 'a') true,
-  test "uppercase" (ord 'A') false,
-  test "digit" (ord '5') false]
-  where
-    test name x result = primCase name _chars_isLower [int32 x] result
-
-charsIsSpace :: TTerm TestGroup
-charsIsSpace = subgroup "isSpace" [
-  test "space" (ord ' ') true,
-  test "tab" (ord '\t') true,
-  test "newline" (ord '\n') true,
-  test "letter" (ord 'a') false]
-  where
-    test name x result = primCase name _chars_isSpace [int32 x] result
-
-charsIsUpper :: TTerm TestGroup
-charsIsUpper = subgroup "isUpper" [
-  test "uppercase" (ord 'A') true,
-  test "lowercase" (ord 'a') false,
-  test "digit" (ord '5') false]
-  where
-    test name x result = primCase name _chars_isUpper [int32 x] result
-
-charsToLower :: TTerm TestGroup
-charsToLower = subgroup "toLower" [
-  test "uppercase" (ord 'A') (ord 'a'),
-  test "lowercase" (ord 'a') (ord 'a'),
-  test "digit" (ord '5') (ord '5')]
-  where
-    test name x result = primCase name _chars_toLower [int32 x] (int32 result)
-
-charsToUpper :: TTerm TestGroup
-charsToUpper = subgroup "toUpper" [
-  test "lowercase" (ord 'a') (ord 'A'),
-  test "uppercase" (ord 'A') (ord 'A'),
-  test "digit" (ord '5') (ord '5')]
-  where
-    test name x result = primCase name _chars_toUpper [int32 x] (int32 result)
-
-allTests :: TTermDefinition TestGroup
+allTests :: TypedTermDefinition TestGroup
 allTests = definitionInModule module_ "allTests" $
     Phantoms.doc "Test cases for hydra.lib.chars primitives" $
     supergroup "hydra.lib.chars primitives" [
@@ -95,3 +45,53 @@ allTests = definitionInModule module_ "allTests" $
       charsIsUpper,
       charsToLower,
       charsToUpper]
+
+charsIsAlphaNum :: TypedTerm TestGroup
+charsIsAlphaNum = subgroup "isAlphaNum" [
+  test "letter" (ord 'a') true,
+  test "digit" (ord '5') true,
+  test "space" (ord ' ') false,
+  test "punctuation" (ord '.') false]
+  where
+    test name x result = primCase name _chars_isAlphaNum [int32 x] result
+
+charsIsLower :: TypedTerm TestGroup
+charsIsLower = subgroup "isLower" [
+  test "lowercase" (ord 'a') true,
+  test "uppercase" (ord 'A') false,
+  test "digit" (ord '5') false]
+  where
+    test name x result = primCase name _chars_isLower [int32 x] result
+
+charsIsSpace :: TypedTerm TestGroup
+charsIsSpace = subgroup "isSpace" [
+  test "space" (ord ' ') true,
+  test "tab" (ord '\t') true,
+  test "newline" (ord '\n') true,
+  test "letter" (ord 'a') false]
+  where
+    test name x result = primCase name _chars_isSpace [int32 x] result
+
+charsIsUpper :: TypedTerm TestGroup
+charsIsUpper = subgroup "isUpper" [
+  test "uppercase" (ord 'A') true,
+  test "lowercase" (ord 'a') false,
+  test "digit" (ord '5') false]
+  where
+    test name x result = primCase name _chars_isUpper [int32 x] result
+
+charsToLower :: TypedTerm TestGroup
+charsToLower = subgroup "toLower" [
+  test "uppercase" (ord 'A') (ord 'a'),
+  test "lowercase" (ord 'a') (ord 'a'),
+  test "digit" (ord '5') (ord '5')]
+  where
+    test name x result = primCase name _chars_toLower [int32 x] (int32 result)
+
+charsToUpper :: TypedTerm TestGroup
+charsToUpper = subgroup "toUpper" [
+  test "lowercase" (ord 'a') (ord 'A'),
+  test "uppercase" (ord 'A') (ord 'A'),
+  test "digit" (ord '5') (ord '5')]
+  where
+    test name x result = primCase name _chars_toUpper [int32 x] (int32 result)

@@ -3,7 +3,7 @@ module Hydra.Sources.Test.Substitution where
 
 -- Standard imports for shallow DSL tests
 import Hydra.Kernel
-import           Hydra.Dsl.Bootstrap (unqualifiedDep)
+import           Hydra.Dsl.Bootstrap (unqualifiedDep, descriptionMetadata)
 import Hydra.Dsl.Meta.Testing                 as Testing
 import Hydra.Sources.Kernel.Types.All
 import qualified Hydra.Dsl.Meta.Core          as Core
@@ -29,45 +29,52 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = unqualifiedDep <$> ([ShowCore.ns, Substitution.ns] ++ kernelTypesModuleNames),
-            moduleDescription = (Just "Test cases for type and term substitution operations")}
+            moduleMetadata = descriptionMetadata ((Just "Test cases for type and term substitution operations"))}
   where
     definitions = [Phantoms.toDefinition allTests]
 
-define :: String -> TTerm a -> TTermDefinition a
+define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModule module_
 
+allTests :: TypedTermDefinition TestGroup
+allTests = define "allTests" $
+    doc "Test cases for type and term substitution operations" $
+    supergroup "substitution" [
+      substInTypeTests,
+      substInTypeSchemeTests]
+
 -- Helper to build names
-nm :: String -> TTerm Name
+nm :: String -> TypedTerm Name
 nm s = Core.name $ string s
 
--- Helper for building substitution pairs
-subst :: [(String, TTerm Type)] -> TTerm [(Name, Type)]
-subst pairs = list [pair (nm n) t | (n, t) <- pairs]
+-- | Build a TypeScheme DSL value
+scheme :: [String] -> TypedTerm Type -> TypedTerm TypeScheme
+scheme vars body = Core.typeScheme (list [nm v | v <- vars]) body nothing
 
 -- | Apply substInType and show the result as a string
-showSubstInType :: [(String, TTerm Type)] -> TTerm Type -> TTerm String
+showSubstInType :: [(String, TypedTerm Type)] -> TypedTerm Type -> TypedTerm String
 showSubstInType pairs inputType =
   ShowCore.type_ @@ (Substitution.substInType @@
     (wrap _TypeSubst (Maps.fromList (subst pairs))) @@ inputType)
 
--- | Universal substInType test case
-substInTypeCase :: String -> [(String, TTerm Type)] -> TTerm Type -> TTerm Type -> TTerm TestCaseWithMetadata
-substInTypeCase cname pairs input output =
-  universalCase cname (showSubstInType pairs input) (ShowCore.type_ @@ output)
-
--- | Build a TypeScheme DSL value
-scheme :: [String] -> TTerm Type -> TTerm TypeScheme
-scheme vars body = Core.typeScheme (list [nm v | v <- vars]) body nothing
-
 -- | Apply substInTypeScheme and render just the scheme's body type, which is
 -- where the capture-avoidance behavior shows up. The quantifier list is
 -- preserved unchanged so we test it separately via showSubstInTypeSchemeVars.
-showSubstInTypeSchemeBody :: [(String, TTerm Type)] -> TTerm TypeScheme -> TTerm String
+showSubstInTypeSchemeBody :: [(String, TypedTerm Type)] -> TypedTerm TypeScheme -> TypedTerm String
 showSubstInTypeSchemeBody pairs inputScheme =
   ShowCore.type_ @@ (Core.typeSchemeBody $ Substitution.substInTypeScheme @@
     (wrap _TypeSubst (Maps.fromList (subst pairs))) @@ inputScheme)
 
-substInTypeSchemeBodyCase :: String -> [(String, TTerm Type)] -> TTerm TypeScheme -> TTerm Type -> TTerm TestCaseWithMetadata
+-- Helper for building substitution pairs
+subst :: [(String, TypedTerm Type)] -> TypedTerm [(Name, Type)]
+subst pairs = list [pair (nm n) t | (n, t) <- pairs]
+
+-- | Universal substInType test case
+substInTypeCase :: String -> [(String, TypedTerm Type)] -> TypedTerm Type -> TypedTerm Type -> TypedTerm TestCaseWithMetadata
+substInTypeCase cname pairs input output =
+  universalCase cname (showSubstInType pairs input) (ShowCore.type_ @@ output)
+
+substInTypeSchemeBodyCase :: String -> [(String, TypedTerm Type)] -> TypedTerm TypeScheme -> TypedTerm Type -> TypedTerm TestCaseWithMetadata
 substInTypeSchemeBodyCase cname pairs input expectedBody =
   universalCase cname (showSubstInTypeSchemeBody pairs input)
     (ShowCore.type_ @@ expectedBody)
@@ -76,7 +83,48 @@ substInTypeSchemeBodyCase cname pairs input expectedBody =
 -- substInType tests
 -- ============================================================
 
-substInTypeTests :: TTerm TestGroup
+substInTypeSchemeTests :: TypedTerm TestGroup
+substInTypeSchemeTests = subgroup "substInTypeScheme" [
+  -- Bound variable in scheme's quantifier list must shadow the substitution.
+  -- Without proper shadowing, {t0 -> Foo} applied to `forall [t0]. t0 -> t0`
+  -- would incorrectly rewrite the body to `Foo -> Foo`, leaving the scheme
+  -- with quantifier [t0] and body Foo -> Foo — a scheme with no free t0
+  -- and an escaped Foo. Regression test for the incremental-inference
+  -- unification bug (2026-04-24).
+  substInTypeSchemeBodyCase "quantified variable shadows substitution"
+    [("a", T.int32)]
+    (scheme ["a"] (T.function (T.var "a") (T.var "a")))
+    (T.function (T.var "a") (T.var "a")),
+
+  -- Free variable in scheme body (not in quantifier list) is substituted.
+  substInTypeSchemeBodyCase "free variable in body is substituted"
+    [("b", T.string)]
+    (scheme ["a"] (T.function (T.var "a") (T.var "b")))
+    (T.function (T.var "a") T.string),
+
+  -- Mixed: substitute frees, not quantified
+  substInTypeSchemeBodyCase "mixed: free substituted, quantified shadowed"
+    [("a", T.int32), ("b", T.string)]
+    (scheme ["a"] (T.function (T.var "a") (T.var "b")))
+    (T.function (T.var "a") T.string),
+
+  -- Multiple quantifiers: all are shadowed
+  substInTypeSchemeBodyCase "multiple quantifiers shadow substitution"
+    [("a", T.int32), ("b", T.string)]
+    (scheme ["a", "b"] (T.pair (T.var "a") (T.var "b")))
+    (T.pair (T.var "a") (T.var "b")),
+
+  -- Empty quantifier list: substitution applies normally
+  substInTypeSchemeBodyCase "empty quantifiers: normal substitution"
+    [("a", T.int32)]
+    (scheme [] (T.var "a"))
+    T.int32]
+
+-- ============================================================
+-- All tests
+-- ============================================================
+
+substInTypeTests :: TypedTerm TestGroup
 substInTypeTests = subgroup "substInType" [
   -- Empty substitution returns type unchanged
   substInTypeCase "empty substitution returns type unchanged"
@@ -170,51 +218,3 @@ substInTypeTests = subgroup "substInType" [
 -- ============================================================
 -- substInTypeScheme tests: quantifier-shadowing
 -- ============================================================
-
-substInTypeSchemeTests :: TTerm TestGroup
-substInTypeSchemeTests = subgroup "substInTypeScheme" [
-  -- Bound variable in scheme's quantifier list must shadow the substitution.
-  -- Without proper shadowing, {t0 -> Foo} applied to `forall [t0]. t0 -> t0`
-  -- would incorrectly rewrite the body to `Foo -> Foo`, leaving the scheme
-  -- with quantifier [t0] and body Foo -> Foo — a scheme with no free t0
-  -- and an escaped Foo. Regression test for the incremental-inference
-  -- unification bug (2026-04-24).
-  substInTypeSchemeBodyCase "quantified variable shadows substitution"
-    [("a", T.int32)]
-    (scheme ["a"] (T.function (T.var "a") (T.var "a")))
-    (T.function (T.var "a") (T.var "a")),
-
-  -- Free variable in scheme body (not in quantifier list) is substituted.
-  substInTypeSchemeBodyCase "free variable in body is substituted"
-    [("b", T.string)]
-    (scheme ["a"] (T.function (T.var "a") (T.var "b")))
-    (T.function (T.var "a") T.string),
-
-  -- Mixed: substitute frees, not quantified
-  substInTypeSchemeBodyCase "mixed: free substituted, quantified shadowed"
-    [("a", T.int32), ("b", T.string)]
-    (scheme ["a"] (T.function (T.var "a") (T.var "b")))
-    (T.function (T.var "a") T.string),
-
-  -- Multiple quantifiers: all are shadowed
-  substInTypeSchemeBodyCase "multiple quantifiers shadow substitution"
-    [("a", T.int32), ("b", T.string)]
-    (scheme ["a", "b"] (T.pair (T.var "a") (T.var "b")))
-    (T.pair (T.var "a") (T.var "b")),
-
-  -- Empty quantifier list: substitution applies normally
-  substInTypeSchemeBodyCase "empty quantifiers: normal substitution"
-    [("a", T.int32)]
-    (scheme [] (T.var "a"))
-    T.int32]
-
--- ============================================================
--- All tests
--- ============================================================
-
-allTests :: TTermDefinition TestGroup
-allTests = define "allTests" $
-    doc "Test cases for type and term substitution operations" $
-    supergroup "substitution" [
-      substInTypeTests,
-      substInTypeSchemeTests]

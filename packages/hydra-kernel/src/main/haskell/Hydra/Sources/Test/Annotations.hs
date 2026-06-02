@@ -3,7 +3,7 @@ module Hydra.Sources.Test.Annotations where
 
 -- Standard imports for term-encoded tests
 import Hydra.Kernel
-import           Hydra.Dsl.Bootstrap (unqualifiedDep)
+import           Hydra.Dsl.Bootstrap (unqualifiedDep, descriptionMetadata)
 import Hydra.Dsl.Meta.Testing                 as Testing
 import Hydra.Dsl.Meta.Terms                   as Terms
 import Hydra.Sources.Kernel.Types.All
@@ -26,16 +26,6 @@ import qualified Hydra.Sources.Kernel.Terms.Lexical as Lexical
 
 
 
--- | Test state (an empty Graph)
-testState :: TTerm Term
-testState = metaref Lexical.emptyGraph
-
--- | Empty Context for Either-based function tests
-testContext :: TTerm Term
-testContext = metaref Lexical.emptyContext
-
-
-
 ns :: ModuleName
 ns = ModuleName "hydra.test.annotations"
 
@@ -44,19 +34,27 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = unqualifiedDep <$> [Annotations.ns, Lexical.ns, ModuleName "hydra.reduction", ModuleName "hydra.show.core", ModuleName "hydra.core", ModuleName "hydra.errors", ModuleName "hydra.test.testGraph", ModuleName "hydra.testing"],
-            moduleDescription = Just "Test cases for hydra.annotations functions"}
+            moduleMetadata = descriptionMetadata (Just "Test cases for hydra.annotations functions")}
   where
     definitions = [Phantoms.toDefinition allTests]
 
 
+allTests :: TypedTermDefinition TestGroup
+allTests = Phantoms.definitionInModule module_ "allTests" $
+    Phantoms.doc "Test cases for hydra.annotations functions" $
+    supergroup "annotations" [
+      arbitraryAnnotationTests,
+      descriptionTests,
+      layeredAnnotationTests]
+
 -- | Annotation eval case: like annEvalCase but tagged as disabled because these tests
 -- require kernel term bindings in the test graph (via reduceTerm), which not all
 -- implementations provide yet. See hydra.test.environment in the branch plan.
-annEvalCase :: String -> TTerm Term -> TTerm Term -> TTerm TestCaseWithMetadata
+annEvalCase :: String -> TypedTerm Term -> TypedTerm Term -> TypedTerm TestCaseWithMetadata
 annEvalCase name = evalCase name
 
 -- | Test cases for getTermAnnotation and setTermAnnotation
-arbitraryAnnotationTests :: TTerm TestGroup
+arbitraryAnnotationTests :: TypedTerm TestGroup
 arbitraryAnnotationTests = subgroup "arbitrary annotations" [
   -- Set a single key/value pair (multiple cases for property test coverage)
   -- Note: These tests require interpretation because setTermAnnotation uses maps.alter which has no interpreter impl
@@ -148,7 +146,7 @@ arbitraryAnnotationTests = subgroup "arbitrary annotations" [
     (annotatedTerm (stringTerm "x") $ Terms.map $ Maps.singleton (nameTerm "a") (int32Term 1))]
 
 -- | Test cases for getTermDescription and setTermDescription
-descriptionTests :: TTerm TestGroup
+descriptionTests :: TypedTerm TestGroup
 descriptionTests = subgroup "descriptions" [
   -- Set a single description (multiple cases)
   -- Note: These tests require interpretation because setTermDescription uses maps.alter which has no interpreter impl
@@ -209,7 +207,7 @@ descriptionTests = subgroup "descriptions" [
 
 -- | Test cases for layered (non-compact) annotations
 -- Note: These tests require interpretation because they call getTermAnnotation which is not a primitive
-layeredAnnotationTests :: TTerm TestGroup
+layeredAnnotationTests :: TypedTerm TestGroup
 layeredAnnotationTests = subgroup "layered annotations" [
   -- Annotations at different levels, with different keys, are all available
   annEvalCase "get annotation from unannotated term"
@@ -255,10 +253,12 @@ layeredAnnotationTests = subgroup "layered annotations" [
            $ Terms.map $ Maps.singleton (nameTerm "one") (int32Term 99)))
     (optional $ just $ int32Term 99)]
 
-allTests :: TTermDefinition TestGroup
-allTests = Phantoms.definitionInModule module_ "allTests" $
-    Phantoms.doc "Test cases for hydra.annotations functions" $
-    supergroup "annotations" [
-      arbitraryAnnotationTests,
-      descriptionTests,
-      layeredAnnotationTests]
+-- | Empty InferenceContext for Either-based function tests
+testContext :: TypedTerm Term
+testContext = metaref Lexical.emptyInferenceContext
+
+
+
+-- | Test state (an empty Graph)
+testState :: TypedTerm Term
+testState = metaref Lexical.emptyGraph

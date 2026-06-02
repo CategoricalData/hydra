@@ -11,20 +11,21 @@ import qualified Hydra.Environment as Environment
 import qualified Hydra.Errors as Errors
 import qualified Hydra.Formatting as Formatting
 import qualified Hydra.Graph as Graph
-import qualified Hydra.Lib.Eithers as Eithers
-import qualified Hydra.Lib.Equality as Equality
-import qualified Hydra.Lib.Lists as Lists
-import qualified Hydra.Lib.Literals as Literals
-import qualified Hydra.Lib.Logic as Logic
-import qualified Hydra.Lib.Maps as Maps
-import qualified Hydra.Lib.Math as Math
-import qualified Hydra.Lib.Maybes as Maybes
-import qualified Hydra.Lib.Pairs as Pairs
-import qualified Hydra.Lib.Sets as Sets
-import qualified Hydra.Lib.Strings as Strings
+import qualified Hydra.Haskell.Lib.Eithers as Eithers
+import qualified Hydra.Haskell.Lib.Equality as Equality
+import qualified Hydra.Haskell.Lib.Lists as Lists
+import qualified Hydra.Haskell.Lib.Literals as Literals
+import qualified Hydra.Haskell.Lib.Logic as Logic
+import qualified Hydra.Haskell.Lib.Maps as Maps
+import qualified Hydra.Haskell.Lib.Math as Math
+import qualified Hydra.Haskell.Lib.Maybes as Maybes
+import qualified Hydra.Haskell.Lib.Pairs as Pairs
+import qualified Hydra.Haskell.Lib.Sets as Sets
+import qualified Hydra.Haskell.Lib.Strings as Strings
 import qualified Hydra.Names as Names
 import qualified Hydra.Packaging as Packaging
 import qualified Hydra.Rewriting as Rewriting
+import qualified Hydra.Scoping as Scoping
 import qualified Hydra.Serialization as Serialization
 import qualified Hydra.Strip as Strip
 import qualified Hydra.Util as Util
@@ -78,10 +79,10 @@ buildFunctionSignatures cx g termDefs =
                     sigEither = extractSignature cx g (Core.typeSchemeBody ts)
                 in (Eithers.either (\_err -> Nothing) (\sig -> Just (snakeName, sig)) sigEither)
           primEntries =
-                  Maybes.cat (Lists.map (\kv -> toSigEntry (Pairs.first kv, (Graph.primitiveTypeScheme (Pairs.second kv)))) (Maps.toList (Graph.graphPrimitives g)))
+                  Maybes.cat (Lists.map (\kv -> toSigEntry (Pairs.first kv, (Scoping.termSignatureToTypeScheme (Packaging.primitiveDefinitionSignature (Graph.primitiveDefinition (Pairs.second kv)))))) (Maps.toList (Graph.graphPrimitives g)))
           boundEntries = Maybes.cat (Lists.map (\kv -> toSigEntry kv) (Maps.toList (Graph.graphBoundTypes g)))
           localEntries =
-                  Maybes.cat (Lists.map (\td -> Maybes.bind (Packaging.termDefinitionTypeScheme td) (\ts -> toSigEntry (Packaging.termDefinitionName td, ts))) termDefs)
+                  Maybes.cat (Lists.map (\td -> Maybes.bind (Maybes.map Scoping.termSignatureToTypeScheme (Packaging.termDefinitionSignature td)) (\ts -> toSigEntry (Packaging.termDefinitionName td, ts))) termDefs)
       in (Maps.fromList (Lists.concat [
         primEntries,
         boundEntries,
@@ -672,7 +673,7 @@ encodeTermDefinition cx g stringOffsets fieldOffsets variantIndexes funcSigs tde
       let name = Packaging.termDefinitionName tdef
           term = Packaging.termDefinitionTerm tdef
           lname = Formatting.convertCaseCamelToLowerSnake (Core.unName name)
-          typ = Maybes.maybe Core.TypeUnit Core.typeSchemeBody (Packaging.termDefinitionTypeScheme tdef)
+          typ = Maybes.maybe Core.TypeUnit Core.typeSchemeBody (Maybes.map Scoping.termSignatureToTypeScheme (Packaging.termDefinitionSignature tdef))
           extracted = extractLambdaParams term
           paramNames = Pairs.first extracted
           innerBody = Pairs.second extracted
@@ -942,7 +943,7 @@ moduleToWasm mod defs cx g =
                         allFields])}
             code = Serialization.printExpr (Serialization.parenthesize (Serde.moduleToExpr wasmMod))
             filePath =
-                    Names.namespaceToFilePath Util.CaseConventionLowerSnake (Packaging.FileExtension "wat") (Packaging.moduleName mod)
+                    Names.moduleNameToFilePath Util.CaseConventionLowerSnake (Packaging.FileExtension "wat") (Packaging.moduleName mod)
         in (Right (Maps.singleton filePath code)))))
 
 peelLambdaApp :: Core.Term -> [t0] -> ([Core.Name], Core.Term)

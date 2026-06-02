@@ -1512,5 +1512,8 @@
         "name": "hydra.tinkerpop.gremlin.Identifier",
         "typeScheme": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}}}],
   "dependencies": [{"module": "hydra.core"}],
-  "description": "A Gremlin model, based on the Gremlin ANTLR grammar (master branch, as of 2024-06-30).",
+  "metadata": {
+    "comments": [],
+    "description": "A Gremlin model, based on the Gremlin ANTLR grammar (master branch, as of 2024-06-30).",
+    "seeAlso": []},
   "name": "hydra.tinkerpop.gremlin"}

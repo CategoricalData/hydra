@@ -17,7 +17,7 @@ module Hydra.Sources.Test.TestEnv where
 
 -- Standard imports for kernel test fixtures
 import Hydra.Kernel
-import           Hydra.Dsl.Bootstrap (unqualifiedDep)
+import           Hydra.Dsl.Bootstrap (unqualifiedDep, descriptionMetadata)
 import Hydra.Dsl.Meta.Phantoms
 import qualified Hydra.Dsl.Meta.Phantoms as Phantoms
 import qualified Hydra.Sources.Kernel.Terms.Lexical as Lexical
@@ -33,18 +33,18 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = unqualifiedDep <$> ([Lexical.ns] Prelude.++ kernelTypesModuleNames),
-            moduleDescription = Just ("Type-level declarations for the hand-written Hydra.Test.TestEnv module.")}
+            moduleMetadata = descriptionMetadata (Just ("Type-level declarations for the hand-written Hydra.Test.TestEnv module."))}
   where
    definitions = [
      Phantoms.toDefinition testContext,
      Phantoms.toDefinition testGraph]
 
-define :: String -> TTerm a -> TTermDefinition a
+define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModule module_
 
 -- | Stub: the real testContext lives in hand-written Hydra.Test.TestEnv
-testContext :: TTermDefinition Context
-testContext = define "testContext" $ asTerm Lexical.emptyContext
+testContext :: TypedTermDefinition InferenceContext
+testContext = define "testContext" $ asTerm Lexical.emptyInferenceContext
 
 -- | Stub: the real testGraph lives in hand-written Hydra.Test.TestEnv.
 -- The hand-written runtime takes a test-types map and a test-terms map;
@@ -55,6 +55,6 @@ testContext = define "testContext" $ asTerm Lexical.emptyContext
 -- expressed at the DSL level), but languages like Clojure and Emacs
 -- Lisp, where the generated testGraph value drives tests directly,
 -- need both maps to populate schema_types and bound_terms.
-testGraph :: TTermDefinition (M.Map Name Type -> M.Map Name Term -> Graph)
+testGraph :: TypedTermDefinition (M.Map Name Type -> M.Map Name Term -> Graph)
 testGraph = define "testGraph" $
   "tys" ~> "tms" ~> asTerm Lexical.emptyGraph

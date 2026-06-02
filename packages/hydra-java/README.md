@@ -6,7 +6,7 @@ Hydra-Java passes all tests in the
 ensuring identical behavior with Hydra-Haskell and Hydra-Python.
 
 Hydra is a type-aware data transformation toolkit which aims to be highly flexible and portable.
-It has its roots in graph databases and type theory, and provides APIs in Haskell, Java, Python, Scala, and Lisp.
+It has its roots in graph databases and type theory, and provides APIs in Haskell, Java, Python, Scala, TypeScript, and Lisp.
 See the main Hydra [README](https://github.com/CategoricalData/hydra) for more details.
 
 JavaDocs for Hydra-Java can be found [here](https://categoricaldata.github.io/hydra/hydra-java/javadoc),
@@ -14,21 +14,26 @@ and releases can be found on Maven Central [here](https://central.sonatype.com/a
 
 ## Getting Started
 
-Hydra-Java requires Java 11 or later. Build the project with Gradle (from the repo root):
+Hydra-Java requires Java 11 or later. The Gradle wrapper lives at
+`heads/java/gradlew`; all subprojects (`hydra-java`, `hydra-rdf4j`,
+`hydra-neo4j`, `hydra-pg-dsl`) are configured from there.
 
 ```bash
+cd heads/java
 ./gradlew :hydra-java:build
 ```
 
 To publish the resulting JAR to your local Maven repository:
 
 ```bash
+cd heads/java
 ./gradlew :hydra-java:publishToMavenLocal
 ```
 
 You may need to set the `JAVA_HOME` environment variable:
 
 ```bash
+cd heads/java
 JAVA_HOME=/path/to/java11/installation ./gradlew :hydra-java:build
 ```
 
@@ -91,6 +96,7 @@ The common test suite (`hydra.test.testSuite`) ensures parity across all Hydra i
 To run all tests:
 
 ```bash
+cd heads/java
 ./gradlew :hydra-java:test
 ```
 
@@ -111,10 +117,8 @@ These are located in `src/test/java/` alongside the common test suite runner.
 To run a specific test class:
 
 ```bash
+cd heads/java
 ./gradlew :hydra-java:test --tests "hydra.VisitorTest"
-
-# (Note: run all gradle commands from the repo root; this package does not have
-# its own gradle wrapper.)
 ```
 
 ## Code organization
@@ -141,7 +145,7 @@ Hydra's Java code is split across three locations
     persistent collection helpers `ConsList` / `PersistentMap` / `PersistentSet`
     (see [Collection classes](#collection-classes) under design notes)
   - `hydra/tools/` — framework classes (PrimitiveFunction, MapperBase, ...)
-  - `hydra/JavaSelfHostDemo.java` — driver that generates `dist/json/hydra-java/`
+  - `hydra/UpdateJavaJson.java` — driver that updates `dist/json/hydra-java/`
     from the Java DSL sources in this package (see [Generate Java code](#generate-java-code))
 
 - **Generated Java kernel** ([`dist/java/hydra-kernel/src/main/java/`](https://github.com/CategoricalData/hydra/tree/main/dist/java/hydra-kernel/src/main/java))
@@ -183,12 +187,13 @@ The script:
    etc., so a scoped `sync-java.sh` is not sufficient). Gated by
    `HYDRA_IN_SYNC=1` so that `sync.sh` Phase 5 invoking us doesn't recurse.
    Warm-cache sync is ~3 minutes.
-2. Compiles the rollup (`./gradlew :hydra-java:compileHeadsExtrasJava`).
-3. Runs `hydra.JavaSelfHostDemo`, which loads the kernel universe from
-   `dist/json/hydra-kernel/`, discovers the Java DSL source modules via reflection,
-   infers types for those that don't carry pre-computed type schemes (Coder ships
-   its schemes pre-computed; see [bin/java-self-host-demo.md](../../bin/java-self-host-demo.md)
-   for the rationale), and writes the resulting JSON.
+2. Compiles the rollup (`(cd heads/java && ./gradlew :hydra-java:compileHeadsExtrasJava)`).
+3. Runs `hydra.UpdateJavaJson` (via `bin/update-java-json.sh`), which loads the
+   kernel universe from `dist/json/hydra-kernel/`, discovers the Java DSL source
+   modules via reflection, infers types for those that don't carry pre-computed
+   type schemes (Coder ships its schemes pre-computed; see
+   [bin/update-java-json.md](../../bin/update-java-json.md) for the rationale),
+   and writes the resulting JSON.
 
 End-to-end is ~30 seconds once `dist/` is current.
 
@@ -201,8 +206,7 @@ End-to-end is ~30 seconds once `dist/` is current.
 
 ### Phase 2: regenerate `dist/java/` from the JSON
 
-The recommended end-to-end script (which currently still drives Phase 1 via the
-legacy Haskell pipeline) is:
+The narrowest end-to-end script is:
 
 ```bash
 bin/sync-java.sh
@@ -215,7 +219,20 @@ This will:
 2. Generate the Java kernel into `dist/java/hydra-kernel/src/main/java`
 3. Generate the default lib modules
 4. Generate the kernel tests into `dist/java/hydra-kernel/src/test/java`
-5. Build and run all tests
+
+`sync-java.sh` does not run the Java test suite. To validate against the
+generated tests, run `heads/java/bin/test-distribution.sh hydra-kernel`
+afterward (or do a full bootstrap demo via `bin/run-bootstrapping-demo.sh
+--hosts java --targets java`, which includes test runs).
+
+> **Note on Phase 5 (Java self-host).** `sync-java.sh` will also run
+> Phase 5 (`generate-hydra-java-from-java.sh`), which compiles
+> `hydra.Generation` and friends. That compile imports
+> `hydra.{python,haskell,lisp,typescript}.*` from per-language `dist/java/`
+> trees, so on a cold checkout Phase 5 will fail until those siblings
+> have been populated by `bin/sync.sh` (full matrix) or `bin/sync.sh
+> --hosts java --targets <every-language>`. See [`claude/pitfalls.md`](../../claude/pitfalls.md)
+> §"`gradle :hydra-java:test` needs all coder language packages in `dist/java/`".
 
 ## Design notes
 

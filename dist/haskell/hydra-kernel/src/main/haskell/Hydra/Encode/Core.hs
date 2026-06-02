@@ -3,12 +3,12 @@
 
 module Hydra.Encode.Core where
 import qualified Hydra.Core as Core
-import qualified Hydra.Lib.Eithers as Eithers
-import qualified Hydra.Lib.Lists as Lists
-import qualified Hydra.Lib.Maps as Maps
-import qualified Hydra.Lib.Maybes as Maybes
-import qualified Hydra.Lib.Pairs as Pairs
-import qualified Hydra.Lib.Sets as Sets
+import qualified Hydra.Haskell.Lib.Eithers as Eithers
+import qualified Hydra.Haskell.Lib.Lists as Lists
+import qualified Hydra.Haskell.Lib.Maps as Maps
+import qualified Hydra.Haskell.Lib.Maybes as Maybes
+import qualified Hydra.Haskell.Lib.Pairs as Pairs
+import qualified Hydra.Haskell.Lib.Sets as Sets
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 -- | Encoder for hydra.core.AnnotatedTerm
@@ -646,6 +646,15 @@ typeApplicationTerm x =
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (type_ (Core.typeApplicationTermType x))}]})
+-- | Encoder for hydra.core.TypeClassConstraint
+typeClassConstraint :: Core.TypeClassConstraint -> Core.Term
+typeClassConstraint x =
+    case x of
+      Core.TypeClassConstraintSimple v0 -> Core.TermInject (Core.Injection {
+        Core.injectionTypeName = (Core.Name "hydra.core.TypeClassConstraint"),
+        Core.injectionField = Core.Field {
+          Core.fieldName = (Core.Name "simple"),
+          Core.fieldTerm = (name v0)}})
 -- | Encoder for hydra.core.TypeLambda
 typeLambda :: Core.TypeLambda -> Core.Term
 typeLambda x =
@@ -681,7 +690,7 @@ typeVariableMetadata x =
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "classes"),
-          Core.fieldTerm = ((\s -> Core.TermSet (Sets.map name s)) (Core.typeVariableMetadataClasses x))}]})
+          Core.fieldTerm = ((\xs -> Core.TermList (Lists.map typeClassConstraint xs)) (Core.typeVariableMetadataClasses x))}]})
 -- | Encoder for hydra.core.WrappedTerm
 wrappedTerm :: Core.WrappedTerm -> Core.Term
 wrappedTerm x =
