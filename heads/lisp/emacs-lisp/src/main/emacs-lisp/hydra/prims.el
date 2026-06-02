@@ -72,13 +72,13 @@
          ;; Exclude qualified names (containing dots) — those are nominal type references
          (detected-vars (cl-remove-if (lambda (v) (string-match-p "\\." v)) all-vars))
          (vars (if variables variables detected-vars))
-         ;; After #156, TypeVariableMetadata.classes is Seq[TypeClassConstraint].
+         ;; After #156, TypeVariableConstraints.classes is Seq[TypeClassConstraint].
          (constraint-map
           (when constraints
             (funcall hydra_lib_maps_from_list
                      (mapcar (lambda (entry)
                                (list (car entry)
-                                     (make-hydra_core_type_variable_metadata
+                                     (make-hydra_core_type_variable_constraints
                                       (wrap-constraints (cdr entry)))))
                              constraints))))
          ;; TypeScheme.constraints is Maybe(Map): wrap as (:just m) or (:nothing).
