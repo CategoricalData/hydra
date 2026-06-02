@@ -54,7 +54,7 @@ data InferenceResult =
     -- | The type substitution resulting from unification
     inferenceResultSubst :: TypeSubst,
     -- | Class constraints discovered during inference (e.g., Ord constraints from Map.lookup)
-    inferenceResultClassConstraints :: (M.Map Core.Name Core.TypeVariableMetadata),
+    inferenceResultClassConstraints :: (M.Map Core.Name Core.TypeVariableConstraints),
     -- | The updated InferenceContext after inference (carries fresh-variable counter and trace)
     inferenceResultContext :: InferenceContext}
   deriving (Eq, Ord, Read, Show)
@@ -112,7 +112,7 @@ newtype TermSubst =
     unTermSubst :: (M.Map Core.Name Core.Term)}
   deriving (Eq, Ord, Read, Show)
 _TermSubst = Core.Name "hydra.typing.TermSubst"
--- | A type class identifier together with a human-readable description. Type classes are referenced as bare names (e.g. the local name "equality") in TypeVariableMetadata.classes; the canonical definitions live as term bindings under hydra.classes.
+-- | A type class identifier together with a human-readable description. Type classes are referenced as bare names (e.g. the local name "equality") in TypeVariableConstraints.classes; the canonical definitions live as term bindings under hydra.classes.
 data TypeClass =
   TypeClass {
     -- | A human-readable description of the type class

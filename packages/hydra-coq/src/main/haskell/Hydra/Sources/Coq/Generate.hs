@@ -718,7 +718,7 @@ globalConstructorCounts = define "globalConstructorCounts" $
         ("def_" ~> cases _Definition (var "def_") (Just (Phantoms.nothing :: TypedTerm (Maybe (String, Type)))) [
           _Definition_type>>: "td" ~> Phantoms.just $ pair
             (CoqUtils.localName @@ (unwrap _Name @@ (Packaging.typeDefinitionName $ var "td")))
-            (Core.typeSchemeBody $ Packaging.typeDefinitionTypeScheme $ var "td")])
+            (Core.typeSchemeBody $ Packaging.typeDefinitionBody $ var "td")])
         (Packaging.moduleDefinitions $ var "m"))
       (var "modules")] $
     CoqUtils.buildConstructorCounts @@ var "allTypeDefs"
@@ -744,7 +744,7 @@ globalSanitizedAccessors = define "globalSanitizedAccessors" $
           ("def_" ~> cases _Definition (var "def_") (Just (Phantoms.nothing :: TypedTerm (Maybe (String, Type)))) [
             _Definition_type>>: "td" ~> Phantoms.just $ pair
               (CoqUtils.localName @@ (unwrap _Name @@ (Packaging.typeDefinitionName $ var "td")))
-              (Core.typeSchemeBody $ Packaging.typeDefinitionTypeScheme $ var "td")])
+              (Core.typeSchemeBody $ Packaging.typeDefinitionBody $ var "td")])
           (Packaging.moduleDefinitions $ var "m")] $
         CoqUtils.sortTypeDefsSCC @@ var "typeDefs")
       (var "modules")] $
@@ -1060,7 +1060,7 @@ moduleToCoq = define "moduleToCoq" $
     ("def_" ~> cases _Definition (var "def_") (Just (Phantoms.nothing :: TypedTerm (Maybe (String, Type)))) [
       _Definition_type>>: "td" ~> Phantoms.just $ pair
         (CoqUtils.localName @@ (unwrap _Name @@ (Packaging.typeDefinitionName $ var "td")))
-        (Core.typeSchemeBody $ Packaging.typeDefinitionTypeScheme $ var "td")])
+        (Core.typeSchemeBody $ Packaging.typeDefinitionBody $ var "td")])
     (var "defs")) $
   "termDefs" <~ Maybes.cat (Lists.map
     ("def_" ~> cases _Definition (var "def_")
@@ -1076,7 +1076,7 @@ moduleToCoq = define "moduleToCoq" $
         Phantoms.just $ pair
           (CoqUtils.localName @@ (unwrap _Name @@ (Packaging.termDefinitionName $ var "td")))
           (pair
-            (Packaging.termDefinitionTerm $ var "td")
+            (Packaging.termDefinitionBody $ var "td")
             (pair (var "vs") (var "mty")))])
     (var "defs")) $
   -- Local definition names (both type and term), used to extend the

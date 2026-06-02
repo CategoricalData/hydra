@@ -167,7 +167,7 @@ constructModule = def "constructModule" $
     "desc">: (Maybes.bind (Packaging.moduleMetadata (var "mod")) ("em" ~> Packaging.entityMetadataDescription (var "em"))),
     "toDef">: "td" ~> lets [
       "name">: Packaging.typeDefinitionName (var "td"),
-      "typ">: Core.typeSchemeBody $ Packaging.typeDefinitionTypeScheme (var "td"),
+      "typ">: Core.typeSchemeBody $ Packaging.typeDefinitionBody (var "td"),
       "encodeDefEither">: "n" ~> "t" ~> asTerm encodeDefinition @@ var "cx" @@ var "g" @@ var "ns_" @@ var "n" @@ var "t",
       "flatTyp">: asTerm flattenType @@ var "typ",
       "enc">: var "encodeDefEither" @@ var "name"] $
@@ -175,7 +175,7 @@ constructModule = def "constructModule" $
           (Just ("adaptedType" <<~ Adapt.adaptTypeForLanguage @@ ProtobufLanguageSource.protobufLanguage @@ var "flatTyp" $
             var "enc" @@ var "adaptedType")) [
           _Type_variable>>: constant (var "enc" @@ var "flatTyp")]),
-    "types">: Lists.map ("td" ~> Core.typeSchemeBody (Packaging.typeDefinitionTypeScheme (var "td"))) (var "typeDefs"),
+    "types">: Lists.map ("td" ~> Core.typeSchemeBody (Packaging.typeDefinitionBody (var "td"))) (var "typeDefs"),
     "structRefs">: asTerm collectStructuralTypes @@ var "types",
     "javaOptions">: list [
       record P3._Option [
@@ -505,8 +505,8 @@ encodeTypeReference = def "encodeTypeReference" $
   doc "Encode a Hydra name as a Protobuf type reference" $
   "localNs" ~> "name" ~> lets [
     "qn">: Names.qualifyName @@ var "name",
-    "local">: Packaging.qualifiedNameLocal (var "qn"),
-    "ns_">: Packaging.qualifiedNameModuleName (var "qn"),
+    "local">: Util.qualifiedNameLocal (var "qn"),
+    "ns_">: Util.qualifiedNameModuleName (var "qn"),
     "localNsParts">: Maybes.fromMaybe (list ([] :: [TypedTerm String])) (Lists.maybeInit (Strings.splitOn (string ".") (unwrap _ModuleName @@ var "localNs")))] $
     wrap P3._TypeName $
       Maybes.maybe

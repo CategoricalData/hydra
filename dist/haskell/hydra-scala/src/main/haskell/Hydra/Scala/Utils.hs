@@ -121,8 +121,8 @@ sprim :: Core.Name -> Syntax.Data
 sprim name =
 
       let qname = Names.qualifyName name
-          prefix = Packaging.unModuleName (Maybes.fromMaybe (Packaging.ModuleName "") (Packaging.qualifiedNameModuleName qname))
-          local = scalaEscapeName (Packaging.qualifiedNameLocal qname)
+          prefix = Packaging.unModuleName (Maybes.fromMaybe (Packaging.ModuleName "") (Util.qualifiedNameModuleName qname))
+          local = scalaEscapeName (Util.qualifiedNameLocal qname)
       in (sname (Strings.cat2 (Strings.cat2 prefix ".") local))
 -- | Apply a Scala type to a list of type arguments
 stapply :: Syntax.Type -> [Syntax.Type] -> Syntax.Type

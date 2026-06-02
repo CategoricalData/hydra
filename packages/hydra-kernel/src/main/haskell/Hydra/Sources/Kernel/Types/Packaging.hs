@@ -26,22 +26,20 @@ module_ = Module {
     definitions = [
       definition,
       definitionReference,
-      entityLifecycle,
       entityMetadata,
       entityReference,
-      fileExtension,
+      lifecycleInfo,
       module',
       moduleDependency,
       moduleNameDef,
       package,
       packageDependency,
       packageName,
-      packageVersionSpecifier,
       primitiveDefinition,
-      qualifiedName,
       termDefinition,
       typeDefinition,
-      version]
+      version,
+      versionSpecifier]
 
 definition :: TypeDefinition
 definition = define "Definition" $
@@ -71,18 +69,6 @@ definitionReference = define "DefinitionReference" $
       doc "A reference to a primitive definition, by name"
       Core.name]
 
-entityLifecycle :: TypeDefinition
-entityLifecycle = define "EntityLifecycle" $
-  doc ("Version-lifecycle milestones for a packaging entity. Each milestone is independently optional;"
-    ++ " further milestones (e.g. stableSince, removedSince) may be added without changing dependent types.") $
-  T.record [
-    "availableSince">:
-      doc "The version in which the entity was introduced, if known." $
-      T.maybe version,
-    "deprecatedSince">:
-      doc "The version in which the entity was deprecated, if applicable." $
-      T.maybe version]
-
 entityMetadata :: TypeDefinition
 entityMetadata = define "EntityMetadata" $
   doc ("Documentation and lifecycle metadata attachable to a packaging entity (package, module, or definition)."
@@ -101,7 +87,7 @@ entityMetadata = define "EntityMetadata" $
       T.list entityReference,
     "lifecycle">:
       doc "Optional version-lifecycle milestones for the entity." $
-      T.maybe entityLifecycle]
+      T.maybe lifecycleInfo]
 
 entityReference :: TypeDefinition
 entityReference = define "EntityReference" $
@@ -117,10 +103,17 @@ entityReference = define "EntityReference" $
       doc "A reference to a definition (type, term, or primitive)"
       definitionReference]
 
-fileExtension :: TypeDefinition
-fileExtension = define "FileExtension" $
-  doc "A file extension (without the dot), e.g. \"json\" or \"py\"" $
-  T.wrap T.string
+lifecycleInfo :: TypeDefinition
+lifecycleInfo = define "LifecycleInfo" $
+  doc ("Version-lifecycle milestones for a packaging entity. Each milestone is independently optional;"
+    ++ " further milestones (e.g. stableSince, removedSince) may be added without changing dependent types.") $
+  T.record [
+    "availableSince">:
+      doc "The version in which the entity was introduced, if known." $
+      T.maybe version,
+    "deprecatedSince">:
+      doc "The version in which the entity was deprecated, if applicable." $
+      T.maybe version]
 
 module' :: TypeDefinition
 module' = define "Module" $
@@ -185,23 +178,12 @@ packageDependency = define "PackageDependency" $
       packageName,
     "version">:
       doc "The version-range constraint on the depended-on package"
-      packageVersionSpecifier]
+      versionSpecifier]
 
 packageName :: TypeDefinition
 packageName = define "PackageName" $
   doc "The unique name of a package, e.g. \"hydra-kernel\" or \"hydra-python\"" $
   T.wrap T.string
-
-packageVersionSpecifier :: TypeDefinition
-packageVersionSpecifier = define "PackageVersionSpecifier" $
-  doc ("A specifier constraining acceptable versions of a depended-on package."
-    ++ " Currently only the `any` (unit) specifier is defined; future variants"
-    ++ " such as `exact`, `caret`, and `range` may be added without breaking"
-    ++ " consumers of the `any` form.") $
-  T.union [
-    "any">:
-      doc "Any version of the package satisfies the dependency" $
-      T.unit]
 
 primitiveDefinition :: TypeDefinition
 primitiveDefinition = define "PrimitiveDefinition" $
@@ -210,36 +192,25 @@ primitiveDefinition = define "PrimitiveDefinition" $
     "name">:
       doc "The name of the primitive"
       Core.name,
-    "signature">:
-      doc "The signature of the primitive (always explicit, never inferred)"
-      Typing.termSignature,
     "metadata">:
-      doc "Optional documentation and lifecycle metadata for the primitive (description, long-form comments, cross-references, version milestones)." $
+      doc "Optional documentation and lifecycle metadata for the primitive." $
       T.maybe entityMetadata,
+    "signature">:
+      doc "The signature of the primitive. Always explicit, never inferred."
+      Typing.termSignature,
     "isPure">:
-      doc "Whether the primitive is pure (referentially transparent, no observable side effects). Defaults to true."
+      doc "Whether the primitive is pure (referentially transparent, no observable side effects). Normally true."
       T.boolean,
     "isTotal">:
-      doc "Whether the primitive is total (terminates on every input of its declared type). Defaults to true."
+      doc "Whether the primitive is total (terminates on every input of its declared type). Normally true."
       T.boolean,
     "defaultImplementation">:
       doc "An optional cross-compilable reference implementation of the primitive, expressed as a Hydra term. Used by interpreters lacking a native implementation and as a proof-friendly reference. Distinct from the per-host Primitive.implementation." $
       T.maybe Core.term]
 
-qualifiedName :: TypeDefinition
-qualifiedName = define "QualifiedName" $
-  doc "A qualified name consisting of an optional module name together with a mandatory local name" $
-  T.record [
-    "moduleName">:
-      doc "The optional module name" $
-      T.maybe moduleNameDef,
-    "local">:
-      doc "The local name"
-      T.string]
-
 termDefinition :: TypeDefinition
 termDefinition = define "TermDefinition" $
-  doc "A term-level definition, including a name, a term, and an optional signature" $
+  doc "A term-level definition, including a name, an optional signature, and a term" $
   T.record [
     "name">:
       doc "The name of the term"
@@ -247,12 +218,12 @@ termDefinition = define "TermDefinition" $
     "metadata">:
       doc "Optional documentation and lifecycle metadata for the term definition" $
       T.maybe entityMetadata,
-    "term">:
-      doc "The term being defined"
-      Core.term,
     "signature">:
-      doc "The optional signature of the term. When absent, the signature is to be inferred." $
-      T.maybe Typing.termSignature]
+      doc "The optional signature of the term. When absent, the signature has yet to be inferred." $
+      T.maybe Typing.termSignature,
+    "body">:
+      doc "The term being defined"
+      Core.term]
 
 typeDefinition :: TypeDefinition
 typeDefinition = define "TypeDefinition" $
@@ -264,7 +235,7 @@ typeDefinition = define "TypeDefinition" $
     "metadata">:
       doc "Optional documentation and lifecycle metadata for the type definition" $
       T.maybe entityMetadata,
-    "typeScheme">:
+    "body">:
       doc "The type scheme being defined"
       Core.typeScheme]
 
@@ -272,3 +243,14 @@ version :: TypeDefinition
 version = define "Version" $
   doc "A version string, e.g. \"0.15\" or \"1.0.0\"." $
   T.wrap T.string
+
+versionSpecifier :: TypeDefinition
+versionSpecifier = define "VersionSpecifier" $
+  doc ("A specifier constraining acceptable versions of a dependency."
+    ++ " Currently only the `any` (unit) specifier is defined; future variants"
+    ++ " such as `exact`, `caret`, and `range` may be added without breaking"
+    ++ " consumers of the `any` form.") $
+  T.union [
+    "any">:
+      doc "Any version satisfies the dependency" $
+      T.unit]

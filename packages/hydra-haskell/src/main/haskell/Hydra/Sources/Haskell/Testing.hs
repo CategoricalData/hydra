@@ -107,8 +107,9 @@ buildNamespacesForTestGroup = define "buildNamespacesForTestGroup" $
       _Module_metadata>>: project _Module _Module_metadata @@ var "mod",
       _Module_dependencies>>: project _Module _Module_dependencies @@ var "mod",
       _Module_definitions>>: Lists.map ("b" ~> Packaging.definitionTerm (Packaging.termDefinition
-        (Core.bindingName $ var "b") nothing (Core.bindingTerm $ var "b")
-        (Maybes.map Scoping.typeSchemeToTermSignature $ Core.bindingTypeScheme $ var "b")))
+        (Core.bindingName $ var "b") nothing
+        (Maybes.map Scoping.typeSchemeToTermSignature $ Core.bindingTypeScheme $ var "b")
+        (Core.bindingTerm $ var "b")))
         (var "testBindings")]] $
     Eithers.bind
       (Eithers.bimap

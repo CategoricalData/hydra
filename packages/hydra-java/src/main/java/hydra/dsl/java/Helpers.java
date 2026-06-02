@@ -4,7 +4,7 @@ import hydra.core.Name;
 import hydra.core.Term;
 import hydra.core.Type;
 import hydra.core.TypeScheme;
-import hydra.core.TypeVariableMetadata;
+import hydra.core.TypeVariableConstraints;
 import hydra.dsl.Terms;
 import hydra.dsl.Types;
 import hydra.packaging.EntityMetadata;
@@ -67,7 +67,7 @@ public final class Helpers {
         TypeScheme ts = new TypeScheme(
             Collections.emptyList(),
             typ,
-            Maybe.<Map<Name, TypeVariableMetadata>>nothing());
+            Maybe.<Map<Name, TypeVariableConstraints>>nothing());
         return new Definition.Type(new TypeDefinition(fqName, Maybe.<EntityMetadata>nothing(), ts));
     }
 
@@ -99,6 +99,6 @@ public final class Helpers {
         return new TypeScheme(
             variables,
             body,
-            Maybe.<Map<Name, TypeVariableMetadata>>nothing());
+            Maybe.<Map<Name, TypeVariableConstraints>>nothing());
     }
 }

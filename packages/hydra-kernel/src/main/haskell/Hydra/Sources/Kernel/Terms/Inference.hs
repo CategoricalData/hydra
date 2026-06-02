@@ -369,7 +369,7 @@ inferInGraphContext = define "inferInGraphContext" $
   "fcx" ~> "cx" ~> "term" ~>
   inferTypeOfTerm @@ var "fcx" @@ var "cx" @@ var "term" @@ (string "single term")
 
-inferMany :: TypedTermDefinition (InferenceContext -> Graph -> [(Term, String)] -> Prelude.Either Error (([Term], ([Type], (TypeSubst, M.Map Name TypeVariableMetadata))), InferenceContext))
+inferMany :: TypedTermDefinition (InferenceContext -> Graph -> [(Term, String)] -> Prelude.Either Error (([Term], ([Type], (TypeSubst, M.Map Name TypeVariableConstraints))), InferenceContext))
 inferMany = define "inferMany" $
   doc "Infer types for multiple terms, propagating class constraints from sub-expressions" $
   "fcx" ~> "cx" ~> "pairs" ~>
@@ -515,7 +515,7 @@ inferTypeOfCaseStatement = define "inferTypeOfCaseStatement" $
   "tname" <~ Core.caseStatementTypeName (var "caseStmt") $
   "dflt" <~ Core.caseStatementDefault (var "caseStmt") $
   "cases" <~ Core.caseStatementCases (var "caseStmt") $
-  "fnames" <~ Lists.map (reify Core.fieldName) (var "cases") $
+  "fnames" <~ Lists.map (reify Core.caseAlternativeName) (var "cases") $
   "stRp" <<~ Resolution.requireSchemaType @@ var "fcx" @@ (Graph.graphSchemaTypes $ var "cx") @@ var "tname" $
   "schemaType" <~ Pairs.first (var "stRp") $
   "fcx2" <~ Pairs.second (var "stRp") $
@@ -532,8 +532,8 @@ inferTypeOfCaseStatement = define "inferTypeOfCaseStatement" $
   -- doesn't include the default's path. Counter is preserved from the descent result if any.
   "fcx3" <~ Maybes.fromMaybe (var "fcx2") (Maybes.map ("_r" ~> Names.restoreTrace @@ var "fcx2" @@ Typing.inferenceResultContext (var "_r")) (var "dfltRp")) $
   "caseRp" <<~ inferMany @@ var "fcx3" @@ var "cx" @@ Lists.map
-    ("f" ~> pair (Core.fieldTerm $ var "f")
-      (Strings.cat $ list [(string "case "), Core.unName $ var "tname", (string "."), Core.unName $ Core.fieldName $ var "f"]))
+    ("f" ~> pair (Core.caseAlternativeHandler $ var "f")
+      (Strings.cat $ list [(string "case "), Core.unName $ var "tname", (string "."), Core.unName $ Core.caseAlternativeName $ var "f"]))
     (var "cases") $
   "caseResults" <~ Pairs.first (var "caseRp") $
   "fcx4" <~ Pairs.second (var "caseRp") $
@@ -568,7 +568,7 @@ inferTypeOfCaseStatement = define "inferTypeOfCaseStatement" $
       @@ var "fcx5"
       @@ (buildTypeApplicationTerm @@ var "svars"
           @@ (Core.termCases $ Core.caseStatement (var "tname") (Maybes.map (reify Typing.inferenceResultTerm) $ var "dfltResult") $
-            Lists.zipWith ("n" ~> "t" ~> Core.field (var "n") (var "t")) (var "fnames") (var "iterms")))
+            Lists.zipWith ("n" ~> "t" ~> Core.caseAlternative (var "n") (var "t")) (var "fnames") (var "iterms")))
       @@ (Core.typeFunction $ Core.functionType
           (Resolution.nominalApplication @@ var "tname" @@ Lists.map (reify Core.typeVariable) (var "svars"))
           (var "cod"))
@@ -589,7 +589,7 @@ inferTypeOfCollection = define "inferTypeOfCollection" $
   "fcx2" <~ Pairs.second (var "varResult") $
   "classConstraints" <~ Logic.ifElse (Sets.null $ var "classNames")
     Maps.empty
-    (Maps.singleton (var "var") (Core.typeVariableMetadata $ Lists.map ("n" ~> Core.typeClassConstraintSimple (var "n")) $ Sets.toList $ var "classNames")) $
+    (Maps.singleton (var "var") (Core.typeVariableConstraints $ Lists.map ("n" ~> Core.typeClassConstraintSimple (var "n")) $ Sets.toList $ var "classNames")) $
   Logic.ifElse (Lists.null $ var "els")
     (right (yieldWithConstraints
       @@ var "fcx2"
@@ -929,7 +929,7 @@ inferTypeOfMap = define "inferTypeOfMap" $
   "vvarResult" <~ Names.freshName @@ var "fcx2" $
   "vvar" <~ Pairs.first (var "vvarResult") $
   "fcx3" <~ Pairs.second (var "vvarResult") $
-  "keyConstraints" <~ Maps.singleton (var "kvar") (Core.typeVariableMetadata $ list [Core.typeClassConstraintSimple $ Core.name (string "ordering")]) $
+  "keyConstraints" <~ Maps.singleton (var "kvar") (Core.typeVariableConstraints $ list [Core.typeClassConstraintSimple $ Core.name (string "ordering")]) $
   Logic.ifElse (Maps.null $ var "m")
     (right (yieldWithConstraints
       @@ var "fcx3"
@@ -1264,7 +1264,7 @@ inferTypeOfWrappedTerm = define "inferTypeOfWrappedTerm" $
     @@ list [Typing.typeConstraint (var "stype") (var "ityp") (string "schema type of wrapper")] $
   right (var "mcResult")
 
-inferTypesOfTemporaryBindings :: TypedTermDefinition (InferenceContext -> Graph -> [Binding] -> Prelude.Either Error (([Term], ([Type], (TypeSubst, M.Map Name TypeVariableMetadata))), InferenceContext))
+inferTypesOfTemporaryBindings :: TypedTermDefinition (InferenceContext -> Graph -> [Binding] -> Prelude.Either Error (([Term], ([Type], (TypeSubst, M.Map Name TypeVariableConstraints))), InferenceContext))
 inferTypesOfTemporaryBindings = define "inferTypesOfTemporaryBindings" $
   doc "Infer types for temporary let bindings (Either version)" $
   "fcx" ~> "cx" ~> "bins" ~>
@@ -1349,7 +1349,7 @@ mapConstraints = define "mapConstraints" $
   Eithers.bind (Checking.checkTypeSubst @@ var "flowCx" @@ var "cx" @@ var "s") (
     "_" ~> right (var "f" @@ var "s"))
 
-mergeClassConstraints :: TypedTermDefinition (M.Map Name TypeVariableMetadata -> M.Map Name TypeVariableMetadata -> M.Map Name TypeVariableMetadata)
+mergeClassConstraints :: TypedTermDefinition (M.Map Name TypeVariableConstraints -> M.Map Name TypeVariableConstraints -> M.Map Name TypeVariableConstraints)
 mergeClassConstraints = define "mergeClassConstraints" $
   doc "Merge two maps of class constraints. When both maps have constraints for the same variable, union the class sets." $
   "m1" ~> "m2" ~>
@@ -1360,7 +1360,7 @@ mergeClassConstraints = define "mergeClassConstraints" $
       Maybes.maybe
         (Maps.insert (var "k") (var "v") (var "acc"))
         ("existing" ~>
-          "merged" <~ Core.typeVariableMetadata (Lists.nub $ Lists.concat2 (Core.typeVariableMetadataClasses $ var "existing") (Core.typeVariableMetadataClasses $ var "v")) $
+          "merged" <~ Core.typeVariableConstraints (Lists.nub $ Lists.concat2 (Core.typeVariableConstraintsClasses $ var "existing") (Core.typeVariableConstraintsClasses $ var "v")) $
           Maps.insert (var "k") (var "merged") (var "acc"))
         (Maps.lookup (var "k") (var "acc")))
     (var "m1")
@@ -1402,7 +1402,7 @@ yieldChecked = define "yieldChecked" $
   "itype" <~ Substitution.substInType @@ var "subst" @@ var "typ" $
   Typing.inferenceResult (var "iterm") (var "itype") (var "subst") Maps.empty (var "fcx")
 
-yieldCheckedWithConstraints :: TypedTermDefinition (InferenceContext -> Term -> Type -> TypeSubst -> M.Map Name TypeVariableMetadata -> InferenceResult)
+yieldCheckedWithConstraints :: TypedTermDefinition (InferenceContext -> Term -> Type -> TypeSubst -> M.Map Name TypeVariableConstraints -> InferenceResult)
 yieldCheckedWithConstraints = define "yieldCheckedWithConstraints" $
   doc "Create a checked inference result with class constraints" $
   "fcx" ~> "term" ~> "typ" ~> "subst" ~> "constraints" ~>
@@ -1418,7 +1418,7 @@ yieldCheckedWithConstraints = define "yieldCheckedWithConstraints" $
 -- and return InferenceResult (which contains the updated InferenceContext).
 -- ============================================================================
 
-yieldWithConstraints :: TypedTermDefinition (InferenceContext -> Term -> Type -> TypeSubst -> M.Map Name TypeVariableMetadata -> InferenceResult)
+yieldWithConstraints :: TypedTermDefinition (InferenceContext -> Term -> Type -> TypeSubst -> M.Map Name TypeVariableConstraints -> InferenceResult)
 yieldWithConstraints = define "yieldWithConstraints" $
   doc "Create an inference result with class constraints" $
   "fcx" ~> "term" ~> "typ" ~> "subst" ~> "constraints" ~>

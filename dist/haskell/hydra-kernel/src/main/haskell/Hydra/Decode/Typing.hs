@@ -52,7 +52,7 @@ inferenceResult cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
       Core.TermRecord v0 ->
         let fieldMap = ExtractCore.toFieldMap v0
-        in (Eithers.bind (ExtractCore.requireField "term" DecodeCore.term fieldMap cx) (\field_term -> Eithers.bind (ExtractCore.requireField "type" DecodeCore.type_ fieldMap cx) (\field_type -> Eithers.bind (ExtractCore.requireField "subst" typeSubst fieldMap cx) (\field_subst -> Eithers.bind (ExtractCore.requireField "classConstraints" (ExtractCore.decodeMap DecodeCore.name DecodeCore.typeVariableMetadata) fieldMap cx) (\field_classConstraints -> Eithers.bind (ExtractCore.requireField "context" inferenceContext fieldMap cx) (\field_context -> Right (Typing.InferenceResult {
+        in (Eithers.bind (ExtractCore.requireField "term" DecodeCore.term fieldMap cx) (\field_term -> Eithers.bind (ExtractCore.requireField "type" DecodeCore.type_ fieldMap cx) (\field_type -> Eithers.bind (ExtractCore.requireField "subst" typeSubst fieldMap cx) (\field_subst -> Eithers.bind (ExtractCore.requireField "classConstraints" (ExtractCore.decodeMap DecodeCore.name DecodeCore.typeVariableConstraints) fieldMap cx) (\field_classConstraints -> Eithers.bind (ExtractCore.requireField "context" inferenceContext fieldMap cx) (\field_context -> Right (Typing.InferenceResult {
           Typing.inferenceResultTerm = field_term,
           Typing.inferenceResultType = field_type,
           Typing.inferenceResultSubst = field_subst,

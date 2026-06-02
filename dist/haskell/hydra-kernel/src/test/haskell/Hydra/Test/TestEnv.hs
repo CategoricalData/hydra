@@ -56,7 +56,7 @@ testGraph testTypes _testTerms = let
       , TermVariables.module_
       ]
     boundTerms = M.fromList
-      [ (termDefinitionName td, termDefinitionTerm td) | DefinitionTerm td <- kernelTermDefs ]
+      [ (termDefinitionName td, termDefinitionBody td) | DefinitionTerm td <- kernelTermDefs ]
     boundTypes = M.fromList
       [ (termDefinitionName td, ts)
       | DefinitionTerm td <- kernelTermDefs, Just sig <- [termDefinitionSignature td], let ts = termSignatureToTypeScheme sig ]

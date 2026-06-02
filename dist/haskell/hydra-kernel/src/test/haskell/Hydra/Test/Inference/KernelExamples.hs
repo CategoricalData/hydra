@@ -232,9 +232,9 @@ testGroupForNestedLet =
                                   Core.caseStatementTypeName = (Core.Name "hydra.core.Type"),
                                   Core.caseStatementDefault = (Just (Core.TermPair (Core.TermVariable (Core.Name "subst"), (Core.TermVariable (Core.Name "t"))))),
                                   Core.caseStatementCases = [
-                                    Core.Field {
-                                      Core.fieldName = (Core.Name "forall"),
-                                      Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                                    Core.CaseAlternative {
+                                      Core.caseAlternativeName = (Core.Name "forall"),
+                                      Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                                         Core.lambdaParameter = (Core.Name "ft"),
                                         Core.lambdaDomain = Nothing,
                                         Core.lambdaBody = (Core.TermApplication (Core.Application {

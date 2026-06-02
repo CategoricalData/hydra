@@ -201,12 +201,12 @@ etaExpandTerm tx0 term0 =
                                   Core.fieldTerm = (recurse tx (Core.fieldTerm f))}
                         forCaseBranch =
                                 \f ->
-                                  let branchBody = recurse tx (Core.fieldTerm f)
+                                  let branchBody = recurse tx (Core.caseAlternativeHandler f)
                                       arty = termArityWithContext tx branchBody
                                       branchHType = termHeadType tx branchBody
-                                  in Core.Field {
-                                    Core.fieldName = (Core.fieldName f),
-                                    Core.fieldTerm = (expand True [] arty branchHType branchBody)}
+                                  in Core.CaseAlternative {
+                                    Core.caseAlternativeName = (Core.caseAlternativeName f),
+                                    Core.caseAlternativeHandler = (expand True [] arty branchHType branchBody)}
                         forMap =
                                 \mp ->
                                   let forPair = \pr -> (recurse tx (Pairs.first pr), (recurse tx (Pairs.second pr)))
@@ -378,9 +378,9 @@ etaExpandTypedTerm cx tx0 term0 =
                               in (Right (padn arity (unwind t))))
                     recurseOrForce = \term2 -> Logic.ifElse forced (forceExpansion term2) (recurse tx (unwind term2))
                     forCase =
-                            \f -> Eithers.bind (rewrite False True [] recurse tx (Core.fieldTerm f)) (\r -> Right (Core.Field {
-                              Core.fieldName = (Core.fieldName f),
-                              Core.fieldTerm = r}))
+                            \f -> Eithers.bind (rewrite False True [] recurse tx (Core.caseAlternativeHandler f)) (\r -> Right (Core.CaseAlternative {
+                              Core.caseAlternativeName = (Core.caseAlternativeName f),
+                              Core.caseAlternativeHandler = r}))
                     forCaseStatement =
                             \cs ->
                               let tname = Core.caseStatementTypeName cs
@@ -495,10 +495,10 @@ reduceTerm cx graph eager term =
                       Errors.noMatchingFieldErrorFieldName = (Core.projectionFieldName proj)})))) (\mf -> Right (Core.fieldTerm mf)) matching))
           applyCases =
                   \cs -> \reducedArg -> Eithers.bind (ExtractCore.injection (Core.caseStatementTypeName cs) graph reducedArg) (\field ->
-                    let matching = Lists.find (\f -> Equality.equal (Core.fieldName f) (Core.fieldName field)) (Core.caseStatementCases cs)
+                    let matching = Lists.find (\f -> Equality.equal (Core.caseAlternativeName f) (Core.fieldName field)) (Core.caseStatementCases cs)
                     in (Maybes.maybe (Maybes.maybe (Left (Errors.ErrorResolution (Errors.ResolutionErrorNoMatchingField (Errors.NoMatchingFieldError {
                       Errors.noMatchingFieldErrorFieldName = (Core.fieldName field)})))) (\x -> Right x) (Core.caseStatementDefault cs)) (\mf -> Right (Core.TermApplication (Core.Application {
-                      Core.applicationFunction = (Core.fieldTerm mf),
+                      Core.applicationFunction = (Core.caseAlternativeHandler mf),
                       Core.applicationArgument = (Core.fieldTerm field)}))) matching))
           applyIfNullary =
                   \eager2 -> \original -> \args ->
@@ -578,9 +578,10 @@ termIsValue term =
       let forList = \els -> Lists.foldl (\b -> \t -> Logic.and b (termIsValue t)) True els
           checkField = \f -> termIsValue (Core.fieldTerm f)
           checkFields = \fields -> Lists.foldl (\b -> \f -> Logic.and b (checkField f)) True fields
+          checkCaseAlternatives = \alts -> Lists.foldl (\b -> \a -> Logic.and b (termIsValue (Core.caseAlternativeHandler a))) True alts
       in case (Strip.deannotateTerm term) of
         Core.TermApplication _ -> False
-        Core.TermCases v0 -> Logic.and (checkFields (Core.caseStatementCases v0)) (Maybes.maybe True termIsValue (Core.caseStatementDefault v0))
+        Core.TermCases v0 -> Logic.and (checkCaseAlternatives (Core.caseStatementCases v0)) (Maybes.maybe True termIsValue (Core.caseStatementDefault v0))
         Core.TermEither v0 -> Eithers.either (\l -> termIsValue l) (\r -> termIsValue r) v0
         Core.TermLambda v0 -> termIsValue (Core.lambdaBody v0)
         Core.TermLiteral _ -> True

@@ -479,7 +479,7 @@ checkTerm = define "checkTerm" $
         -- T4. DuplicateCaseStatementFieldNamesError (via DuplicateFieldError)
         guardedTermRule (var "p") _InvalidTermError _InvalidTermError_duplicateField
           (checkDuplicateFields @@ var "path" @@ (Lists.map
-            (reify Core.fieldName)
+            (reify Core.caseAlternativeName)
             (var "csCases")))],
 
     -- T9. UndefinedTypeVariableInTypeApplicationError (typed mode only)

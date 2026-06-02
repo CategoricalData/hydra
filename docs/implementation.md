@@ -138,8 +138,8 @@ the descriptions below cover the main ones:
 
 **Packaging.hs** - `hydra.packaging` module
 - Defines the packaging model: `Package`, `Module`, `Definition`, `ModuleName`, `ModuleDependency`,
-  `QualifiedName`, `PackageDependency`, `PackageVersionSpecifier`, and the metadata types
-  `EntityMetadata`, `EntityLifecycle`, `EntityReference`, `DefinitionReference`, `Version`.
+  `PackageDependency`, `VersionSpecifier`, and the metadata types
+  `EntityMetadata`, `LifecycleInfo`, `EntityReference`, `DefinitionReference`, `Version`.
 - A `Module` carries a `name :: ModuleName`, an optional `metadata :: Maybe EntityMetadata`, a list of
   `dependencies :: [ModuleDependency]`, and a list of `definitions`. A `ModuleDependency` is the
   depended-on `module :: ModuleName` plus an optional `package :: Maybe PackageName`.
@@ -306,7 +306,7 @@ Core (hydra.core) - Foundation
 Core + supporting types
   ├─ Graph      - Extends core with graph operations
   ├─ Coders     - Language-transformation framework (Coder, Adapter, Language, ...)
-  └─ Packaging  - Module, Definition, ModuleName, ModuleDependency, QualifiedName, Package
+  └─ Packaging  - Module, Definition, ModuleName, ModuleDependency, Package
 
 Error model
   ├─ Errors     - Structured error types
