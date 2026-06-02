@@ -80,16 +80,15 @@ A stub that throws `UnsupportedOperationException` will cause runtime failures.
 See `heads/java/src/main/java/hydra/lib/lists/Map.java` for a higher-order example
 using `hydra.dsl.Terms` helpers (`lambda`, `app`, `variable`, etc.).
 
-### Higher-order primitives (`prim2Eval`)
+### Higher-order primitives
 
-In `Libraries.hs`, primitives are registered with either `prim1`/`prim2`/`prim3` (simple)
-or `prim1Eval`/`prim2Eval`/`prim3Eval` (higher-order). The `Eval` variants have an
-additional "eval element" in `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Eval/Lib/`,
-generated into `dist/java/hydra-kernel/src/main/java/hydra/eval/lib/`.
-
-**Both paths matter**: The reducer calls `implementation()` for all primitives, so even
-`prim2Eval` primitives need a working `implementation()` in their Java
-`PrimitiveFunction` class.
+Higher-order primitives (e.g. `lists.map`, `lists.foldl`, `eithers.bind`) are
+declared the same way as first-order primitives, via `primDef`/`primNoDef` in
+their `Hydra/Sources/Kernel/Lib/<Sub>.hs` registry. Their higher-orderness is
+expressed in the `TermSignature` (function-typed value parameters) rather than
+via a separate registration path. On the Haskell host, the same `prim*` family
+in `Hydra.Dsl.Prims` pairs each name with its native implementation; the
+native implementation must accept and apply its function arguments correctly.
 
 ### Key files for Java debugging
 
@@ -97,7 +96,6 @@ generated into `dist/java/hydra-kernel/src/main/java/hydra/eval/lib/`.
 |---------|------|
 | Primitive registration | `heads/java/src/main/java/hydra/lib/Libraries.java` |
 | Primitive classes | `heads/java/src/main/java/hydra/lib/<library>/` |
-| Generated eval elements | `dist/java/hydra-kernel/src/main/java/hydra/eval/lib/` |
 | DSL term builders | `heads/java/src/main/java/hydra/dsl/Terms.java` |
 | Either utilities | `heads/java/src/main/java/hydra/util/Either.java` |
 | Test runner | `heads/java/src/test/java/hydra/TestSuiteRunner.java` |
