@@ -1,18 +1,20 @@
 #!/usr/bin/env bash
 # Assemble a self-contained Hackage sdist for the `hydra` Haskell package.
 #
-# TEMPORARY for 0.15. The hydra-haskell head's package.yaml declares many
-# `hs-source-dirs:` entries that live at `../../packages/...`,
-# `../../dist/haskell/...`, and `../../demos/...`. `stack sdist` rejects those
-# (Cabal won't allow `../../` in published packages — Hackage requires each
-# package to be self-contained). To produce a valid Hackage tarball we copy
-# every referenced source dir into a flat staging tree, rewrite package.yaml
-# to point at the in-staging paths, and run `stack sdist` from there.
+# Still required as of 0.16 (single `hydra` Haskell package). The hydra-haskell
+# head's package.yaml declares many `hs-source-dirs:` entries that live at
+# `../../packages/...`, `../../dist/haskell/...`, and `../../demos/...`.
+# `stack sdist` rejects those (Cabal won't allow `../../` in published packages —
+# Hackage requires each package to be self-contained). To produce a valid Hackage
+# tarball we copy every referenced source dir into a flat staging tree, rewrite
+# package.yaml to point at the in-staging paths, and run `stack sdist` from there.
 #
-# Starting with 0.16, the plan is to drop this assembler and run
-# `stack sdist` directly from each `dist/haskell/<pkg>/` (mirroring the
-# per-package Java + Python layout shipped in 0.15). This script will be
-# removed at that point.
+# Retirement is tracked by #418 (split the monolithic Hackage distribution into
+# per-package distributions, mirroring Java + Python — a 0.16 goal, likely a fast
+# follow after the tag). Once the Haskell side moves to a per-package layout,
+# `stack sdist` can run directly from each `dist/haskell/<pkg>/` and this assembler
+# can be dropped. Until then, this script is the active mechanism (called by
+# bin/prepare-release.sh).
 #
 # Usage:
 #   heads/haskell/bin/assemble-hackage-sdist.sh [--out <dir>]
