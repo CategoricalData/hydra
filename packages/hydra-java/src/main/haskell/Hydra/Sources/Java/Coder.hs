@@ -233,7 +233,6 @@ module_ = Module {
       toDefinition moduleToJava,
       toDefinition nameMapToTypeMap,
       toDefinition namespaceParent,
-      toDefinition needsThunking,
       toDefinition noComment,
       toDefinition noInterfaceComment,
       toDefinition otherwiseBranch,
@@ -4446,21 +4445,6 @@ namespaceParent = def "namespaceParent" $
     Logic.ifElse (Lists.null (var "initParts"))
       nothing
       (just (wrap _ModuleName (Strings.intercalate (string ".") (var "initParts"))))
-
--- | Check if a term structurally needs lazy evaluation.
-needsThunking :: TypedTermDefinition (Term -> Bool)
-needsThunking = def "needsThunking" $
-  lambda "t" $
-    cases _Term (Strip.deannotateTerm @@ var "t")
-      (Just $ Lists.foldl
-        (lambda "b" $ lambda "st" $ Logic.or (var "b") (needsThunking @@ var "st"))
-        (boolean False)
-        (Rewriting.subterms @@ var "t")) [
-      _Term_let>>: lambda "_lt" $ boolean True,
-      _Term_typeApplication>>: lambda "_ta" $ boolean True,
-      _Term_typeLambda>>: lambda "_tl" $ boolean True]
-
--- | Check if a Binding has function type.
 
 noComment :: TypedTermDefinition (Java.ClassBodyDeclaration -> Java.ClassBodyDeclarationWithComments)
 noComment = def "noComment" $
