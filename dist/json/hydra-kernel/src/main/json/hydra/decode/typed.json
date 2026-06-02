@@ -142,7 +142,11 @@
                                                         "body": {
                                                           "typeApplication": {
                                                             "body": {
-                                                              "either": {"left": {"wrap": {"body": {"literal": {"string": "expected record"}}, "typeName": "hydra.errors.DecodingError"}}}},
+                                                              "either": {
+                                                                "left": {
+                                                                  "wrap": {
+                                                                    "body": {"literal": {"string": "expected a record of type hydra.typed.TypedBinding"}},
+                                                                    "typeName": "hydra.errors.DecodingError"}}}},
                                                             "type": {"variable": "hydra.errors.DecodingError"}}},
                                                         "type": {"application": {"argument": {"variable": "t1"}, "function": {"variable": "hydra.typed.TypedBinding"}}}}},
                                                     "typeName": "hydra.core.Term"}}}},
@@ -446,7 +450,11 @@
                                                         "body": {
                                                           "typeApplication": {
                                                             "body": {
-                                                              "either": {"left": {"wrap": {"body": {"literal": {"string": "expected record"}}, "typeName": "hydra.errors.DecodingError"}}}},
+                                                              "either": {
+                                                                "left": {
+                                                                  "wrap": {
+                                                                    "body": {"literal": {"string": "expected a record of type hydra.typed.TypedTermDefinition"}},
+                                                                    "typeName": "hydra.errors.DecodingError"}}}},
                                                             "type": {"variable": "hydra.errors.DecodingError"}}},
                                                         "type": {"application": {"argument": {"variable": "t1"}, "function": {"variable": "hydra.typed.TypedTermDefinition"}}}}},
                                                     "typeName": "hydra.core.Term"}}}},

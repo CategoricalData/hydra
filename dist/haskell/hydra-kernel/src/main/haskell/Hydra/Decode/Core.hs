@@ -24,7 +24,7 @@ annotatedTerm cx raw =
         in (Eithers.bind (ExtractCore.requireField "body" term fieldMap cx) (\field_body -> Eithers.bind (ExtractCore.requireField "annotation" (ExtractCore.decodeMap name term) fieldMap cx) (\field_annotation -> Right (Core.AnnotatedTerm {
           Core.annotatedTermBody = field_body,
           Core.annotatedTermAnnotation = field_annotation}))))
-      _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+      _ -> Left (Errors.DecodingError "expected a record of type hydra.core.AnnotatedTerm")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.core.AnnotatedType
 annotatedType :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.AnnotatedType
 annotatedType cx raw =
@@ -34,7 +34,7 @@ annotatedType cx raw =
         in (Eithers.bind (ExtractCore.requireField "body" type_ fieldMap cx) (\field_body -> Eithers.bind (ExtractCore.requireField "annotation" (ExtractCore.decodeMap name term) fieldMap cx) (\field_annotation -> Right (Core.AnnotatedType {
           Core.annotatedTypeBody = field_body,
           Core.annotatedTypeAnnotation = field_annotation}))))
-      _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+      _ -> Left (Errors.DecodingError "expected a record of type hydra.core.AnnotatedType")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.core.Application
 application :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.Application
 application cx raw =
@@ -44,7 +44,7 @@ application cx raw =
         in (Eithers.bind (ExtractCore.requireField "function" term fieldMap cx) (\field_function -> Eithers.bind (ExtractCore.requireField "argument" term fieldMap cx) (\field_argument -> Right (Core.Application {
           Core.applicationFunction = field_function,
           Core.applicationArgument = field_argument}))))
-      _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+      _ -> Left (Errors.DecodingError "expected a record of type hydra.core.Application")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.core.ApplicationType
 applicationType :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.ApplicationType
 applicationType cx raw =
@@ -54,7 +54,7 @@ applicationType cx raw =
         in (Eithers.bind (ExtractCore.requireField "function" type_ fieldMap cx) (\field_function -> Eithers.bind (ExtractCore.requireField "argument" type_ fieldMap cx) (\field_argument -> Right (Core.ApplicationType {
           Core.applicationTypeFunction = field_function,
           Core.applicationTypeArgument = field_argument}))))
-      _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+      _ -> Left (Errors.DecodingError "expected a record of type hydra.core.ApplicationType")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.core.Binding
 binding :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.Binding
 binding cx raw =
@@ -65,7 +65,7 @@ binding cx raw =
           Core.bindingName = field_name,
           Core.bindingTerm = field_term,
           Core.bindingTypeScheme = field_typeScheme})))))
-      _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+      _ -> Left (Errors.DecodingError "expected a record of type hydra.core.Binding")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.core.CaseAlternative
 caseAlternative :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.CaseAlternative
 caseAlternative cx raw =
@@ -75,7 +75,7 @@ caseAlternative cx raw =
         in (Eithers.bind (ExtractCore.requireField "name" name fieldMap cx) (\field_name -> Eithers.bind (ExtractCore.requireField "handler" term fieldMap cx) (\field_handler -> Right (Core.CaseAlternative {
           Core.caseAlternativeName = field_name,
           Core.caseAlternativeHandler = field_handler}))))
-      _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+      _ -> Left (Errors.DecodingError "expected a record of type hydra.core.CaseAlternative")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.core.CaseStatement
 caseStatement :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.CaseStatement
 caseStatement cx raw =
@@ -86,7 +86,7 @@ caseStatement cx raw =
           Core.caseStatementTypeName = field_typeName,
           Core.caseStatementDefault = field_default,
           Core.caseStatementCases = field_cases})))))
-      _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+      _ -> Left (Errors.DecodingError "expected a record of type hydra.core.CaseStatement")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.core.EitherType
 eitherType :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.EitherType
 eitherType cx raw =
@@ -96,7 +96,7 @@ eitherType cx raw =
         in (Eithers.bind (ExtractCore.requireField "left" type_ fieldMap cx) (\field_left -> Eithers.bind (ExtractCore.requireField "right" type_ fieldMap cx) (\field_right -> Right (Core.EitherType {
           Core.eitherTypeLeft = field_left,
           Core.eitherTypeRight = field_right}))))
-      _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+      _ -> Left (Errors.DecodingError "expected a record of type hydra.core.EitherType")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.core.Field
 field :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.Field
 field cx raw =
@@ -106,7 +106,7 @@ field cx raw =
         in (Eithers.bind (ExtractCore.requireField "name" name fieldMap cx) (\field_name -> Eithers.bind (ExtractCore.requireField "term" term fieldMap cx) (\field_term -> Right (Core.Field {
           Core.fieldName = field_name,
           Core.fieldTerm = field_term}))))
-      _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+      _ -> Left (Errors.DecodingError "expected a record of type hydra.core.Field")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.core.FieldType
 fieldType :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.FieldType
 fieldType cx raw =
@@ -116,7 +116,7 @@ fieldType cx raw =
         in (Eithers.bind (ExtractCore.requireField "name" name fieldMap cx) (\field_name -> Eithers.bind (ExtractCore.requireField "type" type_ fieldMap cx) (\field_type -> Right (Core.FieldType {
           Core.fieldTypeName = field_name,
           Core.fieldTypeType = field_type}))))
-      _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+      _ -> Left (Errors.DecodingError "expected a record of type hydra.core.FieldType")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.core.FloatType
 floatType :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.FloatType
 floatType cx raw =
@@ -176,7 +176,7 @@ forallType cx raw =
         in (Eithers.bind (ExtractCore.requireField "parameter" name fieldMap cx) (\field_parameter -> Eithers.bind (ExtractCore.requireField "body" type_ fieldMap cx) (\field_body -> Right (Core.ForallType {
           Core.forallTypeParameter = field_parameter,
           Core.forallTypeBody = field_body}))))
-      _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+      _ -> Left (Errors.DecodingError "expected a record of type hydra.core.ForallType")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.core.FunctionType
 functionType :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.FunctionType
 functionType cx raw =
@@ -186,7 +186,7 @@ functionType cx raw =
         in (Eithers.bind (ExtractCore.requireField "domain" type_ fieldMap cx) (\field_domain -> Eithers.bind (ExtractCore.requireField "codomain" type_ fieldMap cx) (\field_codomain -> Right (Core.FunctionType {
           Core.functionTypeDomain = field_domain,
           Core.functionTypeCodomain = field_codomain}))))
-      _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+      _ -> Left (Errors.DecodingError "expected a record of type hydra.core.FunctionType")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.core.Injection
 injection :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.Injection
 injection cx raw =
@@ -196,7 +196,7 @@ injection cx raw =
         in (Eithers.bind (ExtractCore.requireField "typeName" name fieldMap cx) (\field_typeName -> Eithers.bind (ExtractCore.requireField "field" field fieldMap cx) (\field_field -> Right (Core.Injection {
           Core.injectionTypeName = field_typeName,
           Core.injectionField = field_field}))))
-      _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+      _ -> Left (Errors.DecodingError "expected a record of type hydra.core.Injection")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.core.IntegerType
 integerType :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.IntegerType
 integerType cx raw =
@@ -327,7 +327,7 @@ lambda cx raw =
           Core.lambdaParameter = field_parameter,
           Core.lambdaDomain = field_domain,
           Core.lambdaBody = field_body})))))
-      _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+      _ -> Left (Errors.DecodingError "expected a record of type hydra.core.Lambda")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.core.Let
 let_ :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.Let
 let_ cx raw =
@@ -337,7 +337,7 @@ let_ cx raw =
         in (Eithers.bind (ExtractCore.requireField "bindings" (ExtractCore.decodeList binding) fieldMap cx) (\field_bindings -> Eithers.bind (ExtractCore.requireField "body" term fieldMap cx) (\field_body -> Right (Core.Let {
           Core.letBindings = field_bindings,
           Core.letBody = field_body}))))
-      _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+      _ -> Left (Errors.DecodingError "expected a record of type hydra.core.Let")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.core.Literal
 literal :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.Literal
 literal cx raw =
@@ -413,7 +413,7 @@ mapType cx raw =
         in (Eithers.bind (ExtractCore.requireField "keys" type_ fieldMap cx) (\field_keys -> Eithers.bind (ExtractCore.requireField "values" type_ fieldMap cx) (\field_values -> Right (Core.MapType {
           Core.mapTypeKeys = field_keys,
           Core.mapTypeValues = field_values}))))
-      _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+      _ -> Left (Errors.DecodingError "expected a record of type hydra.core.MapType")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.core.Name
 name :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.Name
 name cx raw =
@@ -433,7 +433,7 @@ pairType cx raw =
         in (Eithers.bind (ExtractCore.requireField "first" type_ fieldMap cx) (\field_first -> Eithers.bind (ExtractCore.requireField "second" type_ fieldMap cx) (\field_second -> Right (Core.PairType {
           Core.pairTypeFirst = field_first,
           Core.pairTypeSecond = field_second}))))
-      _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+      _ -> Left (Errors.DecodingError "expected a record of type hydra.core.PairType")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.core.Projection
 projection :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.Projection
 projection cx raw =
@@ -443,7 +443,7 @@ projection cx raw =
         in (Eithers.bind (ExtractCore.requireField "typeName" name fieldMap cx) (\field_typeName -> Eithers.bind (ExtractCore.requireField "fieldName" name fieldMap cx) (\field_fieldName -> Right (Core.Projection {
           Core.projectionTypeName = field_typeName,
           Core.projectionFieldName = field_fieldName}))))
-      _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+      _ -> Left (Errors.DecodingError "expected a record of type hydra.core.Projection")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.core.Record
 record :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.Record
 record cx raw =
@@ -453,7 +453,7 @@ record cx raw =
         in (Eithers.bind (ExtractCore.requireField "typeName" name fieldMap cx) (\field_typeName -> Eithers.bind (ExtractCore.requireField "fields" (ExtractCore.decodeList field) fieldMap cx) (\field_fields -> Right (Core.Record {
           Core.recordTypeName = field_typeName,
           Core.recordFields = field_fields}))))
-      _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+      _ -> Left (Errors.DecodingError "expected a record of type hydra.core.Record")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.core.Term
 term :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.Term
 term cx raw =
@@ -531,7 +531,7 @@ typeApplicationTerm cx raw =
         in (Eithers.bind (ExtractCore.requireField "body" term fieldMap cx) (\field_body -> Eithers.bind (ExtractCore.requireField "type" type_ fieldMap cx) (\field_type -> Right (Core.TypeApplicationTerm {
           Core.typeApplicationTermBody = field_body,
           Core.typeApplicationTermType = field_type}))))
-      _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+      _ -> Left (Errors.DecodingError "expected a record of type hydra.core.TypeApplicationTerm")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.core.TypeClassConstraint
 typeClassConstraint :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.TypeClassConstraint
 typeClassConstraint cx raw =
@@ -557,7 +557,7 @@ typeLambda cx raw =
         in (Eithers.bind (ExtractCore.requireField "parameter" name fieldMap cx) (\field_parameter -> Eithers.bind (ExtractCore.requireField "body" term fieldMap cx) (\field_body -> Right (Core.TypeLambda {
           Core.typeLambdaParameter = field_parameter,
           Core.typeLambdaBody = field_body}))))
-      _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+      _ -> Left (Errors.DecodingError "expected a record of type hydra.core.TypeLambda")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.core.TypeScheme
 typeScheme :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.TypeScheme
 typeScheme cx raw =
@@ -568,7 +568,7 @@ typeScheme cx raw =
           Core.typeSchemeVariables = field_variables,
           Core.typeSchemeBody = field_body,
           Core.typeSchemeConstraints = field_constraints})))))
-      _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+      _ -> Left (Errors.DecodingError "expected a record of type hydra.core.TypeScheme")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.core.TypeVariableConstraints
 typeVariableConstraints :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.TypeVariableConstraints
 typeVariableConstraints cx raw =
@@ -577,7 +577,7 @@ typeVariableConstraints cx raw =
         let fieldMap = ExtractCore.toFieldMap v0
         in (Eithers.bind (ExtractCore.requireField "classes" (ExtractCore.decodeList typeClassConstraint) fieldMap cx) (\field_classes -> Right (Core.TypeVariableConstraints {
           Core.typeVariableConstraintsClasses = field_classes})))
-      _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+      _ -> Left (Errors.DecodingError "expected a record of type hydra.core.TypeVariableConstraints")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.core.WrappedTerm
 wrappedTerm :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.WrappedTerm
 wrappedTerm cx raw =
@@ -587,4 +587,4 @@ wrappedTerm cx raw =
         in (Eithers.bind (ExtractCore.requireField "typeName" name fieldMap cx) (\field_typeName -> Eithers.bind (ExtractCore.requireField "body" term fieldMap cx) (\field_body -> Right (Core.WrappedTerm {
           Core.wrappedTermTypeName = field_typeName,
           Core.wrappedTermBody = field_body}))))
-      _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+      _ -> Left (Errors.DecodingError "expected a record of type hydra.core.WrappedTerm")) (ExtractCore.stripWithDecodingError cx raw)

@@ -58,7 +58,7 @@ edge cx raw =
           Query.edgeType = field_type,
           Query.edgeOut = field_out,
           Query.edgeIn = field_in})))))
-      _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+      _ -> Left (Errors.DecodingError "expected a record of type hydra.query.Edge")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.query.GraphPattern
 graphPattern :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Query.GraphPattern
 graphPattern cx raw =
@@ -68,7 +68,7 @@ graphPattern cx raw =
         in (Eithers.bind (ExtractCore.requireField "graph" DecodeCore.name fieldMap cx) (\field_graph -> Eithers.bind (ExtractCore.requireField "patterns" (ExtractCore.decodeList pattern) fieldMap cx) (\field_patterns -> Right (Query.GraphPattern {
           Query.graphPatternGraph = field_graph,
           Query.graphPatternPatterns = field_patterns}))))
-      _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+      _ -> Left (Errors.DecodingError "expected a record of type hydra.query.GraphPattern")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.query.Node
 node :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Query.Node
 node cx raw =
@@ -114,7 +114,7 @@ pathEquation cx raw =
         in (Eithers.bind (ExtractCore.requireField "left" path fieldMap cx) (\field_left -> Eithers.bind (ExtractCore.requireField "right" path fieldMap cx) (\field_right -> Right (Query.PathEquation {
           Query.pathEquationLeft = field_left,
           Query.pathEquationRight = field_right}))))
-      _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+      _ -> Left (Errors.DecodingError "expected a record of type hydra.query.PathEquation")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.query.Pattern
 pattern :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Query.Pattern
 pattern cx raw =
@@ -148,7 +148,7 @@ patternImplication cx raw =
         in (Eithers.bind (ExtractCore.requireField "antecedent" pattern fieldMap cx) (\field_antecedent -> Eithers.bind (ExtractCore.requireField "consequent" pattern fieldMap cx) (\field_consequent -> Right (Query.PatternImplication {
           Query.patternImplicationAntecedent = field_antecedent,
           Query.patternImplicationConsequent = field_consequent}))))
-      _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+      _ -> Left (Errors.DecodingError "expected a record of type hydra.query.PatternImplication")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.query.Query
 query :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Query.Query
 query cx raw =
@@ -158,7 +158,7 @@ query cx raw =
         in (Eithers.bind (ExtractCore.requireField "variables" (ExtractCore.decodeList variable) fieldMap cx) (\field_variables -> Eithers.bind (ExtractCore.requireField "patterns" (ExtractCore.decodeList pattern) fieldMap cx) (\field_patterns -> Right (Query.Query {
           Query.queryVariables = field_variables,
           Query.queryPatterns = field_patterns}))))
-      _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+      _ -> Left (Errors.DecodingError "expected a record of type hydra.query.Query")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.query.Range
 range :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Query.Range
 range cx raw =
@@ -180,7 +180,7 @@ range cx raw =
           _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx2 raw2)) fieldMap cx) (\field_max -> Right (Query.Range {
           Query.rangeMin = field_min,
           Query.rangeMax = field_max}))))
-      _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+      _ -> Left (Errors.DecodingError "expected a record of type hydra.query.Range")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.query.RegexQuantifier
 regexQuantifier :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Query.RegexQuantifier
 regexQuantifier cx raw =
@@ -230,7 +230,7 @@ regexSequence cx raw =
         in (Eithers.bind (ExtractCore.requireField "path" path fieldMap cx) (\field_path -> Eithers.bind (ExtractCore.requireField "quantifier" regexQuantifier fieldMap cx) (\field_quantifier -> Right (Query.RegexSequence {
           Query.regexSequencePath = field_path,
           Query.regexSequenceQuantifier = field_quantifier}))))
-      _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+      _ -> Left (Errors.DecodingError "expected a record of type hydra.query.RegexSequence")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.query.Step
 step :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Query.Step
 step cx raw =
@@ -259,7 +259,7 @@ triplePattern cx raw =
           Query.triplePatternSubject = field_subject,
           Query.triplePatternPredicate = field_predicate,
           Query.triplePatternObject = field_object})))))
-      _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+      _ -> Left (Errors.DecodingError "expected a record of type hydra.query.TriplePattern")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.query.Variable
 variable :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Query.Variable
 variable cx raw =

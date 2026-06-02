@@ -73,7 +73,7 @@ moduleNames n cx raw =
         in (Eithers.bind (ExtractCore.requireField "focus" (ExtractCore.decodePair Packaging.moduleName n) fieldMap cx) (\field_focus -> Eithers.bind (ExtractCore.requireField "mapping" (ExtractCore.decodeMap Packaging.moduleName n) fieldMap cx) (\field_mapping -> Right (Util.ModuleNames {
           Util.moduleNamesFocus = field_focus,
           Util.moduleNamesMapping = field_mapping}))))
-      _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+      _ -> Left (Errors.DecodingError "expected a record of type hydra.util.ModuleNames")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.util.Precision
 precision :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Util.Precision
 precision cx raw =
@@ -112,4 +112,4 @@ qualifiedName cx raw =
           _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx2 raw2)) fieldMap cx) (\field_local -> Right (Util.QualifiedName {
           Util.qualifiedNameModuleName = field_moduleName,
           Util.qualifiedNameLocal = field_local}))))
-      _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+      _ -> Left (Errors.DecodingError "expected a record of type hydra.util.QualifiedName")) (ExtractCore.stripWithDecodingError cx raw)
