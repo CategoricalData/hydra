@@ -37,10 +37,9 @@
     #{}))    ; type_variables
 
 (defn empty-context
-  "Create an empty Context. (Updated after #368 InContext removal: builds
-  a proper hydra.context.Context, not the deleted InContext wrapper.)"
+  "Create an empty InferenceContext."
   []
-  ((r '->hydra_context_context) (list) (list) {}))
+  ((r '->hydra_typing_inference_context) 0 (list)))
 
 (defn unwrap-either
   "Unwrap an Either value, throwing on Left."
@@ -95,7 +94,7 @@
         schema-map (bootstrap-schema-map)]
     (mapv (fn [ns]
             (let [ns-str (if (string? ns) ns (:value ns))
-                  file-path (str base-path "/" ((r 'hydra_codegen_namespace_to_path) ns-str) ".json")
+                  file-path (str base-path "/" ((r 'hydra_codegen_module_name_to_path) ns-str) ".json")
                   json-val (parse-json-file file-path)
                   mod (decode-module bs-graph schema-map json-val)]
               (println (str "  Loaded: " ns-str))

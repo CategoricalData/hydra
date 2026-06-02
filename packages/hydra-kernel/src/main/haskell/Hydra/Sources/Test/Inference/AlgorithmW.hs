@@ -2,7 +2,7 @@ module Hydra.Sources.Test.Inference.AlgorithmW where
 
 -- Standard imports for term-encoded tests
 import Hydra.Kernel
-import           Hydra.Dsl.Bootstrap (unqualifiedDep)
+import           Hydra.Dsl.Bootstrap (unqualifiedDep, descriptionMetadata)
 import Hydra.Dsl.Meta.Testing                 as Testing
 import Hydra.Dsl.Meta.Terms                   as Terms
 import Hydra.Sources.Kernel.Types.All
@@ -24,23 +24,23 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = unqualifiedDep <$> ([TestGraph.ns, ModuleName "hydra.inference", ModuleName "hydra.show.core"] ++ kernelTypesModuleNames),
-            moduleDescription = (Just "Algorithm W inference tests")}
+            moduleMetadata = descriptionMetadata ((Just "Algorithm W inference tests"))}
   where
     definitions = [
       Phantoms.toDefinition allTests,
       Phantoms.toDefinition testGroupForSystemF]
 
-define :: String -> TTerm a -> TTermDefinition a
+define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModule module_
 
-allTests :: TTermDefinition TestGroup
+allTests :: TypedTermDefinition TestGroup
 allTests = define "allTests" $
   Phantoms.doc "Algorithm W test cases" $
   supergroup "Algorithm W test cases" [
     testGroupForSystemF]
 
 -- @wisnesky's original Algorithm W test cases, modified so as to normalize type variables
-testGroupForSystemF :: TTermDefinition TestGroup
+testGroupForSystemF :: TypedTermDefinition TestGroup
 testGroupForSystemF = define "testGroupForSystemF" $
   subgroup "STLC to System F" [
 
@@ -89,8 +89,8 @@ testGroupForSystemF = define "testGroupForSystemF" $
 ----  @@ ExprConst (Con "Nil")
 ----  @@ ExprConst (Con "Cons")
 ----
-----foldl :: TTerm ((b -> a -> b) -> b -> [a] -> b)
-----cons :: TTerm (a -> [a] -> [a])
+----foldl :: TypedTerm ((b -> a -> b) -> b -> [a] -> b)
+----cons :: TypedTerm (a -> [a] -> [a])
 ----
 ----[testAdt3]
 ----Untyped input:

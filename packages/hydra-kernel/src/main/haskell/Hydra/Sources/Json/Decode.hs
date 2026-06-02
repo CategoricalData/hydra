@@ -87,7 +87,7 @@ import Hydra.Json.Model
 ns :: ModuleName
 ns = ModuleName "hydra.json.decode"
 
-define :: String -> TTerm a -> TTermDefinition a
+define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModuleName ns
 
 module_ :: Module
@@ -95,7 +95,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> ([Strip.ns, moduleName Literals.module_, moduleName ExtractCore.module_] L.++ KernelTypes.kernelTypesModuleNames),
-            moduleDescription = Just "JSON decoding for Hydra terms. Converts JSON Values to Terms using Either for error handling."}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just "JSON decoding for Hydra terms. Converts JSON Values to Terms using Either for error handling.")}
   where
     definitions = [
       toDefinition decodeFloat,
@@ -112,7 +112,7 @@ module_ = Module {
 -- | Decode a JSON value to a float term
 -- Float32 and Float64 accept finite values as JSON numbers
 -- Special values (NaN, Infinity, -Infinity, -0.0) are accepted as JSON string sentinels for all float types
-decodeFloat :: TTermDefinition (FloatType -> Value -> Either String Term)
+decodeFloat :: TypedTermDefinition (FloatType -> Value -> Either String Term)
 decodeFloat = define "decodeFloat" $
   doc "Decode a JSON value to a float term. Finite values arrive as JSON numbers; NaN/Inf/-0.0 arrive as JSON string sentinels. Float32 and Float64 are symmetric." $
   "ft" ~> "value" ~>
@@ -145,7 +145,7 @@ decodeFloat = define "decodeFloat" $
 -- | Decode a JSON value to an integer term
 -- Small integers (int8, int16, int32, uint8, uint16) are decoded from JSON numbers
 -- Large integers (int64, uint32, uint64, bigint) are decoded from JSON strings
-decodeInteger :: TTermDefinition (IntegerType -> Value -> Either String Term)
+decodeInteger :: TypedTermDefinition (IntegerType -> Value -> Either String Term)
 decodeInteger = define "decodeInteger" $
   doc "Decode a JSON value to an integer term. Small ints from numbers; large ints from strings." $
   "it" ~> "value" ~>
@@ -229,7 +229,7 @@ decodeInteger = define "decodeInteger" $
 
 -- | Extract a string from a JSON value
 -- | Decode a JSON value to a literal term given a literal type
-decodeLiteral :: TTermDefinition (LiteralType -> Value -> Either String Term)
+decodeLiteral :: TypedTermDefinition (LiteralType -> Value -> Either String Term)
 decodeLiteral = define "decodeLiteral" $
   doc "Decode a JSON value to a literal term" $
   "lt" ~> "value" ~>
@@ -257,7 +257,7 @@ decodeLiteral = define "decodeLiteral" $
       Eithers.map ("s" ~> Core.termLiteral $ Core.literalString $ var "s") (var "strResult")]
 
 -- | Extract an array from a JSON value
-expectArray :: TTermDefinition (Value -> Either String [Value])
+expectArray :: TypedTermDefinition (Value -> Either String [Value])
 expectArray = define "expectArray" $
   doc "Extract an array from a JSON value" $
   "value" ~> cases _Value (var "value")
@@ -266,14 +266,14 @@ expectArray = define "expectArray" $
 
 -- | Extract an object from a JSON value
 -- | Extract a number from a JSON value
-expectNumber :: TTermDefinition (Value -> Either String Sci.Scientific)
+expectNumber :: TypedTermDefinition (Value -> Either String Sci.Scientific)
 expectNumber = define "expectNumber" $
   doc "Extract a number from a JSON value" $
   "value" ~> cases _Value (var "value")
     (Just $ left $ string "expected number") [
     _Value_number>>: "n" ~> right $ var "n"]
 -- | Extract an object from a JSON value
-expectObject :: TTermDefinition (Value -> Either String (M.Map String Value))
+expectObject :: TypedTermDefinition (Value -> Either String (M.Map String Value))
 expectObject = define "expectObject" $
   doc "Extract an object from a JSON value" $
   "value" ~> cases _Value (var "value")
@@ -282,7 +282,7 @@ expectObject = define "expectObject" $
 
 -- | Extract a number from a JSON value
 -- | Extract a string from a JSON value
-expectString :: TTermDefinition (Value -> Either String String)
+expectString :: TypedTermDefinition (Value -> Either String String)
 expectString = define "expectString" $
   doc "Extract a string from a JSON value" $
   "value" ~> cases _Value (var "value")
@@ -292,7 +292,7 @@ expectString = define "expectString" $
 -- | Extract an array from a JSON value
 -- | Decode a JSON Value to a Term given a Type and type lookup table.
 -- Returns Left with an error message for type mismatches or invalid JSON.
-fromJson :: TTermDefinition (M.Map Name Type -> Name -> Type -> Value -> Either String Term)
+fromJson :: TypedTermDefinition (M.Map Name Type -> Name -> Type -> Value -> Either String Term)
 fromJson = define "fromJson" $
   doc "Decode a JSON value to a Hydra term given a type and type name. Returns Left for type mismatches." $
   "types" ~> "tname" ~> "typ" ~> "value" ~>
@@ -531,7 +531,7 @@ fromJson = define "fromJson" $
 -- "NaN", "Infinity", "-Infinity", or "-0.0". Returns Nothing for unrecognized strings.
 -- The -0.0 case is here so that IEEE negative zero survives a round trip through JSON via
 -- the encoder's string-escape path; Scientific-backed number decoding would normalize it to 0.
-parseSpecialFloat :: TTermDefinition (String -> Maybe Double)
+parseSpecialFloat :: TypedTermDefinition (String -> Maybe Double)
 parseSpecialFloat = define "parseSpecialFloat" $
   doc "Parse an IEEE sentinel string (NaN, Infinity, -Infinity, -0.0) to a float64. Returns Nothing for unrecognized strings." $
   "s" ~>
@@ -547,7 +547,7 @@ parseSpecialFloat = define "parseSpecialFloat" $
 -- but returns a float32 value.
 -- | Parse a string as an IEEE sentinel float32. Same accepted strings as 'parseSpecialFloat',
 -- but returns a float32 value.
-parseSpecialFloat32 :: TTermDefinition (String -> Maybe Float)
+parseSpecialFloat32 :: TypedTermDefinition (String -> Maybe Float)
 parseSpecialFloat32 = define "parseSpecialFloat32" $
   doc "Parse an IEEE sentinel string (NaN, Infinity, -Infinity, -0.0) to a float32. Returns Nothing for unrecognized strings." $
   "s" ~>

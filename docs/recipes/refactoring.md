@@ -1,6 +1,6 @@
 # Refactoring the Hydra Kernel
 
-This recipe documents how to create, rename, move, or delete kernel elements (definitions) and modules (namespaces),
+This recipe documents how to create, rename, move, or delete kernel elements (definitions) and modules (module names),
 and propagate the changes across all implementations.
 
 ## Overview
@@ -80,16 +80,16 @@ module_ = Module {
       toDefinition myFunction2]
 
 -- Helper for defining elements
-define :: String -> TTerm a -> TTermDefinition a
+define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModule module_
 
 -- Define elements
-myFunction1 :: TTermDefinition (Int -> Int)
+myFunction1 :: TypedTermDefinition (Int -> Int)
 myFunction1 = define "myFunction1" $
   doc "Description of myFunction1" $
   "x" ~> var "x"
 
-myFunction2 :: TTermDefinition (String -> String)
+myFunction2 :: TypedTermDefinition (String -> String)
 myFunction2 = define "myFunction2" $
   doc "Description of myFunction2" $
   "s" ~> var "s"
@@ -163,7 +163,7 @@ cd ../heads/haskell
 In the source module, add the new definition:
 
 ```haskell
-myNewFunction :: TTermDefinition (A -> B)
+myNewFunction :: TypedTermDefinition (A -> B)
 myNewFunction = define "myNewFunction" $
   doc "Description" $
   "x" ~> someExpression (var "x")
@@ -356,11 +356,37 @@ change and must be updated.
 Java is the opposite: the local identifier (e.g., `keyClasses()`) reflects
 the new camelCase exactly, so dist/java is visibly affected.
 
+#### Multi-word renames: hand-written heads reference the symbol in several mangled forms
+
+When the rename *does* change the case-converted form (any multi-word rename, e.g.
+`namespaceOf` → `moduleNameOf` lower-snakes from `namespace_of` to `module_name_of`),
+a camelCase-only `grep` over the source will miss the hand-written head references,
+because each host spells the kernel symbol differently. A complete sweep must cover
+**all** of these surface forms, not just the camelCase one:
+
+- **Haskell sources**: camelCase, both bare and qualified (`Names.namespaceOf`); and
+  watch for the same type alias defined in *more than one* file (e.g. a per-module
+  `type HaskellNamespaces = Namespaces H.ModuleName` in both `Utils.hs` and `Coder.hs`)
+  — a unique-looking line can have duplicates.
+- **`heads/python/`**: snake_case imports and calls (`from hydra.names import namespace_to_file_path`).
+- **`heads/lisp/*/`**: the mangled `hydra_<module>_<snake_symbol>` form
+  (`hydra_codegen_namespace_to_path`, `hydra_names_namespace_to_file_path`).
+- **Native DSL sources** (`packages/hydra-{java,python}/src/main/<lang>/`): the generated
+  DSL *helper* is referenced in the host's native casing — Python uses **snake_case
+  attribute access** for the helper itself (`Util.module_names(...)`, not
+  `Util.moduleNames(...)`) but **camelCase inside `var("hydra.…")` qualified-name strings**.
+  Getting this wrong is invisible until the native self-host regen (sync Phase 5) runs.
+
+The compile gate (`stack build` of `heads/haskell`) catches the Haskell-side misses
+including duplicate aliases; the **target-language misses only surface during `/sync`**
+(Python/Lisp head import errors, and the Phase-5 native Python/Java JSON regen). Plan
+for `/sync` to flush out a second round of fixes after the source-and-`dist` patch.
+
 ---
 
 ## Moving or Renaming Modules (namespace refactoring)
 
-This is the most complex refactoring operation. A Hydra namespace like `hydra.foo` corresponds to:
+This is the most complex refactoring operation. A Hydra module name like `hydra.foo` corresponds to:
 - A Haskell source module (e.g., `Hydra/Sources/Kernel/Types/Foo.hs` or `Kernel/Terms/Foo.hs`)
 - Generated Haskell code (e.g., `Hydra/Foo.hs`)
 - Generated decoder/encoder source modules (e.g., `Hydra/Sources/Decode/Foo.hs`,
@@ -373,7 +399,7 @@ This is the most complex refactoring operation. A Hydra namespace like `hydra.fo
 ### When You Might Need This
 
 - Resolving module/package conflicts (e.g., Python can't have both `json.py` and `json/` directory)
-- Reorganizing the namespace hierarchy
+- Reorganizing the module-name hierarchy
 - Preparing for semantic versioning with a cleaner API surface
 
 ### Phase 1: Update the Source Module
@@ -386,7 +412,7 @@ This is the most complex refactoring operation. A Hydra namespace like `hydra.fo
       packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Types/Foo/Bar.hs
    ```
 
-2. **Update the namespace declaration**
+2. **Update the module-name declaration**
    ```haskell
    -- Change from:
    ns = ModuleName "hydra.foo"
@@ -416,7 +442,7 @@ This is the most complex refactoring operation. A Hydra namespace like `hydra.fo
      import qualified Hydra.Sources.Encode.Foo.Bar as EncodeFoo
      ```
 
-2. **Update files that reference the old namespace.** Use `grep` to find all references:
+2. **Update files that reference the old module name.** Use `grep` to find all references:
    ```bash
    grep -rn 'Hydra\.Foo[^.]' packages/hydra-haskell/src/main/haskell/
    grep -rn 'hydra\.foo[^.]' packages/hydra-haskell/src/main/haskell/
@@ -442,7 +468,7 @@ This is the most complex refactoring operation. A Hydra namespace like `hydra.fo
    ```
 
 5. **Move and update decoder/encoder modules.** The generated decoder and encoder modules need to be moved
-   to match the new namespace structure:
+   to match the new module-name structure:
    ```bash
    # Move source decoder/encoder modules
    mkdir -p dist/haskell/hydra-kernel/src/main/haskell/Hydra/Sources/Decode/Foo
@@ -473,7 +499,7 @@ This is the most complex refactoring operation. A Hydra namespace like `hydra.fo
      dist/haskell/hydra-kernel/src/main/haskell/Hydra/Encode/Foo/Bar.hs
    ```
 
-7. **Update namespace references in generated files.** The generated files contain namespace strings that
+7. **Update module-name references in generated files.** The generated files contain module-name strings that
    need updating:
    ```bash
    perl -i -pe 's/hydra\.foo\.Element/hydra.foo.bar.Element/g' \
@@ -493,7 +519,7 @@ This is the most complex refactoring operation. A Hydra namespace like `hydra.fo
    that should be updated:
    ```bash
    # Change "import qualified Hydra.Foo.Bar as Foo" to "import qualified Hydra.Foo.Bar as Model"
-   # in files that use the module for types (not the namespace DSL)
+   # in files that use the module for types (not the module-name DSL)
    perl -i -pe 's/import qualified Hydra\.Foo\.Bar as Foo/import qualified Hydra.Foo.Bar as Model/g' \
      dist/haskell/hydra-kernel/src/main/haskell/Hydra/Foo/Decode.hs \
      dist/haskell/hydra-kernel/src/main/haskell/Hydra/Foo/Encode.hs \
@@ -535,7 +561,7 @@ This is the most complex refactoring operation. A Hydra namespace like `hydra.fo
     writeEncoderSourceHaskell "../../dist/haskell/hydra-kernel/src/main/haskell" mainModules kernelTypesModules
     :quit
     ```
-    This regenerates the `Hydra.Sources.Decode.*` and `Hydra.Sources.Encode.*` modules with correct namespace
+    This regenerates the `Hydra.Sources.Decode.*` and `Hydra.Sources.Encode.*` modules with correct module-name
     references.
 
 12. **Clean up orphan files.** After regeneration, remove any orphan files left at the old locations:
@@ -565,7 +591,7 @@ This is the most complex refactoring operation. A Hydra namespace like `hydra.fo
      packages/hydra-ext/src/main/haskell/
    ```
 
-   Update each file to use the new namespace.
+   Update each file to use the new module name.
 
 2. **Update generated files**
    ```bash
@@ -645,7 +671,7 @@ This is the most complex refactoring operation. A Hydra namespace like `hydra.fo
 - [ ] Python tests pass (or at least don't regress)
 - [ ] Java regenerated (`./bin/sync-java.sh` in `heads/haskell`)
 
-### Files typically affected by a namespace rename
+### Files typically affected by a module-name rename
 
 For a rename from `hydra.foo` to `hydra.foo.bar`:
 
@@ -690,7 +716,7 @@ In **DSL source code** (e.g., `Hydra/Sources/Foo/Decode.hs`), you may keep a sho
 import qualified Hydra.Foo.Bar as Foo
 ```
 
-**Function reference updates.** Generated code contains function references that include the namespace, like
+**Function reference updates.** Generated code contains function references that include the module name, like
 `hydra.decode.foo.element`. When renaming, these become `hydra.decode.foo.bar.element`. Look for these
 patterns:
 - `hydra.decode.<namespace>.element` → `hydra.decode.<new-namespace>.element`
@@ -767,13 +793,14 @@ grep -rn 'OldTypeName' packages/hydra-haskell/ packages/hydra-java/ packages/hyd
   code that previously stored a bare type must now properly extract/wrap forall binders.
   Tests are essential for catching these.
 
-- **Types threaded through computations**: If the old type was passed as a `Context` or `Graph` parameter through
-  computations, every call site must be updated.
+- **Types threaded through computations**: If the old type was passed as an `InferenceContext`, `Graph`,
+  or similar parameter through computations, every call site must be updated.
   These are easy to miss because the compiler may not flag them if the new type happens to unify.
 
-- **Multiple types with similar roles**: When consolidating types like `TypeContext`, `InferenceContext`,
-  and `Graph` into a single `Graph`, different consumers may have used different subsets of the old types' fields.
-  Map each consumer's actual field usage to the new type's fields rather than doing a mechanical rename.
+- **Multiple types with similar roles**: Refactorings that move fields between threaded types
+  (e.g., #192 consolidating `TypeContext` into `Graph`, then #368 splitting inference state back out
+  into `InferenceContext`) must map each consumer's actual field usage to the new type's fields
+  rather than doing a mechanical rename.
 
 ---
 
@@ -801,7 +828,7 @@ The key insight: the patches in step 3 are temporary scaffolding.
 They only need to be correct enough for the build to succeed so that regeneration can produce the real versions.
 
 ### Silent State Pipeline Bugs
-When refactoring types that are threaded through computations (e.g., as `Context` or `Graph` parameters),
+When refactoring types that are threaded through computations (e.g., as `InferenceContext` or `Graph` parameters),
 a function may compile but produce wrong results because a field is empty or has the wrong representation. For example:
 - A graph passed through computations might have an empty `schemaTypes` map,
   causing type alias lookups to silently fail and generate wrapper classes instead of transparent aliases.
@@ -986,6 +1013,27 @@ We created `hydra.hoisting` to separate these concerns.
 
 ## Example: Changing Graph.elements from Map to List
 
+> **Note: historical case study.** This section preserves the narrative
+> of a real refactor from before 0.15. Several API surfaces it mentions
+> have since moved or been renamed:
+>
+> - **Primitive name constants**: `Hydra.Staging.Lib.Names` →
+>   `Hydra.Sources.Kernel.Lib.Names` (constants are now `qname`-defined
+>   `Name` values without the `_<ns>_<local>` prefix; the legacy
+>   `_<ns>_<local>` form lives as aliases in `Hydra.Sources.Libraries`).
+> - **Interpreter-friendly default impls**: `Hydra.Sources.Eval.Lib.*` →
+>   `Hydra.Sources.Kernel.Lib.Defaults.*` (generated under
+>   `Hydra.Lib.Defaults.*`, not `Hydra.Eval.Lib.*`).
+> - **Native Haskell impls**: `Hydra.Lib.*` → `Hydra.Haskell.Lib.*`.
+> - **Primitive registration helper**: `prim2Eval` and related `*Eval`
+>   helpers no longer exist; the same primitive now registers with
+>   plain `prim1` / `prim2` / `prim3` and pairs with a default impl
+>   declared via `toPrimitive` (or the local `primNoDef`) in the
+>   kernel `Lib/<Sub>.hs` module.
+>
+> See [Adding new primitives to Hydra](adding-primitives.md) for the
+> current step-by-step.
+
 This section documents a deep type change to the Hydra kernel: changing `Graph.elements` from `map<Name,
 Binding>` to `list<Binding>` to preserve element order in graphs.
 
@@ -1031,13 +1079,13 @@ Adding a primitive requires updates to **six files**:
 
 4. **`Hydra.Sources.Eval.Lib.Lists`** - The interpreter-friendly definition:
    ```haskell
-   find_ :: TTermDefinition (Term -> Term -> Flow s Term)
+   find_ :: TypedTermDefinition (Term -> Term -> Flow s Term)
    find_ = define "find" $ ...
    ```
 
 5. **`Hydra.Dsl.Meta.Lib.Lists`** - The DSL helper:
    ```haskell
-   find :: TTerm (a -> Bool) -> TTerm [a] -> TTerm (Maybe a)
+   find :: TypedTerm (a -> Bool) -> TypedTerm [a] -> TypedTerm (Maybe a)
    find = primitive2 _lists_find
    ```
 
@@ -1075,8 +1123,8 @@ Adding a primitive requires updates to **six files**:
    ```haskell
    -- Updated function signatures to use [Binding] instead of M.Map Name Binding
    graph :: ...
-   graphElements :: TTerm Graph -> TTerm [Binding]
-   graphWithElements :: [Binding] -> TTerm Graph
+   graphElements :: TypedTerm Graph -> TypedTerm [Binding]
+   graphWithElements :: [Binding] -> TypedTerm Graph
    ```
 
 4. **Added Lists.find primitive** (see above)

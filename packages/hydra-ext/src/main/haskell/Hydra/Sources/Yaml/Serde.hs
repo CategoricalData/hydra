@@ -3,7 +3,7 @@ module Hydra.Sources.Yaml.Serde where
 
 -- Standard imports for term-level sources outside of the kernel
 import Hydra.Kernel
-import           Hydra.Dsl.Bootstrap (unqualifiedDep)
+import           Hydra.Dsl.Bootstrap (unqualifiedDep, descriptionMetadata)
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Meta.Lib.Strings                as Strings
 import           Hydra.Dsl.Meta.Phantoms                   as Phantoms
@@ -29,7 +29,7 @@ import qualified Hydra.Yaml.Model as YM
 ns :: ModuleName
 ns = ModuleName "hydra.yaml.serde"
 
-define :: String -> TTerm a -> TTermDefinition a
+define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModuleName ns
 
 module_ :: Module
@@ -37,7 +37,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = unqualifiedDep <$> ((KernelTypes.kernelTypesModuleNames L.++ [ModuleName "hydra.yaml.model"])),
-            moduleDescription = Just "Native YAML serialization: YAML Node to String"}
+            moduleMetadata = descriptionMetadata (Just "Native YAML serialization: YAML Node to String")}
   where
     definitions = [
       toDefinition escapeSingleQuotes,
@@ -58,7 +58,7 @@ module_ = Module {
       toDefinition yamlSpecialChars]
 
 -- | Escape single quotes by doubling them
-escapeSingleQuotes :: TTermDefinition (String -> String)
+escapeSingleQuotes :: TypedTermDefinition (String -> String)
 escapeSingleQuotes = define "escapeSingleQuotes" $
   doc "Escape single quotes by doubling them" $
   "s" ~>
@@ -69,7 +69,7 @@ escapeSingleQuotes = define "escapeSingleQuotes" $
       (list [var "c"]))
 
 -- | Check if a string has leading or trailing whitespace
-hasLeadingTrailingSpace :: TTermDefinition (String -> Bool)
+hasLeadingTrailingSpace :: TypedTermDefinition (String -> Bool)
 hasLeadingTrailingSpace = define "hasLeadingTrailingSpace" $
   doc "Check if a string has leading or trailing whitespace" $
   "s" ~>
@@ -79,13 +79,13 @@ hasLeadingTrailingSpace = define "hasLeadingTrailingSpace" $
     (Maybes.fromMaybe false (Maybes.map (lambda "c" $ Chars.isSpace (var "c")) (Lists.maybeLast (var "chars"))))
 
 -- | Serialize a YAML node to a string
-hydraYamlToString :: TTermDefinition (YM.Node -> String)
+hydraYamlToString :: TypedTermDefinition (YM.Node -> String)
 hydraYamlToString = define "hydraYamlToString" $
   doc "Serialize a YAML node to a string" $
   lambda "node" $ writeNode @@ var "node"
 
 -- | Indent all lines of a string by 2 spaces
-indentString :: TTermDefinition (String -> String)
+indentString :: TypedTermDefinition (String -> String)
 indentString = define "indentString" $
   doc "Indent all lines of a string by 2 spaces" $
   "s" ~>
@@ -96,7 +96,7 @@ indentString = define "indentString" $
     (Strings.lines $ var "s")
 
 -- | Check if a list of character codes represents a decimal number (digits.digits)
-isDecimalString :: TTermDefinition ([Int] -> Bool)
+isDecimalString :: TypedTermDefinition ([Int] -> Bool)
 isDecimalString = define "isDecimalString" $
   doc "Check if character codes represent a decimal number" $
   "chars" ~>
@@ -121,7 +121,7 @@ isDecimalString = define "isDecimalString" $
     (Lists.null (Lists.filter ("c" ~> Logic.not (var "isDigitFn" @@ var "c")) (var "after")))
 
 -- | Check if a string looks like a number
-looksLikeNumber :: TTermDefinition (String -> Bool)
+looksLikeNumber :: TypedTermDefinition (String -> Bool)
 looksLikeNumber = define "looksLikeNumber" $
   doc "Check if a string looks like a number" $
   "s" ~>
@@ -148,28 +148,28 @@ looksLikeNumber = define "looksLikeNumber" $
     (Lists.uncons (var "chars"))
 
 -- | Check if a string needs quoting in YAML
-needsQuoting :: TTermDefinition (String -> Bool)
+needsQuoting :: TypedTermDefinition (String -> Bool)
 needsQuoting = define "needsQuoting" $
   doc "Check if a string needs quoting in YAML" $
   "s" ~>
   -- Empty string needs quoting
   Logic.ifElse (Strings.null $ var "s") true $
   -- Reserved words need quoting
-  Logic.ifElse (Lists.elem (var "s") (var "hydra.yaml.serde.yamlReservedWords" :: TTerm [String])) true $
+  Logic.ifElse (Lists.elem (var "s") (var "hydra.yaml.serde.yamlReservedWords" :: TypedTerm [String])) true $
   -- Looks like a number needs quoting
   Logic.ifElse (looksLikeNumber @@ var "s") true $
   -- Contains special characters needs quoting
   "chars" <~ Strings.toList (var "s") $
-  "specials" <~ Strings.toList (var "hydra.yaml.serde.yamlSpecialChars" :: TTerm String) $
+  "specials" <~ Strings.toList (var "hydra.yaml.serde.yamlSpecialChars" :: TypedTerm String) $
   "hasSpecial" <~ Logic.not (Lists.null (Lists.filter
-    ("c" ~> Lists.elem (var "c" :: TTerm Int) (var "specials"))
+    ("c" ~> Lists.elem (var "c" :: TypedTerm Int) (var "specials"))
     (var "chars"))) $
   Logic.ifElse (var "hasSpecial") true $
   -- Leading or trailing space needs quoting
   hasLeadingTrailingSpace @@ var "s"
 
 -- | Write a mapping entry in block style (key: value\n)
-writeMappingEntry :: TTermDefinition ((YM.Node, YM.Node) -> String)
+writeMappingEntry :: TypedTermDefinition ((YM.Node, YM.Node) -> String)
 writeMappingEntry = define "writeMappingEntry" $
   doc "Write a mapping entry in block style" $
   "entry" ~>
@@ -187,7 +187,7 @@ writeMappingEntry = define "writeMappingEntry" $
         (Strings.cat $ list [writeNodeInline @@ var "key", string ":\n", indentString @@ (writeNode @@ var "value")])]
 
 -- | Write a mapping entry for the first item of a sequence element
-writeMappingEntryInline :: TTermDefinition ((YM.Node, YM.Node) -> String)
+writeMappingEntryInline :: TypedTermDefinition ((YM.Node, YM.Node) -> String)
 writeMappingEntryInline = define "writeMappingEntryInline" $
   doc "Write a mapping entry for the first item of a sequence element" $
   "entry" ~>
@@ -205,7 +205,7 @@ writeMappingEntryInline = define "writeMappingEntryInline" $
         (Strings.cat $ list [writeNodeInline @@ var "key", string ":\n", indentString @@ (writeNode @@ var "value")])]
 
 -- | Write a YAML node as a top-level value (block style)
-writeNode :: TTermDefinition (YM.Node -> String)
+writeNode :: TypedTermDefinition (YM.Node -> String)
 writeNode = define "writeNode" $
   doc "Write a YAML node as a top-level value in block style" $
   "node" ~> cases YM._Node (var "node") Nothing [
@@ -220,7 +220,7 @@ writeNode = define "writeNode" $
         (Strings.cat $ Lists.map (lambda "e" $ writeMappingEntry @@ var "e") (Maps.toList $ var "m"))]
 
 -- | Write a node inline (for use as a mapping key)
-writeNodeInline :: TTermDefinition (YM.Node -> String)
+writeNodeInline :: TypedTermDefinition (YM.Node -> String)
 writeNodeInline = define "writeNodeInline" $
   doc "Write a node inline (for use as a mapping key)" $
   "node" ~> cases YM._Node (var "node") Nothing [
@@ -242,7 +242,7 @@ writeNodeInline = define "writeNodeInline" $
         string "}"]]
 
 -- | Write a scalar value
-writeScalar :: TTermDefinition (YM.Scalar -> String)
+writeScalar :: TypedTermDefinition (YM.Scalar -> String)
 writeScalar = define "writeScalar" $
   doc "Write a scalar value" $
   "s" ~> cases YM._Scalar (var "s") Nothing [
@@ -254,7 +254,7 @@ writeScalar = define "writeScalar" $
     YM._Scalar_str>>: "str" ~> writeString @@ var "str"]
 
 -- | Write a sequence item in block style
-writeSequenceItem :: TTermDefinition (YM.Node -> String)
+writeSequenceItem :: TypedTermDefinition (YM.Node -> String)
 writeSequenceItem = define "writeSequenceItem" $
   doc "Write a sequence item in block style" $
   "node" ~> cases YM._Node (var "node") Nothing [
@@ -277,7 +277,7 @@ writeSequenceItem = define "writeSequenceItem" $
            (Lists.uncons (var "entries")))]
 
 -- | Write a string value, quoting if necessary
-writeString :: TTermDefinition (String -> String)
+writeString :: TypedTermDefinition (String -> String)
 writeString = define "writeString" $
   doc "Write a string value, quoting if necessary" $
   "s" ~>
@@ -286,7 +286,7 @@ writeString = define "writeString" $
     (var "s")
 
 -- | YAML reserved words that need quoting
-yamlReservedWords :: TTermDefinition [String]
+yamlReservedWords :: TypedTermDefinition [String]
 yamlReservedWords = define "yamlReservedWords" $
   doc "YAML reserved words that need quoting" $
   list [
@@ -298,7 +298,7 @@ yamlReservedWords = define "yamlReservedWords" $
     string "YES", string "NO", string "ON", string "OFF"]
 
 -- | YAML special characters that trigger quoting
-yamlSpecialChars :: TTermDefinition String
+yamlSpecialChars :: TypedTermDefinition String
 yamlSpecialChars = define "yamlSpecialChars" $
   doc "YAML special characters that trigger quoting" $
   string ": {}[]#,&*!|>'\"%@`"

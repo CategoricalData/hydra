@@ -130,11 +130,11 @@ Check that term-level constructors exist in the DSL:
 
 ```haskell
 -- Example: Either constructors (already present)
-left :: TTerm a -> TTerm (Either a b)
-left (TTerm term) = TTerm $ Terms.left term
+left :: TypedTerm a -> TypedTerm (Either a b)
+left (TypedTerm term) = TypedTerm $ Terms.left term
 
-right :: TTerm b -> TTerm (Either a b)
-right (TTerm term) = TTerm $ Terms.right term
+right :: TypedTerm b -> TypedTerm (Either a b)
+right (TypedTerm term) = TypedTerm $ Terms.right term
 ```
 
 If missing, add them following existing patterns like `just` and `nothing` for `Maybe`.
@@ -182,7 +182,7 @@ Add DSL helpers for the variant metadata:
 
 1. **Add case to `termVariant` pattern match:**
 ```haskell
-termVariant :: TermVariant -> TTerm TermVariant
+termVariant :: TermVariant -> TypedTerm TermVariant
 termVariant v = unitVariant _TermVariant $ case v of
   TermVariantAnnotated -> _TermVariant_annotated
   TermVariantApplication -> _TermVariant_application
@@ -193,18 +193,18 @@ termVariant v = unitVariant _TermVariant $ case v of
 
 2. **Add helper function:**
 ```haskell
-termVariantEither :: TTerm TermVariant
+termVariantEither :: TypedTerm TermVariant
 termVariantEither = unitVariant _TermVariant _TermVariant_either
 ```
 
 Place in alphabetical order among the other `termVariantX` helpers.
 
-#### 2.5.3: Update Meta Enum Definitions (CRITICAL!)
+#### 2.5.3: Update Variant Enum Definitions (CRITICAL!)
 
-**File:** `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Types/Meta.hs`
+**File:** `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Types/Variants.hs`
 
 > **⚠️ CRITICAL:** You MUST add your new constructor to the TermVariant and TypeVariant enum definitions
-> in the Meta module. This is the source of the "No such field: X" error during code generation.
+> in the Variants module (module name `hydra.variants`). This is the source of the "No such field: X" error during code generation.
 
 Add to the `TermVariant` enum (around line 70-91):
 ```haskell
@@ -234,9 +234,9 @@ def "TypeVariant" $
 ```
 
 **Why this is necessary:** The `Variants` module uses these enums to map between Term/Type constructors
-and their metadata. The enums are defined in the `hydra.meta` module
+and their metadata. The enums are defined in the `hydra.variants` module
 (in the source file
-[`Hydra/Sources/Kernel/Types/Meta.hs`](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Types/Meta.hs)),
+[`Hydra/Sources/Kernel/Types/Variants.hs`](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Types/Variants.hs)),
 which provides metadata and reflection types that describe the structure of Hydra core types and terms.
 Without adding your constructor here, code generation will fail with "No such field: X".
 
@@ -254,7 +254,7 @@ Without adding your constructor here, code generation will fail with "No such fi
 > Use descriptive names like `pairFst`, `pairSnd`, `listHead`, etc.
 
 ```haskell
-inferTypeOfEitherDef :: TTermDefinition (InferenceContext -> Prelude.Either Term Term -> Either Error InferenceResult)
+inferTypeOfEitherDef :: TypedTermDefinition (InferenceContext -> Prelude.Either Term Term -> Either Error InferenceResult)
 inferTypeOfEitherDef = define "inferTypeOfEither" $
   doc "Infer the type of an either value" $
   "cx" ~> "e" ~>
@@ -326,7 +326,7 @@ import qualified Hydra.Dsl.Meta.Lib.Eithers as Eithers
 Type checking reconstructs types from terms that already have type applications (added during inference).
 
 ```haskell
-typeOfEitherDef :: TTermDefinition (TypeContext -> [Type] -> Prelude.Either Term Term -> Either Error Type)
+typeOfEitherDef :: TypedTermDefinition (TypeContext -> [Type] -> Prelude.Either Term Term -> Either Error Type)
 typeOfEitherDef = define "typeOfEither" $
   doc "Reconstruct the type of an either value" $
   "tx" ~> "typeArgs" ~> "et" ~>
@@ -492,7 +492,7 @@ Add the inference function. Translate from the DSL source to plain Haskell:
 
 ```haskell
 -- Around line 570
-inferTypeOfEither :: (Context.Context -> Graph.Graph -> Either Core.Term Core.Term -> Either Errors.Error Typing_.InferenceResult)
+inferTypeOfEither :: (Typing_.InferenceContext -> Graph.Graph -> Either Core.Term Core.Term -> Either Errors.Error Typing_.InferenceResult)
 inferTypeOfEither cx e = ((\x -> case x of
     Left l -> (Eithers.bind (inferTypeOfTerm cx l "either left value") (\r1 ->
       let leftType = (Typing_.inferenceResultType r1)
@@ -526,7 +526,7 @@ Core.TermEither v1 -> (inferTypeOfEither cx v1)
 Similarly, add the type checking function. This requires exact type arguments:
 
 ```haskell
-typeOfEither :: (Context.Context -> Graph.Graph -> [Core.Type] -> Either Core.Term Core.Term -> Either Errors.Error (Core.Type, Context.Context))
+typeOfEither :: (Typing_.InferenceContext -> Graph.Graph -> [Core.Type] -> Either Core.Term Core.Term -> Either Errors.Error (Core.Type, Typing_.InferenceContext))
 typeOfEither tx typeArgs et = -- Implementation similar to Checking.hs source
 ```
 
@@ -672,7 +672,7 @@ stack exec ghci
 
 This regenerates:
 - `dist/python/hydra-kernel/src/main/python/hydra/core.py` (adds `TermEither` constructor)
-- `dist/python/hydra-kernel/src/main/python/hydra/meta.py` (adds variant enums and type classes)
+- `dist/python/hydra-kernel/src/main/python/hydra/variants.py` (adds variant enums and type classes)
 - `dist/python/hydra-kernel/src/main/python/hydra/util.py` (adds utility types)
 - All other Hydra kernel modules in Python
 
@@ -690,11 +690,11 @@ Each language coder needs to know how to encode/decode the new types in the targ
 ```bash
 # Python (run from the worktree root, dist paths are relative)
 python3 -m py_compile dist/python/hydra-kernel/src/main/python/hydra/core.py
-python3 -m py_compile dist/python/hydra-kernel/src/main/python/hydra/meta.py
+python3 -m py_compile dist/python/hydra-kernel/src/main/python/hydra/variants.py
 python3 -m py_compile dist/python/hydra-kernel/src/main/python/hydra/util.py
 
-# Java (run from the worktree root)
-./gradlew :hydra-java:compileJava
+# Java (from heads/java)
+(cd heads/java && ./gradlew :hydra-java:compileJava)
 
 # Scala (if applicable)
 cd packages/hydra-scala
@@ -717,8 +717,8 @@ Add test cases in the "Type checking" describe block. Use helper functions for c
 
 ```haskell
 -- Helper functions (already defined in the file)
-tyapps :: TTerm a -> [Type] -> TTerm b          -- Multiple type applications
-tylams :: [Name] -> TTerm a -> TTerm b          -- Multiple type abstractions
+tyapps :: TypedTerm a -> [Type] -> TypedTerm b          -- Multiple type applications
+tylams :: [Name] -> TypedTerm a -> TypedTerm b          -- Multiple type abstractions
 forAll :: Name -> Type -> Type                   -- Polymorphic type quantification
 ```
 
@@ -796,7 +796,7 @@ stack test
 
 | Error | Cause | Solution |
 |-------|-------|----------|
-| `No such field: pair` during code generation | Missing from TermVariant/TypeVariant enums in Meta module | **CRITICAL:** Add to `TermVariant` and `TypeVariant` enum definitions in `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Types/Meta.hs` |
+| `No such field: pair` during code generation | Missing from TermVariant/TypeVariant enums in the Variants module | **CRITICAL:** Add to `TermVariant` and `TypeVariant` enum definitions in `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Types/Variants.hs` |
 | `Variable not in scope: fst` compilation error | Variable name clashes with Prelude function | Use descriptive names: `pairFst`, `pairSnd`, not `fst`, `snd` |
 | `No such field: either` | Term union missing the constructor in Core schema | Add to `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Types/Core.hs` |
 | `Variable not bound to type: hydra.inference.inferTypeOfX` | Function not registered in module exports | Add `toDefinition inferTypeOfXDef` to `definitions` list |
@@ -856,7 +856,7 @@ stack test
   - [ ] Add to Type union (if applicable)
   - [ ] Add supporting type definitions
 
-- [ ] `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Types/Meta.hs` (**CRITICAL!**)
+- [ ] `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Types/Variants.hs` (**CRITICAL!**)
   - [ ] Add to `TermVariant` enum definition
   - [ ] Add to `TypeVariant` enum definition (if applicable)
 
@@ -921,7 +921,7 @@ stack test
 - [ ] Regenerate Python code
   - [ ] Run `bin/sync-python.sh` from the worktree root
   - [ ] Verify `dist/python/hydra-kernel/src/main/python/hydra/core.py`
-  - [ ] Verify `dist/python/hydra-kernel/src/main/python/hydra/meta.py`
+  - [ ] Verify `dist/python/hydra-kernel/src/main/python/hydra/variants.py`
   - [ ] Verify `dist/python/hydra-kernel/src/main/python/hydra/util.py`
   - [ ] Compile Python modules
 
@@ -1039,10 +1039,10 @@ The DSL helper module provides functions used by all `Hydra.Sources.*` files to 
 
 ```haskell
 -- Before:
-typeContext :: TTerm (M.Map Name Type) -> TTerm (M.Map Name Term) -> TTerm (S.Set Name) -> TTerm (S.Set Name) -> TTerm InferenceContext -> TTerm TypeContext
+typeContext :: TypedTerm (M.Map Name Type) -> TypedTerm (M.Map Name Term) -> TypedTerm (S.Set Name) -> TypedTerm (S.Set Name) -> TypedTerm InferenceContext -> TypedTerm TypeContext
 
 -- After:
-typeContext :: TTerm (M.Map Name Type) -> TTerm (M.Map Name Term) -> TTerm (S.Set Name) -> TTerm (S.Set Name) -> TTerm (S.Set Name) -> TTerm InferenceContext -> TTerm TypeContext
+typeContext :: TypedTerm (M.Map Name Type) -> TypedTerm (M.Map Name Term) -> TypedTerm (S.Set Name) -> TypedTerm (S.Set Name) -> TypedTerm (S.Set Name) -> TypedTerm InferenceContext -> TypedTerm TypeContext
 typeContext types metadata typeVariables lambdaVariables letVariables inferenceContext = Phantoms.record _TypeContext [
   _TypeContext_types>>: types,
   _TypeContext_metadata>>: metadata,
@@ -1055,14 +1055,14 @@ typeContext types metadata typeVariables lambdaVariables letVariables inferenceC
 **2.2: Add the accessor function:**
 
 ```haskell
-typeContextLetVariables :: TTerm TypeContext -> TTerm (S.Set Name)
+typeContextLetVariables :: TypedTerm TypeContext -> TypedTerm (S.Set Name)
 typeContextLetVariables tc = Phantoms.project _TypeContext _TypeContext_letVariables @@ tc
 ```
 
 **2.3: Add the "with" helper function:**
 
 ```haskell
-typeContextWithLetVariables :: TTerm TypeContext -> TTerm (S.Set Name) -> TTerm TypeContext
+typeContextWithLetVariables :: TypedTerm TypeContext -> TypedTerm (S.Set Name) -> TypedTerm TypeContext
 typeContextWithLetVariables ctx letVariables = typeContext
   (Hydra.Dsl.Meta.Typing.typeContextTypes ctx)
   (Hydra.Dsl.Meta.Typing.typeContextMetadata ctx)
@@ -1075,7 +1075,7 @@ typeContextWithLetVariables ctx letVariables = typeContext
 **2.4: Update ALL existing "with" helpers** to pass through the new field:
 
 ```haskell
-typeContextWithTypes :: TTerm TypeContext -> TTerm (M.Map Name Type) -> TTerm TypeContext
+typeContextWithTypes :: TypedTerm TypeContext -> TypedTerm (M.Map Name Type) -> TypedTerm TypeContext
 typeContextWithTypes ctx types = typeContext
   types
   (Hydra.Dsl.Meta.Typing.typeContextMetadata ctx)
@@ -1462,7 +1462,7 @@ The deltas worth knowing:
    non-empty side, or `Lists.concat2 listA listB` semantics from the dist
    side) now produce host-level Haskell `++`. Many DSL source files import
    `Prelude hiding ((++))` so the DSL's own polymorphic `(++)` (defined for
-   `TTerm String`) takes precedence. Use `L.++` from `Data.List` (and add the
+   `TypedTerm String`) takes precedence. Use `L.++` from `Data.List` (and add the
    `import qualified Data.List as L` if missing). Some files import Phantoms
    *unqualified* and don't hide Prelude `(++)`, in which case the operator is
    ambiguous — qualify as `Prelude.++`. Both cases produce deterministic GHC
@@ -1471,7 +1471,7 @@ The deltas worth knowing:
 3. **Local function-name clashes with the merged kernel field.** A package
    may already define a top-level helper using one of the names you're
    collapsing into. Concrete case: `Hydra.Sources.Coq.Utils.moduleDependencies
-   :: TTermDefinition (Module -> [String])` (a per-element helper) shadowed
+   :: TypedTermDefinition (Module -> [String])` (a per-element helper) shadowed
    the new kernel field `moduleDependencies :: [ModuleDependency]`. Renamed to
    `moduleDependencyNames` and updated 2 callers. Search for top-level
    `<newField>` definitions across all hosts before declaring the merge done.

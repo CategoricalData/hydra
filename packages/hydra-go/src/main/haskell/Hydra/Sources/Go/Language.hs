@@ -78,7 +78,7 @@ import qualified Data.Set                                  as S
 import qualified Data.Maybe                                as Y
 
 
-define :: String -> TTerm a -> TTermDefinition a
+define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModule module_
 
 module_ :: Module
@@ -86,8 +86,8 @@ module_ = Module {
             moduleName = (ModuleName "hydra.go.language"),
             moduleDefinitions = [toDefinition goLanguage, toDefinition goReservedWords],
             moduleDependencies = Bootstrap.unqualifiedDep <$> ([Lexical.ns] L.++ KernelTypes.kernelTypesModuleNames),
-            moduleDescription = Just "Language constraints and reserved words for Go 1.22+"}
-goLanguage :: TTermDefinition Language
+            moduleMetadata = Bootstrap.descriptionMetadata (Just "Language constraints and reserved words for Go 1.22+")}
+goLanguage :: TypedTermDefinition Language
 goLanguage = define "goLanguage" $
     doc "Language constraints for Go 1.22+" $ lets [
     -- Go supports record projection, union elimination via type switch, and wrap/unwrap
@@ -172,7 +172,7 @@ goLanguage = define "goLanguage" $
         (var "typeVariants")
         (var "typePredicate"))
 
-goReservedWords :: TTermDefinition (S.Set String)
+goReservedWords :: TypedTermDefinition (S.Set String)
 goReservedWords = define "goReservedWords" $
   doc "A set of reserved words in Go" $
   lets [

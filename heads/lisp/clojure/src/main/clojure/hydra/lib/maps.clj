@@ -71,9 +71,13 @@
                (to-hash-map m)))))
 
 ;; find_with_default :: v -> k -> Map k v -> v
+;; Thunk-aware: the default is lazy (#391); if def_ is a zero-arg fn, only call it on a miss.
 (def hydra_lib_maps_find_with_default
   (fn [def_] (fn [k] (fn [m]
-    (get (to-hash-map m) k def_)))))
+    (let [hm (to-hash-map m)]
+      (if (contains? hm k)
+        (get hm k)
+        (if (fn? def_) (def_) def_)))))))
 
 ;; from_list :: [Pair k v] -> Map k v
 (def hydra_lib_maps_from_list

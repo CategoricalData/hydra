@@ -3,6 +3,7 @@
     {
       "term": {
         "name": "hydra.wasm.language.wasmLanguage",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.coders.Language"}}, "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Language constraints for WebAssembly"}}}],
@@ -131,11 +132,11 @@
                                 "name": "types",
                                 "term": {"typeApplication": {"body": {"variable": "typePredicate"}, "type": {"variable": "hydra.core.Type"}}}}],
                             "typeName": "hydra.coders.LanguageConstraints"}}}],
-                    "typeName": "hydra.coders.Language"}}}}}},
-        "typeScheme": {"body": {"variable": "hydra.coders.Language"}, "variables": []}}},
+                    "typeName": "hydra.coders.Language"}}}}}}}},
     {
       "term": {
         "name": "hydra.wasm.language.wasmReservedWords",
+        "signature": {"parameters": [], "result": {"type": {"set": {"literal": {"string": {}}}}}, "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "A set of reserved words in WebAssembly text format"}}}],
@@ -223,14 +224,12 @@
                       "application": {
                         "argument": {"list": [{"variable": "keywords"}, {"variable": "valueTypes"}, {"variable": "instructionPrefixes"}]},
                         "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.concat"}, "type": {"literal": {"string": {}}}}}}},
-                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.sets.fromList"}, "type": {"literal": {"string": {}}}}}}}}}}},
-        "typeScheme": {"body": {"set": {"literal": {"string": {}}}}, "variables": []}}}],
+                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.sets.fromList"}, "type": {"literal": {"string": {}}}}}}}}}}}}}],
   "dependencies": [
     {"module": "hydra.lexical"},
     {"module": "hydra.paths"},
     {"module": "hydra.ast"},
     {"module": "hydra.coders"},
-    {"module": "hydra.context"},
     {"module": "hydra.core"},
     {"module": "hydra.error.checking"},
     {"module": "hydra.error.core"},
@@ -240,15 +239,18 @@
     {"module": "hydra.json.model"},
     {"module": "hydra.packaging"},
     {"module": "hydra.parsing"},
-    {"module": "hydra.phantoms"},
     {"module": "hydra.query"},
     {"module": "hydra.relational"},
     {"module": "hydra.tabular"},
     {"module": "hydra.testing"},
     {"module": "hydra.topology"},
+    {"module": "hydra.typed"},
     {"module": "hydra.typing"},
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "description": "Language constraints and reserved words for WebAssembly (WAT text format)",
+  "metadata": {
+    "comments": [],
+    "description": "Language constraints and reserved words for WebAssembly (WAT text format)",
+    "seeAlso": []},
   "name": "hydra.wasm.language"}

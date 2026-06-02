@@ -2,7 +2,7 @@ module Hydra.Sources.Test.Inference.NominalTypes where
 
 -- Standard imports for term-encoded tests
 import Hydra.Kernel
-import           Hydra.Dsl.Bootstrap (unqualifiedDep)
+import           Hydra.Dsl.Bootstrap (unqualifiedDep, descriptionMetadata)
 import Hydra.Dsl.Meta.Testing                 as Testing
 import Hydra.Dsl.Meta.Terms                   as Terms
 import Hydra.Sources.Kernel.Types.All
@@ -26,7 +26,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = unqualifiedDep <$> ([TestGraph.ns, ModuleName "hydra.inference", ModuleName "hydra.show.core", ModuleName "hydra.test.testTerms", ModuleName "hydra.test.testTypes"] ++ kernelTypesModuleNames),
-            moduleDescription = (Just "Inference tests for nominal types")}
+            moduleMetadata = descriptionMetadata ((Just "Inference tests for nominal types"))}
   where
     definitions = [
       Phantoms.toDefinition allTests,
@@ -36,10 +36,10 @@ module_ = Module {
       Phantoms.toDefinition testGroupForVariants,
       Phantoms.toDefinition testGroupForWrappers]
 
-define :: String -> TTerm a -> TTermDefinition a
+define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModule module_
 
-allTests :: TTermDefinition TestGroup
+allTests :: TypedTermDefinition TestGroup
 allTests = define "allTests" $
   Phantoms.doc "Nominal type tests" $
   supergroup "Nominal terms" [
@@ -49,7 +49,7 @@ allTests = define "allTests" $
     testGroupForVariants,
     testGroupForWrappers]
 
-testGroupForCaseStatements :: TTermDefinition TestGroup
+testGroupForCaseStatements :: TypedTermDefinition TestGroup
 testGroupForCaseStatements = define "testGroupForCaseStatements" $
   subgroup "Case statements" [
     expectMono 1 [tag_disabledForMinimalInference]
@@ -64,7 +64,7 @@ testGroupForCaseStatements = define "testGroupForCaseStatements" $
         "unit">: constant false])
       (T.function (Core.typeVariable $ TestTypes.testTypeUnionMonomorphicName) T.boolean)]
 
-testGroupForProjections :: TTermDefinition TestGroup
+testGroupForProjections :: TypedTermDefinition TestGroup
 testGroupForProjections = define "testGroupForProjections" $
   supergroup "Projections" [
     subgroup "Record eliminations" [
@@ -80,7 +80,7 @@ testGroupForProjections = define "testGroupForProjections" $
         (primitive _pairs_second @@ pair (int32 42) (string "foo"))
         T.string]]
 
-testGroupForRecords :: TTermDefinition TestGroup
+testGroupForRecords :: TypedTermDefinition TestGroup
 testGroupForRecords = define "testGroupForRecords" $
   supergroup "Records" [
 
@@ -162,7 +162,7 @@ testGroupForRecords = define "testGroupForRecords" $
             "tail">: optional nothing]])
         ["t0"] (T.function (T.var "t0") (T.apply (Core.typeVariable $ TestTypes.testTypeBuddyListAName) (T.var "t0")))]]
 
-testGroupForVariants :: TTermDefinition TestGroup
+testGroupForVariants :: TypedTermDefinition TestGroup
 testGroupForVariants = define "testGroupForVariants" $
   supergroup "Variant terms" [
 
@@ -191,7 +191,7 @@ testGroupForVariants = define "testGroupForVariants" $
           $ inject (TestTypes.testTypeUnionPolymorphicRecursiveName) "other" $ var "other")
         (T.apply (Core.typeVariable (TestTypes.testTypeUnionPolymorphicRecursiveName)) T.int32)]]
 
-testGroupForWrappers :: TTermDefinition TestGroup
+testGroupForWrappers :: TypedTermDefinition TestGroup
 testGroupForWrappers = define "testGroupForWrappers" $
   supergroup "Wrapper introductions and eliminations" [
 

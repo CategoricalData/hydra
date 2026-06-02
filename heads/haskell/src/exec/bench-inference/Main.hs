@@ -72,7 +72,7 @@ makeSyntheticModule benchMod n =
         moduleName = targetNs,
         moduleDefinitions = renamed,
         moduleDependencies = unqualifiedDep (moduleName benchMod) : moduleDependencies benchMod,
-        moduleDescription = moduleDescription benchMod
+        moduleMetadata = moduleMetadata benchMod
       }
   where
     targetNs = ModuleName "z.bench.scaling"
@@ -94,7 +94,7 @@ timeInference :: [Module] -> Module -> IO (Double, Bool, String)
 timeInference universe target = do
     t0 <- Clock.getCurrentTime
     let result = CodeGeneration.inferModulesGiven
-                   (Context [] [] M.empty)
+                   (InferenceContext { inferenceContextFreshTypeVariableCount = 0, inferenceContextTrace = [] })
                    bootstrapGraph
                    (universe ++ [target])
                    [target]

@@ -122,7 +122,7 @@
     (nreverse result)))
 
 (defun namespace-to-path (ns)
-  (funcall (symbol-value 'hydra_codegen_namespace_to_path) ns))
+  (funcall (symbol-value 'hydra_codegen_module_name_to_path) ns))
 
 (defun load-module-from-json (bs-graph schema-map ns-str json-dir)
   (let* ((file-path (format nil "~A/~A.json" json-dir (namespace-to-path ns-str)))
@@ -208,7 +208,7 @@
 (defun time-inference (universe target)
   "Time hydra_codegen_infer_modules_given universe+target target. Returns (elapsed ok err)."
   (let* ((bs-graph (bootstrap-graph))
-         (cx (funcall 'make-hydra_context_context nil nil nil))
+         (cx (funcall 'make-hydra_typing_inference_context 0 nil))
          (universe-plus (append universe (list target)))
          (targets (list target))
          (t0 (get-internal-real-time))

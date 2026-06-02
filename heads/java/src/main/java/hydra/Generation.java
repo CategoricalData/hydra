@@ -7,6 +7,7 @@ import hydra.core.Binding;
 import hydra.core.Name;
 import hydra.core.Term;
 import hydra.core.TypeScheme;
+import hydra.typing.TermSignature;
 
 import hydra.graph.Graph;
 import hydra.graph.Primitive;
@@ -326,7 +327,7 @@ public class Generation {
         List<Module> modules = new ArrayList<>();
         for (ModuleName ns : namespaces) {
             String filePath = basePath + File.separator
-                    + Codegen.namespaceToPath(ns) + ".json";
+                    + Codegen.moduleNameToPath(ns) + ".json";
             Value jsonVal = parseJsonFile(filePath);
             Module mod = decodeModuleFromJson(bsGraph, schemaMap, jsonVal);
             System.out.println("  Loaded: " + ns.value);
@@ -359,7 +360,7 @@ public class Generation {
 
     /**
      * Read the manifest.json file from a JSON base directory and extract a named
-     * field (e.g. "kernelModules", "mainModules", "testModules") as a list of Namespaces.
+     * field (e.g. "kernelModules", "mainModules", "testModules") as a list of module names.
      */
     public static List<ModuleName> readManifestField(String basePath, String fieldName) throws IOException {
         String manifestPath = basePath + File.separator + "manifest.json";
@@ -377,7 +378,7 @@ public class Generation {
      * Generate source files and write them to disk.
      */
     public static void generateSources(
-            Function<Module, Function<List<Definition>, Function<hydra.context.Context, Function<Graph, Either<hydra.errors.Error_, Map<String, String>>>>>> coder,
+            Function<Module, Function<List<Definition>, Function<hydra.typing.InferenceContext, Function<Graph, Either<hydra.errors.Error_, Map<String, String>>>>>> coder,
             hydra.coders.Language language,
             boolean doInfer,
             boolean doExpand,
@@ -387,8 +388,7 @@ public class Generation {
             List<Module> universe,
             List<Module> modulesToGenerate) {
         Graph bsGraph = bootstrapGraph();
-        hydra.context.Context cx = new hydra.context.Context(
-                new ArrayList<>(), new ArrayList<>(), new HashMap<>());
+        hydra.typing.InferenceContext cx = new hydra.typing.InferenceContext(0, new java.util.ArrayList<>());
         Either<hydra.errors.Error_, List<Pair<String, String>>> result =
                 Codegen.generateSourceFiles(coder, language,
                         doInfer, doExpand, doHoistCase, doHoistPoly,
@@ -439,12 +439,17 @@ public class Generation {
 
     /**
      * Generate TypeScript source files from modules.
+     *
+     * doHoistCaseStatements=true mirrors Python's TS-host setting and the
+     * per-target dispatch in heads/typescript/.../bootstrap.ts. Hoisting
+     * pulls cases out of inline IIFEs into top-level helpers, saving
+     * stack frames when the TS runtime walks deeply-nested terms.
      */
     public static void writeTypeScript(String basePath, List<Module> universe, List<Module> mods) {
         generateSources(
                 mod -> defs -> cx -> g -> hydra.typeScript.Coder.moduleToTypeScript(mod, defs, cx, g),
                 hydra.typeScript.Language.typeScriptLanguage(),
-                false, true, false, false,
+                false, true, true, false,
                 basePath, universe, mods);
     }
 
@@ -500,7 +505,7 @@ public class Generation {
                     String code = hydra.Serialization.printExpr(
                             hydra.Serialization.parenthesize(
                                     hydra.lisp.Serde.programToExpr(program)));
-                    String filePath = hydra.Names.namespaceToFilePath(
+                    String filePath = hydra.Names.moduleNameToFilePath(
                             cc, new hydra.packaging.FileExtension(fileExt), mod.name);
                     Map<String, String> fileMap = new java.util.TreeMap<>();
                     fileMap.put(filePath, code);
@@ -512,10 +517,10 @@ public class Generation {
     }
 
     /**
-     * Convert a namespace to a file path.
+     * Convert a module name to a file path.
      */
-    public static String namespaceToPath(ModuleName ns) {
-        return Codegen.namespaceToPath(ns);
+    public static String moduleNameToPath(ModuleName ns) {
+        return Codegen.moduleNameToPath(ns);
     }
 
     /**
@@ -533,17 +538,21 @@ public class Generation {
                 @Override public Void visit(Definition.Term td) {
                     TermDefinition t = td.value;
                     Term newTerm = Strip.removeTypesFromTerm(t.term);
-                    Maybe<TypeScheme> newType = Maybe.nothing();
-                    stripped.add(new Definition.Term(new TermDefinition(t.name, newTerm, newType)));
+                    Maybe<TermSignature> newType = Maybe.nothing();
+                    stripped.add(new Definition.Term(new TermDefinition(t.name, hydra.util.Maybe.nothing(), newTerm, newType)));
                     return null;
                 }
                 @Override public Void visit(Definition.Type td) {
                     stripped.add(d);
                     return null;
                 }
+                @Override public Void visit(Definition.Primitive td) {
+                    stripped.add(d);
+                    return null;
+                }
             });
         }
-        return new Module(m.description, m.name, m.dependencies, stripped);
+        return new Module(m.name, m.metadata, m.dependencies, stripped);
     }
 
     /**
@@ -860,10 +869,8 @@ public class Generation {
         System.err.println("  Per-package inference: " + ordered.size()
             + " packages in dep order: " + String.join(" -> ", ordered));
 
-        hydra.context.Context ctx = new hydra.context.Context(
-            java.util.Collections.emptyList(),
-            java.util.Collections.emptyList(),
-            java.util.Collections.emptyMap());
+        hydra.typing.InferenceContext ctx = new hydra.typing.InferenceContext(
+            0, new java.util.ArrayList<>());
         Graph bsGraph = bootstrapGraph();
         List<Module> acc = new ArrayList<>(seedAcc);
         List<Module> inferredAll = new ArrayList<>();
@@ -899,7 +906,134 @@ public class Generation {
             acc.addAll(inferred);
             inferredAll.addAll(inferred);
         }
+        // #405: prune orphaned JSON for the packages this generator wrote.
+        // The native Java generator owns hydra.java.* (this package's mods are
+        // its keep-set); reconcile deletes stale .json under the owned
+        // namespace dirs. Prefix-scoped so the Haskell-written hydra/dsl/java/
+        // wrappers and the separately-written manifest.json are never touched
+        // (they live outside the hydra/java/ owned dirs). See #405.
+        reconcilePackageJsonOrphans(distJsonRoot, pkgToMods);
         return inferredAll;
+    }
+
+    /**
+     * Delete orphaned {@code .json} files left behind when a module is dropped
+     * from this generator's emission set, mirroring the Haskell-side #405
+     * reconcile ({@code Hydra.Generation.reconcilePackageJsonOrphans} +
+     * {@code Hydra.Digest.reconcileOrphans}).
+     *
+     * <p>For each package the native generator wrote, the keep-set is the set
+     * of {@code <moduleNameToPath ns>.json} paths for its written modules. The
+     * prune is PREFIX-SCOPED to the second-level namespace directories those
+     * files occupy (e.g. {@code hydra/java/}); any {@code .json} under those
+     * dirs not in the keep-set is an orphan and is deleted. Files outside the
+     * owned dirs — the Haskell-written {@code hydra/dsl/java/} DSL wrappers and
+     * the top-level {@code manifest.json} — are out of scope and survive,
+     * which is required during the transition where both the native generator
+     * and the Haskell DSL pass write into one package dir (#344). Best-effort:
+     * I/O failures on individual files are swallowed.</p>
+     */
+    private static void reconcilePackageJsonOrphans(
+            String distJsonRoot,
+            Map<String, List<Module>> pkgToMods) throws IOException {
+        for (Map.Entry<String, List<Module>> e : pkgToMods.entrySet()) {
+            String pkg = e.getKey();
+            List<Module> pkgMods = e.getValue();
+            if (pkgMods.isEmpty()) continue;
+            Path pkgDir = Paths.get(distJsonRoot, pkg, "src", "main", "json");
+            if (!Files.isDirectory(pkgDir)) continue;
+
+            // Keep-set: relative paths of the .json files we wrote.
+            HashSet<String> keepRel = new HashSet<>();
+            // Owned prefixes: the second-level namespace dirs (e.g. "hydra/java")
+            // those files occupy, scoping the prune to what this generator owns.
+            HashSet<String> ownedPrefixes = new HashSet<>();
+            for (Module m : pkgMods) {
+                String rel = moduleNameToPath(m.name) + ".json";
+                keepRel.add(rel);
+                String prefix = secondLevelDir(rel);
+                if (prefix != null) ownedPrefixes.add(prefix);
+            }
+            if (ownedPrefixes.isEmpty()) continue;
+
+            List<Path> onDisk = listJsonFilesRecursive(pkgDir);
+            int pruned = 0;
+            for (Path p : onDisk) {
+                String rel = pkgDir.relativize(p).toString();
+                String relForward = rel.replace(File.separatorChar, '/');
+                // Only consider files under an owned prefix.
+                boolean owned = false;
+                for (String pre : ownedPrefixes) {
+                    if (relForward.equals(pre) || relForward.startsWith(pre + "/")) {
+                        owned = true;
+                        break;
+                    }
+                }
+                if (!owned) continue;
+                if (keepRel.contains(relForward)) continue;
+                try {
+                    Files.delete(p);
+                    System.err.println("    pruned orphan JSON (#405): " + p);
+                    pruned++;
+                } catch (IOException ignored) {
+                    // best-effort
+                }
+            }
+            if (pruned > 0) {
+                System.err.println("  " + pkg + ": pruned " + pruned
+                    + " orphaned JSON file(s) under " + String.join(", ", ownedPrefixes)
+                    + " (#405)");
+                pruneEmptyDirs(pkgDir);
+            }
+        }
+    }
+
+    /** The first two path segments of a forward-slash or platform path, as
+     *  "seg1/seg2" (e.g. "hydra/java/coder.json" -> "hydra/java"), or null if
+     *  the path has fewer than two segments. */
+    private static String secondLevelDir(String rel) {
+        String forward = rel.replace(File.separatorChar, '/');
+        String[] parts = forward.split("/");
+        if (parts.length < 2) return null;
+        return parts[0] + "/" + parts[1];
+    }
+
+    /** Recursively collect every regular {@code .json} file under {@code root},
+     *  skipping dotfiles/dot-directories. */
+    private static List<Path> listJsonFilesRecursive(Path root) throws IOException {
+        List<Path> out = new ArrayList<>();
+        if (!Files.isDirectory(root)) return out;
+        try (java.util.stream.Stream<Path> walk = Files.walk(root)) {
+            walk.filter(Files::isRegularFile)
+                .filter(p -> p.getFileName().toString().endsWith(".json"))
+                .filter(p -> {
+                    for (Path seg : root.relativize(p)) {
+                        if (seg.toString().startsWith(".")) return false;
+                    }
+                    return true;
+                })
+                .forEach(out::add);
+        }
+        return out;
+    }
+
+    /** Remove empty subdirectories under {@code dir} (depth-first); {@code dir}
+     *  itself is left alone. Best-effort. */
+    private static void pruneEmptyDirs(Path dir) {
+        try (java.util.stream.Stream<Path> walk = Files.walk(dir)) {
+            walk.sorted(java.util.Comparator.reverseOrder())
+                .filter(p -> !p.equals(dir))
+                .filter(Files::isDirectory)
+                .forEach(p -> {
+                    try (java.util.stream.Stream<Path> kids = Files.list(p)) {
+                        if (kids.findAny().isEmpty()) Files.delete(p);
+                    } catch (IOException ignored) {
+                        // best-effort
+                    }
+                });
+        } catch (IOException ignored) {
+            // best-effort
+        }
     }
 
     /**
@@ -931,7 +1065,7 @@ public class Generation {
                         + m.name.value + ": " + err);
                 }
                 String jsonStr = ((Either.Right<hydra.errors.Error_, String>) encoded).value;
-                Path filePath = pkgDir.resolve(namespaceToPath(m.name) + ".json");
+                Path filePath = pkgDir.resolve(moduleNameToPath(m.name) + ".json");
                 Files.createDirectories(filePath.getParent());
                 String newContent = jsonStr + "\n";
                 if (Files.exists(filePath)) {

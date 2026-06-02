@@ -3,9 +3,10 @@
 
 module Hydra.Encode.Util where
 import qualified Hydra.Core as Core
+import qualified Hydra.Encode.Core as EncodeCore
 import qualified Hydra.Encode.Packaging as Packaging
-import qualified Hydra.Lib.Maps as Maps
-import qualified Hydra.Lib.Pairs as Pairs
+import qualified Hydra.Haskell.Lib.Maps as Maps
+import qualified Hydra.Haskell.Lib.Pairs as Pairs
 import qualified Hydra.Util as Util
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
@@ -52,18 +53,18 @@ comparison x =
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "greaterThan"),
           Core.fieldTerm = Core.TermUnit}})
--- | Encoder for hydra.util.Namespaces
-namespaces :: (t0 -> Core.Term) -> Util.Namespaces t0 -> Core.Term
-namespaces n x =
+-- | Encoder for hydra.util.ModuleNames
+moduleNames :: (t0 -> Core.Term) -> Util.ModuleNames t0 -> Core.Term
+moduleNames n x =
     Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.util.Namespaces"),
+      Core.recordTypeName = (Core.Name "hydra.util.ModuleNames"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "focus"),
-          Core.fieldTerm = ((\p -> Core.TermPair (Pairs.bimap Packaging.moduleName n p)) (Util.namespacesFocus x))},
+          Core.fieldTerm = ((\p -> Core.TermPair (Pairs.bimap Packaging.moduleName n p)) (Util.moduleNamesFocus x))},
         Core.Field {
           Core.fieldName = (Core.Name "mapping"),
-          Core.fieldTerm = ((\m -> Core.TermMap (Maps.bimap Packaging.moduleName n m)) (Util.namespacesMapping x))}]})
+          Core.fieldTerm = ((\m -> Core.TermMap (Maps.bimap Packaging.moduleName n m)) (Util.moduleNamesMapping x))}]})
 -- | Encoder for hydra.util.Precision
 precision :: Util.Precision -> Core.Term
 precision x =

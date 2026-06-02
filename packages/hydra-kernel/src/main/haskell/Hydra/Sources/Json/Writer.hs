@@ -84,15 +84,12 @@ import Hydra.Ast
 import qualified Hydra.Json.Model as J
 
 
-jsonSerdeDefinition :: String -> TTerm a -> TTermDefinition a
-jsonSerdeDefinition = definitionInModule module_
-
 module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> ([Serialization.ns] L.++ KernelTypes.kernelTypesModuleNames),
-            moduleDescription = Just "JSON serialization functions using the Hydra AST"}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just "JSON serialization functions using the Hydra AST")}
   where
     ns = ModuleName "hydra.json.writer"
     definitions = [
@@ -103,7 +100,7 @@ module_ = Module {
       toDefinition printJson,
       toDefinition valueToExpr]
 
-colonOp :: TTermDefinition Op
+colonOp :: TypedTermDefinition Op
 colonOp = jsonSerdeDefinition "colonOp" $
   doc "The colon operator used to separate keys and values in JSON objects" $
   Ast.op
@@ -113,7 +110,7 @@ colonOp = jsonSerdeDefinition "colonOp" $
     Ast.associativityNone
 
 -- | ASCII codepoints for characters that need escaping
-quoteCode, backslashCode, backspaceCode, formfeedCode, newlineCode, returnCode, tabCode :: TTerm Int
+quoteCode, backslashCode, backspaceCode, formfeedCode, newlineCode, returnCode, tabCode :: TypedTerm Int
 quoteCode = int32 34      -- '"'
 backslashCode = int32 92  -- '\\'
 backspaceCode = int32 8   -- '\b'
@@ -122,13 +119,10 @@ newlineCode = int32 10    -- '\n'
 returnCode = int32 13     -- '\r'
 tabCode = int32 9         -- '\t'
 
-hexDigits :: TTerm String
-hexDigits = string "0123456789abcdef"
-
 -- | Encode a byte value (0..255) as a two-character lowercase hex string.
 -- For out-of-range inputs (unreachable for a real byte), substitutes "?" for
 -- each invalid nibble so output remains a valid 2-character string.
-hexByte :: TTermDefinition (Int -> String)
+hexByte :: TypedTermDefinition (Int -> String)
 hexByte = jsonSerdeDefinition "hexByte" $
   doc "Encode a byte (0..255) as a two-character lowercase hex string. Non-byte inputs yield placeholder '?' characters." $
   "c" ~>
@@ -139,7 +133,13 @@ hexByte = jsonSerdeDefinition "hexByte" $
   "lo" <~ (var "nibble" @@ Maybes.fromMaybe (int32 0) (Math.maybeMod (var "c") (int32 16))) $
   var "hi" ++ var "lo"
 
-jsonString :: TTermDefinition (String -> String)
+hexDigits :: TypedTerm String
+hexDigits = string "0123456789abcdef"
+
+jsonSerdeDefinition :: String -> TypedTerm a -> TypedTermDefinition a
+jsonSerdeDefinition = definitionInModule module_
+
+jsonString :: TypedTermDefinition (String -> String)
 jsonString = jsonSerdeDefinition "jsonString" $
   doc "Escape and quote a string for JSON output" $
   "s" ~>
@@ -169,7 +169,7 @@ jsonString = jsonSerdeDefinition "jsonString" $
   "escaped" <~ Strings.cat (Lists.map (var "escape") (Strings.toList $ var "s")) $
   string "\"" ++ var "escaped" ++ string "\""
 
-keyValueToExpr :: TTermDefinition ((String, J.Value) -> Expr)
+keyValueToExpr :: TypedTermDefinition ((String, J.Value) -> Expr)
 keyValueToExpr = jsonSerdeDefinition "keyValueToExpr" $
   doc "Convert a key-value pair to an AST expression" $
   "pair" ~>
@@ -179,7 +179,12 @@ keyValueToExpr = jsonSerdeDefinition "keyValueToExpr" $
     @@ (Serialization.cst @@ (jsonString @@ var "key"))
     @@ (valueToExpr @@ var "value")
 
-valueToExpr :: TTermDefinition (J.Value -> Expr)
+printJson :: TypedTermDefinition (J.Value -> String)
+printJson = jsonSerdeDefinition "printJson" $
+  doc "Serialize a JSON value to a string" $
+  "value" ~> Serialization.printExpr @@ (valueToExpr @@ var "value")
+
+valueToExpr :: TypedTermDefinition (J.Value -> Expr)
 valueToExpr = jsonSerdeDefinition "valueToExpr" $
   doc "Convert a JSON value to an AST expression for serialization" $
   "value" ~>
@@ -209,8 +214,3 @@ valueToExpr = jsonSerdeDefinition "valueToExpr" $
       Serialization.bracesListAdaptive @@ (Lists.map (keyValueToExpr) (Maps.toList $ var "obj")),
     J._Value_string>>: "s" ~>
       Serialization.cst @@ (jsonString @@ var "s")]
-
-printJson :: TTermDefinition (J.Value -> String)
-printJson = jsonSerdeDefinition "printJson" $
-  doc "Serialize a JSON value to a string" $
-  "value" ~> Serialization.printExpr @@ (valueToExpr @@ var "value")

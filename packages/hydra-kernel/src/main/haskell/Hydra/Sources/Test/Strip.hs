@@ -5,7 +5,7 @@ module Hydra.Sources.Test.Strip where
 
 -- Standard imports for tests
 import Hydra.Kernel
-import           Hydra.Dsl.Bootstrap (unqualifiedDep)
+import           Hydra.Dsl.Bootstrap (unqualifiedDep, descriptionMetadata)
 import Hydra.Dsl.Meta.Testing                 as Testing
 import Hydra.Dsl.Meta.Terms                   as Terms hiding ((@@))
 import Hydra.Sources.Kernel.Types.All
@@ -34,43 +34,27 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = unqualifiedDep <$> ([ShowCore.ns, Strip.ns, TestGraph.ns] ++ kernelTypesModuleNames),
-            moduleDescription = (Just "Test cases for annotation and type stripping operations")}
+            moduleMetadata = descriptionMetadata ((Just "Test cases for annotation and type stripping operations"))}
   where
     definitions = [Phantoms.toDefinition allTests]
 
-define :: String -> TTerm a -> TTermDefinition a
+define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModule module_
 
--- | Show a term as a string using ShowCore.term
-showTerm :: TTerm Term -> TTerm String
-showTerm t = ShowCore.term @@ t
-
--- | Show a type as a string using ShowCore.type_
-showType :: TTerm Type -> TTerm String
-showType t = ShowCore.type_ @@ t
-
--- | Helper for Term -> Term kernel function test cases
-termCase :: String -> TTermDefinition (Term -> Term) -> TTerm Term -> TTerm Term -> TTerm TestCaseWithMetadata
-termCase cname func input output = universalCase cname (showTerm (func @@ input)) (showTerm output)
-
--- | Helper for Type -> Type kernel function test cases
-typeCase :: String -> TTermDefinition (Type -> Type) -> TTerm Type -> TTerm Type -> TTerm TestCaseWithMetadata
-typeCase cname func input output = universalCase cname (showType (func @@ input)) (showType output)
+allTests :: TypedTermDefinition TestGroup
+allTests = define "allTests" $
+    Phantoms.doc "Test cases for annotation and type stripping operations" $
+    supergroup "strip" [
+      deannotateTermGroup,
+      deannotateTypeGroup]
 
 -- | Convenience helpers for specific kernel functions
-deannotateTermCase :: String -> TTerm Term -> TTerm Term -> TTerm TestCaseWithMetadata
+deannotateTermCase :: String -> TypedTerm Term -> TypedTerm Term -> TypedTerm TestCaseWithMetadata
 deannotateTermCase cname = termCase cname Strip.deannotateTerm
-
-deannotateTypeCase :: String -> TTerm Type -> TTerm Type -> TTerm TestCaseWithMetadata
-deannotateTypeCase cname = typeCase cname Strip.deannotateType
-
--- Helper to build an empty annotation map
-emptyAnnMap :: TTerm (M.Map Name Term)
-emptyAnnMap = Phantoms.map M.empty
 
 -- | Test cases for deannotating terms (stripping top-level annotations)
 -- Note: deannotateTerm only strips annotations at the top level, not recursively
-deannotateTermGroup :: TTerm TestGroup
+deannotateTermGroup :: TypedTerm TestGroup
 deannotateTermGroup = subgroup "deannotateTerm" [
     deannotateTermCase "unannotated literal unchanged"
       (int32 42)
@@ -100,9 +84,12 @@ deannotateTermGroup = subgroup "deannotateTerm" [
       (annots emptyAnnMap (apply (var "f") (var "x")))
       (apply (var "f") (var "x"))]
 
+deannotateTypeCase :: String -> TypedTerm Type -> TypedTerm Type -> TypedTerm TestCaseWithMetadata
+deannotateTypeCase cname = typeCase cname Strip.deannotateType
+
 -- | Test cases for deannotating types (stripping top-level annotations)
 -- Note: deannotateType only strips annotations at the top level, not recursively
-deannotateTypeGroup :: TTerm TestGroup
+deannotateTypeGroup :: TypedTerm TestGroup
 deannotateTypeGroup = subgroup "deannotateType" [
     deannotateTypeCase "unannotated primitive type unchanged"
       T.int32
@@ -132,9 +119,22 @@ deannotateTypeGroup = subgroup "deannotateType" [
       (T.annot emptyAnnMap (T.function T.int32 T.string))
       (T.function T.int32 T.string)]
 
-allTests :: TTermDefinition TestGroup
-allTests = define "allTests" $
-    Phantoms.doc "Test cases for annotation and type stripping operations" $
-    supergroup "strip" [
-      deannotateTermGroup,
-      deannotateTypeGroup]
+-- Helper to build an empty annotation map
+emptyAnnMap :: TypedTerm (M.Map Name Term)
+emptyAnnMap = Phantoms.map M.empty
+
+-- | Show a term as a string using ShowCore.term
+showTerm :: TypedTerm Term -> TypedTerm String
+showTerm t = ShowCore.term @@ t
+
+-- | Show a type as a string using ShowCore.type_
+showType :: TypedTerm Type -> TypedTerm String
+showType t = ShowCore.type_ @@ t
+
+-- | Helper for Term -> Term kernel function test cases
+termCase :: String -> TypedTermDefinition (Term -> Term) -> TypedTerm Term -> TypedTerm Term -> TypedTerm TestCaseWithMetadata
+termCase cname func input output = universalCase cname (showTerm (func @@ input)) (showTerm output)
+
+-- | Helper for Type -> Type kernel function test cases
+typeCase :: String -> TypedTermDefinition (Type -> Type) -> TypedTerm Type -> TypedTerm Type -> TypedTerm TestCaseWithMetadata
+typeCase cname func input output = universalCase cname (showType (func @@ input)) (showType output)

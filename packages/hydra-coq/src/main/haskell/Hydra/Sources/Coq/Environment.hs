@@ -17,21 +17,12 @@ import qualified Hydra.Sources.Kernel.Types.Core           as Core
 ns :: ModuleName
 ns = ModuleName "hydra.coq.environment"
 
-def :: String -> Type -> Binding
-def = datatype ns
-
-environment :: String -> Type
-environment = typeref ns
-
-core :: String -> Type
-core = typeref Core.ns
-
 module_ :: Module
 module_ = Module {
             moduleName = ns,
-            moduleDefinitions = (map toTypeDef definitions),
+            moduleDefinitions = (DefinitionType <$> definitions),
             moduleDependencies = unqualifiedDep <$> [Core.ns],
-            moduleDescription = Just "Environment types for Coq code generation"}
+            moduleMetadata = descriptionMetadata (Just "Environment types for Coq code generation")}
   where
     definitions = [
       coqEnvironment]
@@ -41,7 +32,7 @@ module_ = Module {
 -- each module is encoded; consulted by encodeUnionElim, encodeTerm, etc. to
 -- make output-level decisions (e.g., whether to emit a catch-all match arm or
 -- whether a reference needs to stay fully qualified).
-coqEnvironment :: Binding
+coqEnvironment :: TypeDefinition
 coqEnvironment = def "CoqEnvironment" $
   doc "Cross-module state threaded through the Coq encoder" $
   T.record [
@@ -57,3 +48,12 @@ coqEnvironment = def "CoqEnvironment" $
     "sanitizedAccessors">:
       doc "Accessor names for record fields that were sanitized to unit due to Coq's strict positivity requirement. Applications of these accessors are replaced with hydra_unreachable at emission time." $
       T.set T.string]
+
+core :: String -> Type
+core = typeref Core.ns
+
+def :: String -> Type -> TypeDefinition
+def = datatype ns
+
+environment :: String -> Type
+environment = typeref ns

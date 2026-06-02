@@ -86,7 +86,7 @@ import Hydra.Json.Model
 ns :: ModuleName
 ns = ModuleName "hydra.json.encode"
 
-define :: String -> TTerm a -> TTermDefinition a
+define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModuleName ns
 
 module_ :: Module
@@ -94,7 +94,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> ([Strip.ns, moduleName Literals.module_, moduleName ExtractCore.module_] L.++ KernelTypes.kernelTypesModuleNames),
-            moduleDescription = Just "JSON encoding for Hydra terms. Converts Terms to JSON Values using Either for error handling."}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just "JSON encoding for Hydra terms. Converts Terms to JSON Values using Either for error handling.")}
   where
     definitions = [
       toDefinition encodeFloat,
@@ -108,7 +108,7 @@ module_ = Module {
 -- Float32 and Float64 encode finite, non-negative-zero values as JSON numbers; values the
 -- JSON grammar cannot express (NaN, ±Infinity, -0.0) are encoded as JSON string sentinels
 -- to keep those IEEE values round-trippable through JSON.
-encodeFloat :: TTermDefinition (FloatValue -> Either String Value)
+encodeFloat :: TypedTermDefinition (FloatValue -> Either String Value)
 encodeFloat = define "encodeFloat" $
   doc "Encode a float value to JSON. Finite values become JSON numbers (shortest round-trip); IEEE specials (NaN/Inf/-0.0) become JSON strings. Float32 and Float64 are symmetric; the schema disambiguates precision on decode." $
   "fv" ~> cases _FloatValue (var "fv") Nothing [
@@ -128,7 +128,7 @@ encodeFloat = define "encodeFloat" $
 -- | Encode an integer value to JSON
 -- Small integers (int8, int16, int32, uint8, uint16) use native JSON numbers
 -- Large integers (int64, uint32, uint64, bigint) use strings to preserve precision
-encodeInteger :: TTermDefinition (IntegerValue -> Either String Value)
+encodeInteger :: TypedTermDefinition (IntegerValue -> Either String Value)
 encodeInteger = define "encodeInteger" $
   doc "Encode an integer value to JSON. Small ints use native numbers; large ints use strings." $
   "iv" ~> cases _IntegerValue (var "iv") Nothing [
@@ -144,7 +144,7 @@ encodeInteger = define "encodeInteger" $
     _IntegerValue_uint8>>: "i" ~> right $ Json.valueNumber $ Literals.bigintToDecimal $ Literals.uint8ToBigint $ var "i",
     _IntegerValue_uint16>>: "i" ~> right $ Json.valueNumber $ Literals.bigintToDecimal $ Literals.uint16ToBigint $ var "i"]
 -- | Encode a literal value to JSON
-encodeLiteral :: TTermDefinition (Literal -> Either String Value)
+encodeLiteral :: TypedTermDefinition (Literal -> Either String Value)
 encodeLiteral = define "encodeLiteral" $
   doc "Encode a Hydra literal to a JSON value" $
   "lit" ~> cases _Literal (var "lit") Nothing [
@@ -161,7 +161,7 @@ encodeLiteral = define "encodeLiteral" $
 -- to keep those IEEE values round-trippable through JSON.
 -- | Check whether a float's string form is an IEEE value that the JSON number grammar or
 -- Scientific-backed decoding cannot round-trip: NaN, Infinity, -Infinity, or -0.0.
-requiresJsonStringSentinel :: TTermDefinition (String -> Bool)
+requiresJsonStringSentinel :: TypedTermDefinition (String -> Bool)
 requiresJsonStringSentinel = define "requiresJsonStringSentinel" $
   doc "True for IEEE sentinel strings that JSON must escape as a string to preserve." $
   "s" ~> Logic.or (Equality.equal (var "s") (string "NaN")) $
@@ -178,7 +178,7 @@ requiresJsonStringSentinel = define "requiresJsonStringSentinel" $
 --   Maybe(T) where T is not Maybe: Nothing -> null, Just v -> v (plain value)
 --   Maybe(Maybe(T)): Nothing -> null, Just v -> [v] (array-wrapped, for round-trip fidelity)
 -- In record context, Nothing fields of simple Maybe type are omitted entirely.
-toJson :: TTermDefinition (M.Map Name Type -> Name -> Type -> Term -> Either String Value)
+toJson :: TypedTermDefinition (M.Map Name Type -> Name -> Type -> Term -> Either String Value)
 toJson = define "toJson" $
   doc "Encode a Hydra term to a JSON value given a type and type name. Returns Left for unsupported constructs." $
   "types" ~> "tname" ~> "typ" ~> "term" ~>
@@ -387,7 +387,7 @@ toJson = define "toJson" $
 -- type variables). It encodes terms based on their structure alone, using the legacy encoding
 -- for Maybe (null/[value]) since without type info we cannot determine if idiomatic encoding
 -- is safe.
-toJsonUntyped :: TTermDefinition (Term -> Either String Value)
+toJsonUntyped :: TypedTermDefinition (Term -> Either String Value)
 toJsonUntyped = define "toJsonUntyped" $
   doc "Encode a Hydra term to a JSON value without type information. Falls back to array-wrapped Maybe encoding." $
   "term" ~>

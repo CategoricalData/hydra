@@ -99,7 +99,7 @@ import qualified Hydra.Dsl.Rdf.Syntax          as RdfDsl   -- Generated RDF DSL
 ns :: ModuleName
 ns = ModuleName "hydra.pg.rdf.mappings"
 
-define :: String -> TTerm a -> TTermDefinition a
+define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModule module_
 
 module_ :: Module
@@ -107,7 +107,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> (([RdfUtils.ns] L.++ (kernelTypesModuleNames L.++ [PgModel.ns, PgRdfEnvironment.ns, RdfSyntax.ns, ShaclModel.ns]))),
-            moduleDescription = Just "Mappings from property graph schemas to SHACL shapes graphs, and from property graph data to RDF graphs"}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just "Mappings from property graph schemas to SHACL shapes graphs, and from property graph data to RDF graphs")}
   where
     definitions = [
       toDefinition edgeTypesToPropertyShapes,
@@ -123,59 +123,22 @@ module_ = Module {
 _PgRdfEnvironment :: Name
 _PgRdfEnvironment = Name "hydra.pg.rdf.environment.PgRdfEnvironment"
 
-envEncodeVertexId :: TTerm a -> TTerm b
-envEncodeVertexId env = project _PgRdfEnvironment (Name "encodeVertexId") @@ env
-
-envEncodeVertexLabel :: TTerm a -> TTerm b
-envEncodeVertexLabel env = project _PgRdfEnvironment (Name "encodeVertexLabel") @@ env
-
-envEncodeEdgeLabel :: TTerm a -> TTerm b
-envEncodeEdgeLabel env = project _PgRdfEnvironment (Name "encodeEdgeLabel") @@ env
-
-envEncodePropertyKey :: TTerm a -> TTerm b
-envEncodePropertyKey env = project _PgRdfEnvironment (Name "encodePropertyKey") @@ env
-
-envEncodePropertyValue :: TTerm a -> TTerm b
-envEncodePropertyValue env = project _PgRdfEnvironment (Name "encodePropertyValue") @@ env
-
-
--- | Convert a list of edge types into property shape constraints for a given vertex type.
--- For each edge type whose out-vertex label matches the vertex label, produces a
--- CommonConstraint.property entry with sh:path set to the edge label IRI and
--- sh:class set to the in-vertex's class IRI.
-edgeTypesToPropertyShapes
-  :: TTermDefinition ((PG.VertexLabel -> Rdf.Iri) -> (PG.EdgeLabel -> Rdf.Iri) -> PG.VertexLabel
-    -> [PG.EdgeType t] -> [Shacl.CommonConstraint])
-edgeTypesToPropertyShapes = define "edgeTypesToPropertyShapes" $
-  doc "Convert edge types into property shape constraints for a given vertex label" $
-  lambda "encodeVertexLabel" $ lambda "encodeEdgeLabel" $ lambda "vertexLabel" $ lambda "edgeTypes" $
-    Lists.concat (Lists.map
-      (lambda "et" $
-        lets [
-          "outLabel">: PgDsl.edgeTypeOut (var "et"),
-          "matchesVertex">: Equality.equal
-            (unwrap PG._VertexLabel @@ var "outLabel")
-            (unwrap PG._VertexLabel @@ var "vertexLabel")
-        ] $
-        lets [
-          "edgeShape">: ShaclDsl.commonConstraintProperty (Sets.singleton
-            (ShaclDsl.referenceAnonymous (simplePropertyShape
-              (emptyCommonWith
-                (Sets.singleton (ShaclDsl.commonConstraintClass
-                  (Sets.singleton (RdfDsl.rdfsClass unit))))
-                Sets.empty)
-              Sets.empty
-              (var "encodeEdgeLabel" @@ PgDsl.edgeTypeLabel (var "et")))))
-        ] $
-        Logic.ifElse (var "matchesVertex")
-          (list [var "edgeShape"])
-          (TTerm (TermList []) :: TTerm [Shacl.CommonConstraint]))
-      (var "edgeTypes"))
+-- | A helper for creating empty SHACL common properties with only constraints specified.
+emptyCommonWith :: TypedTerm (S.Set Shacl.CommonConstraint) -> TypedTerm (S.Set Rdf.RdfsClass) -> TypedTerm Shacl.CommonProperties
+emptyCommonWith constraints targetClasses = ShaclDsl.commonProperties
+  constraints                               -- constraints
+  nothing                                   -- deactivated
+  (asTerm RdfUtils.emptyLangStrings)        -- message
+  ShaclDsl.severityViolation                -- severity
+  targetClasses                             -- targetClass
+  Sets.empty                                -- targetNode
+  Sets.empty                                -- targetObjectsOf
+  Sets.empty                                -- targetSubjectsOf
 
 -- | Encode a property graph edge as an RDF description.
 -- The out-vertex becomes the subject, the edge label becomes the predicate,
 -- and the in-vertex becomes the object. Edge id and properties are discarded.
-encodeEdge :: TTermDefinition (env -> PG.Edge v -> Rdf.Description)
+encodeEdge :: TypedTermDefinition (env -> PG.Edge v -> Rdf.Description)
 encodeEdge = define "encodeEdge" $
   doc "Encode a property graph edge as an RDF description" $
   lambda "env" $ lambda "edge" $
@@ -193,7 +156,7 @@ encodeEdge = define "encodeEdge" $
 
 -- | Encode an entire lazy property graph as an RDF graph.
 -- Encodes all vertices and edges as descriptions, then merges them into a single graph.
-encodeLazyGraph :: TTermDefinition (env -> PG.LazyGraph v -> Rdf.Graph)
+encodeLazyGraph :: TypedTermDefinition (env -> PG.LazyGraph v -> Rdf.Graph)
 encodeLazyGraph = define "encodeLazyGraph" $
   doc "Encode a lazy property graph as an RDF graph" $
   lambda "env" $ lambda "lg" $
@@ -207,7 +170,7 @@ encodeLazyGraph = define "encodeLazyGraph" $
 -- | Encode a property graph vertex as an RDF description.
 -- The vertex id becomes the subject IRI, the vertex label becomes an rdf:type triple,
 -- and each property becomes a triple with the property key as predicate and value as object.
-encodeVertex :: TTermDefinition (env -> PG.Vertex v -> Rdf.Description)
+encodeVertex :: TypedTermDefinition (env -> PG.Vertex v -> Rdf.Description)
 encodeVertex = define "encodeVertex" $
   doc "Encode a property graph vertex as an RDF description" $
   lambda "env" $ lambda "vertex" $
@@ -238,7 +201,7 @@ encodeVertex = define "encodeVertex" $
 -- Each VertexType becomes a NodeShape definition with property shapes from
 -- both the vertex's property types and outgoing edge types.
 graphSchemaToShapesGraph
-  :: TTermDefinition ((t -> Rdf.Iri) -> (PG.VertexLabel -> Rdf.Iri) -> (PG.EdgeLabel -> Rdf.Iri)
+  :: TypedTermDefinition ((t -> Rdf.Iri) -> (PG.VertexLabel -> Rdf.Iri) -> (PG.EdgeLabel -> Rdf.Iri)
     -> (PG.PropertyKey -> Rdf.Iri) -> PG.GraphSchema t -> Shacl.ShapesGraph)
 graphSchemaToShapesGraph = define "graphSchemaToShapesGraph" $
   doc "Convert a property graph schema to a SHACL shapes graph" $
@@ -274,21 +237,58 @@ graphSchemaToShapesGraph = define "graphSchemaToShapesGraph" $
     ] $
     ShaclDsl.shapesGraph (Sets.fromList (var "defs"))
 
--- | A helper for creating empty SHACL common properties with only constraints specified.
-emptyCommonWith :: TTerm (S.Set Shacl.CommonConstraint) -> TTerm (S.Set Rdf.RdfsClass) -> TTerm Shacl.CommonProperties
-emptyCommonWith constraints targetClasses = ShaclDsl.commonProperties
-  constraints                               -- constraints
-  nothing                                   -- deactivated
-  (asTerm RdfUtils.emptyLangStrings)        -- message
-  ShaclDsl.severityViolation                -- severity
-  targetClasses                             -- targetClass
-  Sets.empty                                -- targetNode
-  Sets.empty                                -- targetObjectsOf
-  Sets.empty                                -- targetSubjectsOf
+envEncodeEdgeLabel :: TypedTerm a -> TypedTerm b
+envEncodeEdgeLabel env = project _PgRdfEnvironment (Name "encodeEdgeLabel") @@ env
+
+envEncodePropertyKey :: TypedTerm a -> TypedTerm b
+envEncodePropertyKey env = project _PgRdfEnvironment (Name "encodePropertyKey") @@ env
+
+envEncodePropertyValue :: TypedTerm a -> TypedTerm b
+envEncodePropertyValue env = project _PgRdfEnvironment (Name "encodePropertyValue") @@ env
+
+
+-- | Convert a list of edge types into property shape constraints for a given vertex type.
+-- For each edge type whose out-vertex label matches the vertex label, produces a
+-- CommonConstraint.property entry with sh:path set to the edge label IRI and
+-- sh:class set to the in-vertex's class IRI.
+edgeTypesToPropertyShapes
+  :: TypedTermDefinition ((PG.VertexLabel -> Rdf.Iri) -> (PG.EdgeLabel -> Rdf.Iri) -> PG.VertexLabel
+    -> [PG.EdgeType t] -> [Shacl.CommonConstraint])
+edgeTypesToPropertyShapes = define "edgeTypesToPropertyShapes" $
+  doc "Convert edge types into property shape constraints for a given vertex label" $
+  lambda "encodeVertexLabel" $ lambda "encodeEdgeLabel" $ lambda "vertexLabel" $ lambda "edgeTypes" $
+    Lists.concat (Lists.map
+      (lambda "et" $
+        lets [
+          "outLabel">: PgDsl.edgeTypeOut (var "et"),
+          "matchesVertex">: Equality.equal
+            (unwrap PG._VertexLabel @@ var "outLabel")
+            (unwrap PG._VertexLabel @@ var "vertexLabel")
+        ] $
+        lets [
+          "edgeShape">: ShaclDsl.commonConstraintProperty (Sets.singleton
+            (ShaclDsl.referenceAnonymous (simplePropertyShape
+              (emptyCommonWith
+                (Sets.singleton (ShaclDsl.commonConstraintClass
+                  (Sets.singleton (RdfDsl.rdfsClass unit))))
+                Sets.empty)
+              Sets.empty
+              (var "encodeEdgeLabel" @@ PgDsl.edgeTypeLabel (var "et")))))
+        ] $
+        Logic.ifElse (var "matchesVertex")
+          (list [var "edgeShape"])
+          (TypedTerm (TermList []) :: TypedTerm [Shacl.CommonConstraint]))
+      (var "edgeTypes"))
+
+envEncodeVertexId :: TypedTerm a -> TypedTerm b
+envEncodeVertexId env = project _PgRdfEnvironment (Name "encodeVertexId") @@ env
+
+envEncodeVertexLabel :: TypedTerm a -> TypedTerm b
+envEncodeVertexLabel env = project _PgRdfEnvironment (Name "encodeVertexLabel") @@ env
 
 -- | A helper for creating a SHACL property shape with minimal fields.
-simplePropertyShape :: TTerm Shacl.CommonProperties -> TTerm (S.Set Shacl.PropertyShapeConstraint)
-  -> TTerm Rdf.Iri -> TTerm Shacl.PropertyShape
+simplePropertyShape :: TypedTerm Shacl.CommonProperties -> TypedTerm (S.Set Shacl.PropertyShapeConstraint)
+  -> TypedTerm Rdf.Iri -> TypedTerm Shacl.PropertyShape
 simplePropertyShape common constraints path = ShaclDsl.propertyShape
   common                                    -- common
   constraints                               -- constraints
@@ -302,7 +302,7 @@ simplePropertyShape common constraints path = ShaclDsl.propertyShape
 -- The property key becomes the sh:path, and the type becomes a sh:datatype constraint.
 -- If the property is required, sh:minCount is set to 1.
 propertyTypeToPropertyShape
-  :: TTermDefinition ((t -> Rdf.Iri) -> (PG.PropertyKey -> Rdf.Iri) -> PG.PropertyType t -> Shacl.PropertyShape)
+  :: TypedTermDefinition ((t -> Rdf.Iri) -> (PG.PropertyKey -> Rdf.Iri) -> PG.PropertyType t -> Shacl.PropertyShape)
 propertyTypeToPropertyShape = define "propertyTypeToPropertyShape" $
   doc "Convert a property type to a SHACL property shape" $
   lambda "encodeType" $ lambda "encodeKey" $ lambda "pt" $
@@ -326,7 +326,7 @@ propertyTypeToPropertyShape = define "propertyTypeToPropertyShape" $
 -- with sh:targetClass set to the vertex label IRI, and property shapes for
 -- each property type in the vertex type.
 vertexTypeToNodeShape
-  :: TTermDefinition ((t -> Rdf.Iri) -> (PG.VertexLabel -> Rdf.Iri) -> (PG.PropertyKey -> Rdf.Iri)
+  :: TypedTermDefinition ((t -> Rdf.Iri) -> (PG.VertexLabel -> Rdf.Iri) -> (PG.PropertyKey -> Rdf.Iri)
     -> PG.VertexType t -> Shacl.Definition Shacl.Shape)
 vertexTypeToNodeShape = define "vertexTypeToNodeShape" $
   doc "Convert a vertex type to a SHACL node shape definition" $

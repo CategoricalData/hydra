@@ -20,10 +20,11 @@ import hydra.dsl.meta.lib.Pairs;
 import hydra.dsl.meta.lib.Sets;
 import hydra.dsl.meta.lib.Strings;
 import hydra.packaging.Definition;
+import hydra.packaging.EntityMetadata;
 import hydra.packaging.Module;
 import hydra.packaging.ModuleName;
 import hydra.packaging.ModuleDependency;
-import hydra.phantoms.TTerm;
+import hydra.typed.TypedTerm;
 import hydra.util.Maybe;
 
 import java.util.Arrays;
@@ -42,44 +43,44 @@ public class Language {
     public static final ModuleName NS = new ModuleName("hydra.java.language");
 
     /** Build an injection of a unit-tagged variant. Mirrors the inlined form
-     * that {@code hydra.dsl.variants.*} TTerm constants expand to in the
+     * that {@code hydra.dsl.variants.*} TypedTerm constants expand to in the
      * canonical JSON. */
-    private static TTerm<?> variant(String typeName, String fieldName) {
+    private static TypedTerm<?> variant(String typeName, String fieldName) {
         return injectUnit(typeName, fieldName);
     }
-    private static TTerm<?> literalVariant(String which) {
+    private static TypedTerm<?> literalVariant(String which) {
         return variant("hydra.variants.LiteralVariant", which);
     }
-    private static TTerm<?> termVariantInj(String which) {
+    private static TypedTerm<?> termVariantInj(String which) {
         return variant("hydra.variants.TermVariant", which);
     }
-    private static TTerm<?> typeVariantInj(String which) {
+    private static TypedTerm<?> typeVariantInj(String which) {
         return variant("hydra.variants.TypeVariant", which);
     }
-    private static TTerm<?> floatType(String which) {
+    private static TypedTerm<?> floatType(String which) {
         return variant("hydra.core.FloatType", which);
     }
-    private static TTerm<?> integerType(String which) {
+    private static TypedTerm<?> integerType(String which) {
         return variant("hydra.core.IntegerType", which);
     }
     /** {@code Coders.language(name, constraints)} expands to a Record term. */
-    private static TTerm<?> codersLanguage(TTerm<?> name, TTerm<?> constraints) {
+    private static TypedTerm<?> codersLanguage(TypedTerm<?> name, TypedTerm<?> constraints) {
         return record("hydra.coders.Language",
             field("name", name),
             field("constraints", constraints));
     }
     /** {@code Coders.languageName2(x)} expands to a Wrap term. */
-    private static TTerm<?> codersLanguageName2(TTerm<?> x) {
+    private static TypedTerm<?> codersLanguageName2(TypedTerm<?> x) {
         return wrap("hydra.coders.LanguageName", x);
     }
     /** {@code Coders.languageConstraints2(...)} expands to a Record term. */
-    private static TTerm<?> codersLanguageConstraints2(
-            TTerm<?> literalVariants,
-            TTerm<?> floatTypes,
-            TTerm<?> integerTypes,
-            TTerm<?> termVariants,
-            TTerm<?> typeVariants,
-            TTerm<?> types) {
+    private static TypedTerm<?> codersLanguageConstraints2(
+            TypedTerm<?> literalVariants,
+            TypedTerm<?> floatTypes,
+            TypedTerm<?> integerTypes,
+            TypedTerm<?> termVariants,
+            TypedTerm<?> typeVariants,
+            TypedTerm<?> types) {
         return record("hydra.coders.LanguageConstraints",
             field("literalVariants", literalVariants),
             field("floatTypes", floatTypes),
@@ -91,10 +92,10 @@ public class Language {
     /** {@code Sets.fromList xs}: typeApplication of the kernel primitive
      * (so the element type is recorded), then applied to xs. Matches the
      * canonical encoding produced by the Haskell DSL. */
-    private static TTerm<?> setsFromList(String elementTypeName, TTerm<?> listTerm) {
+    private static TypedTerm<?> setsFromList(String elementTypeName, TypedTerm<?> listTerm) {
         return setsFromList(hydra.dsl.Types.variable(elementTypeName), listTerm);
     }
-    private static TTerm<?> setsFromList(hydra.core.Type elementType, TTerm<?> listTerm) {
+    private static TypedTerm<?> setsFromList(hydra.core.Type elementType, TypedTerm<?> listTerm) {
         return Sets.fromList(listTerm);
     }
 
@@ -108,7 +109,7 @@ public class Language {
     /** The {@code javaLanguage} definition: a {@code Language} record value. */
     private static Definition javaLanguage() {
         // Mirror Haskell `lets [...] $ Coders.language ...`.
-        TTerm<?> body = doc(
+        TypedTerm<?> body = doc(
             "Language constraints for Java",
             let(
                 Arrays.<hydra.core.Field>asList(
@@ -191,8 +192,8 @@ public class Language {
         return termDef(NS, "javaLanguage", body.value);
     }
 
-    private static TTerm<?> stringList(String... strs) {
-        TTerm<?>[] terms = new TTerm<?>[strs.length];
+    private static TypedTerm<?> stringList(String... strs) {
+        TypedTerm<?>[] terms = new TypedTerm<?>[strs.length];
         for (int i = 0; i < strs.length; i++) {
             terms[i] = string(strs[i]);
         }
@@ -200,10 +201,10 @@ public class Language {
     }
 
     private static Definition reservedWords() {
-        TTerm<?> specialNames = doc(
+        TypedTerm<?> specialNames = doc(
             "Special names reserved for use by Hydra",
             stringList("Elements"));
-        TTerm<?> classNames = doc(
+        TypedTerm<?> classNames = doc(
             "java.lang classes as of JDK 7\n"
                 + "See: https://docs.oracle.com/javase/7/docs/api/java/lang/package-summary.html",
             stringList(
@@ -226,7 +227,7 @@ public class Language {
                 "ThreadGroup", "ThreadLocal", "Throwable", "TypeNotPresentException",
                 "UnknownError", "UnsatisfiedLinkError", "UnsupportedClassVersionError",
                 "UnsupportedOperationException", "VerifyError", "VirtualMachineError", "Void"));
-        TTerm<?> keywords = doc(
+        TypedTerm<?> keywords = doc(
             "Keywords and literals are taken from Oracle's Java Tutorials on 2022-05-27; said to be complete for Java 1.8 only\n"
                 + "See: https://docs.oracle.com/javase/tutorial/java/nutsandbolts/_keywords.html",
             stringList(
@@ -235,9 +236,9 @@ public class Language {
                 "implements", "import", "instanceof", "int", "interface", "long", "native", "new", "package", "private",
                 "protected", "public", "return", "short", "static", "strictfp", "super", "switch", "synchronized", "this",
                 "throw", "throws", "transient", "try", "void", "volatile", "while"));
-        TTerm<?> literals = stringList("false", "null", "true");
+        TypedTerm<?> literals = stringList("false", "null", "true");
 
-        TTerm<?> body = doc(
+        TypedTerm<?> body = doc(
             "A set of reserved words in Java",
             let(
                 Arrays.<hydra.core.Field>asList(
@@ -265,7 +266,6 @@ public class Language {
         new ModuleName("hydra.ast"),
         new ModuleName("hydra.classes"),
         new ModuleName("hydra.coders"),
-        new ModuleName("hydra.context"),
         new ModuleName("hydra.core"),
         new ModuleName("hydra.error.checking"),
         new ModuleName("hydra.error.core"),
@@ -275,20 +275,24 @@ public class Language {
         new ModuleName("hydra.json.model"),
         new ModuleName("hydra.packaging"),
         new ModuleName("hydra.parsing"),
-        new ModuleName("hydra.phantoms"),
         new ModuleName("hydra.query"),
         new ModuleName("hydra.relational"),
         new ModuleName("hydra.tabular"),
         new ModuleName("hydra.testing"),
         new ModuleName("hydra.topology"),
+        new ModuleName("hydra.typed"),
         new ModuleName("hydra.typing"),
         new ModuleName("hydra.util"),
         new ModuleName("hydra.validation"),
         new ModuleName("hydra.variants"));
 
     public static final Module module_ = new Module(
-        Maybe.just("Language constraints and reserved words for Java"),
         NS,
+        Maybe.just(new EntityMetadata(
+            Maybe.just("Language constraints and reserved words for Java"),
+            java.util.List.of(),
+            java.util.List.of(),
+            Maybe.nothing())),
         DEPENDENCIES,
         DEFINITIONS);
 }

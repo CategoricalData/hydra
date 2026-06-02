@@ -22,34 +22,31 @@ import qualified Hydra.Sources.Pg.Model      as PgModel
 ns :: ModuleName
 ns = ModuleName "hydra.pg.rdf.environment"
 
-define :: String -> Type -> Binding
+define :: String -> Type -> TypeDefinition
 define = defineType ns
-
-env :: String -> Type
-env = typeref ns
-
-rdf :: String -> Type
-rdf = typeref RdfSyntax.ns
-
-pg :: String -> Type
-pg = typeref PgModel.ns
-
-core :: String -> Type
-core = typeref Core.ns
 
 module_ :: Module
 module_ = Module {
             moduleName = ns,
-            moduleDefinitions = (map toTypeDef definitions),
+            moduleDefinitions = (DefinitionType <$> definitions),
             moduleDependencies = unqualifiedDep <$> [RdfSyntax.ns, PgModel.ns, Core.ns],
-            moduleDescription = Just "Environment types for property graph to RDF mapping"}
+            moduleMetadata = descriptionMetadata (Just "Environment types for property graph to RDF mapping")}
   where
     definitions = [
       pgRdfEnvironment]
 
+core :: String -> Type
+core = typeref Core.ns
+
+env :: String -> Type
+env = typeref ns
+
+pg :: String -> Type
+pg = typeref PgModel.ns
+
 -- | The environment for property graph to RDF mapping, providing configurable
 -- functions for encoding property graph labels, keys, ids, and values as RDF terms.
-pgRdfEnvironment :: Binding
+pgRdfEnvironment :: TypeDefinition
 pgRdfEnvironment = define "PgRdfEnvironment" $
   doc "The environment for property graph to RDF mapping" $
   T.forAlls ["v"] $ T.record [
@@ -71,3 +68,6 @@ pgRdfEnvironment = define "PgRdfEnvironment" $
     "encodePropertyValue">:
       doc "A function which encodes a property value as an RDF literal" $
       T.function "v" (rdf "Literal")]
+
+rdf :: String -> Type
+rdf = typeref RdfSyntax.ns

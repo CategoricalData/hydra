@@ -3,28 +3,49 @@
 
 module Hydra.Lisp.Coder where
 import qualified Hydra.Analysis as Analysis
+import qualified Hydra.Ast as Ast
+import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
 import qualified Hydra.Environment as Environment
+import qualified Hydra.Error.Checking as Checking
+import qualified Hydra.Error.Core as ErrorCore
+import qualified Hydra.Error.Packaging as ErrorPackaging
+import qualified Hydra.Errors as Errors
 import qualified Hydra.Formatting as Formatting
-import qualified Hydra.Lib.Eithers as Eithers
-import qualified Hydra.Lib.Equality as Equality
-import qualified Hydra.Lib.Lists as Lists
-import qualified Hydra.Lib.Literals as Literals
-import qualified Hydra.Lib.Logic as Logic
-import qualified Hydra.Lib.Maps as Maps
-import qualified Hydra.Lib.Maybes as Maybes
-import qualified Hydra.Lib.Pairs as Pairs
-import qualified Hydra.Lib.Sets as Sets
-import qualified Hydra.Lib.Strings as Strings
+import qualified Hydra.Graph as Graph
+import qualified Hydra.Json.Model as Model
+import qualified Hydra.Lexical as Lexical
+import qualified Hydra.Haskell.Lib.Eithers as Eithers
+import qualified Hydra.Haskell.Lib.Equality as Equality
+import qualified Hydra.Haskell.Lib.Lists as Lists
+import qualified Hydra.Haskell.Lib.Literals as Literals
+import qualified Hydra.Haskell.Lib.Logic as Logic
+import qualified Hydra.Haskell.Lib.Maps as Maps
+import qualified Hydra.Haskell.Lib.Maybes as Maybes
+import qualified Hydra.Haskell.Lib.Pairs as Pairs
+import qualified Hydra.Haskell.Lib.Sets as Sets
+import qualified Hydra.Haskell.Lib.Strings as Strings
 import qualified Hydra.Lisp.Language as Language
 import qualified Hydra.Lisp.Syntax as Syntax
 import qualified Hydra.Names as Names
 import qualified Hydra.Packaging as Packaging
+import qualified Hydra.Parsing as Parsing
+import qualified Hydra.Paths as Paths
 import qualified Hydra.Predicates as Predicates
+import qualified Hydra.Query as Query
+import qualified Hydra.Relational as Relational
 import qualified Hydra.Show.Core as ShowCore
 import qualified Hydra.Sorting as Sorting
 import qualified Hydra.Strip as Strip
+import qualified Hydra.Tabular as Tabular
+import qualified Hydra.Testing as Testing
+import qualified Hydra.Topology as Topology
+import qualified Hydra.Typed as Typed
+import qualified Hydra.Typing as Typing
+import qualified Hydra.Util as Util
+import qualified Hydra.Validation as Validation
 import qualified Hydra.Variables as Variables
+import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 dialectCadr :: Syntax.Dialect -> String
@@ -54,7 +75,7 @@ dialectSupportsLetrec d =
     case d of
       Syntax.DialectClojure -> False
       _ -> True
-encodeApplication :: Syntax.Dialect -> t0 -> t1 -> Core.Term -> Core.Term -> Either t2 Syntax.Expression
+encodeApplication :: Syntax.Dialect -> t0 -> Graph.Graph -> Core.Term -> Core.Term -> Either t1 Syntax.Expression
 encodeApplication dialect cx g rawFun rawArg =
 
       let dFun = Strip.deannotateTerm rawFun
@@ -67,8 +88,7 @@ encodeApplication dialect cx g rawFun rawArg =
           let midFun = Core.applicationFunction v0
               midArg = Core.applicationArgument v0
               dMidFun = Strip.deannotateTerm midFun
-              isLazy2 =
-                      Logic.or (isPrimitiveRef "hydra.lib.eithers.fromLeft" dMidFun) (Logic.or (isPrimitiveRef "hydra.lib.eithers.fromRight" dMidFun) (isPrimitiveRef "hydra.lib.maybes.fromMaybe" dMidFun))
+              isLazy2 = primIsLazyAt g dMidFun 0
           in (Logic.ifElse isLazy2 (Eithers.bind (enc midFun) (\ePrim -> Eithers.bind (enc midArg) (\eDef -> Eithers.bind (enc rawArg) (\eArg -> Right (lispApp (lispApp ePrim [
             wrapInThunk eDef]) [
             eArg]))))) (case dMidFun of
@@ -79,10 +99,10 @@ encodeApplication dialect cx g rawFun rawArg =
               in (Logic.ifElse (isPrimitiveRef "hydra.lib.logic.ifElse" dInnerFun) (Eithers.bind (enc innerArg) (\eC -> Eithers.bind (enc midArg) (\eT -> Eithers.bind (enc rawArg) (\eE -> Right (Syntax.ExpressionIf (Syntax.IfExpression {
                 Syntax.ifExpressionCondition = eC,
                 Syntax.ifExpressionThen = eT,
-                Syntax.ifExpressionElse = (Just eE)})))))) (Logic.ifElse (isPrimitiveRef "hydra.lib.maybes.maybe" dInnerFun) (Eithers.bind (enc innerFun) (\eP -> Eithers.bind (enc innerArg) (\eDef -> Eithers.bind (enc midArg) (\eF -> Eithers.bind (enc rawArg) (\eM -> Right (lispApp (lispApp (lispApp eP [
+                Syntax.ifExpressionElse = (Just eE)})))))) (Logic.ifElse (primIsLazyAt g dInnerFun 0) (Eithers.bind (enc innerFun) (\eP -> Eithers.bind (enc innerArg) (\eDef -> Eithers.bind (enc midArg) (\eF -> Eithers.bind (enc rawArg) (\eM -> Right (lispApp (lispApp (lispApp eP [
                 wrapInThunk eDef]) [
                 eF]) [
-                eM])))))) (Logic.ifElse (isPrimitiveRef "hydra.lib.maybes.cases" dInnerFun) (Eithers.bind (enc innerFun) (\eP -> Eithers.bind (enc innerArg) (\eM -> Eithers.bind (enc midArg) (\eN -> Eithers.bind (enc rawArg) (\eJ -> Right (lispApp (lispApp (lispApp eP [
+                eM])))))) (Logic.ifElse (primIsLazyAt g dInnerFun 1) (Eithers.bind (enc innerFun) (\eP -> Eithers.bind (enc innerArg) (\eM -> Eithers.bind (enc midArg) (\eN -> Eithers.bind (enc rawArg) (\eJ -> Right (lispApp (lispApp (lispApp eP [
                 eM]) [
                 wrapInThunk eN]) [
                 eJ])))))) normal)))
@@ -95,14 +115,14 @@ encodeFieldDef ft =
       in Syntax.FieldDefinition {
         Syntax.fieldDefinitionName = (Syntax.Symbol (Formatting.convertCaseCamelToLowerSnake fname)),
         Syntax.fieldDefinitionDefaultValue = Nothing}
-encodeLambdaTerm :: Syntax.Dialect -> t0 -> t1 -> Core.Lambda -> Either t2 Syntax.Expression
+encodeLambdaTerm :: Syntax.Dialect -> t0 -> Graph.Graph -> Core.Lambda -> Either t1 Syntax.Expression
 encodeLambdaTerm dialect cx g lam =
 
       let param =
               Formatting.convertCaseCamelOrUnderscoreToLowerSnake (Formatting.sanitizeWithUnderscores Language.lispReservedWords (Core.unName (Core.lambdaParameter lam)))
       in (Eithers.bind (encodeTerm dialect cx g (Core.lambdaBody lam)) (\body -> Right (lispLambdaExpr [
         param] body)))
-encodeLetAsLambdaApp :: Syntax.Dialect -> t0 -> t1 -> [Core.Binding] -> Core.Term -> Either t2 Syntax.Expression
+encodeLetAsLambdaApp :: Syntax.Dialect -> t0 -> Graph.Graph -> [Core.Binding] -> Core.Term -> Either t1 Syntax.Expression
 encodeLetAsLambdaApp dialect cx g bindings body =
     Eithers.bind (encodeTerm dialect cx g body) (\bodyExpr -> Eithers.foldl (\acc -> \b ->
       let bname =
@@ -110,7 +130,7 @@ encodeLetAsLambdaApp dialect cx g bindings body =
       in (Eithers.bind (encodeTerm dialect cx g (Core.bindingTerm b)) (\bval -> Right (lispApp (lispLambdaExpr [
         bname] acc) [
         bval])))) bodyExpr (Lists.reverse bindings))
-encodeLetAsNative :: Syntax.Dialect -> t0 -> t1 -> [Core.Binding] -> Core.Term -> Either t2 Syntax.Expression
+encodeLetAsNative :: Syntax.Dialect -> t0 -> Graph.Graph -> [Core.Binding] -> Core.Term -> Either t1 Syntax.Expression
 encodeLetAsNative dialect cx g bindings body =
     Eithers.bind (encodeTerm dialect cx g body) (\bodyExpr ->
       let supportsLetrec = dialectSupportsLetrec dialect
@@ -207,7 +227,7 @@ encodeLiteral lit =
           Syntax.vectorLiteralElements = (Lists.map (\bv -> Syntax.ExpressionLiteral (Syntax.LiteralInteger (Syntax.IntegerLiteral {
             Syntax.integerLiteralValue = (Literals.int32ToBigint bv),
             Syntax.integerLiteralBigint = False}))) byteValues)}))
-encodeProjectionElim :: Syntax.Dialect -> t0 -> t1 -> Core.Projection -> Maybe Core.Term -> Either t2 Syntax.Expression
+encodeProjectionElim :: Syntax.Dialect -> t0 -> Graph.Graph -> Core.Projection -> Maybe Core.Term -> Either t1 Syntax.Expression
 encodeProjectionElim dialect cx g proj marg =
 
       let fname = Formatting.convertCaseCamelToLowerSnake (Core.unName (Core.projectionFieldName proj))
@@ -220,7 +240,7 @@ encodeProjectionElim dialect cx g proj marg =
         Syntax.fieldAccessRecordType = (Syntax.Symbol tname),
         Syntax.fieldAccessField = (Syntax.Symbol fname),
         Syntax.fieldAccessTarget = sarg})))))
-encodeTerm :: Syntax.Dialect -> t0 -> t1 -> Core.Term -> Either t2 Syntax.Expression
+encodeTerm :: Syntax.Dialect -> t0 -> Graph.Graph -> Core.Term -> Either t1 Syntax.Expression
 encodeTerm dialect cx g term =
     case term of
       Core.TermAnnotated v0 -> encodeTerm dialect cx g (Core.annotatedTermBody v0)
@@ -283,7 +303,7 @@ encodeTerm dialect cx g term =
       Core.TermTypeApplication v0 -> encodeTerm dialect cx g (Core.typeApplicationTermBody v0)
       Core.TermTypeLambda v0 -> encodeTerm dialect cx g (Core.typeLambdaBody v0)
       Core.TermWrap v0 -> encodeTerm dialect cx g (Core.wrappedTermBody v0)
-encodeTermDefinition :: Syntax.Dialect -> t0 -> t1 -> Packaging.TermDefinition -> Either t2 Syntax.TopLevelFormWithComments
+encodeTermDefinition :: Syntax.Dialect -> t0 -> Graph.Graph -> Packaging.TermDefinition -> Either t1 Syntax.TopLevelFormWithComments
 encodeTermDefinition dialect cx g tdef =
 
       let name = Packaging.termDefinitionName tdef
@@ -367,7 +387,7 @@ encodeTypeDefinition cx g tdef =
           lname = qualifiedSnakeName name
           dtyp = Strip.deannotateType typ
       in (encodeTypeBody lname typ dtyp)
-encodeUnionElim :: Syntax.Dialect -> t0 -> t1 -> Core.CaseStatement -> Maybe Core.Term -> Either t2 Syntax.Expression
+encodeUnionElim :: Syntax.Dialect -> t0 -> Graph.Graph -> Core.CaseStatement -> Maybe Core.Term -> Either t1 Syntax.Expression
 encodeUnionElim dialect cx g cs marg =
 
       let tname = Names.localNameOf (Core.caseStatementTypeName cs)
@@ -399,17 +419,10 @@ encodeUnionElim dialect cx g cs marg =
           "match_target"] innerExpr)) (\arg -> Eithers.bind (encodeTerm dialect cx g arg) (\sarg -> Right (lispApp (lispLambdaExpr [
           "match_target"] innerExpr) [
           sarg])))))))
-encodeUnwrapElim :: Syntax.Dialect -> t0 -> t1 -> Core.Name -> Maybe Core.Term -> Either t2 Syntax.Expression
+encodeUnwrapElim :: Syntax.Dialect -> t0 -> Graph.Graph -> Core.Name -> Maybe Core.Term -> Either t1 Syntax.Expression
 encodeUnwrapElim dialect cx g name marg =
     Maybes.cases marg (Right (lispLambdaExpr [
       "v"] (lispVar "v"))) (\arg -> encodeTerm dialect cx g arg)
-isCasesPrimitive :: Core.Name -> Bool
-isCasesPrimitive name = Equality.equal name (Core.Name "hydra.lib.maybes.cases")
-isLazy2ArgPrimitive :: Core.Name -> Bool
-isLazy2ArgPrimitive name =
-    Logic.or (Equality.equal name (Core.Name "hydra.lib.eithers.fromLeft")) (Logic.or (Equality.equal name (Core.Name "hydra.lib.eithers.fromRight")) (Equality.equal name (Core.Name "hydra.lib.maybes.fromMaybe")))
-isLazy3ArgPrimitive :: Core.Name -> Bool
-isLazy3ArgPrimitive name = Equality.equal name (Core.Name "hydra.lib.maybes.maybe")
 isPrimitiveRef :: String -> Core.Term -> Bool
 isPrimitiveRef primName term =
     case term of
@@ -418,6 +431,9 @@ isPrimitiveRef primName term =
       Core.TermTypeApplication v0 -> isPrimitiveRef primName (Core.typeApplicationTermBody v0)
       Core.TermTypeLambda v0 -> isPrimitiveRef primName (Core.typeLambdaBody v0)
       _ -> False
+lazyFlagsForPrimitiveTerm :: Graph.Graph -> Core.Term -> [Bool]
+lazyFlagsForPrimitiveTerm g headTerm =
+    Maybes.cases (primHeadName headTerm) [] (\name -> Maybes.cases (Maps.lookup name (Graph.graphPrimitives g)) [] (\prim -> Lists.map (\p -> Typing.parameterIsLazy p) (Typing.termSignatureParameters (Packaging.primitiveDefinitionSignature (Graph.primitiveDefinition prim)))))
 lispApp :: Syntax.Expression -> [Syntax.Expression] -> Syntax.Expression
 lispApp fun args =
     Syntax.ExpressionApplication (Syntax.Application {
@@ -503,11 +519,11 @@ moduleExports forms =
 moduleImports :: Packaging.ModuleName -> [Packaging.Definition] -> [Syntax.ImportDeclaration]
 moduleImports focusNs defs =
 
-      let depNss = Sets.toList (Sets.delete focusNs (Analysis.definitionDependencyNamespaces defs))
+      let depNss = Sets.toList (Sets.delete focusNs (Analysis.definitionDependencyModuleNames defs))
       in (Lists.map (\ns -> Syntax.ImportDeclaration {
         Syntax.importDeclarationModule = (Syntax.NamespaceName (Packaging.unModuleName ns)),
         Syntax.importDeclarationSpec = Syntax.ImportSpecAll}) depNss)
-moduleToLisp :: Syntax.Dialect -> Packaging.Module -> [Packaging.Definition] -> t0 -> t1 -> Either t2 Syntax.Program
+moduleToLisp :: Syntax.Dialect -> Packaging.Module -> [Packaging.Definition] -> t0 -> Graph.Graph -> Either t1 Syntax.Program
 moduleToLisp dialect mod defs0 cx g =
 
       let defs = Environment.reorderDefs defs0
@@ -530,6 +546,16 @@ moduleToLisp dialect mod defs0 cx g =
           Syntax.programImports = imports,
           Syntax.programExports = exports,
           Syntax.programForms = allItems})))))
+primHeadName :: Core.Term -> Maybe Core.Name
+primHeadName term =
+    case term of
+      Core.TermVariable v0 -> Just v0
+      Core.TermAnnotated v0 -> primHeadName (Core.annotatedTermBody v0)
+      Core.TermTypeApplication v0 -> primHeadName (Core.typeApplicationTermBody v0)
+      Core.TermTypeLambda v0 -> primHeadName (Core.typeLambdaBody v0)
+      _ -> Nothing
+primIsLazyAt :: Graph.Graph -> Core.Term -> Int -> Bool
+primIsLazyAt g headTerm i = Maybes.fromMaybe False (Lists.maybeAt i (lazyFlagsForPrimitiveTerm g headTerm))
 qualifiedSnakeName :: Core.Name -> String
 qualifiedSnakeName name =
 

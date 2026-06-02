@@ -2,7 +2,7 @@ module Hydra.Sources.Test.Inference.KernelExamples where
 
 -- Standard imports for term-encoded tests
 import Hydra.Kernel
-import           Hydra.Dsl.Bootstrap (unqualifiedDep)
+import           Hydra.Dsl.Bootstrap (unqualifiedDep, descriptionMetadata)
 import Hydra.Dsl.Meta.Testing                 as Testing
 import Hydra.Dsl.Meta.Terms                   as Terms
 import Hydra.Sources.Kernel.Types.All
@@ -24,22 +24,22 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = unqualifiedDep <$> ([TestGraph.ns, ModuleName "hydra.formatting", ModuleName "hydra.inference", ModuleName "hydra.show.core"] ++ kernelTypesModuleNames),
-            moduleDescription = (Just "Inference tests for examples from the Hydra kernel")}
+            moduleMetadata = descriptionMetadata ((Just "Inference tests for examples from the Hydra kernel"))}
   where
     definitions = [
       Phantoms.toDefinition allTests,
       Phantoms.toDefinition testGroupForNestedLet]
 
-define :: String -> TTerm a -> TTermDefinition a
+define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModule module_
 
-allTests :: TTermDefinition TestGroup
+allTests :: TypedTermDefinition TestGroup
 allTests = define "allTests" $
   Phantoms.doc "Examples from the Hydra kernel" $
   supergroup "Examples from the Hydra kernel" [
     testGroupForNestedLet]
 
-testGroupForNestedLet :: TTermDefinition TestGroup
+testGroupForNestedLet :: TypedTermDefinition TestGroup
 testGroupForNestedLet = define "testGroupForNestedLet" $
   supergroup "Nested let" [
     subgroup "hydra.formatting.mapFirstLetter" [

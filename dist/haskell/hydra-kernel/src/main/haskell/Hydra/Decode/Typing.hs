@@ -3,13 +3,16 @@
 
 module Hydra.Decode.Typing where
 import qualified Hydra.Core as Core
-import qualified Hydra.Decode.Context as Context
 import qualified Hydra.Decode.Core as DecodeCore
+import qualified Hydra.Decode.Paths as Paths
 import qualified Hydra.Errors as Errors
 import qualified Hydra.Extract.Core as ExtractCore
 import qualified Hydra.Graph as Graph
-import qualified Hydra.Lib.Eithers as Eithers
+import qualified Hydra.Lexical as Lexical
+import qualified Hydra.Haskell.Lib.Eithers as Eithers
+import qualified Hydra.Rewriting as Rewriting
 import qualified Hydra.Typing as Typing
+import qualified Hydra.Util as Util
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 -- | Decoder for hydra.typing.FunctionStructure
@@ -27,18 +30,79 @@ functionStructure env cx raw =
           Typing.functionStructureCodomain = field_codomain,
           Typing.functionStructureEnvironment = field_environment})))))))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+-- | Decoder for hydra.typing.InferenceContext
+inferenceContext :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Typing.InferenceContext
+inferenceContext cx raw =
+    Eithers.either (\err -> Left err) (\stripped -> case stripped of
+      Core.TermRecord v0 ->
+        let fieldMap = ExtractCore.toFieldMap v0
+        in (Eithers.bind (ExtractCore.requireField "freshTypeVariableCount" (\cx2 -> \raw2 -> Eithers.either (\err -> Left err) (\stripped2 -> case stripped2 of
+          Core.TermLiteral v1 -> case v1 of
+            Core.LiteralInteger v2 -> case v2 of
+              Core.IntegerValueInt32 v3 -> Right v3
+              _ -> Left (Errors.DecodingError "expected int32 value")
+            _ -> Left (Errors.DecodingError "expected int32 literal")
+          _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx2 raw2)) fieldMap cx) (\field_freshTypeVariableCount -> Eithers.bind (ExtractCore.requireField "trace" (ExtractCore.decodeList Paths.subtermStep) fieldMap cx) (\field_trace -> Right (Typing.InferenceContext {
+          Typing.inferenceContextFreshTypeVariableCount = field_freshTypeVariableCount,
+          Typing.inferenceContextTrace = field_trace}))))
+      _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.typing.InferenceResult
 inferenceResult :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Typing.InferenceResult
 inferenceResult cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
       Core.TermRecord v0 ->
         let fieldMap = ExtractCore.toFieldMap v0
-        in (Eithers.bind (ExtractCore.requireField "term" DecodeCore.term fieldMap cx) (\field_term -> Eithers.bind (ExtractCore.requireField "type" DecodeCore.type_ fieldMap cx) (\field_type -> Eithers.bind (ExtractCore.requireField "subst" typeSubst fieldMap cx) (\field_subst -> Eithers.bind (ExtractCore.requireField "classConstraints" (ExtractCore.decodeMap DecodeCore.name DecodeCore.typeVariableMetadata) fieldMap cx) (\field_classConstraints -> Eithers.bind (ExtractCore.requireField "context" Context.context fieldMap cx) (\field_context -> Right (Typing.InferenceResult {
+        in (Eithers.bind (ExtractCore.requireField "term" DecodeCore.term fieldMap cx) (\field_term -> Eithers.bind (ExtractCore.requireField "type" DecodeCore.type_ fieldMap cx) (\field_type -> Eithers.bind (ExtractCore.requireField "subst" typeSubst fieldMap cx) (\field_subst -> Eithers.bind (ExtractCore.requireField "classConstraints" (ExtractCore.decodeMap DecodeCore.name DecodeCore.typeVariableMetadata) fieldMap cx) (\field_classConstraints -> Eithers.bind (ExtractCore.requireField "context" inferenceContext fieldMap cx) (\field_context -> Right (Typing.InferenceResult {
           Typing.inferenceResultTerm = field_term,
           Typing.inferenceResultType = field_type,
           Typing.inferenceResultSubst = field_subst,
           Typing.inferenceResultClassConstraints = field_classConstraints,
           Typing.inferenceResultContext = field_context})))))))
+      _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+-- | Decoder for hydra.typing.Parameter
+parameter :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Typing.Parameter
+parameter cx raw =
+    Eithers.either (\err -> Left err) (\stripped -> case stripped of
+      Core.TermRecord v0 ->
+        let fieldMap = ExtractCore.toFieldMap v0
+        in (Eithers.bind (ExtractCore.requireField "name" DecodeCore.name fieldMap cx) (\field_name -> Eithers.bind (ExtractCore.requireField "description" (ExtractCore.decodeMaybe (\cx2 -> \raw2 -> Eithers.either (\err -> Left err) (\stripped2 -> case stripped2 of
+          Core.TermLiteral v1 -> case v1 of
+            Core.LiteralString v2 -> Right v2
+            _ -> Left (Errors.DecodingError "expected string literal")
+          _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx2 raw2))) fieldMap cx) (\field_description -> Eithers.bind (ExtractCore.requireField "type" DecodeCore.type_ fieldMap cx) (\field_type -> Eithers.bind (ExtractCore.requireField "isLazy" (\cx2 -> \raw2 -> Eithers.either (\err -> Left err) (\stripped2 -> case stripped2 of
+          Core.TermLiteral v1 -> case v1 of
+            Core.LiteralBoolean v2 -> Right v2
+            _ -> Left (Errors.DecodingError "expected boolean literal")
+          _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx2 raw2)) fieldMap cx) (\field_isLazy -> Right (Typing.Parameter {
+          Typing.parameterName = field_name,
+          Typing.parameterDescription = field_description,
+          Typing.parameterType = field_type,
+          Typing.parameterIsLazy = field_isLazy}))))))
+      _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+-- | Decoder for hydra.typing.Result
+result :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Typing.Result
+result cx raw =
+    Eithers.either (\err -> Left err) (\stripped -> case stripped of
+      Core.TermRecord v0 ->
+        let fieldMap = ExtractCore.toFieldMap v0
+        in (Eithers.bind (ExtractCore.requireField "description" (ExtractCore.decodeMaybe (\cx2 -> \raw2 -> Eithers.either (\err -> Left err) (\stripped2 -> case stripped2 of
+          Core.TermLiteral v1 -> case v1 of
+            Core.LiteralString v2 -> Right v2
+            _ -> Left (Errors.DecodingError "expected string literal")
+          _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx2 raw2))) fieldMap cx) (\field_description -> Eithers.bind (ExtractCore.requireField "type" DecodeCore.type_ fieldMap cx) (\field_type -> Right (Typing.Result {
+          Typing.resultDescription = field_description,
+          Typing.resultType = field_type}))))
+      _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+-- | Decoder for hydra.typing.TermSignature
+termSignature :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Typing.TermSignature
+termSignature cx raw =
+    Eithers.either (\err -> Left err) (\stripped -> case stripped of
+      Core.TermRecord v0 ->
+        let fieldMap = ExtractCore.toFieldMap v0
+        in (Eithers.bind (ExtractCore.requireField "typeParameters" (ExtractCore.decodeList typeParameter) fieldMap cx) (\field_typeParameters -> Eithers.bind (ExtractCore.requireField "parameters" (ExtractCore.decodeList parameter) fieldMap cx) (\field_parameters -> Eithers.bind (ExtractCore.requireField "result" result fieldMap cx) (\field_result -> Right (Typing.TermSignature {
+          Typing.termSignatureTypeParameters = field_typeParameters,
+          Typing.termSignatureParameters = field_parameters,
+          Typing.termSignatureResult = field_result})))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.typing.TermSubst
 termSubst :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Typing.TermSubst
@@ -73,6 +137,16 @@ typeConstraint cx raw =
           Typing.typeConstraintLeft = field_left,
           Typing.typeConstraintRight = field_right,
           Typing.typeConstraintComment = field_comment})))))
+      _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+-- | Decoder for hydra.typing.TypeParameter
+typeParameter :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Typing.TypeParameter
+typeParameter cx raw =
+    Eithers.either (\err -> Left err) (\stripped -> case stripped of
+      Core.TermRecord v0 ->
+        let fieldMap = ExtractCore.toFieldMap v0
+        in (Eithers.bind (ExtractCore.requireField "name" DecodeCore.name fieldMap cx) (\field_name -> Eithers.bind (ExtractCore.requireField "constraints" (ExtractCore.decodeList DecodeCore.typeClassConstraint) fieldMap cx) (\field_constraints -> Right (Typing.TypeParameter {
+          Typing.typeParameterName = field_name,
+          Typing.typeParameterConstraints = field_constraints}))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.typing.TypeSubst
 typeSubst :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Typing.TypeSubst

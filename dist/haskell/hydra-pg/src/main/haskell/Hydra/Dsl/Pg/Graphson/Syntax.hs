@@ -6,77 +6,77 @@ module Hydra.Dsl.Pg.Graphson.Syntax where
 
 import qualified Hydra.Core as Core
 import qualified Hydra.Pg.Graphson.Syntax as Syntax
-import qualified Hydra.Phantoms as Phantoms
+import qualified Hydra.Typed as Phantoms
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 import qualified Data.Int as I
 import qualified Data.Map as M
 
-adjacentEdge :: Phantoms.TTerm Syntax.Value -> Phantoms.TTerm Syntax.Value -> Phantoms.TTerm (M.Map Syntax.PropertyKey Syntax.Value) -> Phantoms.TTerm Syntax.AdjacentEdge
+adjacentEdge :: Phantoms.TypedTerm Syntax.Value -> Phantoms.TypedTerm Syntax.Value -> Phantoms.TypedTerm (M.Map Syntax.PropertyKey Syntax.Value) -> Phantoms.TypedTerm Syntax.AdjacentEdge
 adjacentEdge id vertexId properties =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.pg.graphson.syntax.AdjacentEdge"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "id"),
-          Core.fieldTerm = (Phantoms.unTTerm id)},
+          Core.fieldTerm = (Phantoms.unTypedTerm id)},
         Core.Field {
           Core.fieldName = (Core.Name "vertexId"),
-          Core.fieldTerm = (Phantoms.unTTerm vertexId)},
+          Core.fieldTerm = (Phantoms.unTypedTerm vertexId)},
         Core.Field {
           Core.fieldName = (Core.Name "properties"),
-          Core.fieldTerm = (Phantoms.unTTerm properties)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm properties)}]}))
 
-adjacentEdgeId :: Phantoms.TTerm Syntax.AdjacentEdge -> Phantoms.TTerm Syntax.Value
+adjacentEdgeId :: Phantoms.TypedTerm Syntax.AdjacentEdge -> Phantoms.TypedTerm Syntax.Value
 adjacentEdgeId x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.pg.graphson.syntax.AdjacentEdge"),
         Core.projectionFieldName = (Core.Name "id")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-adjacentEdgeProperties :: Phantoms.TTerm Syntax.AdjacentEdge -> Phantoms.TTerm (M.Map Syntax.PropertyKey Syntax.Value)
+adjacentEdgeProperties :: Phantoms.TypedTerm Syntax.AdjacentEdge -> Phantoms.TypedTerm (M.Map Syntax.PropertyKey Syntax.Value)
 adjacentEdgeProperties x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.pg.graphson.syntax.AdjacentEdge"),
         Core.projectionFieldName = (Core.Name "properties")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-adjacentEdgeVertexId :: Phantoms.TTerm Syntax.AdjacentEdge -> Phantoms.TTerm Syntax.Value
+adjacentEdgeVertexId :: Phantoms.TypedTerm Syntax.AdjacentEdge -> Phantoms.TypedTerm Syntax.Value
 adjacentEdgeVertexId x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.pg.graphson.syntax.AdjacentEdge"),
         Core.projectionFieldName = (Core.Name "vertexId")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-adjacentEdgeWithId :: Phantoms.TTerm Syntax.AdjacentEdge -> Phantoms.TTerm Syntax.Value -> Phantoms.TTerm Syntax.AdjacentEdge
+adjacentEdgeWithId :: Phantoms.TypedTerm Syntax.AdjacentEdge -> Phantoms.TypedTerm Syntax.Value -> Phantoms.TypedTerm Syntax.AdjacentEdge
 adjacentEdgeWithId original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.pg.graphson.syntax.AdjacentEdge"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "id"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "vertexId"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.graphson.syntax.AdjacentEdge"),
               Core.projectionFieldName = (Core.Name "vertexId")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "properties"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.graphson.syntax.AdjacentEdge"),
               Core.projectionFieldName = (Core.Name "properties")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))}]}))
 
-adjacentEdgeWithProperties :: Phantoms.TTerm Syntax.AdjacentEdge -> Phantoms.TTerm (M.Map Syntax.PropertyKey Syntax.Value) -> Phantoms.TTerm Syntax.AdjacentEdge
+adjacentEdgeWithProperties :: Phantoms.TypedTerm Syntax.AdjacentEdge -> Phantoms.TypedTerm (M.Map Syntax.PropertyKey Syntax.Value) -> Phantoms.TypedTerm Syntax.AdjacentEdge
 adjacentEdgeWithProperties original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.pg.graphson.syntax.AdjacentEdge"),
       Core.recordFields = [
         Core.Field {
@@ -85,21 +85,21 @@ adjacentEdgeWithProperties original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.graphson.syntax.AdjacentEdge"),
               Core.projectionFieldName = (Core.Name "id")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "vertexId"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.graphson.syntax.AdjacentEdge"),
               Core.projectionFieldName = (Core.Name "vertexId")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "properties"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)}]}))
 
-adjacentEdgeWithVertexId :: Phantoms.TTerm Syntax.AdjacentEdge -> Phantoms.TTerm Syntax.Value -> Phantoms.TTerm Syntax.AdjacentEdge
+adjacentEdgeWithVertexId :: Phantoms.TypedTerm Syntax.AdjacentEdge -> Phantoms.TypedTerm Syntax.Value -> Phantoms.TypedTerm Syntax.AdjacentEdge
 adjacentEdgeWithVertexId original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.pg.graphson.syntax.AdjacentEdge"),
       Core.recordFields = [
         Core.Field {
@@ -108,55 +108,55 @@ adjacentEdgeWithVertexId original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.graphson.syntax.AdjacentEdge"),
               Core.projectionFieldName = (Core.Name "id")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "vertexId"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "properties"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.graphson.syntax.AdjacentEdge"),
               Core.projectionFieldName = (Core.Name "properties")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))}]}))
 
-bigDecimalValue :: Phantoms.TTerm String -> Phantoms.TTerm Syntax.BigDecimalValue
+bigDecimalValue :: Phantoms.TypedTerm String -> Phantoms.TypedTerm Syntax.BigDecimalValue
 bigDecimalValue x =
-    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
+    Phantoms.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.pg.graphson.syntax.BigDecimalValue"),
-      Core.wrappedTermBody = (Phantoms.unTTerm x)}))
+      Core.wrappedTermBody = (Phantoms.unTypedTerm x)}))
 
-compositeTypedValue :: Phantoms.TTerm Syntax.TypeName -> Phantoms.TTerm Syntax.Map -> Phantoms.TTerm Syntax.CompositeTypedValue
+compositeTypedValue :: Phantoms.TypedTerm Syntax.TypeName -> Phantoms.TypedTerm Syntax.Map -> Phantoms.TypedTerm Syntax.CompositeTypedValue
 compositeTypedValue type_ fields =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.pg.graphson.syntax.CompositeTypedValue"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "type"),
-          Core.fieldTerm = (Phantoms.unTTerm type_)},
+          Core.fieldTerm = (Phantoms.unTypedTerm type_)},
         Core.Field {
           Core.fieldName = (Core.Name "fields"),
-          Core.fieldTerm = (Phantoms.unTTerm fields)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm fields)}]}))
 
-compositeTypedValueFields :: Phantoms.TTerm Syntax.CompositeTypedValue -> Phantoms.TTerm Syntax.Map
+compositeTypedValueFields :: Phantoms.TypedTerm Syntax.CompositeTypedValue -> Phantoms.TypedTerm Syntax.Map
 compositeTypedValueFields x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.pg.graphson.syntax.CompositeTypedValue"),
         Core.projectionFieldName = (Core.Name "fields")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-compositeTypedValueType :: Phantoms.TTerm Syntax.CompositeTypedValue -> Phantoms.TTerm Syntax.TypeName
+compositeTypedValueType :: Phantoms.TypedTerm Syntax.CompositeTypedValue -> Phantoms.TypedTerm Syntax.TypeName
 compositeTypedValueType x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.pg.graphson.syntax.CompositeTypedValue"),
         Core.projectionFieldName = (Core.Name "type")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-compositeTypedValueWithFields :: Phantoms.TTerm Syntax.CompositeTypedValue -> Phantoms.TTerm Syntax.Map -> Phantoms.TTerm Syntax.CompositeTypedValue
+compositeTypedValueWithFields :: Phantoms.TypedTerm Syntax.CompositeTypedValue -> Phantoms.TypedTerm Syntax.Map -> Phantoms.TypedTerm Syntax.CompositeTypedValue
 compositeTypedValueWithFields original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.pg.graphson.syntax.CompositeTypedValue"),
       Core.recordFields = [
         Core.Field {
@@ -165,162 +165,162 @@ compositeTypedValueWithFields original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.graphson.syntax.CompositeTypedValue"),
               Core.projectionFieldName = (Core.Name "type")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "fields"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)}]}))
 
-compositeTypedValueWithType :: Phantoms.TTerm Syntax.CompositeTypedValue -> Phantoms.TTerm Syntax.TypeName -> Phantoms.TTerm Syntax.CompositeTypedValue
+compositeTypedValueWithType :: Phantoms.TypedTerm Syntax.CompositeTypedValue -> Phantoms.TypedTerm Syntax.TypeName -> Phantoms.TypedTerm Syntax.CompositeTypedValue
 compositeTypedValueWithType original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.pg.graphson.syntax.CompositeTypedValue"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "type"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "fields"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.graphson.syntax.CompositeTypedValue"),
               Core.projectionFieldName = (Core.Name "fields")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))}]}))
 
-dateTime :: Phantoms.TTerm String -> Phantoms.TTerm Syntax.DateTime
+dateTime :: Phantoms.TypedTerm String -> Phantoms.TypedTerm Syntax.DateTime
 dateTime x =
-    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
+    Phantoms.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.pg.graphson.syntax.DateTime"),
-      Core.wrappedTermBody = (Phantoms.unTTerm x)}))
+      Core.wrappedTermBody = (Phantoms.unTypedTerm x)}))
 
-doubleValueFinite :: Phantoms.TTerm Double -> Phantoms.TTerm Syntax.DoubleValue
+doubleValueFinite :: Phantoms.TypedTerm Double -> Phantoms.TypedTerm Syntax.DoubleValue
 doubleValueFinite x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.pg.graphson.syntax.DoubleValue"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "finite"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-doubleValueInfinity :: Phantoms.TTerm Syntax.DoubleValue
+doubleValueInfinity :: Phantoms.TypedTerm Syntax.DoubleValue
 doubleValueInfinity =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.pg.graphson.syntax.DoubleValue"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "infinity"),
         Core.fieldTerm = Core.TermUnit}}))
 
-doubleValueNegativeInfinity :: Phantoms.TTerm Syntax.DoubleValue
+doubleValueNegativeInfinity :: Phantoms.TypedTerm Syntax.DoubleValue
 doubleValueNegativeInfinity =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.pg.graphson.syntax.DoubleValue"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "negativeInfinity"),
         Core.fieldTerm = Core.TermUnit}}))
 
-doubleValueNotANumber :: Phantoms.TTerm Syntax.DoubleValue
+doubleValueNotANumber :: Phantoms.TypedTerm Syntax.DoubleValue
 doubleValueNotANumber =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.pg.graphson.syntax.DoubleValue"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "notANumber"),
         Core.fieldTerm = Core.TermUnit}}))
 
-duration :: Phantoms.TTerm String -> Phantoms.TTerm Syntax.Duration
+duration :: Phantoms.TypedTerm String -> Phantoms.TypedTerm Syntax.Duration
 duration x =
-    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
+    Phantoms.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.pg.graphson.syntax.Duration"),
-      Core.wrappedTermBody = (Phantoms.unTTerm x)}))
+      Core.wrappedTermBody = (Phantoms.unTypedTerm x)}))
 
-edgeLabel :: Phantoms.TTerm String -> Phantoms.TTerm Syntax.EdgeLabel
+edgeLabel :: Phantoms.TypedTerm String -> Phantoms.TypedTerm Syntax.EdgeLabel
 edgeLabel x =
-    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
+    Phantoms.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.pg.graphson.syntax.EdgeLabel"),
-      Core.wrappedTermBody = (Phantoms.unTTerm x)}))
+      Core.wrappedTermBody = (Phantoms.unTypedTerm x)}))
 
-floatValueFinite :: Phantoms.TTerm Float -> Phantoms.TTerm Syntax.FloatValue
+floatValueFinite :: Phantoms.TypedTerm Float -> Phantoms.TypedTerm Syntax.FloatValue
 floatValueFinite x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.pg.graphson.syntax.FloatValue"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "finite"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-floatValueInfinity :: Phantoms.TTerm Syntax.FloatValue
+floatValueInfinity :: Phantoms.TypedTerm Syntax.FloatValue
 floatValueInfinity =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.pg.graphson.syntax.FloatValue"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "infinity"),
         Core.fieldTerm = Core.TermUnit}}))
 
-floatValueNegativeInfinity :: Phantoms.TTerm Syntax.FloatValue
+floatValueNegativeInfinity :: Phantoms.TypedTerm Syntax.FloatValue
 floatValueNegativeInfinity =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.pg.graphson.syntax.FloatValue"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "negativeInfinity"),
         Core.fieldTerm = Core.TermUnit}}))
 
-floatValueNotANumber :: Phantoms.TTerm Syntax.FloatValue
+floatValueNotANumber :: Phantoms.TypedTerm Syntax.FloatValue
 floatValueNotANumber =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.pg.graphson.syntax.FloatValue"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "notANumber"),
         Core.fieldTerm = Core.TermUnit}}))
 
-map :: Phantoms.TTerm [Syntax.ValuePair] -> Phantoms.TTerm Syntax.Map
+map :: Phantoms.TypedTerm [Syntax.ValuePair] -> Phantoms.TypedTerm Syntax.Map
 map x =
-    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
+    Phantoms.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.pg.graphson.syntax.Map"),
-      Core.wrappedTermBody = (Phantoms.unTTerm x)}))
+      Core.wrappedTermBody = (Phantoms.unTypedTerm x)}))
 
-primitiveTypedValue :: Phantoms.TTerm Syntax.TypeName -> Phantoms.TTerm String -> Phantoms.TTerm Syntax.PrimitiveTypedValue
+primitiveTypedValue :: Phantoms.TypedTerm Syntax.TypeName -> Phantoms.TypedTerm String -> Phantoms.TypedTerm Syntax.PrimitiveTypedValue
 primitiveTypedValue type_ value =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.pg.graphson.syntax.PrimitiveTypedValue"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "type"),
-          Core.fieldTerm = (Phantoms.unTTerm type_)},
+          Core.fieldTerm = (Phantoms.unTypedTerm type_)},
         Core.Field {
           Core.fieldName = (Core.Name "value"),
-          Core.fieldTerm = (Phantoms.unTTerm value)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm value)}]}))
 
-primitiveTypedValueType :: Phantoms.TTerm Syntax.PrimitiveTypedValue -> Phantoms.TTerm Syntax.TypeName
+primitiveTypedValueType :: Phantoms.TypedTerm Syntax.PrimitiveTypedValue -> Phantoms.TypedTerm Syntax.TypeName
 primitiveTypedValueType x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.pg.graphson.syntax.PrimitiveTypedValue"),
         Core.projectionFieldName = (Core.Name "type")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-primitiveTypedValueValue :: Phantoms.TTerm Syntax.PrimitiveTypedValue -> Phantoms.TTerm String
+primitiveTypedValueValue :: Phantoms.TypedTerm Syntax.PrimitiveTypedValue -> Phantoms.TypedTerm String
 primitiveTypedValueValue x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.pg.graphson.syntax.PrimitiveTypedValue"),
         Core.projectionFieldName = (Core.Name "value")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-primitiveTypedValueWithType :: Phantoms.TTerm Syntax.PrimitiveTypedValue -> Phantoms.TTerm Syntax.TypeName -> Phantoms.TTerm Syntax.PrimitiveTypedValue
+primitiveTypedValueWithType :: Phantoms.TypedTerm Syntax.PrimitiveTypedValue -> Phantoms.TypedTerm Syntax.TypeName -> Phantoms.TypedTerm Syntax.PrimitiveTypedValue
 primitiveTypedValueWithType original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.pg.graphson.syntax.PrimitiveTypedValue"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "type"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "value"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.graphson.syntax.PrimitiveTypedValue"),
               Core.projectionFieldName = (Core.Name "value")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))}]}))
 
-primitiveTypedValueWithValue :: Phantoms.TTerm Syntax.PrimitiveTypedValue -> Phantoms.TTerm String -> Phantoms.TTerm Syntax.PrimitiveTypedValue
+primitiveTypedValueWithValue :: Phantoms.TypedTerm Syntax.PrimitiveTypedValue -> Phantoms.TypedTerm String -> Phantoms.TypedTerm Syntax.PrimitiveTypedValue
 primitiveTypedValueWithValue original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.pg.graphson.syntax.PrimitiveTypedValue"),
       Core.recordFields = [
         Core.Field {
@@ -329,258 +329,258 @@ primitiveTypedValueWithValue original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.graphson.syntax.PrimitiveTypedValue"),
               Core.projectionFieldName = (Core.Name "type")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "value"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)}]}))
 
-propertyKey :: Phantoms.TTerm String -> Phantoms.TTerm Syntax.PropertyKey
+propertyKey :: Phantoms.TypedTerm String -> Phantoms.TypedTerm Syntax.PropertyKey
 propertyKey x =
-    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
+    Phantoms.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.pg.graphson.syntax.PropertyKey"),
-      Core.wrappedTermBody = (Phantoms.unTTerm x)}))
+      Core.wrappedTermBody = (Phantoms.unTypedTerm x)}))
 
-typeName :: Phantoms.TTerm String -> Phantoms.TTerm Syntax.TypeName
+typeName :: Phantoms.TypedTerm String -> Phantoms.TypedTerm Syntax.TypeName
 typeName x =
-    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
+    Phantoms.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.pg.graphson.syntax.TypeName"),
-      Core.wrappedTermBody = (Phantoms.unTTerm x)}))
+      Core.wrappedTermBody = (Phantoms.unTypedTerm x)}))
 
-unBigDecimalValue :: Phantoms.TTerm Syntax.BigDecimalValue -> Phantoms.TTerm String
+unBigDecimalValue :: Phantoms.TypedTerm Syntax.BigDecimalValue -> Phantoms.TypedTerm String
 unBigDecimalValue x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.pg.graphson.syntax.BigDecimalValue")),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-unDateTime :: Phantoms.TTerm Syntax.DateTime -> Phantoms.TTerm String
+unDateTime :: Phantoms.TypedTerm Syntax.DateTime -> Phantoms.TypedTerm String
 unDateTime x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.pg.graphson.syntax.DateTime")),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-unDuration :: Phantoms.TTerm Syntax.Duration -> Phantoms.TTerm String
+unDuration :: Phantoms.TypedTerm Syntax.Duration -> Phantoms.TypedTerm String
 unDuration x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.pg.graphson.syntax.Duration")),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-unEdgeLabel :: Phantoms.TTerm Syntax.EdgeLabel -> Phantoms.TTerm String
+unEdgeLabel :: Phantoms.TypedTerm Syntax.EdgeLabel -> Phantoms.TypedTerm String
 unEdgeLabel x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.pg.graphson.syntax.EdgeLabel")),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-unMap :: Phantoms.TTerm Syntax.Map -> Phantoms.TTerm [Syntax.ValuePair]
+unMap :: Phantoms.TypedTerm Syntax.Map -> Phantoms.TypedTerm [Syntax.ValuePair]
 unMap x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.pg.graphson.syntax.Map")),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-unPropertyKey :: Phantoms.TTerm Syntax.PropertyKey -> Phantoms.TTerm String
+unPropertyKey :: Phantoms.TypedTerm Syntax.PropertyKey -> Phantoms.TypedTerm String
 unPropertyKey x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.pg.graphson.syntax.PropertyKey")),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-unTypeName :: Phantoms.TTerm Syntax.TypeName -> Phantoms.TTerm String
+unTypeName :: Phantoms.TypedTerm Syntax.TypeName -> Phantoms.TypedTerm String
 unTypeName x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.pg.graphson.syntax.TypeName")),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-unUuid :: Phantoms.TTerm Syntax.Uuid -> Phantoms.TTerm String
+unUuid :: Phantoms.TypedTerm Syntax.Uuid -> Phantoms.TypedTerm String
 unUuid x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.pg.graphson.syntax.Uuid")),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-unVertexLabel :: Phantoms.TTerm Syntax.VertexLabel -> Phantoms.TTerm String
+unVertexLabel :: Phantoms.TypedTerm Syntax.VertexLabel -> Phantoms.TypedTerm String
 unVertexLabel x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.pg.graphson.syntax.VertexLabel")),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-uuid :: Phantoms.TTerm String -> Phantoms.TTerm Syntax.Uuid
+uuid :: Phantoms.TypedTerm String -> Phantoms.TypedTerm Syntax.Uuid
 uuid x =
-    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
+    Phantoms.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.pg.graphson.syntax.Uuid"),
-      Core.wrappedTermBody = (Phantoms.unTTerm x)}))
+      Core.wrappedTermBody = (Phantoms.unTypedTerm x)}))
 
-valueBigDecimal :: Phantoms.TTerm Syntax.BigDecimalValue -> Phantoms.TTerm Syntax.Value
+valueBigDecimal :: Phantoms.TypedTerm Syntax.BigDecimalValue -> Phantoms.TypedTerm Syntax.Value
 valueBigDecimal x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.pg.graphson.syntax.Value"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "bigDecimal"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-valueBigInteger :: Phantoms.TTerm Integer -> Phantoms.TTerm Syntax.Value
+valueBigInteger :: Phantoms.TypedTerm Integer -> Phantoms.TypedTerm Syntax.Value
 valueBigInteger x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.pg.graphson.syntax.Value"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "bigInteger"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-valueBinary :: Phantoms.TTerm String -> Phantoms.TTerm Syntax.Value
+valueBinary :: Phantoms.TypedTerm String -> Phantoms.TypedTerm Syntax.Value
 valueBinary x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.pg.graphson.syntax.Value"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "binary"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-valueBoolean :: Phantoms.TTerm Bool -> Phantoms.TTerm Syntax.Value
+valueBoolean :: Phantoms.TypedTerm Bool -> Phantoms.TypedTerm Syntax.Value
 valueBoolean x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.pg.graphson.syntax.Value"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "boolean"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-valueByte :: Phantoms.TTerm I.Int16 -> Phantoms.TTerm Syntax.Value
+valueByte :: Phantoms.TypedTerm I.Int16 -> Phantoms.TypedTerm Syntax.Value
 valueByte x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.pg.graphson.syntax.Value"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "byte"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-valueChar :: Phantoms.TTerm I.Int64 -> Phantoms.TTerm Syntax.Value
+valueChar :: Phantoms.TypedTerm I.Int64 -> Phantoms.TypedTerm Syntax.Value
 valueChar x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.pg.graphson.syntax.Value"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "char"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-valueComposite :: Phantoms.TTerm Syntax.CompositeTypedValue -> Phantoms.TTerm Syntax.Value
+valueComposite :: Phantoms.TypedTerm Syntax.CompositeTypedValue -> Phantoms.TypedTerm Syntax.Value
 valueComposite x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.pg.graphson.syntax.Value"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "composite"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-valueDateTime :: Phantoms.TTerm Syntax.DateTime -> Phantoms.TTerm Syntax.Value
+valueDateTime :: Phantoms.TypedTerm Syntax.DateTime -> Phantoms.TypedTerm Syntax.Value
 valueDateTime x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.pg.graphson.syntax.Value"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "dateTime"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-valueDouble :: Phantoms.TTerm Syntax.DoubleValue -> Phantoms.TTerm Syntax.Value
+valueDouble :: Phantoms.TypedTerm Syntax.DoubleValue -> Phantoms.TypedTerm Syntax.Value
 valueDouble x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.pg.graphson.syntax.Value"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "double"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-valueDuration :: Phantoms.TTerm Syntax.Duration -> Phantoms.TTerm Syntax.Value
+valueDuration :: Phantoms.TypedTerm Syntax.Duration -> Phantoms.TypedTerm Syntax.Value
 valueDuration x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.pg.graphson.syntax.Value"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "duration"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-valueFloat :: Phantoms.TTerm Syntax.FloatValue -> Phantoms.TTerm Syntax.Value
+valueFloat :: Phantoms.TypedTerm Syntax.FloatValue -> Phantoms.TypedTerm Syntax.Value
 valueFloat x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.pg.graphson.syntax.Value"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "float"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-valueInteger :: Phantoms.TTerm Int -> Phantoms.TTerm Syntax.Value
+valueInteger :: Phantoms.TypedTerm Int -> Phantoms.TypedTerm Syntax.Value
 valueInteger x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.pg.graphson.syntax.Value"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "integer"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-valueList :: Phantoms.TTerm [Syntax.Value] -> Phantoms.TTerm Syntax.Value
+valueList :: Phantoms.TypedTerm [Syntax.Value] -> Phantoms.TypedTerm Syntax.Value
 valueList x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.pg.graphson.syntax.Value"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "list"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-valueLong :: Phantoms.TTerm I.Int64 -> Phantoms.TTerm Syntax.Value
+valueLong :: Phantoms.TypedTerm I.Int64 -> Phantoms.TypedTerm Syntax.Value
 valueLong x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.pg.graphson.syntax.Value"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "long"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-valueMap :: Phantoms.TTerm Syntax.Map -> Phantoms.TTerm Syntax.Value
+valueMap :: Phantoms.TypedTerm Syntax.Map -> Phantoms.TypedTerm Syntax.Value
 valueMap x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.pg.graphson.syntax.Value"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "map"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-valueNull :: Phantoms.TTerm Syntax.Value
+valueNull :: Phantoms.TypedTerm Syntax.Value
 valueNull =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.pg.graphson.syntax.Value"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "null"),
         Core.fieldTerm = Core.TermUnit}}))
 
-valuePair :: Phantoms.TTerm Syntax.Value -> Phantoms.TTerm Syntax.Value -> Phantoms.TTerm Syntax.ValuePair
+valuePair :: Phantoms.TypedTerm Syntax.Value -> Phantoms.TypedTerm Syntax.Value -> Phantoms.TypedTerm Syntax.ValuePair
 valuePair first second =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.pg.graphson.syntax.ValuePair"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "first"),
-          Core.fieldTerm = (Phantoms.unTTerm first)},
+          Core.fieldTerm = (Phantoms.unTypedTerm first)},
         Core.Field {
           Core.fieldName = (Core.Name "second"),
-          Core.fieldTerm = (Phantoms.unTTerm second)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm second)}]}))
 
-valuePairFirst :: Phantoms.TTerm Syntax.ValuePair -> Phantoms.TTerm Syntax.Value
+valuePairFirst :: Phantoms.TypedTerm Syntax.ValuePair -> Phantoms.TypedTerm Syntax.Value
 valuePairFirst x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.pg.graphson.syntax.ValuePair"),
         Core.projectionFieldName = (Core.Name "first")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-valuePairSecond :: Phantoms.TTerm Syntax.ValuePair -> Phantoms.TTerm Syntax.Value
+valuePairSecond :: Phantoms.TypedTerm Syntax.ValuePair -> Phantoms.TypedTerm Syntax.Value
 valuePairSecond x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.pg.graphson.syntax.ValuePair"),
         Core.projectionFieldName = (Core.Name "second")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-valuePairWithFirst :: Phantoms.TTerm Syntax.ValuePair -> Phantoms.TTerm Syntax.Value -> Phantoms.TTerm Syntax.ValuePair
+valuePairWithFirst :: Phantoms.TypedTerm Syntax.ValuePair -> Phantoms.TypedTerm Syntax.Value -> Phantoms.TypedTerm Syntax.ValuePair
 valuePairWithFirst original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.pg.graphson.syntax.ValuePair"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "first"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "second"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.graphson.syntax.ValuePair"),
               Core.projectionFieldName = (Core.Name "second")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))}]}))
 
-valuePairWithSecond :: Phantoms.TTerm Syntax.ValuePair -> Phantoms.TTerm Syntax.Value -> Phantoms.TTerm Syntax.ValuePair
+valuePairWithSecond :: Phantoms.TypedTerm Syntax.ValuePair -> Phantoms.TypedTerm Syntax.Value -> Phantoms.TypedTerm Syntax.ValuePair
 valuePairWithSecond original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.pg.graphson.syntax.ValuePair"),
       Core.recordFields = [
         Core.Field {
@@ -589,165 +589,165 @@ valuePairWithSecond original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.graphson.syntax.ValuePair"),
               Core.projectionFieldName = (Core.Name "first")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "second"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)}]}))
 
-valuePrimitive :: Phantoms.TTerm Syntax.PrimitiveTypedValue -> Phantoms.TTerm Syntax.Value
+valuePrimitive :: Phantoms.TypedTerm Syntax.PrimitiveTypedValue -> Phantoms.TypedTerm Syntax.Value
 valuePrimitive x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.pg.graphson.syntax.Value"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "primitive"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-valueSet :: Phantoms.TTerm [Syntax.Value] -> Phantoms.TTerm Syntax.Value
+valueSet :: Phantoms.TypedTerm [Syntax.Value] -> Phantoms.TypedTerm Syntax.Value
 valueSet x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.pg.graphson.syntax.Value"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "set"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-valueShort :: Phantoms.TTerm I.Int16 -> Phantoms.TTerm Syntax.Value
+valueShort :: Phantoms.TypedTerm I.Int16 -> Phantoms.TypedTerm Syntax.Value
 valueShort x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.pg.graphson.syntax.Value"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "short"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-valueString :: Phantoms.TTerm String -> Phantoms.TTerm Syntax.Value
+valueString :: Phantoms.TypedTerm String -> Phantoms.TypedTerm Syntax.Value
 valueString x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.pg.graphson.syntax.Value"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "string"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-valueUuid :: Phantoms.TTerm Syntax.Uuid -> Phantoms.TTerm Syntax.Value
+valueUuid :: Phantoms.TypedTerm Syntax.Uuid -> Phantoms.TypedTerm Syntax.Value
 valueUuid x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
+    Phantoms.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.pg.graphson.syntax.Value"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "uuid"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+        Core.fieldTerm = (Phantoms.unTypedTerm x)}}))
 
-vertex :: Phantoms.TTerm Syntax.Value -> Phantoms.TTerm (Maybe Syntax.VertexLabel) -> Phantoms.TTerm (M.Map Syntax.EdgeLabel [Syntax.AdjacentEdge]) -> Phantoms.TTerm (M.Map Syntax.EdgeLabel [Syntax.AdjacentEdge]) -> Phantoms.TTerm (M.Map Syntax.PropertyKey [Syntax.VertexPropertyValue]) -> Phantoms.TTerm Syntax.Vertex
+vertex :: Phantoms.TypedTerm Syntax.Value -> Phantoms.TypedTerm (Maybe Syntax.VertexLabel) -> Phantoms.TypedTerm (M.Map Syntax.EdgeLabel [Syntax.AdjacentEdge]) -> Phantoms.TypedTerm (M.Map Syntax.EdgeLabel [Syntax.AdjacentEdge]) -> Phantoms.TypedTerm (M.Map Syntax.PropertyKey [Syntax.VertexPropertyValue]) -> Phantoms.TypedTerm Syntax.Vertex
 vertex id label inEdges outEdges properties =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.pg.graphson.syntax.Vertex"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "id"),
-          Core.fieldTerm = (Phantoms.unTTerm id)},
+          Core.fieldTerm = (Phantoms.unTypedTerm id)},
         Core.Field {
           Core.fieldName = (Core.Name "label"),
-          Core.fieldTerm = (Phantoms.unTTerm label)},
+          Core.fieldTerm = (Phantoms.unTypedTerm label)},
         Core.Field {
           Core.fieldName = (Core.Name "inEdges"),
-          Core.fieldTerm = (Phantoms.unTTerm inEdges)},
+          Core.fieldTerm = (Phantoms.unTypedTerm inEdges)},
         Core.Field {
           Core.fieldName = (Core.Name "outEdges"),
-          Core.fieldTerm = (Phantoms.unTTerm outEdges)},
+          Core.fieldTerm = (Phantoms.unTypedTerm outEdges)},
         Core.Field {
           Core.fieldName = (Core.Name "properties"),
-          Core.fieldTerm = (Phantoms.unTTerm properties)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm properties)}]}))
 
-vertexId :: Phantoms.TTerm Syntax.Vertex -> Phantoms.TTerm Syntax.Value
+vertexId :: Phantoms.TypedTerm Syntax.Vertex -> Phantoms.TypedTerm Syntax.Value
 vertexId x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.pg.graphson.syntax.Vertex"),
         Core.projectionFieldName = (Core.Name "id")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-vertexInEdges :: Phantoms.TTerm Syntax.Vertex -> Phantoms.TTerm (M.Map Syntax.EdgeLabel [Syntax.AdjacentEdge])
+vertexInEdges :: Phantoms.TypedTerm Syntax.Vertex -> Phantoms.TypedTerm (M.Map Syntax.EdgeLabel [Syntax.AdjacentEdge])
 vertexInEdges x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.pg.graphson.syntax.Vertex"),
         Core.projectionFieldName = (Core.Name "inEdges")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-vertexLabel :: Phantoms.TTerm Syntax.Vertex -> Phantoms.TTerm (Maybe Syntax.VertexLabel)
+vertexLabel :: Phantoms.TypedTerm Syntax.Vertex -> Phantoms.TypedTerm (Maybe Syntax.VertexLabel)
 vertexLabel x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.pg.graphson.syntax.Vertex"),
         Core.projectionFieldName = (Core.Name "label")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-vertexLabel_ :: Phantoms.TTerm String -> Phantoms.TTerm Syntax.VertexLabel
+vertexLabel_ :: Phantoms.TypedTerm String -> Phantoms.TypedTerm Syntax.VertexLabel
 vertexLabel_ x =
-    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
+    Phantoms.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.pg.graphson.syntax.VertexLabel"),
-      Core.wrappedTermBody = (Phantoms.unTTerm x)}))
+      Core.wrappedTermBody = (Phantoms.unTypedTerm x)}))
 
-vertexOutEdges :: Phantoms.TTerm Syntax.Vertex -> Phantoms.TTerm (M.Map Syntax.EdgeLabel [Syntax.AdjacentEdge])
+vertexOutEdges :: Phantoms.TypedTerm Syntax.Vertex -> Phantoms.TypedTerm (M.Map Syntax.EdgeLabel [Syntax.AdjacentEdge])
 vertexOutEdges x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.pg.graphson.syntax.Vertex"),
         Core.projectionFieldName = (Core.Name "outEdges")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-vertexProperties :: Phantoms.TTerm Syntax.Vertex -> Phantoms.TTerm (M.Map Syntax.PropertyKey [Syntax.VertexPropertyValue])
+vertexProperties :: Phantoms.TypedTerm Syntax.Vertex -> Phantoms.TypedTerm (M.Map Syntax.PropertyKey [Syntax.VertexPropertyValue])
 vertexProperties x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.pg.graphson.syntax.Vertex"),
         Core.projectionFieldName = (Core.Name "properties")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-vertexPropertyValue :: Phantoms.TTerm (Maybe Syntax.Value) -> Phantoms.TTerm Syntax.Value -> Phantoms.TTerm Syntax.VertexPropertyValue
+vertexPropertyValue :: Phantoms.TypedTerm (Maybe Syntax.Value) -> Phantoms.TypedTerm Syntax.Value -> Phantoms.TypedTerm Syntax.VertexPropertyValue
 vertexPropertyValue id value =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.pg.graphson.syntax.VertexPropertyValue"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "id"),
-          Core.fieldTerm = (Phantoms.unTTerm id)},
+          Core.fieldTerm = (Phantoms.unTypedTerm id)},
         Core.Field {
           Core.fieldName = (Core.Name "value"),
-          Core.fieldTerm = (Phantoms.unTTerm value)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm value)}]}))
 
-vertexPropertyValueId :: Phantoms.TTerm Syntax.VertexPropertyValue -> Phantoms.TTerm (Maybe Syntax.Value)
+vertexPropertyValueId :: Phantoms.TypedTerm Syntax.VertexPropertyValue -> Phantoms.TypedTerm (Maybe Syntax.Value)
 vertexPropertyValueId x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.pg.graphson.syntax.VertexPropertyValue"),
         Core.projectionFieldName = (Core.Name "id")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-vertexPropertyValueValue :: Phantoms.TTerm Syntax.VertexPropertyValue -> Phantoms.TTerm Syntax.Value
+vertexPropertyValueValue :: Phantoms.TypedTerm Syntax.VertexPropertyValue -> Phantoms.TypedTerm Syntax.Value
 vertexPropertyValueValue x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
+    Phantoms.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.pg.graphson.syntax.VertexPropertyValue"),
         Core.projectionFieldName = (Core.Name "value")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+      Core.applicationArgument = (Phantoms.unTypedTerm x)}))
 
-vertexPropertyValueWithId :: Phantoms.TTerm Syntax.VertexPropertyValue -> Phantoms.TTerm (Maybe Syntax.Value) -> Phantoms.TTerm Syntax.VertexPropertyValue
+vertexPropertyValueWithId :: Phantoms.TypedTerm Syntax.VertexPropertyValue -> Phantoms.TypedTerm (Maybe Syntax.Value) -> Phantoms.TypedTerm Syntax.VertexPropertyValue
 vertexPropertyValueWithId original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.pg.graphson.syntax.VertexPropertyValue"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "id"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "value"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.graphson.syntax.VertexPropertyValue"),
               Core.projectionFieldName = (Core.Name "value")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))}]}))
 
-vertexPropertyValueWithValue :: Phantoms.TTerm Syntax.VertexPropertyValue -> Phantoms.TTerm Syntax.Value -> Phantoms.TTerm Syntax.VertexPropertyValue
+vertexPropertyValueWithValue :: Phantoms.TypedTerm Syntax.VertexPropertyValue -> Phantoms.TypedTerm Syntax.Value -> Phantoms.TypedTerm Syntax.VertexPropertyValue
 vertexPropertyValueWithValue original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.pg.graphson.syntax.VertexPropertyValue"),
       Core.recordFields = [
         Core.Field {
@@ -756,51 +756,51 @@ vertexPropertyValueWithValue original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.graphson.syntax.VertexPropertyValue"),
               Core.projectionFieldName = (Core.Name "id")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "value"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)}]}))
 
-vertexWithId :: Phantoms.TTerm Syntax.Vertex -> Phantoms.TTerm Syntax.Value -> Phantoms.TTerm Syntax.Vertex
+vertexWithId :: Phantoms.TypedTerm Syntax.Vertex -> Phantoms.TypedTerm Syntax.Value -> Phantoms.TypedTerm Syntax.Vertex
 vertexWithId original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.pg.graphson.syntax.Vertex"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "id"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "label"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.graphson.syntax.Vertex"),
               Core.projectionFieldName = (Core.Name "label")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "inEdges"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.graphson.syntax.Vertex"),
               Core.projectionFieldName = (Core.Name "inEdges")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "outEdges"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.graphson.syntax.Vertex"),
               Core.projectionFieldName = (Core.Name "outEdges")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "properties"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.graphson.syntax.Vertex"),
               Core.projectionFieldName = (Core.Name "properties")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))}]}))
 
-vertexWithInEdges :: Phantoms.TTerm Syntax.Vertex -> Phantoms.TTerm (M.Map Syntax.EdgeLabel [Syntax.AdjacentEdge]) -> Phantoms.TTerm Syntax.Vertex
+vertexWithInEdges :: Phantoms.TypedTerm Syntax.Vertex -> Phantoms.TypedTerm (M.Map Syntax.EdgeLabel [Syntax.AdjacentEdge]) -> Phantoms.TypedTerm Syntax.Vertex
 vertexWithInEdges original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.pg.graphson.syntax.Vertex"),
       Core.recordFields = [
         Core.Field {
@@ -809,35 +809,35 @@ vertexWithInEdges original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.graphson.syntax.Vertex"),
               Core.projectionFieldName = (Core.Name "id")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "label"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.graphson.syntax.Vertex"),
               Core.projectionFieldName = (Core.Name "label")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "inEdges"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "outEdges"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.graphson.syntax.Vertex"),
               Core.projectionFieldName = (Core.Name "outEdges")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "properties"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.graphson.syntax.Vertex"),
               Core.projectionFieldName = (Core.Name "properties")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))}]}))
 
-vertexWithLabel :: Phantoms.TTerm Syntax.Vertex -> Phantoms.TTerm (Maybe Syntax.VertexLabel) -> Phantoms.TTerm Syntax.Vertex
+vertexWithLabel :: Phantoms.TypedTerm Syntax.Vertex -> Phantoms.TypedTerm (Maybe Syntax.VertexLabel) -> Phantoms.TypedTerm Syntax.Vertex
 vertexWithLabel original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.pg.graphson.syntax.Vertex"),
       Core.recordFields = [
         Core.Field {
@@ -846,35 +846,35 @@ vertexWithLabel original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.graphson.syntax.Vertex"),
               Core.projectionFieldName = (Core.Name "id")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "label"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "inEdges"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.graphson.syntax.Vertex"),
               Core.projectionFieldName = (Core.Name "inEdges")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "outEdges"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.graphson.syntax.Vertex"),
               Core.projectionFieldName = (Core.Name "outEdges")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "properties"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.graphson.syntax.Vertex"),
               Core.projectionFieldName = (Core.Name "properties")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))}]}))
 
-vertexWithOutEdges :: Phantoms.TTerm Syntax.Vertex -> Phantoms.TTerm (M.Map Syntax.EdgeLabel [Syntax.AdjacentEdge]) -> Phantoms.TTerm Syntax.Vertex
+vertexWithOutEdges :: Phantoms.TypedTerm Syntax.Vertex -> Phantoms.TypedTerm (M.Map Syntax.EdgeLabel [Syntax.AdjacentEdge]) -> Phantoms.TypedTerm Syntax.Vertex
 vertexWithOutEdges original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.pg.graphson.syntax.Vertex"),
       Core.recordFields = [
         Core.Field {
@@ -883,35 +883,35 @@ vertexWithOutEdges original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.graphson.syntax.Vertex"),
               Core.projectionFieldName = (Core.Name "id")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "label"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.graphson.syntax.Vertex"),
               Core.projectionFieldName = (Core.Name "label")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "inEdges"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.graphson.syntax.Vertex"),
               Core.projectionFieldName = (Core.Name "inEdges")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "outEdges"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)},
         Core.Field {
           Core.fieldName = (Core.Name "properties"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.graphson.syntax.Vertex"),
               Core.projectionFieldName = (Core.Name "properties")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))}]}))
 
-vertexWithProperties :: Phantoms.TTerm Syntax.Vertex -> Phantoms.TTerm (M.Map Syntax.PropertyKey [Syntax.VertexPropertyValue]) -> Phantoms.TTerm Syntax.Vertex
+vertexWithProperties :: Phantoms.TypedTerm Syntax.Vertex -> Phantoms.TypedTerm (M.Map Syntax.PropertyKey [Syntax.VertexPropertyValue]) -> Phantoms.TypedTerm Syntax.Vertex
 vertexWithProperties original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
+    Phantoms.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.pg.graphson.syntax.Vertex"),
       Core.recordFields = [
         Core.Field {
@@ -920,28 +920,28 @@ vertexWithProperties original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.graphson.syntax.Vertex"),
               Core.projectionFieldName = (Core.Name "id")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "label"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.graphson.syntax.Vertex"),
               Core.projectionFieldName = (Core.Name "label")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "inEdges"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.graphson.syntax.Vertex"),
               Core.projectionFieldName = (Core.Name "inEdges")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "outEdges"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.graphson.syntax.Vertex"),
               Core.projectionFieldName = (Core.Name "outEdges")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+            Core.applicationArgument = (Phantoms.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "properties"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Phantoms.unTypedTerm newVal)}]}))

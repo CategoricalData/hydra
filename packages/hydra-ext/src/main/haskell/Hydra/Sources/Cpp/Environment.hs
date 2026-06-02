@@ -15,36 +15,36 @@ import qualified Hydra.Sources.Cpp.Syntax as CppSyntax
 ns :: ModuleName
 ns = ModuleName "hydra.cpp.environment"
 
-define :: String -> Type -> Binding
+define :: String -> Type -> TypeDefinition
 define = defineType ns
+
+module_ :: Module
+module_ = Module {
+            moduleName = ns,
+            moduleDefinitions = (DefinitionType <$> definitions),
+            moduleDependencies = unqualifiedDep <$> [CoreTypes.ns, ModuleTypes.ns, UtilTypes.ns],
+            moduleMetadata = descriptionMetadata (Just "Type definitions for C++ code generation environment")}
+  where
+    definitions = [
+      cppEnvironmentType]
 
 coreType :: String -> Type
 coreType = typeref CoreTypes.ns
+
+-- | The CppEnvironment type definition
+cppEnvironmentType :: TypeDefinition
+cppEnvironmentType = define "CppEnvironment" $
+  doc "Environment for C++ code generation" $
+  T.record [
+    "namespaces" >:
+      doc "ModuleName mapping for code generation" $
+      T.apply (utilType "ModuleNames") T.string,
+    "boundTypeVariables" >:
+      doc "Type variables in scope, with their C++ names" $
+      T.pair (T.list (coreType "Name")) (T.map (coreType "Name") T.string)]
 
 modulType :: String -> Type
 modulType = typeref ModuleTypes.ns
 
 utilType :: String -> Type
 utilType = typeref UtilTypes.ns
-
-module_ :: Module
-module_ = Module {
-            moduleName = ns,
-            moduleDefinitions = (map toTypeDef definitions),
-            moduleDependencies = unqualifiedDep <$> [CoreTypes.ns, ModuleTypes.ns, UtilTypes.ns],
-            moduleDescription = Just "Type definitions for C++ code generation environment"}
-  where
-    definitions = [
-      cppEnvironmentType]
-
--- | The CppEnvironment type definition
-cppEnvironmentType :: Binding
-cppEnvironmentType = define "CppEnvironment" $
-  doc "Environment for C++ code generation" $
-  T.record [
-    "namespaces" >:
-      doc "ModuleName mapping for code generation" $
-      T.apply (utilType "Namespaces") T.string,
-    "boundTypeVariables" >:
-      doc "Type variables in scope, with their C++ names" $
-      T.pair (T.list (coreType "Name")) (T.map (coreType "Name") T.string)]

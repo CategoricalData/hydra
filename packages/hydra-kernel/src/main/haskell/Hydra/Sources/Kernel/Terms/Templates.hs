@@ -10,7 +10,6 @@ import qualified Hydra.Dsl.Ast          as Ast
 import qualified Hydra.Dsl.Bootstrap         as Bootstrap
 import qualified Hydra.Dsl.Coders       as Coders
 import qualified Hydra.Dsl.Util      as Util
-import qualified Hydra.Dsl.Meta.Context      as Ctx
 import qualified Hydra.Dsl.Meta.Core         as Core
 import qualified Hydra.Dsl.Meta.Graph        as Graph
 import qualified Hydra.Dsl.Json.Model         as Json
@@ -65,16 +64,16 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> ([Constants.ns, moduleName DecodeCore.module_, ShowCore.ns] L.++ kernelTypesModuleNames),
-            moduleDescription = Just "A utility which instantiates a nonrecursive type with default values"}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just "A utility which instantiates a nonrecursive type with default values")}
   where
    definitions = [
      toDefinition graphToSchema,
      toDefinition instantiateTemplate]
 
-define :: String -> TTerm a -> TTermDefinition a
+define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModule module_
 
-graphToSchema :: TTermDefinition (Context -> Graph -> [Binding] -> Either DecodingError (M.Map Name Type))
+graphToSchema :: TypedTermDefinition (InferenceContext -> Graph -> [Binding] -> Either DecodingError (M.Map Name Type))
 graphToSchema = define "graphToSchema" $
   doc "Decode a list of type-encoding bindings into a map of named types" $
   "cx" ~> "graph" ~> "els" ~>
@@ -85,7 +84,7 @@ graphToSchema = define "graphToSchema" $
   Eithers.bind (Eithers.mapList (var "toPair") (var "els")) (
     "pairs" ~> right (Maps.fromList (var "pairs")))
 
-instantiateTemplate :: TTermDefinition (Context -> Bool -> M.Map Name Type -> Name -> Type -> Either Error Term)
+instantiateTemplate :: TypedTermDefinition (InferenceContext -> Bool -> M.Map Name Type -> Name -> Type -> Either Error Term)
 instantiateTemplate = define "instantiateTemplate" $
   doc ("Given a graph schema and a nonrecursive type, instantiate it with default values."
     <> " If the minimal flag is set, the smallest possible term is produced; otherwise, exactly one subterm"
@@ -93,7 +92,7 @@ instantiateTemplate = define "instantiateTemplate" $
     <> " The name parameter provides the element name for nominal type construction.") $
   "cx" ~> "minimal" ~> "schema" ~> "tname" ~> "t" ~>
   "inst" <~ ("tn" ~> instantiateTemplate @@ var "cx" @@ var "minimal" @@ var "schema" @@ var "tn") $
-  "noPoly" <~ Ctx.failInContext (Error.errorExtraction $ Error.extractionErrorUnexpectedShape $ Error.unexpectedShapeError (string "non-polymorphic type") (string "polymorphic or function type")) (var "cx") $
+  "noPoly" <~ left (Error.errorExtraction $ Error.extractionErrorUnexpectedShape $ Error.unexpectedShapeError (string "non-polymorphic type") (string "polymorphic or function type")) $
   "forFloat" <~ ("ft" ~> cases _FloatType (var "ft")
     Nothing [
     _FloatType_float32>>: constant (Core.floatValueFloat32 (float32 0.0)),
@@ -124,7 +123,7 @@ instantiateTemplate = define "instantiateTemplate" $
     _Type_function>>: constant (var "noPoly"),
     _Type_forall>>: constant (var "noPoly"),
     _Type_list>>: "et" ~> Logic.ifElse (var "minimal")
-      (right (Core.termList (list ([] :: [TTerm Term]))))
+      (right (Core.termList (list ([] :: [TypedTerm Term]))))
       (Eithers.bind (var "inst" @@ var "tname" @@ var "et") (
         "e" ~> right (Core.termList (list [var "e"])))),
     _Type_literal>>: "lt" ~> right (Core.termLiteral (var "forLiteral" @@ var "lt")),
@@ -153,7 +152,7 @@ instantiateTemplate = define "instantiateTemplate" $
         "e" ~> right (Core.termSet (Sets.fromList (list [var "e"]))))),
     _Type_variable>>: "vname" ~>
       Maybes.maybe
-        (Ctx.failInContext (Error.errorResolution $ Error.resolutionErrorUnexpectedShape $ Error.unexpectedShapeError (string "bound type variable") (Strings.cat2 (string "unbound variable ") (Core.unName (var "vname")))) (var "cx"))
+        (left (Error.errorResolution $ Error.resolutionErrorUnexpectedShape $ Error.unexpectedShapeError (string "bound type variable") (Strings.cat2 (string "unbound variable ") (Core.unName (var "vname")))))
         (var "inst" @@ var "vname")
         (Maps.lookup (var "vname") (var "schema")),
     _Type_wrap>>: "wt" ~>

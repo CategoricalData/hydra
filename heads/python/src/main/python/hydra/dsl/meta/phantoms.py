@@ -15,52 +15,52 @@ import hydra.formatting
 from hydra.util import CaseConvention
 from hydra.core import Binding, Field, Name, Term, Type
 from hydra.packaging import Module, ModuleName, QualifiedName
-from hydra.phantoms import TBinding, TTerm
+from hydra.typed import TypedBinding, TypedTerm
 from hydra.dsl.python import FrozenDict, Maybe, Just, Nothing
 
 
 def _tbinding_matmul(self, other):
-    """Apply a TBinding as a function reference to an argument."""
-    ref_term = TTerm(terms.TermVariable(self.name))
+    """Apply a TypedBinding as a function reference to an argument."""
+    ref_term = TypedTerm(terms.TermVariable(self.name))
     return ref_term @ other
 
-TBinding.__matmul__ = _tbinding_matmul
+TypedBinding.__matmul__ = _tbinding_matmul
 
 
 def _tterm_matmul(self, other):
-    """Apply a TTerm function-term to a TTerm argument: `f @ x` ≡ `apply(f, x)`.
+    """Apply a TypedTerm function-term to a TypedTerm argument: `f @ x` ≡ `apply(f, x)`.
 
     Enables the `@@` Haskell idiom in Python:
         var("f") @ var("x")           # apply(f, x)
         var("f") @ var("x") @ var("y") # apply(apply(f, x), y)
     """
-    if not isinstance(other, TTerm):
+    if not isinstance(other, TypedTerm):
         return NotImplemented
-    return TTerm(terms.apply(self.value, other.value))
+    return TypedTerm(terms.apply(self.value, other.value))
 
-TTerm.__matmul__ = _tterm_matmul
+TypedTerm.__matmul__ = _tterm_matmul
 
 
 def _tterm_call(self, *args):
-    """Treat a TTerm function-term as callable: `f(x, y, z)` ≡ `apply(apply(apply(f, x), y), z)`.
+    """Treat a TypedTerm function-term as callable: `f(x, y, z)` ≡ `apply(apply(apply(f, x), y), z)`.
 
     This is the natural Python idiom for term application — equivalent to Haskell's
-    `f @@ x @@ y @@ z`. All args must themselves be TTerm.
+    `f @@ x @@ y @@ z`. All args must themselves be TypedTerm.
     """
     out = self
     for a in args:
-        if not isinstance(a, TTerm):
+        if not isinstance(a, TypedTerm):
             raise TypeError(
-                f"TTerm() called with non-TTerm argument of type {type(a).__name__}"
+                f"TypedTerm() called with non-TypedTerm argument of type {type(a).__name__}"
             )
-        out = TTerm(terms.apply(out.value, a.value))
+        out = TypedTerm(terms.apply(out.value, a.value))
     return out
 
-TTerm.__call__ = _tterm_call
+TypedTerm.__call__ = _tterm_call
 
 
 def _name_rshift(self, val):
-    """Create a Field from a Name and a TTerm: name >> term."""
+    """Create a Field from a Name and a TypedTerm: name >> term."""
     return Field(self, un_tterm(val))
 
 Name.__rshift__ = _name_rshift
@@ -68,7 +68,7 @@ Name.__rshift__ = _name_rshift
 from enum import Enum
 
 def _enum_rshift(self, val):
-    """Create a Field from an enum member (whose value is a Name) and a TTerm: member >> term."""
+    """Create a Field from an enum member (whose value is a Name) and a TypedTerm: member >> term."""
     return Field(self.value, un_tterm(val))
 
 Enum.__rshift__ = _enum_rshift
@@ -111,43 +111,43 @@ def _name(n) -> Name:
     return n if isinstance(n, Name) else Name(n)
 
 
-def un_tterm(t: TTerm[A]) -> Term:
-    """Extract the underlying Term from a TTerm."""
+def un_tterm(t: TypedTerm[A]) -> Term:
+    """Extract the underlying Term from a TypedTerm."""
     return t.value
 
 
 # Operators - Python equivalents for Haskell operators
-# (~>) :: String -> TTerm x -> TTerm (a -> b) - use lam(name, body)
-# (<~) :: String -> TTerm a -> TTerm b -> TTerm b - use let1(name, value, body)
-# (<.>) :: TTerm (b -> c) -> TTerm (a -> b) -> TTerm (a -> c) - use compose(f, g)
-# (@@) :: TTerm (a -> b) -> TTerm a -> TTerm b - use apply(fun, arg)
-# (>:) :: String -> TTerm a -> Field - use field_op(name, term)
-# (>>:) :: Name -> TTerm a -> Field - use field_name_op(fname, term)
+# (~>) :: String -> TypedTerm x -> TypedTerm (a -> b) - use lam(name, body)
+# (<~) :: String -> TypedTerm a -> TypedTerm b -> TypedTerm b - use let1(name, value, body)
+# (<.>) :: TypedTerm (b -> c) -> TypedTerm (a -> b) -> TypedTerm (a -> c) - use compose(f, g)
+# (@@) :: TypedTerm (a -> b) -> TypedTerm a -> TypedTerm b - use apply(fun, arg)
+# (>:) :: String -> TypedTerm a -> Field - use field_op(name, term)
+# (>>:) :: Name -> TypedTerm a -> Field - use field_name_op(fname, term)
 
 
-def annot(key: Name, mvalue: Maybe[Term], term: TTerm[A]) -> TTerm[A]:
+def annot(key: Name, mvalue: Maybe[Term], term: TypedTerm[A]) -> TypedTerm[A]:
     """Add an annotation to a term."""
-    return TTerm[A](annotations.annotate_term(key, mvalue, un_tterm(term)))
+    return TypedTerm[A](annotations.annotate_term(key, mvalue, un_tterm(term)))
 
 
-def apply(fun: TTerm[A], arg: TTerm[B]) -> TTerm[C]:
+def apply(fun: TypedTerm[A], arg: TypedTerm[B]) -> TypedTerm[C]:
     """Apply a function to an argument."""
-    return TTerm[C](terms.apply(un_tterm(fun), un_tterm(arg)))
+    return TypedTerm[C](terms.apply(un_tterm(fun), un_tterm(arg)))
 
 
-def binary_function(f) -> TTerm[A]:
+def binary_function(f) -> TypedTerm[A]:
     """Extract a binary function from a function application."""
     term = un_tterm(f(var("x"), var("y")))
     match term:
         case terms.TermApplication(terms.Application(
             terms.TermApplication(terms.Application(lhs, _)), _
         )):
-            return TTerm[A](lhs)
+            return TypedTerm[A](lhs)
         case _:
-            return TTerm[A](terms.string(f"unexpected term as binary function: {term}"))
+            return TypedTerm[A](terms.string(f"unexpected term as binary function: {term}"))
 
 
-def cases(name, arg: TTerm[A], dflt: Maybe[TTerm[B]] = None, fields: Sequence[Field] = ()) -> TTerm[B]:
+def cases(name, arg: TypedTerm[A], dflt: Maybe[TypedTerm[B]] = None, fields: Sequence[Field] = ()) -> TypedTerm[B]:
     """Apply a named case match to an argument.
 
     Accepts a str or Name. Without a default, pass `dflt=None` (treated as Nothing()).
@@ -162,53 +162,53 @@ def cases(name, arg: TTerm[A], dflt: Maybe[TTerm[B]] = None, fields: Sequence[Fi
             case Nothing():
                 dflt_term = Nothing()
 
-    return TTerm[B](terms.apply(terms.match(_name(name), dflt_term, fields), un_tterm(arg)))
+    return TypedTerm[B](terms.apply(terms.match(_name(name), dflt_term, fields), un_tterm(arg)))
 
 
-def cases_with_default(name, arg: TTerm[A], default: TTerm[B], *fields: Field) -> TTerm[B]:
+def cases_with_default(name, arg: TypedTerm[A], default: TypedTerm[B], *fields: Field) -> TypedTerm[B]:
     """Apply a named case match with a default branch.
 
     Java-style alternative to `cases(name, arg, Just(default), [f1, f2, ...])`.
     Accepts variadic field args for ergonomics.
     """
-    return TTerm[B](terms.apply(
+    return TypedTerm[B](terms.apply(
         terms.match(_name(name), Just(un_tterm(default)), list(fields)),
         un_tterm(arg)
     ))
 
 
-def compose(f: TTerm[B], g: TTerm[A]) -> TTerm[C]:
+def compose(f: TypedTerm[B], g: TypedTerm[A]) -> TypedTerm[C]:
     """Compose two functions (g then f)."""
-    return TTerm[C](terms.compose(un_tterm(f), un_tterm(g)))
+    return TypedTerm[C](terms.compose(un_tterm(f), un_tterm(g)))
 
 
-def constant(term: TTerm[A]) -> TTerm[B]:
+def constant(term: TypedTerm[A]) -> TypedTerm[B]:
     """Create a constant function that always returns the same value."""
-    return TTerm[B](terms.constant(un_tterm(term)))
+    return TypedTerm[B](terms.constant(un_tterm(term)))
 
 
-def definition_in_module(mod: Module, lname: str, term: TTerm[A]) -> TBinding[A]:
+def definition_in_module(mod: Module, lname: str, term: TypedTerm[A]) -> TypedBinding[A]:
     """Create a definition in a module."""
     return definition_in_namespace(mod.name, lname, term)
 
 
-def definition_in_namespace(ns: ModuleName, lname: str, term: TTerm[A] | None = None) -> "TBinding[A] | DefineBuilder":
+def definition_in_namespace(ns: ModuleName, lname: str, term: TypedTerm[A] | None = None) -> "TypedBinding[A] | DefineBuilder":
     """Create a definition in a namespace.
 
-    With 3 arguments: returns a TBinding (direct definition).
+    With 3 arguments: returns a TypedBinding (direct definition).
     With 2 arguments: returns a DefineBuilder for fluent chaining.
     """
     qname = QualifiedName(Just(ns), lname)
     name = unqualify_name(qname)
     if term is not None:
-        return TBinding(name, term)
+        return TypedBinding(name, term)
     return DefineBuilder(name, [])
 
 
 def make_local(ns: ModuleName):
     """Create a local reference function for a namespace.
 
-    Returns a function that takes a local name and produces a TTerm variable
+    Returns a function that takes a local name and produces a TypedTerm variable
     reference with the full qualified name. Use this for recursive or
     forward references within a module.
 
@@ -221,25 +221,25 @@ def make_local(ns: ModuleName):
     return lambda lname: var(prefix + lname)
 
 
-def to_binding(tb: TBinding[A]) -> Binding:
-    """Convert a TBinding to an untyped Binding for use in module element lists.
+def to_binding(tb: TypedBinding[A]) -> Binding:
+    """Convert a TypedBinding to an untyped Binding for use in module element lists.
 
     This mirrors Haskell's toBinding and Java's Phantoms.toBinding().
     """
     return Binding(tb.name, tb.term.value, Nothing())
 
 
-def to_definition(tb: TBinding[A]):
-    """Convert a TBinding to a term Definition for use in Module.definitions.
+def to_definition(tb: TypedBinding[A]):
+    """Convert a TypedBinding to a term Definition for use in Module.definitions.
 
     Mirrors Haskell's Hydra.Dsl.Meta.Phantoms.toDefinition.
     """
     from hydra.packaging import DefinitionTerm, TermDefinition
-    return DefinitionTerm(TermDefinition(tb.name, tb.term.value, Nothing()))
+    return DefinitionTerm(TermDefinition(tb.name, Nothing(), tb.term.value, Nothing()))
 
 
-def to_term_definition(tb: TBinding[A]):
-    """Convert a TBinding to a term Definition (alias for to_definition)."""
+def to_term_definition(tb: TypedBinding[A]):
+    """Convert a TypedBinding to a term Definition (alias for to_definition)."""
     return to_definition(tb)
 
 
@@ -280,48 +280,48 @@ def derive_primitive_name() -> Name:
     return Name(f"hydra.lib.{lib_name}.{camel_name}")
 
 
-def doc(s: str, term: TTerm[A] | None = None) -> "TTerm[A] | ExprBuilder":
+def doc(s: str, term: TypedTerm[A] | None = None) -> "TypedTerm[A] | ExprBuilder":
     """Add documentation to a term.
 
-    With 2 arguments: returns a TTerm (direct doc annotation).
+    With 2 arguments: returns a TypedTerm (direct doc annotation).
     With 1 argument: returns an ExprBuilder for fluent chaining.
     """
     if term is not None:
-        return TTerm[A](annotations.set_term_description(Just(s), un_tterm(term)))
+        return TypedTerm[A](annotations.set_term_description(Just(s), un_tterm(term)))
     return ExprBuilder([("doc", s, None)])
 
 
-def doc_wrapped(length: int, s: str, term: TTerm[A]) -> TTerm[A]:
+def doc_wrapped(length: int, s: str, term: TypedTerm[A]) -> TypedTerm[A]:
     """Add documentation with line wrapping at the specified width."""
-    return TTerm[A](annotations.data_doc(annotations.wrap_line(length, s), un_tterm(term)))
+    return TypedTerm[A](annotations.data_doc(annotations.wrap_line(length, s), un_tterm(term)))
 
 
-def el(binding: TBinding[A]) -> terms.Binding:
+def el(binding: TypedBinding[A]) -> terms.Binding:
     """Convert a typed element to an untyped element."""
     return terms.Binding(binding.name, un_tterm(binding.term), Nothing())
 
 
-def field(fname, val: TTerm[A]) -> Field:
+def field(fname, val: TypedTerm[A]) -> Field:
     """Create a field with the given name and value. Accepts str or Name."""
     return Field(_name(fname), un_tterm(val))
 
 
-def field_name_op(fname, d: TTerm[A]) -> Field:
+def field_name_op(fname, d: TypedTerm[A]) -> Field:
     """Field definition operator with pre-constructed name: fname>>: value."""
     return Field(_name(fname), un_tterm(d))
 
 
-def field_op(name: str, term: TTerm[A]) -> Field:
+def field_op(name: str, term: TypedTerm[A]) -> Field:
     """Field definition operator: name>: value."""
     return Field(Name(name), un_tterm(term))
 
 
-def first(pair: TTerm[tuple[A, B]]) -> TTerm[A]:
+def first(pair: TypedTerm[tuple[A, B]]) -> TypedTerm[A]:
     """First element projection function for pairs."""
-    return apply(TTerm[A](terms.first()), pair)
+    return apply(TypedTerm[A](terms.first()), pair)
 
 
-def first_class_type(typ: TTerm[Type]) -> TTerm[Type]:
+def first_class_type(typ: TypedTerm[Type]) -> TypedTerm[Type]:
     """Mark a type as first-class."""
     return annot(
         hydra.constants.key_first_class_type,
@@ -330,81 +330,81 @@ def first_class_type(typ: TTerm[Type]) -> TTerm[Type]:
     )
 
 
-def fold(f: TTerm[A]) -> TTerm[B]:
+def fold(f: TypedTerm[A]) -> TypedTerm[B]:
     """Create a fold function to process lists."""
     return apply(primitive(Name("hydra.lib.lists.foldl")), f)
 
 
-def identity() -> TTerm[A]:
+def identity() -> TypedTerm[A]:
     """Identity function that returns its argument unchanged."""
-    return TTerm[A](terms.identity())
+    return TypedTerm[A](terms.identity())
 
 
-def inject(name, fname, term: TTerm[A]) -> TTerm[B]:
+def inject(name, fname, term: TypedTerm[A]) -> TypedTerm[B]:
     """Create a union injection. Accepts str or Name for type/field names."""
-    return TTerm[B](terms.inject(_name(name), _name(fname), un_tterm(term)))
+    return TypedTerm[B](terms.inject(_name(name), _name(fname), un_tterm(term)))
 
 
-def inject_lambda(name, fname) -> TTerm[A]:
+def inject_lambda(name, fname) -> TypedTerm[A]:
     """Create a function that injects its argument into a union variant."""
     return lam("injected_", inject(name, fname, var("injected_")))
 
 
-def just(term: TTerm[A]) -> TTerm[Maybe[A]]:
+def just(term: TypedTerm[A]) -> TypedTerm[Maybe[A]]:
     """Create a 'Just' optional value."""
-    return TTerm[Maybe[A]](terms.just(un_tterm(term)))
+    return TypedTerm[Maybe[A]](terms.just(un_tterm(term)))
 
 
-def just_() -> TTerm[A]:
+def just_() -> TypedTerm[A]:
     """Function that wraps a value in 'Just'."""
-    return TTerm[A](terms.lambda_("just_", terms.just(terms.var("just_"))))
+    return TypedTerm[A](terms.lambda_("just_", terms.just(terms.var("just_"))))
 
 
-def lambdas(params: Sequence[str], body: TTerm[X]) -> TTerm[A]:
+def lambdas(params: Sequence[str], body: TypedTerm[X]) -> TypedTerm[A]:
     """Create a multi-parameter lambda function."""
-    return TTerm[A](terms.lambdas(params, un_tterm(body)))
+    return TypedTerm[A](terms.lambdas(params, un_tterm(body)))
 
 
-def left(term: TTerm[A]) -> TTerm[A]:
+def left(term: TypedTerm[A]) -> TypedTerm[A]:
     """Create a 'Left' either value."""
-    return TTerm[A](terms.left(un_tterm(term)))
+    return TypedTerm[A](terms.left(un_tterm(term)))
 
 
-def left_() -> TTerm[A]:
+def left_() -> TypedTerm[A]:
     """Function that wraps a value in 'Left'."""
-    return TTerm[A](terms.lambda_("left_", terms.left(terms.var("left_"))))
+    return TypedTerm[A](terms.lambda_("left_", terms.left(terms.var("left_"))))
 
 
-def right(term: TTerm[A]) -> TTerm[A]:
+def right(term: TypedTerm[A]) -> TypedTerm[A]:
     """Create a 'Right' either value."""
-    return TTerm[A](terms.right(un_tterm(term)))
+    return TypedTerm[A](terms.right(un_tterm(term)))
 
 
-def right_() -> TTerm[A]:
+def right_() -> TypedTerm[A]:
     """Function that wraps a value in 'Right'."""
-    return TTerm[A](terms.lambda_("right_", terms.right(terms.var("right_"))))
+    return TypedTerm[A](terms.lambda_("right_", terms.right(terms.var("right_"))))
 
 
-def let1(name: str, value: TTerm[A], env: TTerm[B]) -> TTerm[B]:
+def let1(name: str, value: TypedTerm[A], env: TypedTerm[B]) -> TypedTerm[B]:
     """Create a let expression with a single binding (alias for let with explicit args)."""
-    return TTerm[B](terms.let_term(Name(name), un_tterm(value), un_tterm(env)))
+    return TypedTerm[B](terms.let_term(Name(name), un_tterm(value), un_tterm(env)))
 
 
-def unsafe_cast(t: TTerm[A]) -> TTerm[B]:
-    """Cast a TTerm to a different phantom type. Used to bridge type inference gaps."""
-    return TTerm[B](un_tterm(t))
+def unsafe_cast(t: TypedTerm[A]) -> TypedTerm[B]:
+    """Cast a TypedTerm to a different phantom type. Used to bridge type inference gaps."""
+    return TypedTerm[B](un_tterm(t))
 
 
-def _build_term(intros: list[tuple[str, str, TTerm | None]], body: TTerm[B]) -> TTerm[B]:
+def _build_term(intros: list[tuple[str, str, TypedTerm | None]], body: TypedTerm[B]) -> TypedTerm[B]:
     """Build a nested term from a list of intro forms and a body."""
     result = body
     for kind, name, value in reversed(intros):
         if kind == "doc":
-            result = TTerm[B](annotations.set_term_description(Just(name), un_tterm(result)))
+            result = TypedTerm[B](annotations.set_term_description(Just(name), un_tterm(result)))
         elif kind == "lambda":
-            result = TTerm[B](terms.lambda_(name, un_tterm(result)))
+            result = TypedTerm[B](terms.lambda_(name, un_tterm(result)))
         else:
-            result = TTerm[B](terms.let_term(Name(name), un_tterm(value), un_tterm(result)))
+            result = TypedTerm[B](terms.let_term(Name(name), un_tterm(value), un_tterm(result)))
     return result
 
 
@@ -421,7 +421,7 @@ class ExprBuilder:
     Produces: doc "description" (lambda x -> lambda y -> let z = expr in body)
     """
 
-    def __init__(self, intros: list[tuple[str, str, TTerm | None]]):
+    def __init__(self, intros: list[tuple[str, str, TypedTerm | None]]):
         # Each intro is ("doc", description, None), ("lambda", param, None),
         # or ("let", name, value)
         self._intros = intros
@@ -438,17 +438,17 @@ class ExprBuilder:
         """Add multiple lambda parameters."""
         return ExprBuilder(self._intros + [("lambda", v, None) for v in vs])
 
-    def let(self, name: str, value: TTerm[A]) -> "ExprBuilder":
+    def let(self, name: str, value: TypedTerm[A]) -> "ExprBuilder":
         """Add a single-binding let."""
         return ExprBuilder(self._intros + [("let", name, value)])
 
-    def to(self, body: TTerm[B]) -> TTerm[B]:
+    def to(self, body: TypedTerm[B]) -> TypedTerm[B]:
         """Finalize the chain with a body."""
         return _build_term(self._intros, body)
 
 
 class DefineBuilder:
-    """Fluent builder that starts with a definition name and produces a TBinding.
+    """Fluent builder that starts with a definition name and produces a TypedBinding.
 
     Usage:
         define("freeVariablesInType")
@@ -458,7 +458,7 @@ class DefineBuilder:
           .to(body)
     """
 
-    def __init__(self, name: Name, intros: list[tuple[str, str, TTerm | None]]):
+    def __init__(self, name: Name, intros: list[tuple[str, str, TypedTerm | None]]):
         self._name = name
         self._intros = intros
 
@@ -474,23 +474,23 @@ class DefineBuilder:
         """Add multiple lambda parameters."""
         return DefineBuilder(self._name, self._intros + [("lambda", v, None) for v in vs])
 
-    def let(self, name: str, value: TTerm[A]) -> "DefineBuilder":
+    def let(self, name: str, value: TypedTerm[A]) -> "DefineBuilder":
         """Add a single-binding let."""
         return DefineBuilder(self._name, self._intros + [("let", name, value)])
 
-    def to(self, body: TTerm[B]) -> TBinding[B]:
-        """Finalize the chain with a body, producing a TBinding."""
-        return TBinding(self._name, _build_term(self._intros, body))
+    def to(self, body: TypedTerm[B]) -> TypedBinding[B]:
+        """Finalize the chain with a body, producing a TypedBinding."""
+        return TypedBinding(self._name, _build_term(self._intros, body))
 
 
-def lam(v: str, body: TTerm[X] | None = None) -> TTerm[A] | ExprBuilder:
+def lam(v: str, body: TypedTerm[X] | None = None) -> TypedTerm[A] | ExprBuilder:
     """Create a lambda function with one parameter.
 
-    With 2 arguments: returns a TTerm (direct lambda).
+    With 2 arguments: returns a TypedTerm (direct lambda).
     With 1 argument: returns an ExprBuilder for fluent chaining.
     """
     if body is not None:
-        return TTerm[A](terms.lambda_(v, un_tterm(body)))
+        return TypedTerm[A](terms.lambda_(v, un_tterm(body)))
     return ExprBuilder([("lambda", v, None)])
 
 
@@ -499,20 +499,20 @@ def lams(*vs: str) -> ExprBuilder:
     return ExprBuilder([("lambda", v, None) for v in vs])
 
 
-def let(name: str, value: TTerm[A], env: TTerm[B] | None = None) -> TTerm[B] | ExprBuilder:
+def let(name: str, value: TypedTerm[A], env: TypedTerm[B] | None = None) -> TypedTerm[B] | ExprBuilder:
     """Create a let expression with a single binding.
 
-    With 3 arguments: returns a TTerm (direct let expression).
+    With 3 arguments: returns a TypedTerm (direct let expression).
     With 2 arguments: returns an ExprBuilder for fluent chaining.
     """
     if env is not None:
-        return TTerm[B](terms.let_term(Name(name), un_tterm(value), un_tterm(env)))
+        return TypedTerm[B](terms.let_term(Name(name), un_tterm(value), un_tterm(env)))
     return ExprBuilder([("let", name, value)])
 
 
-def lets(fields: Sequence[Field], env: TTerm[A]) -> TTerm[A]:
+def lets(fields: Sequence[Field], env: TypedTerm[A]) -> TypedTerm[A]:
     """Create a let expression with multiple bindings."""
-    return TTerm[A](terms.lets(fields, un_tterm(env)))
+    return TypedTerm[A](terms.lets(fields, un_tterm(env)))
 
 
 def bindings(*pairs) -> list[Field]:
@@ -534,7 +534,7 @@ def bindings(*pairs) -> list[Field]:
     return out
 
 
-def let_chain(pairs, body: TTerm[A]) -> TTerm[A]:
+def let_chain(pairs, body: TypedTerm[A]) -> TypedTerm[A]:
     """Emit nested singleton lets (matches Haskell's `<~` chaining).
 
     Each pair is (name, value). Reverses the list to build inside-out so the
@@ -544,14 +544,14 @@ def let_chain(pairs, body: TTerm[A]) -> TTerm[A]:
     for p in reversed(pairs):
         if isinstance(p, Field):
             # Field: extract name and value
-            out = TTerm[A](terms.let_term(p.name, p.value, un_tterm(out)))
+            out = TypedTerm[A](terms.let_term(p.name, p.value, un_tterm(out)))
         else:
             n, v = p
             out = let1(n if isinstance(n, str) else n.value, v, out)
     return out
 
 
-def lib_primitive() -> TTerm:
+def lib_primitive() -> TypedTerm:
     """
     Automatically derive and apply a library primitive with no arguments.
 
@@ -560,7 +560,7 @@ def lib_primitive() -> TTerm:
     return primitive(derive_primitive_name())
 
 
-def lib_primitive1(a: TTerm) -> TTerm:
+def lib_primitive1(a: TypedTerm) -> TypedTerm:
     """
     Automatically derive and apply a library primitive with one argument.
 
@@ -569,7 +569,7 @@ def lib_primitive1(a: TTerm) -> TTerm:
     return primitive1(derive_primitive_name(), a)
 
 
-def lib_primitive2(a: TTerm, b: TTerm) -> TTerm:
+def lib_primitive2(a: TypedTerm, b: TypedTerm) -> TypedTerm:
     """
     Automatically derive and apply a library primitive with two arguments.
 
@@ -578,7 +578,7 @@ def lib_primitive2(a: TTerm, b: TTerm) -> TTerm:
     return primitive2(derive_primitive_name(), a, b)
 
 
-def lib_primitive3(a: TTerm, b: TTerm, c: TTerm) -> TTerm:
+def lib_primitive3(a: TypedTerm, b: TypedTerm, c: TypedTerm) -> TypedTerm:
     """
     Automatically derive and apply a library primitive with three arguments.
 
@@ -587,19 +587,19 @@ def lib_primitive3(a: TTerm, b: TTerm, c: TTerm) -> TTerm:
     return primitive3(derive_primitive_name(), a, b, c)
 
 
-def list_(els: Sequence[TTerm[A]]) -> TTerm[list[A]]:
+def list_(els: Sequence[TypedTerm[A]]) -> TypedTerm[list[A]]:
     """Create a list of terms."""
-    return TTerm[list[A]](terms.list_([un_tterm(el) for el in els]))
+    return TypedTerm[list[A]](terms.list_([un_tterm(el) for el in els]))
 
 
-def map_(m: Mapping[TTerm[A], TTerm[B]]) -> TTerm[dict[A, B]]:
+def map_(m: Mapping[TypedTerm[A], TypedTerm[B]]) -> TypedTerm[dict[A, B]]:
     """Create a map/dictionary term."""
-    return TTerm[dict[A, B]](
+    return TypedTerm[dict[A, B]](
         terms.map_({un_tterm(k): un_tterm(v) for k, v in m.items()})
     )
 
 
-def match(name, dflt: Maybe[TTerm[B]] = None, fields: Sequence[Field] = ()) -> TTerm[A]:
+def match(name, dflt: Maybe[TypedTerm[B]] = None, fields: Sequence[Field] = ()) -> TypedTerm[A]:
     """Create a pattern match on a union term. Accepts str or Name."""
     if dflt is None:
         dflt_term = Nothing()
@@ -610,7 +610,7 @@ def match(name, dflt: Maybe[TTerm[B]] = None, fields: Sequence[Field] = ()) -> T
             case Nothing():
                 dflt_term = Nothing()
 
-    return TTerm[A](terms.match(_name(name), dflt_term, fields))
+    return TypedTerm[A](terms.match(_name(name), dflt_term, fields))
 
 
 def module_name(mod: Module) -> ModuleName:
@@ -618,21 +618,21 @@ def module_name(mod: Module) -> ModuleName:
     return mod.name
 
 
-def nothing() -> TTerm[Maybe[A]]:
+def nothing() -> TypedTerm[Maybe[A]]:
     """Create a 'Nothing' optional value."""
-    return TTerm[Maybe[A]](terms.nothing())
+    return TypedTerm[Maybe[A]](terms.nothing())
 
 
-def opt(mc: Maybe[TTerm[A]]) -> TTerm[Maybe[A]]:
+def opt(mc: Maybe[TypedTerm[A]]) -> TypedTerm[Maybe[A]]:
     """Create an optional value from a Maybe."""
     match mc:
         case Just(c):
-            return TTerm[Maybe[A]](terms.optional(Just(un_tterm(c))))
+            return TypedTerm[Maybe[A]](terms.optional(Just(un_tterm(c))))
         case Nothing():
-            return TTerm[Maybe[A]](terms.optional(Nothing()))
+            return TypedTerm[Maybe[A]](terms.optional(Nothing()))
 
 
-def opt_cases(arg: TTerm[Maybe[A]], if_nothing: TTerm[B], if_just: TTerm[A]) -> TTerm[B]:
+def opt_cases(arg: TypedTerm[Maybe[A]], if_nothing: TypedTerm[B], if_just: TypedTerm[A]) -> TypedTerm[B]:
     """Pattern match on an optional value."""
     return primitive3(
         Name("hydra.lib.maybes.maybe"),
@@ -642,24 +642,24 @@ def opt_cases(arg: TTerm[Maybe[A]], if_nothing: TTerm[B], if_just: TTerm[A]) -> 
     )
 
 
-def pair(l: TTerm[A], r: TTerm[B]) -> TTerm[tuple[A, B]]:
+def pair(l: TypedTerm[A], r: TypedTerm[B]) -> TypedTerm[tuple[A, B]]:
     """Create a pair (2-tuple)."""
-    return TTerm[tuple[A, B]](terms.pair(un_tterm(l), un_tterm(r)))
+    return TypedTerm[tuple[A, B]](terms.pair(un_tterm(l), un_tterm(r)))
 
 
-def primitive(prim_name: Name) -> TTerm[A]:
+def primitive(prim_name: Name) -> TypedTerm[A]:
     """Primitive function by name."""
-    return TTerm[A](terms.primitive(prim_name))
+    return TypedTerm[A](terms.primitive(prim_name))
 
 
-def primitive1(prim_name: Name, a: TTerm[A]) -> TTerm[B]:
+def primitive1(prim_name: Name, a: TypedTerm[A]) -> TypedTerm[B]:
     """Apply a primitive function to one argument."""
-    return TTerm[B](terms.apply(terms.primitive(prim_name), un_tterm(a)))
+    return TypedTerm[B](terms.apply(terms.primitive(prim_name), un_tterm(a)))
 
 
-def primitive2(prim_name: Name, a: TTerm[A], b: TTerm[B]) -> TTerm[C]:
+def primitive2(prim_name: Name, a: TypedTerm[A], b: TypedTerm[B]) -> TypedTerm[C]:
     """Apply a primitive function to two arguments."""
-    return TTerm[C](
+    return TypedTerm[C](
         terms.apply(
             terms.apply(terms.primitive(prim_name), un_tterm(a)),
             un_tterm(b)
@@ -667,9 +667,9 @@ def primitive2(prim_name: Name, a: TTerm[A], b: TTerm[B]) -> TTerm[C]:
     )
 
 
-def primitive3(prim_name: Name, a: TTerm[A], b: TTerm[B], c: TTerm[C]) -> TTerm[X]:
+def primitive3(prim_name: Name, a: TypedTerm[A], b: TypedTerm[B], c: TypedTerm[C]) -> TypedTerm[X]:
     """Apply a primitive function to three arguments."""
-    return TTerm[X](
+    return TypedTerm[X](
         terms.apply(
             terms.apply(
                 terms.apply(terms.primitive(prim_name), un_tterm(a)),
@@ -680,62 +680,62 @@ def primitive3(prim_name: Name, a: TTerm[A], b: TTerm[B], c: TTerm[C]) -> TTerm[
     )
 
 
-def project(name, fname) -> TTerm[A]:
+def project(name, fname) -> TypedTerm[A]:
     """Extract a field from a record. Accepts str or Name."""
-    return TTerm[A](terms.project(_name(name), _name(fname)))
+    return TypedTerm[A](terms.project(_name(name), _name(fname)))
 
 
-def record(name, fields: Sequence[Field]) -> TTerm[A]:
+def record(name, fields: Sequence[Field]) -> TypedTerm[A]:
     """Create a record with named fields. Accepts str or Name."""
-    return TTerm[A](terms.record(_name(name), fields))
+    return TypedTerm[A](terms.record(_name(name), fields))
 
 
-def ref(binding: TBinding[A]) -> TTerm[A]:
+def ref(binding: TypedBinding[A]) -> TypedTerm[A]:
     """Reference a defined element."""
-    return TTerm[A](terms.TermVariable(binding.name))
+    return TypedTerm[A](terms.TermVariable(binding.name))
 
 
-def second(pair: TTerm[tuple[A, B]]) -> TTerm[B]:
+def second(pair: TypedTerm[tuple[A, B]]) -> TypedTerm[B]:
     """Second element projection function for pairs."""
-    return apply(TTerm[B](terms.second()), pair)
+    return apply(TypedTerm[B](terms.second()), pair)
 
 
-def set_(els: Sequence[TTerm[A]]) -> TTerm[set[A]]:
+def set_(els: Sequence[TypedTerm[A]]) -> TypedTerm[set[A]]:
     """Create a set of terms."""
-    return TTerm[set[A]](terms.set_({un_tterm(el) for el in els}))
+    return TypedTerm[set[A]](terms.set_({un_tterm(el) for el in els}))
 
 
-def triple(a: TTerm[A], b: TTerm[B], c: TTerm[C]) -> TTerm[tuple[A, B, C]]:
+def triple(a: TypedTerm[A], b: TypedTerm[B], c: TypedTerm[C]) -> TypedTerm[tuple[A, B, C]]:
     """Create a triple."""
-    return TTerm[tuple[A, B, C]](
+    return TypedTerm[tuple[A, B, C]](
         terms.triple(un_tterm(a), un_tterm(b), un_tterm(c))
     )
 
 
-def tuple4(a: TTerm[A], b: TTerm[B], c: TTerm[C], d: TTerm[X]) -> TTerm[tuple[A, B, C, X]]:
+def tuple4(a: TypedTerm[A], b: TypedTerm[B], c: TypedTerm[C], d: TypedTerm[X]) -> TypedTerm[tuple[A, B, C, X]]:
     """Create a 4-tuple."""
-    return TTerm[tuple[A, B, C, X]](
+    return TypedTerm[tuple[A, B, C, X]](
         terms.tuple4(un_tterm(a), un_tterm(b), un_tterm(c), un_tterm(d))
     )
 
 
 def tuple5(
-        a: TTerm[A], b: TTerm[B], c: TTerm[C], d: TTerm[X], e: TTerm[X]
-) -> TTerm[tuple[A, B, C, X, X]]:
+        a: TypedTerm[A], b: TypedTerm[B], c: TypedTerm[C], d: TypedTerm[X], e: TypedTerm[X]
+) -> TypedTerm[tuple[A, B, C, X, X]]:
     """Create a 5-tuple."""
-    return TTerm[tuple[A, B, C, X, X]](
+    return TypedTerm[tuple[A, B, C, X, X]](
         terms.tuple5(un_tterm(a), un_tterm(b), un_tterm(c), un_tterm(d), un_tterm(e))
     )
 
 
-def unary_function(f) -> TTerm[A]:
+def unary_function(f) -> TypedTerm[A]:
     """Extract a unary function from a function application."""
     term = un_tterm(f(var("x")))
     match term:
         case terms.TermApplication(terms.Application(lhs, _)):
-            return TTerm[A](lhs)
+            return TypedTerm[A](lhs)
         case terms.TermMaybe(Just(_)):
-            return TTerm[A](terms.primitive(Name("hydra.lib.maybes.pure")))
+            return TypedTerm[A](terms.primitive(Name("hydra.lib.maybes.pure")))
         case terms.TermInject(terms.Injection(tname, Field(fname, _))):
             return lam("x", inject(tname, fname, var("x")))
         case terms.TermWrap(terms.WrappedTerm(tname, _)):
@@ -744,14 +744,14 @@ def unary_function(f) -> TTerm[A]:
             raise ValueError(f"Cannot extract unary function from: {term}")
 
 
-def unit() -> TTerm[A]:
+def unit() -> TypedTerm[A]:
     """Unit value (empty record)."""
-    return TTerm[A](terms.unit())
+    return TypedTerm[A](terms.unit())
 
 
-def inject_unit(name, fname) -> TTerm[A]:
+def inject_unit(name, fname) -> TypedTerm[A]:
     """Create a unit injection of a union. Accepts str or Name."""
-    return TTerm[A](terms.inject(_name(name), _name(fname), terms.unit()))
+    return TypedTerm[A](terms.inject(_name(name), _name(fname), terms.unit()))
 
 
 def unqualify_name(qname: QualifiedName) -> Name:
@@ -763,19 +763,19 @@ def unqualify_name(qname: QualifiedName) -> Name:
             return Name(qname.local)
 
 
-def unwrap(name) -> TTerm[A]:
+def unwrap(name) -> TypedTerm[A]:
     """Create an unwrap function for a wrapped type. Accepts str or Name."""
-    return TTerm[A](terms.unwrap(_name(name)))
+    return TypedTerm[A](terms.unwrap(_name(name)))
 
 
-def var(v: str) -> TTerm[A]:
+def var(v: str) -> TypedTerm[A]:
     """Create a variable reference."""
-    return TTerm[A](terms.var(v))
+    return TypedTerm[A](terms.var(v))
 
 
 
 
-def with_eq(v: str, term: TTerm[A]) -> TTerm[A]:
+def with_eq(v: str, term: TypedTerm[A]) -> TypedTerm[A]:
     """Associate the Eq type class with the inferred type of a term."""
     return with_type_classes(
         FrozenDict({Name(v): frozenset([Name("equality")])}),
@@ -783,7 +783,7 @@ def with_eq(v: str, term: TTerm[A]) -> TTerm[A]:
     )
 
 
-def with_ord(v: str, term: TTerm[A]) -> TTerm[A]:
+def with_ord(v: str, term: TypedTerm[A]) -> TypedTerm[A]:
     """Associate the Ord type class with the inferred type of a term."""
     return with_type_classes(
         FrozenDict({Name(v): frozenset([Name("ordering")])}),
@@ -791,12 +791,12 @@ def with_ord(v: str, term: TTerm[A]) -> TTerm[A]:
     )
 
 
-def with_type_classes(classes: FrozenDict[Name, frozenset], term: TTerm[A]) -> TTerm[A]:
+def with_type_classes(classes: FrozenDict[Name, frozenset], term: TypedTerm[A]) -> TypedTerm[A]:
     """Associate type classes with the inferred type of a term."""
     import hydra.annotations
-    return TTerm[A](hydra.annotations.set_type_classes(classes, un_tterm(term)))
+    return TypedTerm[A](hydra.annotations.set_type_classes(classes, un_tterm(term)))
 
 
-def wrap(name, term: TTerm[A]) -> TTerm[B]:
+def wrap(name, term: TypedTerm[A]) -> TypedTerm[B]:
     """Create a wrapped term (instance of a newtype). Accepts str or Name."""
-    return TTerm[B](terms.wrap(_name(name), un_tterm(term)))
+    return TypedTerm[B](terms.wrap(_name(name), un_tterm(term)))

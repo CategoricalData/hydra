@@ -20,7 +20,7 @@ the source of truth for `dist/json/hydra-python/`, exported via
 
 `bin/sync.sh` runs `bin/generate-hydra-python-from-python.sh` automatically in
 Phase 5 on every invocation. The native generator owns `dist/json/hydra-python/`;
-Phase 1 (Haskell DSL → JSON) skips `hydra.python.*` namespaces by default and
+Phase 1 (Haskell DSL → JSON) skips `hydra.python.*` module names by default and
 only writes them on a cold-start bootstrap (when `dist/json/hydra-python/` is
 empty), so in any warm state the only writer is the native generator. A diff
 report against the pre-run snapshot reports the number of changed files. The
@@ -29,9 +29,9 @@ isn't built yet — i.e. `python` was not in `--hosts` of a prior sync; in that
 case the JSON remains whatever Phase 1 last wrote.
 
 When you make changes to:
-- **the kernel, eval lib, or test suite** (in Hydra-Haskell): regenerate
-  `dist/json/hydra-kernel/`, then run `bin/sync-python.sh` to refresh
-  `dist/python/`.
+- **the kernel, default-impls (`Hydra.Sources.Kernel.Lib.Defaults.*`), or test suite**
+  (in Hydra-Haskell): regenerate `dist/json/hydra-kernel/`, then run
+  `bin/sync-python.sh` to refresh `dist/python/`.
 - **the Python coder DSL sources**: run `bin/sync-python.sh`, which now
   invokes `bin/generate-hydra-python-from-python.sh` in Phase 5. You can
   also run the native generator directly with `--compare` to verify
@@ -42,7 +42,7 @@ The synchronization process generates four categories of Python code:
 | Category | Source | Target | Description |
 |----------|--------|--------|-------------|
 | Kernel modules | `Hydra.Sources.All.kernelModules` | `dist/python/hydra-kernel/src/main/python/hydra/` | Core Hydra types and functions |
-| Eval lib modules | `Hydra.Sources.Eval.Lib.All.evalLibModules` | `dist/python/hydra-kernel/src/main/python/hydra/eval/` | Interpreter-level primitives |
+| Default-impl modules | `Hydra.Sources.Kernel.Lib.Defaults.*` (per-module-name) | `dist/python/hydra-kernel/src/main/python/hydra/lib/defaults/` | Interpreter-friendly term-level reference implementations |
 | Kernel tests | `Hydra.Sources.Test.All.testModules` | `dist/python/hydra-kernel/src/test/python/hydra/test/` | Test data structures |
 | Generation tests | TestSuite + TestGroups | `dist/python/hydra-kernel/src/test/python/generation/` | Executable pytest tests |
 
@@ -100,7 +100,11 @@ For faster iteration during development, skip tests:
 
 ## Manual Sync (Step by Step)
 
-If you prefer to run steps individually, or need to regenerate only specific parts:
+Prefer `./bin/sync-python.sh` (above) for routine work — it builds the
+executable from current source before running it. The manual steps below are
+for when you need to regenerate only specific parts; note that Step 1's
+`stack build` is not optional, because `stack exec` (Step 2) never rebuilds on
+its own and would otherwise run a stale binary.
 
 ### Step 1: Build the bootstrap executable
 
@@ -111,7 +115,7 @@ stack build hydra:exe:bootstrap-from-json
 
 ### Step 2: Generate all Python artifacts
 
-The `bootstrap-from-json` executable generates kernel modules, eval lib, coder modules, kernel tests,
+The `bootstrap-from-json` executable generates kernel modules, default-impl modules, coder modules, kernel tests,
 and generation tests in a single invocation:
 
 ```bash

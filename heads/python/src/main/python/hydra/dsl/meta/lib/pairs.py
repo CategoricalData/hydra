@@ -1,15 +1,15 @@
 """Phantom-typed term DSL for the hydra.lib.pairs library."""
 
-from hydra.phantoms import TTerm
+from hydra.typed import TypedTerm
 from hydra.dsl.meta.phantoms import lib_primitive1 as primitive1, lib_primitive3 as primitive3
 
 
-def bimap(f: TTerm, g: TTerm, p: TTerm) -> TTerm:
+def bimap(f: TypedTerm, g: TypedTerm, p: TypedTerm) -> TypedTerm:
     """Map over both elements of a pair."""
     return primitive3(f, g, p)
 
 
-def first(pair: TTerm) -> TTerm:
+def first(pair: TypedTerm) -> TypedTerm:
     """
     Get the first element of a pair.
 
@@ -18,7 +18,7 @@ def first(pair: TTerm) -> TTerm:
     return primitive1(pair)
 
 
-def second(pair: TTerm) -> TTerm:
+def second(pair: TypedTerm) -> TypedTerm:
     """
     Get the second element of a pair.
 

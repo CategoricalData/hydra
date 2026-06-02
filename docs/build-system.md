@@ -103,22 +103,59 @@ strictly in order, but any phase can short-circuit independently.
 
 | Phase | Driver | Output |
 |-------|--------|--------|
-| 0. Stack build | `stack build` of every Haskell exec | Bootstraps `update-json-main`, `update-json-test`, `update-json-manifest`, `verify-json-kernel`, `bootstrap-from-json`, `digest-check` |
+| 0. Stack build | `stack build` of every Haskell exec | Bootstraps `update-json-main`, `update-json-test`, `update-json-manifest`, `update-json-kernel`, `verify-json-kernel`, `bootstrap-from-json`, `digest-check` |
 | 1. DSL → JSON + Haskell kernel | `heads/haskell/bin/sync-haskell.sh` | `dist/json/**` and `dist/haskell/{hydra-kernel,hydra-haskell}/` |
+| 1.5. Java/Python coder-JSON auto-heal | `bin/lib/check-java-python-json-fresh.py` | On a staleness miss, re-exports `dist/json/hydra-{java,python}/` via `update-json-main --include-java-python` before Phase 2 reads it |
 | 2. Coder Haskell dists | per-language assemblers | `dist/haskell/hydra-<lang>/` for every L in (hosts ∪ targets) |
 | 3. Kernel/pg/rdf into each target | per-target assemblers | `dist/<lang>/{hydra-kernel,hydra-pg,hydra-rdf}/` |
 | 4. Cross-host coders | per-host assemblers | `dist/<host>/hydra-<target>/` for every (host, target) with host ≠ haskell |
 | 5. Native DSL → JSON for hydra-java and hydra-python | `bin/generate-hydra-<lang>-from-<lang>.sh` | Overwrites `dist/json/hydra-{java,python}/` from host-native sources |
 
+Phase 1.5 closes a warm/cold asymmetry from #344 that
+[#406](https://github.com/CategoricalData/hydra/issues/406) made deterministic. Phase 1
+re-exports the `hydra.java.*` / `hydra.python.*` coder JSON only on cold-start (when the
+sentinel JSON is missing); on a warm tree it skips them, since Phase 5 owns those paths.
+But `dist/json/hydra-{java,python}/coder.json` feeds Phase 2's
+`dist/haskell/hydra-{java,python}/Coder.hs`, which compiles into the core `hydra` library.
+A kernel rename that ripples into the coders therefore leaves that JSON stale against the
+freshly regenerated kernel, and Phase 2 emits a `Coder.hs` referencing a renamed-away field
+— breaking the next `stack build`, before Phase 5 (which would refresh the JSON) ever runs.
+Reordering Phase 5 ahead of Phase 2 cannot fix this today: the native generator needs the
+host built (Phase 4 output), which needs this very library. So Phase 1.5 heals in place —
+it keys on the just-regenerated kernel JSON (the rename signal, which survives the eventual
+deletion of the legacy Haskell coder DSL) and, on a miss, re-exports the coder JSON via
+`update-json-main --include-java-python` so Phase 2 reads fresh input.
+
 Phase 5 is the migration path for [#344](https://github.com/CategoricalData/hydra/issues/344):
 `hydra-java` and `hydra-python` are now authored in their own host languages, with the
 legacy Haskell-DSL copies retained as a fallback through 0.15.
 
+Because Phase 5 is last but its output (`dist/json/hydra-{java,python}/`) is an *input* to
+Phases 2–4, a change to a native coder would otherwise take two sync passes to fully land —
+Phases 2–4 in pass *n* still see the pre-Phase-5 JSON. To keep a single pass self-consistent,
+when the native output differs from the prior snapshot Phase 5 re-assembles
+`dist/haskell/hydra-<lang>/` from the new JSON and re-runs `stack build` so
+`bootstrap-from-json` embeds the updated coder. This re-assemble flows through the normal
+freshness gate: Phase 1's input digest now folds in the native `hydra.<lang>.*` source
+hashes (see [the cache model](#the-cache-model) and
+[#400](https://github.com/CategoricalData/hydra/issues/400)), so the assembler correctly
+detects the change without any output-digest force-drop. The downstream `dist/<target>/`
+trees are gitignored and regenerated on the next run, so they are intentionally not
+re-emitted here.
+
+Once the legacy Haskell DSL copies for hydra-java/hydra-python are removed (post-0.16), the
+native generators become the sole writers of `dist/json/hydra-{java,python}/`. This native
+DSL→JSON step should then move ahead of Phase 2, eliminating the producer-ordering lag and
+the re-assemble block above.
+
 `bin/sync.sh` runs Phases 0–5 over the matrix the caller specifies via `--hosts` and
 `--targets`. `bin/sync.sh` does NOT run target-language tests; only Haskell `stack test`
-is invoked (via `sync-haskell.sh`'s Step 6). To validate a target's runtime, run that
-head's own `bin/run-tests.sh` or `bin/test-distribution.sh`, or use
-`bin/sync-packages.sh` which adds a Phase 3 test gate.
+is invoked (via `sync-haskell.sh`'s Step 6). To validate a target's runtime, run
+**`bin/test.sh`** (or `/test` from a Claude session — same scoping vocabulary as `/sync`),
+which pre-syncs and then invokes each requested target's `heads/<lang>/bin/test-distribution.sh`.
+You can also run a single per-target tester directly (e.g.
+`heads/python/bin/test-distribution.sh hydra-kernel`) or use `bin/sync-packages.sh`,
+which adds a Phase 3 test gate.
 
 ### Phase 1's memory envelope
 
@@ -170,9 +207,9 @@ The caches form a hierarchy: a hit at a coarser layer skips a finer one.
 | Cache | Location | Granularity | What it gates |
 |-------|----------|-------------|---------------|
 | Phase 1 input cache | `heads/haskell/.stack-work/phase1-input-cache.txt` | Universe-wide | Skips all of Phase 1 (no stack startup, no JSON regen) |
-| Universe digest | `dist/json/build/digest.json` | Per-namespace | Drives `check-dsl-fresh.py`; per-module skip inside `bootstrap-from-json` |
-| Per-package input digest | `dist/json/<pkg>/build/<set>/digest.json` | Per-namespace, scoped to one package | Source-of-truth for Layer 2 freshness comparison |
-| Per-package output digest | `dist/<lang>/<pkg>/build/<set>/digest.json` | Per-namespace + per-target generator stamp | Compared against input digest to skip Layer 1 + Layer 2 for one package |
+| Universe digest | `dist/json/build/digest.json` | Per-module-name | Drives `check-dsl-fresh.py`; per-module skip inside `bootstrap-from-json` |
+| Per-package input digest | `dist/json/<pkg>/build/<set>/digest.json` | Per-module-name, scoped to one package | Source-of-truth for Layer 2 freshness comparison |
+| Per-package output digest | `dist/<lang>/<pkg>/build/<set>/digest.json` | Per-module-name + per-target generator stamp | Compared against input digest to skip Layer 1 + Layer 2 for one package |
 | Step caches | `heads/haskell/.stack-work/{verify-json-kernel,bootstrap-from-json,haskell-test}-cache.txt` | Universe-wide hash of inputs + exec source | Skips `verify-json-kernel`, `bootstrap-from-json`, or `stack test` |
 | Per-target test cache | `dist/<lang>/test-cache.json` | Universe of generated sources + test infra + runner | Skips the target's `test-distribution.sh` |
 
@@ -190,21 +227,40 @@ A missing or stale digest is always a cache miss, never a correctness problem. T
 first build after a fresh clone or after a merge runs without cache hits and rebuilds
 the digests as it goes; subsequent runs hit the cache normally.
 
+The self-hosted coders used to have an incomplete input digest: it hashed only the
+`hydra.dsl.<lang>.*` modules, not the native-generator-owned `hydra.<lang>.*` modules
+(including `hydra.<lang>.coder`), so a change confined to the native coder was *invisible*
+to the freshness gate ([#400](https://github.com/CategoricalData/hydra/issues/400)). Fixed:
+`Hydra.Digest.discoverModuleNameFiles` now also scans the native `.java`/`.py` sources, and
+the per-package input digest hashes the unfiltered universe, so
+`dist/json/hydra-{java,python}/build/main/digest.json` includes every native module. A
+native coder edit now invalidates that digest like any other source change — Phase 5's
+re-assemble relies on the honest gate instead of force-dropping the output digest.
+
 ### What invalidates what
 
 The crucial design property: **every cache hashes the inputs that produced its output
 and is keyed off them**. Editing a DSL source invalidates the universe digest →
-invalidates the per-package input digest for whichever package owns the namespace →
+invalidates the per-package input digest for whichever package owns the module name →
 invalidates the per-package output digest for each target that consumes the package →
 invalidates the per-target test cache.
 
 There are four notable exceptions where the cause-and-effect chain is incomplete today.
 All four are tracked under [#347](https://github.com/CategoricalData/hydra/issues/347).
-See [Gaps and the path to #347](#gaps-and-the-path-to-347).
+See [Remaining gaps](#remaining-gaps).
+
+A distinct failure mode, worth separating from the four cascade gaps above, is an
+**incomplete input set**: a real input that feeds a package's generation is missing from
+the input digest *entirely*, so no edit to it can ever invalidate the cache — unlike a
+*stale* hash, which content-hashing catches on the next run. #400 was an instance: the
+self-hosted coders' input digest omitted the native `hydra.<lang>.*` modules, so a
+`Coder.java` edit produced a green sync with no effect (fixed — see above). The general
+guard: the input digest for a package must hash *every* source module that feeds its
+generation, including ones whose JSON output is written by a different producer.
 
 ### The per-target generator stamp
 
-The Layer 2 cache is keyed on (a) per-namespace input hashes and (b) a per-target
+The Layer 2 cache is keyed on (a) per-module-name input hashes and (b) a per-target
 **generator stamp** — a fingerprint of the transform that produced the output. Without
 the stamp, edits to the transform (the per-target coder, the kernel orchestrator code,
 the assembler script) would change downstream emission without changing any tracked
@@ -245,9 +301,9 @@ prototype transform fingerprint and triggered a universal cache miss when any of
 files changed.
 
 `encoderId` is retired by the compositional stamp above. The four files it fingerprinted
-are namespaces in the kernel package, so they're covered by `component_identity
+are module names in the kernel package, so they're covered by `component_identity
 hydra-kernel`. Their effect on output bytes now invalidates the cache through the standard
-per-namespace path (in Phase 1) plus the kernel-id leaf of every target's stamp
+per-module-name path (in Phase 1) plus the kernel-id leaf of every target's stamp
 (in Layer 2).
 
 Legacy on-disk digests carrying `encoderId` are tolerated: `parseDigest` silently ignores
@@ -266,7 +322,7 @@ For each generated file `dist/<lang>/<pkg>/.../foo.<ext>`:
 
 - ✅ Content hash of the DSL source `packages/<pkg>/.../Foo.hs` (or `.java` / `.py`).
 - ✅ Content hash of upstream DSL modules reachable from `Foo` (per-package input
-  digest includes every namespace owned by `<pkg>`).
+  digest includes every module name owned by `<pkg>`).
 - ✅ Per-target generator stamp covering the kernel + per-target coder + host runtime
   (see [The per-target generator stamp](#the-per-target-generator-stamp) above). A
   change to any of these three components invalidates the cache for that target.
@@ -274,7 +330,7 @@ For each generated file `dist/<lang>/<pkg>/.../foo.<ext>`:
   `bootstrap-from-json`) plus, for `bootstrap-from-json`'s BFJ step, every file under
   `heads/haskell/src/main/haskell/**.hs`.
 - ⚠️ Coarse-grained on the source side. A change to one source file invalidates only
-  its own per-namespace hash, but the *consumers* of that namespace aren't automatically
+  its own per-module-name hash, but the *consumers* of that module name aren't automatically
   invalidated unless they themselves changed. The current design treats the per-package
   digest as the unit of invalidation, not the file-level dependency DAG. See [Remaining
   gaps](#remaining-gaps).
@@ -305,16 +361,16 @@ around the corresponding `bin/` script; see [CLAUDE.md §Shorthand commands](../
 
 ### 1. File-level source-dependency Merkle (A-side)
 
-Today the per-package input digest treats each package as an opaque bag of namespaces.
+Today the per-package input digest treats each package as an opaque bag of module names.
 A change to one source file `Foo.hs` invalidates the per-package digest's entry for
-`Foo`'s namespace — but consumers of `Foo` in *other* packages aren't automatically
+`Foo`'s module name — but consumers of `Foo` in *other* packages aren't automatically
 flagged for regen unless they themselves changed. The current design relies on the
 universe-wide invalidation cascade for cross-package propagation, which is correct but
 coarse: a kernel-type edit may invalidate everything even though only a handful of
-downstream namespaces consume the changed type.
+downstream module names consume the changed type.
 
 The proper Merkle structure on the A side is the file-level dependency DAG: each
-namespace's cache key is `hash(its source content, its transitive deps' cache keys)`. A
+module name's cache key is `hash(its source content, its transitive deps' cache keys)`. A
 change at the root propagates exactly to dependents. Substantially overlaps with
 [#329 (definition-level change detection)](https://github.com/CategoricalData/hydra/issues/329);
 worth treating as one piece of work.
@@ -356,19 +412,19 @@ Phase 5 (native DSL → JSON for hydra-java and hydra-python) now routes through
 per-package iterative driver that mirrors the Haskell-side
 `inferAndWriteByPackage`: `Generation.inferAndWriteByPackage` in
 `heads/java/src/main/java/hydra/Generation.java` and `infer_and_write_by_package`
-in `heads/python/src/main/python/hydra/generation.py`. Both demos
-(`bin/python-self-host-demo.py` and `JavaSelfHostDemo`) call this driver after
+in `heads/python/src/main/python/hydra/generation.py`. Both drivers
+(`bin/update-python-json.py` and `UpdateJavaJson`) call this routine after
 loading the kernel universe and the package's source modules. Today's runs
 collapse to a one-iteration loop (only hydra-java or hydra-python is being
-re-inferred); the structure is in place for multi-package self-hosts once
-additional packages are owned by these native pipelines.
+re-inferred); the structure is in place for multi-package native-coder updates
+once additional packages are owned by these native pipelines.
 
 ## The end-state design
 
 Two pieces, one per side:
 
 **A-side: file-level Merkle over the source DAG.**
-Per-namespace cache key = `hash(source content, dep1 cache key, dep2 cache key, ...)`.
+Per-module-name cache key = `hash(source content, dep1 cache key, dep2 cache key, ...)`.
 A change at the root propagates exactly to dependents. Combines naturally with #329's
 definition-level checksums.
 

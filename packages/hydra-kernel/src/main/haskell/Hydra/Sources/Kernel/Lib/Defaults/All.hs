@@ -64,7 +64,7 @@ import qualified Hydra.Sources.Kernel.Lib.Defaults.Sets as DefaultSets
 ns :: ModuleName
 ns = ModuleName "hydra.lib.defaults"
 
-define :: String -> TTerm a -> TTermDefinition a
+define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModuleName ns
 
 -- | All default library modules (term-level fallback implementations used by the interpreter
@@ -87,15 +87,15 @@ defaultLibModules = [
   DefaultSets.module_
   ]
 
--- | Namespaces of all default library modules
-defaultLibNamespaces :: [ModuleName]
-defaultLibNamespaces = Prelude.map moduleName defaultLibModules
+-- | Module names of all default library modules
+defaultLibModuleNames :: [ModuleName]
+defaultLibModuleNames = Prelude.map moduleName defaultLibModules
 
 module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = Bootstrap.unqualifiedDep <$> (defaultLibNamespaces L.++ kernelTypesModuleNames),
-            moduleDescription = Just ("Registry of default term-level library implementations used by the Hydra interpreter when no native primitive is available.")}
+            moduleDependencies = Bootstrap.unqualifiedDep <$> (defaultLibModuleNames L.++ kernelTypesModuleNames),
+            moduleMetadata = Bootstrap.descriptionMetadata (Just ("Registry of default term-level library implementations used by the Hydra interpreter when no native primitive is available."))}
   where
     definitions = []

@@ -27,5 +27,8 @@
                         "body": {"literal": {"string": {}}}}}}]}}},
           "variables": []}}}],
   "dependencies": [{"module": "hydra.core"}],
-  "description": "Based on https://github.com/protocolbuffers/protobuf/blob/main/src/google/protobuf/source_context.proto",
+  "metadata": {
+    "comments": [],
+    "description": "Based on https://github.com/protocolbuffers/protobuf/blob/main/src/google/protobuf/source_context.proto",
+    "seeAlso": []},
   "name": "hydra.protobuf.sourceContext"}

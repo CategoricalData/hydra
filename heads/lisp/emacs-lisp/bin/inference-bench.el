@@ -122,7 +122,7 @@
     (nreverse result)))
 
 (defun bench-namespace-to-path (ns)
-  (funcall (symbol-value 'hydra_codegen_namespace_to_path) ns))
+  (funcall (symbol-value 'hydra_codegen_module_name_to_path) ns))
 
 (defun bench-load-module-from-json (bs-graph schema-map ns-str json-dir)
   (let* ((file-path (format "%s/%s.json" json-dir (bench-namespace-to-path ns-str)))
@@ -205,7 +205,7 @@
 (defun bench-time-inference (universe target)
   "Time hydra_codegen_infer_modules_given. Returns (elapsed ok err)."
   (let* ((bs-graph (bench-bootstrap-graph))
-         (cx (funcall 'make-hydra_context_context nil nil nil))
+         (cx (funcall 'make-hydra_typing_inference_context 0 nil))
          (universe-plus (append universe (list target)))
          (targets (list target))
          (t0 (float-time))

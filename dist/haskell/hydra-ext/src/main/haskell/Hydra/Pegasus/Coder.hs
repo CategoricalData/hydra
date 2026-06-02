@@ -10,15 +10,15 @@ import qualified Hydra.Environment as Environment
 import qualified Hydra.Errors as Errors
 import qualified Hydra.Formatting as Formatting
 import qualified Hydra.Graph as Graph
-import qualified Hydra.Lib.Eithers as Eithers
-import qualified Hydra.Lib.Equality as Equality
-import qualified Hydra.Lib.Lists as Lists
-import qualified Hydra.Lib.Logic as Logic
-import qualified Hydra.Lib.Maps as Maps
-import qualified Hydra.Lib.Maybes as Maybes
-import qualified Hydra.Lib.Pairs as Pairs
-import qualified Hydra.Lib.Sets as Sets
-import qualified Hydra.Lib.Strings as Strings
+import qualified Hydra.Haskell.Lib.Eithers as Eithers
+import qualified Hydra.Haskell.Lib.Equality as Equality
+import qualified Hydra.Haskell.Lib.Lists as Lists
+import qualified Hydra.Haskell.Lib.Logic as Logic
+import qualified Hydra.Haskell.Lib.Maps as Maps
+import qualified Hydra.Haskell.Lib.Maybes as Maybes
+import qualified Hydra.Haskell.Lib.Pairs as Pairs
+import qualified Hydra.Haskell.Lib.Sets as Sets
+import qualified Hydra.Haskell.Lib.Strings as Strings
 import qualified Hydra.Names as Names
 import qualified Hydra.Packaging as Packaging
 import qualified Hydra.Pegasus.Pdl as Pdl
@@ -172,7 +172,7 @@ getAnns cx g typ = Eithers.bind (Annotations.getTypeDescription cx g typ) (\r ->
 -- | Compute import aliases for a module's dependencies
 importAliasesForModule :: t0 -> Graph.Graph -> Packaging.Module -> Either Errors.Error (M.Map Packaging.ModuleName String)
 importAliasesForModule cx g mod =
-    Eithers.bind (Analysis.moduleDependencyNamespaces cx g False True True False mod) (\nss -> Right (Maps.fromList (Lists.map (\ns_ -> (ns_, (slashesToDots (Packaging.unModuleName ns_)))) (Sets.toList nss))))
+    Eithers.bind (Analysis.moduleDependencyModuleNames cx g False True True False mod) (\nss -> Right (Maps.fromList (Lists.map (\ns_ -> (ns_, (slashesToDots (Packaging.unModuleName ns_)))) (Sets.toList nss))))
 -- | Convert a Hydra module to a map of file paths to PDL schema strings
 moduleToPdl :: Packaging.Module -> [Packaging.Definition] -> t0 -> Graph.Graph -> Either Errors.Error (M.Map String String)
 moduleToPdl mod defs cx g =
@@ -222,7 +222,7 @@ toPair mod aliases schemaPair =
           ns_ = pdlNameForModule mod
           local = Pdl.unName (Pdl.qualifiedNameName (Pdl.namedSchemaQualifiedName schema))
           path =
-                  Names.namespaceToFilePath Util.CaseConventionCamel (Packaging.FileExtension "pdl") (Packaging.ModuleName (Strings.cat2 (Packaging.unModuleName (Packaging.moduleName mod)) (Strings.cat2 "/" local)))
+                  Names.moduleNameToFilePath Util.CaseConventionCamel (Packaging.FileExtension "pdl") (Packaging.ModuleName (Strings.cat2 (Packaging.unModuleName (Packaging.moduleName mod)) (Strings.cat2 "/" local)))
       in (
         path,
         Pdl.SchemaFile {

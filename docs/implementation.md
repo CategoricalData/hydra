@@ -125,42 +125,46 @@ the descriptions below cover the main ones:
 
 #### Core foundation
 
-**Core.hs** - `hydra.core` namespace (largest type module)
+**Core.hs** - `hydra.core` module name (largest type module)
 - Central hub defining fundamental types: `Term`, `Type`, `Literal`, `Function`, `Application`, `Lambda`, `Let`,
   `Record`, `Union`, etc.
 - All other modules depend on Core directly or transitively
 - Special property: imports itself as a dependency
 
-**Variants.hs** - `hydra.variants` namespace
+**Variants.hs** - `hydra.variants` module name
 - Supplements Core with metadata types NOT referenced by Core
 - Defines variant enums: `TermVariant`, `TypeVariant`, `LiteralVariant`, etc.
 - Provides introspection capabilities: `Precision`, `Comparison`
 
 **Packaging.hs** - `hydra.packaging` module
-- Defines module structure: `Module`, `Definition`, `ModuleName`, `ModuleDependency`, `QualifiedName`, `Package`, `PackageDependency`, `PackageVersionSpecifier`
-- A `Module` carries a `name :: ModuleName`, a list of `definitions`, and a list of
-  `dependencies :: [ModuleDependency]`. A `ModuleDependency` is the depended-on
-  `module :: ModuleName` plus an optional `package :: Maybe PackageName`.
+- Defines the packaging model: `Package`, `Module`, `Definition`, `ModuleName`, `ModuleDependency`,
+  `QualifiedName`, `PackageDependency`, `PackageVersionSpecifier`, and the metadata types
+  `EntityMetadata`, `EntityLifecycle`, `EntityReference`, `DefinitionReference`, `Version`.
+- A `Module` carries a `name :: ModuleName`, an optional `metadata :: Maybe EntityMetadata`, a list of
+  `dependencies :: [ModuleDependency]`, and a list of `definitions`. A `ModuleDependency` is the
+  depended-on `module :: ModuleName` plus an optional `package :: Maybe PackageName`.
+- For the conceptual model (entity metadata, lifecycle/versioning, cross-references), see the
+  [Packaging wiki page](https://github.com/CategoricalData/hydra/wiki/Packaging).
 
 #### Transformation framework
 
-**Coders.hs** - `hydra.coders` namespace
+**Coders.hs** - `hydra.coders` module name
 - Defines `Coder`, `Adapter`, `Bicoder`, `Language`, `LanguageConstraints`, `AdapterContext`, `TraversalOrder`
 - The framework is Either-based; the former `Flow` monad was removed in #245
 
 #### Graph and query
 
-**Graph.hs** - `hydra.graph` namespace
+**Graph.hs** - `hydra.graph` module name
 - Extends core with graph operations
 - Defines: `Graph`, `Primitive`, `TermCoder`
 
-**Query.hs** - `hydra.query` namespace
+**Query.hs** - `hydra.query` module name
 - Language-agnostic graph pattern queries
 - Triple patterns and path expressions
 
 #### Type system support
 
-**Typing.hs** - `hydra.typing` namespace
+**Typing.hs** - `hydra.typing` module name
 - Type inference and reconstruction
 - Type constraints and substitutions
 - `TypeClass` record (used by `hydra.classes` term bindings)
@@ -169,18 +173,15 @@ the descriptions below cover the main ones:
 - `equality` and `ordering` bindings of type `TypeClass`
 - See the [Concepts wiki § Type classes](https://github.com/CategoricalData/hydra/wiki/Concepts#type-classes)
 
-**Context.hs** - `hydra.context` namespace
-- Execution context: trace, messages, error attribution
-
 #### Error model
 
-**Errors.hs** - `hydra.errors` namespace and the `Error/` subdirectory
+**Errors.hs** - `hydra.errors` module name and the `Error/` subdirectory
 - Structured error types used by inference, checking, and coders
 
 #### Parsing and path resolution
 
-**Parsing.hs** - `hydra.parsing` namespace
-**Paths.hs** - `hydra.paths` namespace
+**Parsing.hs** - `hydra.parsing` module name
+**Paths.hs** - `hydra.paths` module name
 
 #### Data model helpers
 
@@ -190,7 +191,7 @@ the descriptions below cover the main ones:
 #### Utility and specialized
 
 **Testing.hs** - `hydra.testing` — unit testing framework
-**Phantoms.hs** - `hydra.phantoms` — phantom types for DSL use
+**Typed.hs** - `hydra.typed` — typed (phantom) wrappers for DSL use
 **Relational.hs** - `hydra.relational` — Codd's Relational Model
 **Topology.hs** - `hydra.topology` — graph algorithms (Tarjan SCC)
 **Util.hs** - `hydra.util` — misc utilities
@@ -210,7 +211,7 @@ import qualified Hydra.Sources.Kernel.Types.Core as Core
 module_ :: Module
 module_ = Module {
     moduleName = ns,
-    moduleDefinitions = map toTypeDef definitions,
+    moduleDefinitions = DefinitionType <$> definitions,
     moduleDependencies = unqualifiedDep <$> [moduleName Core.module_],
     moduleDescription = Just description}
   where
@@ -367,12 +368,12 @@ type3 = list (optional boolean)
 Compile-time type safety via phantom types:
 
 ```haskell
--- Phantoms.hs - TTerm a where 'a' is a phantom type
-goodFunc :: TTerm (Int -> String)
+-- Phantoms.hs - TypedTerm a where 'a' is a phantom type
+goodFunc :: TypedTerm (Int -> String)
 goodFunc = lambda "x" (Strings.toUpper (var "x"))
 
 -- Type error at Haskell compile time!
-badFunc :: TTerm (Int -> String)
+badFunc :: TypedTerm (Int -> String)
 badFunc = lambda "x" (int32 42)  -- Expected String, got Int
 ```
 
@@ -384,7 +385,7 @@ Write programs that build programs (meta-programming):
 
 ```haskell
 -- Meta/Terms.hs - terms that construct terms
-buildAddFunction :: TTerm (Int -> Int -> Int)
+buildAddFunction :: TypedTerm (Int -> Int -> Int)
 buildAddFunction =
   lambda "x" $ lambda "y" $
     primitive _math_add @@ var "x" @@ var "y"
@@ -400,7 +401,7 @@ The `hydra.dsls` module (`Sources/Kernel/Terms/Dsls.hs`) automatically generates
 phantom-typed DSL functions from any Hydra type module. For each type definition, it
 produces:
 
-- **Record constructors** — one function taking all fields as `TTerm` arguments
+- **Record constructors** — one function taking all fields as `TypedTerm` arguments
 - **Field accessors** — one function per field, returning the field value
 - **Field updaters** — `withXxx` functions that return a modified copy of the record
 - **Union injectors** — one function per variant (unit variants produce nullary values)
@@ -429,9 +430,8 @@ compatibility shims.
 
 - **Meta/Core.hs** - Wraps `Hydra.Dsl.Core`; adds `AsTerm` overrides for `binding`, `injection`,
   `typeVariable`; helpers like `equalName_`, `false`
-- **Meta/Context.hs** - Wraps `Hydra.Dsl.Context`; adds `withContext`, `pushTrace`, `failInContext`
 - **Meta/Graph.hs** - Wraps `Hydra.Dsl.Graph`; adds graph construction helpers
-- **Meta/Phantoms.hs** - Phantom-typed term construction (`TTerm a`), operators (`@@`, `~>`, `<~`)
+- **Meta/Phantoms.hs** - Phantom-typed term construction (`TypedTerm a`), operators (`@@`, `~>`, `<~`)
 - **Meta/Terms.hs** - Phantom-typed term-encoded terms
 - **Meta/Types.hs** - Phantom-typed term-encoded types
 - **Meta/Variants.hs** - Wraps `Hydra.Dsl.Variants`; metadata variants and introspection
@@ -473,9 +473,9 @@ The DSL provides convenient operators for readable code:
 (>:) :: String -> a -> Field           -- Field definition
 
 -- Phantom-typed construction
-(~>) :: String -> TTerm a -> TTerm (x -> b)     -- Lambda
-(<~) :: String -> TTerm a -> TTerm b -> TTerm b  -- Let binding
-(<<~) :: String -> TTerm (Either e a) -> TTerm (Either e b) -> TTerm (Either e b)  -- Either bind
+(~>) :: String -> TypedTerm a -> TypedTerm (x -> b)     -- Lambda
+(<~) :: String -> TypedTerm a -> TypedTerm b -> TypedTerm b  -- Let binding
+(<<~) :: String -> TypedTerm (Either e a) -> TypedTerm (Either e b) -> TypedTerm (Either e b)  -- Either bind
 
 -- Examples
 intToString = int32 --> string                -- Type
@@ -492,7 +492,7 @@ Here's a complete example showing DSL usage in type inference:
 
 ```haskell
 -- From Hydra.Sources.Kernel.Terms.Inference
-inferTypeOfEither :: TTermDefinition (Context -> Graph -> Either Term Term -> Either Error InferenceResult)
+inferTypeOfEither :: TypedTermDefinition (InferenceContext -> Graph -> Either Term Term -> Either Error InferenceResult)
 inferTypeOfEitherDef = define "inferTypeOfEither" $
   doc "Infer the type of an Either term" $
   "cx" ~> "e" ~>
@@ -553,106 +553,169 @@ Primitive functions are the standard library of Hydra, providing built-in operat
 
 ### Organization
 
-Primitives are organized into **13 library modules** by category:
+Primitives are organized into **13 library modules** by category. Each module
+lives in `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Lib/<Sub>.hs`
+and is **the** canonical registry for its module name:
 
 | Library | Count | Examples |
 |---------|-------|----------|
 | **hydra.lib.chars** | 6 | `isAlphaNum`, `isLower`, `toUpper` |
-| **hydra.lib.eithers** | 8 | `either`, `isLeft`, `rights` |
+| **hydra.lib.eithers** | 15 | `either`, `isLeft`, `rights`, `bimap`, `bind` |
 | **hydra.lib.equality** | 9 | `equal`, `compare`, `gt`, `lt`, `max` |
-| **hydra.lib.lists** | 34 | `map`, `filter`, `fold`, `concat`, `sort` |
-| **hydra.lib.literals** | 43 | Type conversions, parsing, showing |
+| **hydra.lib.lists** | 37 | `map`, `filter`, `foldl`, `concat`, `sort` |
+| **hydra.lib.literals** | 55 | Type conversions, parsing, showing |
 | **hydra.lib.logic** | 4 | `and`, `or`, `not`, `ifElse` |
-| **hydra.lib.maps** | 19 | `lookup`, `insert`, `keys`, `toList` |
-| **hydra.lib.math** | 37 | `add`, `mul`, `sin`, `sqrt`, `abs` |
+| **hydra.lib.maps** | 20 | `lookup`, `insert`, `keys`, `toList` |
+| **hydra.lib.math** | 46 | `add`, `mul`, `sin`, `sqrt`, `abs` |
 | **hydra.lib.maybes** | 13 | `fromMaybe`, `maybe`, `isJust` |
-| **hydra.lib.pairs** | 4 | `first`, `second`, `map`, `swap` |
+| **hydra.lib.pairs** | 3 | `first`, `second`, `bimap` |
 | **hydra.lib.regex** | 6 | `matches`, `find`, `findAll`, `replace`, `replaceAll`, `split` |
 | **hydra.lib.sets** | 14 | `union`, `intersection`, `member` |
-| **hydra.lib.strings** | 13 | `concat`, `split`, `length`, `lines` |
+| **hydra.lib.strings** | 13 | `cat`, `splitOn`, `length`, `lines` |
 
-**Total: ~210 primitive functions**
+**Total: 241 primitive functions** (post-#156).
 
 ### Three-level definition structure
 
-Each primitive is defined at three levels:
+Each primitive is defined at three levels, with a clear separation of concerns
+between universal metadata and per-host implementation (introduced in #156):
 
-#### Level 1: Core Type Definition
+#### Level 1: PrimitiveDefinition + Primitive (kernel types)
 
-From `Graph.hs`:
+`PrimitiveDefinition` (in `hydra.packaging`) carries the universal metadata that
+is the same in every host language:
+
+```haskell
+def "PrimitiveDefinition" $
+  record [
+    "name">:                  doc "Fully-qualified name" $ core "Name",
+    "description">:           doc "Human-readable description" $ core "String",
+    "signature">:             doc "Full type signature with parameter names" $
+                                typing "TermSignature",
+    "isPure">:                doc "Purity flag (defaults to True)" $ core "Boolean",
+    "isTotal">:               doc "Totality flag (defaults to True)" $ core "Boolean",
+    "defaultImplementation">: doc "Optional reference implementation in Hydra terms" $
+                                T.maybe (core "Term")
+  ]
+```
+
+`Primitive` (in `hydra.graph`) pairs the universal metadata with a host-specific
+implementation. This is what lives in a `Graph` as the per-host primitive
+registry:
+
 ```haskell
 def "Primitive" $
   record [
-    "name">: doc "Unique name of the primitive" $
-      core "Name",
-    "type">: doc "Type signature" $
-      core "TypeScheme",
+    "definition">: doc "Host-independent metadata (name, signature, purity, totality)" $
+      packaging "PrimitiveDefinition",
     "implementation">: doc "Concrete implementation" $
-      context "Context" ~> graph "Graph" ~> list (core "Term") ~>
+      typing "InferenceContext" ~> graph "Graph" ~> list (core "Term") ~>
         Types.either_ (errors "Error") (core "Term")
   ]
 ```
 
-(The Either-based implementation replaces the former `Flow` monad, removed in #245.)
+(The Either-based implementation replaces the former `Flow` monad, removed in #245.
+The host-independent `PrimitiveDefinition` was split out from the implementation
+in #156; the `InferenceContext` parameter replaced the legacy `Context` in #368.)
 
-#### Level 2: Haskell Implementation
+#### Level 2: PrimitiveDefinition declaration (the canonical registry)
 
-Native Haskell implementations in `heads/haskell/src/main/haskell/Hydra/Lib/`:
+The kernel modules `Hydra/Sources/Kernel/Lib/<Sub>.hs` declare every primitive
+as a `PrimitiveDefinition` (an arm of `Definition` alongside `term` and `type`),
+collectively forming **the** primitive registry. The 13 modules — `Chars`,
+`Eithers`, `Equality`, `Lists`, `Literals`, `Logic`, `Maps`, `Math`, `Maybes`,
+`Pairs`, `Regex`, `Sets`, `Strings` — declare 241 primitives total.
 
-```haskell
--- Math.hs
-add :: Num a => a -> a -> a
-add x y = x + y
-
-sqrt :: Double -> Double
-sqrt = Prelude.sqrt
-
--- Strings.hs
-cat :: [String] -> String
-cat = L.concat
-
-toUpper :: String -> String
-toUpper = fmap C.toUpper
-
--- Lists.hs
-map :: (a -> b) -> [a] -> [b]
-map = fmap
-
-length :: [a] -> Int
-length = L.length
-```
-
-#### Level 3: Primitive Registration
-
-In `Sources/Libraries.hs`, primitives are wrapped with metadata using DSL helpers:
+Example (`Hydra/Sources/Kernel/Lib/Logic.hs`):
 
 ```haskell
--- Unary primitive
-prim1 name function typeVars inputCoder outputCoder
+ns :: ModuleName
+ns = ModuleName "hydra.lib.logic"
 
--- Binary primitive
-prim2 name function typeVars input1Coder input2Coder outputCoder
-
--- Ternary primitive
-prim3 name function typeVars input1Coder input2Coder input3Coder outputCoder
-
--- Constant (nullary)
-prim0 name value typeVars outputCoder
-```
-
-**Example: Lists.map**
-```haskell
-prim2Interp _lists_map (Just mapInterp) ["x", "y"]
-  (function x y) (list x) (list y)
+module_ :: Module
+module_ = Module {
+            moduleName = ns,
+            moduleDefinitions = definitions,
+            moduleDependencies = Bootstrap.unqualifiedDep <$> kernelTypesModuleNames,
+            moduleDescription = Just "Primitives in the hydra.lib.logic namespace."}
   where
-    x = variable "x"
-    y = variable "y"
+    definitions = [
+      toPrimitive "Compute the logical AND of two boolean values." andSig and_,
+      primNoDef "ifElse" "Compute a conditional expression." ifElseSig,
+      toPrimitive "Compute the logical NOT of a boolean value." notSig not_,
+      toPrimitive "Compute the logical OR of two boolean values." orSig or_]
 
-    mapInterp :: Term -> Term -> Context -> Graph -> Either Error Term
-    mapInterp fun args' cx g = do
-      args <- ExtractCore.list cx args' g
-      return $ Terms.list (Terms.apply fun <$> args)
+andSig :: TermSignature
+andSig = sig $ TypeScheme [] (Types.boolean Types.~> Types.boolean Types.~> Types.boolean) Nothing
+
+and_ :: TypedTermDefinition (Bool -> Bool -> Bool)
+and_ = define "and" $
+  doc "Logical AND, defined in terms of ifElse." $
+  "a" ~> "b" ~> Logic.ifElse (var "a") (var "b" :: TypedTerm Bool) false
 ```
+
+The metadata flows through to JSON in `dist/json/hydra-kernel/src/main/json/hydra/lib/<sub>.json`,
+where it becomes the cross-host source of truth for the primitive's name,
+signature, description, and default implementation.
+
+#### Level 3: Native implementations and host registries
+
+Per host, two things are needed beyond the kernel metadata:
+
+1. **Native implementations** — in `heads/<host>/`, e.g.
+   `heads/haskell/src/main/haskell/Hydra/Lib/Math.hs`:
+
+   ```haskell
+   add :: Int -> Int -> Int
+   add x y = x + y
+   ```
+
+2. **Host-side primitive registry** — binds names to native impls.
+   The Haskell registry lives in
+   `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Libraries.hs`:
+
+   ```haskell
+   hydraLibMath :: Library
+   hydraLibMath = standardLibrary _hydra_lib_math [
+     prim2 _math_add Math.add [] int32 int32 int32,
+     ...]
+   ```
+
+   The `prim1`/`prim2`/`prim3` helpers build a `Primitive` by pairing the
+   universal `PrimitiveDefinition` (looked up by name) with the host's native
+   `implementation` function.
+
+   The Java and Python heads have analogous host-side registries
+   (`heads/java/.../Libraries.java`, `heads/python/.../sources/libraries.py`)
+   that wrap each native impl in a `Primitive`.
+
+The type information passed to `prim1`/`prim2`/`prim3` at host registration is
+a sanity-check repetition of the canonical signature — it's expected to match,
+and divergence is a bug. Future work (see follow-ups) may have host registries
+derive their signatures directly from the kernel metadata to eliminate this
+duplication.
+
+### Default implementations
+
+`PrimitiveDefinition.defaultImplementation : Maybe Term` carries an optional
+declarative reference implementation in pure Hydra terms. Two uses:
+
+- **Fallback for minimal interpreters.** A host that doesn't ship a native
+  impl for a primitive can fall back to evaluating the default Hydra term.
+- **Proof-friendly reference.** Targets that can prove or simulate the default
+  body (e.g. Coq) get a verified reference implementation for free.
+
+Default implementations are pure expressions — they take only the primitive's
+declared arguments (no `Context`, no `Graph`) and reduce using only other
+primitives. Not every primitive has one: fundamental operations like
+`logic.ifElse`, `pairs.first`, character predicates, and arithmetic cannot
+be expressed in terms of other primitives and use `primNoDef`.
+
+The `defaultImplementation` field replaces the pre-#156 `Hydra.Sources.Kernel.Lib.Defaults.*`
+modules, which encoded the same notion as interpreter-friendly Term-AST
+constructions. Those modules remain in the source tree but are now superseded
+by the primitive modules' `defaultImplementation` field; they will be removed
+in a follow-up.
 
 ### TermCoder system
 
@@ -783,11 +846,12 @@ type from `hydra.errors`:
 type Result a = Either Error a
 ```
 
-A `Context` value is threaded alongside the `Graph` as an explicit parameter, carrying
-debug traces and diagnostic messages. This provides:
+An `InferenceContext` value is threaded alongside the `Graph` as an explicit
+parameter, carrying inference state (the fresh-variable counter and the
+current subterm-path trace, accumulated backward). This provides:
 - Explicit error handling with short-circuit semantics
-- Debug traces via the threaded `Context` parameter
-- No hidden state — all context is passed explicitly
+- Subterm-path tracing via the threaded `InferenceContext` parameter
+- No hidden state — all inference state is passed explicitly
 
 ---
 
@@ -823,7 +887,7 @@ When `reduceTerm` encounters a `TermVariable`, it resolves the name in this orde
 
 This means module bindings shadow primitives, and primitives shadow lambda-bound variables.
 In practice, names don't collide: module definitions use qualified names like `hydra.core.Term`,
-while primitives use the `hydra.lib.*` namespace.
+while primitives use the `hydra.lib.*` module name.
 
 ### Construction-time shadowing
 
@@ -855,8 +919,9 @@ Test runners and custom applications can use `graphWithPrimitives` to inject add
 ### Built-in primitives vs. user-defined functions
 
 **Built-in primitives** (`graphPrimitives`) are implemented natively in the host language.
-Each `Primitive` carries a name, a type scheme, and an `implementation` function that maps
-a list of `Term` arguments to a result `Term`.
+Each `Primitive` carries a `definition : PrimitiveDefinition` (universal metadata: name,
+description, signature, isPure/isTotal flags, optional reference implementation) and an
+`implementation` function that maps a list of `Term` arguments to a result `Term`.
 See [Primitive functions](#primitive-functions) above.
 
 **User-defined functions** (`graphBoundTerms`) are Hydra terms — typically lambdas or
@@ -948,9 +1013,9 @@ file paths to contents comes out, and errors are reported via `Either Error`.
 
 Examples:
 ```haskell
-moduleToJava   :: Context -> Graph -> Module -> Either Error (M.Map FilePath String)
-moduleToPython :: Context -> Graph -> Module -> Either Error (M.Map FilePath String)
-moduleToCpp    :: Context -> Graph -> Module -> Either Error (M.Map FilePath String)
+moduleToJava   :: InferenceContext -> Graph -> Module -> Either Error (M.Map FilePath String)
+moduleToPython :: InferenceContext -> Graph -> Module -> Either Error (M.Map FilePath String)
+moduleToCpp    :: InferenceContext -> Graph -> Module -> Either Error (M.Map FilePath String)
 ```
 
 ### Coder framework
@@ -961,8 +1026,8 @@ Located in `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Types/Co
 ```haskell
 -- Bidirectional transformation
 data Coder v1 v2 = Coder {
-  coderEncode :: Context -> v1 -> Either Error v2,
-  coderDecode :: Context -> v2 -> Either Error v1
+  coderEncode :: InferenceContext -> v1 -> Either Error v2,
+  coderDecode :: InferenceContext -> v2 -> Either Error v1
 }
 
 -- Adapter for language-specific transformations
@@ -982,7 +1047,7 @@ Terms are recursively converted to target language expressions:
 
 ```haskell
 -- Java example
-encodeTerm :: Context -> Graph -> Aliases -> Term -> Either Error Java.Expression
+encodeTerm :: InferenceContext -> Graph -> Aliases -> Term -> Either Error Java.Expression
 
 -- Handles:
 -- - Literals (int, string, boolean, etc.)
@@ -1001,7 +1066,7 @@ Hydra types map to language types:
 
 ```haskell
 -- Java example
-encodeType :: Context -> Graph -> Aliases -> Type -> Either Error Java.Type
+encodeType :: InferenceContext -> Graph -> Aliases -> Type -> Either Error Java.Type
 
 -- Maps:
 -- TypeRecord → Java Class
@@ -1020,7 +1085,7 @@ Complete module transformation:
 
 ```haskell
 -- Java example from hydra-java's Coder.hs
-moduleToJava :: Context -> Graph -> Module -> Either Error (M.Map FilePath String)
+moduleToJava :: InferenceContext -> Graph -> Module -> Either Error (M.Map FilePath String)
 moduleToJava cx g mod = do
   -- Extract types from module
   types <- getTypes cx g mod
@@ -1029,7 +1094,7 @@ moduleToJava cx g mod = do
   classes <- traverse (typeToJavaClass cx g mod) types
 
   -- Generate package structure
-  let packagePath = namespaceToPath (moduleName mod)
+  let packagePath = moduleNameToPath (moduleName mod)
 
   -- Map file paths to source code
   pure $ M.fromList $ map (\cls ->
@@ -1043,13 +1108,13 @@ Adapters handle type compatibility between languages:
 
 ```haskell
 -- Core adapter functions
-languageAdapter    :: Context -> AdapterContext -> Language -> Type
+languageAdapter    :: InferenceContext -> AdapterContext -> Language -> Type
                    -> Either Error (Adapter Type Type Term Term)
 
-adaptTypeForLanguage :: Context -> AdapterContext -> Language -> Type
+adaptTypeForLanguage :: InferenceContext -> AdapterContext -> Language -> Type
                     -> Either Error Type
 
-termAdapter        :: Context -> AdapterContext -> Type
+termAdapter        :: InferenceContext -> AdapterContext -> Type
                    -> Either Error (Adapter FieldType FieldType Field Field)
 ```
 
@@ -1057,7 +1122,7 @@ termAdapter        :: Context -> AdapterContext -> Type
 ```haskell
 composeCoders  :: Coder v1 v2 -> Coder v2 v3 -> Coder v1 v3
 
-constructCoder :: Context -> AdapterContext -> Language -> Type
+constructCoder :: InferenceContext -> AdapterContext -> Language -> Type
                -> Either Error (Coder Term Term)
 ```
 
@@ -1340,7 +1405,7 @@ full payload* (which is what the original `[Module]` accumulator
 retained). A `TypeScheme` is typically 1-3 orders of magnitude smaller
 than the term body it types, so this is what keeps Phase 1 within the
 `-M6G` CI heap cap on a wholly dirty universe (e.g. after a kernel-wide
-rename invalidates every namespace's digest). See
+rename invalidates every module name's digest). See
 [#381](https://github.com/CategoricalData/hydra/issues/381) and
 [Phase 1's memory envelope](build-system.md#phase-1s-memory-envelope)
 in the build-system doc for the wall-time trade-off and the dead-end
@@ -1356,10 +1421,10 @@ otherwise downstream consumers that pattern-match on the body shape
 (e.g. expecting `record{...}`) hit `UnexpectedShape` errors against
 the raw `∀.∀.…record{...}` form.
 
-The Java and Python self-host pipelines (`heads/java/.../Generation.java`
+The Java and Python native DSL → JSON pipelines (`heads/java/.../Generation.java`
 and `heads/python/.../generation.py`) mirror the same driver shape in
-their host language so the native generators (`JavaSelfHostDemo`,
-`python-self-host-demo.py`) hit the same per-package memory envelope —
+their host language so the native generators (`UpdateJavaJson`,
+`update-python-json.py`) hit the same per-package memory envelope —
 relevant when those pipelines grow to cover more than their own one
 package.
 
@@ -1392,7 +1457,7 @@ def "Term" $
 
 Add DSL operations in `Phantoms.hs`:
 ```haskell
-either_ :: TTerm (a -> c) -> TTerm (b -> c) -> TTerm (Either a b) -> TTerm c
+either_ :: TypedTerm (a -> c) -> TypedTerm (b -> c) -> TypedTerm (Either a b) -> TypedTerm c
 ```
 
 #### Step 2: Build (Will Fail)
@@ -1408,14 +1473,14 @@ Hand-translate DSL definitions to Haskell in generated files:
 
 ```haskell
 -- Manually edit: dist/haskell/hydra-kernel/src/main/haskell/Hydra/Inference.hs
-inferTypeOfEither :: InferenceContext -> Either Term Term -> Context -> Graph -> Either Error InferenceResult
-inferTypeOfEither cx (Left left) context graph = do
-  leftResult <- inferType cx left context graph
+inferTypeOfEither :: InferenceContext -> Graph -> Either Term Term -> Either Error InferenceResult
+inferTypeOfEither cx graph (Left left) = do
+  leftResult <- inferType cx graph left
   let leftType = inferenceResultType leftResult
   let cx2 = inferenceResultContext leftResult
   return $ InferenceResult cx2 (TypeUnion [leftType, typeAny])
-inferTypeOfEither cx (Right right) = do
-  rightResult <- inferType cx right
+inferTypeOfEither cx graph (Right right) = do
+  rightResult <- inferType cx graph right
   let rightType = inferenceResultType rightResult
   let cx2 = inferenceResultContext rightResult
   return $ InferenceResult cx2 (TypeUnion [typeAny, rightType])
@@ -1455,9 +1520,9 @@ heads/haskell/src/main/haskell/Hydra/
 
 packages/hydra-kernel/src/main/haskell/Hydra/
 └── Sources/                # Kernel DSL-based specifications (manual)
-    ├── Kernel/Types/       # Type modules
-    ├── Kernel/Terms/       # Term modules
-    ├── Eval/Lib/           # Primitive library specs
+    ├── Kernel/Types/       # Type modules (data shapes)
+    ├── Kernel/Terms/       # Term modules (kernel functions)
+    ├── Kernel/Lib/         # Primitive registry: PrimitiveDefinition per hydra.lib.<sub> module name
     └── Test/               # Common test suite
 
 packages/hydra-<lang>/src/main/haskell/Hydra/
@@ -1491,8 +1556,9 @@ For detailed step-by-step guides, see the
 
 ### Key extension points
 
-**Primitive functions**: Add new standard library functions by defining native implementations in Haskell,
-registering them in `Sources/Libraries.hs`, and regenerating code for all target languages.
+**Primitive functions**: Add new standard library functions by declaring a `PrimitiveDefinition`
+in the appropriate `Hydra/Sources/Kernel/Lib/<Sub>.hs` module, adding native implementations in
+each host, and regenerating code for all target languages.
 See the
 [Adding primitives recipe](https://github.com/CategoricalData/hydra/blob/main/docs/recipes/adding-primitives.md).
 
@@ -1542,9 +1608,18 @@ implementing native functions in `Lib/`, registering primitives, and creating DS
 
 ### Primitive functions
 
-[`heads/haskell/src/main/haskell/Hydra/Lib/`](https://github.com/CategoricalData/hydra/tree/main/heads/haskell/src/main/haskell/Hydra/Lib) — Native implementations
-[`packages/hydra-kernel/src/main/haskell/Hydra/Sources/Libraries.hs`](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-kernel/src/main/haskell/Hydra/Sources/Libraries.hs) — Primitive registration
+[`packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Lib/`](https://github.com/CategoricalData/hydra/tree/main/packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Lib) — Canonical primitive registry (one `PrimitiveDefinition`-emitting module per `hydra.lib.<sub>` module name)
+
+[`heads/haskell/src/main/haskell/Hydra/Lib/`](https://github.com/CategoricalData/hydra/tree/main/heads/haskell/src/main/haskell/Hydra/Lib) — Native Haskell implementations
+
+[`packages/hydra-kernel/src/main/haskell/Hydra/Sources/Libraries.hs`](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-kernel/src/main/haskell/Hydra/Sources/Libraries.hs) — Host-side bindings (pairs each name with its native impl via `prim1`/`prim2`/`prim3`)
 ```
+Sources/Kernel/Lib/
+├── Math.hs
+├── Lists.hs
+└── ...
+
+heads/haskell/.../Hydra/Lib/
 ├── Math.hs
 ├── Lists.hs
 └── ...

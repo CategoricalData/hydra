@@ -2,7 +2,7 @@ module Hydra.Sources.Test.TestTerms where
 
 -- Standard imports for kernel test fixtures
 import Hydra.Kernel
-import           Hydra.Dsl.Bootstrap (unqualifiedDep)
+import           Hydra.Dsl.Bootstrap (unqualifiedDep, descriptionMetadata)
 import Hydra.Dsl.Meta.Testing                 as Testing
 import Hydra.Dsl.Meta.Terms                   as Terms
 import Hydra.Sources.Kernel.Types.All
@@ -28,7 +28,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = unqualifiedDep <$> [TestTypes.ns, ModuleName "hydra.core"],
-            moduleDescription = (Just "Term definitions for the test suite")}
+            moduleMetadata = descriptionMetadata ((Just "Term definitions for the test suite"))}
   where
     definitions = [
       Phantoms.toDefinition latlonRecord,
@@ -36,33 +36,33 @@ module_ = Module {
       Phantoms.toDefinition testElementArthur,
       Phantoms.toDefinition testElementFirstName]
 
-defineTerm :: String -> TTerm a -> TTermDefinition a
+defineTerm :: String -> TypedTerm a -> TypedTermDefinition a
 defineTerm = definitionInModule module_
 
-latlonRecord :: TTermDefinition (Float -> Float -> Term)
+latlonRecord :: TypedTermDefinition (Float -> Float -> Term)
 latlonRecord = defineTerm "latlonRecord" $
   Phantoms.lambdas ["lat", "lon"] $ record TestTypes.testTypeLatLonName [
     "lat">: float32Lift $ varPhantom "lat",
     "lon">: float32Lift $ varPhantom "lon"]
 
-testDataArthur :: TTermDefinition Term
+testDataArthur :: TypedTermDefinition Term
 testDataArthur = defineTerm "testDataArthur" $
   record TestTypes.testTypePersonName [
     "firstName">: string "Arthur",
     "lastName">: string "Dent",
     "age">: int32 42]
 
-testElementArthur :: TTermDefinition Binding
+testElementArthur :: TypedTermDefinition Binding
 testElementArthur = defineTerm "testElementArthur" $
   Core.binding
     (name "firstName")
     testDataArthur
-    (Phantoms.just $ Core.typeScheme (Phantoms.list ([] :: [TTerm Name])) (Core.typeVariable TestTypes.testTypePersonName) Phantoms.nothing)
+    (Phantoms.just $ Core.typeScheme (Phantoms.list ([] :: [TypedTerm Name])) (Core.typeVariable TestTypes.testTypePersonName) Phantoms.nothing)
 
-testElementFirstName :: TTermDefinition Binding
+testElementFirstName :: TypedTermDefinition Binding
 testElementFirstName = defineTerm "testElementFirstName" $
   Core.binding
     (name "firstName")
     (project TestTypes.testTypePersonName (name "firstName"))
-    (Phantoms.just $ Core.typeScheme (Phantoms.list ([] :: [TTerm Name]))
+    (Phantoms.just $ Core.typeScheme (Phantoms.list ([] :: [TypedTerm Name]))
       (Core.typeFunction $ Core.functionType (Core.typeVariable TestTypes.testTypePersonName) T.string) Phantoms.nothing)

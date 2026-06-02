@@ -86,9 +86,6 @@ import qualified Hydra.Java.Syntax as Java
 import qualified Hydra.Sources.Java.Syntax as JavaSyntax
 
 
-def :: String -> TTerm a -> TTermDefinition a
-def = definitionInModule module_
-
 ns :: ModuleName
 ns = ModuleName "hydra.java.names"
 
@@ -97,7 +94,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> ((JavaSyntax.ns:KernelTypes.kernelTypesModuleNames)),
-            moduleDescription = Just "Java naming constants and package name utilities"}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just "Java naming constants and package name utilities")}
   where
     definitions = [
       toDefinition acceptMethodName,
@@ -122,79 +119,82 @@ module_ = Module {
       toDefinition visitorName,
       toDefinition visitorReturnParameter]
 
-acceptMethodName :: TTermDefinition String
+acceptMethodName :: TypedTermDefinition String
 acceptMethodName = def "acceptMethodName" $ string "accept"
 
-applyMethodName :: TTermDefinition String
+applyMethodName :: TypedTermDefinition String
 applyMethodName = def "applyMethodName" $ string "apply"
 
-compareToMethodName :: TTermDefinition String
+compareToMethodName :: TypedTermDefinition String
 compareToMethodName = def "compareToMethodName" $ string "compareTo"
 
-equalsMethodName :: TTermDefinition String
+def :: String -> TypedTerm a -> TypedTermDefinition a
+def = definitionInModule module_
+
+equalsMethodName :: TypedTermDefinition String
 equalsMethodName = def "equalsMethodName" $ string "equals"
 
-getMethodName :: TTermDefinition String
+getMethodName :: TypedTermDefinition String
 getMethodName = def "getMethodName" $ string "get"
 
-hashCodeMethodName :: TTermDefinition String
+hashCodeMethodName :: TypedTermDefinition String
 hashCodeMethodName = def "hashCodeMethodName" $ string "hashCode"
 
-hydraCorePackageName :: TTermDefinition (Maybe Java.PackageName)
+hydraCorePackageName :: TypedTermDefinition (Maybe Java.PackageName)
 hydraCorePackageName = def "hydraCorePackageName" $
   doc "The hydra.core package name" $
   just (javaPackageName @@ list [string "hydra", string "core"])
 
-hydraUtilPackageName :: TTermDefinition (Maybe Java.PackageName)
+hydraUtilPackageName :: TypedTermDefinition (Maybe Java.PackageName)
 hydraUtilPackageName = def "hydraUtilPackageName" $
   doc "The hydra.util package name" $
   just (javaPackageName @@ list [string "hydra", string "util"])
 
-instanceName :: TTermDefinition String
+instanceName :: TypedTermDefinition String
 instanceName = def "instanceName" $ string "instance"
 
-javaLangPackageName :: TTermDefinition (Maybe Java.PackageName)
+javaLangPackageName :: TypedTermDefinition (Maybe Java.PackageName)
 javaLangPackageName = def "javaLangPackageName" $
   doc "The java.lang package name" $
   just (javaPackageName @@ list [string "java", string "lang"])
 
-javaPackageName :: TTermDefinition ([String] -> Java.PackageName)
+javaPackageName :: TypedTermDefinition ([String] -> Java.PackageName)
 javaPackageName = def "javaPackageName" $
   doc "Construct a Java package name from a list of string parts" $
   "parts" ~>
     wrap Java._PackageName $
       Lists.map ("p" ~> wrap Java._Identifier (var "p")) (var "parts")
 
-javaUtilFunctionPackageName :: TTermDefinition (Maybe Java.PackageName)
+javaUtilFunctionPackageName :: TypedTermDefinition (Maybe Java.PackageName)
 javaUtilFunctionPackageName = def "javaUtilFunctionPackageName" $
   doc "The java.util.function package name" $
   just (javaPackageName @@ list [string "java", string "util", string "function"])
 
-javaUtilPackageName :: TTermDefinition (Maybe Java.PackageName)
+javaUtilPackageName :: TypedTermDefinition (Maybe Java.PackageName)
 javaUtilPackageName = def "javaUtilPackageName" $
   doc "The java.util package name" $
   just (javaPackageName @@ list [string "java", string "util"])
 
-otherInstanceName :: TTermDefinition String
+otherInstanceName :: TypedTermDefinition String
 otherInstanceName = def "otherInstanceName" $ string "other"
 
-otherwiseMethodName :: TTermDefinition String
+otherwiseMethodName :: TypedTermDefinition String
 otherwiseMethodName = def "otherwiseMethodName" $ string "otherwise"
 
-partialVisitorName :: TTermDefinition String
+partialVisitorName :: TypedTermDefinition String
 partialVisitorName = def "partialVisitorName" $ string "PartialVisitor"
 
-setMethodName :: TTermDefinition String
+setMethodName :: TypedTermDefinition String
 setMethodName = def "setMethodName" $ string "set"
 
-valueFieldName :: TTermDefinition String
+valueFieldName :: TypedTermDefinition String
 valueFieldName = def "valueFieldName" $ string "value"
 
-visitMethodName :: TTermDefinition String
+visitMethodName :: TypedTermDefinition String
 visitMethodName = def "visitMethodName" $ string "visit"
 
-visitorName :: TTermDefinition String
+visitorName :: TypedTermDefinition String
 visitorName = def "visitorName" $ string "Visitor"
 
-visitorReturnParameter :: TTermDefinition String
+visitorReturnParameter :: TypedTermDefinition String
 visitorReturnParameter = def "visitorReturnParameter" $ string "R"

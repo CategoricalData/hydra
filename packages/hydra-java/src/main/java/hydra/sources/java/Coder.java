@@ -23,7 +23,7 @@ import hydra.packaging.Definition;
 import hydra.packaging.Module;
 import hydra.packaging.ModuleName;
 import hydra.packaging.ModuleDependency;
-import hydra.phantoms.TTerm;
+import hydra.typed.TypedTerm;
 import hydra.util.Maybe;
 
 import java.util.Arrays;
@@ -150,7 +150,9 @@ import hydra.java.syntax.VariableDeclarator;  // AUTO-IMPORT (hydra-java DSL)
 import hydra.java.syntax.VariableDeclaratorId;  // AUTO-IMPORT (hydra-java DSL)
 import hydra.java.syntax.VariableInitializer;  // AUTO-IMPORT (hydra-java DSL)
 import hydra.java.syntax.WhileStatement;  // AUTO-IMPORT (hydra-java DSL)
+import hydra.packaging.EntityMetadata;  // AUTO-IMPORT (hydra-java DSL)
 import hydra.packaging.FileExtension;  // AUTO-IMPORT (hydra-java DSL)
+import hydra.packaging.PrimitiveDefinition;  // AUTO-IMPORT (hydra-java DSL)
 import hydra.packaging.QualifiedName;  // AUTO-IMPORT (hydra-java DSL)
 import hydra.packaging.TermDefinition;  // AUTO-IMPORT (hydra-java DSL)
 import hydra.packaging.TypeDefinition;  // AUTO-IMPORT (hydra-java DSL)
@@ -158,6 +160,8 @@ import hydra.sources.java.Names;  // AUTO-IMPORT (hydra-java DSL)
 import hydra.sources.java.Serde;  // AUTO-IMPORT (hydra-java DSL)
 import hydra.sources.java.Utils;  // AUTO-IMPORT (hydra-java DSL)
 import hydra.typing.FunctionStructure;  // AUTO-IMPORT (hydra-java DSL)
+import hydra.typing.Parameter;  // AUTO-IMPORT (hydra-java DSL)
+import hydra.typing.TermSignature;  // AUTO-IMPORT (hydra-java DSL)
 import hydra.util.CaseConvention;  // AUTO-IMPORT (hydra-java DSL)
 
 /**
@@ -171,7 +175,7 @@ import hydra.util.CaseConvention;  // AUTO-IMPORT (hydra-java DSL)
 public class Coder {
     public static final ModuleName NS = new ModuleName("hydra.java.coder");
 
-    private static Def def(String localName, Supplier<TTerm<?>> body) {
+    private static Def def(String localName, Supplier<TypedTerm<?>> body) {
         return define(NS, localName, body);
     }
 
@@ -284,7 +288,9 @@ public class Coder {
                                     right(
                                         Maybes.map(
                                             lambda("prim",
-                                                proj(Primitive.TYPE_, Primitive.TYPE_SCHEME, "prim")),
+                                                apply(var("hydra.scoping.termSignatureToTypeScheme"),
+                                                    proj(PrimitiveDefinition.TYPE_, PrimitiveDefinition.SIGNATURE,
+                                                        proj(Primitive.TYPE_, Primitive.DEFINITION, "prim")))),
                                             Maps.lookup(
                                                 var("cname"),
                                                 proj(Graph.TYPE_, Graph.PRIMITIVES, "g")))),
@@ -1138,9 +1144,15 @@ public class Coder {
                                                             var("bname"),
                                                             var("recursiveVars"))),
                                                     Logic.and_(
-                                                        apply(
-                                                            ref(Coder.needsThunking),
-                                                            proj(Binding.TYPE_, Binding.TERM, "b")),
+                                                        Logic.and_(
+                                                            apply(
+                                                                var("hydra.predicates.isComplexBinding"),
+                                                                var("g"),
+                                                                var("b")),
+                                                            Logic.not_(
+                                                                apply(
+                                                                    var("hydra.predicates.isTrivialTerm"),
+                                                                    proj(Binding.TYPE_, Binding.TERM, "b")))),
                                                         Logic.not_(
                                                             apply(
                                                                 ref(Coder.bindingIsFunctionType),
@@ -2704,7 +2716,10 @@ public class Coder {
                                 var("itf")),
                             field(
                                 TopLevelClassOrInterfaceDeclarationWithComments.COMMENTS,
-                                proj(Module.TYPE_, Module.DESCRIPTION, "mod"))))),
+                                Maybes.bind(
+                                    proj(Module.TYPE_, Module.METADATA, "mod"),
+                                    lambda("em",
+                                        proj(EntityMetadata.TYPE_, EntityMetadata.DESCRIPTION, "em"))))))),
                     pair(
                         var("elName"),
                         inject(CompilationUnit.TYPE_,
@@ -6337,8 +6352,10 @@ public class Coder {
                                                     wrap(Name.TYPE_,
                                                         string("hydra.core.Unit")))),
                                             field(TypeScheme.CONSTRAINTS, nothing())),
-                                        lambda("x", var("x")),
-                                        proj(TermDefinition.TYPE_, TermDefinition.TYPE_SCHEME, "tdef"))),
+                                        lambda("sig",
+                                            apply(var("hydra.scoping.termSignatureToTypeScheme"),
+                                                var("sig"))),
+                                        proj(TermDefinition.TYPE_, TermDefinition.SIGNATURE, "tdef"))),
                                 field("term",
                                     apply(var("hydra.variables.unshadowVariables"), var("term0"))),
                                 Eithers.bind(
@@ -7262,16 +7279,28 @@ public class Coder {
                                     Eithers.bind(
                                         Eithers.mapList(var("encode"), var("els")),
                                         lambda("jels",
-                                            right(
+                                            Eithers.bind(
                                                 apply(
-                                                    ref(Utils.javaMethodInvocationToJavaExpression),
-                                                    apply(
-                                                        ref(Utils.methodInvocationStatic),
-                                                        wrap(Identifier.TYPE_,
-                                                            string("hydra.util.ConsList")),
-                                                        wrap(Identifier.TYPE_,
-                                                            string("of")),
-                                                        var("jels"))))))))),
+                                                    ref(Coder.collectionTypeArgs),
+                                                    string("list"),
+                                                    int32(1),
+                                                    var("aliases"),
+                                                    var("anns"),
+                                                    var("tyapps"),
+                                                    var("cx"),
+                                                    var("g")),
+                                                lambda("targs",
+                                                    right(
+                                                        apply(
+                                                            ref(Utils.javaMethodInvocationToJavaExpression),
+                                                            apply(
+                                                                ref(Utils.methodInvocationStaticWithTypeArgs),
+                                                                wrap(Identifier.TYPE_,
+                                                                    string("hydra.util.ConsList")),
+                                                                wrap(Identifier.TYPE_,
+                                                                    string("of")),
+                                                                var("targs"),
+                                                                var("jels"))))))))))),
                         field(
                             Term.LITERAL,
                             lambda("l", right(apply(ref(Coder.encodeLiteral), var("l"))))),
@@ -7335,18 +7364,30 @@ public class Coder {
                                                                             Pairs.first(var("kv")),
                                                                             Pairs.second(var("kv")))))),
                                                             Lists.zip(var("jkeys"), var("jvals"))),
-                                                        right(
+                                                        Eithers.bind(
                                                             apply(
-                                                                ref(Utils.javaMethodInvocationToJavaExpression),
-                                                                apply(
-                                                                    ref(Utils.methodInvocationStatic),
-                                                                    wrap(
-                                                                        Identifier.TYPE_,
-                                                                        string("hydra.util.PersistentMap")),
-                                                                    wrap(
-                                                                        Identifier.TYPE_,
-                                                                        string("ofEntries")),
-                                                                    var("pairExprs")))))))))))),
+                                                                ref(Coder.collectionTypeArgs),
+                                                                string("map"),
+                                                                int32(2),
+                                                                var("aliases"),
+                                                                var("anns"),
+                                                                var("tyapps"),
+                                                                var("cx"),
+                                                                var("g")),
+                                                            lambda("targs",
+                                                                right(
+                                                                    apply(
+                                                                        ref(Utils.javaMethodInvocationToJavaExpression),
+                                                                        apply(
+                                                                            ref(Utils.methodInvocationStaticWithTypeArgs),
+                                                                            wrap(
+                                                                                Identifier.TYPE_,
+                                                                                string("hydra.util.PersistentMap")),
+                                                                            wrap(
+                                                                                Identifier.TYPE_,
+                                                                                string("ofEntries")),
+                                                                            var("targs"),
+                                                                            var("pairExprs")))))))))))))),
                         field(
                             Term.MAYBE,
                             lambda("mt",
@@ -7388,16 +7429,28 @@ public class Coder {
                                         Eithers.bind(
                                             apply(var("encode"), var("term1")),
                                             lambda("expr",
-                                                right(
+                                                Eithers.bind(
                                                     apply(
-                                                        ref(Utils.javaMethodInvocationToJavaExpression),
-                                                        apply(
-                                                            ref(Utils.methodInvocationStatic),
-                                                            wrap(Identifier.TYPE_,
-                                                                string("hydra.util.Maybe")),
-                                                            wrap(Identifier.TYPE_,
-                                                                string("just")),
-                                                            list(var("expr"))))))))))),
+                                                        ref(Coder.collectionTypeArgs),
+                                                        string("maybe"),
+                                                        int32(1),
+                                                        var("aliases"),
+                                                        var("anns"),
+                                                        var("tyapps"),
+                                                        var("cx"),
+                                                        var("g")),
+                                                    lambda("targs",
+                                                        right(
+                                                            apply(
+                                                                ref(Utils.javaMethodInvocationToJavaExpression),
+                                                                apply(
+                                                                    ref(Utils.methodInvocationStaticWithTypeArgs),
+                                                                    wrap(Identifier.TYPE_,
+                                                                        string("hydra.util.Maybe")),
+                                                                    wrap(Identifier.TYPE_,
+                                                                        string("just")),
+                                                                    var("targs"),
+                                                                    list(var("expr"))))))))))))),
                         field(
                             Term.PAIR,
                             lambda("p",
@@ -7760,16 +7813,28 @@ public class Coder {
                                         Eithers.bind(
                                             Eithers.mapList(var("encode"), var("slist")),
                                             lambda("jels",
-                                                right(
+                                                Eithers.bind(
                                                     apply(
-                                                        ref(Utils.javaMethodInvocationToJavaExpression),
-                                                        apply(
-                                                            ref(Utils.methodInvocationStatic),
-                                                            wrap(Identifier.TYPE_,
-                                                                string("hydra.util.PersistentSet")),
-                                                            wrap(Identifier.TYPE_,
-                                                                string("of")),
-                                                            var("jels")))))))))),
+                                                        ref(Coder.collectionTypeArgs),
+                                                        string("set"),
+                                                        int32(1),
+                                                        var("aliases"),
+                                                        var("anns"),
+                                                        var("tyapps"),
+                                                        var("cx"),
+                                                        var("g")),
+                                                    lambda("targs",
+                                                        right(
+                                                            apply(
+                                                                ref(Utils.javaMethodInvocationToJavaExpression),
+                                                                apply(
+                                                                    ref(Utils.methodInvocationStaticWithTypeArgs),
+                                                                    wrap(Identifier.TYPE_,
+                                                                        string("hydra.util.PersistentSet")),
+                                                                    wrap(Identifier.TYPE_,
+                                                                        string("of")),
+                                                                    var("targs"),
+                                                                    var("jels")))))))))))),
                         field(
                             Term.TYPE_LAMBDA,
                             lambda("tl",
@@ -10261,7 +10326,7 @@ public class Coder {
                         lambda("jargs0",
                             let(
                                 field("wrapResult",
-                                    apply(ref(Coder.wrapLazyArguments), var("name"), var("jargs0"))),
+                                    apply(ref(Coder.wrapLazyArguments), var("g"), var("name"), var("jargs0"))),
                                 field("jargs",
                                     Pairs.first(var("wrapResult"))),
                                 field("mMethodOverride",
@@ -11182,22 +11247,6 @@ public class Coder {
                         just(
                             wrap(ModuleName.TYPE_,
                                 Strings.intercalate(string("."), var("initParts"))))))));
-
-    public static final Def needsThunking = def(
-        "needsThunking",
-        () -> lambda("t",
-                casesWithDefault(Term.TYPE_,
-                    apply(var("hydra.strip.deannotateTerm"), var("t")),
-                    Lists.foldl(
-                        lambda(
-                            "b",
-                            "st",
-                            Logic.or_(var("b"), apply(ref(Coder.needsThunking), var("st")))),
-                        bool(false),
-                        apply(var("hydra.rewriting.subterms"), var("t"))),
-                    field(Term.LET, constant(bool(true))),
-                    field(Term.TYPE_APPLICATION, constant(bool(true))),
-                    field(Term.TYPE_LAMBDA, constant(bool(true))))));
 
     public static final Def noComment = def(
         "noComment",
@@ -12688,6 +12737,110 @@ public class Coder {
                                     ref(Utils.javaMethodInvocationToJavaExpression),
                                     var("otherGetName"))))))));
 
+    // Derive the explicit type arguments for a non-empty collection literal
+    // (list, set, map, optional). When the caller already has type applications
+    // in scope (descended through a Type.APPLICATION wrapper), reuse them via
+    // takeTypeArgs. Otherwise recover the term's type with typeOfTerm, strip
+    // annotations, and pull the component types out of the expected
+    // ListType/SetType/MapType/OptionalType shape. Each component is encoded to
+    // a Java reference type and wrapped as a TypeArgument, ready for
+    // methodInvocationStaticWithTypeArgs. This lets the coder emit e.g.
+    // hydra.util.PersistentMap.<Name, Type>ofEntries(...) so javac is not forced
+    // to infer K and V from deeply-nested varargs (issue #394).
+    public static final Def collectionTypeArgs = def(
+        "collectionTypeArgs",
+        () -> lambda(
+                java.util.Arrays.asList("label", "n", "aliases", "anns", "tyapps", "cx", "g"),
+                Logic.ifElse(
+                    Logic.not_(Lists.null_(var("tyapps"))),
+                    apply(
+                        ref(Coder.takeTypeArgs),
+                        var("label"),
+                        var("n"),
+                        var("tyapps"),
+                        var("cx"),
+                        var("g")),
+                    let("combinedAnns",
+                        Lists.foldl(
+                            lambda(
+                                "acc",
+                                "m",
+                                Maps.union(var("acc"), var("m"))),
+                            var("hydra.lib.maps.empty"),
+                            var("anns")),
+                        Eithers.bind(
+                            Eithers.bimap(
+                                lambda("__de",
+                                    inject(Error_.TYPE_,
+                                        Error_.OTHER,
+                                        wrap(OtherError.TYPE_,
+                                            apply(
+                                                unwrap(DecodingError.TYPE_),
+                                                var("__de"))))),
+                                lambda("__a", var("__a")),
+                                apply(
+                                    var("hydra.annotations.getType"),
+                                    var("g"),
+                                    var("combinedAnns"))),
+                            lambda("mtyp",
+                                Eithers.bind(
+                                    Maybes.cases(
+                                        var("mtyp"),
+                                        // No retained type (neither a wrapping type application nor a
+                                        // keyType annotation reached this collection term, e.g. a literal
+                                        // nested below the points the type-propagation pass annotates).
+                                        // Fall back to bare emission — same as the empty-collection case
+                                        // does when tyapps is empty. javac can still infer the simpler
+                                        // (non-varargs-heavy) cases; the cases that defeat inference, like
+                                        // the 94-entry typesByName map, do carry the annotation. (#394)
+                                        right(list()),
+                                        lambda("typ",
+                                            casesWithDefault(Type.TYPE_,
+                                                apply(var("hydra.strip.deannotateType"), var("typ")),
+                                                right(list()),
+                                                field(
+                                                    Type.LIST,
+                                                    lambda("elemType",
+                                                        right(list(var("elemType"))))),
+                                                field(
+                                                    Type.SET,
+                                                    lambda("elemType",
+                                                        right(list(var("elemType"))))),
+                                                field(
+                                                    Type.MAYBE,
+                                                    lambda("elemType",
+                                                        right(list(var("elemType"))))),
+                                                field(
+                                                    Type.MAP,
+                                                    lambda("mt",
+                                                        right(
+                                                            list(
+                                                                proj(MapType.TYPE_, MapType.KEYS, "mt"),
+                                                                proj(MapType.TYPE_, MapType.VALUES, "mt")))))))),
+                                    lambda("compTypes",
+                                        Eithers.mapList(
+                                            lambda("ct",
+                                                Eithers.bind(
+                                                    apply(
+                                                        ref(Coder.encodeType),
+                                                        var("aliases"),
+                                                        var("hydra.lib.sets.empty"),
+                                                        var("ct"),
+                                                        var("cx"),
+                                                        var("g")),
+                                                    lambda("jt",
+                                                        Eithers.bind(
+                                                            apply(
+                                                                ref(Utils.javaTypeToJavaReferenceType),
+                                                                var("jt"),
+                                                                var("cx")),
+                                                            lambda("rt",
+                                                                right(
+                                                                    inject(TypeArgument.TYPE_,
+                                                                        TypeArgument.REFERENCE,
+                                                                        var("rt")))))))),
+                                            var("compTypes"))))))))));
+
     public static final Def takeTypeArgs = def(
         "takeTypeArgs",
         () -> lambda(
@@ -13822,104 +13975,66 @@ public class Coder {
                                 LambdaBody.EXPRESSION,
                                 var("expr")))))));
 
+    // Look up a primitive by name and return its per-parameter laziness flags
+    // (the isLazy flag of each signature parameter), in order. Empty if the name
+    // is not a registered primitive. The single source of truth for which
+    // arguments must be thunked, replacing the former hard-coded name table
+    // (issue #391).
+    public static final Def lazyFlagsForPrimitive = def(
+        "lazyFlagsForPrimitive",
+        () -> lambda(
+                "g",
+                "name",
+                Maybes.cases(
+                    Maps.lookup(var("name"), proj(Graph.TYPE_, Graph.PRIMITIVES, "g")),
+                    list(),
+                    lambda("prim",
+                        Lists.map(
+                            lambda("p", proj(Parameter.TYPE_, Parameter.IS_LAZY, "p")),
+                            proj(TermSignature.TYPE_, TermSignature.PARAMETERS,
+                                proj(PrimitiveDefinition.TYPE_, PrimitiveDefinition.SIGNATURE,
+                                    proj(Primitive.TYPE_, Primitive.DEFINITION, "prim"))))))));
+
+    // For primitives requiring lazy evaluation, wrap the lazy-flagged arguments
+    // in Supplier lambdas. Java eagerly evaluates all method arguments, so e.g.
+    // ifElse branches must be wrapped in () -> expr and called via IfElse.lazy();
+    // maybe's default must be wrapped to avoid constructing expensive values on
+    // the success path. Which positions are lazy comes from the primitive's
+    // isLazy metadata (issue #391), not a hard-coded name table. Only fires when
+    // the primitive is fully applied (argc == parameter count) and has at least
+    // one lazy parameter. The returned Maybe String is the Java method-name
+    // override: ifElse dispatches to `lazy`, the others to `applyLazy`.
     public static final Def wrapLazyArguments = def(
         "wrapLazyArguments",
         () -> lambda(
+                "g",
                 "name",
                 "args",
                 let(
-                    field("dummyExpr",
-                        apply(
-                            ref(Utils.javaIntExpression),
-                            bigint(java.math.BigInteger.valueOf(0L)))),
-                    field("argAt",
-                        lambda("i",
-                            Maybes.fromMaybe(var("dummyExpr"), Lists.maybeAt(var("i"), var("args"))))),
+                    field("lazyFlags",
+                        apply(ref(Coder.lazyFlagsForPrimitive), var("g"), var("name"))),
+                    field("anyLazy",
+                        Lists.foldl(
+                            lambda("b", "f", Logic.or_(var("b"), var("f"))),
+                            bool(false),
+                            var("lazyFlags"))),
                     Logic.ifElse(
                         Logic.and_(
-                            Equality.equal(
-                                var("name"),
-                                wrap(Name.TYPE_, string("hydra.lib.logic.ifElse"))),
-                            Equality.equal(Lists.length(var("args")), int32(3))),
+                            var("anyLazy"),
+                            Equality.equal(Lists.length(var("args")), Lists.length(var("lazyFlags")))),
                         pair(
-                            list(
-                                apply(var("argAt"), int32(0)),
-                                apply(
-                                    ref(Coder.wrapInSupplierLambda),
-                                    apply(var("argAt"), int32(1))),
-                                apply(
-                                    ref(Coder.wrapInSupplierLambda),
-                                    apply(var("argAt"), int32(2)))),
-                            just(string("lazy"))),
-                        Logic.ifElse(
-                            Logic.and_(
-                                Equality.equal(
-                                    var("name"),
-                                    wrap(Name.TYPE_, string("hydra.lib.maybes.maybe"))),
-                                Equality.equal(Lists.length(var("args")), int32(3))),
-                            pair(
-                                list(
-                                    apply(
-                                        ref(Coder.wrapInSupplierLambda),
-                                        apply(var("argAt"), int32(0))),
-                                    apply(var("argAt"), int32(1)),
-                                    apply(var("argAt"), int32(2))),
-                                just(string("applyLazy"))),
-                            Logic.ifElse(
-                                Logic.and_(
-                                    Equality.equal(
-                                        var("name"),
-                                        wrap(Name.TYPE_,
-                                            string("hydra.lib.maybes.cases"))),
-                                    Equality.equal(Lists.length(var("args")), int32(3))),
-                                pair(
-                                    list(
-                                        apply(var("argAt"), int32(0)),
-                                        apply(
-                                            ref(Coder.wrapInSupplierLambda),
-                                            apply(var("argAt"), int32(1))),
-                                        apply(var("argAt"), int32(2))),
-                                    just(string("applyLazy"))),
-                                Logic.ifElse(
-                                    Logic.and_(
-                                        Equality.equal(
-                                            var("name"),
-                                            wrap(Name.TYPE_,
-                                                string("hydra.lib.maps.findWithDefault"))),
-                                        Equality.equal(Lists.length(var("args")), int32(3))),
-                                    pair(
-                                        list(
-                                            apply(
-                                                ref(Coder.wrapInSupplierLambda),
-                                                apply(var("argAt"), int32(0))),
-                                            apply(var("argAt"), int32(1)),
-                                            apply(var("argAt"), int32(2))),
-                                        just(string("applyLazy"))),
+                            Lists.map(
+                                lambda("pair",
                                     Logic.ifElse(
-                                        Logic.and_(
-                                            Logic.or_(
-                                                Equality.equal(
-                                                    var("name"),
-                                                    wrap(Name.TYPE_,
-                                                        string("hydra.lib.maybes.fromMaybe"))),
-                                                Logic.or_(
-                                                    Equality.equal(
-                                                        var("name"),
-                                                        wrap(Name.TYPE_,
-                                                            string("hydra.lib.eithers.fromLeft"))),
-                                                    Equality.equal(
-                                                        var("name"),
-                                                        wrap(Name.TYPE_,
-                                                            string("hydra.lib.eithers.fromRight"))))),
-                                            Equality.equal(Lists.length(var("args")), int32(2))),
-                                        pair(
-                                            list(
-                                                apply(
-                                                    ref(Coder.wrapInSupplierLambda),
-                                                    apply(var("argAt"), int32(0))),
-                                                apply(var("argAt"), int32(1))),
-                                            just(string("applyLazy"))),
-                                        pair(var("args"), nothing())))))))));
+                                        Pairs.second(var("pair")),
+                                        apply(ref(Coder.wrapInSupplierLambda), Pairs.first(var("pair"))),
+                                        Pairs.first(var("pair")))),
+                                Lists.zip(var("args"), var("lazyFlags"))),
+                            just(Logic.ifElse(
+                                Equality.equal(var("name"), wrap(Name.TYPE_, string("hydra.lib.logic.ifElse"))),
+                                string("lazy"),
+                                string("applyLazy")))),
+                        pair(var("args"), nothing())))));
 
 
 
@@ -13968,6 +14083,7 @@ public class Coder {
             collectTypeApps0,
             collectTypeVars,
             collectTypeVars_go,
+            collectionTypeArgs,
             comparableCompareExpr,
             compareAndReturnStmts,
             compareFieldExpr,
@@ -14078,10 +14194,10 @@ public class Coder {
             javaTypeArgumentsForType,
             javaTypeParametersForType,
             javaTypeParametersForType_bvars,
+            lazyFlagsForPrimitive,
             moduleToJava,
             nameMapToTypeMap,
             namespaceParent,
-            needsThunking,
             noComment,
             noInterfaceComment,
             otherwiseBranch,
@@ -14162,7 +14278,6 @@ public class Coder {
         new ModuleName("hydra.ast"),
         new ModuleName("hydra.classes"),
         new ModuleName("hydra.coders"),
-        new ModuleName("hydra.context"),
         new ModuleName("hydra.core"),
         new ModuleName("hydra.error.checking"),
         new ModuleName("hydra.error.core"),
@@ -14172,20 +14287,24 @@ public class Coder {
         new ModuleName("hydra.json.model"),
         new ModuleName("hydra.packaging"),
         new ModuleName("hydra.parsing"),
-        new ModuleName("hydra.phantoms"),
         new ModuleName("hydra.query"),
         new ModuleName("hydra.relational"),
         new ModuleName("hydra.tabular"),
         new ModuleName("hydra.testing"),
         new ModuleName("hydra.topology"),
+        new ModuleName("hydra.typed"),
         new ModuleName("hydra.typing"),
         new ModuleName("hydra.util"),
         new ModuleName("hydra.validation"),
         new ModuleName("hydra.variants"));
 
     public static final Module module_ = new Module(
-        Maybe.just("Java code generator: converts Hydra modules to Java source code"),
         NS,
+        Maybe.just(new EntityMetadata(
+            Maybe.just("Java code generator: converts Hydra modules to Java source code"),
+            List.of(),
+            List.of(),
+            Maybe.nothing())),
         DEPENDENCIES,
         DEFINITIONS);
 }

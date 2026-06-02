@@ -5,7 +5,7 @@ module Hydra.Sources.Java.Coder where
 
 -- Standard imports for term-level sources outside of the kernel
 import Hydra.Kernel
-import           Hydra.Dsl.Bootstrap (unqualifiedDep)
+import           Hydra.Dsl.Bootstrap (unqualifiedDep, descriptionMetadata)
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Meta.Lib.Strings                as Strings
 import           Hydra.Dsl.Meta.Phantoms                   as Phantoms
@@ -21,9 +21,9 @@ import qualified Hydra.Dsl.Meta.Lib.Maybes                 as Maybes
 import qualified Hydra.Dsl.Meta.Lib.Sets                   as Sets
 import qualified Hydra.Dsl.Meta.Core                       as Core
 import qualified Hydra.Dsl.Coders                     as Coders
-import qualified Hydra.Dsl.Meta.Context                    as Ctx
 import qualified Hydra.Dsl.Errors                      as Error
 import qualified Hydra.Dsl.Packaging                     as Packaging
+import qualified Hydra.Dsl.Typing                      as Typing
 import qualified Hydra.Dsl.Util                       as Util
 import qualified Hydra.Sources.Kernel.Terms.Formatting     as Formatting
 import qualified Hydra.Sources.Kernel.Terms.Names          as Names
@@ -69,20 +69,6 @@ import qualified Hydra.Sources.Decode.Core                 as DecodeCore
 import qualified Hydra.Sources.Encode.Core                 as EncodeCore
 import qualified Hydra.Sources.Kernel.Terms.Serialization  as SerializationSource
 
-def :: String -> TTerm a -> TTermDefinition a
-def = definitionInModule module_
-
--- | Get a type annotation, converting DecodingError to Error.
-getTypeE :: TTerm Context -> TTerm Graph -> TTerm (M.Map Name Term) -> TTerm (Either Error (Maybe Type))
-getTypeE cx g ann = Eithers.bimap
-  ("__de" ~> Error.errorOther (Error.otherError ((unwrap _DecodingError) @@ var "__de")))
-  ("__a" ~> var "__a")
-  (Annotations.getType @@ g @@ ann)
-
--- | Reference to the hydra.encode.core.type function (Type -> Term encoder)
-encodeTypeAsTerm :: TTerm (Type -> Term)
-encodeTypeAsTerm = TTerm $ TermVariable $ Name "hydra.encode.core.type"
-
 ns :: ModuleName
 ns = ModuleName "hydra.java.coder"
 
@@ -92,7 +78,7 @@ module_ = Module {
             moduleDefinitions = definitions,
             moduleDependencies = unqualifiedDep <$> ([JavaUtilsSource.ns, JavaNamesSource.ns, JavaSerdeSource.ns, moduleName JavaLanguageSource.module_, Analysis.ns, Checking.ns, Formatting.ns, Names.ns, Rewriting.ns, Dependencies.ns, Scoping.ns, Strip.ns, Variables.ns, Lexical.ns, Environment.ns, Predicates.ns, Resolution.ns, ShowCore.ns, Annotations.ns, Constants.ns,
       Inference.ns, Sorting.ns, Arity.ns, moduleName DecodeCore.module_, moduleName EncodeCore.module_, SerializationSource.ns] L.++ (JavaEnvironmentSource.ns:JavaSyntax.ns:KernelTypes.kernelTypesModuleNames)),
-            moduleDescription = Just "Java code generator: converts Hydra modules to Java source code"}
+            moduleMetadata = descriptionMetadata (Just "Java code generator: converts Hydra modules to Java source code")}
   where
     definitions = [
       toDefinition addComment,
@@ -243,6 +229,7 @@ module_ = Module {
       toDefinition javaTypeArgumentsForType,
       toDefinition javaTypeParametersForType,
       toDefinition javaTypeParametersForType_bvars,
+      toDefinition lazyFlagsForPrimitive,
       toDefinition moduleToJava,
       toDefinition nameMapToTypeMap,
       toDefinition namespaceParent,
@@ -294,12 +281,8 @@ module_ = Module {
       toDefinition wrapInSupplierLambda,
       toDefinition wrapLazyArguments]
 
--- | Helper: coerce bigint to int for javaInt/javaIntExpression TTermDefinition (phantom type mismatch workaround)
-bigintAsInt :: TTerm Integer -> TTerm Int
-bigintAsInt = coerce
-
 -- | Add a comment from a FieldType to a class body declaration
-addComment :: TTermDefinition (Java.ClassBodyDeclaration -> FieldType -> Context -> Graph -> Either Error Java.ClassBodyDeclarationWithComments)
+addComment :: TypedTermDefinition (Java.ClassBodyDeclaration -> FieldType -> InferenceContext -> Graph -> Either Error Java.ClassBodyDeclarationWithComments)
 addComment = def "addComment" $
   lambda "decl" $ lambda "field" $
         "cx" ~> "g" ~>
@@ -308,7 +291,7 @@ addComment = def "addComment" $
           (Annotations.commentsFromFieldType @@ var "cx" @@ var "g" @@ var "field")
 
 -- | Analyze a Java function term, collecting lambdas, type lambdas, lets, and type applications
-analyzeJavaFunction :: TTermDefinition (JavaHelpers.JavaEnvironment -> Term -> Context -> Graph -> Either Error (FunctionStructure JavaHelpers.JavaEnvironment))
+analyzeJavaFunction :: TypedTermDefinition (JavaHelpers.JavaEnvironment -> Term -> InferenceContext -> Graph -> Either Error (FunctionStructure JavaHelpers.JavaEnvironment))
 analyzeJavaFunction = def "analyzeJavaFunction" $
   lambda "env" $ lambda "term" $
     "cx" ~> "g" ~>
@@ -316,7 +299,7 @@ analyzeJavaFunction = def "analyzeJavaFunction" $
 
 -- | Annotate a term body with the expected codomain type, propagating through
 -- applications so that inner type-applied subterms also get correct annotations.
-annotateBodyWithCod :: TTermDefinition (Type -> Term -> Term)
+annotateBodyWithCod :: TypedTermDefinition (Type -> Term -> Term)
 annotateBodyWithCod = def "annotateBodyWithCod" $
   lambda "typ" $ lambda "term" $
     "setAnn" <~ (lambda "t" $
@@ -344,7 +327,7 @@ annotateBodyWithCod = def "annotateBodyWithCod" $
 -- | Annotate lambda arguments with expected types computed from the callee's type scheme
 -- and type applications. This corrects type annotations that normalizeTypeVariablesInTerm
 -- may have made inconsistent with the outer scope.
-annotateLambdaArgs :: TTermDefinition (Name -> [Type] -> [Term] -> Context -> Graph -> Either Error [Term])
+annotateLambdaArgs :: TypedTermDefinition (Name -> [Type] -> [Term] -> InferenceContext -> Graph -> Either Error [Term])
 annotateLambdaArgs = def "annotateLambdaArgs" $
   lambda "cname" $ lambda "tApps" $ lambda "argTerms" $
     "cx" ~> "g" ~>
@@ -355,7 +338,7 @@ annotateLambdaArgs = def "annotateLambdaArgs" $
         "mel" <<~ right (Lexical.lookupBinding @@ var "g" @@ var "cname") $
         Maybes.cases (var "mel")
           (right (Maybes.map
-              (lambda "prim" $ Graph.primitiveTypeScheme (var "prim"))
+              (lambda "prim" $ Scoping.termSignatureToTypeScheme @@ (Packaging.primitiveDefinitionSignature $ Graph.primitiveDefinition (var "prim")))
               (Maps.lookup (var "cname") (Graph.graphPrimitives (var "g")))))
           (lambda "el" $ right (Core.bindingTypeScheme (var "el")))) $
       Maybes.cases (var "mts")
@@ -378,7 +361,7 @@ annotateLambdaArgs = def "annotateLambdaArgs" $
                   (Lists.replicate (Lists.length (var "argTerms")) (inject _Type _Type_variable (wrap _Name (string "unused")))))))))
 
 -- | Apply a lambda cast if the type is safe (doesn't contain potentially wrong type variables).
-applyCastIfSafe :: TTermDefinition (JavaHelpers.Aliases -> Type -> Java.Expression -> Context -> Graph -> Either Error Java.Expression)
+applyCastIfSafe :: TypedTermDefinition (JavaHelpers.Aliases -> Type -> Java.Expression -> InferenceContext -> Graph -> Either Error Java.Expression)
 applyCastIfSafe = def "applyCastIfSafe" $
   lambda "aliases" $ lambda "castType" $ lambda "expr" $
     "cx" ~> "g" ~>
@@ -402,7 +385,7 @@ applyCastIfSafe = def "applyCastIfSafe" $
       (right (var "expr"))
 
 -- | Apply a Java argument to a Java expression using .apply() method invocation.
-applyJavaArg :: TTermDefinition (Java.Expression -> Java.Expression -> Java.Expression)
+applyJavaArg :: TypedTermDefinition (Java.Expression -> Java.Expression -> Java.Expression)
 applyJavaArg = def "applyJavaArg" $
   lambda "expr" $ lambda "jarg" $
     JavaUtilsSource.javaMethodInvocationToJavaExpression @@
@@ -413,7 +396,7 @@ applyJavaArg = def "applyJavaArg" $
 
 -- | Apply a type substitution to all type annotations in a term.
 -- Monadic wrapper that gets the graph state and delegates to the pure helper.
-applyOvergenSubstToTermAnnotations :: TTermDefinition (M.Map Name Type -> Term -> Context -> Graph -> Either Error Term)
+applyOvergenSubstToTermAnnotations :: TypedTermDefinition (M.Map Name Type -> Term -> InferenceContext -> Graph -> Either Error Term)
 applyOvergenSubstToTermAnnotations = def "applyOvergenSubstToTermAnnotations" $
   lambda "subst" $ lambda "term0" $
     "cx" ~> "g" ~>
@@ -422,7 +405,7 @@ applyOvergenSubstToTermAnnotations = def "applyOvergenSubstToTermAnnotations" $
 -- | Recursive helper for applyOvergenSubstToTermAnnotations. Walks a term and applies
 -- a type substitution to all type annotations. Also updates lambda domains and type applications.
 -- Pure function: takes the substitution, graph context, and term directly.
-applyOvergenSubstToTermAnnotations_go :: TTermDefinition (M.Map Name Type -> Graph -> Term -> Term)
+applyOvergenSubstToTermAnnotations_go :: TypedTermDefinition (M.Map Name Type -> Graph -> Term -> Term)
 applyOvergenSubstToTermAnnotations_go = def "applyOvergenSubstToTermAnnotations_go" $
   lambda "subst" $ lambda "cx" $ lambda "term" $
     cases _Term (var "term")
@@ -473,7 +456,7 @@ applyOvergenSubstToTermAnnotations_go = def "applyOvergenSubstToTermAnnotations_
             @@ Core.typeLambdaBody (var "tl")))]
 
 -- | Recursively apply a type substitution
-applySubstFull :: TTermDefinition (M.Map Name Type -> Type -> Type)
+applySubstFull :: TypedTermDefinition (M.Map Name Type -> Type -> Type)
 applySubstFull = def "applySubstFull" $
   lambda "s" $ lambda "t" $ cases _Type (Strip.deannotateType @@ var "t")
     (Just $ var "t") [
@@ -512,7 +495,7 @@ applySubstFull = def "applySubstFull" $
           @@ Core.forallTypeBody (var "ft")))]
 
 -- | Simple top-level-only type variable substitution.
-applySubstSimple :: TTermDefinition (M.Map Name Type -> Type -> Type)
+applySubstSimple :: TypedTermDefinition (M.Map Name Type -> Type -> Type)
 applySubstSimple = def "applySubstSimple" $
   lambda "subst" $ lambda "t" $
     cases _Type (Strip.deannotateType @@ var "t")
@@ -521,13 +504,13 @@ applySubstSimple = def "applySubstSimple" $
         Maps.findWithDefault (var "t") (var "v") (var "subst")]
 
 -- | Shared helper: java.util.Arrays.compare(this.field, otherVar.field)
-arraysCompareExpr :: TTermDefinition (String -> String -> Java.Expression)
+arraysCompareExpr :: TypedTermDefinition (String -> String -> Java.Expression)
 arraysCompareExpr = def "arraysCompareExpr" $
   lambda "otherVar" $ lambda "fname" $ lets [
     "header">: JavaDsl.methodInvocationHeaderComplex
       (JavaDsl.methodInvocationComplex
         (JavaDsl.methodInvocationVariantType (JavaUtilsSource.javaTypeName @@ wrap Java._Identifier (string "java.util.Arrays")))
-        (list ([] :: [TTerm Java.TypeArgument]))
+        (list ([] :: [TypedTerm Java.TypeArgument]))
         (wrap Java._Identifier (string "compare"))),
     "arg1">: JavaUtilsSource.javaExpressionNameToJavaExpression @@
       (JavaDsl.expressionName nothing (wrap Java._Identifier (JavaUtilsSource.sanitizeJavaName @@ var "fname"))),
@@ -536,7 +519,7 @@ arraysCompareExpr = def "arraysCompareExpr" $
     JavaUtilsSource.javaMethodInvocationToJavaExpression @@ (JavaDsl.methodInvocation_ (var "header") (list [var "arg1", var "arg2"]))
 
 -- | java.util.Arrays.equals(this.field, other.field) for byte[] fields
-arraysEqualsClause :: TTermDefinition (String -> String -> Java.InclusiveOrExpression)
+arraysEqualsClause :: TypedTermDefinition (String -> String -> Java.InclusiveOrExpression)
 arraysEqualsClause = def "arraysEqualsClause" $
   lambda "tmpName" $ lambda "fname" $ lets [
     "thisArg">: JavaUtilsSource.javaExpressionNameToJavaExpression
@@ -548,7 +531,7 @@ arraysEqualsClause = def "arraysEqualsClause" $
     "header">: JavaDsl.methodInvocationHeaderComplex
       (JavaDsl.methodInvocationComplex
         (JavaDsl.methodInvocationVariantType (JavaUtilsSource.javaTypeName @@ wrap Java._Identifier (string "java.util.Arrays")))
-        (list ([] :: [TTerm Java.TypeArgument]))
+        (list ([] :: [TypedTerm Java.TypeArgument]))
         (wrap Java._Identifier (asTerm JavaNamesSource.equalsMethodName)))] $
     JavaUtilsSource.javaPostfixExpressionToJavaInclusiveOrExpression
       @@ (JavaUtilsSource.javaMethodInvocationToJavaPostfixExpression
@@ -556,7 +539,7 @@ arraysEqualsClause = def "arraysEqualsClause" $
 
 -- | Augment a variant class declaration for union types.
 -- Adds public static final modifiers, sets parent class extends, and adds accept method.
-augmentVariantClass :: TTermDefinition (JavaHelpers.Aliases -> [Java.TypeParameter] -> Name -> Java.ClassDeclaration -> Java.ClassDeclaration)
+augmentVariantClass :: TypedTermDefinition (JavaHelpers.Aliases -> [Java.TypeParameter] -> Name -> Java.ClassDeclaration -> Java.ClassDeclaration)
 augmentVariantClass = def "augmentVariantClass" $
   lambda "aliases" $ lambda "tparams" $ lambda "elName" $ lambda "cd" $
     cases Java._ClassDeclaration (var "cd")
@@ -584,8 +567,12 @@ augmentVariantClass = def "augmentVariantClass" $
             project Java._NormalClassDeclaration Java._NormalClassDeclaration_permits @@ var "ncd",
           Java._NormalClassDeclaration_body>>: var "newBody"])]
 
+-- | Helper: coerce bigint to int for javaInt/javaIntExpression TypedTermDefinition (phantom type mismatch workaround)
+bigintAsInt :: TypedTerm Integer -> TypedTerm Int
+bigintAsInt = coerce
+
 -- | Check if a Binding has function type.
-bindingIsFunctionType :: TTermDefinition (Binding -> Bool)
+bindingIsFunctionType :: TypedTermDefinition (Binding -> Bool)
 bindingIsFunctionType = def "bindingIsFunctionType" $
   lambda "b" $
     Maybes.maybe
@@ -609,7 +596,7 @@ bindingIsFunctionType = def "bindingIsFunctionType" $
 
 -- | Decode a Type from its term encoding (limited subset).
 
-bindingNameToFilePath :: TTermDefinition (Name -> String)
+bindingNameToFilePath :: TypedTermDefinition (Name -> String)
 bindingNameToFilePath = def "bindingNameToFilePath" $
   lambda "name" $ lets [
     "qn">: Names.qualifyName @@ var "name",
@@ -621,7 +608,7 @@ bindingNameToFilePath = def "bindingNameToFilePath" $
       @@ wrap _FileExtension (string "java") @@ var "unq"
 
 -- | Convert let-bindings to Java block statements.
-bindingsToStatements :: TTermDefinition (JavaHelpers.JavaEnvironment -> [Binding] -> Context -> Graph -> Either Error ([Java.BlockStatement], JavaHelpers.JavaEnvironment))
+bindingsToStatements :: TypedTermDefinition (JavaHelpers.JavaEnvironment -> [Binding] -> InferenceContext -> Graph -> Either Error ([Java.BlockStatement], JavaHelpers.JavaEnvironment))
 bindingsToStatements = def "bindingsToStatements" $
   lambda "env" $ lambda "bindings" $
     "cx" ~> "g0" ~>
@@ -656,14 +643,14 @@ bindingsToStatements = def "bindingsToStatements" $
       (lambda "names" $
         Logic.ifElse (Equality.equal (Lists.length (var "names")) (int32 1))
           (Maybes.maybe
-            (list ([] :: [TTerm Name]))
+            (list ([] :: [TypedTerm Name]))
             (lambda "singleName" $
               Maybes.cases (Maps.lookup (var "singleName") (var "allDeps"))
-                (list ([] :: [TTerm Name]))
+                (list ([] :: [TypedTerm Name]))
                 (lambda "deps" $
                   Logic.ifElse (Sets.member (var "singleName") (var "deps"))
                     (list [var "singleName"])
-                    (list ([] :: [TTerm Name]))))
+                    (list ([] :: [TypedTerm Name]))))
             (Lists.maybeHead (var "names")))
           (var "names"))
       (var "sorted"))) $
@@ -690,7 +677,7 @@ bindingsToStatements = def "bindingsToStatements" $
               (Logic.not (Predicates.isTrivialTerm @@ Core.bindingTerm (var "b")))
               (Logic.not (bindingIsFunctionType @@ var "b")))))
           (list [var "bname"])
-          (list ([] :: [TTerm Name])))
+          (list ([] :: [TypedTerm Name])))
       (var "flatBindings"))) $
     -- Build extended aliases
     "aliasesExtended" <~ (record JavaHelpers._Aliases [
@@ -726,7 +713,7 @@ bindingsToStatements = def "bindingsToStatements" $
       JavaHelpers._JavaEnvironment_graph>>: var "gExtended"]) $
     -- Generate statements
     Logic.ifElse (Lists.null (var "bindings"))
-      (right (pair (list ([] :: [TTerm Java.BlockStatement])) (var "envExtended")))
+      (right (pair (list ([] :: [TypedTerm Java.BlockStatement])) (var "envExtended")))
       ("groups" <<~ (Eithers.mapList
         (lambda "names" $
           -- For each group: generate init statements (for recursive vars) and decl statements
@@ -738,10 +725,10 @@ bindingsToStatements = def "bindingsToStatements" $
 
 -- | Dispatch type to class declaration.
 
-boundTypeVariables :: TTermDefinition (Type -> [Name])
+boundTypeVariables :: TypedTermDefinition (Type -> [Name])
 boundTypeVariables = def "boundTypeVariables" $
   lambda "typ" $ cases _Type (var "typ")
-    (Just $ list ([] :: [TTerm Name])) [
+    (Just $ list ([] :: [TypedTerm Name])) [
     _Type_annotated>>: lambda "at" $
       boundTypeVariables @@ (Core.annotatedTypeBody (var "at")),
     _Type_forall>>: lambda "ft" $
@@ -750,7 +737,7 @@ boundTypeVariables = def "boundTypeVariables" $
         (boundTypeVariables @@ (Core.forallTypeBody (var "ft")))]
 
 -- | Build a type substitution from scheme domain types and actual argument types.
-buildArgSubst :: TTermDefinition (S.Set Name -> [Type] -> [Type] -> M.Map Name Type)
+buildArgSubst :: TypedTermDefinition (S.Set Name -> [Type] -> [Type] -> M.Map Name Type)
 buildArgSubst = def "buildArgSubst" $
   lambda "schemeVarSet" $ lambda "schemeDoms" $ lambda "argTypes" $
     Maps.fromList (Lists.bind
@@ -759,16 +746,16 @@ buildArgSubst = def "buildArgSubst" $
         "sdom" <~ Pairs.first (var "p") $
         "argType" <~ Pairs.second (var "p") $
         cases _Type (Strip.deannotateType @@ var "sdom")
-          (Just $ list ([] :: [TTerm (Name, Type)])) [
+          (Just $ list ([] :: [TypedTerm (Name, Type)])) [
           _Type_variable>>: lambda "v" $
             Logic.ifElse
               (Sets.member (var "v") (var "schemeVarSet"))
               (list [pair (var "v") (var "argType")])
-              (list ([] :: [TTerm (Name, Type)]))]))
+              (list ([] :: [TypedTerm (Name, Type)]))]))
 
 -- | Build a curried lambda chain from a list of parameter names wrapping an inner expression.
 -- E.g., buildCurriedLambda [p0, p1] inner = javaLambda p0 (javaLambda p1 inner)
-buildCurriedLambda :: TTermDefinition ([Name] -> Java.Expression -> Java.Expression)
+buildCurriedLambda :: TypedTermDefinition ([Name] -> Java.Expression -> Java.Expression)
 buildCurriedLambda = def "buildCurriedLambda" $
   lambda "params" $ lambda "inner" $
     Lists.foldl
@@ -778,7 +765,7 @@ buildCurriedLambda = def "buildCurriedLambda" $
 
 -- | Build a type variable substitution by walking a term and comparing lambda domain types
 -- against annotation map types. Returns a Map Name Name (fresh→canonical mapping).
-buildSubstFromAnnotations :: TTermDefinition (S.Set Name -> Term -> Context -> Graph -> Either Error (M.Map Name Name))
+buildSubstFromAnnotations :: TypedTermDefinition (S.Set Name -> Term -> InferenceContext -> Graph -> Either Error (M.Map Name Name))
 buildSubstFromAnnotations = def "buildSubstFromAnnotations" $
   lambda "schemeVarSet" $ lambda "term" $
     "cx" ~> "g" ~>
@@ -787,7 +774,7 @@ buildSubstFromAnnotations = def "buildSubstFromAnnotations" $
 -- | Recursive helper for buildSubstFromAnnotations. Walks a term and compares lambda domain types
 -- (normalized) against annotation map types (NOT normalized) to recover the fresh→canonical mapping.
 -- Pure function: takes the graph and term directly.
-buildSubstFromAnnotations_go :: TTermDefinition (S.Set Name -> Graph -> Term -> M.Map Name Name)
+buildSubstFromAnnotations_go :: TypedTermDefinition (S.Set Name -> Graph -> Term -> M.Map Name Name)
 buildSubstFromAnnotations_go = def "buildSubstFromAnnotations_go" $
   lambda "schemeVarSet" $ lambda "g" $ lambda "term" $
     cases _Term (var "term")
@@ -879,7 +866,7 @@ buildSubstFromAnnotations_go = def "buildSubstFromAnnotations_go" $
 
 -- | Build a mapping from scheme type variables to actual types by structurally matching
 -- a scheme type against an actual type. Only maps variables that are in the schemeVarSet.
-buildTypeSubst :: TTermDefinition (S.Set Name -> Type -> Type -> M.Map Name Type)
+buildTypeSubst :: TypedTermDefinition (S.Set Name -> Type -> Type -> M.Map Name Type)
 buildTypeSubst = def "buildTypeSubst" $
   lambda "schemeVarSet" $ lambda "schemeType" $ lambda "actualType" $
     buildTypeSubst_go @@ var "schemeVarSet"
@@ -887,7 +874,7 @@ buildTypeSubst = def "buildTypeSubst" $
       @@ (Strip.deannotateType @@ var "actualType")
 
 -- | Recursive helper for buildTypeSubst. Takes deannotated types.
-buildTypeSubst_go :: TTermDefinition (S.Set Name -> Type -> Type -> M.Map Name Type)
+buildTypeSubst_go :: TypedTermDefinition (S.Set Name -> Type -> Type -> M.Map Name Type)
 buildTypeSubst_go = def "buildTypeSubst_go" $
   lambda "svs" $ lambda "st" $ lambda "at" $
     "goSub" <~ (lambda "a" $ lambda "b" $
@@ -895,21 +882,21 @@ buildTypeSubst_go = def "buildTypeSubst_go" $
         @@ (Strip.deannotateType @@ var "a")
         @@ (Strip.deannotateType @@ var "b")) $
     cases _Type (var "st")
-      (Just (Maps.empty :: TTerm (M.Map Name Type))) [
+      (Just (Maps.empty :: TypedTerm (M.Map Name Type))) [
       _Type_variable>>: lambda "v" $
         Logic.ifElse (Sets.member (var "v") (var "svs"))
           (Maps.singleton (var "v") (var "at"))
-          (Maps.empty :: TTerm (M.Map Name Type)),
+          (Maps.empty :: TypedTerm (M.Map Name Type)),
       _Type_function>>: lambda "sft" $
         cases _Type (var "at")
-          (Just (Maps.empty :: TTerm (M.Map Name Type))) [
+          (Just (Maps.empty :: TypedTerm (M.Map Name Type))) [
           _Type_function>>: lambda "aft" $
             Maps.union
               (var "goSub" @@ Core.functionTypeDomain (var "sft") @@ Core.functionTypeDomain (var "aft"))
               (var "goSub" @@ Core.functionTypeCodomain (var "sft") @@ Core.functionTypeCodomain (var "aft"))],
       _Type_application>>: lambda "sat" $
         cases _Type (var "at")
-          (Just (Maps.empty :: TTerm (M.Map Name Type))) [
+          (Just (Maps.empty :: TypedTerm (M.Map Name Type))) [
           _Type_application>>: lambda "aat" $
             Maps.union
               (var "goSub" @@ Core.applicationTypeFunction (var "sat") @@ Core.applicationTypeFunction (var "aat"))
@@ -917,36 +904,36 @@ buildTypeSubst_go = def "buildTypeSubst_go" $
                            @@ (project _ApplicationType _ApplicationType_argument @@ var "aat"))],
       _Type_list>>: lambda "sl" $
         cases _Type (var "at")
-          (Just (Maps.empty :: TTerm (M.Map Name Type))) [
+          (Just (Maps.empty :: TypedTerm (M.Map Name Type))) [
           _Type_list>>: lambda "al" $
             var "goSub" @@ var "sl" @@ var "al"],
       _Type_set>>: lambda "ss" $
         cases _Type (var "at")
-          (Just (Maps.empty :: TTerm (M.Map Name Type))) [
+          (Just (Maps.empty :: TypedTerm (M.Map Name Type))) [
           _Type_set>>: lambda "as'" $
             var "goSub" @@ var "ss" @@ var "as'"],
       _Type_maybe>>: lambda "sm" $
         cases _Type (var "at")
-          (Just (Maps.empty :: TTerm (M.Map Name Type))) [
+          (Just (Maps.empty :: TypedTerm (M.Map Name Type))) [
           _Type_maybe>>: lambda "am" $
             var "goSub" @@ var "sm" @@ var "am"],
       _Type_map>>: lambda "smt" $
         cases _Type (var "at")
-          (Just (Maps.empty :: TTerm (M.Map Name Type))) [
+          (Just (Maps.empty :: TypedTerm (M.Map Name Type))) [
           _Type_map>>: lambda "amt" $
             Maps.union
               (var "goSub" @@ Core.mapTypeKeys (var "smt") @@ Core.mapTypeKeys (var "amt"))
               (var "goSub" @@ Core.mapTypeValues (var "smt") @@ Core.mapTypeValues (var "amt"))],
       _Type_pair>>: lambda "spt" $
         cases _Type (var "at")
-          (Just (Maps.empty :: TTerm (M.Map Name Type))) [
+          (Just (Maps.empty :: TypedTerm (M.Map Name Type))) [
           _Type_pair>>: lambda "apt" $
             Maps.union
               (var "goSub" @@ Core.pairTypeFirst (var "spt") @@ Core.pairTypeFirst (var "apt"))
               (var "goSub" @@ Core.pairTypeSecond (var "spt") @@ Core.pairTypeSecond (var "apt"))],
       _Type_either>>: lambda "set'" $
         cases _Type (var "at")
-          (Just (Maps.empty :: TTerm (M.Map Name Type))) [
+          (Just (Maps.empty :: TypedTerm (M.Map Name Type))) [
           _Type_either>>: lambda "aet" $
             Maps.union
               (var "goSub" @@ Core.eitherTypeLeft (var "set'") @@ Core.eitherTypeLeft (var "aet"))
@@ -962,7 +949,7 @@ buildTypeSubst_go = def "buildTypeSubst_go" $
 -- annotations) against a "canonical" type (from the type scheme). When both types have a
 -- TypeVariable at the same structural position, maps the fresh name to the canonical name.
 -- Only includes mappings where the names actually differ.
-buildTypeVarSubst :: TTermDefinition (S.Set Name -> Type -> Type -> M.Map Name Name)
+buildTypeVarSubst :: TypedTermDefinition (S.Set Name -> Type -> Type -> M.Map Name Name)
 buildTypeVarSubst = def "buildTypeVarSubst" $
   lambda "schemeVarSet" $ lambda "freshTyp" $ lambda "canonTyp" $
     buildTypeVarSubst_go @@ var "schemeVarSet"
@@ -970,7 +957,7 @@ buildTypeVarSubst = def "buildTypeVarSubst" $
       @@ (Strip.deannotateType @@ var "canonTyp")
 
 -- | Recursive helper for buildTypeVarSubst. Takes deannotated types.
-buildTypeVarSubst_go :: TTermDefinition (S.Set Name -> Type -> Type -> M.Map Name Name)
+buildTypeVarSubst_go :: TypedTermDefinition (S.Set Name -> Type -> Type -> M.Map Name Name)
 buildTypeVarSubst_go = def "buildTypeVarSubst_go" $
   lambda "svs" $ lambda "ft" $ lambda "ct" $
     "goSub" <~ (lambda "a" $ lambda "b" $
@@ -980,28 +967,28 @@ buildTypeVarSubst_go = def "buildTypeVarSubst_go" $
     cases _Type (var "ft")
       (Just $ -- Default: check if ct is a forall, and if so unwrap it
         cases _Type (var "ct")
-          (Just (Maps.empty :: TTerm (M.Map Name Name))) [
+          (Just (Maps.empty :: TypedTerm (M.Map Name Name))) [
           _Type_forall>>: lambda "cfa" $
             buildTypeVarSubst_go @@ var "svs" @@ var "ft"
               @@ (Strip.deannotateType @@ Core.forallTypeBody (var "cfa"))]) [
       _Type_variable>>: lambda "fn" $
         cases _Type (var "ct")
-          (Just (Maps.empty :: TTerm (M.Map Name Name))) [
+          (Just (Maps.empty :: TypedTerm (M.Map Name Name))) [
           _Type_variable>>: lambda "cn" $
             Logic.ifElse
               (Logic.and (Logic.not (Equality.equal (var "fn") (var "cn"))) (Sets.member (var "cn") (var "svs")))
               (Maps.singleton (var "fn") (var "cn"))
-              (Maps.empty :: TTerm (M.Map Name Name))],
+              (Maps.empty :: TypedTerm (M.Map Name Name))],
       _Type_function>>: lambda "fft" $
         cases _Type (var "ct")
-          (Just (Maps.empty :: TTerm (M.Map Name Name))) [
+          (Just (Maps.empty :: TypedTerm (M.Map Name Name))) [
           _Type_function>>: lambda "cft" $
             Maps.union
               (var "goSub" @@ Core.functionTypeDomain (var "fft") @@ Core.functionTypeDomain (var "cft"))
               (var "goSub" @@ Core.functionTypeCodomain (var "fft") @@ Core.functionTypeCodomain (var "cft"))],
       _Type_application>>: lambda "fat" $
         cases _Type (var "ct")
-          (Just (Maps.empty :: TTerm (M.Map Name Name))) [
+          (Just (Maps.empty :: TypedTerm (M.Map Name Name))) [
           _Type_application>>: lambda "cat" $
             Maps.union
               (var "goSub" @@ Core.applicationTypeFunction (var "fat") @@ Core.applicationTypeFunction (var "cat"))
@@ -1009,36 +996,36 @@ buildTypeVarSubst_go = def "buildTypeVarSubst_go" $
                            @@ (project _ApplicationType _ApplicationType_argument @@ var "cat"))],
       _Type_list>>: lambda "fl" $
         cases _Type (var "ct")
-          (Just (Maps.empty :: TTerm (M.Map Name Name))) [
+          (Just (Maps.empty :: TypedTerm (M.Map Name Name))) [
           _Type_list>>: lambda "cl" $
             var "goSub" @@ var "fl" @@ var "cl"],
       _Type_set>>: lambda "fs" $
         cases _Type (var "ct")
-          (Just (Maps.empty :: TTerm (M.Map Name Name))) [
+          (Just (Maps.empty :: TypedTerm (M.Map Name Name))) [
           _Type_set>>: lambda "cs" $
             var "goSub" @@ var "fs" @@ var "cs"],
       _Type_maybe>>: lambda "fm" $
         cases _Type (var "ct")
-          (Just (Maps.empty :: TTerm (M.Map Name Name))) [
+          (Just (Maps.empty :: TypedTerm (M.Map Name Name))) [
           _Type_maybe>>: lambda "cm" $
             var "goSub" @@ var "fm" @@ var "cm"],
       _Type_map>>: lambda "fmt" $
         cases _Type (var "ct")
-          (Just (Maps.empty :: TTerm (M.Map Name Name))) [
+          (Just (Maps.empty :: TypedTerm (M.Map Name Name))) [
           _Type_map>>: lambda "cmt" $
             Maps.union
               (var "goSub" @@ Core.mapTypeKeys (var "fmt") @@ Core.mapTypeKeys (var "cmt"))
               (var "goSub" @@ Core.mapTypeValues (var "fmt") @@ Core.mapTypeValues (var "cmt"))],
       _Type_pair>>: lambda "fpt" $
         cases _Type (var "ct")
-          (Just (Maps.empty :: TTerm (M.Map Name Name))) [
+          (Just (Maps.empty :: TypedTerm (M.Map Name Name))) [
           _Type_pair>>: lambda "cpt" $
             Maps.union
               (var "goSub" @@ Core.pairTypeFirst (var "fpt") @@ Core.pairTypeFirst (var "cpt"))
               (var "goSub" @@ Core.pairTypeSecond (var "fpt") @@ Core.pairTypeSecond (var "cpt"))],
       _Type_either>>: lambda "fet" $
         cases _Type (var "ct")
-          (Just (Maps.empty :: TTerm (M.Map Name Name))) [
+          (Just (Maps.empty :: TypedTerm (M.Map Name Name))) [
           _Type_either>>: lambda "cet" $
             Maps.union
               (var "goSub" @@ Core.eitherTypeLeft (var "fet") @@ Core.eitherTypeLeft (var "cet"))
@@ -1052,12 +1039,12 @@ buildTypeVarSubst_go = def "buildTypeVarSubst_go" $
           _Type_forall>>: lambda "cfa" $
             var "goSub" @@ Core.forallTypeBody (var "ffa") @@ Core.forallTypeBody (var "cfa")]]
 
-classModsPublic :: TTermDefinition [Java.ClassModifier]
+classModsPublic :: TypedTermDefinition [Java.ClassModifier]
 classModsPublic = def "classModsPublic" $
   list [inject Java._ClassModifier Java._ClassModifier_public unit]
 
 -- | Classify a data reference by looking up its element and classifying its term
-classifyDataReference :: TTermDefinition (Name -> Context -> Graph -> Either Error JavaHelpers.JavaSymbolClass)
+classifyDataReference :: TypedTermDefinition (Name -> InferenceContext -> Graph -> Either Error JavaHelpers.JavaSymbolClass)
 classifyDataReference = def "classifyDataReference" $
   lambda "name" $
     "cx" ~> "g" ~>
@@ -1067,12 +1054,12 @@ classifyDataReference = def "classifyDataReference" $
       (right $ inject JavaHelpers._JavaSymbolClass JavaHelpers._JavaSymbolClass_localVariable unit)
       (lambda "el" $
         Maybes.cases (Core.bindingTypeScheme (var "el"))
-          (Ctx.failInContext (Error.errorOther $ Error.otherError $ Strings.cat2 (string "no type scheme for element ") ((unwrap _Name @@ Core.bindingName (var "el")))) (var "cx"))
+          (left (Error.errorOther $ Error.otherError $ Strings.cat2 (string "no type scheme for element ") ((unwrap _Name @@ Core.bindingName (var "el")))))
           (lambda "ts" $
             right $ classifyDataTerm @@ var "ts" @@ Core.bindingTerm (var "el")))
 
 -- | Classify a data term by its symbol class (constant, nullary function, hoisted lambda, etc.)
-classifyDataTerm :: TTermDefinition (TypeScheme -> Term -> JavaHelpers.JavaSymbolClass)
+classifyDataTerm :: TypedTermDefinition (TypeScheme -> Term -> JavaHelpers.JavaSymbolClass)
 classifyDataTerm = def "classifyDataTerm" $
   lambda "ts" $ lambda "term" $
     Logic.ifElse (Dependencies.isLambda @@ var "term")
@@ -1093,7 +1080,7 @@ classifyDataTerm = def "classifyDataTerm" $
           (inject JavaHelpers._JavaSymbolClass JavaHelpers._JavaSymbolClass_nullaryFunction unit))
 
 -- | Count the number of lambda parameters in a term (recursing through let bodies)
-classifyDataTerm_countLambdaParams :: TTermDefinition (Term -> Int)
+classifyDataTerm_countLambdaParams :: TypedTermDefinition (Term -> Int)
 classifyDataTerm_countLambdaParams = def "classifyDataTerm_countLambdaParams" $
   lambda "t" $
     cases _Term (Strip.deannotateTerm @@ var "t")
@@ -1105,7 +1092,7 @@ classifyDataTerm_countLambdaParams = def "classifyDataTerm_countLambdaParams" $
         classifyDataTerm_countLambdaParams @@ (project _Let _Let_body @@ var "lt")]
 
 -- | Strip type lambda wrappers from a term
-classifyDataTerm_stripTypeLambdas :: TTermDefinition (Term -> Term)
+classifyDataTerm_stripTypeLambdas :: TypedTermDefinition (Term -> Term)
 classifyDataTerm_stripTypeLambdas = def "classifyDataTerm_stripTypeLambdas" $
   lambda "t" $
     cases _Term (Strip.deannotateTerm @@ var "t")
@@ -1116,14 +1103,14 @@ classifyDataTerm_stripTypeLambdas = def "classifyDataTerm_stripTypeLambdas" $
 -- | Classify a data reference by looking up its element and classifying its term
 
 -- | Shared helper: int cmp = 0; declaration
-cmpDeclStatement :: TTermDefinition (JavaHelpers.Aliases -> Java.BlockStatement)
+cmpDeclStatement :: TypedTermDefinition (JavaHelpers.Aliases -> Java.BlockStatement)
 cmpDeclStatement = def "cmpDeclStatement" $
   lambda "aliases" $
     JavaUtilsSource.variableDeclarationStatement @@ var "aliases" @@ (asTerm JavaUtilsSource.javaIntType)
       @@ (JavaUtilsSource.javaIdentifier @@ string "cmp") @@ (JavaUtilsSource.javaIntExpression @@ bigintAsInt (bigint 0))
 
 -- | Shared helper: cmp != 0 expression
-cmpNotZeroExpr :: TTermDefinition Java.Expression
+cmpNotZeroExpr :: TypedTermDefinition Java.Expression
 cmpNotZeroExpr = def "cmpNotZeroExpr" $ lets [
     "lhs">: JavaUtilsSource.javaRelationalExpressionToJavaEqualityExpression @@
       (JavaUtilsSource.javaPostfixExpressionToJavaRelationalExpression @@
@@ -1134,31 +1121,31 @@ cmpNotZeroExpr = def "cmpNotZeroExpr" $ lets [
       (JavaDsl.equalityExpressionNotEqual (JavaDsl.equalityExpressionBinary (var "lhs") (var "rhs")))
 
 -- | Collect forall-bound type parameter names from a type
-collectForallParams :: TTermDefinition (Type -> [Name])
+collectForallParams :: TypedTermDefinition (Type -> [Name])
 collectForallParams = def "collectForallParams" $
   lambda "t" $ cases _Type (Strip.deannotateType @@ var "t")
-    (Just $ list ([] :: [TTerm Name])) [
+    (Just $ list ([] :: [TypedTerm Name])) [
     _Type_forall>>: lambda "fa" $
       Lists.cons (Core.forallTypeParameter (var "fa"))
         (collectForallParams @@ Core.forallTypeBody (var "fa"))]
 
 -- | Collect domain annotations from a chain of nested lambdas.
 -- Returns (domains, innerBody).
-collectLambdaDomains :: TTermDefinition (Term -> ([Type], Term))
+collectLambdaDomains :: TypedTermDefinition (Term -> ([Type], Term))
 collectLambdaDomains = def "collectLambdaDomains" $
   lambda "t" $
     cases _Term (Strip.deannotateTerm @@ var "t")
-      (Just $ pair (list ([] :: [TTerm Type])) (var "t")) [
+      (Just $ pair (list ([] :: [TypedTerm Type])) (var "t")) [
       _Term_lambda>>: lambda "lam" $
         Maybes.cases (Core.lambdaDomain (var "lam"))
-          (pair (list ([] :: [TTerm Type])) (var "t"))
+          (pair (list ([] :: [TypedTerm Type])) (var "t"))
           (lambda "dom" $
             "rest" <~ (collectLambdaDomains @@ Core.lambdaBody (var "lam")) $
             pair (Lists.cons (var "dom") (Pairs.first (var "rest")))
               (Pairs.second (var "rest")))]
 
 -- | Collect type arguments from nested TermTypeApplication chain, stripping annotations.
-collectTypeApps :: TTermDefinition (Term -> [Type] -> (Term, [Type]))
+collectTypeApps :: TypedTermDefinition (Term -> [Type] -> (Term, [Type]))
 collectTypeApps = def "collectTypeApps" $
   lambda "t" $ lambda "acc" $
     cases _Term (Strip.deannotateTerm @@ var "t")
@@ -1169,7 +1156,7 @@ collectTypeApps = def "collectTypeApps" $
           @@ Lists.cons (Core.typeApplicationTermType (var "ta")) (var "acc")]
 
 -- | Like collectTypeApps but preserves the original (annotated) term when no more type apps.
-collectTypeApps0 :: TTermDefinition (Term -> [Type] -> (Term, [Type]))
+collectTypeApps0 :: TypedTermDefinition (Term -> [Type] -> (Term, [Type]))
 collectTypeApps0 = def "collectTypeApps0" $
   lambda "t" $ lambda "acc" $
     cases _Term (Strip.deannotateTerm @@ var "t")
@@ -1180,15 +1167,15 @@ collectTypeApps0 = def "collectTypeApps0" $
           @@ Lists.cons (Core.typeApplicationTermType (var "ta")) (var "acc")]
 
 -- | Collect all type variable names from a type
-collectTypeVars :: TTermDefinition (Type -> S.Set Name)
+collectTypeVars :: TypedTermDefinition (Type -> S.Set Name)
 collectTypeVars = def "collectTypeVars" $
   lambda "typ" $ collectTypeVars_go @@ (Strip.deannotateType @@ var "typ")
 
 -- | Helper for collectTypeVars
-collectTypeVars_go :: TTermDefinition (Type -> S.Set Name)
+collectTypeVars_go :: TypedTermDefinition (Type -> S.Set Name)
 collectTypeVars_go = def "collectTypeVars_go" $
   lambda "t" $ cases _Type (var "t")
-    (Just $ (Sets.empty :: TTerm (S.Set Name))) [
+    (Just $ (Sets.empty :: TypedTerm (S.Set Name))) [
     _Type_variable>>: lambda "name" $
       Sets.singleton (var "name"),
     _Type_function>>: lambda "ft" $
@@ -1221,7 +1208,7 @@ collectTypeVars_go = def "collectTypeVars_go" $
       collectTypeVars_go @@ (Strip.deannotateType @@ Core.forallTypeBody (var "ft"))]
 
 -- | Shared helper: hydra.util.Comparing.compare(this.field, otherVar.field)
-comparableCompareExpr :: TTermDefinition (String -> String -> Java.Expression)
+comparableCompareExpr :: TypedTermDefinition (String -> String -> Java.Expression)
 comparableCompareExpr = def "comparableCompareExpr" $
   lambda "otherVar" $ lambda "fname" $ lets [
     "thisField">: JavaUtilsSource.javaIdentifierToJavaExpression @@ wrap Java._Identifier (JavaUtilsSource.sanitizeJavaName @@ var "fname"),
@@ -1234,7 +1221,7 @@ comparableCompareExpr = def "comparableCompareExpr" $
         @@ list [var "thisField", var "otherField"])
 
 -- | Shared helper: cmp = expr; if (cmp != 0) return cmp;
-compareAndReturnStmts :: TTermDefinition (String -> FieldType -> [Java.BlockStatement])
+compareAndReturnStmts :: TypedTermDefinition (String -> FieldType -> [Java.BlockStatement])
 compareAndReturnStmts = def "compareAndReturnStmts" $
   lambda "otherVar" $ lambda "f" $
     list [
@@ -1248,7 +1235,7 @@ compareAndReturnStmts = def "compareAndReturnStmts" $
             (JavaUtilsSource.javaExpressionNameToJavaExpression @@ (JavaDsl.expressionName nothing (JavaUtilsSource.javaIdentifier @@ string "cmp"))))))]
 
 -- | Shared helper: dispatch to appropriate comparison expression based on field type
-compareFieldExpr :: TTermDefinition (String -> FieldType -> Java.Expression)
+compareFieldExpr :: TypedTermDefinition (String -> FieldType -> Java.Expression)
 compareFieldExpr = def "compareFieldExpr" $
   lambda "otherVar" $ lambda "ft" $
     "fname" <~ Core.unName (Core.fieldTypeName (var "ft")) $
@@ -1260,7 +1247,7 @@ compareFieldExpr = def "compareFieldExpr" $
         (comparableCompareExpr @@ var "otherVar" @@ var "fname"))
 
 -- | Shared helper: build the compareTo method body for a list of fields
-compareToBody :: TTermDefinition (JavaHelpers.Aliases -> String -> [FieldType] -> [Java.BlockStatement])
+compareToBody :: TypedTermDefinition (JavaHelpers.Aliases -> String -> [FieldType] -> [Java.BlockStatement])
 compareToBody = def "compareToBody" $
   lambda "aliases" $ lambda "otherVar" $ lambda "fields" $ lets [
     "zeroStmts">: list [JavaDsl.blockStatementStatement (JavaUtilsSource.javaReturnStatement @@ just (JavaUtilsSource.javaIntExpression @@ bigintAsInt (bigint 0)))]] $
@@ -1273,12 +1260,12 @@ compareToBody = def "compareToBody" $
           (Lists.concat2
             (list [cmpDeclStatement @@ var "aliases"])
             (Lists.concat2
-              (Lists.concat (Lists.map (lambda "f" $ compareAndReturnStmts @@ var "otherVar" @@ var "f") (Lists.cons (var "firstField") (Maybes.fromMaybe (list ([] :: [TTerm FieldType])) (Lists.maybeInit (var "restFields"))))))
+              (Lists.concat (Lists.map (lambda "f" $ compareAndReturnStmts @@ var "otherVar" @@ var "f") (Lists.cons (var "firstField") (Maybes.fromMaybe (list ([] :: [TypedTerm FieldType])) (Lists.maybeInit (var "restFields"))))))
               (list [JavaDsl.blockStatementStatement (JavaUtilsSource.javaReturnStatement @@ just (compareFieldExpr @@ var "otherVar" @@ (Maybes.fromMaybe (var "firstField") (Lists.maybeLast (var "restFields")))))]))))
       (Lists.uncons (var "fields")))
 
 -- | this.field.compareTo(other.field) == 0 for BigDecimal/BigInteger fields
-compareToZeroClause :: TTermDefinition (String -> String -> Java.InclusiveOrExpression)
+compareToZeroClause :: TypedTermDefinition (String -> String -> Java.InclusiveOrExpression)
 compareToZeroClause = def "compareToZeroClause" $
   lambda "tmpName" $ lambda "fname" $ lets [
     "compareToArg">: JavaUtilsSource.javaExpressionNameToJavaExpression
@@ -1289,7 +1276,7 @@ compareToZeroClause = def "compareToZeroClause" $
         @@ (JavaUtilsSource.javaIdentifier @@ var "fname")),
     "compareToHeader">: JavaDsl.methodInvocationHeaderComplex
       (JavaDsl.methodInvocationComplex (var "compareToVar")
-        (list ([] :: [TTerm Java.TypeArgument]))
+        (list ([] :: [TypedTerm Java.TypeArgument]))
         (wrap Java._Identifier (asTerm JavaNamesSource.compareToMethodName))),
     "lhs">: JavaUtilsSource.javaRelationalExpressionToJavaEqualityExpression
       @@ (JavaUtilsSource.javaPostfixExpressionToJavaRelationalExpression
@@ -1302,7 +1289,7 @@ compareToZeroClause = def "compareToZeroClause" $
       @@ (JavaDsl.equalityExpressionEqual (JavaDsl.equalityExpressionBinary (var "lhs") (var "rhs")))
 
 -- | Create a constant field declaration (e.g., public static final Name TYPE_ = new Name("..."))
-constantDecl :: TTermDefinition (String -> String -> JavaHelpers.Aliases -> Name -> Context -> Graph -> Either Error Java.ClassBodyDeclarationWithComments)
+constantDecl :: TypedTermDefinition (String -> String -> JavaHelpers.Aliases -> Name -> InferenceContext -> Graph -> Either Error Java.ClassBodyDeclarationWithComments)
 constantDecl = def "constantDecl" $
   lambda "comment" $ lambda "javaName" $ lambda "aliases" $ lambda "name" $
     "cx" ~> "g" ~>
@@ -1323,7 +1310,7 @@ constantDecl = def "constantDecl" $
     right (withCommentString @@ var "comment" @@ (JavaUtilsSource.javaMemberField @@ var "mods" @@ var "jt" @@ var "var"))
 
 -- | Create a constant field declaration for a field name. The parentName is the FQN of the enclosing type.
-constantDeclForFieldType :: TTermDefinition (Name -> JavaHelpers.Aliases -> FieldType -> Context -> Graph -> Either Error Java.ClassBodyDeclarationWithComments)
+constantDeclForFieldType :: TypedTermDefinition (Name -> JavaHelpers.Aliases -> FieldType -> InferenceContext -> Graph -> Either Error Java.ClassBodyDeclarationWithComments)
 constantDeclForFieldType = def "constantDeclForFieldType" $
   lambda "parentName" $ lambda "aliases" $ lambda "ftyp" $
     "cx" ~> "g" ~>
@@ -1339,7 +1326,7 @@ constantDeclForFieldType = def "constantDeclForFieldType" $
     constantDecl @@ var "comment" @@ var "javaName" @@ var "aliases" @@ var "name" @@ var "cx" @@ var "g"
 
 -- | Create a constant field declaration for a type name.
-constantDeclForTypeName :: TTermDefinition (JavaHelpers.Aliases -> Name -> Context -> Graph -> Either Error Java.ClassBodyDeclarationWithComments)
+constantDeclForTypeName :: TypedTermDefinition (JavaHelpers.Aliases -> Name -> InferenceContext -> Graph -> Either Error Java.ClassBodyDeclarationWithComments)
 constantDeclForTypeName = def "constantDeclForTypeName" $
   lambda "aliases" $ lambda "name" $
     "cx" ~> "g" ~>
@@ -1351,7 +1338,7 @@ constantDeclForTypeName = def "constantDeclForTypeName" $
     constantDecl @@ var "comment" @@ string "TYPE_" @@ var "aliases" @@ var "name" @@ var "cx" @@ var "g"
 
 -- | Construct an elements interface for a module's data definitions
-constructElementsInterface :: TTermDefinition (Module -> [Java.InterfaceMemberDeclarationWithComments] -> (Name, Java.CompilationUnit))
+constructElementsInterface :: TypedTermDefinition (Module -> [Java.InterfaceMemberDeclarationWithComments] -> (Name, Java.CompilationUnit))
 constructElementsInterface = def "constructElementsInterface" $
   lambda "mod" $ lambda "members" $ lets [
     "ns">: Packaging.moduleName (var "mod"),
@@ -1370,28 +1357,28 @@ constructElementsInterface = def "constructElementsInterface" $
           Java._NormalInterfaceDeclaration_identifier>>:
             JavaUtilsSource.javaTypeIdentifier @@ var "className",
           Java._NormalInterfaceDeclaration_parameters>>:
-            list ([] :: [TTerm Java.TypeParameter]),
+            list ([] :: [TypedTerm Java.TypeParameter]),
           Java._NormalInterfaceDeclaration_extends>>:
-            list ([] :: [TTerm Java.InterfaceType]),
+            list ([] :: [TypedTerm Java.InterfaceType]),
           Java._NormalInterfaceDeclaration_permits>>:
-            list ([] :: [TTerm Java.TypeName]),
+            list ([] :: [TypedTerm Java.TypeName]),
           Java._NormalInterfaceDeclaration_body>>: var "body"])),
     "decl">: record Java._TopLevelClassOrInterfaceDeclarationWithComments [
       Java._TopLevelClassOrInterfaceDeclarationWithComments_value>>: var "itf",
-      Java._TopLevelClassOrInterfaceDeclarationWithComments_comments>>: Packaging.moduleDescription (var "mod")]] $
+      Java._TopLevelClassOrInterfaceDeclarationWithComments_comments>>: (Maybes.bind (Packaging.moduleMetadata (var "mod")) ("em" ~> Packaging.entityMetadataDescription (var "em")))]] $
     pair (var "elName")
       (inject Java._CompilationUnit Java._CompilationUnit_ordinary
         (record Java._OrdinaryCompilationUnit [
           Java._OrdinaryCompilationUnit_package>>: just (var "pkg"),
           Java._OrdinaryCompilationUnit_imports>>:
-            list ([] :: [TTerm Java.ImportDeclaration]),
+            list ([] :: [TypedTerm Java.ImportDeclaration]),
           Java._OrdinaryCompilationUnit_types>>: list [var "decl"]]))
 
 -- | Correct the cast type for pair terms. When we have a TermTypeApplication wrapping
 -- a TermPair with exactly 2 type args, reconstruct the pair type from the type args
 -- (which have been correctly renamed by normalizeTypeVariablesInTerm) instead of using
 -- the annotation type (which may have stale variable names).
-correctCastType :: TTermDefinition (Term -> [Type] -> Type -> Context -> Graph -> Either Error Type)
+correctCastType :: TypedTermDefinition (Term -> [Type] -> Type -> InferenceContext -> Graph -> Either Error Type)
 correctCastType = def "correctCastType" $
   lambda "innerBody" $ lambda "typeArgs" $ lambda "fallback" $
     "cx" ~> "g" ~>
@@ -1405,7 +1392,7 @@ correctCastType = def "correctCastType" $
           (right (var "fallback"))]
 
 -- | Compute corrected type applications for a function call.
-correctTypeApps :: TTermDefinition (Graph -> Name -> [Term] -> [Type] -> Context -> Graph -> Either Error [Type])
+correctTypeApps :: TypedTermDefinition (Graph -> Name -> [Term] -> [Type] -> InferenceContext -> Graph -> Either Error [Type])
 correctTypeApps = def "correctTypeApps" $
   lambda "gr" $ lambda "name" $ lambda "args" $ lambda "fallbackTypeApps" $
     "cx" ~> "g" ~>
@@ -1447,7 +1434,7 @@ correctTypeApps = def "correctTypeApps" $
               (correctTypeAppsWithArgs @@ var "schemeVars" @@ var "filteredFallback" @@ var "schemeType" @@ var "args" @@ var "cx" @@ var "g")))
 
 -- | Try to verify and correct IR type args using annotation-based arg types.
-correctTypeAppsWithArgs :: TTermDefinition ([Name] -> [Type] -> Type -> [Term] -> Context -> Graph -> Either Error [Type])
+correctTypeAppsWithArgs :: TypedTermDefinition ([Name] -> [Type] -> Type -> [Term] -> InferenceContext -> Graph -> Either Error [Type])
 correctTypeAppsWithArgs = def "correctTypeAppsWithArgs" $
   lambda "schemeVars" $ lambda "fallbackTypeApps" $ lambda "schemeType" $ lambda "args" $
     "cx" ~> "g" ~>
@@ -1463,7 +1450,7 @@ correctTypeAppsWithArgs = def "correctTypeAppsWithArgs" $
       (Logic.not (Lists.null (Lists.filter (lambda "m" $ Maybes.isNothing (var "m")) (var "mArgTypes"))))
       (right (var "fallbackTypeApps"))
       ("argTypes" <~ Lists.bind (var "mArgTypes")
-        (lambda "m" $ Maybes.cases (var "m") (list ([] :: [TTerm Type])) (lambda "x" $ Lists.pure (var "x"))) $
+        (lambda "m" $ Maybes.cases (var "m") (list ([] :: [TypedTerm Type])) (lambda "x" $ Lists.pure (var "x"))) $
       "irDoms" <~ Lists.map (lambda "d" $ applySubstSimple @@ var "irSubst" @@ var "d") (var "schemeDoms") $
       "domsMatch" <~ Lists.null (Lists.filter
         (lambda "p" $ Logic.not (typesMatch @@ (Strip.deannotateType @@ Pairs.first (var "p"))
@@ -1475,7 +1462,7 @@ correctTypeAppsWithArgs = def "correctTypeAppsWithArgs" $
           @@ (buildArgSubst @@ var "schemeVarSet" @@ var "schemeDoms" @@ var "argTypes"))))
 
 -- | Count the number of parameters in a function type by peeling domain types.
-countFunctionParams :: TTermDefinition (Type -> Int)
+countFunctionParams :: TypedTermDefinition (Type -> Int)
 countFunctionParams = def "countFunctionParams" $
   lambda "t" $
     cases _Type (Strip.deannotateType @@ var "t")
@@ -1484,16 +1471,16 @@ countFunctionParams = def "countFunctionParams" $
         Math.add (int32 1) (countFunctionParams @@ Core.functionTypeCodomain (var "ft"))]
 
 -- | Create a record type class declaration (without parent class).
-declarationForRecordType :: TTermDefinition (Bool -> Bool -> JavaHelpers.Aliases -> [Java.TypeParameter] -> Name
-  -> [FieldType] -> Context -> Graph -> Either Error Java.ClassDeclaration)
+declarationForRecordType :: TypedTermDefinition (Bool -> Bool -> JavaHelpers.Aliases -> [Java.TypeParameter] -> Name
+  -> [FieldType] -> InferenceContext -> Graph -> Either Error Java.ClassDeclaration)
 declarationForRecordType = def "declarationForRecordType" $
   lambda "isInner" $ lambda "isSer" $ lambda "aliases" $ lambda "tparams" $ lambda "elName" $ lambda "fields" $
     "cx" ~> "g" ~>
     declarationForRecordType' @@ var "isInner" @@ var "isSer" @@ var "aliases" @@ var "tparams" @@ var "elName" @@ nothing @@ var "fields" @@ var "cx" @@ var "g"
 
 -- | Create a record type class declaration (with optional parent class).
-declarationForRecordType' :: TTermDefinition (Bool -> Bool -> JavaHelpers.Aliases -> [Java.TypeParameter] -> Name -> Maybe Name -> [FieldType]
-  -> Context -> Graph -> Either Error Java.ClassDeclaration)
+declarationForRecordType' :: TypedTermDefinition (Bool -> Bool -> JavaHelpers.Aliases -> [Java.TypeParameter] -> Name -> Maybe Name -> [FieldType]
+  -> InferenceContext -> Graph -> Either Error Java.ClassDeclaration)
 declarationForRecordType' = def "declarationForRecordType'" $
   lambda "isInner" $ lambda "isSer" $ lambda "aliases" $ lambda "tparams" $ lambda "elName" $ lambda "parentName" $ lambda "fields" $
     "cx" ~> "g" ~>
@@ -1513,7 +1500,7 @@ declarationForRecordType' = def "declarationForRecordType'" $
             string "} replaced."]) $
           right (withCommentString @@ var "comment" @@ var "decl"))
         (var "fields"))
-      (right (list ([] :: [TTerm Java.ClassBodyDeclarationWithComments])))) $
+      (right (list ([] :: [TypedTerm Java.ClassBodyDeclarationWithComments])))) $
     "cons" <<~ (recordConstructor @@ var "aliases" @@ var "elName" @@ var "fields" @@ var "cx" @@ var "g") $
     "paramLines" <<~ (Eithers.mapList (lambda "f" $
       "fname" <~ (unwrap _Name @@ Core.fieldTypeName (var "f")) $
@@ -1542,17 +1529,17 @@ declarationForRecordType' = def "declarationForRecordType'" $
         Strings.intercalate (string "\n") (var "nonEmptyParamLines")])) $
     "consWithComment" <~ (withCommentString @@ var "consComment" @@ var "cons") $
     "tn" <<~ (Logic.ifElse (var "isInner")
-      (right (list ([] :: [TTerm Java.ClassBodyDeclarationWithComments])))
+      (right (list ([] :: [TypedTerm Java.ClassBodyDeclarationWithComments])))
       ("d" <<~ (constantDeclForTypeName @@ var "aliases" @@ var "elName" @@ var "cx" @@ var "g") $
         "dfields" <<~ (Eithers.mapList (lambda "f" $ constantDeclForFieldType @@ var "elName" @@ var "aliases" @@ var "f" @@ var "cx" @@ var "g") (var "fields")) $
         right (Lists.cons (var "d") (var "dfields")))) $
     "comparableMethods" <~ (Maybes.cases (var "parentName")
       (Logic.ifElse (Logic.and (Logic.not (var "isInner")) (var "isSer"))
         (list [recordCompareToMethod @@ var "aliases" @@ var "tparams" @@ var "elName" @@ var "fields"])
-        (list ([] :: [TTerm Java.ClassBodyDeclaration])))
+        (list ([] :: [TypedTerm Java.ClassBodyDeclaration])))
       (lambda "pn" $ Logic.ifElse (var "isSer")
         (list [variantCompareToMethod @@ var "aliases" @@ var "tparams" @@ var "pn" @@ var "elName" @@ var "fields"])
-        (list ([] :: [TTerm Java.ClassBodyDeclaration])))) $
+        (list ([] :: [TypedTerm Java.ClassBodyDeclaration])))) $
     "noCommentMethods" <~ Lists.map (lambda "x" $ noComment @@ var "x")
       (Lists.concat2
         (list [recordEqualsMethod @@ var "aliases" @@ var "elName" @@ var "fields",
@@ -1571,7 +1558,7 @@ declarationForRecordType' = def "declarationForRecordType'" $
       @@ asTerm classModsPublic @@ nothing @@ var "ifaces" @@ var "bodyDecls")
 
 -- | Generate class declaration for a union type.
-declarationForUnionType :: TTermDefinition (Bool -> JavaHelpers.Aliases -> [Java.TypeParameter] -> Name -> [FieldType] -> Context -> Graph -> Either Error Java.ClassDeclaration)
+declarationForUnionType :: TypedTermDefinition (Bool -> JavaHelpers.Aliases -> [Java.TypeParameter] -> Name -> [FieldType] -> InferenceContext -> Graph -> Either Error Java.ClassDeclaration)
 declarationForUnionType = def "declarationForUnionType" $
   lambda "isSer" $ lambda "aliases" $ lambda "tparams" $ lambda "elName" $ lambda "fields" $
     "cx" ~> "g" ~>
@@ -1580,10 +1567,10 @@ declarationForUnionType = def "declarationForUnionType" $
       "fname" <~ (project _FieldType _FieldType_name @@ var "ft") $
       "ftype" <~ (project _FieldType _FieldType_type @@ var "ft") $
       "rfields" <~ Logic.ifElse (Predicates.isUnitType @@ (Strip.deannotateType @@ var "ftype"))
-        (list ([] :: [TTerm FieldType]))
+        (list ([] :: [TypedTerm FieldType]))
         (list [Core.fieldType (wrap _Name (string "value")) (Strip.deannotateType @@ var "ftype")]) $
       "varName" <~ (JavaUtilsSource.variantClassName @@ false @@ var "elName" @@ var "fname") $
-      "innerDecl" <<~ (declarationForRecordType' @@ true @@ var "isSer" @@ var "aliases" @@ (list ([] :: [TTerm Java.TypeParameter]))
+      "innerDecl" <<~ (declarationForRecordType' @@ true @@ var "isSer" @@ var "aliases" @@ (list ([] :: [TypedTerm Java.TypeParameter]))
         @@ var "varName" @@ (Logic.ifElse (var "isSer") (just (var "elName")) nothing) @@ var "rfields" @@ var "cx" @@ var "g") $
       right (augmentVariantClass @@ var "aliases" @@ var "tparams" @@ var "elName" @@ var "innerDecl"))
       (var "fields")) $
@@ -1597,7 +1584,7 @@ declarationForUnionType = def "declarationForUnionType" $
       (Lists.zip (var "variantDecls") (var "fields"))) $
     -- Build other declarations
     "privateConst" <~ (JavaUtilsSource.makeConstructor @@ var "aliases" @@ var "elName" @@ true
-      @@ list ([] :: [TTerm Java.FormalParameter]) @@ list ([] :: [TTerm Java.BlockStatement])) $
+      @@ list ([] :: [TypedTerm Java.FormalParameter]) @@ list ([] :: [TypedTerm Java.BlockStatement])) $
     "acceptDecl" <~ (JavaUtilsSource.toAcceptMethod @@ true @@ var "tparams") $
     -- Build visitor and partial visitor interfaces
     "vtparams" <~ Lists.concat2 (var "tparams") (list [JavaUtilsSource.javaTypeParameter @@ asTerm JavaNamesSource.visitorReturnParameter]) $
@@ -1619,7 +1606,7 @@ declarationForUnionType = def "declarationForUnionType" $
           var "varNameStr",
           string "} case."]) $
         pair (var "comment")
-          (JavaUtilsSource.interfaceMethodDeclaration @@ list ([] :: [TTerm Java.InterfaceMethodModifier]) @@ list ([] :: [TTerm Java.TypeParameter])
+          (JavaUtilsSource.interfaceMethodDeclaration @@ list ([] :: [TypedTerm Java.InterfaceMethodModifier]) @@ list ([] :: [TypedTerm Java.TypeParameter])
             @@ asTerm JavaNamesSource.visitMethodName @@ list [var "param"] @@ var "resultR" @@ nothing))
       (var "fields") $
     "visitorBody" <~ wrap Java._InterfaceBody (Lists.map (lambda "p" $
@@ -1629,8 +1616,8 @@ declarationForUnionType = def "declarationForUnionType" $
         Java._NormalInterfaceDeclaration_modifiers>>: list [inject Java._InterfaceModifier Java._InterfaceModifier_public unit],
         Java._NormalInterfaceDeclaration_identifier>>: wrap Java._TypeIdentifier (JavaDsl.identifier (asTerm JavaNamesSource.visitorName)),
         Java._NormalInterfaceDeclaration_parameters>>: var "vtparams",
-        Java._NormalInterfaceDeclaration_extends>>: list ([] :: [TTerm Java.InterfaceType]),
-        Java._NormalInterfaceDeclaration_permits>>: list ([] :: [TTerm Java.TypeName]),
+        Java._NormalInterfaceDeclaration_extends>>: list ([] :: [TypedTerm Java.InterfaceType]),
+        Java._NormalInterfaceDeclaration_permits>>: list ([] :: [TypedTerm Java.TypeName]),
         Java._NormalInterfaceDeclaration_body>>: var "visitorBody"])) $
     -- Partial visitor: extends Visitor, has default otherwise() and override visit methods
     "typeArgs" <~ Lists.map (lambda "tp" $ JavaUtilsSource.typeParameterToTypeArgument @@ var "tp") (var "tparams") $
@@ -1650,7 +1637,7 @@ declarationForUnionType = def "declarationForUnionType" $
         inject Java._MultiplicativeExpression Java._MultiplicativeExpression_unary
           (JavaUtilsSource.javaIdentifierToJavaUnaryExpression @@ (JavaDsl.identifier (string "instance")))])])) $
     "defaultMod" <~ list [inject Java._InterfaceMethodModifier Java._InterfaceMethodModifier_default unit] $
-    "otherwiseDecl" <~ (JavaUtilsSource.interfaceMethodDeclaration @@ var "defaultMod" @@ list ([] :: [TTerm Java.TypeParameter])
+    "otherwiseDecl" <~ (JavaUtilsSource.interfaceMethodDeclaration @@ var "defaultMod" @@ list ([] :: [TypedTerm Java.TypeParameter])
       @@ asTerm JavaNamesSource.otherwiseMethodName @@ list [var "mainInstanceParam"] @@ var "resultR"
       @@ just (list [var "throwStmt"])) $
     "otherwiseComment" <~ string "Default branch for unhandled cases." $
@@ -1675,7 +1662,7 @@ declarationForUnionType = def "declarationForUnionType" $
           var "varNameStr",
           string "} case."]) $
         pair (var "comment")
-          (JavaUtilsSource.interfaceMethodDeclaration @@ var "defaultMod" @@ list ([] :: [TTerm Java.TypeParameter])
+          (JavaUtilsSource.interfaceMethodDeclaration @@ var "defaultMod" @@ list ([] :: [TypedTerm Java.TypeParameter])
             @@ asTerm JavaNamesSource.visitMethodName @@ list [var "param"] @@ var "resultR"
             @@ just (list [var "returnOtherwise"])))
       (var "fields") $
@@ -1689,7 +1676,7 @@ declarationForUnionType = def "declarationForUnionType" $
         Java._NormalInterfaceDeclaration_identifier>>: wrap Java._TypeIdentifier (JavaDsl.identifier (asTerm JavaNamesSource.partialVisitorName)),
         Java._NormalInterfaceDeclaration_parameters>>: var "vtparams",
         Java._NormalInterfaceDeclaration_extends>>: list [wrap Java._InterfaceType (var "visitorClassType")],
-        Java._NormalInterfaceDeclaration_permits>>: list ([] :: [TTerm Java.TypeName]),
+        Java._NormalInterfaceDeclaration_permits>>: list ([] :: [TypedTerm Java.TypeName]),
         Java._NormalInterfaceDeclaration_body>>: var "pvBody"])) $
     -- Build constant declarations
     "tn0" <<~ (constantDeclForTypeName @@ var "aliases" @@ var "elName" @@ var "cx" @@ var "g") $
@@ -1719,7 +1706,7 @@ declarationForUnionType = def "declarationForUnionType" $
       @@ nothing @@ (interfaceTypes @@ var "isSer" @@ var "aliases" @@ var "tparams" @@ var "elName") @@ var "bodyDecls")
 
 -- | Decode a Type from its term encoding (limited subset).
-decodeTypeFromTerm :: TTermDefinition (Term -> Maybe Type)
+decodeTypeFromTerm :: TypedTermDefinition (Term -> Maybe Type)
 decodeTypeFromTerm = def "decodeTypeFromTerm" $
   lambda "term" $
     cases _Term (Strip.deannotateTerm @@ var "term")
@@ -1803,10 +1790,10 @@ decodeTypeFromTerm = def "decodeTypeFromTerm" $
           nothing]
 
 -- | Deduplicate binding names that collide with in-scope variables.
-dedupBindings :: TTermDefinition (S.Set Name -> [Binding] -> [Binding])
+dedupBindings :: TypedTermDefinition (S.Set Name -> [Binding] -> [Binding])
 dedupBindings = def "dedupBindings" $
   lambda "inScope" $ lambda "bs" $
-    Maybes.fromMaybe (list ([] :: [TTerm Binding])) (Maybes.map
+    Maybes.fromMaybe (list ([] :: [TypedTerm Binding])) (Maybes.map
       (lambda "p" $
         "b" <~ Pairs.first (var "p") $
         "rest" <~ Pairs.second (var "p") $
@@ -1828,8 +1815,11 @@ dedupBindings = def "dedupBindings" $
            (dedupBindings @@ Sets.insert (var "name") (var "inScope") @@ var "rest")))
       (Lists.uncons (var "bs")))
 
+def :: String -> TypedTerm a -> TypedTermDefinition a
+def = definitionInModule module_
+
 -- | Detect over-generalized type variables in a scheme type.
-detectAccumulatorUnification :: TTermDefinition ([Type] -> Type -> [Name] -> M.Map Name Type)
+detectAccumulatorUnification :: TypedTermDefinition ([Type] -> Type -> [Name] -> M.Map Name Type)
 detectAccumulatorUnification = def "detectAccumulatorUnification" $
   lambda "doms" $ lambda "cod" $ lambda "tparams" $
     "tparamSet" <~ Sets.fromList (var "tparams") $
@@ -1878,7 +1868,7 @@ detectAccumulatorUnification = def "detectAccumulatorUnification" $
 
 -- | Direct-return substitution: for each input var with >=2 self-refs and
 -- safe non-self vars, substitute those vars to the input var.
-directRefSubstitution :: TTermDefinition (S.Set Name -> Maybe Name -> M.Map Name [Name] -> M.Map Name Name)
+directRefSubstitution :: TypedTermDefinition (S.Set Name -> Maybe Name -> M.Map Name [Name] -> M.Map Name Name)
 directRefSubstitution = def "directRefSubstitution" $
   lambda "directInputVars" $ lambda "codVar" $ lambda "grouped" $
     Lists.foldl
@@ -1889,7 +1879,7 @@ directRefSubstitution = def "directRefSubstitution" $
       (Maps.empty)
       (Maps.toList (var "grouped"))
 
-directRefSubstitution_processGroup :: TTermDefinition (S.Set Name -> Maybe Name -> M.Map Name Name -> Name -> [Name] -> M.Map Name Name)
+directRefSubstitution_processGroup :: TypedTermDefinition (S.Set Name -> Maybe Name -> M.Map Name Name -> Name -> [Name] -> M.Map Name Name)
 directRefSubstitution_processGroup = def "directRefSubstitution_processGroup" $
   lambda "directInputVars" $ lambda "codVar" $ lambda "subst" $ lambda "inVar" $ lambda "outVars" $
     "selfRefCount" <~ Lists.length (Lists.filter (lambda "v" $ Equality.equal (var "v") (var "inVar")) (var "outVars")) $
@@ -1911,7 +1901,7 @@ directRefSubstitution_processGroup = def "directRefSubstitution_processGroup" $
 
 -- | Extract Java type arguments from a domain type.
 -- Uses actual type application args when available, falling back to javaTypeArgumentsForType.
-domTypeArgs :: TTermDefinition (JavaHelpers.Aliases -> Type -> Context -> Graph -> Either Error [Java.TypeArgument])
+domTypeArgs :: TypedTermDefinition (JavaHelpers.Aliases -> Type -> InferenceContext -> Graph -> Either Error [Java.TypeArgument])
 domTypeArgs = def "domTypeArgs" $
   lambda "aliases" $ lambda "d" $
     "cx" ~> "g" ~>
@@ -1925,7 +1915,7 @@ domTypeArgs = def "domTypeArgs" $
       (right (javaTypeArgumentsForType @@ var "d"))
 
 -- | Generate a Java identifier for a data element (variable, constant, function, etc.)
-elementJavaIdentifier :: TTermDefinition (Bool -> Bool -> JavaHelpers.Aliases -> Name -> Java.Identifier)
+elementJavaIdentifier :: TypedTermDefinition (Bool -> Bool -> JavaHelpers.Aliases -> Name -> Java.Identifier)
 elementJavaIdentifier = def "elementJavaIdentifier" $
   lambda "isPrim" $ lambda "isMethod" $ lambda "aliases" $ lambda "name" $ lets [
     "qn">: Names.qualifyName @@ var "name",
@@ -1949,14 +1939,14 @@ elementJavaIdentifier = def "elementJavaIdentifier" $
           (JavaUtilsSource.sanitizeJavaName @@ var "local"))))
 
 -- | Helper for elementJavaIdentifier: qualify a name through the aliases
-elementJavaIdentifier_qualify :: TTermDefinition (JavaHelpers.Aliases -> Maybe ModuleName -> String -> String)
+elementJavaIdentifier_qualify :: TypedTermDefinition (JavaHelpers.Aliases -> Maybe ModuleName -> String -> String)
 elementJavaIdentifier_qualify = def "elementJavaIdentifier_qualify" $
   lambda "aliases" $ lambda "mns" $ lambda "s" $
     unwrap Java._Identifier @@ (JavaUtilsSource.nameToJavaName @@ var "aliases"
       @@ (Names.unqualifyName @@ Packaging.qualifiedName (var "mns") (var "s")))
 
 -- | Convert a namespace to an elements class name (e.g., "hydra.java.syntax" -> "Syntax")
-elementsClassName :: TTermDefinition (ModuleName -> String)
+elementsClassName :: TypedTermDefinition (ModuleName -> String)
 elementsClassName = def "elementsClassName" $
   lambda "ns" $ lets [
     "nsStr">: unwrap _ModuleName @@ var "ns",
@@ -1966,13 +1956,13 @@ elementsClassName = def "elementsClassName" $
 
 -- | Produce the qualified name for a term module's elements interface.
 -- Uses the parent namespace so that e.g. "hydra.formatting" -> "hydra.Formatting" (not "hydra.formatting.Formatting").
-elementsQualifiedName :: TTermDefinition (ModuleName -> Name)
+elementsQualifiedName :: TypedTermDefinition (ModuleName -> Name)
 elementsQualifiedName = def "elementsQualifiedName" $
   lambda "ns" $
     Names.unqualifyName @@ Packaging.qualifiedName (namespaceParent @@ var "ns") (elementsClassName @@ var "ns")
 
 -- | Encode a function application.
-encodeApplication :: TTermDefinition (JavaHelpers.JavaEnvironment -> Application -> Context -> Graph -> Either Error Java.Expression)
+encodeApplication :: TypedTermDefinition (JavaHelpers.JavaEnvironment -> Application -> InferenceContext -> Graph -> Either Error Java.Expression)
 encodeApplication = def "encodeApplication" $
   lambda "env" $ lambda "app" $
     "cx" ~> "g0" ~>
@@ -1981,8 +1971,8 @@ encodeApplication = def "encodeApplication" $
     -- Gather function, args, and type applications
     "gathered" <~ (Analysis.gatherArgsWithTypeApps
       @@ (inject _Term _Term_application (var "app"))
-      @@ list ([] :: [TTerm Term])
-      @@ list ([] :: [TTerm Type])) $
+      @@ list ([] :: [TypedTerm Term])
+      @@ list ([] :: [TypedTerm Type])) $
     "fun" <~ Pairs.first (var "gathered") $
     "args" <~ Pairs.first (Pairs.second (var "gathered")) $
     "typeApps" <~ Pairs.second (Pairs.second (var "gathered")) $
@@ -2010,7 +2000,7 @@ encodeApplication = def "encodeApplication" $
         Logic.ifElse (Maybes.isJust (Maps.lookup (var "name") (Graph.graphPrimitives (var "g"))))
           ("hargs" <~ Lists.take (var "arity") (var "annotatedArgs") $
            "rargs" <~ Lists.drop (var "arity") (var "annotatedArgs") $
-           "initialCall" <<~ (functionCall @@ var "env" @@ true @@ var "name" @@ var "hargs" @@ (list ([] :: [TTerm Type])) @@ var "cx" @@ var "g") $
+           "initialCall" <<~ (functionCall @@ var "env" @@ true @@ var "name" @@ var "hargs" @@ (list ([] :: [TypedTerm Type])) @@ var "cx" @@ var "g") $
            Eithers.foldl (lambda "acc" $ lambda "h" $
              "jarg" <<~ (encodeTerm @@ var "env" @@ var "h" @@ var "cx" @@ var "g") $
              right (applyJavaArg @@ var "acc" @@ var "jarg"))
@@ -2033,16 +2023,16 @@ encodeApplication = def "encodeApplication" $
             "trusted" <~ (project JavaHelpers._Aliases JavaHelpers._Aliases_trustedTypeVars @@ var "aliases") $
             "inScope" <~ (project JavaHelpers._Aliases JavaHelpers._Aliases_inScopeTypeParams @@ var "aliases") $
             "filteredTypeApps" <~ (Logic.ifElse (Logic.or (Sets.null (var "trusted")) (Sets.null (var "inScope")))
-              (list ([] :: [TTerm Type]))
+              (list ([] :: [TypedTerm Type]))
               ("allVars" <~ Sets.unions (Lists.map (lambda "t" $ collectTypeVars @@ var "t") (var "typeApps")) $
                 Logic.ifElse (Logic.not (Sets.null (Sets.difference (var "allVars") (var "inScope"))))
-                  (list ([] :: [TTerm Type]))
+                  (list ([] :: [TypedTerm Type]))
                   (Logic.ifElse (Sets.null (Sets.difference (var "allVars") (var "trusted")))
                     (var "typeApps")
-                    (list ([] :: [TTerm Type]))))) $
+                    (list ([] :: [TypedTerm Type]))))) $
             -- Correct the type application ordering
             "safeTypeApps" <<~ (Logic.ifElse (Lists.null (var "filteredTypeApps"))
-              (right (list ([] :: [TTerm Type])))
+              (right (list ([] :: [TypedTerm Type])))
               (correctTypeApps @@ var "g" @@ var "name" @@ var "hargs" @@ var "filteredTypeApps" @@ var "cx" @@ var "g")) $
             -- Filter phantom type args
             "finalTypeApps" <<~ (filterPhantomTypeArgs @@ var "name" @@ var "safeTypeApps" @@ var "cx" @@ var "g") $
@@ -2053,7 +2043,7 @@ encodeApplication = def "encodeApplication" $
               (var "initialCall") (var "rargs")))]
 
 -- | Fallback path for encodeApplication — used for eliminations and default expressions.
-encodeApplication_fallback :: TTermDefinition (JavaHelpers.JavaEnvironment -> JavaHelpers.Aliases -> Graph -> [Type] -> Term -> Term -> Context -> Graph -> Either Error Java.Expression)
+encodeApplication_fallback :: TypedTermDefinition (JavaHelpers.JavaEnvironment -> JavaHelpers.Aliases -> Graph -> [Type] -> Term -> Term -> InferenceContext -> Graph -> Either Error Java.Expression)
 encodeApplication_fallback = def "encodeApplication_fallback" $
   lambda "env" $ lambda "aliases" $ lambda "gr" $ lambda "typeApps" $ lambda "lhs" $ lambda "rhs" $
     "cx" ~> "g" ~>
@@ -2102,7 +2092,7 @@ encodeApplication_fallback = def "encodeApplication_fallback" $
           _Term_unwrap>>: lambda "_w" $ var "elimBranch"]])
 
 -- | Encode all definitions in a module to Java compilation units.
-encodeDefinitions :: TTermDefinition (Module -> [Definition] -> Context -> Graph -> Either Error (M.Map Name Java.CompilationUnit))
+encodeDefinitions :: TypedTermDefinition (Module -> [Definition] -> InferenceContext -> Graph -> Either Error (M.Map Name Java.CompilationUnit))
 encodeDefinitions = def "encodeDefinitions" $
   lambda "mod" $ lambda "defs" $
     "cx" ~> "g" ~>
@@ -2121,14 +2111,14 @@ encodeDefinitions = def "encodeDefinitions" $
       (var "typeDefs") $
     "typeUnits" <<~ (Eithers.mapList (lambda "td" $ encodeTypeDefinition @@ var "pkg" @@ var "aliases" @@ var "td" @@ var "cx" @@ var "g") (var "nonTypedefDefs")) $
     "termUnits" <<~ Logic.ifElse (Lists.null (var "termDefs"))
-      (right (list ([] :: [TTerm (Name, Java.CompilationUnit)])))
+      (right (list ([] :: [TypedTerm (Name, Java.CompilationUnit)])))
       ("dataMembers" <<~ (Eithers.mapList (lambda "td" $ encodeTermDefinition @@ var "env" @@ var "td" @@ var "cx" @@ var "g") (var "termDefs")) $
         right (list [constructElementsInterface @@ var "mod" @@ var "dataMembers"])) $
     right (Maps.fromList (Lists.concat2 (var "typeUnits") (var "termUnits")))
 
 -- | Encode an elimination expression. The "elimTerm" argument must be one of
 -- the elimination-form Term variants: project, cases, or unwrap.
-encodeElimination :: TTermDefinition (JavaHelpers.JavaEnvironment -> Maybe Java.Expression -> Type -> Type -> Term -> Context -> Graph -> Either Error Java.Expression)
+encodeElimination :: TypedTermDefinition (JavaHelpers.JavaEnvironment -> Maybe Java.Expression -> Type -> Type -> Term -> InferenceContext -> Graph -> Either Error Java.Expression)
 encodeElimination = def "encodeElimination" $
   lambda "env" $ lambda "marg" $ lambda "dom" $ lambda "cod" $ lambda "elimTerm" $
     "cx" ~> "g" ~>
@@ -2136,7 +2126,7 @@ encodeElimination = def "encodeElimination" $
     -- Peel TypeApp wrappers (in addition to annotations) so callers can pass
     -- in `TypeApp (Cases ...) Value` and we still dispatch to the right branch.
     cases _Term (Strip.deannotateAndDetypeTerm @@ var "elimTerm")
-      (Just $ Ctx.failInContext (Error.errorOther $ Error.otherError $ Strings.cat2 (string "unexpected ") (Strings.cat2 (string "elimination case") (Strings.cat2 (string " in ") (string "encodeElimination")))) (var "cx")) [
+      (Just $ left (Error.errorOther $ Error.otherError $ Strings.cat2 (string "unexpected ") (Strings.cat2 (string "elimination case") (Strings.cat2 (string " in ") (string "encodeElimination"))))) [
 
       -- Projection: field projection
       _Term_project>>: lambda "proj" $
@@ -2179,7 +2169,7 @@ encodeElimination = def "encodeElimination" $
                   var "domTypeArgs0"
                     @@ Core.applicationTypeFunction (var "atyp")
                     @@ Lists.cons (Core.applicationTypeArgument (var "atyp")) (var "acc")]) $
-            "domTypeArgs" <~ (var "domTypeArgs0" @@ var "dom" @@ list ([] :: [TTerm Type])) $
+            "domTypeArgs" <~ (var "domTypeArgs0" @@ var "dom" @@ list ([] :: [TypedTerm Type])) $
             -- Use the deannotated-and-detyped form of elimTerm as the base, then wrap with
             -- typeApps derived from dom. This handles both bare-Cases and already-wrapped
             -- TypeApp(Cases) inputs uniformly.
@@ -2208,13 +2198,13 @@ encodeElimination = def "encodeElimination" $
             "domArgs" <<~ (domTypeArgs @@ var "aliases" @@ var "dom" @@ var "cx" @@ var "g") $
             "targs" <~ (typeArgsOrDiamond @@ (Lists.concat2 (var "domArgs") (list [JavaDsl.typeArgumentReference (var "rt")]))) $
             "otherwiseBranches" <<~ (Maybes.cases (var "def_")
-              (right (list ([] :: [TTerm Java.ClassBodyDeclarationWithComments])))
+              (right (list ([] :: [TypedTerm Java.ClassBodyDeclarationWithComments])))
               (lambda "d" $
                 "b" <<~ (otherwiseBranch @@ var "env" @@ var "aliases" @@ var "dom" @@ var "cod" @@ var "tname" @@ var "jcod" @@ var "domArgs" @@ var "d" @@ var "cx" @@ var "g") $
                 right (list [var "b"]))) $
             "visitBranches" <<~ (Eithers.mapList (lambda "f" $ visitBranch @@ var "env" @@ var "aliases" @@ var "dom" @@ var "tname" @@ var "jcod" @@ var "domArgs" @@ var "f" @@ var "cx" @@ var "g") (var "fields")) $
             "body" <~ wrap Java._ClassBody (Lists.concat2 (var "otherwiseBranches") (var "visitBranches")) $
-            "visitor" <~ (JavaUtilsSource.javaConstructorCall @@ (JavaUtilsSource.javaConstructorName @@ var "consId" @@ just (var "targs")) @@ list ([] :: [TTerm Java.Expression]) @@ just (var "body")) $
+            "visitor" <~ (JavaUtilsSource.javaConstructorCall @@ (JavaUtilsSource.javaConstructorName @@ var "consId" @@ just (var "targs")) @@ list ([] :: [TypedTerm Java.Expression]) @@ just (var "body")) $
             right (JavaUtilsSource.javaMethodInvocationToJavaExpression @@
               (JavaUtilsSource.methodInvocation @@ just (right (var "prim"))
                 @@ JavaDsl.identifier (asTerm JavaNamesSource.acceptMethodName) @@ list [var "visitor"]))),
@@ -2236,7 +2226,7 @@ encodeElimination = def "encodeElimination" $
 
 -- | Encode a function-form term. The "funTerm" argument must be one of
 -- the function-form Term variants: lambda, project, cases, or unwrap.
-encodeFunction :: TTermDefinition (JavaHelpers.JavaEnvironment -> Type -> Type -> Term -> Context -> Graph -> Either Error Java.Expression)
+encodeFunction :: TypedTermDefinition (JavaHelpers.JavaEnvironment -> Type -> Type -> Term -> InferenceContext -> Graph -> Either Error Java.Expression)
 encodeFunction = def "encodeFunction" $
   lambda "env" $ lambda "dom" $ lambda "cod" $ lambda "funTerm" $
     "cx" ~> "g" ~>
@@ -2287,8 +2277,8 @@ encodeFunction = def "encodeFunction" $
             -- Body is another lambda: recursively encode it
             _Term_lambda>>: lambda "innerLam" $
               cases _Type (Strip.deannotateType @@ var "cod")
-                (Just $ Ctx.failInContext (Error.errorOther $ Error.otherError $ Strings.cat2 (string "expected function type for lambda body, but got: ")
-                  (ShowCore.type_ @@ var "cod")) (var "cx")) [
+                (Just $ left (Error.errorOther $ Error.otherError $ Strings.cat2 (string "expected function type for lambda body, but got: ")
+                  (ShowCore.type_ @@ var "cod"))) [
                 _Type_function>>: lambda "ft" $
                   "dom2" <~ Core.functionTypeDomain (var "ft") $
                   "cod2" <~ Core.functionTypeCodomain (var "ft") $
@@ -2301,7 +2291,7 @@ encodeFunction = def "encodeFunction" $
 
 -- | Shared handler for function-form Term variants (lambda, project, cases, unwrap)
 -- at the encodeTermInternal level. Resolves the term's type and delegates to encodeFunction.
-encodeFunctionFormTerm :: TTermDefinition (JavaHelpers.JavaEnvironment -> [M.Map Name Term] -> Term -> Context -> Graph -> Either Error Java.Expression)
+encodeFunctionFormTerm :: TypedTermDefinition (JavaHelpers.JavaEnvironment -> [M.Map Name Term] -> Term -> InferenceContext -> Graph -> Either Error Java.Expression)
 encodeFunctionFormTerm = def "encodeFunctionFormTerm" $
   lambda "env" $ lambda "anns" $ lambda "term" $
     "cx" ~> "g" ~>
@@ -2318,7 +2308,7 @@ encodeFunctionFormTerm = def "encodeFunctionFormTerm" $
         encodeFunction @@ var "env" @@ (Core.functionTypeDomain (var "ft")) @@ (Core.functionTypeCodomain (var "ft")) @@ var "term" @@ var "cx" @@ var "g"]
 
 -- | Encode a primitive reference (by name) with function-type arity, as a method reference or curried wrapper.
-encodeFunctionPrimitiveByName :: TTermDefinition (JavaHelpers.JavaEnvironment -> Type -> Type -> Name -> Context -> Graph -> Either Error Java.Expression)
+encodeFunctionPrimitiveByName :: TypedTermDefinition (JavaHelpers.JavaEnvironment -> Type -> Type -> Name -> InferenceContext -> Graph -> Either Error Java.Expression)
 encodeFunctionPrimitiveByName = def "encodeFunctionPrimitiveByName" $
   lambda "env" $ lambda "dom" $ lambda "cod" $ lambda "name" $
     "cx" ~> "g" ~>
@@ -2352,7 +2342,7 @@ encodeFunctionPrimitiveByName = def "encodeFunctionPrimitiveByName" $
           (JavaUtilsSource.javaCastExpression @@ var "rt" @@ (JavaUtilsSource.javaExpressionToJavaUnaryExpression @@ var "curried"))))
 
 -- | Encode a literal value to a Java expression
-encodeLiteral :: TTermDefinition (Literal -> Java.Expression)
+encodeLiteral :: TypedTermDefinition (Literal -> Java.Expression)
 encodeLiteral = def "encodeLiteral" $
   lambda "lit" $
     cases _Literal (var "lit") Nothing [
@@ -2380,7 +2370,7 @@ encodeLiteral = def "encodeLiteral" $
         encodeLiteral_litExp @@ (JavaUtilsSource.javaString @@ var "s")]
 
 -- | Encode a Hydra literal type to a Java type
-encodeLiteralType :: TTermDefinition (LiteralType -> Context -> Graph -> Either Error Java.Type)
+encodeLiteralType :: TypedTermDefinition (LiteralType -> InferenceContext -> Graph -> Either Error Java.Type)
 encodeLiteralType = def "encodeLiteralType" $
   lambda "lt" $ 
     "cx" ~> "g" ~>
@@ -2389,16 +2379,16 @@ encodeLiteralType = def "encodeLiteralType" $
       right (JavaDsl.typeReference
         (JavaDsl.referenceTypeArray
           (JavaDsl.arrayType
-            (JavaDsl.dims (list [list ([] :: [TTerm Java.Annotation])]))
+            (JavaDsl.dims (list [list ([] :: [TypedTerm Java.Annotation])]))
             (JavaDsl.arrayTypeVariantPrimitive
               (JavaDsl.primitiveTypeWithAnnotations
                 (JavaDsl.primitiveTypeNumeric (JavaDsl.numericTypeIntegral JavaDsl.integralTypeByte))
-                (list ([] :: [TTerm Java.Annotation]))))))),
+                (list ([] :: [TypedTerm Java.Annotation]))))))),
     _LiteralType_boolean>>: constant $
       encodeLiteralType_simple @@ string "Boolean" @@ var "cx" @@ var "g",
     _LiteralType_decimal>>: constant $
       right (JavaUtilsSource.javaRefType
-        @@ list ([] :: [TTerm Java.ReferenceType])
+        @@ list ([] :: [TypedTerm Java.ReferenceType])
         @@ just (JavaNamesSource.javaPackageName @@ list [string "java", string "math"])
         @@ string "BigDecimal"),
     _LiteralType_float>>: lambda "ft" $
@@ -2411,7 +2401,7 @@ encodeLiteralType = def "encodeLiteralType" $
       cases _IntegerType (var "it") Nothing [
         _IntegerType_bigint>>: constant $
           right (JavaUtilsSource.javaRefType
-            @@ list ([] :: [TTerm Java.ReferenceType])
+            @@ list ([] :: [TypedTerm Java.ReferenceType])
             @@ just (JavaNamesSource.javaPackageName @@ list [string "java", string "math"])
             @@ string "BigInteger"),
         _IntegerType_int8>>: constant $
@@ -2430,24 +2420,24 @@ encodeLiteralType = def "encodeLiteralType" $
           encodeLiteralType_simple @@ string "Long" @@ var "cx" @@ var "g",
         _IntegerType_uint64>>: constant $
           right (JavaUtilsSource.javaRefType
-            @@ list ([] :: [TTerm Java.ReferenceType])
+            @@ list ([] :: [TypedTerm Java.ReferenceType])
             @@ just (JavaNamesSource.javaPackageName @@ list [string "java", string "math"])
             @@ string "BigInteger")],
     _LiteralType_string>>: constant $
       encodeLiteralType_simple @@ string "String" @@ var "cx" @@ var "g"]
 
 -- | Helper: encode a simple Java reference type by class name (no package, no type arguments)
-encodeLiteralType_simple :: TTermDefinition (String -> Context -> Graph -> Either Error Java.Type)
+encodeLiteralType_simple :: TypedTermDefinition (String -> InferenceContext -> Graph -> Either Error Java.Type)
 encodeLiteralType_simple = def "encodeLiteralType_simple" $
   lambda "n" $ 
     "cx" ~> "g" ~>
     right (JavaUtilsSource.javaRefType
-    @@ list ([] :: [TTerm Java.ReferenceType])
+    @@ list ([] :: [TypedTerm Java.ReferenceType])
     @@ nothing
     @@ var "n")
 
 -- | Encode a float value to a Java expression
-encodeLiteral_encodeFloat :: TTermDefinition (FloatValue -> Java.Expression)
+encodeLiteral_encodeFloat :: TypedTermDefinition (FloatValue -> Java.Expression)
 encodeLiteral_encodeFloat = def "encodeLiteral_encodeFloat" $
   lambda "f" $
     cases _FloatValue (var "f") Nothing [
@@ -2457,7 +2447,7 @@ encodeLiteral_encodeFloat = def "encodeLiteral_encodeFloat" $
         encodeLiteral_encodeFloat64 @@ var "v"]
 
 -- | Encode a float32 value, handling NaN and Infinity specially since BigDecimal cannot represent them.
-encodeLiteral_encodeFloat32 :: TTermDefinition (Float -> Java.Expression)
+encodeLiteral_encodeFloat32 :: TypedTermDefinition (Float -> Java.Expression)
 encodeLiteral_encodeFloat32 = def "encodeLiteral_encodeFloat32" $
   lambda "v" $ lets [
     "s">: Literals.showFloat32 (var "v")] $
@@ -2475,7 +2465,7 @@ encodeLiteral_encodeFloat32 = def "encodeLiteral_encodeFloat32" $
 
 -- | Encode a float64 value, handling NaN, Infinity, and negative zero specially.
 -- The Java FloatingPointLiteral wrapper cannot represent NaN, Infinity, or signed zero.
-encodeLiteral_encodeFloat64 :: TTermDefinition (Double -> Java.Expression)
+encodeLiteral_encodeFloat64 :: TypedTermDefinition (Double -> Java.Expression)
 encodeLiteral_encodeFloat64 = def "encodeLiteral_encodeFloat64" $
   lambda "v" $ lets [
     "s">: Literals.showFloat64 (var "v")] $
@@ -2493,7 +2483,7 @@ encodeLiteral_encodeFloat64 = def "encodeLiteral_encodeFloat64" $
         var "v")
 
 -- | Encode an integer value to a Java expression
-encodeLiteral_encodeInteger :: TTermDefinition (IntegerValue -> Java.Expression)
+encodeLiteral_encodeInteger :: TypedTermDefinition (IntegerValue -> Java.Expression)
 encodeLiteral_encodeInteger = def "encodeLiteral_encodeInteger" $
   lambda "i" $
     cases _IntegerValue (var "i") Nothing [
@@ -2544,7 +2534,7 @@ encodeLiteral_encodeInteger = def "encodeLiteral_encodeInteger" $
 
 -- | Emit a Java method call expression Double.parseDouble("<value>"). Used for
 -- float64 values that cannot be represented as a FloatingPointLiteral (e.g., negative zero).
-encodeLiteral_javaParseDouble :: TTermDefinition (String -> Java.Expression)
+encodeLiteral_javaParseDouble :: TypedTermDefinition (String -> Java.Expression)
 encodeLiteral_javaParseDouble = def "encodeLiteral_javaParseDouble" $
   lambda "value" $
     JavaUtilsSource.javaMethodInvocationToJavaExpression @@
@@ -2554,7 +2544,7 @@ encodeLiteral_javaParseDouble = def "encodeLiteral_javaParseDouble" $
         @@ list [encodeLiteral @@ inject _Literal _Literal_string (var "value")])
 
 -- | Emit a Java field access expression like Float.NaN or Double.POSITIVE_INFINITY.
-encodeLiteral_javaSpecialFloatExpr :: TTermDefinition (String -> String -> Java.Expression)
+encodeLiteral_javaSpecialFloatExpr :: TypedTermDefinition (String -> String -> Java.Expression)
 encodeLiteral_javaSpecialFloatExpr = def "encodeLiteral_javaSpecialFloatExpr" $
   lambda "className" $ lambda "fieldName" $
     JavaUtilsSource.javaExpressionNameToJavaExpression @@
@@ -2563,12 +2553,12 @@ encodeLiteral_javaSpecialFloatExpr = def "encodeLiteral_javaSpecialFloatExpr" $
         (JavaDsl.identifier $ var "fieldName"))
 
 -- | Helper: convert a Java literal to a Java expression
-encodeLiteral_litExp :: TTermDefinition (Java.Literal -> Java.Expression)
+encodeLiteral_litExp :: TypedTermDefinition (Java.Literal -> Java.Expression)
 encodeLiteral_litExp = def "encodeLiteral_litExp" $
   lambda "l" $ JavaUtilsSource.javaLiteralToJavaExpression @@ var "l"
 
 -- | Helper: cast an expression to a primitive type
-encodeLiteral_primCast :: TTermDefinition (Java.PrimitiveType -> Java.Expression -> Java.Expression)
+encodeLiteral_primCast :: TypedTermDefinition (Java.PrimitiveType -> Java.Expression -> Java.Expression)
 encodeLiteral_primCast = def "encodeLiteral_primCast" $
   lambda "pt" $ lambda "expr" $
     JavaUtilsSource.javaCastExpressionToJavaExpression @@
@@ -2576,19 +2566,19 @@ encodeLiteral_primCast = def "encodeLiteral_primCast" $
         (JavaUtilsSource.javaExpressionToJavaUnaryExpression @@ var "expr"))
 
 -- | Encode a nullary constant function as a Java expression
-encodeNullaryConstant :: TTermDefinition (JavaHelpers.JavaEnvironment -> Type -> Term -> Context -> Graph -> Either Error Java.Expression)
+encodeNullaryConstant :: TypedTermDefinition (JavaHelpers.JavaEnvironment -> Type -> Term -> InferenceContext -> Graph -> Either Error Java.Expression)
 encodeNullaryConstant = def "encodeNullaryConstant" $
   lambda "env" $ lambda "typ" $ lambda "funTerm" $
     "cx" ~> "g" ~>
-    Ctx.failInContext (Error.errorOther $ Error.otherError $ Strings.cat2 (string "unexpected ") (Strings.cat2 (string "nullary function") (Strings.cat2 (string " in ") (ShowCore.term @@ var "funTerm")))) (var "cx")
+    left (Error.errorOther $ Error.otherError $ Strings.cat2 (string "unexpected ") (Strings.cat2 (string "nullary function") (Strings.cat2 (string " in ") (ShowCore.term @@ var "funTerm"))))
 
 -- | Extract type arguments from the return type for generic method calls
-encodeNullaryConstant_typeArgsFromReturnType :: TTermDefinition (JavaHelpers.Aliases -> Type -> Context -> Graph -> Either Error [Java.TypeArgument])
+encodeNullaryConstant_typeArgsFromReturnType :: TypedTermDefinition (JavaHelpers.Aliases -> Type -> InferenceContext -> Graph -> Either Error [Java.TypeArgument])
 encodeNullaryConstant_typeArgsFromReturnType = def "encodeNullaryConstant_typeArgsFromReturnType" $
   lambda "aliases" $ lambda "t" $
     "cx" ~> "g" ~>
     cases _Type (Strip.deannotateType @@ var "t")
-      (Just $ right (list ([] :: [TTerm Java.TypeArgument]))) [
+      (Just $ right (list ([] :: [TypedTerm Java.TypeArgument]))) [
       _Type_set>>: "st" ~>
         "jst" <<~ (encodeType @@ var "aliases" @@ Sets.empty @@ var "st" @@ var "cx" @@ var "g") $
         "rt" <<~ (JavaUtilsSource.javaTypeToJavaReferenceType @@ var "jst" @@ var "cx") $
@@ -2609,7 +2599,7 @@ encodeNullaryConstant_typeArgsFromReturnType = def "encodeNullaryConstant_typeAr
         right (list [JavaDsl.typeArgumentReference (var "rk"), JavaDsl.typeArgumentReference (var "rv")])]
 
 -- | Encode a nullary primitive reference (by name) as a Java expression.
-encodeNullaryPrimitiveByName :: TTermDefinition (JavaHelpers.JavaEnvironment -> Type -> Name -> Context -> Graph -> Either Error Java.Expression)
+encodeNullaryPrimitiveByName :: TypedTermDefinition (JavaHelpers.JavaEnvironment -> Type -> Name -> InferenceContext -> Graph -> Either Error Java.Expression)
 encodeNullaryPrimitiveByName = def "encodeNullaryPrimitiveByName" $
   lambda "env" $ lambda "typ" $ lambda "name" $
     "cx" ~> "g" ~>
@@ -2622,26 +2612,26 @@ encodeNullaryPrimitiveByName = def "encodeNullaryPrimitiveByName" $
        right (JavaUtilsSource.javaMethodInvocationToJavaExpression @@
          (record Java._MethodInvocation [
            Java._MethodInvocation_header>>: var "header",
-           Java._MethodInvocation_arguments>>: list ([] :: [TTerm Java.Expression])])))
+           Java._MethodInvocation_arguments>>: list ([] :: [TypedTerm Java.Expression])])))
       ("fullName" <~ (unwrap Java._Identifier @@ (elementJavaIdentifier @@ boolean True @@ boolean False @@ var "aliases" @@ var "name")) $
        "parts" <~ Strings.splitOn (string ".") (var "fullName") $
-       "className" <~ JavaDsl.identifier (Strings.intercalate (string ".") (Maybes.fromMaybe (list ([] :: [TTerm String])) (Lists.maybeInit (var "parts")))) $
+       "className" <~ JavaDsl.identifier (Strings.intercalate (string ".") (Maybes.fromMaybe (list ([] :: [TypedTerm String])) (Lists.maybeInit (var "parts")))) $
        "methodName" <~ JavaDsl.identifier (Maybes.fromMaybe (var "fullName") (Lists.maybeLast (var "parts"))) $
        right (JavaUtilsSource.javaMethodInvocationToJavaExpression @@
-         (JavaUtilsSource.methodInvocationStaticWithTypeArgs @@ var "className" @@ var "methodName" @@ var "targs" @@ (list ([] :: [TTerm Java.Expression])))))
+         (JavaUtilsSource.methodInvocationStaticWithTypeArgs @@ var "className" @@ var "methodName" @@ var "targs" @@ (list ([] :: [TypedTerm Java.Expression])))))
 
 -- | Encode a Hydra term as a Java expression.
 -- Wrapper that calls encodeTermInternal with empty accumulators.
-encodeTerm :: TTermDefinition (JavaHelpers.JavaEnvironment -> Term -> Context -> Graph -> Either Error Java.Expression)
+encodeTerm :: TypedTermDefinition (JavaHelpers.JavaEnvironment -> Term -> InferenceContext -> Graph -> Either Error Java.Expression)
 encodeTerm = def "encodeTerm" $
   lambda "env" $ lambda "term" $
     "cx" ~> "g" ~>
-    encodeTermInternal @@ var "env" @@ list ([] :: [TTerm (M.Map Name Term)]) @@ list ([] :: [TTerm Java.Type]) @@ var "term" @@ var "cx" @@ var "g"
+    encodeTermInternal @@ var "env" @@ list ([] :: [TypedTerm (M.Map Name Term)]) @@ list ([] :: [TypedTerm Java.Type]) @@ var "term" @@ var "cx" @@ var "g"
 
 -- | Encode a term definition as a Java interface method declaration.
 -- This is the most complex function — it handles type parameters, lambda analysis,
 -- type variable substitution, accumulator unification, and body annotation.
-encodeTermDefinition :: TTermDefinition (JavaHelpers.JavaEnvironment -> TermDefinition -> Context -> Graph -> Either Error Java.InterfaceMemberDeclarationWithComments)
+encodeTermDefinition :: TypedTermDefinition (JavaHelpers.JavaEnvironment -> TermDefinition -> InferenceContext -> Graph -> Either Error Java.InterfaceMemberDeclarationWithComments)
 encodeTermDefinition = def "encodeTermDefinition" $
   lambda "env" $ lambda "tdef" $
     "cx" ~> "g" ~>
@@ -2649,9 +2639,9 @@ encodeTermDefinition = def "encodeTermDefinition" $
     "term0" <~ (project _TermDefinition _TermDefinition_term @@ var "tdef") $
     "mDoc" <<~ (Annotations.getTermDescription @@ var "cx" @@ var "g" @@ var "term0") $
     "ts" <~ Maybes.maybe
-      (Core.typeScheme (list ([] :: [TTerm Name])) (Core.typeVariable (wrap _Name (string "hydra.core.Unit"))) nothing)
+      (Core.typeScheme (list ([] :: [TypedTerm Name])) (Core.typeVariable (wrap _Name (string "hydra.core.Unit"))) nothing)
       ("x" ~> var "x")
-      (project _TermDefinition _TermDefinition_typeScheme @@ var "tdef") $
+      (Maybes.map Scoping.termSignatureToTypeScheme (project _TermDefinition _TermDefinition_signature @@ var "tdef")) $
     -- Unshadow variables
     ("term" <~ (Variables.unshadowVariables @@ var "term0") $
       "fs" <<~ (analyzeJavaFunction @@ var "env" @@ var "term" @@ var "cx" @@ var "g") $
@@ -2783,7 +2773,7 @@ encodeTermDefinition = def "encodeTermDefinition" $
           "tcoStmts" <<~ (encodeTermTCO @@ var "env2WithTypeParams" @@ var "name" @@ var "params" @@ var "tcoVarRenames" @@ int32 0 @@ var "tcoBody" @@ var "cx" @@ var "g") $
           "whileBodyStmts" <~ Lists.concat2 (var "snapshotDecls") (var "tcoStmts") $
           "whileBodyBlock" <~ (JavaDsl.statementWithoutTrailing (JavaDsl.stmtBlock (JavaDsl.block (var "whileBodyStmts")))) $
-          "noCond" <~ (nothing :: TTerm (Maybe Java.Expression)) $
+          "noCond" <~ (nothing :: TypedTerm (Maybe Java.Expression)) $
           "whileStmt" <~ (JavaDsl.blockStatementStatement
             (JavaDsl.statementWhile (record Java._WhileStatement [
               Java._WhileStatement_cond>>: var "noCond",
@@ -2802,7 +2792,7 @@ encodeTermDefinition = def "encodeTermDefinition" $
         (var "mDoc")))
 
 -- | Internal term encoder with annotation and type-application accumulators.
-encodeTermInternal :: TTermDefinition (JavaHelpers.JavaEnvironment -> [M.Map Name Term] -> [Java.Type] -> Term -> Context -> Graph -> Either Error Java.Expression)
+encodeTermInternal :: TypedTermDefinition (JavaHelpers.JavaEnvironment -> [M.Map Name Term] -> [Java.Type] -> Term -> InferenceContext -> Graph -> Either Error Java.Expression)
 encodeTermInternal = def "encodeTermInternal" $
   lambda "env" $ lambda "anns" $ lambda "tyapps" $ lambda "term" $
     "cx" ~> "g0" ~>
@@ -2843,7 +2833,7 @@ encodeTermInternal = def "encodeTermInternal" $
         "encodeWithType" <~ (lambda "branchType" $ lambda "t1" $
           "annotated" <~ (Annotations.setTermAnnotation @@ asTerm Constants.keyType
             @@ just (encodeTypeAsTerm @@ var "branchType") @@ var "t1") $
-          encodeTermInternal @@ var "env" @@ var "anns" @@ list ([] :: [TTerm Java.Type]) @@ var "annotated" @@ var "cx" @@ var "g") $
+          encodeTermInternal @@ var "env" @@ var "anns" @@ list ([] :: [TypedTerm Java.Type]) @@ var "annotated" @@ var "cx" @@ var "g") $
         "eitherCall" <~ (lambda "methodName" $ lambda "expr" $
           Maybes.cases (var "mtargs")
             (JavaUtilsSource.javaMethodInvocationToJavaExpression @@
@@ -2880,16 +2870,16 @@ encodeTermInternal = def "encodeTermInternal" $
         ("bindings" <~ Core.letBindings (var "lt") $
         "body" <~ Core.letBody (var "lt") $
         Logic.ifElse (Lists.null (var "bindings"))
-          (encodeTermInternal @@ var "env" @@ var "anns" @@ list ([] :: [TTerm Java.Type]) @@ var "body" @@ var "cx" @@ var "g")
+          (encodeTermInternal @@ var "env" @@ var "anns" @@ list ([] :: [TypedTerm Java.Type]) @@ var "body" @@ var "cx" @@ var "g")
           ("bindResult" <<~ (bindingsToStatements @@ var "env" @@ var "bindings" @@ var "cx" @@ var "g") $
             "bindingStmts" <~ Pairs.first (var "bindResult") $
             "env2" <~ Pairs.second (var "bindResult") $
-            "jbody" <<~ (encodeTermInternal @@ var "env2" @@ var "anns" @@ list ([] :: [TTerm Java.Type]) @@ var "body" @@ var "cx" @@ var "g") $
+            "jbody" <<~ (encodeTermInternal @@ var "env2" @@ var "anns" @@ list ([] :: [TypedTerm Java.Type]) @@ var "body" @@ var "cx" @@ var "g") $
             "returnSt" <~ JavaDsl.blockStatementStatement (JavaUtilsSource.javaReturnStatement @@ just (var "jbody")) $
             "block" <~ (wrap Java._Block (Lists.concat2 (var "bindingStmts") (list [var "returnSt"]))) $
             "nullaryLambda" <~ JavaDsl.expressionLambda
               (JavaDsl.lambdaExpression
-                (JavaDsl.lambdaParametersTuple (list ([] :: [TTerm Java.FormalParameter])))
+                (JavaDsl.lambdaParametersTuple (list ([] :: [TypedTerm Java.FormalParameter])))
                 (JavaDsl.lambdaBodyBlock (var "block"))) $
             "combinedAnns" <~ Lists.foldl (lambda "acc" $ lambda "m" $ Maps.union (var "acc") (var "m")) Maps.empty (var "anns") $
             "g2" <~ (project JavaHelpers._JavaEnvironment JavaHelpers._JavaEnvironment_graph @@ var "env2") $
@@ -2907,7 +2897,7 @@ encodeTermInternal = def "encodeTermInternal" $
               (JavaUtilsSource.javaCastExpression @@ var "supplierRt" @@ (JavaUtilsSource.javaExpressionToJavaUnaryExpression @@ var "nullaryLambda"))) $
             right (JavaUtilsSource.javaMethodInvocationToJavaExpression @@
               (JavaUtilsSource.methodInvocation @@ just (right
-                (JavaUtilsSource.javaExpressionToJavaPrimary @@ var "castExpr")) @@ JavaDsl.identifier (string "get") @@ list ([] :: [TTerm Java.Expression]))))),
+                (JavaUtilsSource.javaExpressionToJavaPrimary @@ var "castExpr")) @@ JavaDsl.identifier (string "get") @@ list ([] :: [TypedTerm Java.Expression]))))),
 
       -- TermList: hydra.util.ConsList.of(elements) or hydra.util.ConsList.empty()
       _Term_list>>: lambda "els" $
@@ -2917,13 +2907,13 @@ encodeTermInternal = def "encodeTermInternal" $
               (JavaUtilsSource.methodInvocationStatic
                 @@ JavaDsl.identifier (string "hydra.util.ConsList")
                 @@ JavaDsl.identifier (string "empty")
-                @@ list ([] :: [TTerm Java.Expression]))))
+                @@ list ([] :: [TypedTerm Java.Expression]))))
             ("targs" <<~ (takeTypeArgs @@ string "list" @@ int32 1 @@ var "tyapps" @@ var "cx" @@ var "g") $
               right (JavaUtilsSource.javaMethodInvocationToJavaExpression @@
                 (JavaUtilsSource.methodInvocationStaticWithTypeArgs
                   @@ JavaDsl.identifier (string "hydra.util.ConsList")
                   @@ JavaDsl.identifier (string "empty")
-                  @@ var "targs" @@ list ([] :: [TTerm Java.Expression])))))
+                  @@ var "targs" @@ list ([] :: [TypedTerm Java.Expression])))))
           ("jels" <<~ (Eithers.mapList (var "encode") (var "els")) $
             right (JavaUtilsSource.javaMethodInvocationToJavaExpression @@
               (JavaUtilsSource.methodInvocationStatic
@@ -2943,13 +2933,13 @@ encodeTermInternal = def "encodeTermInternal" $
               (JavaUtilsSource.methodInvocationStatic
                 @@ JavaDsl.identifier (string "hydra.util.PersistentMap")
                 @@ JavaDsl.identifier (string "empty")
-                @@ list ([] :: [TTerm Java.Expression]))))
+                @@ list ([] :: [TypedTerm Java.Expression]))))
             ("targs" <<~ (takeTypeArgs @@ string "map" @@ int32 2 @@ var "tyapps" @@ var "cx" @@ var "g") $
               right (JavaUtilsSource.javaMethodInvocationToJavaExpression @@
                 (JavaUtilsSource.methodInvocationStaticWithTypeArgs
                   @@ JavaDsl.identifier (string "hydra.util.PersistentMap")
                   @@ JavaDsl.identifier (string "empty")
-                  @@ var "targs" @@ list ([] :: [TTerm Java.Expression])))))
+                  @@ var "targs" @@ list ([] :: [TypedTerm Java.Expression])))))
           ("jkeys" <<~ (Eithers.mapList (var "encode") (Maps.keys (var "m"))) $
             "jvals" <<~ (Eithers.mapList (var "encode") (Maps.elems (var "m"))) $
             "pairExprs" <~ Lists.map
@@ -2973,13 +2963,13 @@ encodeTermInternal = def "encodeTermInternal" $
               (JavaUtilsSource.methodInvocationStatic
                 @@ JavaDsl.identifier (string "hydra.util.Maybe")
                 @@ JavaDsl.identifier (string "nothing")
-                @@ list ([] :: [TTerm Java.Expression]))))
+                @@ list ([] :: [TypedTerm Java.Expression]))))
             ("targs" <<~ (takeTypeArgs @@ string "maybe" @@ int32 1 @@ var "tyapps" @@ var "cx" @@ var "g") $
               right (JavaUtilsSource.javaMethodInvocationToJavaExpression @@
                 (JavaUtilsSource.methodInvocationStaticWithTypeArgs
                   @@ JavaDsl.identifier (string "hydra.util.Maybe")
                   @@ JavaDsl.identifier (string "nothing")
-                  @@ var "targs" @@ list ([] :: [TTerm Java.Expression])))))
+                  @@ var "targs" @@ list ([] :: [TypedTerm Java.Expression])))))
           (lambda "term1" $
             "expr" <<~ (var "encode" @@ var "term1") $
             right (JavaUtilsSource.javaMethodInvocationToJavaExpression @@
@@ -3048,7 +3038,7 @@ encodeTermInternal = def "encodeTermInternal" $
                   -- Annotate the field term with the resolved type before encoding
                   "annotatedFieldTerm" <~ (Annotations.setTermAnnotation @@ asTerm Constants.keyType
                     @@ just (encodeTypeAsTerm @@ var "resolvedType") @@ Core.fieldTerm (var "fld")) $
-                  encodeTermInternal @@ var "env" @@ var "anns" @@ list ([] :: [TTerm Java.Type]) @@ var "annotatedFieldTerm" @@ var "cx" @@ var "g"))) $
+                  encodeTermInternal @@ var "env" @@ var "anns" @@ list ([] :: [TypedTerm Java.Type]) @@ var "annotatedFieldTerm" @@ var "cx" @@ var "g"))) $
         "fieldExprs" <<~ (Eithers.mapList (var "encodeField") (Core.recordFields (var "rec"))) $
         "consId" <~ (JavaUtilsSource.nameToJavaName @@ var "aliases" @@ var "recName") $
         "mtargs" <<~ (Logic.ifElse (Logic.not (Lists.null (var "tyapps")))
@@ -3081,13 +3071,13 @@ encodeTermInternal = def "encodeTermInternal" $
               (JavaUtilsSource.methodInvocationStatic
                 @@ JavaDsl.identifier (string "hydra.util.PersistentSet")
                 @@ JavaDsl.identifier (string "empty")
-                @@ list ([] :: [TTerm Java.Expression]))))
+                @@ list ([] :: [TypedTerm Java.Expression]))))
             ("targs" <<~ (takeTypeArgs @@ string "set" @@ int32 1 @@ var "tyapps" @@ var "cx" @@ var "g") $
               right (JavaUtilsSource.javaMethodInvocationToJavaExpression @@
                 (JavaUtilsSource.methodInvocationStaticWithTypeArgs
                   @@ JavaDsl.identifier (string "hydra.util.PersistentSet")
                   @@ JavaDsl.identifier (string "empty")
-                  @@ var "targs" @@ list ([] :: [TTerm Java.Expression])))))
+                  @@ var "targs" @@ list ([] :: [TypedTerm Java.Expression])))))
           ("slist" <~ Sets.toList (var "s") $
             "jels" <<~ (Eithers.mapList (var "encode") (var "slist")) $
             right (JavaUtilsSource.javaMethodInvocationToJavaExpression @@
@@ -3120,7 +3110,7 @@ encodeTermInternal = def "encodeTermInternal" $
         "consId" <~ JavaDsl.identifier (Strings.cat (list [var "typeId", string ".", JavaUtilsSource.sanitizeJavaName @@ (Formatting.capitalize @@ (unwrap _Name @@ var "injFieldName"))])) $
         "fieldIsUnit" <<~ (isFieldUnitType @@ var "injTypeName" @@ var "injFieldName" @@ var "cx" @@ var "g") $
         "args" <<~ (Logic.ifElse (Logic.or (Predicates.isUnitTerm @@ (Strip.deannotateTerm @@ var "injFieldTerm")) (var "fieldIsUnit"))
-          (right (list ([] :: [TTerm Java.Expression])))
+          (right (list ([] :: [TypedTerm Java.Expression])))
           ("ex" <<~ (var "encode" @@ var "injFieldTerm") $
             right (list [var "ex"]))) $
         right (JavaUtilsSource.javaConstructorCall
@@ -3201,7 +3191,7 @@ encodeTermInternal = def "encodeTermInternal" $
                 "encodeEitherBranch" <~ (lambda "branchType" $ lambda "t1" $
                   "annotated" <~ (Annotations.setTermAnnotation @@ asTerm Constants.keyType
                     @@ just (encodeTypeAsTerm @@ var "branchType") @@ var "t1") $
-                  encodeTermInternal @@ var "env" @@ var "anns" @@ list ([] :: [TTerm Java.Type]) @@ var "annotated" @@ var "cx" @@ var "g") $
+                  encodeTermInternal @@ var "env" @@ var "anns" @@ list ([] :: [TypedTerm Java.Type]) @@ var "annotated" @@ var "cx" @@ var "g") $
                 Eithers.either_
                   (lambda "term1" $
                     "expr" <<~ (var "encodeEitherBranch" @@ Pairs.first (var "eitherBranchTypes") @@ var "term1") $
@@ -3228,7 +3218,7 @@ encodeTermInternal = def "encodeTermInternal" $
 --   Returns a list of Java BlockStatements (if/instanceof checks + return/continue).
 --   tcoVarRenames maps original parameter names to snapshot names (e.g. term -> term_tco).
 --   Non-continue paths use the snapshot names so lambdas capture effectively-final variables.
-encodeTermTCO :: TTermDefinition (JavaHelpers.JavaEnvironment -> Name -> [Name] -> M.Map Name Name -> Int -> Term -> Context -> Graph -> Either Error [Java.BlockStatement])
+encodeTermTCO :: TypedTermDefinition (JavaHelpers.JavaEnvironment -> Name -> [Name] -> M.Map Name Name -> Int -> Term -> InferenceContext -> Graph -> Either Error [Java.BlockStatement])
 encodeTermTCO = def "encodeTermTCO" $
   "env0" ~> "funcName" ~> "paramNames" ~> "tcoVarRenames" ~> "tcoDepth" ~> "term" ~>
     "cx" ~> "g" ~>
@@ -3299,7 +3289,7 @@ encodeTermTCO = def "encodeTermTCO" $
         "continueStmt" <~ (JavaDsl.blockStatementStatement
           (JavaDsl.statementWithoutTrailing
             (inject Java._StatementWithoutTrailingSubstatement Java._StatementWithoutTrailingSubstatement_continue
-              (wrap Java._ContinueStatement (nothing :: TTerm (Maybe Java.Identifier)))))) $
+              (wrap Java._ContinueStatement (nothing :: TypedTerm (Maybe Java.Identifier)))))) $
         right $ Lists.concat2 (var "assignments") (list [var "continueStmt"]))
       -- NOT a self-call: check for let-expression or case statement application
       (cases _Term (var "stripped")
@@ -3321,7 +3311,7 @@ encodeTermTCO = def "encodeTermTCO" $
                         "tname" <~ (Core.caseStatementTypeName $ var "cs") $
                         "dflt" <~ (Core.caseStatementDefault $ var "cs") $
                         "cases_" <~ (Core.caseStatementCases $ var "cs") $
-                        "domArgs" <<~ (domTypeArgs @@ var "aliases" @@ (Resolution.nominalApplication @@ var "tname" @@ list ([] :: [TTerm Type])) @@ var "cx" @@ var "g") $
+                        "domArgs" <<~ (domTypeArgs @@ var "aliases" @@ (Resolution.nominalApplication @@ var "tname" @@ list ([] :: [TypedTerm Type])) @@ var "cx" @@ var "g") $
                         -- Encode the argument (the value being matched) and cache in a local variable
                         -- so that complex expressions (e.g. deannotateType(t_tco)) are computed once,
                         -- not duplicated across every instanceof check and cast.
@@ -3341,7 +3331,7 @@ encodeTermTCO = def "encodeTermTCO" $
                             @@ var "tname" @@ just (Formatting.capitalize @@ (Core.unName (var "fieldName")))) $
                           -- Extract the lambda body from this case branch
                           cases _Term (Strip.deannotateTerm @@ Core.fieldTerm (var "field"))
-                            (Just $ Ctx.failInContext (Error.errorOther $ Error.otherError $ string "TCO: case branch is not a lambda") (var "cx")) [
+                            (Just $ left (Error.errorOther $ Error.otherError $ string "TCO: case branch is not a lambda")) [
                             _Term_lambda>>: "lam" ~>
                                   -- Use withLambda to properly set up the lambda context
                                   withLambda @@ var "env" @@ var "lam" @@ (lambda "env2" $
@@ -3409,14 +3399,14 @@ encodeTermTCO = def "encodeTermTCO" $
           right $ Lists.concat2 (var "letStmts") (var "tcoBodyStmts")])
 
 -- | Encode a Hydra type as a Java type
-encodeType :: TTermDefinition (JavaHelpers.Aliases -> S.Set Name -> Type -> Context -> Graph -> Either Error Java.Type)
+encodeType :: TypedTermDefinition (JavaHelpers.Aliases -> S.Set Name -> Type -> InferenceContext -> Graph -> Either Error Java.Type)
 encodeType = def "encodeType" $
   lambda "aliases" $ lambda "boundVars" $ lambda "t" $
     "cx" ~> "g" ~>
     "inScopeTypeParams" <~ project JavaHelpers._Aliases JavaHelpers._Aliases_inScopeTypeParams @@ var "aliases" $
     "typeVarSubst" <~ project JavaHelpers._Aliases JavaHelpers._Aliases_typeVarSubst @@ var "aliases" $
     cases _Type (Strip.deannotateType @@ var "t")
-      (Just $ Ctx.failInContext (Error.errorOther $ Error.otherError $ Strings.cat2 (string "can't encode unsupported type in Java: ") (ShowCore.type_ @@ var "t")) (var "cx")) [
+      (Just $ left (Error.errorOther $ Error.otherError $ Strings.cat2 (string "can't encode unsupported type in Java: ") (ShowCore.type_ @@ var "t"))) [
       _Type_application>>: lambda "at" $
         "jlhs" <<~ (encodeType @@ var "aliases" @@ var "boundVars" @@ (Core.applicationTypeFunction (var "at")) @@ var "cx" @@ var "g") $
         "jrhs" <<~ (Eithers.bind
@@ -3485,17 +3475,17 @@ encodeType = def "encodeType" $
           @@ string "Pair"),
       _Type_unit>>: lambda "_" $
         right (JavaUtilsSource.javaRefType
-          @@ list ([] :: [TTerm Java.ReferenceType])
+          @@ list ([] :: [TypedTerm Java.ReferenceType])
           @@ asTerm JavaNamesSource.javaLangPackageName
           @@ string "Void"),
       _Type_record>>: lambda "rt" $
         Logic.ifElse
           (Lists.null (var "rt"))
           (right (JavaUtilsSource.javaRefType
-            @@ list ([] :: [TTerm Java.ReferenceType])
+            @@ list ([] :: [TypedTerm Java.ReferenceType])
             @@ asTerm JavaNamesSource.javaLangPackageName
             @@ string "Void"))
-          (Ctx.failInContext (Error.errorOther $ Error.otherError (string "unexpected anonymous record type")) (var "cx")),
+          (left (Error.errorOther $ Error.otherError (string "unexpected anonymous record type"))),
       _Type_maybe>>: lambda "ot" $
         "jot" <<~ (Eithers.bind
           (encodeType @@ var "aliases" @@ var "boundVars" @@ var "ot" @@ var "cx" @@ var "g")
@@ -3513,7 +3503,7 @@ encodeType = def "encodeType" $
           @@ asTerm JavaNamesSource.javaUtilPackageName
           @@ string "Set"),
       _Type_union>>: lambda "_" $
-        Ctx.failInContext (Error.errorOther $ Error.otherError (string "unexpected anonymous union type")) (var "cx"),
+        left (Error.errorOther $ Error.otherError (string "unexpected anonymous union type")),
       _Type_variable>>: lambda "name0" $
         -- Apply type variable substitution
         "name" <~ Maybes.fromMaybe (var "name0") (Maps.lookup (var "name0") (var "typeVarSubst")) $
@@ -3533,23 +3523,27 @@ encodeType = def "encodeType" $
                     (inject Java._ReferenceType Java._ReferenceType_classOrInterface
                       (inject Java._ClassOrInterfaceType Java._ClassOrInterfaceType_class
                         (JavaUtilsSource.javaClassType
-                          @@ list ([] :: [TTerm Java.ReferenceType])
+                          @@ list ([] :: [TypedTerm Java.ReferenceType])
                           @@ asTerm JavaNamesSource.javaLangPackageName
                           @@ string "Object"))))
                   -- Named reference
                   (inject Java._Type Java._Type_reference
                     (JavaUtilsSource.nameToJavaReferenceType @@ var "aliases" @@ boolean True
-                      @@ list ([] :: [TTerm Java.TypeArgument])
+                      @@ list ([] :: [TypedTerm Java.TypeArgument])
                       @@ var "name"
                       @@ nothing)))))
           -- Typedef resolved: encode the resolved type
           (lambda "resolvedType" $
             encodeType @@ var "aliases" @@ var "boundVars" @@ var "resolvedType" @@ var "cx" @@ var "g"),
       _Type_wrap>>: lambda "_" $
-        Ctx.failInContext (Error.errorOther $ Error.otherError (string "unexpected anonymous wrap type")) (var "cx")]
+        left (Error.errorOther $ Error.otherError (string "unexpected anonymous wrap type"))]
+
+-- | Reference to the hydra.encode.core.type function (Type -> Term encoder)
+encodeTypeAsTerm :: TypedTerm (Type -> Term)
+encodeTypeAsTerm = TypedTerm $ TermVariable $ Name "hydra.encode.core.type"
 
 -- | Encode a type definition as a Java compilation unit.
-encodeTypeDefinition :: TTermDefinition (Java.PackageDeclaration -> JavaHelpers.Aliases -> TypeDefinition -> Context -> Graph -> Either Error (Name, Java.CompilationUnit))
+encodeTypeDefinition :: TypedTermDefinition (Java.PackageDeclaration -> JavaHelpers.Aliases -> TypeDefinition -> InferenceContext -> Graph -> Either Error (Name, Java.CompilationUnit))
 encodeTypeDefinition = def "encodeTypeDefinition" $
   lambda "pkg" $ lambda "aliases" $ lambda "tdef" $
     "cx" ~> "g" ~>
@@ -3561,9 +3555,9 @@ encodeTypeDefinition = def "encodeTypeDefinition" $
       (list [inject Java._ImportDeclaration Java._ImportDeclaration_singleType
         (wrap Java._SingleTypeImportDeclaration
           (JavaUtilsSource.javaTypeName @@ (JavaDsl.identifier (string "java.io.Serializable"))))])
-      (list ([] :: [TTerm Java.ImportDeclaration])) $
+      (list ([] :: [TypedTerm Java.ImportDeclaration])) $
     "decl" <<~ (toClassDecl @@ false @@ var "serializable" @@ var "aliases"
-      @@ (list ([] :: [TTerm Java.TypeParameter])) @@ var "name" @@ var "typ" @@ var "cx" @@ var "g") $
+      @@ (list ([] :: [TypedTerm Java.TypeParameter])) @@ var "name" @@ var "typ" @@ var "cx" @@ var "g") $
     "comment" <<~ (Annotations.getTypeDescription @@ var "cx" @@ var "g" @@ var "typ") $
     "tdecl" <~ record Java._TopLevelClassOrInterfaceDeclarationWithComments [
       Java._TopLevelClassOrInterfaceDeclarationWithComments_value>>: inject Java._TopLevelClassOrInterfaceDeclaration Java._TopLevelClassOrInterfaceDeclaration_class (var "decl"),
@@ -3575,7 +3569,7 @@ encodeTypeDefinition = def "encodeTypeDefinition" $
         Java._OrdinaryCompilationUnit_types>>: list [var "tdecl"]])))
 
 -- | Resolve a TypeVariable name if it refers to a typedef (simple type alias)
-encodeType_resolveIfTypedef :: TTermDefinition (JavaHelpers.Aliases -> S.Set Name -> S.Set Name -> Name -> Context -> Graph -> Either Error (Maybe Type))
+encodeType_resolveIfTypedef :: TypedTermDefinition (JavaHelpers.Aliases -> S.Set Name -> S.Set Name -> Name -> InferenceContext -> Graph -> Either Error (Maybe Type))
 encodeType_resolveIfTypedef = def "encodeType_resolveIfTypedef" $
   lambda "aliases" $ lambda "boundVars" $ lambda "inScopeTypeParams" $ lambda "name" $
     "cx" ~> "g" ~>
@@ -3596,7 +3590,7 @@ encodeType_resolveIfTypedef = def "encodeType_resolveIfTypedef" $
                   _Type_wrap>>: lambda "_" $ right nothing]))))
 
 -- | Encode a variable reference as a Java expression
-encodeVariable :: TTermDefinition (JavaHelpers.JavaEnvironment -> Name -> Context -> Graph -> Either Error Java.Expression)
+encodeVariable :: TypedTermDefinition (JavaHelpers.JavaEnvironment -> Name -> InferenceContext -> Graph -> Either Error Java.Expression)
 encodeVariable = def "encodeVariable" $
   lambda "env" $ lambda "name" $
     "cx" ~> "g" ~>
@@ -3628,7 +3622,7 @@ encodeVariable = def "encodeVariable" $
           (right (JavaUtilsSource.javaMethodInvocationToJavaExpression @@
             (JavaUtilsSource.methodInvocation @@
               (just (Phantoms.left (JavaDsl.expressionName nothing (var "jid"))))
-              @@ (JavaDsl.identifier (asTerm JavaNamesSource.getMethodName)) @@ (list ([] :: [TTerm Java.Expression])))))
+              @@ (JavaDsl.identifier (asTerm JavaNamesSource.getMethodName)) @@ (list ([] :: [TypedTerm Java.Expression])))))
           -- Thunked variables use .get()
           (Logic.ifElse (Logic.and
               (Sets.member (var "name") (project JavaHelpers._Aliases JavaHelpers._Aliases_thunkedVars @@ var "aliases"))
@@ -3636,7 +3630,7 @@ encodeVariable = def "encodeVariable" $
             (right (JavaUtilsSource.javaMethodInvocationToJavaExpression @@
               (JavaUtilsSource.methodInvocation @@
                 (just (Phantoms.left (JavaDsl.expressionName nothing (var "jid"))))
-                @@ (JavaDsl.identifier (asTerm JavaNamesSource.getMethodName)) @@ (list ([] :: [TTerm Java.Expression])))))
+                @@ (JavaDsl.identifier (asTerm JavaNamesSource.getMethodName)) @@ (list ([] :: [TypedTerm Java.Expression])))))
             -- Lambda-bound variables
             (Logic.ifElse (isLambdaBoundIn @@ var "name" @@ (project JavaHelpers._Aliases JavaHelpers._Aliases_lambdaVars @@ var "aliases"))
               ("actualName" <~ (findMatchingLambdaVar @@ var "name" @@ (project JavaHelpers._Aliases JavaHelpers._Aliases_lambdaVars @@ var "aliases")) $
@@ -3658,12 +3652,12 @@ encodeVariable = def "encodeVariable" $
                    right (JavaUtilsSource.javaMethodInvocationToJavaExpression @@
                      (JavaUtilsSource.methodInvocation @@ nothing @@
                        (elementJavaIdentifier @@ boolean False @@ boolean False @@ var "aliases" @@ var "name") @@
-                       (list ([] :: [TTerm Java.Expression])))),
+                       (list ([] :: [TypedTerm Java.Expression])))),
                  JavaHelpers._JavaSymbolClass_unaryFunction>>: lambda "_" $
                    right (JavaUtilsSource.javaIdentifierToJavaExpression @@ (elementJavaIdentifier @@ boolean False @@ boolean True @@ var "aliases" @@ var "name"))]))))))
 
 -- | Build a curried lambda from a list of parameter names wrapping a call expression
-encodeVariable_buildCurried :: TTermDefinition ([Name] -> Java.Expression -> Java.Expression)
+encodeVariable_buildCurried :: TypedTermDefinition ([Name] -> Java.Expression -> Java.Expression)
 encodeVariable_buildCurried = def "encodeVariable_buildCurried" $
   lambda "params" $ lambda "inner" $
     Maybes.fromMaybe (var "inner") (Maybes.map
@@ -3674,7 +3668,7 @@ encodeVariable_buildCurried = def "encodeVariable_buildCurried" $
       (Lists.uncons (var "params")))
 
 -- | Handle the HoistedLambda case of encodeVariable
-encodeVariable_hoistedLambdaCase :: TTermDefinition (JavaHelpers.Aliases -> Name -> Int -> Context -> Graph -> Either Error Java.Expression)
+encodeVariable_hoistedLambdaCase :: TypedTermDefinition (JavaHelpers.Aliases -> Name -> Int -> InferenceContext -> Graph -> Either Error Java.Expression)
 encodeVariable_hoistedLambdaCase = def "encodeVariable_hoistedLambdaCase" $
   lambda "aliases" $ lambda "name" $ lambda "arity" $
     "cx" ~> "g" ~>
@@ -3705,7 +3699,7 @@ encodeVariable_hoistedLambdaCase = def "encodeVariable_hoistedLambdaCase" $
                 (JavaUtilsSource.javaExpressionToJavaUnaryExpression @@ var "lam")))))
 
 -- | Build an equality clause for a single field in the equals() method.
-eqClause :: TTermDefinition (String -> FieldType -> Java.InclusiveOrExpression)
+eqClause :: TypedTermDefinition (String -> FieldType -> Java.InclusiveOrExpression)
 eqClause = def "eqClause" $
   lambda "tmpName" $ lambda "ft" $ lets [
     "fname">: unwrap _Name @@ Core.fieldTypeName (var "ft"),
@@ -3717,7 +3711,7 @@ eqClause = def "eqClause" $
         (equalsClause @@ var "tmpName" @@ var "fname"))
 
 -- | Objects.equals(this.field, other.field) for null-safe comparison
-equalsClause :: TTermDefinition (String -> String -> Java.InclusiveOrExpression)
+equalsClause :: TypedTermDefinition (String -> String -> Java.InclusiveOrExpression)
 equalsClause = def "equalsClause" $
   lambda "tmpName" $ lambda "fname" $ lets [
     "thisArg">: JavaUtilsSource.javaExpressionNameToJavaExpression
@@ -3729,7 +3723,7 @@ equalsClause = def "equalsClause" $
     "header">: JavaDsl.methodInvocationHeaderComplex
       (JavaDsl.methodInvocationComplex
         (JavaDsl.methodInvocationVariantType (JavaUtilsSource.javaTypeName @@ wrap Java._Identifier (string "java.util.Objects")))
-        (list ([] :: [TTerm Java.TypeArgument]))
+        (list ([] :: [TypedTerm Java.TypeArgument]))
         (wrap Java._Identifier (asTerm JavaNamesSource.equalsMethodName)))] $
     JavaUtilsSource.javaPostfixExpressionToJavaInclusiveOrExpression
       @@ (JavaUtilsSource.javaMethodInvocationToJavaPostfixExpression
@@ -3738,7 +3732,7 @@ equalsClause = def "equalsClause" $
 -- | Try to extract the argument type from a function application.
 -- For a function like a constructor :: a -> Wrapper a with return type Wrapper a,
 -- the argument type is a (the type parameter of the wrapper).
-extractArgType :: TTermDefinition (Type -> Type -> Type)
+extractArgType :: TypedTermDefinition (Type -> Type -> Type)
 extractArgType = def "extractArgType" $
   lambda "_lhs" $ lambda "typ" $
     cases _Type (var "typ")
@@ -3751,16 +3745,16 @@ extractArgType = def "extractArgType" $
 
 -- | Extract input/output pairs for direct variable returns in
 -- "context extension" functions: ... -> V -> X -> V (or W)
-extractDirectReturn :: TTermDefinition (S.Set Name -> Type -> [(Name, Name)])
+extractDirectReturn :: TypedTermDefinition (S.Set Name -> Type -> [(Name, Name)])
 extractDirectReturn = def "extractDirectReturn" $
   lambda "tparamSet" $ lambda "t" $
     extractDirectReturn_go @@ var "tparamSet" @@ var "t"
 
-extractDirectReturn_go :: TTermDefinition (S.Set Name -> Type -> [(Name, Name)])
+extractDirectReturn_go :: TypedTermDefinition (S.Set Name -> Type -> [(Name, Name)])
 extractDirectReturn_go = def "extractDirectReturn_go" $
   lambda "tparamSet" $ lambda "t" $
     cases _Type (Strip.deannotateType @@ var "t")
-      (Just $ list ([] :: [TTerm (Name, Name)])) [
+      (Just $ list ([] :: [TypedTerm (Name, Name)])) [
       _Type_function>>: lambda "ft" $
         "dom" <~ (Strip.deannotateType @@ Core.functionTypeDomain (var "ft")) $
         "cod" <~ Core.functionTypeCodomain (var "ft") $
@@ -3770,71 +3764,71 @@ extractDirectReturn_go = def "extractDirectReturn_go" $
             Logic.ifElse
               (Sets.member (var "inVar") (var "tparamSet"))
               (cases _Type (Strip.deannotateType @@ var "cod")
-                (Just $ list ([] :: [TTerm (Name, Name)])) [
+                (Just $ list ([] :: [TypedTerm (Name, Name)])) [
                 _Type_function>>: lambda "ft2" $
                   "midArg" <~ (Strip.deannotateType @@ Core.functionTypeDomain (var "ft2")) $
                   "retPart" <~ (Strip.deannotateType @@ Core.functionTypeCodomain (var "ft2")) $
                   cases _Type (var "midArg")
                     (Just $
                       cases _Type (var "retPart")
-                        (Just $ list ([] :: [TTerm (Name, Name)])) [
+                        (Just $ list ([] :: [TypedTerm (Name, Name)])) [
                         _Type_variable>>: lambda "outVar" $
                           Logic.ifElse
                             (Sets.member (var "outVar") (var "tparamSet"))
                             (list [pair (var "inVar") (var "outVar")])
-                            (list ([] :: [TTerm (Name, Name)]))]
+                            (list ([] :: [TypedTerm (Name, Name)]))]
                     ) [
                     _Type_variable>>: lambda "midVar" $
                       Logic.ifElse
                         (Sets.member (var "midVar") (var "tparamSet"))
-                        (list ([] :: [TTerm (Name, Name)]))
+                        (list ([] :: [TypedTerm (Name, Name)]))
                         (cases _Type (var "retPart")
-                          (Just $ list ([] :: [TTerm (Name, Name)])) [
+                          (Just $ list ([] :: [TypedTerm (Name, Name)])) [
                           _Type_variable>>: lambda "outVar" $
                             Logic.ifElse
                               (Sets.member (var "outVar") (var "tparamSet"))
                               (list [pair (var "inVar") (var "outVar")])
-                              (list ([] :: [TTerm (Name, Name)]))])]])
+                              (list ([] :: [TypedTerm (Name, Name)]))])]])
               (extractDirectReturn_go @@ var "tparamSet" @@ var "cod")]]
 
 -- | Extract input/output type variable pairs from function-typed parameters.
 -- For a param like (A -> ... -> (B, ...)), extract (A, B) where B is
 -- the first element of a pair return type.
-extractInOutPair :: TTermDefinition (Type -> [(Name, Name)])
+extractInOutPair :: TypedTermDefinition (Type -> [(Name, Name)])
 extractInOutPair = def "extractInOutPair" $
   lambda "t" $
     cases _Type (Strip.deannotateType @@ var "t")
-      (Just $ list ([] :: [TTerm (Name, Name)])) [
+      (Just $ list ([] :: [TypedTerm (Name, Name)])) [
       _Type_function>>: lambda "ft" $
         cases _Type (Strip.deannotateType @@ Core.functionTypeDomain (var "ft"))
-          (Just $ list ([] :: [TTerm (Name, Name)])) [
+          (Just $ list ([] :: [TypedTerm (Name, Name)])) [
           _Type_variable>>: lambda "inVar" $
             "retType" <~ (unwrapReturnType @@ Core.functionTypeCodomain (var "ft")) $
             cases _Type (Strip.deannotateType @@ var "retType")
-              (Just $ list ([] :: [TTerm (Name, Name)])) [
+              (Just $ list ([] :: [TypedTerm (Name, Name)])) [
               _Type_pair>>: lambda "pt" $
                 cases _Type (Strip.deannotateType @@ Core.pairTypeFirst (var "pt"))
-                  (Just $ list ([] :: [TTerm (Name, Name)])) [
+                  (Just $ list ([] :: [TypedTerm (Name, Name)])) [
                   _Type_variable>>: lambda "outVar" $
                     list [pair (var "inVar") (var "outVar")]]]]]
 
 -- | Extract input/output pairs for direct variable returns in
 
-extractTypeApplicationArgs :: TTermDefinition (Type -> [Type])
+extractTypeApplicationArgs :: TypedTermDefinition (Type -> [Type])
 extractTypeApplicationArgs = def "extractTypeApplicationArgs" $
   lambda "typ" $ Lists.reverse (extractTypeApplicationArgs_go @@ var "typ")
 
-extractTypeApplicationArgs_go :: TTermDefinition (Type -> [Type])
+extractTypeApplicationArgs_go :: TypedTermDefinition (Type -> [Type])
 extractTypeApplicationArgs_go = def "extractTypeApplicationArgs_go" $
   lambda "t" $ cases _Type (var "t")
-    (Just $ list ([] :: [TTerm Type])) [
+    (Just $ list ([] :: [TypedTerm Type])) [
     _Type_application>>: lambda "at" $
       Lists.cons
         (Core.applicationTypeArgument (var "at"))
         (extractTypeApplicationArgs_go @@ (Core.applicationTypeFunction (var "at")))]
 
 -- | Convert a field type to a Java formal parameter
-fieldTypeToFormalParam :: TTermDefinition (JavaHelpers.Aliases -> FieldType -> Context -> Graph -> Either Error Java.FormalParameter)
+fieldTypeToFormalParam :: TypedTermDefinition (JavaHelpers.Aliases -> FieldType -> InferenceContext -> Graph -> Either Error Java.FormalParameter)
 fieldTypeToFormalParam = def "fieldTypeToFormalParam" $
   lambda "aliases" $ lambda "ft" $
     "cx" ~> "g" ~>
@@ -3842,7 +3836,7 @@ fieldTypeToFormalParam = def "fieldTypeToFormalParam" $
     right (JavaUtilsSource.javaTypeToJavaFormalParameter @@ var "jt" @@ Core.fieldTypeName (var "ft"))
 
 -- | Select elements from a list where the corresponding flag is True.
-filterByFlags :: TTermDefinition ([a] -> [Bool] -> [a])
+filterByFlags :: TypedTermDefinition ([a] -> [Bool] -> [a])
 filterByFlags = def "filterByFlags" $
   lambda "xs" $ lambda "flags" $
     Lists.map (lambda "p" $ Pairs.first (var "p"))
@@ -3851,7 +3845,7 @@ filterByFlags = def "filterByFlags" $
 
 -- | Filter type arguments to remove those at positions corresponding to phantom
 -- or over-generalized scheme variables.
-filterPhantomTypeArgs :: TTermDefinition (Name -> [Type] -> Context -> Graph -> Either Error [Type])
+filterPhantomTypeArgs :: TypedTermDefinition (Name -> [Type] -> InferenceContext -> Graph -> Either Error [Type])
 filterPhantomTypeArgs = def "filterPhantomTypeArgs" $
   lambda "calleeName" $ lambda "allTypeArgs" $
     "cx" ~> "g" ~>
@@ -3881,7 +3875,7 @@ filterPhantomTypeArgs = def "filterPhantomTypeArgs" $
               (right (filterPhantomTypeArgs_filterAndApply @@ var "allTypeArgs" @@ var "keepFlags" @@ var "overgenSubst"))))
 
 -- | Helper: given type args, keep-flags, and overgen subst, filter and apply.
-filterPhantomTypeArgs_filterAndApply :: TTermDefinition ([Type] -> [Bool] -> M.Map Name Type -> [Type])
+filterPhantomTypeArgs_filterAndApply :: TypedTermDefinition ([Type] -> [Bool] -> M.Map Name Type -> [Type])
 filterPhantomTypeArgs_filterAndApply = def "filterPhantomTypeArgs_filterAndApply" $
   lambda "allTypeArgs" $ lambda "keepFlags" $ lambda "overgenSubst" $
     "filtered" <~ Lists.map
@@ -3894,7 +3888,7 @@ filterPhantomTypeArgs_filterAndApply = def "filterPhantomTypeArgs_filterAndApply
       (var "filtered")
 
 -- | Find the actual lambda variable name that matches a given reference
-findMatchingLambdaVar :: TTermDefinition (Name -> S.Set Name -> Name)
+findMatchingLambdaVar :: TypedTermDefinition (Name -> S.Set Name -> Name)
 findMatchingLambdaVar = def "findMatchingLambdaVar" $
   lambda "name" $ lambda "lambdaVars" $
     Logic.ifElse (Sets.member (var "name") (var "lambdaVars"))
@@ -3914,7 +3908,7 @@ findMatchingLambdaVar = def "findMatchingLambdaVar" $
           (var "name")))
 
 -- | Extract the type variable from the first element of a pair type.
-findPairFirst :: TTermDefinition (Type -> Maybe Name)
+findPairFirst :: TypedTermDefinition (Type -> Maybe Name)
 findPairFirst = def "findPairFirst" $
   lambda "t" $
     cases _Type (Strip.deannotateType @@ var "t")
@@ -3925,23 +3919,23 @@ findPairFirst = def "findPairFirst" $
           _Type_variable>>: lambda "v" $ just (var "v")]]
 
 -- | Find the first self-referencing input var in a grouped map.
-findSelfRefVar :: TTermDefinition (M.Map Name [Name] -> Maybe Name)
+findSelfRefVar :: TypedTermDefinition (M.Map Name [Name] -> Maybe Name)
 findSelfRefVar = def "findSelfRefVar" $
   lambda "grouped" $
     "selfRefs" <~ Lists.filter
-      (lambda "entry" $ (Lists.elem :: TTerm Name -> TTerm [Name] -> TTerm Bool) (Pairs.first (var "entry")) (Pairs.second (var "entry")))
+      (lambda "entry" $ (Lists.elem :: TypedTerm Name -> TypedTerm [Name] -> TypedTerm Bool) (Pairs.first (var "entry")) (Pairs.second (var "entry")))
       (Maps.toList (var "grouped")) $
     Maybes.map (lambda "entry" $ Pairs.first (var "entry")) (Lists.maybeHead (var "selfRefs"))
 
 -- | First 20 prime numbers used as hash code multipliers.
-first20Primes :: TTermDefinition [Int]
+first20Primes :: TypedTermDefinition [Int]
 first20Primes = def "first20Primes" $
   list (fmap bigintAsInt [bigint 2, bigint 3, bigint 5, bigint 7, bigint 11, bigint 13, bigint 17, bigint 19,
     bigint 23, bigint 29, bigint 31, bigint 37, bigint 41, bigint 43, bigint 47, bigint 53, bigint 59,
     bigint 61, bigint 67, bigint 71])
 
 -- | Flatten a nested application chain f(a1)(a2)...(aN) into ([a1,...,aN], f).
-flattenApps :: TTermDefinition (Term -> [Term] -> ([Term], Term))
+flattenApps :: TypedTermDefinition (Term -> [Term] -> ([Term], Term))
 flattenApps = def "flattenApps" $
   lambda "t" $ lambda "acc" $
     cases _Term (Strip.deannotateTerm @@ var "t")
@@ -3952,7 +3946,7 @@ flattenApps = def "flattenApps" $
           @@ Lists.cons (project _Application _Application_argument @@ var "app") (var "acc")]
 
 -- | Flatten nested TermLet into a flat list of Bindings.
-flattenBindings :: TTermDefinition ([Binding] -> [Binding])
+flattenBindings :: TypedTermDefinition ([Binding] -> [Binding])
 flattenBindings = def "flattenBindings" $
   lambda "bindings" $
     Lists.bind (var "bindings") (lambda "b" $
@@ -3964,12 +3958,12 @@ flattenBindings = def "flattenBindings" $
             (list [Core.binding (Core.bindingName (var "b")) (Core.letBody (var "lt")) (Core.bindingTypeScheme (var "b"))])])
 
 -- | Generate a unique name by appending increasing integers, avoiding a given set.
-freshJavaName :: TTermDefinition (Name -> S.Set Name -> Name)
+freshJavaName :: TypedTermDefinition (Name -> S.Set Name -> Name)
 freshJavaName = def "freshJavaName" $
   lambda "base" $ lambda "avoid" $
     freshJavaName_go @@ var "base" @@ var "avoid" @@ int32 2
 
-freshJavaName_go :: TTermDefinition (Name -> S.Set Name -> Int -> Name)
+freshJavaName_go :: TypedTermDefinition (Name -> S.Set Name -> Int -> Name)
 freshJavaName_go = def "freshJavaName_go" $
   lambda "base" $ lambda "avoid" $ lambda "i" $
     "candidate" <~ Core.name (Strings.cat2 (Core.unName (var "base")) (Literals.showInt32 (var "i"))) $
@@ -3979,7 +3973,7 @@ freshJavaName_go = def "freshJavaName_go" $
       (var "candidate")
 
 -- | Generate a method invocation for a function call.
-functionCall :: TTermDefinition (JavaHelpers.JavaEnvironment -> Bool -> Name -> [Term] -> [Type] -> Context -> Graph -> Either Error Java.Expression)
+functionCall :: TypedTermDefinition (JavaHelpers.JavaEnvironment -> Bool -> Name -> [Term] -> [Type] -> InferenceContext -> Graph -> Either Error Java.Expression)
 functionCall = def "functionCall" $
   lambda "env" $ lambda "isPrim" $ lambda "name" $ lambda "args" $ lambda "typeApps" $
     "cx" ~> "g" ~>
@@ -3988,7 +3982,7 @@ functionCall = def "functionCall" $
       @@ (project JavaHelpers._Aliases JavaHelpers._Aliases_lambdaVars @@ var "aliases")) $
     -- Encode arguments and generate method invocation
     ("jargs0" <<~ (Eithers.mapList (lambda "arg" $ encodeTerm @@ var "env" @@ var "arg" @@ var "cx" @@ var "g") (var "args")) $
-        "wrapResult" <~ (wrapLazyArguments @@ var "name" @@ var "jargs0") $
+        "wrapResult" <~ (wrapLazyArguments @@ var "g" @@ var "name" @@ var "jargs0") $
         "jargs" <~ Pairs.first (var "wrapResult") $
         "mMethodOverride" <~ Pairs.second (var "wrapResult") $
         Logic.ifElse (Logic.or (isLocalVariable @@ var "name") (var "isLambdaBound"))
@@ -4039,7 +4033,7 @@ functionCall = def "functionCall" $
                       (JavaUtilsSource.methodInvocationStaticWithTypeArgs @@ var "classId" @@ var "methodId" @@ var "jTypeArgs" @@ var "jargs"))))))
 
 -- | Get the codomain type from annotations
-getCodomain :: TTermDefinition (M.Map Name Term -> Context -> Graph -> Either Error Type)
+getCodomain :: TypedTermDefinition (M.Map Name Term -> InferenceContext -> Graph -> Either Error Type)
 getCodomain = def "getCodomain" $
   lambda "ann" $
     "cx" ~> "g" ~>
@@ -4048,19 +4042,26 @@ getCodomain = def "getCodomain" $
       (getFunctionType @@ var "ann" @@ var "cx" @@ var "g")
 
 -- | Get the function type from annotations
-getFunctionType :: TTermDefinition (M.Map Name Term -> Context -> Graph -> Either Error FunctionType)
+getFunctionType :: TypedTermDefinition (M.Map Name Term -> InferenceContext -> Graph -> Either Error FunctionType)
 getFunctionType = def "getFunctionType" $
   lambda "ann" $
     "cx" ~> "g" ~>
     "mt" <<~ (getTypeE (var "cx") (var "g") (var "ann")) $
     Maybes.cases (var "mt")
-      (Ctx.failInContext (Error.errorOther $ Error.otherError $ string "type annotation is required for function and elimination terms in Java") (var "cx"))
+      (left (Error.errorOther $ Error.otherError $ string "type annotation is required for function and elimination terms in Java"))
       (lambda "t" $ cases _Type (var "t")
-        (Just $ Ctx.failInContext (Error.errorOther $ Error.otherError $ Strings.cat2 (string "expected function type, got: ") (ShowCore.type_ @@ var "t")) (var "cx")) [
+        (Just $ left (Error.errorOther $ Error.otherError $ Strings.cat2 (string "expected function type, got: ") (ShowCore.type_ @@ var "t"))) [
         _Type_function>>: lambda "ft" $ right (var "ft")])
 
+-- | Get a type annotation, converting DecodingError to Error.
+getTypeE :: TypedTerm InferenceContext -> TypedTerm Graph -> TypedTerm (M.Map Name Term) -> TypedTerm (Either Error (Maybe Type))
+getTypeE cx g ann = Eithers.bimap
+  ("__de" ~> Error.errorOther (Error.otherError ((unwrap _DecodingError) @@ var "__de")))
+  ("__a" ~> var "__a")
+  (Annotations.getType @@ g @@ ann)
+
 -- | Group pairs by their first element, collecting second elements into lists.
-groupPairsByFirst :: TTermDefinition ([(Name, Name)] -> M.Map Name [Name])
+groupPairsByFirst :: TypedTermDefinition ([(Name, Name)] -> M.Map Name [Name])
 groupPairsByFirst = def "groupPairsByFirst" $
   lambda "pairs" $
     Lists.foldl
@@ -4079,34 +4080,34 @@ groupPairsByFirst = def "groupPairsByFirst" $
       (var "pairs")
 
 -- | Shared helper: Integer.compare(this.field.hashCode(), otherVar.field.hashCode())
-hashCodeCompareExpr :: TTermDefinition (String -> String -> Java.Expression)
+hashCodeCompareExpr :: TypedTermDefinition (String -> String -> Java.Expression)
 hashCodeCompareExpr = def "hashCodeCompareExpr" $
   lambda "otherVar" $ lambda "fname" $ lets [
     "header">: JavaDsl.methodInvocationHeaderComplex
       (JavaDsl.methodInvocationComplex
         (JavaDsl.methodInvocationVariantType (JavaUtilsSource.javaTypeName @@ wrap Java._Identifier (string "Integer")))
-        (list ([] :: [TTerm Java.TypeArgument]))
+        (list ([] :: [TypedTerm Java.TypeArgument]))
         (wrap Java._Identifier (string "compare"))),
     "thisHashCode">: JavaUtilsSource.javaMethodInvocationToJavaExpression @@ (JavaDsl.methodInvocation_
       (JavaDsl.methodInvocationHeaderComplex
         (JavaDsl.methodInvocationComplex
           (JavaDsl.methodInvocationVariantExpression
             (JavaDsl.expressionName nothing (wrap Java._Identifier (JavaUtilsSource.sanitizeJavaName @@ var "fname"))))
-          (list ([] :: [TTerm Java.TypeArgument]))
+          (list ([] :: [TypedTerm Java.TypeArgument]))
           (wrap Java._Identifier (asTerm JavaNamesSource.hashCodeMethodName))))
-      (list ([] :: [TTerm Java.Expression]))),
+      (list ([] :: [TypedTerm Java.Expression]))),
     "otherHashCode">: JavaUtilsSource.javaMethodInvocationToJavaExpression @@ (JavaDsl.methodInvocation_
       (JavaDsl.methodInvocationHeaderComplex
         (JavaDsl.methodInvocationComplex
           (JavaDsl.methodInvocationVariantExpression
             (JavaUtilsSource.fieldExpression @@ (JavaUtilsSource.javaIdentifier @@ var "otherVar") @@ (JavaUtilsSource.javaIdentifier @@ var "fname")))
-          (list ([] :: [TTerm Java.TypeArgument]))
+          (list ([] :: [TypedTerm Java.TypeArgument]))
           (wrap Java._Identifier (asTerm JavaNamesSource.hashCodeMethodName))))
-      (list ([] :: [TTerm Java.Expression])))] $
+      (list ([] :: [TypedTerm Java.Expression])))] $
     JavaUtilsSource.javaMethodInvocationToJavaExpression @@ (JavaDsl.methodInvocation_ (var "header") (list [var "thisHashCode", var "otherHashCode"]))
 
 -- | Build a hashCode multiplier pair: prime * Objects.hashCode(field)
-hashCodeMultPair :: TTermDefinition (Int -> Name -> Java.MultiplicativeExpression)
+hashCodeMultPair :: TypedTermDefinition (Int -> Name -> Java.MultiplicativeExpression)
 hashCodeMultPair = def "hashCodeMultPair" $
   lambda "i" $ lambda "fname" $ lets [
     "fnameStr">: unwrap _Name @@ var "fname",
@@ -4120,7 +4121,7 @@ hashCodeMultPair = def "hashCodeMultPair" $
             (JavaDsl.methodInvocationComplex
               (JavaDsl.methodInvocationVariantType
                 (JavaUtilsSource.javaTypeName @@ wrap Java._Identifier (string "java.util.Objects")))
-              (list ([] :: [TTerm Java.TypeArgument]))
+              (list ([] :: [TypedTerm Java.TypeArgument]))
               (wrap Java._Identifier (asTerm JavaNamesSource.hashCodeMethodName))))
           (list [JavaUtilsSource.javaExpressionNameToJavaExpression
             @@ (JavaDsl.expressionName nothing
@@ -4129,14 +4130,14 @@ hashCodeMultPair = def "hashCodeMultPair" $
       (JavaDsl.multiplicativeExpressionBinary (var "lhs") (var "rhs"))
 
 -- | Create a qualified reference to an inner class member
-innerClassRef :: TTermDefinition (JavaHelpers.Aliases -> Name -> String -> Java.Identifier)
+innerClassRef :: TypedTermDefinition (JavaHelpers.Aliases -> Name -> String -> Java.Identifier)
 innerClassRef = def "innerClassRef" $
   lambda "aliases" $ lambda "name" $ lambda "local" $ lets [
     "id">: unwrap Java._Identifier @@ (JavaUtilsSource.nameToJavaName @@ var "aliases" @@ var "name")] $
     wrap Java._Identifier (Strings.cat2 (Strings.cat2 (var "id") (string ".")) (var "local"))
 
 -- | Insert a branch variable into the environment
-insertBranchVar :: TTermDefinition (Name -> JavaHelpers.JavaEnvironment -> JavaHelpers.JavaEnvironment)
+insertBranchVar :: TypedTermDefinition (Name -> JavaHelpers.JavaEnvironment -> JavaHelpers.JavaEnvironment)
 insertBranchVar = def "insertBranchVar" $
   lambda "name" $ lambda "env" $ lets [
     "aliases">: project JavaHelpers._JavaEnvironment JavaHelpers._JavaEnvironment_aliases @@ var "env"] $
@@ -4173,31 +4174,31 @@ insertBranchVar = def "insertBranchVar" $
 
 -- | Compute the list of interface types for a Java class declaration.
 --   If serializable, includes both Serializable and Comparable<Self>.
-interfaceTypes :: TTermDefinition (Bool -> JavaHelpers.Aliases -> [Java.TypeParameter] -> Name -> [Java.InterfaceType])
+interfaceTypes :: TypedTermDefinition (Bool -> JavaHelpers.Aliases -> [Java.TypeParameter] -> Name -> [Java.InterfaceType])
 interfaceTypes = def "interfaceTypes" $
   lambda "isSer" $ lambda "aliases" $ lambda "tparams" $ lambda "elName" $ lets [
     "javaSerializableType">: JavaDsl.interfaceType
       (JavaDsl.classType
-        (list ([] :: [TTerm Java.Annotation]))
+        (list ([] :: [TypedTerm Java.Annotation]))
         JavaDsl.classTypeQualifierNone
         (JavaUtilsSource.javaTypeIdentifier @@ string "Serializable")
-        (list ([] :: [TTerm Java.TypeArgument]))),
+        (list ([] :: [TypedTerm Java.TypeArgument]))),
     "selfTypeArg">: (JavaDsl.typeArgumentReference
       (JavaUtilsSource.nameToJavaReferenceType @@ var "aliases" @@ boolean False
         @@ Lists.map (lambda "tp_" $ JavaUtilsSource.typeParameterToTypeArgument @@ var "tp_") (var "tparams")
-        @@ var "elName" @@ nothing) :: TTerm Java.TypeArgument),
+        @@ var "elName" @@ nothing) :: TypedTerm Java.TypeArgument),
     "javaComparableType">: JavaDsl.interfaceType
       (JavaDsl.classType
-        (list ([] :: [TTerm Java.Annotation]))
+        (list ([] :: [TypedTerm Java.Annotation]))
         JavaDsl.classTypeQualifierNone
         (JavaUtilsSource.javaTypeIdentifier @@ string "Comparable")
         (list [var "selfTypeArg"]))] $
     Logic.ifElse (var "isSer")
       (list [var "javaSerializableType", var "javaComparableType"])
-      (list ([] :: [TTerm Java.InterfaceType]))
+      (list ([] :: [TypedTerm Java.InterfaceType]))
 
 -- | Check whether a Hydra type maps to BigDecimal or BigInteger in Java
-isBigNumericType :: TTermDefinition (Type -> Bool)
+isBigNumericType :: TypedTermDefinition (Type -> Bool)
 isBigNumericType = def "isBigNumericType" $
   lambda "typ" $ cases _Type (Strip.deannotateType @@ var "typ")
     (Just $ boolean False) [
@@ -4209,7 +4210,7 @@ isBigNumericType = def "isBigNumericType" $
             _IntegerType_bigint>>: constant $ boolean True]]]
 
 -- | Check whether a Hydra type is the binary literal type (maps to byte[])
-isBinaryType :: TTermDefinition (Type -> Bool)
+isBinaryType :: TypedTermDefinition (Type -> Bool)
 isBinaryType = def "isBinaryType" $
   lambda "typ" $ cases _Type (Strip.deannotateType @@ var "typ")
     (Just $ boolean False) [
@@ -4218,7 +4219,7 @@ isBinaryType = def "isBinaryType" $
         _LiteralType_binary>>: constant $ boolean True]]
 
 -- | Check if a union variant field's type is a unit type, by looking up the union type schema.
-isFieldUnitType :: TTermDefinition (Name -> Name -> Context -> Graph -> Either Error Bool)
+isFieldUnitType :: TypedTermDefinition (Name -> Name -> InferenceContext -> Graph -> Either Error Bool)
 isFieldUnitType = def "isFieldUnitType" $
   lambda "typeName" $ lambda "fieldName" $
     "cx" ~> "g" ~>
@@ -4236,7 +4237,7 @@ isFieldUnitType = def "isFieldUnitType" $
               (lambda "ft" $ Predicates.isUnitType @@ (Strip.deannotateType @@ Core.fieldTypeType (var "ft"))))])
 
 -- | Check if a name (possibly qualified) is lambda-bound
-isLambdaBoundIn :: TTermDefinition (Name -> S.Set Name -> Bool)
+isLambdaBoundIn :: TypedTermDefinition (Name -> S.Set Name -> Bool)
 isLambdaBoundIn = def "isLambdaBoundIn" $
   lambda "name" $ lambda "lambdaVars" $
     Logic.or (Sets.member (var "name") (var "lambdaVars"))
@@ -4255,25 +4256,25 @@ isLambdaBoundIn = def "isLambdaBoundIn" $
           (Sets.member (wrap _Name (Names.localNameOf @@ var "name")) (var "lambdaVars"))))
 
 -- | Helper: check if a name is qualified (has a namespace)
-isLambdaBoundIn_isQualified :: TTermDefinition (Name -> Bool)
+isLambdaBoundIn_isQualified :: TypedTermDefinition (Name -> Bool)
 isLambdaBoundIn_isQualified = def "isLambdaBoundIn_isQualified" $
   lambda "n" $ Maybes.isJust (Packaging.qualifiedNameModuleName (Names.qualifyName @@ var "n"))
 
 -- | Check if a name (possibly qualified) is lambda-bound
 
-isLambdaBoundVariable :: TTermDefinition (Name -> Bool)
+isLambdaBoundVariable :: TypedTermDefinition (Name -> Bool)
 isLambdaBoundVariable = def "isLambdaBoundVariable" $
   lambda "name" $ lets [
     "v">: Core.unName $ var "name"] $
     Equality.lte (Strings.length (var "v")) (int32 4)
 
-isLocalVariable :: TTermDefinition (Name -> Bool)
+isLocalVariable :: TypedTermDefinition (Name -> Bool)
 isLocalVariable = def "isLocalVariable" $
   lambda "name" $ Maybes.isNothing
     (Packaging.qualifiedNameModuleName (Names.qualifyName @@ var "name"))
 
 -- | Check whether a Hydra type maps to a Java type that does not implement Comparable
-isNonComparableType :: TTermDefinition (Type -> Bool)
+isNonComparableType :: TypedTermDefinition (Type -> Bool)
 isNonComparableType = def "isNonComparableType" $
   lambda "typ" $ cases _Type (Strip.deannotateType @@ var "typ")
     (Just $ boolean False) [
@@ -4287,7 +4288,7 @@ isNonComparableType = def "isNonComparableType" $
       isNonComparableType @@ (Core.forallTypeBody (var "ft"))]
 
 -- | Check if a variable is recursive (self-referencing) in the current context
-isRecursiveVariable :: TTermDefinition (JavaHelpers.Aliases -> Name -> Bool)
+isRecursiveVariable :: TypedTermDefinition (JavaHelpers.Aliases -> Name -> Bool)
 isRecursiveVariable = def "isRecursiveVariable" $
   lambda "aliases" $ lambda "name" $
     Sets.member (var "name")
@@ -4296,12 +4297,12 @@ isRecursiveVariable = def "isRecursiveVariable" $
 -- | Check whether a type is "serializable" (record, union, wrap, or forall wrapping a serializable type).
 -- These are the types that get promoted to Java class declarations.
 -- Delegates to the shared isNominalType in Predicates.
-isSerializableJavaType :: TTermDefinition (Type -> Bool)
+isSerializableJavaType :: TypedTermDefinition (Type -> Bool)
 isSerializableJavaType = def "isSerializableJavaType" $
   lambda "typ" $ Predicates.isNominalType @@ var "typ"
 
 -- | Check if a Name is simple (unqualified, no dots).
-isSimpleName :: TTermDefinition (Name -> Bool)
+isSimpleName :: TypedTermDefinition (Name -> Bool)
 isSimpleName = def "isSimpleName" $
   lambda "name" $
     Equality.equal
@@ -4310,7 +4311,7 @@ isSimpleName = def "isSimpleName" $
 
 -- | Check if a name looks like an unresolved type inference variable.
 -- These are generated by the type inference engine and have the form 't' followed by digits.
-isUnresolvedInferenceVar :: TTermDefinition (Name -> Bool)
+isUnresolvedInferenceVar :: TypedTermDefinition (Name -> Bool)
 isUnresolvedInferenceVar = def "isUnresolvedInferenceVar" $
   lambda "name" $
     "chars" <~ Strings.toList (unwrap _Name @@ var "name") $
@@ -4328,40 +4329,40 @@ isUnresolvedInferenceVar = def "isUnresolvedInferenceVar" $
               (var "rest"))))
       (Lists.uncons (var "chars")))
 
-isUnresolvedInferenceVar_isDigit :: TTermDefinition (Int -> Bool)
+isUnresolvedInferenceVar_isDigit :: TypedTermDefinition (Int -> Bool)
 isUnresolvedInferenceVar_isDigit = def "isUnresolvedInferenceVar_isDigit" $
   lambda "c" $
     Logic.and (Equality.gte (var "c") (int32 48)) (Equality.lte (var "c") (int32 57))
 
 -- | Classify a data term by its symbol class (constant, nullary function, hoisted lambda, etc.)
 
-java11Features :: TTermDefinition JavaHelpers.JavaFeatures
+java11Features :: TypedTermDefinition JavaHelpers.JavaFeatures
 java11Features = def "java11Features" $
   record JavaHelpers._JavaFeatures [
     JavaHelpers._JavaFeatures_supportsDiamondOperator>>: boolean True]
 
-java8Features :: TTermDefinition JavaHelpers.JavaFeatures
+java8Features :: TypedTermDefinition JavaHelpers.JavaFeatures
 java8Features = def "java8Features" $
   record JavaHelpers._JavaFeatures [
     JavaHelpers._JavaFeatures_supportsDiamondOperator>>: boolean False]
 
 -- | Shared helper: reference type for Comparable, used in cast expressions for compareTo
-javaComparableRefType :: TTermDefinition Java.ReferenceType
+javaComparableRefType :: TypedTermDefinition Java.ReferenceType
 javaComparableRefType = def "javaComparableRefType" $
   JavaDsl.referenceTypeClassOrInterface (JavaDsl.classOrInterfaceTypeClass
     (JavaDsl.classType
-      (list ([] :: [TTerm Java.Annotation]))
+      (list ([] :: [TypedTerm Java.Annotation]))
       JavaDsl.classTypeQualifierNone
       (JavaUtilsSource.javaTypeIdentifier @@ string "Comparable")
-      (list ([] :: [TTerm Java.TypeArgument]))))
+      (list ([] :: [TypedTerm Java.TypeArgument]))))
 
 -- | Get Graph from JavaEnvironment
-javaEnvGetGraph :: TTermDefinition (JavaHelpers.JavaEnvironment -> Graph)
+javaEnvGetGraph :: TypedTermDefinition (JavaHelpers.JavaEnvironment -> Graph)
 javaEnvGetGraph = def "javaEnvGetGraph" $
   lambda "env" $ project JavaHelpers._JavaEnvironment JavaHelpers._JavaEnvironment_graph @@ var "env"
 
 -- | Set Graph in JavaEnvironment (preserving other fields)
-javaEnvSetGraph :: TTermDefinition (Graph -> JavaHelpers.JavaEnvironment -> JavaHelpers.JavaEnvironment)
+javaEnvSetGraph :: TypedTermDefinition (Graph -> JavaHelpers.JavaEnvironment -> JavaHelpers.JavaEnvironment)
 javaEnvSetGraph = def "javaEnvSetGraph" $
   lambda "g" $ lambda "env" $
     record JavaHelpers._JavaEnvironment [
@@ -4371,16 +4372,16 @@ javaEnvSetGraph = def "javaEnvSetGraph" $
 
 -- | Analyze a Java function term, collecting lambdas, type lambdas, lets, and type applications
 
-javaFeatures :: TTermDefinition JavaHelpers.JavaFeatures
+javaFeatures :: TypedTermDefinition JavaHelpers.JavaFeatures
 javaFeatures = def "javaFeatures" $
   asTerm java11Features
 
-javaIdentifierToString :: TTermDefinition (Java.Identifier -> String)
+javaIdentifierToString :: TypedTermDefinition (Java.Identifier -> String)
 javaIdentifierToString = def "javaIdentifierToString" $
   lambda "id" $ unwrap Java._Identifier @@ var "id"
 
 -- | Get type arguments for a named type by looking up its definition
-javaTypeArgumentsForNamedType :: TTermDefinition (Name -> Context -> Graph -> Either Error [Java.TypeArgument])
+javaTypeArgumentsForNamedType :: TypedTermDefinition (Name -> InferenceContext -> Graph -> Either Error [Java.TypeArgument])
 javaTypeArgumentsForNamedType = def "javaTypeArgumentsForNamedType" $
   lambda "tname" $
     "cx" ~> "g" ~>
@@ -4390,12 +4391,12 @@ javaTypeArgumentsForNamedType = def "javaTypeArgumentsForNamedType" $
 
 -- | Helper: convert a Java literal to a Java expression
 
-javaTypeArgumentsForType :: TTermDefinition (Type -> [Java.TypeArgument])
+javaTypeArgumentsForType :: TypedTermDefinition (Type -> [Java.TypeArgument])
 javaTypeArgumentsForType = def "javaTypeArgumentsForType" $
   lambda "typ" $ Lists.reverse
     (Lists.map JavaUtilsSource.typeParameterToTypeArgument (javaTypeParametersForType @@ var "typ"))
 
-javaTypeParametersForType :: TTermDefinition (Type -> [Java.TypeParameter])
+javaTypeParametersForType :: TypedTermDefinition (Type -> [Java.TypeParameter])
 javaTypeParametersForType = def "javaTypeParametersForType" $
   lambda "typ" $ lets [
     "toParam">: lambda "name" $
@@ -4403,20 +4404,20 @@ javaTypeParametersForType = def "javaTypeParametersForType" $
     "boundVars">: javaTypeParametersForType_bvars @@ var "typ",
     "freeVars">: Lists.filter (lambda "v" $ isLambdaBoundVariable @@ var "v")
       (Sets.toList (Variables.freeVariablesInType @@ var "typ")),
-    "vars">: (Lists.nub :: TTerm [Name] -> TTerm [Name]) (Lists.concat2 (var "boundVars") (var "freeVars"))] $
+    "vars">: (Lists.nub :: TypedTerm [Name] -> TypedTerm [Name]) (Lists.concat2 (var "boundVars") (var "freeVars"))] $
     Lists.map (var "toParam") (var "vars")
 
-javaTypeParametersForType_bvars :: TTermDefinition (Type -> [Name])
+javaTypeParametersForType_bvars :: TypedTermDefinition (Type -> [Name])
 javaTypeParametersForType_bvars = def "javaTypeParametersForType_bvars" $
   lambda "t" $ cases _Type (var "t")
-    (Just $ list ([] :: [TTerm Name])) [
+    (Just $ list ([] :: [TypedTerm Name])) [
     _Type_forall>>: lambda "ft" $
       Lists.cons
         (Core.forallTypeParameter (var "ft"))
         (javaTypeParametersForType_bvars @@ (Core.forallTypeBody (var "ft")))]
 
 -- | Top-level entry point: convert a module to Java source files.
-moduleToJava :: TTermDefinition (Module -> [Definition] -> Context -> Graph -> Either Error (M.Map FilePath String))
+moduleToJava :: TypedTermDefinition (Module -> [Definition] -> InferenceContext -> Graph -> Either Error (M.Map FilePath String))
 moduleToJava = def "moduleToJava" $
   lambda "mod" $ lambda "defs" $
     "cx" ~> "g" ~>
@@ -4430,24 +4431,24 @@ moduleToJava = def "moduleToJava" $
         (Maps.toList (var "units")))))
 
 -- | Convert Name->Name map to Name->Type map (wrapping values as TypeVariable)
-nameMapToTypeMap :: TTermDefinition (M.Map Name Name -> M.Map Name Type)
+nameMapToTypeMap :: TypedTermDefinition (M.Map Name Name -> M.Map Name Type)
 nameMapToTypeMap = def "nameMapToTypeMap" $
   lambda "m" $
     Maps.map (lambda "v" $ Core.typeVariable (var "v")) (var "m")
 
 -- | Get the parent namespace (all but last segment), or Nothing if there is no parent.
 -- E.g., "hydra.formatting" -> Just "hydra", "hydra.java.syntax" -> Just "hydra.java"
-namespaceParent :: TTermDefinition (ModuleName -> Maybe ModuleName)
+namespaceParent :: TypedTermDefinition (ModuleName -> Maybe ModuleName)
 namespaceParent = def "namespaceParent" $
   lambda "ns" $ lets [
     "parts">: Strings.splitOn (string ".") (unwrap _ModuleName @@ var "ns"),
-    "initParts">: Maybes.fromMaybe (list ([] :: [TTerm String])) (Lists.maybeInit (var "parts"))] $
+    "initParts">: Maybes.fromMaybe (list ([] :: [TypedTerm String])) (Lists.maybeInit (var "parts"))] $
     Logic.ifElse (Lists.null (var "initParts"))
       nothing
       (just (wrap _ModuleName (Strings.intercalate (string ".") (var "initParts"))))
 
 -- | Check if a term structurally needs lazy evaluation.
-needsThunking :: TTermDefinition (Term -> Bool)
+needsThunking :: TypedTermDefinition (Term -> Bool)
 needsThunking = def "needsThunking" $
   lambda "t" $
     cases _Term (Strip.deannotateTerm @@ var "t")
@@ -4461,33 +4462,19 @@ needsThunking = def "needsThunking" $
 
 -- | Check if a Binding has function type.
 
-noComment :: TTermDefinition (Java.ClassBodyDeclaration -> Java.ClassBodyDeclarationWithComments)
+noComment :: TypedTermDefinition (Java.ClassBodyDeclaration -> Java.ClassBodyDeclarationWithComments)
 noComment = def "noComment" $
   lambda "decl" $ JavaDsl.classBodyDeclarationWithComments (var "decl") nothing
 
--- | Wrap a class body declaration with a Javadoc comment.
-withCommentString :: TTermDefinition (String -> Java.ClassBodyDeclaration -> Java.ClassBodyDeclarationWithComments)
-withCommentString = def "withCommentString" $
-  lambda "comment" $ lambda "decl" $
-    JavaDsl.classBodyDeclarationWithComments (var "decl") (just (var "comment"))
-
 -- | Wrap an interface member declaration with no comment.
-noInterfaceComment :: TTermDefinition (Java.InterfaceMemberDeclaration -> Java.InterfaceMemberDeclarationWithComments)
+noInterfaceComment :: TypedTermDefinition (Java.InterfaceMemberDeclaration -> Java.InterfaceMemberDeclarationWithComments)
 noInterfaceComment = def "noInterfaceComment" $
   lambda "decl" $ record Java._InterfaceMemberDeclarationWithComments [
     Java._InterfaceMemberDeclarationWithComments_value>>: var "decl",
     Java._InterfaceMemberDeclarationWithComments_comments>>: nothing]
 
--- | Wrap an interface member declaration with a Javadoc comment.
-withInterfaceCommentString :: TTermDefinition (String -> Java.InterfaceMemberDeclaration -> Java.InterfaceMemberDeclarationWithComments)
-withInterfaceCommentString = def "withInterfaceCommentString" $
-  lambda "comment" $ lambda "decl" $
-    record Java._InterfaceMemberDeclarationWithComments [
-      Java._InterfaceMemberDeclarationWithComments_value>>: var "decl",
-      Java._InterfaceMemberDeclarationWithComments_comments>>: just (var "comment")]
-
 -- | Generate the otherwise (default) branch of a visitor.
-otherwiseBranch :: TTermDefinition (JavaHelpers.JavaEnvironment -> JavaHelpers.Aliases -> Type -> Type -> Name -> Java.Type -> [Java.TypeArgument] -> Term -> Context -> Graph -> Either Error Java.ClassBodyDeclarationWithComments)
+otherwiseBranch :: TypedTermDefinition (JavaHelpers.JavaEnvironment -> JavaHelpers.Aliases -> Type -> Type -> Name -> Java.Type -> [Java.TypeArgument] -> Term -> InferenceContext -> Graph -> Either Error Java.ClassBodyDeclarationWithComments)
 otherwiseBranch = def "otherwiseBranch" $
   lambda "env" $ lambda "aliases" $ lambda "dom" $ lambda "cod" $ lambda "tname" $ lambda "jcod" $ lambda "targs" $ lambda "d" $
     "cx" ~> "g" ~>
@@ -4507,18 +4494,18 @@ otherwiseBranch = def "otherwiseBranch" $
     "jret" <<~ (encodeTerm @@ var "env3" @@ var "innerBody" @@ var "cx" @@ var "g") $
     "returnStmt" <~ (JavaDsl.blockStatementStatement (JavaUtilsSource.javaReturnStatement @@ just (var "jret"))) $
     "allStmts" <~ Lists.concat2 (var "bindingStmts") (list [var "returnStmt"]) $
-    right (noComment @@ (JavaUtilsSource.methodDeclaration @@ var "mods" @@ list ([] :: [TTerm Java.TypeParameter]) @@ var "anns"
+    right (noComment @@ (JavaUtilsSource.methodDeclaration @@ var "mods" @@ list ([] :: [TypedTerm Java.TypeParameter]) @@ var "anns"
       @@ asTerm JavaNamesSource.otherwiseMethodName @@ list [var "param"] @@ var "result" @@ just (var "allStmts")))
 
 -- | Peel N domain types from a function type, returning the domains and the final codomain.
-peelDomainTypes :: TTermDefinition (Int -> Type -> ([Type], Type))
+peelDomainTypes :: TypedTermDefinition (Int -> Type -> ([Type], Type))
 peelDomainTypes = def "peelDomainTypes" $
   lambda "n" $ lambda "t" $
     Logic.ifElse
       (Equality.lte (var "n") (int32 0))
-      (pair (list ([] :: [TTerm Type])) (var "t"))
+      (pair (list ([] :: [TypedTerm Type])) (var "t"))
       (cases _Type (Strip.deannotateType @@ var "t")
-        (Just $ pair (list ([] :: [TTerm Type])) (var "t")) [
+        (Just $ pair (list ([] :: [TypedTerm Type])) (var "t")) [
         _Type_function>>: lambda "ft" $
           "rest" <~ (peelDomainTypes @@ Math.sub (var "n") (int32 1) @@ Core.functionTypeCodomain (var "ft")) $
           pair
@@ -4527,26 +4514,26 @@ peelDomainTypes = def "peelDomainTypes" $
 
 -- | Peel domain types from a function type, returning the list of domains and the codomain.
 -- Given a count n and a type, peels up to n function types off the front.
-peelDomainsAndCod :: TTermDefinition (Int -> Type -> ([Type], Type))
+peelDomainsAndCod :: TypedTermDefinition (Int -> Type -> ([Type], Type))
 peelDomainsAndCod = def "peelDomainsAndCod" $
   lambda "n" $ lambda "t" $
     Logic.ifElse (Equality.lte (var "n") (int32 0))
-      (pair (list ([] :: [TTerm Type])) (var "t"))
+      (pair (list ([] :: [TypedTerm Type])) (var "t"))
       (cases _Type (Strip.deannotateType @@ var "t")
-        (Just $ pair (list ([] :: [TTerm Type])) (var "t")) [
+        (Just $ pair (list ([] :: [TypedTerm Type])) (var "t")) [
         _Type_function>>: lambda "ft" $
           "rest" <~ (peelDomainsAndCod @@ Math.sub (var "n") (int32 1) @@ Core.functionTypeCodomain (var "ft")) $
           pair (Lists.cons (Core.functionTypeDomain (var "ft")) (Pairs.first (var "rest")))
             (Pairs.second (var "rest"))])
 
 -- | Peel expected argument types from a type scheme body using a substitution
-peelExpectedTypes :: TTermDefinition (M.Map Name Type -> Int -> Type -> [Type])
+peelExpectedTypes :: TypedTermDefinition (M.Map Name Type -> Int -> Type -> [Type])
 peelExpectedTypes = def "peelExpectedTypes" $
   lambda "subst" $ lambda "n" $ lambda "t" $
     Logic.ifElse (Equality.equal (var "n") (int32 0))
-      (list ([] :: [TTerm Type]))
+      (list ([] :: [TypedTerm Type]))
       (cases _Type (Strip.deannotateType @@ var "t")
-        (Just $ list ([] :: [TTerm Type])) [
+        (Just $ list ([] :: [TypedTerm Type])) [
         _Type_function>>: lambda "ft" $
           Lists.cons
             (applySubstFull @@ var "subst" @@ Core.functionTypeDomain (var "ft"))
@@ -4554,7 +4541,7 @@ peelExpectedTypes = def "peelExpectedTypes" $
 
 -- | Propagate a correct type annotation through a term. Sets the type annotation on the term
 -- and, for lambdas, also recursively annotates the body with the codomain type.
-propagateType :: TTermDefinition (Type -> Term -> Term)
+propagateType :: TypedTermDefinition (Type -> Term -> Term)
 propagateType = def "propagateType" $
   lambda "typ" $ lambda "term" $
     "setTypeAnn" <~ (lambda "t" $
@@ -4594,14 +4581,14 @@ propagateType = def "propagateType" $
           (Just $ var "fun") [
           _Term_cases>>: lambda "cs" $
             "dom" <~ (Resolution.nominalApplication @@ (Core.caseStatementTypeName (var "cs"))
-              @@ list ([] :: [TTerm Type])) $
+              @@ list ([] :: [TypedTerm Type])) $
             "ft" <~ inject _Type _Type_function (Core.functionType (var "dom") (var "typ")) $
             Annotations.setTermAnnotation @@ asTerm Constants.keyType
               @@ just (Phantoms.encoderFor _Type @@ var "ft") @@ var "fun"]) $
         var "setTypeAnn" @@ Core.termApplication (Core.application (var "annotatedFun") (var "arg"))]
 
 -- | Propagate the codomain type into a lambda's body, traversing through annotations
-propagateType_propagateIntoLambda :: TTermDefinition (Type -> Term -> Term)
+propagateType_propagateIntoLambda :: TypedTermDefinition (Type -> Term -> Term)
 propagateType_propagateIntoLambda = def "propagateType_propagateIntoLambda" $
   lambda "cod" $ lambda "t" $
     cases _Term (var "t")
@@ -4617,7 +4604,7 @@ propagateType_propagateIntoLambda = def "propagateType_propagateIntoLambda" $
           (propagateType @@ var "cod" @@ Core.lambdaBody (var "lam")))]
 
 -- | Rebuild a let expression with a new body, preserving annotations
-propagateType_rebuildLet :: TTermDefinition (Term -> [Binding] -> Term -> Term)
+propagateType_rebuildLet :: TypedTermDefinition (Term -> [Binding] -> Term -> Term)
 propagateType_rebuildLet = def "propagateType_rebuildLet" $
   lambda "t" $ lambda "bindings" $ lambda "newBody" $
     cases _Term (var "t")
@@ -4632,10 +4619,10 @@ propagateType_rebuildLet = def "propagateType_rebuildLet" $
 -- | For application chains, propagate type annotations through the chain.
 -- If f is a lambda with domain annotations and N args are applied,
 -- annotate f with its full type and rebuild the chain with intermediate annotations.
-propagateTypesInAppChain :: TTermDefinition (Type -> Type -> Term -> Term)
+propagateTypesInAppChain :: TypedTermDefinition (Type -> Type -> Term -> Term)
 propagateTypesInAppChain = def "propagateTypesInAppChain" $
   lambda "fixedCod" $ lambda "resultType" $ lambda "t" $
-    "flattened" <~ (flattenApps @@ var "t" @@ list ([] :: [TTerm Term])) $
+    "flattened" <~ (flattenApps @@ var "t" @@ list ([] :: [TypedTerm Term])) $
     "args" <~ Pairs.first (var "flattened") $
     "fun" <~ Pairs.second (var "flattened") $
     "lambdaDomsResult" <~ (collectLambdaDomains @@ var "fun") $
@@ -4664,7 +4651,7 @@ propagateTypesInAppChain = def "propagateTypesInAppChain" $
             (Just $ var "lhs") [
             _Term_cases>>: lambda "cs" $
               "dom" <~ (Resolution.nominalApplication @@ (Core.caseStatementTypeName (var "cs"))
-                @@ list ([] :: [TTerm Type])) $
+                @@ list ([] :: [TypedTerm Type])) $
               "ft" <~ inject _Type _Type_function (Core.functionType (var "dom") (var "fixedCod")) $
               Annotations.setTermAnnotation @@ asTerm Constants.keyType
                 @@ just (encodeTypeAsTerm @@ var "ft") @@ var "lhs"]) $
@@ -4673,7 +4660,7 @@ propagateTypesInAppChain = def "propagateTypesInAppChain" $
             @@ inject _Term _Term_application (Core.application (var "annotatedLhs") (var "rhs"))])
 
 -- | Rebuild an application chain with proper type annotations at each step.
-rebuildApps :: TTermDefinition (Term -> [Term] -> Type -> Term)
+rebuildApps :: TypedTermDefinition (Term -> [Term] -> Type -> Term)
 rebuildApps = def "rebuildApps" $
   lambda "f" $ lambda "args" $ lambda "fType" $
     Logic.ifElse (Lists.null (var "args"))
@@ -4695,19 +4682,19 @@ rebuildApps = def "rebuildApps" $
             (Lists.uncons (var "args")))])
 
 -- | Generate a compareTo method for a record type.
-recordCompareToMethod :: TTermDefinition (JavaHelpers.Aliases -> [Java.TypeParameter] -> Name -> [FieldType] -> Java.ClassBodyDeclaration)
+recordCompareToMethod :: TypedTermDefinition (JavaHelpers.Aliases -> [Java.TypeParameter] -> Name -> [FieldType] -> Java.ClassBodyDeclaration)
 recordCompareToMethod = def "recordCompareToMethod" $
   lambda "aliases" $ lambda "tparams" $ lambda "elName" $ lambda "fields" $ lets [
     "anns">: list [asTerm JavaUtilsSource.overrideAnnotation, asTerm JavaUtilsSource.suppressWarningsUncheckedAnnotation],
     "mods">: list [inject Java._MethodModifier Java._MethodModifier_public unit],
     "param">: JavaUtilsSource.javaTypeToJavaFormalParameter @@ (JavaUtilsSource.javaTypeFromTypeName @@ var "aliases" @@ var "elName") @@ wrap _Name (asTerm JavaNamesSource.otherInstanceName),
     "result">: JavaUtilsSource.javaTypeToJavaResult @@ (asTerm JavaUtilsSource.javaIntType)] $
-    JavaUtilsSource.methodDeclaration @@ var "mods" @@ list ([] :: [TTerm Java.TypeParameter]) @@ var "anns"
+    JavaUtilsSource.methodDeclaration @@ var "mods" @@ list ([] :: [TypedTerm Java.TypeParameter]) @@ var "anns"
       @@ (asTerm JavaNamesSource.compareToMethodName) @@ list [var "param"] @@ var "result"
       @@ just (compareToBody @@ var "aliases" @@ (asTerm JavaNamesSource.otherInstanceName) @@ var "fields")
 
 -- | Build a record constructor.
-recordConstructor :: TTermDefinition (JavaHelpers.Aliases -> Name -> [FieldType] -> Context -> Graph -> Either Error Java.ClassBodyDeclaration)
+recordConstructor :: TypedTermDefinition (JavaHelpers.Aliases -> Name -> [FieldType] -> InferenceContext -> Graph -> Either Error Java.ClassBodyDeclaration)
 recordConstructor = def "recordConstructor" $
   lambda "aliases" $ lambda "elName" $ lambda "fields" $
     "cx" ~> "g" ~>
@@ -4719,13 +4706,13 @@ recordConstructor = def "recordConstructor" $
     right (JavaUtilsSource.makeConstructor @@ var "aliases" @@ var "elName" @@ false @@ var "params" @@ var "assignStmts")
 
 -- | Build the equals() method for a record class.
-recordEqualsMethod :: TTermDefinition (JavaHelpers.Aliases -> Name -> [FieldType] -> Java.ClassBodyDeclaration)
+recordEqualsMethod :: TypedTermDefinition (JavaHelpers.Aliases -> Name -> [FieldType] -> Java.ClassBodyDeclaration)
 recordEqualsMethod = def "recordEqualsMethod" $
   lambda "aliases" $ lambda "elName" $ lambda "fields" $ lets [
     "anns">: list [asTerm JavaUtilsSource.overrideAnnotation],
     "mods">: list [inject Java._MethodModifier Java._MethodModifier_public unit],
     "param">: JavaUtilsSource.javaTypeToJavaFormalParameter
-      @@ (JavaUtilsSource.javaRefType @@ list ([] :: [TTerm Java.ReferenceType]) @@ nothing @@ string "Object")
+      @@ (JavaUtilsSource.javaRefType @@ list ([] :: [TypedTerm Java.ReferenceType]) @@ nothing @@ string "Object")
       @@ wrap _Name (asTerm JavaNamesSource.otherInstanceName),
     "result">: JavaUtilsSource.javaTypeToJavaResult @@ (asTerm JavaUtilsSource.javaBooleanType),
     "tmpName">: string "o",
@@ -4740,7 +4727,7 @@ recordEqualsMethod = def "recordEqualsMethod" $
                   @@ (JavaUtilsSource.javaIdentifierToJavaRelationalExpression
                     @@ (JavaUtilsSource.javaIdentifier @@ (asTerm JavaNamesSource.otherInstanceName)))
                   @@ (JavaUtilsSource.nameToJavaReferenceType @@ var "aliases" @@ false
-                    @@ list ([] :: [TTerm Java.TypeArgument]) @@ var "elName" @@ nothing))))))
+                    @@ list ([] :: [TypedTerm Java.TypeArgument]) @@ var "elName" @@ nothing))))))
         (JavaUtilsSource.javaReturnStatement @@ just (JavaUtilsSource.javaBooleanExpression @@ false)))),
     -- ElName o = (ElName) other;
     "castStmt">: JavaUtilsSource.variableDeclarationStatement @@ var "aliases"
@@ -4749,7 +4736,7 @@ recordEqualsMethod = def "recordEqualsMethod" $
       @@ (JavaUtilsSource.javaCastExpressionToJavaExpression @@
         (JavaUtilsSource.javaCastExpression
           @@ (JavaUtilsSource.nameToJavaReferenceType @@ var "aliases" @@ false
-            @@ list ([] :: [TTerm Java.TypeArgument]) @@ var "elName" @@ nothing)
+            @@ list ([] :: [TypedTerm Java.TypeArgument]) @@ var "elName" @@ nothing)
           @@ (JavaUtilsSource.javaIdentifierToJavaUnaryExpression
             @@ wrap Java._Identifier (JavaUtilsSource.sanitizeJavaName @@ (asTerm JavaNamesSource.otherInstanceName))))),
     -- return Objects.equals(this.f1, o.f1) && Objects.equals(this.f2, o.f2) && ...
@@ -4760,12 +4747,12 @@ recordEqualsMethod = def "recordEqualsMethod" $
           (JavaUtilsSource.javaConditionalAndExpressionToJavaExpression @@
             (JavaDsl.conditionalAndExpression
               (Lists.map (lambda "f" $ eqClause @@ var "tmpName" @@ var "f") (var "fields"))))))] $
-    JavaUtilsSource.methodDeclaration @@ var "mods" @@ list ([] :: [TTerm Java.TypeParameter]) @@ var "anns"
+    JavaUtilsSource.methodDeclaration @@ var "mods" @@ list ([] :: [TypedTerm Java.TypeParameter]) @@ var "anns"
       @@ (asTerm JavaNamesSource.equalsMethodName) @@ list [var "param"] @@ var "result"
       @@ just (list [var "instanceOfStmt", var "castStmt", var "returnAllFieldsEqual"])
 
 -- | Build the hashCode() method for a record class.
-recordHashCodeMethod :: TTermDefinition ([FieldType] -> Java.ClassBodyDeclaration)
+recordHashCodeMethod :: TypedTermDefinition ([FieldType] -> Java.ClassBodyDeclaration)
 recordHashCodeMethod = def "recordHashCodeMethod" $
   lambda "fields" $ lets [
     "anns">: list [asTerm JavaUtilsSource.overrideAnnotation],
@@ -4780,12 +4767,12 @@ recordHashCodeMethod = def "recordHashCodeMethod" $
               (Lists.zipWith (asTerm hashCodeMultPair)
                 (asTerm first20Primes)
                 (Lists.map (lambda "f" $ Core.fieldTypeName (var "f")) (var "fields")))))))] $
-    JavaUtilsSource.methodDeclaration @@ var "mods" @@ list ([] :: [TTerm Java.TypeParameter]) @@ var "anns"
-      @@ (asTerm JavaNamesSource.hashCodeMethodName) @@ list ([] :: [TTerm Java.FormalParameter]) @@ var "result"
+    JavaUtilsSource.methodDeclaration @@ var "mods" @@ list ([] :: [TypedTerm Java.TypeParameter]) @@ var "anns"
+      @@ (asTerm JavaNamesSource.hashCodeMethodName) @@ list ([] :: [TypedTerm Java.FormalParameter]) @@ var "result"
       @@ just (list [var "returnSum"])
 
 -- | Build a record field as a public final member variable declaration.
-recordMemberVar :: TTermDefinition (JavaHelpers.Aliases -> FieldType -> Context -> Graph -> Either Error Java.ClassBodyDeclaration)
+recordMemberVar :: TypedTermDefinition (JavaHelpers.Aliases -> FieldType -> InferenceContext -> Graph -> Either Error Java.ClassBodyDeclaration)
 recordMemberVar = def "recordMemberVar" $
   lambda "aliases" $ lambda "ft" $
     "cx" ~> "g" ~>
@@ -4799,18 +4786,18 @@ recordMemberVar = def "recordMemberVar" $
       @@ (JavaUtilsSource.fieldNameToJavaVariableDeclarator @@ var "fname"))
 
 -- | Build a "with" method for a record field.
-recordWithMethod :: TTermDefinition (JavaHelpers.Aliases -> Name -> [FieldType] -> FieldType -> Context -> Graph -> Either Error Java.ClassBodyDeclaration)
+recordWithMethod :: TypedTermDefinition (JavaHelpers.Aliases -> Name -> [FieldType] -> FieldType -> InferenceContext -> Graph -> Either Error Java.ClassBodyDeclaration)
 recordWithMethod = def "recordWithMethod" $
   lambda "aliases" $ lambda "elName" $ lambda "fields" $ lambda "field" $
     "cx" ~> "g" ~>
     lets [
     "mods">: list [inject Java._MethodModifier Java._MethodModifier_public unit],
-    "anns">: list ([] :: [TTerm Java.Annotation]),
+    "anns">: list ([] :: [TypedTerm Java.Annotation]),
     "methodName">: Strings.cat2 (string "with")
       (Formatting.nonAlnumToUnderscores @@ (Formatting.capitalize @@ (unwrap _Name @@ Core.fieldTypeName (var "field")))),
     "result">: JavaUtilsSource.referenceTypeToResult
       @@ (JavaUtilsSource.nameToJavaReferenceType @@ var "aliases" @@ false
-        @@ list ([] :: [TTerm Java.TypeArgument]) @@ var "elName" @@ nothing),
+        @@ list ([] :: [TypedTerm Java.TypeArgument]) @@ var "elName" @@ nothing),
     "consId">: wrap Java._Identifier (JavaUtilsSource.sanitizeJavaName @@ (Names.localNameOf @@ var "elName")),
     "fieldArgs">: Lists.map (lambda "f" $ JavaUtilsSource.fieldNameToJavaExpression @@ Core.fieldTypeName (var "f")) (var "fields"),
     "returnStmt">: JavaDsl.blockStatementStatement
@@ -4818,12 +4805,12 @@ recordWithMethod = def "recordWithMethod" $
         (JavaUtilsSource.javaConstructorCall @@ (JavaUtilsSource.javaConstructorName @@ var "consId" @@ nothing)
           @@ var "fieldArgs" @@ nothing))] $
     "param" <<~ (fieldTypeToFormalParam @@ var "aliases" @@ var "field" @@ var "cx" @@ var "g") $
-    right (JavaUtilsSource.methodDeclaration @@ var "mods" @@ list ([] :: [TTerm Java.TypeParameter])
+    right (JavaUtilsSource.methodDeclaration @@ var "mods" @@ list ([] :: [TypedTerm Java.TypeParameter])
       @@ var "anns" @@ var "methodName" @@ list [var "param"] @@ var "result"
       @@ just (list [var "returnStmt"]))
 
 -- | Given a partial argSubst, fill in unresolved vars from unused IR types.
-resolveTypeApps :: TTermDefinition ([Name] -> [Type] -> M.Map Name Type -> [Type])
+resolveTypeApps :: TypedTermDefinition ([Name] -> [Type] -> M.Map Name Type -> [Type])
 resolveTypeApps = def "resolveTypeApps" $
   lambda "schemeVars" $ lambda "fallbackTypeApps" $ lambda "argSubst" $
     "resolvedVars" <~ Sets.fromList (Maps.keys (var "argSubst")) $
@@ -4837,7 +4824,7 @@ resolveTypeApps = def "resolveTypeApps" $
 
 -- | For each group where the input var appears in its own output list,
 -- substitute all other output vars to that input var.
-selfRefSubstitution :: TTermDefinition (M.Map Name [Name] -> M.Map Name Name)
+selfRefSubstitution :: TypedTermDefinition (M.Map Name [Name] -> M.Map Name Name)
 selfRefSubstitution = def "selfRefSubstitution" $
   lambda "grouped" $
     Lists.foldl
@@ -4846,11 +4833,11 @@ selfRefSubstitution = def "selfRefSubstitution" $
       (Maps.empty)
       (Maps.toList (var "grouped"))
 
-selfRefSubstitution_processGroup :: TTermDefinition (M.Map Name Name -> Name -> [Name] -> M.Map Name Name)
+selfRefSubstitution_processGroup :: TypedTermDefinition (M.Map Name Name -> Name -> [Name] -> M.Map Name Name)
 selfRefSubstitution_processGroup = def "selfRefSubstitution_processGroup" $
   lambda "subst" $ lambda "inVar" $ lambda "outVars" $
     Logic.ifElse
-      ((Lists.elem :: TTerm Name -> TTerm [Name] -> TTerm Bool) (var "inVar") (var "outVars"))
+      ((Lists.elem :: TypedTerm Name -> TypedTerm [Name] -> TypedTerm Bool) (var "inVar") (var "outVars"))
       (Lists.foldl
         (lambda "s" $ lambda "v" $
           Logic.ifElse
@@ -4863,21 +4850,21 @@ selfRefSubstitution_processGroup = def "selfRefSubstitution_processGroup" $
 
 -- | Direct-return substitution: for each input var with >=2 self-refs and
 
-serializableTypes :: TTermDefinition (Bool -> [Java.InterfaceType])
+serializableTypes :: TypedTermDefinition (Bool -> [Java.InterfaceType])
 serializableTypes = def "serializableTypes" $
   lambda "isSer" $ lets [
     "javaSerializableType">: JavaDsl.interfaceType
       (JavaDsl.classType
-        (list ([] :: [TTerm Java.Annotation]))
+        (list ([] :: [TypedTerm Java.Annotation]))
         JavaDsl.classTypeQualifierNone
         (JavaUtilsSource.javaTypeIdentifier @@ string "Serializable")
-        (list ([] :: [TTerm Java.TypeArgument])))] $
+        (list ([] :: [TypedTerm Java.TypeArgument])))] $
     Logic.ifElse (var "isSer")
       (list [var "javaSerializableType"])
-      (list ([] :: [TTerm Java.InterfaceType]))
+      (list ([] :: [TypedTerm Java.InterfaceType]))
 
 -- | Split a constant declaration into a field + helper method to avoid large <clinit>
-splitConstantInitializer :: TTermDefinition (Java.InterfaceMemberDeclaration -> [Java.InterfaceMemberDeclaration])
+splitConstantInitializer :: TypedTermDefinition (Java.InterfaceMemberDeclaration -> [Java.InterfaceMemberDeclaration])
 splitConstantInitializer = def "splitConstantInitializer" $
   lambda "member" $ cases Java._InterfaceMemberDeclaration (var "member")
     (Just $ list [var "member"]) [
@@ -4889,7 +4876,7 @@ splitConstantInitializer = def "splitConstantInitializer" $
           @@ (project Java._ConstantDeclaration Java._ConstantDeclaration_type @@ var "cd"))]
 
 -- | Helper for splitConstantInitializer: split a single variable declarator
-splitConstantInitializer_splitVar :: TTermDefinition ([Java.ConstantModifier] -> Java.UnannType -> Java.VariableDeclarator -> [Java.InterfaceMemberDeclaration])
+splitConstantInitializer_splitVar :: TypedTermDefinition ([Java.ConstantModifier] -> Java.UnannType -> Java.VariableDeclarator -> [Java.InterfaceMemberDeclaration])
 splitConstantInitializer_splitVar = def "splitConstantInitializer_splitVar" $
   lambda "mods" $ lambda "utype" $ lambda "vd" $ lets [
     "vid">: project Java._VariableDeclarator Java._VariableDeclarator_id @@ var "vd",
@@ -4915,7 +4902,7 @@ splitConstantInitializer_splitVar = def "splitConstantInitializer_splitVar" $
             "helperName">: Strings.cat2 (string "_init_") (var "varName"),
             "callExpr">: JavaUtilsSource.javaMethodInvocationToJavaExpression @@
               (JavaUtilsSource.methodInvocation @@ nothing @@ wrap Java._Identifier (var "helperName")
-                @@ list ([] :: [TTerm Java.Expression])),
+                @@ list ([] :: [TypedTerm Java.Expression])),
             "field">: inject Java._InterfaceMemberDeclaration Java._InterfaceMemberDeclaration_constant
               (record Java._ConstantDeclaration [
                 Java._ConstantDeclaration_modifiers>>: var "mods",
@@ -4933,15 +4920,15 @@ splitConstantInitializer_splitVar = def "splitConstantInitializer_splitVar" $
               @@ list [
                 inject Java._InterfaceMethodModifier Java._InterfaceMethodModifier_static unit,
                 inject Java._InterfaceMethodModifier Java._InterfaceMethodModifier_private unit]
-              @@ list ([] :: [TTerm Java.TypeParameter])
+              @@ list ([] :: [TypedTerm Java.TypeParameter])
               @@ var "helperName"
-              @@ list ([] :: [TTerm Java.FormalParameter])
+              @@ list ([] :: [TypedTerm Java.FormalParameter])
               @@ var "resultType"
               @@ just (list [var "returnSt"])] $
             list [var "field", var "helper"]])
 
 -- | Strip all forall wrappers from a type, returning the body
-stripForalls :: TTermDefinition (Type -> Type)
+stripForalls :: TypedTermDefinition (Type -> Type)
 stripForalls = def "stripForalls" $
   lambda "t" $ cases _Type (Strip.deannotateType @@ var "t")
     (Just $ var "t") [
@@ -4949,12 +4936,12 @@ stripForalls = def "stripForalls" $
       stripForalls @@ Core.forallTypeBody (var "fa")]
 
 -- | Substitute type variables with types
-substituteTypeVarsWithTypes :: TTermDefinition (M.Map Name Type -> Type -> Type)
+substituteTypeVarsWithTypes :: TypedTermDefinition (M.Map Name Type -> Type -> Type)
 substituteTypeVarsWithTypes = def "substituteTypeVarsWithTypes" $
   lambda "subst" $ lambda "t" $ substituteTypeVarsWithTypes_go @@ var "subst" @@ (Strip.deannotateType @@ var "t")
 
 -- | Helper for substituteTypeVarsWithTypes
-substituteTypeVarsWithTypes_go :: TTermDefinition (M.Map Name Type -> Type -> Type)
+substituteTypeVarsWithTypes_go :: TypedTermDefinition (M.Map Name Type -> Type -> Type)
 substituteTypeVarsWithTypes_go = def "substituteTypeVarsWithTypes_go" $
   lambda "subst" $ lambda "t" $ cases _Type (Strip.deannotateType @@ var "t")
     (Just $ var "t") [
@@ -4992,7 +4979,7 @@ substituteTypeVarsWithTypes_go = def "substituteTypeVarsWithTypes_go" $
         (substituteTypeVarsWithTypes_go @@ var "subst" @@ Core.forallTypeBody (var "ft")))]
 
 -- | Shared helper: tagCmp != 0
-tagCmpNotZeroExpr :: TTermDefinition Java.Expression
+tagCmpNotZeroExpr :: TypedTermDefinition Java.Expression
 tagCmpNotZeroExpr = def "tagCmpNotZeroExpr" $ lets [
     "lhs">: JavaUtilsSource.javaRelationalExpressionToJavaEqualityExpression @@
       (JavaUtilsSource.javaPostfixExpressionToJavaRelationalExpression @@
@@ -5004,60 +4991,60 @@ tagCmpNotZeroExpr = def "tagCmpNotZeroExpr" $ lets [
 
 -- | Shared helper: this.getClass().getName().compareTo(other.getClass().getName())
 -- Used in variant compareTo to compare by class name for tag ordering.
-tagCompareExpr :: TTermDefinition Java.Expression
+tagCompareExpr :: TypedTermDefinition Java.Expression
 tagCompareExpr = def "tagCompareExpr" $ lets [
     "thisGetClass">: JavaDsl.methodInvocation_
       (JavaDsl.methodInvocationHeaderComplex
         (JavaDsl.methodInvocationComplex
           (JavaDsl.methodInvocationVariantPrimary (JavaUtilsSource.javaExpressionToJavaPrimary @@ (asTerm JavaUtilsSource.javaThis)))
-          (list ([] :: [TTerm Java.TypeArgument]))
+          (list ([] :: [TypedTerm Java.TypeArgument]))
           (wrap Java._Identifier (string "getClass"))))
-      (list ([] :: [TTerm Java.Expression])),
+      (list ([] :: [TypedTerm Java.Expression])),
     "thisGetName">: JavaDsl.methodInvocation_
       (JavaDsl.methodInvocationHeaderComplex
         (JavaDsl.methodInvocationComplex
           (JavaDsl.methodInvocationVariantPrimary (JavaUtilsSource.javaMethodInvocationToJavaPrimary @@ var "thisGetClass"))
-          (list ([] :: [TTerm Java.TypeArgument]))
+          (list ([] :: [TypedTerm Java.TypeArgument]))
           (wrap Java._Identifier (string "getName"))))
-      (list ([] :: [TTerm Java.Expression])),
+      (list ([] :: [TypedTerm Java.Expression])),
     "otherGetClass">: JavaDsl.methodInvocation_
       (JavaDsl.methodInvocationHeaderComplex
         (JavaDsl.methodInvocationComplex
           (JavaDsl.methodInvocationVariantExpression
             (JavaDsl.expressionName nothing (wrap Java._Identifier (asTerm JavaNamesSource.otherInstanceName))))
-          (list ([] :: [TTerm Java.TypeArgument]))
+          (list ([] :: [TypedTerm Java.TypeArgument]))
           (wrap Java._Identifier (string "getClass"))))
-      (list ([] :: [TTerm Java.Expression])),
+      (list ([] :: [TypedTerm Java.Expression])),
     "otherGetName">: JavaDsl.methodInvocation_
       (JavaDsl.methodInvocationHeaderComplex
         (JavaDsl.methodInvocationComplex
           (JavaDsl.methodInvocationVariantPrimary (JavaUtilsSource.javaMethodInvocationToJavaPrimary @@ var "otherGetClass"))
-          (list ([] :: [TTerm Java.TypeArgument]))
+          (list ([] :: [TypedTerm Java.TypeArgument]))
           (wrap Java._Identifier (string "getName"))))
-      (list ([] :: [TTerm Java.Expression]))] $
+      (list ([] :: [TypedTerm Java.Expression]))] $
     JavaUtilsSource.javaMethodInvocationToJavaExpression @@ (JavaDsl.methodInvocation_
       (JavaDsl.methodInvocationHeaderComplex
         (JavaDsl.methodInvocationComplex
           (JavaDsl.methodInvocationVariantPrimary (JavaUtilsSource.javaMethodInvocationToJavaPrimary @@ var "thisGetName"))
-          (list ([] :: [TTerm Java.TypeArgument]))
+          (list ([] :: [TypedTerm Java.TypeArgument]))
           (wrap Java._Identifier (asTerm JavaNamesSource.compareToMethodName))))
       (list [JavaUtilsSource.javaMethodInvocationToJavaExpression @@ var "otherGetName"]))
 
 -- | Take N type arguments from the accumulated type applications list,
 -- converting them to Java TypeArguments via javaTypeToJavaReferenceType.
-takeTypeArgs :: TTermDefinition (String -> Int -> [Java.Type] -> Context -> Graph -> Either Error [Java.TypeArgument])
+takeTypeArgs :: TypedTermDefinition (String -> Int -> [Java.Type] -> InferenceContext -> Graph -> Either Error [Java.TypeArgument])
 takeTypeArgs = def "takeTypeArgs" $
   lambda "label" $ lambda "n" $ lambda "tyapps" $
     "cx" ~> "g" ~>
     Logic.ifElse (Equality.lt (Lists.length (var "tyapps")) (var "n"))
-      (Ctx.failInContext (Error.errorOther $ Error.otherError $ Strings.cat (list [string "needed type arguments for ", var "label", string ", found too few"])) (var "cx"))
+      (left (Error.errorOther $ Error.otherError $ Strings.cat (list [string "needed type arguments for ", var "label", string ", found too few"])))
       (Eithers.mapList (lambda "jt" $
         "rt" <<~ (JavaUtilsSource.javaTypeToJavaReferenceType @@ var "jt" @@ var "cx") $
         right (JavaDsl.typeArgumentReference (var "rt")))
         (Lists.take (var "n") (var "tyapps")))
 
 -- | Dispatch type to class declaration.
-toClassDecl :: TTermDefinition (Bool -> Bool -> JavaHelpers.Aliases -> [Java.TypeParameter] -> Name -> Type -> Context -> Graph -> Either Error Java.ClassDeclaration)
+toClassDecl :: TypedTermDefinition (Bool -> Bool -> JavaHelpers.Aliases -> [Java.TypeParameter] -> Name -> Type -> InferenceContext -> Graph -> Either Error Java.ClassDeclaration)
 toClassDecl = def "toClassDecl" $
   lambda "isInner" $ lambda "isSer" $ lambda "aliases" $ lambda "tparams" $ lambda "elName" $ lambda "t" $
     "cx" ~> "g" ~>
@@ -5083,7 +5070,7 @@ toClassDecl = def "toClassDecl" $
           @@ (list [Core.fieldType (wrap _Name (string "value")) (var "wt")]) @@ var "cx" @@ var "g"]
 
 -- | Initialize a recursive binding with AtomicReference (for toDeclInit).
-toDeclInit :: TTermDefinition (JavaHelpers.Aliases -> Graph -> S.Set Name -> [Binding] -> Name -> Context -> Graph -> Either Error (Maybe Java.BlockStatement))
+toDeclInit :: TypedTermDefinition (JavaHelpers.Aliases -> Graph -> S.Set Name -> [Binding] -> Name -> InferenceContext -> Graph -> Either Error (Maybe Java.BlockStatement))
 toDeclInit = def "toDeclInit" $
   lambda "aliasesExt" $ lambda "gExt" $ lambda "recursiveVars" $ lambda "flatBindings" $ lambda "name" $
     "cx" ~> "g" ~>
@@ -5096,20 +5083,20 @@ toDeclInit = def "toDeclInit" $
         "jtype" <<~ (encodeType @@ var "aliasesExt" @@ Sets.empty @@ var "typ" @@ var "cx" @@ var "g") $
         "id" <~ (JavaUtilsSource.variableToJavaIdentifier @@ var "name") $
         "arid" <~ (JavaDsl.identifier (string "java.util.concurrent.atomic.AtomicReference")) $
-        "aid" <~ (JavaDsl.annotatedIdentifier (list ([] :: [TTerm Java.Annotation])) (var "arid")) $
+        "aid" <~ (JavaDsl.annotatedIdentifier (list ([] :: [TypedTerm Java.Annotation])) (var "arid")) $
         "rt" <<~ (JavaUtilsSource.javaTypeToJavaReferenceType @@ var "jtype" @@ var "cx") $
         "targs" <~ (typeArgsOrDiamond @@ list [JavaDsl.typeArgumentReference (var "rt")]) $
         "ci" <~ record Java._ClassOrInterfaceTypeToInstantiate [
           Java._ClassOrInterfaceTypeToInstantiate_identifiers>>: list [var "aid"],
           Java._ClassOrInterfaceTypeToInstantiate_typeArguments>>: just (var "targs")] $
-        "body" <~ (JavaUtilsSource.javaConstructorCall @@ var "ci" @@ list ([] :: [TTerm Java.Expression]) @@ nothing) $
+        "body" <~ (JavaUtilsSource.javaConstructorCall @@ var "ci" @@ list ([] :: [TypedTerm Java.Expression]) @@ nothing) $
         "pkg" <~ (JavaNamesSource.javaPackageName @@ list [string "java", string "util", string "concurrent", string "atomic"]) $
         "artype" <~ (JavaUtilsSource.javaRefType @@ list [var "rt"] @@ just (var "pkg") @@ string "AtomicReference") $
         right (just (JavaUtilsSource.variableDeclarationStatement @@ var "aliasesExt" @@ var "artype" @@ var "id" @@ var "body")))
       (right nothing)
 
 -- | Declare or set a binding value (for toDeclStatement).
-toDeclStatement :: TTermDefinition (JavaHelpers.JavaEnvironment -> JavaHelpers.Aliases -> Graph -> S.Set Name -> S.Set Name -> [Binding] -> Name -> Context -> Graph -> Either Error Java.BlockStatement)
+toDeclStatement :: TypedTermDefinition (JavaHelpers.JavaEnvironment -> JavaHelpers.Aliases -> Graph -> S.Set Name -> S.Set Name -> [Binding] -> Name -> InferenceContext -> Graph -> Either Error Java.BlockStatement)
 toDeclStatement = def "toDeclStatement" $
   lambda "envExt" $ lambda "aliasesExt" $ lambda "gExt" $ lambda "recursiveVars" $ lambda "thunkedVars" $ lambda "flatBindings" $ lambda "name" $
     "cx" ~> "g" ~>
@@ -5136,7 +5123,7 @@ toDeclStatement = def "toDeclStatement" $
           "lazyType" <~ (JavaUtilsSource.javaRefType @@ list [var "rt"] @@ asTerm JavaNamesSource.hydraUtilPackageName @@ string "Lazy") $
           "lambdaBody" <~ inject Java._LambdaBody Java._LambdaBody_expression (var "rhs") $
           "supplierLambda" <~ (JavaDsl.expressionLambda (JavaDsl.lambdaExpression
-            (inject Java._LambdaParameters Java._LambdaParameters_tuple (list ([] :: [TTerm Java.FormalParameter])))
+            (inject Java._LambdaParameters Java._LambdaParameters_tuple (list ([] :: [TypedTerm Java.FormalParameter])))
             (var "lambdaBody"))) $
           "targs" <~ (typeArgsOrDiamond @@ list [JavaDsl.typeArgumentReference (var "rt")]) $
           "lazyExpr" <~ (JavaUtilsSource.javaConstructorCall
@@ -5148,7 +5135,7 @@ toDeclStatement = def "toDeclStatement" $
 
 -- | Try to infer the function type from lambda structure when type annotations are unavailable.
 -- The "funTerm" argument should be a function-form Term (lambda, project, cases, or unwrap).
-tryInferFunctionType :: TTermDefinition (Term -> Maybe Type)
+tryInferFunctionType :: TypedTermDefinition (Term -> Maybe Type)
 tryInferFunctionType = def "tryInferFunctionType" $
   lambda "funTerm" $
     cases _Term (Strip.deannotateTerm @@ var "funTerm")
@@ -5170,7 +5157,7 @@ tryInferFunctionType = def "tryInferFunctionType" $
 
 -- | Fallback cast for TermTypeApplication: re-annotate the body with corrected type
 -- before encoding, then cast.
-typeAppFallbackCast :: TTermDefinition (JavaHelpers.JavaEnvironment -> JavaHelpers.Aliases -> [M.Map Name Term] -> [Java.Type] -> Java.Type -> Term -> Type -> Context -> Graph -> Either Error Java.Expression)
+typeAppFallbackCast :: TypedTermDefinition (JavaHelpers.JavaEnvironment -> JavaHelpers.Aliases -> [M.Map Name Term] -> [Java.Type] -> Java.Type -> Term -> Type -> InferenceContext -> Graph -> Either Error Java.Expression)
 typeAppFallbackCast = def "typeAppFallbackCast" $
   lambda "env" $ lambda "aliases" $ lambda "anns" $ lambda "tyapps" $
     lambda "jatyp" $ lambda "body" $ lambda "typ" $
@@ -5186,7 +5173,7 @@ typeAppFallbackCast = def "typeAppFallbackCast" $
 -- | Handle TermTypeApplication when the innermost body is a variable.
 -- Generates explicit type witnesses for nullary static methods and hoisted lambdas
 -- instead of casts, which Java can't resolve for methods with unconstrained type params.
-typeAppNullaryOrHoisted :: TTermDefinition (JavaHelpers.JavaEnvironment -> JavaHelpers.Aliases -> [M.Map Name Term] -> [Java.Type] -> Java.Type -> Term -> Type -> Name -> JavaHelpers.JavaSymbolClass -> [Type] -> Context -> Graph -> Either Error Java.Expression)
+typeAppNullaryOrHoisted :: TypedTermDefinition (JavaHelpers.JavaEnvironment -> JavaHelpers.Aliases -> [M.Map Name Term] -> [Java.Type] -> Java.Type -> Term -> Type -> Name -> JavaHelpers.JavaSymbolClass -> [Type] -> InferenceContext -> Graph -> Either Error Java.Expression)
 typeAppNullaryOrHoisted = def "typeAppNullaryOrHoisted" $
   lambda "env" $ lambda "aliases" $ lambda "anns" $ lambda "tyapps" $
     lambda "jatyp" $ lambda "body" $ lambda "correctedTyp" $ lambda "varName" $
@@ -5214,7 +5201,7 @@ typeAppNullaryOrHoisted = def "typeAppNullaryOrHoisted" $
                   (var "filteredTypeArgs")) $
                 right (JavaUtilsSource.javaMethodInvocationToJavaExpression @@
                   (JavaUtilsSource.methodInvocationStaticWithTypeArgs @@ var "classId" @@ var "methodId"
-                    @@ var "jTypeArgs" @@ list ([] :: [TTerm Java.Expression])))),
+                    @@ var "jTypeArgs" @@ list ([] :: [TypedTerm Java.Expression])))),
           JavaHelpers._JavaSymbolClass_hoistedLambda>>: lambda "arity" $
             Maybes.cases (var "mns")
               (typeAppFallbackCast @@ var "env" @@ var "aliases" @@ var "anns" @@ var "tyapps"
@@ -5241,7 +5228,7 @@ typeAppNullaryOrHoisted = def "typeAppNullaryOrHoisted" $
 
 -- | Flatten a nested application chain f(a1)(a2)...(aN) into ([a1,...,aN], f).
 
-typeArgsOrDiamond :: TTermDefinition ([Java.TypeArgument] -> Java.TypeArgumentsOrDiamond)
+typeArgsOrDiamond :: TypedTermDefinition ([Java.TypeArgument] -> Java.TypeArgumentsOrDiamond)
 typeArgsOrDiamond = def "typeArgsOrDiamond" $
   lambda "args" $
     Logic.ifElse
@@ -5251,7 +5238,7 @@ typeArgsOrDiamond = def "typeArgsOrDiamond" $
 
 -- | Shallow structural match for types.
 -- TypeVariable: check names match. TypeWrap: check type names match. Otherwise: True.
-typesMatch :: TTermDefinition (Type -> Type -> Bool)
+typesMatch :: TypedTermDefinition (Type -> Type -> Bool)
 typesMatch = def "typesMatch" $
   lambda "a" $ lambda "b" $ cases _Type (var "a")
     (Just $ boolean True) [
@@ -5268,7 +5255,7 @@ typesMatch = def "typesMatch" $
 
 -- | Unwrap nested function types to get the final return type.
 -- Also looks through type application wrappers (TypeApplication).
-unwrapReturnType :: TTermDefinition (Type -> Type)
+unwrapReturnType :: TypedTermDefinition (Type -> Type)
 unwrapReturnType = def "unwrapReturnType" $
   lambda "t" $
     cases _Type (Strip.deannotateType @@ var "t")
@@ -5282,7 +5269,7 @@ unwrapReturnType = def "unwrapReturnType" $
 -- Takes the parent type as the compareTo parameter.
 -- First compares variant class names for tag ordering,
 -- then casts 'other' to the same variant class and compares the 'value' field.
-variantCompareToMethod :: TTermDefinition (JavaHelpers.Aliases -> [Java.TypeParameter] -> Name -> Name -> [FieldType] -> Java.ClassBodyDeclaration)
+variantCompareToMethod :: TypedTermDefinition (JavaHelpers.Aliases -> [Java.TypeParameter] -> Name -> Name -> [FieldType] -> Java.ClassBodyDeclaration)
 variantCompareToMethod = def "variantCompareToMethod" $
   lambda "aliases" $ lambda "tparams" $ lambda "parentName" $ lambda "variantName" $ lambda "fields" $ lets [
     "anns">: list [asTerm JavaUtilsSource.overrideAnnotation, asTerm JavaUtilsSource.suppressWarningsUncheckedAnnotation],
@@ -5299,7 +5286,7 @@ variantCompareToMethod = def "variantCompareToMethod" $
     "variantJavaType">: JavaUtilsSource.javaTypeFromTypeName @@ var "aliases" @@ var "variantName",
     "castOtherExpr">: JavaUtilsSource.javaCastExpressionToJavaExpression @@
       (JavaUtilsSource.javaCastExpression
-        @@ (JavaUtilsSource.nameToJavaReferenceType @@ var "aliases" @@ false @@ list ([] :: [TTerm Java.TypeArgument]) @@ var "variantName" @@ nothing)
+        @@ (JavaUtilsSource.nameToJavaReferenceType @@ var "aliases" @@ false @@ list ([] :: [TypedTerm Java.TypeArgument]) @@ var "variantName" @@ nothing)
         @@ (JavaUtilsSource.javaIdentifierToJavaUnaryExpression @@ wrap Java._Identifier (asTerm JavaNamesSource.otherInstanceName))),
     "castDeclStmt">: JavaUtilsSource.variableDeclarationStatement @@ var "aliases" @@ var "variantJavaType"
       @@ (JavaUtilsSource.javaIdentifier @@ var "varTmpName") @@ var "castOtherExpr",
@@ -5308,12 +5295,12 @@ variantCompareToMethod = def "variantCompareToMethod" $
       (var "emptyReturn")
       (Lists.concat2 (list [var "castDeclStmt"]) (compareToBody @@ var "aliases" @@ var "varTmpName" @@ var "fields")),
     "body">: Lists.concat2 (list [var "tagDeclStmt", var "tagReturnStmt"]) (var "valueCompareStmt")] $
-    JavaUtilsSource.methodDeclaration @@ var "mods" @@ list ([] :: [TTerm Java.TypeParameter]) @@ var "anns"
+    JavaUtilsSource.methodDeclaration @@ var "mods" @@ list ([] :: [TypedTerm Java.TypeParameter]) @@ var "anns"
       @@ (asTerm JavaNamesSource.compareToMethodName) @@ list [var "param"] @@ var "result"
       @@ just (var "body")
 
 -- | Generate a visit branch for a field of a union type.
-visitBranch :: TTermDefinition (JavaHelpers.JavaEnvironment -> JavaHelpers.Aliases -> Type -> Name -> Java.Type -> [Java.TypeArgument] -> Field -> Context -> Graph -> Either Error Java.ClassBodyDeclarationWithComments)
+visitBranch :: TypedTermDefinition (JavaHelpers.JavaEnvironment -> JavaHelpers.Aliases -> Type -> Name -> Java.Type -> [Java.TypeArgument] -> Field -> InferenceContext -> Graph -> Either Error Java.ClassBodyDeclarationWithComments)
 visitBranch = def "visitBranch" $
   lambda "env" $ lambda "aliases" $ lambda "dom" $ lambda "tname" $ lambda "jcod" $ lambda "targs" $ lambda "field" $
     "cx" ~> "g" ~>
@@ -5325,7 +5312,7 @@ visitBranch = def "visitBranch" $
     "result" <~ (JavaDsl.resultType (JavaDsl.unannType (var "jcod"))) $
     -- Field terms are lambdas; apply to special var that encodes to instance.value
     cases _Term (Strip.deannotateTerm @@ Core.fieldTerm (var "field"))
-      (Just $ Ctx.failInContext (Error.errorOther $ Error.otherError $ Strings.cat2 (string "visitBranch: field term is not a lambda: ") (ShowCore.term @@ Core.fieldTerm (var "field"))) (var "cx")) [
+      (Just $ left (Error.errorOther $ Error.otherError $ Strings.cat2 (string "visitBranch: field term is not a lambda: ") (ShowCore.term @@ Core.fieldTerm (var "field")))) [
       _Term_lambda>>: lambda "lam" $
         withLambda @@ var "env" @@ var "lam" @@ (lambda "env2" $
           "lambdaParam" <~ Core.lambdaParameter (var "lam") $
@@ -5342,12 +5329,26 @@ visitBranch = def "visitBranch" $
           "param" <~ (JavaUtilsSource.javaTypeToJavaFormalParameter @@ var "jdom" @@ var "lambdaParam") $
           "returnStmt" <~ (JavaDsl.blockStatementStatement (JavaUtilsSource.javaReturnStatement @@ just (var "jret"))) $
           "allStmts" <~ Lists.concat2 (var "bindingStmts") (list [var "returnStmt"]) $
-          right (noComment @@ (JavaUtilsSource.methodDeclaration @@ var "mods" @@ list ([] :: [TTerm Java.TypeParameter]) @@ var "anns"
+          right (noComment @@ (JavaUtilsSource.methodDeclaration @@ var "mods" @@ list ([] :: [TypedTerm Java.TypeParameter]) @@ var "anns"
             @@ asTerm JavaNamesSource.visitMethodName @@ list [var "param"] @@ var "result" @@ just (var "allStmts"))))]
+
+-- | Wrap a class body declaration with a Javadoc comment.
+withCommentString :: TypedTermDefinition (String -> Java.ClassBodyDeclaration -> Java.ClassBodyDeclarationWithComments)
+withCommentString = def "withCommentString" $
+  lambda "comment" $ lambda "decl" $
+    JavaDsl.classBodyDeclarationWithComments (var "decl") (just (var "comment"))
+
+-- | Wrap an interface member declaration with a Javadoc comment.
+withInterfaceCommentString :: TypedTermDefinition (String -> Java.InterfaceMemberDeclaration -> Java.InterfaceMemberDeclarationWithComments)
+withInterfaceCommentString = def "withInterfaceCommentString" $
+  lambda "comment" $ lambda "decl" $
+    record Java._InterfaceMemberDeclarationWithComments [
+      Java._InterfaceMemberDeclarationWithComments_value>>: var "decl",
+      Java._InterfaceMemberDeclarationWithComments_comments>>: just (var "comment")]
 
 -- | Execute a computation in the context of a lambda, extending both the Graph
 -- and aliasesLambdaVars with the lambda parameter.
-withLambda :: TTermDefinition (JavaHelpers.JavaEnvironment -> Lambda -> (JavaHelpers.JavaEnvironment -> a) -> a)
+withLambda :: TypedTermDefinition (JavaHelpers.JavaEnvironment -> Lambda -> (JavaHelpers.JavaEnvironment -> a) -> a)
 withLambda = def "withLambda" $
   lambda "env" $ lambda "lam" $ lambda "k" $
     Environment.withLambdaContext @@ javaEnvGetGraph @@ javaEnvSetGraph @@ var "env" @@ var "lam" @@
@@ -5388,80 +5389,59 @@ withLambda = def "withLambda" $
         var "k" @@ var "env2")
 
 -- | Execute a computation in the context of a type lambda
-withTypeLambda :: TTermDefinition (JavaHelpers.JavaEnvironment -> TypeLambda -> (JavaHelpers.JavaEnvironment -> a) -> a)
+withTypeLambda :: TypedTermDefinition (JavaHelpers.JavaEnvironment -> TypeLambda -> (JavaHelpers.JavaEnvironment -> a) -> a)
 withTypeLambda = def "withTypeLambda" $
   Environment.withTypeLambdaContext @@ javaEnvGetGraph @@ javaEnvSetGraph
 
 -- | Wrap a single expression in a Supplier lambda: () -> expr
-wrapInSupplierLambda :: TTermDefinition (Java.Expression -> Java.Expression)
+wrapInSupplierLambda :: TypedTermDefinition (Java.Expression -> Java.Expression)
 wrapInSupplierLambda = def "wrapInSupplierLambda" $
   lambda "expr" $
     inject Java._Expression Java._Expression_lambda
       (JavaDsl.lambdaExpression
         (inject Java._LambdaParameters Java._LambdaParameters_tuple
-          (list ([] :: [TTerm Java.FormalParameter])))
+          (list ([] :: [TypedTerm Java.FormalParameter])))
         (inject Java._LambdaBody Java._LambdaBody_expression (var "expr")))
 
--- | For primitives requiring lazy evaluation, wrap branch arguments in Supplier lambdas.
--- Java eagerly evaluates all method arguments, so ifElse branches must be wrapped
--- in () -> expr and called via IfElse.lazy(). Similarly, maybe's nothing case must be
--- wrapped to avoid constructing expensive error messages on the success path.
-wrapLazyArguments :: TTermDefinition (Name -> [Java.Expression] -> ([Java.Expression], Maybe String))
+-- | Look up a primitive by name and return its per-parameter laziness flags
+-- (the `isLazy` flag of each signature parameter), in order. Empty if the name
+-- is not a registered primitive. The single source of truth for which arguments
+-- must be thunked, replacing per-coder hard-coded name tables (issue #391).
+lazyFlagsForPrimitive :: TypedTermDefinition (Graph -> Name -> [Bool])
+lazyFlagsForPrimitive = def "lazyFlagsForPrimitive" $
+  lambda "g" $ lambda "name" $
+    Maybes.cases (Maps.lookup (var "name") (Graph.graphPrimitives (var "g")))
+      (list ([] :: [TypedTerm Bool]))
+      (lambda "prim" $
+        Lists.map (lambda "p" $ Typing.parameterIsLazy (var "p"))
+          (Typing.termSignatureParameters
+            (Packaging.primitiveDefinitionSignature
+              (Graph.primitiveDefinition (var "prim")))))
+
+-- | For primitives requiring lazy evaluation, wrap the lazy-flagged arguments in
+-- Supplier lambdas. Java eagerly evaluates all method arguments, so e.g. ifElse
+-- branches must be wrapped in () -> expr and called via IfElse.lazy(); maybe's
+-- default must be wrapped to avoid constructing expensive values on the success
+-- path. Which positions are lazy comes from the primitive's `isLazy` metadata
+-- (issue #391), not a hard-coded name table. Only fires when the primitive is
+-- fully applied (argc == parameter count) and has at least one lazy parameter.
+-- The returned Maybe String is the Java method-name override: ifElse dispatches
+-- to `lazy`, the others to `applyLazy`.
+wrapLazyArguments :: TypedTermDefinition (Graph -> Name -> [Java.Expression] -> ([Java.Expression], Maybe String))
 wrapLazyArguments = def "wrapLazyArguments" $
-  lambda "name" $ lambda "args" $ lets [
-    "dummyExpr">: JavaUtilsSource.javaIntExpression @@ bigintAsInt (bigint 0),
-    "argAt">: "i" ~> Maybes.fromMaybe (var "dummyExpr") (Lists.maybeAt (var "i") (var "args"))] $
+  lambda "g" $ lambda "name" $ lambda "args" $ lets [
+    "lazyFlags">: lazyFlagsForPrimitive @@ var "g" @@ var "name",
+    "anyLazy">: Lists.foldl (lambda "b" $ lambda "f" $ Logic.or (var "b") (var "f")) false (var "lazyFlags")] $
     Logic.ifElse
-      (Logic.and
-        (Equality.equal (var "name") (Core.nameLift _logic_ifElse))
-        (Equality.equal (Lists.length (var "args")) (int32 3)))
+      (Logic.and (var "anyLazy")
+        (Equality.equal (Lists.length (var "args")) (Lists.length (var "lazyFlags"))))
       (pair
-        (list [
-          var "argAt" @@ int32 0,
-          wrapInSupplierLambda @@ (var "argAt" @@ int32 1),
-          wrapInSupplierLambda @@ (var "argAt" @@ int32 2)])
-        (just (string "lazy")))
-      (Logic.ifElse
-        (Logic.and
-          (Equality.equal (var "name") (Core.nameLift _maybes_maybe))
-          (Equality.equal (Lists.length (var "args")) (int32 3)))
-        (pair
-          (list [
-            wrapInSupplierLambda @@ (var "argAt" @@ int32 0),
-            var "argAt" @@ int32 1,
-            var "argAt" @@ int32 2])
-          (just (string "applyLazy")))
-      (Logic.ifElse
-        (Logic.and
-          (Equality.equal (var "name") (Core.nameLift _maybes_cases))
-          (Equality.equal (Lists.length (var "args")) (int32 3)))
-        (pair
-          (list [
-            var "argAt" @@ int32 0,
-            wrapInSupplierLambda @@ (var "argAt" @@ int32 1),
-            var "argAt" @@ int32 2])
-          (just (string "applyLazy")))
-      (Logic.ifElse
-        (Logic.and
-          (Equality.equal (var "name") (Core.nameLift _maps_findWithDefault))
-          (Equality.equal (Lists.length (var "args")) (int32 3)))
-        (pair
-          (list [
-            wrapInSupplierLambda @@ (var "argAt" @@ int32 0),
-            var "argAt" @@ int32 1,
-            var "argAt" @@ int32 2])
-          (just (string "applyLazy")))
-      (Logic.ifElse
-        (Logic.and
-          (Logic.or
-            (Equality.equal (var "name") (Core.nameLift _maybes_fromMaybe))
-            (Logic.or
-              (Equality.equal (var "name") (Core.nameLift _eithers_fromLeft))
-              (Equality.equal (var "name") (Core.nameLift _eithers_fromRight))))
-          (Equality.equal (Lists.length (var "args")) (int32 2)))
-        (pair
-          (list [
-            wrapInSupplierLambda @@ (var "argAt" @@ int32 0),
-            var "argAt" @@ int32 1])
-          (just (string "applyLazy")))
-        (pair (var "args") (nothing :: TTerm (Maybe String)))))))
+        (Lists.map
+          (lambda "pair" $ Logic.ifElse (Pairs.second (var "pair"))
+            (wrapInSupplierLambda @@ Pairs.first (var "pair"))
+            (Pairs.first (var "pair")))
+          (Lists.zip (var "args") (var "lazyFlags")))
+        (just (Logic.ifElse (Equality.equal (var "name") (Core.nameLift _logic_ifElse))
+          (string "lazy")
+          (string "applyLazy"))))
+      (pair (var "args") (nothing :: TypedTerm (Maybe String)))

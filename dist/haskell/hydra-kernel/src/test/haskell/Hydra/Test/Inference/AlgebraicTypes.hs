@@ -2,14 +2,34 @@
 -- | Inference tests for algebraic data types
 
 module Hydra.Test.Inference.AlgebraicTypes where
+import qualified Hydra.Ast as Ast
+import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
+import qualified Hydra.Error.Checking as Checking
+import qualified Hydra.Error.Core as ErrorCore
+import qualified Hydra.Error.Packaging as ErrorPackaging
+import qualified Hydra.Errors as Errors
+import qualified Hydra.Graph as Graph
 import qualified Hydra.Inference as Inference
-import qualified Hydra.Lib.Eithers as Eithers
-import qualified Hydra.Lib.Pairs as Pairs
-import qualified Hydra.Lib.Strings as Strings
+import qualified Hydra.Json.Model as Model
+import qualified Hydra.Haskell.Lib.Eithers as Eithers
+import qualified Hydra.Haskell.Lib.Pairs as Pairs
+import qualified Hydra.Haskell.Lib.Strings as Strings
+import qualified Hydra.Packaging as Packaging
+import qualified Hydra.Parsing as Parsing
+import qualified Hydra.Paths as Paths
+import qualified Hydra.Query as Query
+import qualified Hydra.Relational as Relational
 import qualified Hydra.Show.Core as ShowCore
+import qualified Hydra.Tabular as Tabular
 import qualified Hydra.Test.TestGraph as TestGraph
 import qualified Hydra.Testing as Testing
+import qualified Hydra.Topology as Topology
+import qualified Hydra.Typed as Typed
+import qualified Hydra.Typing as Typing
+import qualified Hydra.Util as Util
+import qualified Hydra.Validation as Validation
+import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 import qualified Data.Map as M
@@ -58,9 +78,11 @@ testGroupForCollectionPrimitives =
                       Core.mapTypeKeys = (Core.TypeVariable (Core.Name "t0")),
                       Core.mapTypeValues = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}))})),
                   Core.typeSchemeConstraints = (Just (M.fromList [
-                    (Core.Name "t0", Core.TypeVariableMetadata {
-                      Core.typeVariableMetadataClasses = (S.fromList [
-                        Core.Name "ordering"])})]))}))})),
+                    (
+                      Core.Name "t0",
+                      Core.TypeVariableMetadata {
+                        Core.typeVariableMetadataClasses = [
+                          Core.TypeClassConstraintSimple (Core.Name "ordering")]})]))}))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = [
                 Testing.Tag "disabledForMinimalInference"]},
@@ -86,9 +108,11 @@ testGroupForCollectionPrimitives =
                       Core.mapTypeKeys = (Core.TypeVariable (Core.Name "t0")),
                       Core.mapTypeValues = (Core.TypeList (Core.TypeVariable (Core.Name "t1")))}))})),
                   Core.typeSchemeConstraints = (Just (M.fromList [
-                    (Core.Name "t0", Core.TypeVariableMetadata {
-                      Core.typeVariableMetadataClasses = (S.fromList [
-                        Core.Name "ordering"])})]))}))})),
+                    (
+                      Core.Name "t0",
+                      Core.TypeVariableMetadata {
+                        Core.typeVariableMetadataClasses = [
+                          Core.TypeClassConstraintSimple (Core.Name "ordering")]})]))}))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = [
                 Testing.Tag "disabledForMinimalInference"]},
@@ -110,12 +134,16 @@ testGroupForCollectionPrimitives =
                       Core.mapTypeKeys = (Core.TypeVariable (Core.Name "t0")),
                       Core.mapTypeValues = (Core.TypeSet (Core.TypeVariable (Core.Name "t1")))}))})),
                   Core.typeSchemeConstraints = (Just (M.fromList [
-                    (Core.Name "t0", Core.TypeVariableMetadata {
-                      Core.typeVariableMetadataClasses = (S.fromList [
-                        Core.Name "ordering"])}),
-                    (Core.Name "t1", Core.TypeVariableMetadata {
-                      Core.typeVariableMetadataClasses = (S.fromList [
-                        Core.Name "ordering"])})]))}))})),
+                    (
+                      Core.Name "t0",
+                      Core.TypeVariableMetadata {
+                        Core.typeVariableMetadataClasses = [
+                          Core.TypeClassConstraintSimple (Core.Name "ordering")]}),
+                    (
+                      Core.Name "t1",
+                      Core.TypeVariableMetadata {
+                        Core.typeVariableMetadataClasses = [
+                          Core.TypeClassConstraintSimple (Core.Name "ordering")]})]))}))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = [
                 Testing.Tag "disabledForMinimalInference"]}]},
@@ -152,9 +180,11 @@ testGroupForCollectionPrimitives =
                     Core.functionTypeDomain = (Core.TypeSet (Core.TypeList (Core.TypeVariable (Core.Name "t0")))),
                     Core.functionTypeCodomain = (Core.TypeSet (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)))})),
                   Core.typeSchemeConstraints = (Just (M.fromList [
-                    (Core.Name "t0", Core.TypeVariableMetadata {
-                      Core.typeVariableMetadataClasses = (S.fromList [
-                        Core.Name "ordering"])})]))}))})),
+                    (
+                      Core.Name "t0",
+                      Core.TypeVariableMetadata {
+                        Core.typeVariableMetadataClasses = [
+                          Core.TypeClassConstraintSimple (Core.Name "ordering")]})]))}))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = [
                 Testing.Tag "disabledForMinimalInference"]}]},
@@ -187,12 +217,16 @@ testGroupForCollectionPrimitives =
                       Core.mapTypeKeys = (Core.TypeVariable (Core.Name "t0")),
                       Core.mapTypeValues = (Core.TypeSet (Core.TypeVariable (Core.Name "t1")))}))})),
                   Core.typeSchemeConstraints = (Just (M.fromList [
-                    (Core.Name "t0", Core.TypeVariableMetadata {
-                      Core.typeVariableMetadataClasses = (S.fromList [
-                        Core.Name "ordering"])}),
-                    (Core.Name "t1", Core.TypeVariableMetadata {
-                      Core.typeVariableMetadataClasses = (S.fromList [
-                        Core.Name "ordering"])})]))}))})),
+                    (
+                      Core.Name "t0",
+                      Core.TypeVariableMetadata {
+                        Core.typeVariableMetadataClasses = [
+                          Core.TypeClassConstraintSimple (Core.Name "ordering")]}),
+                    (
+                      Core.Name "t1",
+                      Core.TypeVariableMetadata {
+                        Core.typeVariableMetadataClasses = [
+                          Core.TypeClassConstraintSimple (Core.Name "ordering")]})]))}))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = [
                 Testing.Tag "disabledForMinimalInference"]},
@@ -256,9 +290,11 @@ testGroupForCollectionPrimitives =
                       Core.mapTypeKeys = (Core.TypeVariable (Core.Name "t0")),
                       Core.mapTypeValues = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}))})),
                   Core.typeSchemeConstraints = (Just (M.fromList [
-                    (Core.Name "t0", Core.TypeVariableMetadata {
-                      Core.typeVariableMetadataClasses = (S.fromList [
-                        Core.Name "ordering"])})]))}))})),
+                    (
+                      Core.Name "t0",
+                      Core.TypeVariableMetadata {
+                        Core.typeVariableMetadataClasses = [
+                          Core.TypeClassConstraintSimple (Core.Name "ordering")]})]))}))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = [
                 Testing.Tag "disabledForMinimalInference"]},
@@ -293,9 +329,11 @@ testGroupForCollectionPrimitives =
                         Core.mapTypeKeys = (Core.TypeVariable (Core.Name "t2")),
                         Core.mapTypeValues = (Core.TypeVariable (Core.Name "t1"))}))}))})),
                   Core.typeSchemeConstraints = (Just (M.fromList [
-                    (Core.Name "t2", Core.TypeVariableMetadata {
-                      Core.typeVariableMetadataClasses = (S.fromList [
-                        Core.Name "ordering"])})]))}))})),
+                    (
+                      Core.Name "t2",
+                      Core.TypeVariableMetadata {
+                        Core.typeVariableMetadataClasses = [
+                          Core.TypeClassConstraintSimple (Core.Name "ordering")]})]))}))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = [
                 Testing.Tag "disabledForMinimalInference"]}]},
@@ -936,9 +974,11 @@ testGroupForMaps =
                 Core.mapTypeKeys = (Core.TypeVariable (Core.Name "t0")),
                 Core.mapTypeValues = (Core.TypeVariable (Core.Name "t1"))})),
               Core.typeSchemeConstraints = (Just (M.fromList [
-                (Core.Name "t0", Core.TypeVariableMetadata {
-                  Core.typeVariableMetadataClasses = (S.fromList [
-                    Core.Name "ordering"])})]))}))})),
+                (
+                  Core.Name "t0",
+                  Core.TypeVariableMetadata {
+                    Core.typeVariableMetadataClasses = [
+                      Core.TypeClassConstraintSimple (Core.Name "ordering")]})]))}))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = [
             Testing.Tag "disabledForMinimalInference"]},
@@ -965,9 +1005,11 @@ testGroupForMaps =
                     Core.mapTypeKeys = (Core.TypeVariable (Core.Name "t0")),
                     Core.mapTypeValues = (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat64))}))}))})),
               Core.typeSchemeConstraints = (Just (M.fromList [
-                (Core.Name "t0", Core.TypeVariableMetadata {
-                  Core.typeVariableMetadataClasses = (S.fromList [
-                    Core.Name "ordering"])})]))}))})),
+                (
+                  Core.Name "t0",
+                  Core.TypeVariableMetadata {
+                    Core.typeVariableMetadataClasses = [
+                      Core.TypeClassConstraintSimple (Core.Name "ordering")]})]))}))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = [
             Testing.Tag "disabledForMinimalInference"]}]}
@@ -1273,9 +1315,11 @@ testGroupForSets =
                 Core.Name "t0"],
               Core.typeSchemeBody = (Core.TypeSet (Core.TypeSet (Core.TypeVariable (Core.Name "t0")))),
               Core.typeSchemeConstraints = (Just (M.fromList [
-                (Core.Name "t0", Core.TypeVariableMetadata {
-                  Core.typeVariableMetadataClasses = (S.fromList [
-                    Core.Name "ordering"])})]))}))})),
+                (
+                  Core.Name "t0",
+                  Core.TypeVariableMetadata {
+                    Core.typeVariableMetadataClasses = [
+                      Core.TypeClassConstraintSimple (Core.Name "ordering")]})]))}))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = [
             Testing.Tag "disabledForMinimalInference"]}]}

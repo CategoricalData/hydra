@@ -4,36 +4,28 @@
 module Hydra.Dsl.Meta.Graph (
   module Hydra.Dsl.Graph,
   module Hydra.Dsl.Meta.Graph,
-  DslGraph.primitiveName,
-  DslGraph.primitiveTypeScheme,
-  DslGraph.graphPrimitives,
 ) where
 
 import Hydra.Kernel
 import Hydra.Dsl.Meta.Phantoms
-import Hydra.Dsl.Graph hiding (primitiveName, primitiveType, graphPrimitives)
-import qualified Hydra.Dsl.Graph as DslGraph
+import Hydra.Dsl.Graph
 
-import qualified Hydra.Dsl.Meta.Lib.Lists as Lists
 import qualified Hydra.Dsl.Meta.Lib.Maps as Maps
 import qualified Hydra.Dsl.Meta.Lib.Sets as Sets
-
-import qualified Data.Map as M
-import qualified Data.Set as S
 
 
 -- | Non-standard helpers
 
-comparisonLessThan :: TTerm Comparison
-comparisonLessThan = injectUnit _Comparison _Comparison_lessThan
-
-comparisonEqualTo :: TTerm Comparison
+comparisonEqualTo :: TypedTerm Comparison
 comparisonEqualTo = injectUnit _Comparison _Comparison_equalTo
 
-comparisonGreaterThan :: TTerm Comparison
+comparisonGreaterThan :: TypedTerm Comparison
 comparisonGreaterThan = injectUnit _Comparison _Comparison_greaterThan
 
-emptyGraph :: TTerm Graph
+comparisonLessThan :: TypedTerm Comparison
+comparisonLessThan = injectUnit _Comparison _Comparison_lessThan
+
+emptyGraph :: TypedTerm Graph
 emptyGraph = graph
     Maps.empty  -- boundTerms
     Maps.empty  -- boundTypes
@@ -44,7 +36,3 @@ emptyGraph = graph
     Maps.empty  -- schemaTypes
     Sets.empty  -- typeVariables
 
-graphPrimitiveTypes :: TTerm Graph -> TTerm (M.Map Name TypeScheme)
-graphPrimitiveTypes g = Maps.fromList (Lists.map
-    ("_gpt_p" ~> pair (DslGraph.primitiveName $ var "_gpt_p") (DslGraph.primitiveTypeScheme $ var "_gpt_p"))
-    (Maps.elems $ DslGraph.graphPrimitives g))

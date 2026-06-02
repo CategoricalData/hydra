@@ -17,7 +17,6 @@ import qualified Hydra.Dsl.Ast                        as Ast
 import qualified Hydra.Dsl.Meta.Base                       as MetaBase
 import qualified Hydra.Dsl.Coders                     as Coders
 import qualified Hydra.Dsl.Util                    as Util
-import qualified Hydra.Dsl.Meta.Context                    as Ctx
 import qualified Hydra.Dsl.Errors                      as Error
 import qualified Hydra.Dsl.Meta.Core                       as Core
 import qualified Hydra.Dsl.Meta.Graph                      as Graph
@@ -102,7 +101,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> (([GraphsonCoder.ns] L.++ (kernelTypesModuleNames L.++ [GraphsonSyntax.ns, PgModel.ns, JsonModel.ns]))),
-            moduleDescription = Just "Functions for constructing GraphSON vertices from property graph vertices."}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just "Functions for constructing GraphSON vertices from property graph vertices.")}
   where
     definitions = [
       toDefinition adjacentEdgeToGraphson,
@@ -113,21 +112,11 @@ module_ = Module {
       toDefinition pgVertexWithAdjacentEdgesToJson,
       toDefinition vertexPropertyToGraphson]
 
-define :: String -> TTerm a -> TTermDefinition a
+define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModule module_
 
--- Type references
-gson :: String -> Type
-gson = Bootstrap.typeref GraphsonSyntax.ns
-
-pg :: String -> Type
-pg = Bootstrap.typeref PgModel.ns
-
-jsonValue :: Type
-jsonValue = Bootstrap.typeref JsonModel.ns "Value"
-
 -- | Convert a PG adjacent edge to GraphSON format
-adjacentEdgeToGraphson :: TTermDefinition ((v -> Either Error G.Value) -> PG.AdjacentEdge v -> Either Error (G.EdgeLabel, G.AdjacentEdge))
+adjacentEdgeToGraphson :: TypedTermDefinition ((v -> Either Error G.Value) -> PG.AdjacentEdge v -> Either Error (G.EdgeLabel, G.AdjacentEdge))
 adjacentEdgeToGraphson = define "adjacentEdgeToGraphson" $
   doc "Convert a property graph adjacent edge to a GraphSON adjacent edge" $
   "encodeValue" ~> "edge" ~>
@@ -153,7 +142,7 @@ adjacentEdgeToGraphson = define "adjacentEdgeToGraphson" $
                       G._AdjacentEdge_properties>>: Maps.fromList (var "propPairs")]))))
 
 -- | Aggregate a list of key-value pairs into a map of lists
-aggregateMap :: TTermDefinition ([(k, v)] -> M.Map k [v])
+aggregateMap :: TypedTermDefinition ([(k, v)] -> M.Map k [v])
 aggregateMap = define "aggregateMap" $
   doc "Aggregate a list of key-value pairs into a map where each key maps to a list of values" $
   "pairs" ~>
@@ -172,7 +161,7 @@ aggregateMap = define "aggregateMap" $
       (var "pairs")
 
 -- | Convert a PG edge property to GraphSON format
-edgePropertyToGraphson :: TTermDefinition ((v -> Either Error G.Value) -> (PG.PropertyKey, v) -> Either Error (G.PropertyKey, G.Value))
+edgePropertyToGraphson :: TypedTermDefinition ((v -> Either Error G.Value) -> (PG.PropertyKey, v) -> Either Error (G.PropertyKey, G.Value))
 edgePropertyToGraphson = define "edgePropertyToGraphson" $
   doc "Convert a property graph edge property to a GraphSON property" $
   "encodeValue" ~> "prop" ~>
@@ -184,15 +173,25 @@ edgePropertyToGraphson = define "edgePropertyToGraphson" $
       (var "encodeValue" @@ (Pairs.second $ var "prop"))
 
 -- | A coder that converts GraphSON vertices to JSON
-graphsonVertexToJsonCoder :: TTermDefinition (Coder G.Vertex JM.Value)
+graphsonVertexToJsonCoder :: TypedTermDefinition (Coder G.Vertex JM.Value)
 graphsonVertexToJsonCoder = define "graphsonVertexToJsonCoder" $
   doc "A coder that converts GraphSON vertices to JSON. Decoding is not supported." $
   Coders.coder
     ("_cx" ~> "v" ~> right (Coder.vertexToJson @@ var "v"))
-    ("_cx" ~> "_" ~> Ctx.failInContext (Error.errorOther $ Error.otherError $ string "decoding GraphSON JSON is currently unsupported") (var "_cx"))
+    ("_cx" ~> "_" ~> left (Error.errorOther $ Error.otherError $ string "decoding GraphSON JSON is currently unsupported"))
+
+-- Type references
+gson :: String -> Type
+gson = Bootstrap.typeref GraphsonSyntax.ns
+
+jsonValue :: Type
+jsonValue = Bootstrap.typeref JsonModel.ns "Value"
+
+pg :: String -> Type
+pg = Bootstrap.typeref PgModel.ns
 
 -- | Convert a PG vertex with adjacent edges to a GraphSON vertex
-pgVertexWithAdjacentEdgesToGraphsonVertex :: TTermDefinition ((v -> Either Error G.Value) -> PG.VertexWithAdjacentEdges v -> Either Error G.Vertex)
+pgVertexWithAdjacentEdgesToGraphsonVertex :: TypedTermDefinition ((v -> Either Error G.Value) -> PG.VertexWithAdjacentEdges v -> Either Error G.Vertex)
 pgVertexWithAdjacentEdgesToGraphsonVertex = define "pgVertexWithAdjacentEdgesToGraphsonVertex" $
   doc "Convert a property graph vertex with adjacent edges to a GraphSON vertex" $
   "encodeValue" ~> "vae" ~>
@@ -223,7 +222,7 @@ pgVertexWithAdjacentEdgesToGraphsonVertex = define "pgVertexWithAdjacentEdgesToG
                         G._Vertex_properties>>: aggregateMap @@ var "propPairs"]))))
 
 -- | Convert a PG vertex with adjacent edges directly to JSON
-pgVertexWithAdjacentEdgesToJson :: TTermDefinition ((v -> Either Error G.Value) -> PG.VertexWithAdjacentEdges v -> Either Error JM.Value)
+pgVertexWithAdjacentEdgesToJson :: TypedTermDefinition ((v -> Either Error G.Value) -> PG.VertexWithAdjacentEdges v -> Either Error JM.Value)
 pgVertexWithAdjacentEdgesToJson = define "pgVertexWithAdjacentEdgesToJson" $
   doc "Convert a property graph vertex with adjacent edges to JSON" $
   "encodeValue" ~> "vertex" ~>
@@ -233,7 +232,7 @@ pgVertexWithAdjacentEdgesToJson = define "pgVertexWithAdjacentEdgesToJson" $
         right $ Coder.vertexToJson @@ var "gVertex")
 
 -- | Convert a PG vertex property to GraphSON format
-vertexPropertyToGraphson :: TTermDefinition ((v -> Either Error G.Value) -> (PG.PropertyKey, v) -> Either Error (G.PropertyKey, G.VertexPropertyValue))
+vertexPropertyToGraphson :: TypedTermDefinition ((v -> Either Error G.Value) -> (PG.PropertyKey, v) -> Either Error (G.PropertyKey, G.VertexPropertyValue))
 vertexPropertyToGraphson = define "vertexPropertyToGraphson" $
   doc "Convert a property graph vertex property to a GraphSON vertex property" $
   "encodeValue" ~> "prop" ~>

@@ -3,13 +3,13 @@ module Hydra.Sources.Kernel.Terms.Analysis where
 
 -- Standard imports for kernel terms modules
 import Hydra.Kernel hiding (
-  addNamesToNamespaces,
+  addNamesToModuleNames,
   analyzeFunctionTerm,
   analyzeFunctionTermWith,
   analyzeFunctionTermWithFinish,
   analyzeFunctionTermWithGather,
-  definitionDependencyNamespaces,
-  dependencyNamespaces,
+  definitionDependencyModuleNames,
+  dependencyModuleNames,
   gatherApplications,
   gatherArgs,
   gatherArgsWithTypeApps,
@@ -18,8 +18,8 @@ import Hydra.Kernel hiding (
   isTailRecursiveInTailPosition,
   moduleContainsBinaryLiterals,
   moduleContainsDecimalLiterals,
-  moduleDependencyNamespaces,
-  namespacesForDefinitions)
+  moduleDependencyModuleNames,
+  moduleNamesForDefinitions)
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Paths    as Paths
 import qualified Hydra.Dsl.Annotations       as Annotations
@@ -58,7 +58,6 @@ import qualified Hydra.Dsl.Tests             as Tests
 import qualified Hydra.Dsl.Topology     as Topology
 import qualified Hydra.Dsl.Types             as Types
 import qualified Hydra.Dsl.Typing       as Typing
-import qualified Hydra.Dsl.Meta.Context      as Ctx
 import qualified Hydra.Dsl.Errors       as Error
 import qualified Hydra.Dsl.Meta.Variants     as Variants
 import           Hydra.Sources.Kernel.Types.All
@@ -87,7 +86,7 @@ import qualified Hydra.Sources.Kernel.Terms.Predicates   as Predicates
 ns :: ModuleName
 ns = ModuleName "hydra.analysis"
 
-define :: String -> TTerm a -> TTermDefinition a
+define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModuleName ns
 
 module_ :: Module
@@ -95,16 +94,16 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> ([Annotations.ns, Arity.ns, Checking.ns, Dependencies.ns, moduleName DecodeCore.module_, Lexical.ns, Names.ns, Predicates.ns, Rewriting.ns, Scoping.ns, Strip.ns, Variables.ns] L.++ kernelTypesModuleNames),
-            moduleDescription = Just ("Module dependency namespace analysis")}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just ("Module dependency module name analysis"))}
   where
     definitions = [
-      toDefinition addNamesToNamespaces,
+      toDefinition addNamesToModuleNames,
       toDefinition analyzeFunctionTerm,
       toDefinition analyzeFunctionTermWith,
       toDefinition analyzeFunctionTermWithFinish,
       toDefinition analyzeFunctionTermWithGather,
-      toDefinition definitionDependencyNamespaces,
-      toDefinition dependencyNamespaces,
+      toDefinition definitionDependencyModuleNames,
+      toDefinition dependencyModuleNames,
       toDefinition gatherApplications,
       toDefinition gatherArgs,
       toDefinition gatherArgsWithTypeApps,
@@ -113,22 +112,22 @@ module_ = Module {
       toDefinition isTailRecursiveInTailPosition,
       toDefinition moduleContainsBinaryLiterals,
       toDefinition moduleContainsDecimalLiterals,
-      toDefinition moduleDependencyNamespaces,
-      toDefinition namespacesForDefinitions]
+      toDefinition moduleDependencyModuleNames,
+      toDefinition moduleNamesForDefinitions]
 
-addNamesToNamespaces :: TTermDefinition ((ModuleName -> a) -> S.Set Name -> Namespaces a -> Namespaces a)
-addNamesToNamespaces = define "addNamesToNamespaces" $
-  doc "Add names to existing namespaces mapping" $
-  "encodeNamespace" ~> "names" ~> "ns0" ~>
+addNamesToModuleNames :: TypedTermDefinition ((ModuleName -> a) -> S.Set Name -> ModuleNames a -> ModuleNames a)
+addNamesToModuleNames = define "addNamesToModuleNames" $
+  doc "Add names to existing module names mapping" $
+  "encodeModuleName" ~> "names" ~> "ns0" ~>
 --  "nss" <~ Sets.empty $
-  "nss" <~ Sets.fromList (Maybes.cat $ Lists.map (Names.namespaceOf) $ Sets.toList $ var "names") $
-  "toPair" <~ ("ns" ~> pair (var "ns") (var "encodeNamespace" @@ var "ns")) $
-  Util.namespacesWithMapping (var "ns0") $ Maps.union
-    (Util.namespacesMapping $ var "ns0")
+  "nss" <~ Sets.fromList (Maybes.cat $ Lists.map (Names.moduleNameOf) $ Sets.toList $ var "names") $
+  "toPair" <~ ("ns" ~> pair (var "ns") (var "encodeModuleName" @@ var "ns")) $
+  Util.moduleNamesWithMapping (var "ns0") $ Maps.union
+    (Util.moduleNamesMapping $ var "ns0")
     (Maps.fromList $ Lists.map (var "toPair") $ Sets.toList $ var "nss")
 
-analyzeFunctionTerm :: TTermDefinition (
-  Context ->
+analyzeFunctionTerm :: TypedTermDefinition (
+  InferenceContext ->
   (env -> Graph) ->
   (Graph -> env -> env) ->
   env ->
@@ -141,8 +140,8 @@ analyzeFunctionTerm = define "analyzeFunctionTerm" $
     @@ ("g" ~> "b" ~> Logic.ifElse (Predicates.isComplexBinding @@ var "g" @@ var "b") (just MetaTerms.true) nothing)
     @@ var "getTC" @@ var "setTC" @@ var "env" @@ var "term"
 
-analyzeFunctionTermWith :: TTermDefinition (
-  Context ->
+analyzeFunctionTermWith :: TypedTermDefinition (
+  InferenceContext ->
   (Graph -> Binding -> Maybe Term) ->
   (env -> Graph) ->
   (Graph -> env -> env) ->
@@ -154,15 +153,15 @@ analyzeFunctionTermWith = define "analyzeFunctionTermWith" $
   "cx" ~> "forBinding" ~> "getTC" ~> "setTC" ~> "env" ~> "term" ~>
   analyzeFunctionTermWithGather @@ var "cx" @@ var "forBinding" @@ var "getTC" @@ var "setTC"
     @@ boolean True @@ var "env"
-    @@ list ([] :: [TTerm Name])
-    @@ list ([] :: [TTerm Name])
-    @@ list ([] :: [TTerm Binding])
-    @@ list ([] :: [TTerm Type])
-    @@ list ([] :: [TTerm Type])
+    @@ list ([] :: [TypedTerm Name])
+    @@ list ([] :: [TypedTerm Name])
+    @@ list ([] :: [TypedTerm Binding])
+    @@ list ([] :: [TypedTerm Type])
+    @@ list ([] :: [TypedTerm Type])
     @@ var "term"
 
-analyzeFunctionTermWithFinish :: TTermDefinition (
-  Context ->
+analyzeFunctionTermWithFinish :: TypedTermDefinition (
+  InferenceContext ->
   (env -> Graph) ->
   env -> [Name] -> [Name] -> [Binding] -> [Type] -> [Type] -> Term ->
   Either Error (FunctionStructure env))
@@ -185,8 +184,8 @@ analyzeFunctionTermWithFinish = define "analyzeFunctionTermWithFinish" $
     _FunctionStructure_codomain>>: var "mcod",
     _FunctionStructure_environment>>: var "fEnv"]
 
-analyzeFunctionTermWithGather :: TTermDefinition (
-  Context ->
+analyzeFunctionTermWithGather :: TypedTermDefinition (
+  InferenceContext ->
   (Graph -> Binding -> Maybe Term) ->
   (env -> Graph) ->
   (Graph -> env -> env) ->
@@ -249,22 +248,24 @@ analyzeFunctionTermWithGather = define "analyzeFunctionTermWithGather" $
         @@ var "tapps"
         @@ var "tlBody"]
 
-definitionDependencyNamespaces :: TTermDefinition ([Definition] -> S.Set ModuleName)
-definitionDependencyNamespaces = define "definitionDependencyNamespaces" $
-  doc "Get dependency namespaces from definitions" $
+definitionDependencyModuleNames :: TypedTermDefinition ([Definition] -> S.Set ModuleName)
+definitionDependencyModuleNames = define "definitionDependencyModuleNames" $
+  doc "Get dependency module names from definitions" $
   "defs" ~>
   "defNames" <~ ("def" ~> cases _Definition (var "def")
     Nothing [
     _Definition_type>>: "typeDef" ~>
       Dependencies.typeDependencyNames @@ true @@ (Core.typeSchemeBody $ Packaging.typeDefinitionTypeScheme (var "typeDef")),
     _Definition_term>>: "termDef" ~>
-      Dependencies.termDependencyNames @@ true @@ true @@ true @@ Packaging.termDefinitionTerm (var "termDef")]) $
+      Dependencies.termDependencyNames @@ true @@ true @@ true @@ Packaging.termDefinitionTerm (var "termDef"),
+    _Definition_primitive>>: "primDef" ~>
+      Dependencies.typeDependencyNames @@ true @@ (Core.typeSchemeBody $ Scoping.termSignatureToTypeScheme @@ Packaging.primitiveDefinitionSignature (var "primDef"))]) $
   "allNames" <~ Sets.unions (Lists.map (var "defNames") (var "defs")) $
-  Sets.fromList (Maybes.cat (Lists.map (Names.namespaceOf) (Sets.toList (var "allNames"))))
+  Sets.fromList (Maybes.cat (Lists.map (Names.moduleNameOf) (Sets.toList (var "allNames"))))
 
-dependencyNamespaces :: TTermDefinition (Context -> Graph -> Bool -> Bool -> Bool -> Bool -> [Binding] -> Either Error (S.Set ModuleName))
-dependencyNamespaces = define "dependencyNamespaces" $
-  doc "Find dependency namespaces in all of a set of terms (Either version)" $
+dependencyModuleNames :: TypedTermDefinition (InferenceContext -> Graph -> Bool -> Bool -> Bool -> Bool -> [Binding] -> Either Error (S.Set ModuleName))
+dependencyModuleNames = define "dependencyModuleNames" $
+  doc "Find dependency module names in all of a set of terms (Either version)" $
   "cx" ~> "graph" ~> "binds" ~> "withPrims" ~> "withNoms" ~> "withSchema" ~> "els" ~>
   "depNames" <~ ("el" ~>
     "term" <~ Core.bindingTerm (var "el") $
@@ -290,11 +291,11 @@ dependencyNamespaces = define "dependencyNamespaces" $
           (Eithers.bimap ("_e" ~> Error.errorDecoding $ var "_e") ("_a" ~> var "_a")
               (decoderFor _Term @@ var "graph" @@ var "term")))
         (right (Sets.unions (list [var "dataNames", var "schemaNames"]))))) $
-  Eithers.map ("namesList" ~> Sets.fromList (Maybes.cat (Lists.map (Names.namespaceOf) (
+  Eithers.map ("namesList" ~> Sets.fromList (Maybes.cat (Lists.map (Names.moduleNameOf) (
       Sets.toList (Sets.unions (var "namesList"))))))
     (Eithers.mapList (var "depNames") (var "els"))
 
-gatherApplications :: TTermDefinition (Term -> ([Term], Term))
+gatherApplications :: TypedTermDefinition (Term -> ([Term], Term))
 gatherApplications = define "gatherApplications" $
   doc "Gather applications from a term, returning (args, baseTerm)" $
   "term" ~>
@@ -306,9 +307,9 @@ gatherApplications = define "gatherApplications" $
         "lhs" <~ Core.applicationFunction (var "app") $
         "rhs" <~ Core.applicationArgument (var "app") $
         var "go" @@ (Lists.cons (var "rhs") (var "args")) @@ var "lhs"]) $
-  var "go" @@ (list ([] :: [TTerm Term])) @@ var "term"
+  var "go" @@ (list ([] :: [TypedTerm Term])) @@ var "term"
 
-gatherArgs :: TTermDefinition (Term -> [Term] -> (Term, [Term]))
+gatherArgs :: TypedTermDefinition (Term -> [Term] -> (Term, [Term]))
 gatherArgs = define "gatherArgs" $
   doc "Gather term arguments, stripping type-level constructs" $
   "term" ~> "args" ~>
@@ -325,7 +326,7 @@ gatherArgs = define "gatherArgs" $
       "body" <~ Core.typeApplicationTermBody (var "ta") $
       gatherArgs @@ var "body" @@ var "args"]
 
-gatherArgsWithTypeApps :: TTermDefinition (Term -> [Term] -> [Type] -> (Term, [Term], [Type]))
+gatherArgsWithTypeApps :: TypedTermDefinition (Term -> [Term] -> [Type] -> (Term, [Term], [Type]))
 gatherArgsWithTypeApps = define "gatherArgsWithTypeApps" $
   doc "Gather term and type arguments from a term" $
   "term" ~> "args" ~> "tyArgs" ~>
@@ -343,7 +344,7 @@ gatherArgsWithTypeApps = define "gatherArgsWithTypeApps" $
       "typ" <~ Core.typeApplicationTermType (var "ta") $
       gatherArgsWithTypeApps @@ var "body" @@ var "args" @@ (Lists.cons (var "typ") (var "tyArgs"))]
 
-isSelfTailRecursive :: TTermDefinition (Name -> Term -> Bool)
+isSelfTailRecursive :: TypedTermDefinition (Name -> Term -> Bool)
 isSelfTailRecursive = define "isSelfTailRecursive" $
   doc "Check if a term body is self-tail-recursive with respect to a function name" $
   "funcName" ~> "body" ~>
@@ -354,14 +355,14 @@ isSelfTailRecursive = define "isSelfTailRecursive" $
       (isTailRecursiveInTailPosition @@ var "funcName" @@ var "body")
       false
 
-isSimpleAssignment :: TTermDefinition (Term -> Bool)
+isSimpleAssignment :: TypedTermDefinition (Term -> Bool)
 isSimpleAssignment = define "isSimpleAssignment" $
   doc "Check if a term can be encoded as a simple assignment" $
   "term" ~>
   cases _Term (var "term")
     (Just $
       -- Check if the base term (after gathering args) is a union elimination
-      "baseTerm" <~ Pairs.first (gatherArgs @@ var "term" @@ list ([] :: [TTerm Term])) $
+      "baseTerm" <~ Pairs.first (gatherArgs @@ var "term" @@ list ([] :: [TypedTerm Term])) $
       cases _Term (var "baseTerm")
         (Just $ boolean True) [
         _Term_cases>>: constant (boolean False)]) [
@@ -373,7 +374,7 @@ isSimpleAssignment = define "isSimpleAssignment" $
     _Term_typeApplication>>: "ta" ~>
       isSimpleAssignment @@ (Core.typeApplicationTermBody $ var "ta")]
 
-isTailRecursiveInTailPosition :: TTermDefinition (Name -> Term -> Bool)
+isTailRecursiveInTailPosition :: TypedTermDefinition (Name -> Term -> Bool)
 isTailRecursiveInTailPosition = define "isTailRecursiveInTailPosition" $
   doc "Check that all self-references are in tail position" $
   "funcName" ~> "term" ~>
@@ -457,7 +458,7 @@ isTailRecursiveInTailPosition = define "isTailRecursiveInTailPosition" $
         Logic.and (var "bindingsOk")
           (isTailRecursiveInTailPosition @@ var "funcName" @@ (Core.letBody $ var "lt"))]
 
-moduleContainsBinaryLiterals :: TTermDefinition (Module -> Bool)
+moduleContainsBinaryLiterals :: TypedTermDefinition (Module -> Bool)
 moduleContainsBinaryLiterals = define "moduleContainsBinaryLiterals" $
   doc "Check whether a module contains any binary literal values" $
   "mod" ~>
@@ -477,7 +478,7 @@ moduleContainsBinaryLiterals = define "moduleContainsBinaryLiterals" $
     false
     (var "defTerms")
 
-moduleContainsDecimalLiterals :: TTermDefinition (Module -> Bool)
+moduleContainsDecimalLiterals :: TypedTermDefinition (Module -> Bool)
 moduleContainsDecimalLiterals = define "moduleContainsDecimalLiterals" $
   doc "Check whether a module contains any decimal literal values" $
   "mod" ~>
@@ -497,9 +498,9 @@ moduleContainsDecimalLiterals = define "moduleContainsDecimalLiterals" $
     false
     (var "defTerms")
 
-moduleDependencyNamespaces :: TTermDefinition (Context -> Graph -> Bool -> Bool -> Bool -> Bool -> Module -> Either Error (S.Set ModuleName))
-moduleDependencyNamespaces = define "moduleDependencyNamespaces" $
-  doc "Find dependency namespaces in all elements of a module, excluding the module's own namespace (Either version)" $
+moduleDependencyModuleNames :: TypedTermDefinition (InferenceContext -> Graph -> Bool -> Bool -> Bool -> Bool -> Module -> Either Error (S.Set ModuleName))
+moduleDependencyModuleNames = define "moduleDependencyModuleNames" $
+  doc "Find dependency module names in all elements of a module, excluding the module's own module name (Either version)" $
   "cx" ~> "graph" ~> "binds" ~> "withPrims" ~> "withNoms" ~> "withSchema" ~> "mod" ~>
   "allBindings" <~ Maybes.cat (Lists.map
     ("d" ~> cases _Definition (var "d") (Just nothing) [
@@ -507,18 +508,18 @@ moduleDependencyNamespaces = define "moduleDependencyNamespaces" $
         just (Annotations.typeBinding @@ (Packaging.typeDefinitionName $ var "td") @@ (Core.typeSchemeBody $ Packaging.typeDefinitionTypeScheme $ var "td")),
       _Definition_term>>: "td" ~>
         just (Core.binding (Packaging.termDefinitionName $ var "td") (Packaging.termDefinitionTerm $ var "td")
-          (Packaging.termDefinitionTypeScheme $ var "td"))])
+          (Maybes.map Scoping.termSignatureToTypeScheme $ Packaging.termDefinitionSignature $ var "td"))])
     (Packaging.moduleDefinitions (var "mod"))) $
   Eithers.map
     ("deps" ~> Sets.delete (Packaging.moduleName (var "mod")) (var "deps"))
-    (dependencyNamespaces @@ var "cx" @@ var "graph" @@ var "binds" @@ var "withPrims" @@ var "withNoms" @@ var "withSchema" @@
+    (dependencyModuleNames @@ var "cx" @@ var "graph" @@ var "binds" @@ var "withPrims" @@ var "withNoms" @@ var "withSchema" @@
       (var "allBindings"))
 
-namespacesForDefinitions :: TTermDefinition ((ModuleName -> a) -> ModuleName -> [Definition] -> Namespaces a)
-namespacesForDefinitions = define "namespacesForDefinitions" $
-  doc "Create namespaces mapping for definitions" $
-  "encodeNamespace" ~> "focusNs" ~> "defs" ~>
-  "nss" <~ Sets.delete (var "focusNs") (definitionDependencyNamespaces @@ var "defs") $
-  "toPair" <~ ("ns" ~> pair (var "ns") (var "encodeNamespace" @@ var "ns")) $
-  Util.namespaces (var "toPair" @@ var "focusNs") (Maps.fromList (Lists.map (var "toPair") (Sets.toList (var "nss"))))
+moduleNamesForDefinitions :: TypedTermDefinition ((ModuleName -> a) -> ModuleName -> [Definition] -> ModuleNames a)
+moduleNamesForDefinitions = define "moduleNamesForDefinitions" $
+  doc "Create module names mapping for definitions" $
+  "encodeModuleName" ~> "focusNs" ~> "defs" ~>
+  "nss" <~ Sets.delete (var "focusNs") (definitionDependencyModuleNames @@ var "defs") $
+  "toPair" <~ ("ns" ~> pair (var "ns") (var "encodeModuleName" @@ var "ns")) $
+  Util.moduleNames (var "toPair" @@ var "focusNs") (Maps.fromList (Lists.map (var "toPair") (Sets.toList (var "nss"))))
 

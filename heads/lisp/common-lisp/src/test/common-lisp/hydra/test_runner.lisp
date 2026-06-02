@@ -289,11 +289,17 @@
   (labels ((make-type (n)
              (if (<= n 0) (list :unit)
                  (list :function (make-function_type (list :unit) (make-type (1- n)))))))
-    (make-type_scheme nil (make-type arity) nil)))
+    (make-type_scheme nil (make-type arity) (list :nothing))))
+
+(defun make-ann-prim-def (pname arity)
+  "Build a PrimitiveDefinition (#156 shape) for an annotation primitive."
+  (let* ((ts (make-ann-type-scheme arity))
+         (sig (funcall hydra_scoping_type_scheme_to_term_signature ts)))
+    (make-hydra_packaging_primitive_definition pname sig (list :nothing) t t (list :nothing))))
 
 (defun make-annotation-primitive (pname arity impl-fn)
   "Create a Primitive for annotation operations."
-  (make-primitive pname (make-ann-type-scheme arity)
+  (make-primitive (make-ann-prim-def pname arity)
     (lambda (cx)
       (lambda (g)
         (lambda (args)
@@ -408,7 +414,7 @@
          (maybe-val (if term-val (list :maybe term-val) (list :maybe (list :nothing)))))
     (prim-set-term-annotation cx g (list desc-key maybe-val term))))
 
-;; getTermDescription :: Context -> Graph -> Term -> Either Error (Maybe String)
+;; getTermDescription :: InferenceContext -> Graph -> Term -> Either Error (Maybe String)
 (defun prim-get-term-description (cx g args)
   (declare (ignore cx g))
   (let* ((term (third args))

@@ -53,7 +53,6 @@ import qualified Hydra.Dsl.Tests             as Tests
 import qualified Hydra.Dsl.Topology     as Topology
 import qualified Hydra.Dsl.Types             as Types
 import qualified Hydra.Dsl.Typing       as Typing
-import qualified Hydra.Dsl.Meta.Context      as Ctx
 import qualified Hydra.Dsl.Errors       as Error
 import qualified Hydra.Dsl.Meta.Variants     as Variants
 import           Hydra.Sources.Kernel.Types.All
@@ -77,7 +76,7 @@ import qualified Hydra.Sources.Encode.Core  as EncodeCore
 ns :: ModuleName
 ns = ModuleName "hydra.environment"
 
-define :: String -> TTerm a -> TTermDefinition a
+define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModuleName ns
 
 module_ :: Module
@@ -85,7 +84,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> ([Lexical.ns, moduleName DecodeCore.module_, moduleName EncodeCore.module_, Scoping.ns, Sorting.ns, Strip.ns, Variables.ns] L.++ kernelTypesModuleNames),
-            moduleDescription = Just ("Graph to type environment conversions")}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just ("Graph to type environment conversions"))}
   where
     definitions = [
       toDefinition definitionAsTypeApplicationTerm,
@@ -101,15 +100,15 @@ module_ = Module {
       toDefinition withLetContext,
       toDefinition withTypeLambdaContext]
 
-definitionAsTypeApplicationTerm :: TTermDefinition (Binding -> Either Error TypeApplicationTerm)
+definitionAsTypeApplicationTerm :: TypedTermDefinition (Binding -> Either Error TypeApplicationTerm)
 definitionAsTypeApplicationTerm = define "definitionAsTypeApplicationTerm" $
   doc "Convert a definition to a typed term" $
   "el" ~>
-  Maybes.maybe (Ctx.failInContext (Error.errorExtraction $ Error.extractionErrorUnexpectedShape $ Error.unexpectedShapeError (string "typed binding") (string "untyped binding")) (var "cx"))
+  Maybes.maybe (left (Error.errorExtraction $ Error.extractionErrorUnexpectedShape $ Error.unexpectedShapeError (string "typed binding") (string "untyped binding")))
     ("ts" ~> right (Core.typeApplicationTerm (Core.bindingTerm (var "el")) (Core.typeSchemeBody (var "ts"))))
     (Core.bindingTypeScheme (var "el"))
 
-graphAsLet :: TTermDefinition ([Binding] -> Term -> Let)
+graphAsLet :: TypedTermDefinition ([Binding] -> Term -> Let)
 graphAsLet = define "graphAsLet" $
   doc "Convert bindings and a body to a let expression" $
   "bindings" ~> "body" ~>
@@ -117,12 +116,12 @@ graphAsLet = define "graphAsLet" $
     (var "bindings")
     (var "body")
 
-graphAsTerm :: TTermDefinition ([Binding] -> Term -> Term)
+graphAsTerm :: TypedTermDefinition ([Binding] -> Term -> Term)
 graphAsTerm = define "graphAsTerm" $
   doc "Convert bindings and a body to a term, using let-term duality" $
   "bindings" ~> "body" ~> Core.termLet (graphAsLet @@ var "bindings" @@ var "body")
 
-graphAsTypes :: TTermDefinition (Graph -> [Binding] -> Either DecodingError (M.Map Name Type))
+graphAsTypes :: TypedTermDefinition (Graph -> [Binding] -> Either DecodingError (M.Map Name Type))
 graphAsTypes = define "graphAsTypes" $
   doc "Decode a list of type-encoding bindings into a map of named types" $
   "graph" ~> "els" ~>
@@ -132,21 +131,23 @@ graphAsTypes = define "graphAsTypes" $
       (decoderFor _Type @@ var "graph" @@ (Core.bindingTerm $ var "el"))) $
   Eithers.map (reify Maps.fromList) (Eithers.mapList (var "toPair") (var "els"))
 
-partitionDefinitions :: TTermDefinition ([Definition] -> ([TypeDefinition], [TermDefinition]))
+partitionDefinitions :: TypedTermDefinition ([Definition] -> ([TypeDefinition], [TermDefinition]))
 partitionDefinitions = define "partitionDefinitions" $
   doc "Partition a list of definitions into type definitions and term definitions" $
   "defs" ~>
   "getType" <~ ("def" ~> cases _Definition (var "def") Nothing [
     _Definition_type>>: "td" ~> just (var "td"),
-    _Definition_term>>: "_" ~> nothing]) $
+    _Definition_term>>: "_" ~> nothing,
+    _Definition_primitive>>: "_" ~> nothing]) $
   "getTerm" <~ ("def" ~> cases _Definition (var "def") Nothing [
     _Definition_type>>: "_" ~> nothing,
-    _Definition_term>>: "td" ~> just (var "td")]) $
+    _Definition_term>>: "td" ~> just (var "td"),
+    _Definition_primitive>>: "_" ~> nothing]) $
   pair
     (Maybes.cat $ Lists.map (var "getType") (var "defs"))
     (Maybes.cat $ Lists.map (var "getTerm") (var "defs"))
 
-reorderDefs :: TTermDefinition ([Definition] -> [Definition])
+reorderDefs :: TypedTermDefinition ([Definition] -> [Definition])
 reorderDefs = define "reorderDefs" $
   doc "Reorder definitions: types first (with hydra.core.Name first among types), then topologically sorted terms" $
   "defs" ~>
@@ -173,13 +174,13 @@ reorderDefs = define "reorderDefs" $
       ("d" ~> cases _Definition (var "d") Nothing [
         _Definition_term>>: "td" ~> project _TermDefinition _TermDefinition_name @@ var "td"])
       @@
-      ("d" ~> cases _Definition (var "d") (Just (list ([] :: [TTerm Name]))) [
+      ("d" ~> cases _Definition (var "d") (Just (list ([] :: [TypedTerm Name]))) [
         _Definition_term>>: "td" ~>
           Sets.toList $ Variables.freeVariablesInTerm @@ (project _TermDefinition _TermDefinition_term @@ var "td")])
       @@ var "termDefsWrapped") $
     Lists.concat (list [var "typeDefs", var "sortedTermDefs"])
 
-schemaGraphToTypingEnvironment :: TTermDefinition (Graph -> Either Error (M.Map Name TypeScheme))
+schemaGraphToTypingEnvironment :: TypedTermDefinition (Graph -> Either Error (M.Map Name TypeScheme))
 schemaGraphToTypingEnvironment = define "schemaGraphToTypingEnvironment" $
   doc "Convert a schema graph to a typing environment (Either version)" $
   "g" ~>
@@ -204,31 +205,31 @@ schemaGraphToTypingEnvironment = define "schemaGraphToTypingEnvironment" $
       _Term_inject>>: "i" ~>
         Logic.ifElse (Equality.equal (Core.injectionTypeName (var "i")) (Core.nameLift _Type))
           (Eithers.map
-            ("decoded" ~> just (var "toTypeScheme" @@ list ([] :: [TTerm Name]) @@ var "decoded"))
+            ("decoded" ~> just (var "toTypeScheme" @@ list ([] :: [TypedTerm Name]) @@ var "decoded"))
             (var "decodeType" @@ Core.bindingTerm (var "el")))
           (right nothing)]) $
     "mts" <<~  optCases (Core.bindingTypeScheme (var "el"))
       (Eithers.map ("typ" ~> just $ Scoping.fTypeToTypeScheme @@ var "typ") $ var "decodeType" @@ (Core.bindingTerm (var "el")))
       ("ts" ~> Logic.ifElse
-        (Equality.equal (var "ts") (Core.typeScheme (list ([] :: [TTerm Name])) (Core.typeVariable (Core.nameLift _TypeScheme)) Phantoms.nothing))
+        (Equality.equal (var "ts") (Core.typeScheme (list ([] :: [TypedTerm Name])) (Core.typeVariable (Core.nameLift _TypeScheme)) Phantoms.nothing))
         (Eithers.map (reify just) (var "decodeTypeScheme" @@ Core.bindingTerm (var "el")))
         (Logic.ifElse
-          (Equality.equal (var "ts") (Core.typeScheme (list ([] :: [TTerm Name])) (Core.typeVariable (Core.nameLift _Type)) Phantoms.nothing))
-          (Eithers.map ("decoded" ~> just (var "toTypeScheme" @@ list ([] :: [TTerm Name]) @@ var "decoded")) (var "decodeType" @@ Core.bindingTerm (var "el")))
+          (Equality.equal (var "ts") (Core.typeScheme (list ([] :: [TypedTerm Name])) (Core.typeVariable (Core.nameLift _Type)) Phantoms.nothing))
+          (Eithers.map ("decoded" ~> just (var "toTypeScheme" @@ list ([] :: [TypedTerm Name]) @@ var "decoded")) (var "decodeType" @@ Core.bindingTerm (var "el")))
           (var "forTerm" @@ (Strip.deannotateTerm @@ (Core.bindingTerm (var "el")))))) $
     right $ Maybes.map ("ts" ~> pair (Core.bindingName (var "el")) (var "ts")) (var "mts")) $
   Eithers.map ("mpairs" ~> Maps.fromList (Maybes.cat (var "mpairs")))
     (Eithers.mapList (var "toPair") (Lexical.graphToBindings @@ var "g"))
 
 -- Note: this is lossy, as it throws away the term body
-termAsBindings :: TTermDefinition (Term -> [Binding])
+termAsBindings :: TypedTermDefinition (Term -> [Binding])
 termAsBindings = define "termAsBindings" $
   doc "Extract the bindings from a let term, or return an empty list for other terms" $
   "term" ~> cases _Term (Strip.deannotateTerm @@ var "term")
-    (Just (list ([] :: [TTerm Binding]))) [
+    (Just (list ([] :: [TypedTerm Binding]))) [
     _Term_let>>: "lt" ~> Core.letBindings (var "lt")]
 
-typesToDefinitions :: TTermDefinition (M.Map Name Type -> [Binding])
+typesToDefinitions :: TypedTermDefinition (M.Map Name Type -> [Binding])
 typesToDefinitions = define "typesToDefinitions" $
   doc "Encode a map of named types to a list of bindings" $
   "typeMap" ~>
@@ -240,21 +241,21 @@ typesToDefinitions = define "typesToDefinitions" $
       nothing) $
   Lists.map (var "toElement") $ Maps.toList $ var "typeMap"
 
-withLambdaContext :: TTermDefinition ((e -> Graph) -> (Graph -> e -> f) -> e -> Lambda -> (f -> a) -> a)
+withLambdaContext :: TypedTermDefinition ((e -> Graph) -> (Graph -> e -> f) -> e -> Lambda -> (f -> a) -> a)
 withLambdaContext = define "withLambdaContext" $
   doc "Execute a computation in the context of a lambda body, extending the type context with the lambda parameter" $
   "getContext" ~> "setContext" ~> "env" ~> "lam" ~> "body" ~>
   "newContext" <~ Scoping.extendGraphForLambda @@ (var "getContext" @@ var "env") @@ var "lam" $
   var "body" @@ (var "setContext" @@ var "newContext" @@ var "env")
 
-withLetContext :: TTermDefinition ((e -> Graph) -> (Graph -> e -> f) -> (Graph -> Binding -> Maybe Term) -> e -> Let -> (f -> a) -> a)
+withLetContext :: TypedTermDefinition ((e -> Graph) -> (Graph -> e -> f) -> (Graph -> Binding -> Maybe Term) -> e -> Let -> (f -> a) -> a)
 withLetContext = define "withLetContext" $
   doc "Execute a computation in the context of a let body, extending the type context with the let bindings" $
   "getContext" ~> "setContext" ~> "forBinding" ~> "env" ~> "letrec" ~> "body" ~>
   "newContext" <~ Scoping.extendGraphForLet @@ var "forBinding" @@ (var "getContext" @@ var "env") @@ var "letrec" $
   var "body" @@ (var "setContext" @@ var "newContext" @@ var "env")
 
-withTypeLambdaContext :: TTermDefinition ((e -> Graph) -> (Graph -> e -> f) -> e -> TypeLambda -> (f -> a) -> a)
+withTypeLambdaContext :: TypedTermDefinition ((e -> Graph) -> (Graph -> e -> f) -> e -> TypeLambda -> (f -> a) -> a)
 withTypeLambdaContext = define "withTypeLambdaContext" $
   doc "Execute a computation in the context of a type lambda body, extending the type context with the type parameter" $
   "getContext" ~> "setContext" ~> "env" ~> "tlam" ~> "body" ~>

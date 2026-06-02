@@ -2,9 +2,9 @@
 
 module Hydra.Sources.Test.TestSuite where
 
--- Standard imports for deep DSL tests (produces TTerm a with specific types)
+-- Standard imports for deep DSL tests (produces TypedTerm a with specific types)
 import Hydra.Kernel
-import           Hydra.Dsl.Bootstrap (unqualifiedDep)
+import           Hydra.Dsl.Bootstrap (unqualifiedDep, descriptionMetadata)
 import Hydra.Dsl.Meta.Testing                 as Testing
 import Hydra.Dsl.Meta.Phantoms                as Phantoms hiding ((++))
 import Hydra.Sources.Kernel.Types.All
@@ -80,20 +80,20 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = unqualifiedDep <$> (namespaces ++ kernelTypesModuleNames),
-            moduleDescription = Just ("Hydra's common test suite, which is designed to run identically in each Hydra implementation;"
-      <> " the criterion for a true Hydra implementation is that all test cases pass.")}
+            moduleMetadata = descriptionMetadata (Just ("Hydra's common test suite, which is designed to run identically in each Hydra implementation;"
+      <> " the criterion for a true Hydra implementation is that all test cases pass."))}
   where
     definitions = [Phantoms.toDefinition allTests]
     namespaces = fst <$> testPairs
 
-allTests :: TTermDefinition TestGroup
+allTests :: TypedTermDefinition TestGroup
 allTests = definitionInModule module_ "allTests" $
     doc "The group of all common tests" $
-    Testing.testGroup (string "common") nothing (list subgroups) (list ([] :: [TTerm TestCaseWithMetadata]))
+    Testing.testGroup (string "common") nothing (list subgroups) (list ([] :: [TypedTerm TestCaseWithMetadata]))
   where
     subgroups = snd <$> testPairs
 
-libPairs :: [(ModuleName, TTermDefinition TestGroup)]
+libPairs :: [(ModuleName, TypedTermDefinition TestGroup)]
 libPairs = [
   (Chars.ns, Chars.allTests),
   (Eithers.ns, Eithers.allTests),
@@ -109,7 +109,7 @@ libPairs = [
   (Sets.ns, Sets.allTests),
   (Strings.ns, Strings.allTests)]
 
-otherPairs :: [(ModuleName, TTermDefinition TestGroup)]
+otherPairs :: [(ModuleName, TypedTermDefinition TestGroup)]
 otherPairs = [
   (Annotations.ns, Annotations.allTests),
   (CheckingAll.ns, CheckingAll.allTests),
@@ -135,7 +135,7 @@ otherPairs = [
   (ValidateAll.ns, ValidateAll.allTests),
   (Variables.ns, Variables.allTests)]
 
-testPairs :: [(ModuleName, TTermDefinition TestGroup)]
+testPairs :: [(ModuleName, TypedTermDefinition TestGroup)]
 testPairs = libPairs ++ otherPairs
 
 -- | All test suite modules (the actual Module values)

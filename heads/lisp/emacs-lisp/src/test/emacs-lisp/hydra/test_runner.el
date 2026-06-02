@@ -329,7 +329,7 @@
 
 (defun hydra--make-annotation-primitive (name arity impl-fn)
   ;; #368: errors flow through Either Left Error directly; no InContext wrap
-  (make-hydra_graph_primitive name (make-prim-type-scheme arity)
+  (make-hydra_graph_primitive (make-prim-def-from-arity name arity)
     (lambda (cx) (lambda (g) (lambda (args)
       (condition-case err
           (funcall impl-fn cx g args)
@@ -443,7 +443,7 @@
          (setq hydra--test-graph base))))))
 
 (defun hydra-empty-context ()
-  '((:functions) (:annotations) (:variable_types)))
+  (funcall 'make-hydra_typing_inference_context 0 nil))
 
 (defun hydra-type-scheme-to-type (ts)
   "Convert a TypeScheme back to a Type by wrapping forall binders."

@@ -1,57 +1,73 @@
 -- Note: this is an automatically generated file. Do not edit.
--- | Module dependency namespace analysis
+-- | Module dependency module name analysis
 
 module Hydra.Analysis where
 import qualified Hydra.Annotations as Annotations
+import qualified Hydra.Arity as Arity
+import qualified Hydra.Ast as Ast
 import qualified Hydra.Checking as Checking
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Constants as Constants
-import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
 import qualified Hydra.Decode.Core as DecodeCore
 import qualified Hydra.Dependencies as Dependencies
 import qualified Hydra.Encode.Core as EncodeCore
+import qualified Hydra.Error.Checking as ErrorChecking
+import qualified Hydra.Error.Core as ErrorCore
+import qualified Hydra.Error.Packaging as ErrorPackaging
 import qualified Hydra.Errors as Errors
 import qualified Hydra.Graph as Graph
-import qualified Hydra.Lib.Eithers as Eithers
-import qualified Hydra.Lib.Equality as Equality
-import qualified Hydra.Lib.Lists as Lists
-import qualified Hydra.Lib.Logic as Logic
-import qualified Hydra.Lib.Maps as Maps
-import qualified Hydra.Lib.Maybes as Maybes
-import qualified Hydra.Lib.Pairs as Pairs
-import qualified Hydra.Lib.Sets as Sets
+import qualified Hydra.Json.Model as Model
+import qualified Hydra.Lexical as Lexical
+import qualified Hydra.Haskell.Lib.Eithers as Eithers
+import qualified Hydra.Haskell.Lib.Equality as Equality
+import qualified Hydra.Haskell.Lib.Lists as Lists
+import qualified Hydra.Haskell.Lib.Logic as Logic
+import qualified Hydra.Haskell.Lib.Maps as Maps
+import qualified Hydra.Haskell.Lib.Maybes as Maybes
+import qualified Hydra.Haskell.Lib.Pairs as Pairs
+import qualified Hydra.Haskell.Lib.Sets as Sets
 import qualified Hydra.Names as Names
 import qualified Hydra.Packaging as Packaging
+import qualified Hydra.Parsing as Parsing
+import qualified Hydra.Paths as Paths
 import qualified Hydra.Predicates as Predicates
+import qualified Hydra.Query as Query
+import qualified Hydra.Relational as Relational
 import qualified Hydra.Rewriting as Rewriting
 import qualified Hydra.Scoping as Scoping
 import qualified Hydra.Strip as Strip
+import qualified Hydra.Tabular as Tabular
+import qualified Hydra.Testing as Testing
+import qualified Hydra.Topology as Topology
+import qualified Hydra.Typed as Typed
 import qualified Hydra.Typing as Typing
 import qualified Hydra.Util as Util
+import qualified Hydra.Validation as Validation
 import qualified Hydra.Variables as Variables
+import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 import qualified Data.Set as S
--- | Add names to existing namespaces mapping
-addNamesToNamespaces :: (Packaging.ModuleName -> t0) -> S.Set Core.Name -> Util.Namespaces t0 -> Util.Namespaces t0
-addNamesToNamespaces encodeNamespace names ns0 =
+-- | Add names to existing module names mapping
+addNamesToModuleNames :: (Packaging.ModuleName -> t0) -> S.Set Core.Name -> Util.ModuleNames t0 -> Util.ModuleNames t0
+addNamesToModuleNames encodeModuleName names ns0 =
 
-      let nss = Sets.fromList (Maybes.cat (Lists.map Names.namespaceOf (Sets.toList names)))
-          toPair = \ns -> (ns, (encodeNamespace ns))
-      in Util.Namespaces {
-        Util.namespacesFocus = (Util.namespacesFocus ns0),
-        Util.namespacesMapping = (Maps.union (Util.namespacesMapping ns0) (Maps.fromList (Lists.map toPair (Sets.toList nss))))}
+      let nss = Sets.fromList (Maybes.cat (Lists.map Names.moduleNameOf (Sets.toList names)))
+          toPair = \ns -> (ns, (encodeModuleName ns))
+      in Util.ModuleNames {
+        Util.moduleNamesFocus = (Util.moduleNamesFocus ns0),
+        Util.moduleNamesMapping = (Maps.union (Util.moduleNamesMapping ns0) (Maps.fromList (Lists.map toPair (Sets.toList nss))))}
 -- | Analyze a function term, collecting lambdas, type lambdas, lets, and type applications
-analyzeFunctionTerm :: Context.Context -> (t0 -> Graph.Graph) -> (Graph.Graph -> t0 -> t0) -> t0 -> Core.Term -> Either t1 (Typing.FunctionStructure t0)
+analyzeFunctionTerm :: Typing.InferenceContext -> (t0 -> Graph.Graph) -> (Graph.Graph -> t0 -> t0) -> t0 -> Core.Term -> Either t1 (Typing.FunctionStructure t0)
 analyzeFunctionTerm cx getTC setTC env term =
     analyzeFunctionTermWith cx (\g -> \b -> Logic.ifElse (Predicates.isComplexBinding g b) (Just (Core.TermLiteral (Core.LiteralBoolean True))) Nothing) getTC setTC env term
 -- | Analyze a function term with configurable binding metadata
-analyzeFunctionTermWith :: Context.Context -> (Graph.Graph -> Core.Binding -> Maybe Core.Term) -> (t0 -> Graph.Graph) -> (Graph.Graph -> t0 -> t0) -> t0 -> Core.Term -> Either t1 (Typing.FunctionStructure t0)
+analyzeFunctionTermWith :: Typing.InferenceContext -> (Graph.Graph -> Core.Binding -> Maybe Core.Term) -> (t0 -> Graph.Graph) -> (Graph.Graph -> t0 -> t0) -> t0 -> Core.Term -> Either t1 (Typing.FunctionStructure t0)
 analyzeFunctionTermWith cx forBinding getTC setTC env term =
     analyzeFunctionTermWithGather cx forBinding getTC setTC True env [] [] [] [] [] term
 -- | Final step of the function-term walk: type-apply the body and assemble the FunctionStructure
-analyzeFunctionTermWithFinish :: Context.Context -> (t0 -> Graph.Graph) -> t0 -> [Core.Name] -> [Core.Name] -> [Core.Binding] -> [Core.Type] -> [Core.Type] -> Core.Term -> Either t1 (Typing.FunctionStructure t0)
+analyzeFunctionTermWithFinish :: Typing.InferenceContext -> (t0 -> Graph.Graph) -> t0 -> [Core.Name] -> [Core.Name] -> [Core.Binding] -> [Core.Type] -> [Core.Type] -> Core.Term -> Either t1 (Typing.FunctionStructure t0)
 analyzeFunctionTermWithFinish cx getTC fEnv tparams args bindings doms tapps body =
 
       let bodyWithTapps =
@@ -68,7 +84,7 @@ analyzeFunctionTermWithFinish cx getTC fEnv tparams args bindings doms tapps bod
         Typing.functionStructureCodomain = mcod,
         Typing.functionStructureEnvironment = fEnv}))
 -- | Recursive step of the function-term walk: peel lambdas / type-lambdas / type-applications, accumulating params and bindings, then call analyzeFunctionTermWithFinish
-analyzeFunctionTermWithGather :: Context.Context -> (Graph.Graph -> Core.Binding -> Maybe Core.Term) -> (t0 -> Graph.Graph) -> (Graph.Graph -> t0 -> t0) -> Bool -> t0 -> [Core.Name] -> [Core.Name] -> [Core.Binding] -> [Core.Type] -> [Core.Type] -> Core.Term -> Either t1 (Typing.FunctionStructure t0)
+analyzeFunctionTermWithGather :: Typing.InferenceContext -> (Graph.Graph -> Core.Binding -> Maybe Core.Term) -> (t0 -> Graph.Graph) -> (Graph.Graph -> t0 -> t0) -> Bool -> t0 -> [Core.Name] -> [Core.Name] -> [Core.Binding] -> [Core.Type] -> [Core.Type] -> Core.Term -> Either t1 (Typing.FunctionStructure t0)
 analyzeFunctionTermWithGather cx forBinding getTC setTC argMode gEnv tparams args bindings doms tapps t =
     case (Strip.deannotateTerm t) of
       Core.TermLambda v0 -> Logic.ifElse argMode (
@@ -92,19 +108,20 @@ analyzeFunctionTermWithGather cx forBinding getTC setTC argMode gEnv tparams arg
             newEnv = setTC (Scoping.extendGraphForTypeLambda (getTC gEnv) v0) gEnv
         in (analyzeFunctionTermWithGather cx forBinding getTC setTC argMode newEnv (Lists.cons tvar tparams) args bindings doms tapps tlBody)
       _ -> analyzeFunctionTermWithFinish cx getTC gEnv tparams args bindings doms tapps t
--- | Get dependency namespaces from definitions
-definitionDependencyNamespaces :: [Packaging.Definition] -> S.Set Packaging.ModuleName
-definitionDependencyNamespaces defs =
+-- | Get dependency module names from definitions
+definitionDependencyModuleNames :: [Packaging.Definition] -> S.Set Packaging.ModuleName
+definitionDependencyModuleNames defs =
 
       let defNames =
               \def -> case def of
                 Packaging.DefinitionType v0 -> Dependencies.typeDependencyNames True (Core.typeSchemeBody (Packaging.typeDefinitionTypeScheme v0))
                 Packaging.DefinitionTerm v0 -> Dependencies.termDependencyNames True True True (Packaging.termDefinitionTerm v0)
+                Packaging.DefinitionPrimitive v0 -> Dependencies.typeDependencyNames True (Core.typeSchemeBody (Scoping.termSignatureToTypeScheme (Packaging.primitiveDefinitionSignature v0)))
           allNames = Sets.unions (Lists.map defNames defs)
-      in (Sets.fromList (Maybes.cat (Lists.map Names.namespaceOf (Sets.toList allNames))))
--- | Find dependency namespaces in all of a set of terms (Either version)
-dependencyNamespaces :: t0 -> Graph.Graph -> Bool -> Bool -> Bool -> Bool -> [Core.Binding] -> Either Errors.Error (S.Set Packaging.ModuleName)
-dependencyNamespaces cx graph binds withPrims withNoms withSchema els =
+      in (Sets.fromList (Maybes.cat (Lists.map Names.moduleNameOf (Sets.toList allNames))))
+-- | Find dependency module names in all of a set of terms (Either version)
+dependencyModuleNames :: t0 -> Graph.Graph -> Bool -> Bool -> Bool -> Bool -> [Core.Binding] -> Either Errors.Error (S.Set Packaging.ModuleName)
+dependencyModuleNames cx graph binds withPrims withNoms withSchema els =
 
       let depNames =
               \el ->
@@ -122,7 +139,7 @@ dependencyNamespaces cx graph binds withPrims withNoms withSchema els =
                   (Dependencies.termDependencyNames binds withPrims withNoms decodedTerm)]) (Eithers.bimap (\_e -> Errors.ErrorDecoding _e) (\_a -> _a) (DecodeCore.term graph term))) (Right (Sets.unions [
                   dataNames,
                   schemaNames]))))
-      in (Eithers.map (\namesList -> Sets.fromList (Maybes.cat (Lists.map Names.namespaceOf (Sets.toList (Sets.unions namesList))))) (Eithers.mapList depNames els))
+      in (Eithers.map (\namesList -> Sets.fromList (Maybes.cat (Lists.map Names.moduleNameOf (Sets.toList (Sets.unions namesList))))) (Eithers.mapList depNames els))
 -- | Gather applications from a term, returning (args, baseTerm)
 gatherApplications :: Core.Term -> ([Core.Term], Core.Term)
 gatherApplications term =
@@ -254,9 +271,9 @@ moduleContainsDecimalLiterals mod =
                     Packaging.DefinitionTerm v0 -> Just (Packaging.termDefinitionTerm v0)
                     _ -> Nothing) (Packaging.moduleDefinitions mod))
       in (Lists.foldl (\acc -> \t -> Logic.or acc (termContainsDecimal t)) False defTerms)
--- | Find dependency namespaces in all elements of a module, excluding the module's own namespace (Either version)
-moduleDependencyNamespaces :: t0 -> Graph.Graph -> Bool -> Bool -> Bool -> Bool -> Packaging.Module -> Either Errors.Error (S.Set Packaging.ModuleName)
-moduleDependencyNamespaces cx graph binds withPrims withNoms withSchema mod =
+-- | Find dependency module names in all elements of a module, excluding the module's own module name (Either version)
+moduleDependencyModuleNames :: t0 -> Graph.Graph -> Bool -> Bool -> Bool -> Bool -> Packaging.Module -> Either Errors.Error (S.Set Packaging.ModuleName)
+moduleDependencyModuleNames cx graph binds withPrims withNoms withSchema mod =
 
       let allBindings =
               Maybes.cat (Lists.map (\d -> case d of
@@ -277,15 +294,15 @@ moduleDependencyNamespaces cx graph binds withPrims withNoms withSchema mod =
                 Packaging.DefinitionTerm v0 -> Just (Core.Binding {
                   Core.bindingName = (Packaging.termDefinitionName v0),
                   Core.bindingTerm = (Packaging.termDefinitionTerm v0),
-                  Core.bindingTypeScheme = (Packaging.termDefinitionTypeScheme v0)})
+                  Core.bindingTypeScheme = (Maybes.map Scoping.termSignatureToTypeScheme (Packaging.termDefinitionSignature v0))})
                 _ -> Nothing) (Packaging.moduleDefinitions mod))
-      in (Eithers.map (\deps -> Sets.delete (Packaging.moduleName mod) deps) (dependencyNamespaces cx graph binds withPrims withNoms withSchema allBindings))
--- | Create namespaces mapping for definitions
-namespacesForDefinitions :: (Packaging.ModuleName -> t0) -> Packaging.ModuleName -> [Packaging.Definition] -> Util.Namespaces t0
-namespacesForDefinitions encodeNamespace focusNs defs =
+      in (Eithers.map (\deps -> Sets.delete (Packaging.moduleName mod) deps) (dependencyModuleNames cx graph binds withPrims withNoms withSchema allBindings))
+-- | Create module names mapping for definitions
+moduleNamesForDefinitions :: (Packaging.ModuleName -> t0) -> Packaging.ModuleName -> [Packaging.Definition] -> Util.ModuleNames t0
+moduleNamesForDefinitions encodeModuleName focusNs defs =
 
-      let nss = Sets.delete focusNs (definitionDependencyNamespaces defs)
-          toPair = \ns -> (ns, (encodeNamespace ns))
-      in Util.Namespaces {
-        Util.namespacesFocus = (toPair focusNs),
-        Util.namespacesMapping = (Maps.fromList (Lists.map toPair (Sets.toList nss)))}
+      let nss = Sets.delete focusNs (definitionDependencyModuleNames defs)
+          toPair = \ns -> (ns, (encodeModuleName ns))
+      in Util.ModuleNames {
+        Util.moduleNamesFocus = (toPair focusNs),
+        Util.moduleNamesMapping = (Maps.fromList (Lists.map toPair (Sets.toList nss)))}

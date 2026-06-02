@@ -3,26 +3,46 @@
 
 module Hydra.Decoding where
 import qualified Hydra.Annotations as Annotations
+import qualified Hydra.Ast as Ast
+import qualified Hydra.Coders as Coders
 import qualified Hydra.Constants as Constants
-import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
 import qualified Hydra.Decode.Core as DecodeCore
 import qualified Hydra.Encode.Core as EncodeCore
+import qualified Hydra.Error.Checking as Checking
+import qualified Hydra.Error.Core as ErrorCore
+import qualified Hydra.Error.Packaging as ErrorPackaging
 import qualified Hydra.Errors as Errors
 import qualified Hydra.Extract.Core as ExtractCore
 import qualified Hydra.Formatting as Formatting
 import qualified Hydra.Graph as Graph
-import qualified Hydra.Lib.Eithers as Eithers
-import qualified Hydra.Lib.Lists as Lists
-import qualified Hydra.Lib.Logic as Logic
-import qualified Hydra.Lib.Maps as Maps
-import qualified Hydra.Lib.Maybes as Maybes
-import qualified Hydra.Lib.Pairs as Pairs
-import qualified Hydra.Lib.Sets as Sets
-import qualified Hydra.Lib.Strings as Strings
+import qualified Hydra.Json.Model as Model
+import qualified Hydra.Lexical as Lexical
+import qualified Hydra.Haskell.Lib.Eithers as Eithers
+import qualified Hydra.Haskell.Lib.Lists as Lists
+import qualified Hydra.Haskell.Lib.Logic as Logic
+import qualified Hydra.Haskell.Lib.Maps as Maps
+import qualified Hydra.Haskell.Lib.Maybes as Maybes
+import qualified Hydra.Haskell.Lib.Pairs as Pairs
+import qualified Hydra.Haskell.Lib.Strings as Strings
 import qualified Hydra.Names as Names
 import qualified Hydra.Packaging as Packaging
+import qualified Hydra.Parsing as Parsing
+import qualified Hydra.Paths as Paths
 import qualified Hydra.Predicates as Predicates
+import qualified Hydra.Query as Query
+import qualified Hydra.Relational as Relational
+import qualified Hydra.Rewriting as Rewriting
+import qualified Hydra.Scoping as Scoping
+import qualified Hydra.Show.Core as ShowCore
+import qualified Hydra.Tabular as Tabular
+import qualified Hydra.Testing as Testing
+import qualified Hydra.Topology as Topology
+import qualified Hydra.Typed as Typed
+import qualified Hydra.Typing as Typing
+import qualified Hydra.Util as Util
+import qualified Hydra.Validation as Validation
+import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 -- | Collect forall type variable names from a type
@@ -1041,7 +1061,7 @@ decodeMaybeType elemType =
         Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.core.decodeMaybe")),
         Core.applicationArgument = elemDecoder}))
 -- | Transform a type module into a decoder module
-decodeModule :: Context.Context -> Graph.Graph -> Packaging.Module -> Either Errors.Error (Maybe Packaging.Module)
+decodeModule :: t0 -> Graph.Graph -> Packaging.Module -> Either Errors.Error (Maybe Packaging.Module)
 decodeModule cx graph mod =
     Eithers.bind (filterTypeBindings cx graph (Maybes.cat (Lists.map (\d -> case d of
       Packaging.DefinitionType v0 -> Just ((\name -> \typ ->
@@ -1060,12 +1080,16 @@ decodeModule cx graph mod =
             Core.typeSchemeConstraints = Nothing}))}) (Packaging.typeDefinitionName v0) (Core.typeSchemeBody (Packaging.typeDefinitionTypeScheme v0)))
       _ -> Nothing) (Packaging.moduleDefinitions mod)))) (\typeBindings -> Logic.ifElse (Lists.null typeBindings) (Right Nothing) (Eithers.bind (Eithers.mapList (\b -> Eithers.bimap (\_e -> Errors.ErrorDecoding _e) (\x -> x) (decodeBinding cx graph b)) typeBindings) (\decodedBindings ->
       let allDecodedDeps =
-              Lists.nub (Lists.map decodeNamespace (Lists.map (\dep -> Packaging.moduleDependencyModule dep) (Packaging.moduleDependencies mod)))
+              Lists.nub (Lists.map decodeModuleName (Lists.map (\dep -> Packaging.moduleDependencyModule dep) (Packaging.moduleDependencies mod)))
       in (Right (Just (Packaging.Module {
-        Packaging.moduleDescription = (Just (Strings.cat [
-          "Term decoders for ",
-          (Packaging.unModuleName (Packaging.moduleName mod))])),
-        Packaging.moduleName = (decodeNamespace (Packaging.moduleName mod)),
+        Packaging.moduleName = (decodeModuleName (Packaging.moduleName mod)),
+        Packaging.moduleMetadata = (Just (Packaging.EntityMetadata {
+          Packaging.entityMetadataDescription = (Just (Strings.cat [
+            "Term decoders for ",
+            (Packaging.unModuleName (Packaging.moduleName mod))])),
+          Packaging.entityMetadataComments = [],
+          Packaging.entityMetadataSeeAlso = [],
+          Packaging.entityMetadataLifecycle = Nothing})),
         Packaging.moduleDependencies = (Lists.map (\ns -> Packaging.ModuleDependency {
           Packaging.moduleDependencyModule = ns,
           Packaging.moduleDependencyPackage = Nothing}) (Lists.concat2 [
@@ -1076,11 +1100,12 @@ decodeModule cx graph mod =
           (Packaging.ModuleName "hydra.util")] allDecodedDeps)),
         Packaging.moduleDefinitions = (Lists.map (\b -> Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.bindingName b),
+          Packaging.termDefinitionMetadata = Nothing,
           Packaging.termDefinitionTerm = (Core.bindingTerm b),
-          Packaging.termDefinitionTypeScheme = (Core.bindingTypeScheme b)})) decodedBindings)}))))))
--- | Generate a decoder module namespace from a source module namespace
-decodeNamespace :: Packaging.ModuleName -> Packaging.ModuleName
-decodeNamespace ns =
+          Packaging.termDefinitionSignature = (Maybes.map Scoping.typeSchemeToTermSignature (Core.bindingTypeScheme b))})) decodedBindings)}))))))
+-- | Generate a decoder module name from a source module name
+decodeModuleName :: Packaging.ModuleName -> Packaging.ModuleName
+decodeModuleName ns =
 
       let parts = Strings.splitOn "." (Packaging.unModuleName ns)
           fallback = Packaging.ModuleName (Packaging.unModuleName ns)
@@ -1562,8 +1587,11 @@ decoderTypeScheme typ =
           allOrdVars = collectOrdConstrainedVariables typ
           ordVars = Lists.filter (\v -> Lists.elem v typeVars) allOrdVars
           constraints =
-                  Logic.ifElse (Lists.null ordVars) Nothing (Just (Maps.fromList (Lists.map (\v -> (v, Core.TypeVariableMetadata {
-                    Core.typeVariableMetadataClasses = (Sets.singleton (Core.Name "ordering"))})) ordVars)))
+                  Logic.ifElse (Lists.null ordVars) Nothing (Just (Maps.fromList (Lists.map (\v -> (
+                    v,
+                    Core.TypeVariableMetadata {
+                      Core.typeVariableMetadataClasses = [
+                        Core.TypeClassConstraintSimple (Core.Name "ordering")]})) ordVars)))
       in Core.TypeScheme {
         Core.typeSchemeVariables = typeVars,
         Core.typeSchemeBody = (decoderType typ),
@@ -1576,18 +1604,21 @@ decoderTypeSchemeNamed ename typ =
           allOrdVars = collectOrdConstrainedVariables typ
           ordVars = Lists.filter (\v -> Lists.elem v typeVars) allOrdVars
           constraints =
-                  Logic.ifElse (Lists.null ordVars) Nothing (Just (Maps.fromList (Lists.map (\v -> (v, Core.TypeVariableMetadata {
-                    Core.typeVariableMetadataClasses = (Sets.singleton (Core.Name "ordering"))})) ordVars)))
+                  Logic.ifElse (Lists.null ordVars) Nothing (Just (Maps.fromList (Lists.map (\v -> (
+                    v,
+                    Core.TypeVariableMetadata {
+                      Core.typeVariableMetadataClasses = [
+                        Core.TypeClassConstraintSimple (Core.Name "ordering")]})) ordVars)))
       in Core.TypeScheme {
         Core.typeSchemeVariables = typeVars,
         Core.typeSchemeBody = (decoderTypeNamed ename typ),
         Core.typeSchemeConstraints = constraints}
 -- | Filter bindings to only decodable type definitions
-filterTypeBindings :: Context.Context -> Graph.Graph -> [Core.Binding] -> Either Errors.Error [Core.Binding]
+filterTypeBindings :: t0 -> Graph.Graph -> [Core.Binding] -> Either Errors.Error [Core.Binding]
 filterTypeBindings cx graph bindings =
     Eithers.map Maybes.cat (Eithers.mapList (isDecodableBinding cx graph) (Lists.filter Annotations.isNativeType bindings))
 -- | Check if a binding is decodable (serializable type)
-isDecodableBinding :: Context.Context -> Graph.Graph -> Core.Binding -> Either Errors.Error (Maybe Core.Binding)
+isDecodableBinding :: t0 -> Graph.Graph -> Core.Binding -> Either Errors.Error (Maybe Core.Binding)
 isDecodableBinding cx graph b =
     Eithers.bind (Predicates.isSerializableByName cx graph (Core.bindingName b)) (\serializable -> Right (Logic.ifElse serializable (Just b) Nothing))
 -- | Prepend decoder types for forall parameters to base type

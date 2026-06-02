@@ -3,6 +3,10 @@
     {
       "term": {
         "name": "hydra.show.graph.graph",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"list": {"variable": "hydra.core.Binding"}}}],
+          "result": {"type": {"literal": {"string": {}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Show a list of bindings as a string"}}}],
@@ -36,16 +40,12 @@
                             {"literal": {"string": "}"}}]},
                         "function": {"variable": "hydra.lib.strings.cat"}}}}},
                 "domain": {"list": {"variable": "hydra.core.Binding"}},
-                "parameter": "elements"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"literal": {"string": {}}}, "domain": {"list": {"variable": "hydra.core.Binding"}}}},
-          "variables": []}}}],
+                "parameter": "elements"}}}}}}],
   "dependencies": [
     {"module": "hydra.show.core"},
     {"module": "hydra.paths"},
     {"module": "hydra.ast"},
     {"module": "hydra.coders"},
-    {"module": "hydra.context"},
     {"module": "hydra.core"},
     {"module": "hydra.error.checking"},
     {"module": "hydra.error.core"},
@@ -55,15 +55,15 @@
     {"module": "hydra.json.model"},
     {"module": "hydra.packaging"},
     {"module": "hydra.parsing"},
-    {"module": "hydra.phantoms"},
     {"module": "hydra.query"},
     {"module": "hydra.relational"},
     {"module": "hydra.tabular"},
     {"module": "hydra.testing"},
     {"module": "hydra.topology"},
+    {"module": "hydra.typed"},
     {"module": "hydra.typing"},
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "description": "String representations of hydra.graph types",
+  "metadata": {"comments": [], "description": "String representations of hydra.graph types", "seeAlso": []},
   "name": "hydra.show.graph"}

@@ -24,7 +24,7 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "ModuleName mapping for imports"}}}],
                         "body": {
-                          "application": {"argument": {"variable": "hydra.python.syntax.DottedName"}, "function": {"variable": "hydra.util.Namespaces"}}}}}},
+                          "application": {"argument": {"variable": "hydra.python.syntax.DottedName"}, "function": {"variable": "hydra.util.ModuleNames"}}}}}},
                   {
                     "name": "boundTypeVariables",
                     "type": {
@@ -86,7 +86,7 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "ModuleName mapping for imports"}}}],
                         "body": {
-                          "application": {"argument": {"variable": "hydra.python.syntax.DottedName"}, "function": {"variable": "hydra.util.Namespaces"}}}}}},
+                          "application": {"argument": {"variable": "hydra.python.syntax.DottedName"}, "function": {"variable": "hydra.util.ModuleNames"}}}}}},
                   {
                     "name": "typeVariables",
                     "type": {
@@ -145,5 +145,5 @@
     {"module": "hydra.graph"},
     {"module": "hydra.packaging"},
     {"module": "hydra.typing"}],
-  "description": "Environment types for Python code generation",
+  "metadata": {"comments": [], "description": "Environment types for Python code generation", "seeAlso": []},
   "name": "hydra.python.environment"}

@@ -1807,5 +1807,8 @@
                         "body": {"list": {"variable": "hydra.lisp.syntax.SExpression"}}}}}]}}},
           "variables": []}}}],
   "dependencies": [{"module": "hydra.core"}],
-  "description": "A unified Lisp syntax model covering Clojure, Emacs Lisp, Common Lisp, and Scheme (R7RS). Designed for code generation from Hydra types and terms.",
+  "metadata": {
+    "comments": [],
+    "description": "A unified Lisp syntax model covering Clojure, Emacs Lisp, Common Lisp, and Scheme (R7RS). Designed for code generation from Hydra types and terms.",
+    "seeAlso": []},
   "name": "hydra.lisp.syntax"}

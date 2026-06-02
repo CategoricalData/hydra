@@ -44,7 +44,6 @@ import qualified Hydra.Dsl.Types             as Types
 import qualified Hydra.Dsl.Typing       as Typing
 import qualified Hydra.Dsl.Util         as Util
 import qualified Hydra.Dsl.Meta.Variants     as Variants
-import qualified Hydra.Dsl.Meta.Context      as Ctx
 import qualified Hydra.Dsl.Errors       as Error
 import           Hydra.Sources.Kernel.Types.All
 import           Prelude hiding ((++))
@@ -74,7 +73,7 @@ import qualified Hydra.Sources.Kernel.Terms.Annotations as Annotations
 ns :: ModuleName
 ns = ModuleName "hydra.reduction"
 
-define :: String -> TTerm a -> TTermDefinition a
+define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModuleName ns
 
 module_ :: Module
@@ -84,7 +83,7 @@ module_ = Module {
             moduleDependencies = Bootstrap.unqualifiedDep <$> ([Arity.ns, Checking.ns, ExtractCore.ns, Hoisting.ns, Inference.ns, Lexical.ns,
       Rewriting.ns, Scoping.ns,
       Resolution.ns, ShowCore.ns, ShowError.ns, Strip.ns, Variables.ns] L.++ kernelTypesModuleNames),
-            moduleDescription = Just "Functions for reducing terms and types, i.e. performing computations."}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just "Functions for reducing terms and types, i.e. performing computations.")}
   where
    definitions = [
      toDefinition alphaConvert,
@@ -99,10 +98,7 @@ module_ = Module {
      toDefinition termIsClosed,
      toDefinition termIsValue]
 
-formatError :: TTerm (Error -> String)
-formatError = "e" ~> ShowError.error_ @@ var "e"
-
-alphaConvert :: TTermDefinition (Name -> Name -> Term -> Term)
+alphaConvert :: TypedTermDefinition (Name -> Name -> Term -> Term)
 alphaConvert = define "alphaConvert" $
   doc "Alpha convert a variable in a term" $
   "vold" ~> "vnew" ~> "term" ~>
@@ -110,7 +106,7 @@ alphaConvert = define "alphaConvert" $
 
 -- Note: this is eager beta reduction, in that we always descend into subtypes,
 --       and always reduce the right-hand side of an application prior to substitution
-betaReduceType :: TTermDefinition (Context -> Graph -> Type -> Prelude.Either Error Type)
+betaReduceType :: TypedTermDefinition (InferenceContext -> Graph -> Type -> Prelude.Either Error Type)
 betaReduceType = define "betaReduceType" $
   doc "Eagerly beta-reduce a type by substituting type arguments into type lambdas" $
   "cx" ~> "graph" ~> "typ" ~>
@@ -139,7 +135,7 @@ betaReduceType = define "betaReduceType" $
     var "findApp" @@ var "r") $
   Rewriting.rewriteTypeM @@ var "mapExpr" @@ var "typ"
 
-contractTerm :: TTermDefinition (Term -> Term)
+contractTerm :: TypedTermDefinition (Term -> Term)
 contractTerm = define "contractTerm" $
   doc ("Apply the special rules:\n"
     <> "    ((\\x.e1) e2) == e1, where x does not appear free in e1\n"
@@ -165,7 +161,7 @@ contractTerm = define "contractTerm" $
   Rewriting.rewriteTerm @@ var "rewrite" @@ var "term"
 
 -- For demo purposes. This should be generalized to enable additional side effects of interest.
-countPrimitiveInvocations :: TTermDefinition Bool
+countPrimitiveInvocations :: TypedTermDefinition Bool
 countPrimitiveInvocations = define "countPrimitiveInvocations" $
   doc "Compile-time flag controlling whether primitive invocations are counted during evaluation. For demo and instrumentation purposes." $
   true
@@ -178,7 +174,7 @@ countPrimitiveInvocations = define "countPrimitiveInvocations" $
 -- 1. Pure because we look up types directly from the context
 -- 2. Manually tracks Graph when entering lambdas, lets, and type lambdas
 -- 3. Preserves existing type annotations where possible
-etaExpandTerm :: TTermDefinition (Graph -> Term -> Term)
+etaExpandTerm :: TypedTermDefinition (Graph -> Term -> Term)
 etaExpandTerm = define "etaExpandTerm" $
   doc ("Recursively transform terms to eliminate partial application, e.g. 'add 42' becomes '\\x.add 42 x'."
     <> " Uses the Graph to look up types for arity calculation."
@@ -187,7 +183,11 @@ etaExpandTerm = define "etaExpandTerm" $
   "tx0" ~> "term0" ~>
 
   -- Pre-compute primitive types map once (primitives don't change during recursion)
-  "primTypes" <~ (Graph.graphPrimitiveTypes $ var "tx0") $
+  "primTypes" <~ Maps.fromList (Lists.map
+    ("_gpt_p" ~> pair
+      (Packaging.primitiveDefinitionName $ Graph.primitiveDefinition $ var "_gpt_p")
+      (Scoping.termSignatureToTypeScheme @@ (Packaging.primitiveDefinitionSignature $ Graph.primitiveDefinition $ var "_gpt_p")))
+    (Maps.elems $ Graph.graphPrimitives $ var "tx0")) $
 
   -- termArityWithContext: compute arity of a term using Graph for lookups
   "termArityWithContext" <~ ("tx" ~> "term" ~>
@@ -222,7 +222,7 @@ etaExpandTerm = define "etaExpandTerm" $
   -- For a type A -> B -> C with n=2, returns [Just A, Just B]
   "domainTypes" <~ ("n" ~> "mt" ~>
     Logic.ifElse (Equality.lte (var "n") (int32 0))
-      (list ([] :: [TTerm (Maybe Type)]))
+      (list ([] :: [TypedTerm (Maybe Type)]))
       (optCases (var "mt")
         -- No type available: return n copies of Nothing
         (Lists.map (constant nothing) (Math.range (int32 1) (var "n")))
@@ -310,7 +310,7 @@ etaExpandTerm = define "etaExpandTerm" $
   -- This is a recursive let binding that calls itself directly
   "rewriteWithArgs" <~ ("args" ~> "tx" ~> "term" ~>
     -- recurse is shorthand for calling rewriteWithArgs with empty args
-    "recurse" <~ ("tx1" ~> "term1" ~> var "rewriteWithArgs" @@ list ([] :: [TTerm Term]) @@ var "tx1" @@ var "term1") $
+    "recurse" <~ ("tx1" ~> "term1" ~> var "rewriteWithArgs" @@ list ([] :: [TypedTerm Term]) @@ var "tx1" @@ var "term1") $
 
     -- termHeadType: extract the type of a term's "head" (the variable/primitive at its core)
     -- by following annotations, lets, type applications, and type lambdas.
@@ -359,7 +359,7 @@ etaExpandTerm = define "etaExpandTerm" $
       "branchBody" <~ var "recurse" @@ var "tx" @@ Core.fieldTerm (var "f") $
       "arty" <~ var "termArityWithContext" @@ var "tx" @@ var "branchBody" $
       "branchHType" <~ var "termHeadType" @@ var "tx" @@ var "branchBody" $
-      Core.fieldWithTerm (var "f") (var "expand" @@ true @@ list ([] :: [TTerm Term]) @@ var "arty" @@ var "branchHType" @@ var "branchBody")) $
+      Core.fieldWithTerm (var "f") (var "expand" @@ true @@ list ([] :: [TypedTerm Term]) @@ var "arty" @@ var "branchHType" @@ var "branchBody")) $
 
     -- Helper for maps
     "forMap" <~ ("mp" ~>
@@ -375,7 +375,7 @@ etaExpandTerm = define "etaExpandTerm" $
 
       -- Application: process RHS with empty args, then descend into LHS with RHS added to args
       _Term_application>>: "app" ~>
-        "rhs" <~ var "rewriteWithArgs" @@ list ([] :: [TTerm Term]) @@ var "tx" @@ Core.applicationArgument (var "app") $
+        "rhs" <~ var "rewriteWithArgs" @@ list ([] :: [TypedTerm Term]) @@ var "tx" @@ Core.applicationArgument (var "app") $
         var "rewriteWithArgs" @@ Lists.cons (var "rhs") (var "args") @@ var "tx" @@ Core.applicationFunction (var "app"),
 
       -- Either: recurse into left or right
@@ -404,7 +404,7 @@ etaExpandTerm = define "etaExpandTerm" $
       -- Lambda: extend context for body
       _Term_lambda>>: "lm" ~>
         "tx1" <~ Scoping.extendGraphForLambda @@ var "tx" @@ var "lm" $
-        "body" <~ var "rewriteWithArgs" @@ list ([] :: [TTerm Term]) @@ var "tx1" @@ Core.lambdaBody (var "lm") $
+        "body" <~ var "rewriteWithArgs" @@ list ([] :: [TypedTerm Term]) @@ var "tx1" @@ Core.lambdaBody (var "lm") $
         "result" <~ Core.termLambda (Core.lambda (Core.lambdaParameter $ var "lm") (Core.lambdaDomain $ var "lm") (var "body")) $
         "arty" <~ var "termArityWithContext" @@ var "tx" @@ var "result" $
         -- Lambda type is not in the context; pass Nothing (lambdas have arity 0 so expand is a no-op anyway)
@@ -415,11 +415,11 @@ etaExpandTerm = define "etaExpandTerm" $
         "tx1" <~ Scoping.extendGraphForLet @@ constant (constant nothing) @@ var "tx" @@ var "lt" $
         "mapBinding" <~ ("b" ~> Core.binding
           (Core.bindingName $ var "b")
-          (var "rewriteWithArgs" @@ list ([] :: [TTerm Term]) @@ var "tx1" @@ Core.bindingTerm (var "b"))
+          (var "rewriteWithArgs" @@ list ([] :: [TypedTerm Term]) @@ var "tx1" @@ Core.bindingTerm (var "b"))
           (Core.bindingTypeScheme $ var "b")) $
         "result" <~ Core.termLet (Core.let_
           (Lists.map (var "mapBinding") (Core.letBindings $ var "lt"))
-          (var "rewriteWithArgs" @@ list ([] :: [TTerm Term]) @@ var "tx1" @@ Core.letBody (var "lt"))) $
+          (var "rewriteWithArgs" @@ list ([] :: [TypedTerm Term]) @@ var "tx1" @@ Core.letBody (var "lt"))) $
         var "afterRecursion" @@ var "result",
 
       -- List: recurse into elements
@@ -492,7 +492,7 @@ etaExpandTerm = define "etaExpandTerm" $
         "tx1" <~ Scoping.extendGraphForTypeLambda @@ var "tx" @@ var "tl" $
         "result" <~ Core.termTypeLambda (Core.typeLambda
           (Core.typeLambdaParameter $ var "tl")
-          (var "rewriteWithArgs" @@ list ([] :: [TTerm Term]) @@ var "tx1" @@ Core.typeLambdaBody (var "tl"))) $
+          (var "rewriteWithArgs" @@ list ([] :: [TypedTerm Term]) @@ var "tx1" @@ Core.typeLambdaBody (var "tl"))) $
         var "afterRecursion" @@ var "result",
 
       -- Union: recurse into injection field
@@ -514,10 +514,10 @@ etaExpandTerm = define "etaExpandTerm" $
         (Core.wrappedTermTypeName $ var "wt")
         (var "recurse" @@ var "tx" @@ Core.wrappedTermBody (var "wt")))]) $
 
-  contractTerm @@ (var "rewriteWithArgs" @@ list ([] :: [TTerm Term]) @@ var "tx0" @@ var "term0")
+  contractTerm @@ (var "rewriteWithArgs" @@ list ([] :: [TypedTerm Term]) @@ var "tx0" @@ var "term0")
 
 -- TODO: add lambda domains as part of the rewriting process, so inference does not need to be performed again.
-etaExpandTypedTerm :: TTermDefinition (Context -> Graph -> Term -> Prelude.Either Error Term)
+etaExpandTypedTerm :: TypedTermDefinition (InferenceContext -> Graph -> Term -> Prelude.Either Error Term)
 etaExpandTypedTerm = define "etaExpandTypedTerm" $
   doc ("Recursively transform arbitrary terms like 'add 42' into terms like '\\x.add 42 x',"
     <> " eliminating partial application. Variable references are not expanded."
@@ -529,7 +529,7 @@ etaExpandTypedTerm = define "etaExpandTypedTerm" $
   "cx" ~> "tx0" ~> "term0" ~>
   "rewrite" <~ ("topLevel" ~> "forced" ~> "typeArgs" ~> "recurse" ~> "tx" ~> "term" ~>
     "rewriteSpine" <~ ("term" ~> cases _Term (var "term")
-      (Just $ var "rewrite" @@ false @@ false @@ list ([] :: [TTerm Type]) @@ var "recurse" @@ var "tx" @@ var "term") [
+      (Just $ var "rewrite" @@ false @@ false @@ list ([] :: [TypedTerm Type]) @@ var "recurse" @@ var "tx" @@ var "term") [
       _Term_annotated>>: "at" ~>
         "body" <<~ var "rewriteSpine" @@ Core.annotatedTermBody (var "at") $
         "ann" <~ Core.annotatedTermAnnotation (var "at") $
@@ -543,7 +543,7 @@ etaExpandTypedTerm = define "etaExpandTypedTerm" $
         -- list<hydra.core.Type> but found list<unit>". Validate.Core's
         -- constant-condition rule flags this; the rule is disabled in
         -- update-json-main's exemption list along with the comment there.
-        "l" <~ Logic.ifElse false (list [Core.typeLiteral Core.literalTypeString]) (list ([] :: [TTerm Type])) $
+        "l" <~ Logic.ifElse false (list [Core.typeLiteral Core.literalTypeString]) (list ([] :: [TypedTerm Type])) $
         "lhs" <<~ var "rewriteSpine" @@ Core.applicationFunction (var "a") $
         "rhs" <<~ var "rewrite" @@ true @@ false @@ var "l" @@ var "recurse" @@ var "tx" @@ Core.applicationArgument (var "a") $
         right (Core.termApplication $ Core.application (var "lhs") (var "rhs")),
@@ -558,7 +558,7 @@ etaExpandTypedTerm = define "etaExpandTypedTerm" $
     --       type lookups.
     "arityOf" <~ ("tx" ~> "term" ~>
       "dflt" <~ (Eithers.map ("_tc" ~> Arity.typeArity @@ Pairs.first (var "_tc"))
-          (Checking.typeOf @@ var "cx" @@ var "tx" @@ list ([] :: [TTerm Type]) @@ var "term")) $
+          (Checking.typeOf @@ var "cx" @@ var "tx" @@ list ([] :: [TypedTerm Type]) @@ var "term")) $
       cases _Term (var "term")
         (Just $ var "dflt") [
         _Term_annotated>>: "at" ~> var "arityOf" @@ var "tx" @@ Core.annotatedTermBody (var "at"),
@@ -582,7 +582,7 @@ etaExpandTypedTerm = define "etaExpandTypedTerm" $
           -- Variable not in graphBoundTypes; use typeOf with CURRENT context and variable term as fallback
           -- This can happen with local let bindings that aren't yet in scope during eta expansion
           (Eithers.map ("_tc" ~> Arity.typeArity @@ Pairs.first (var "_tc"))
-            (Checking.typeOf @@ var "cx" @@ var "tx" @@ list ([] :: [TTerm Type]) @@ Core.termVariable (var "name")))
+            (Checking.typeOf @@ var "cx" @@ var "tx" @@ list ([] :: [TypedTerm Type]) @@ Core.termVariable (var "name")))
           ("t" ~> right $ Arity.typeArity @@ var "t")]) $
 
 
@@ -605,7 +605,7 @@ etaExpandTypedTerm = define "etaExpandTypedTerm" $
       (var "term") (var "typeArgs")) $
 
     "forceExpansion" <~ ("t" ~>
-      "typCx" <<~ Checking.typeOf @@ var "cx" @@ var "tx" @@ list ([] :: [TTerm Type]) @@ var "t" $
+      "typCx" <<~ Checking.typeOf @@ var "cx" @@ var "tx" @@ list ([] :: [TypedTerm Type]) @@ var "t" $
       "arity" <~ Arity.typeArity @@ Pairs.first (var "typCx") $
       right $ var "padn" @@ var "arity" @@ (var "unwind" @@ var "t")) $
 
@@ -614,7 +614,7 @@ etaExpandTypedTerm = define "etaExpandTypedTerm" $
       (var "recurse" @@ var "tx" @@ (var "unwind" @@ var "term"))) $
 
     "forCase" <~ ("f" ~>
-      "r" <<~ var "rewrite" @@ false @@ true @@ list ([] :: [TTerm Type]) @@ var "recurse" @@ var "tx" @@ Core.fieldTerm (var "f") $
+      "r" <<~ var "rewrite" @@ false @@ true @@ list ([] :: [TypedTerm Type]) @@ var "recurse" @@ var "tx" @@ Core.fieldTerm (var "f") $
       right $ Core.fieldWithTerm (var "f") (var "r")) $
 
     -- Forcing case statement branches is intended for Python, where we cannot accept a branch which is simply
@@ -624,7 +624,7 @@ etaExpandTypedTerm = define "etaExpandTypedTerm" $
       "tname" <~ Core.caseStatementTypeName (var "cs") $
       "dflt" <~ Core.caseStatementDefault (var "cs") $
       "csCases" <~ Core.caseStatementCases (var "cs") $
-      "rdflt" <<~ Eithers.mapMaybe (var "rewrite" @@ false @@ false @@ list ([] :: [TTerm Type]) @@ var "recurse" @@ var "tx") (var "dflt") $
+      "rdflt" <<~ Eithers.mapMaybe (var "rewrite" @@ false @@ false @@ list ([] :: [TypedTerm Type]) @@ var "recurse" @@ var "tx") (var "dflt") $
       "rcases" <<~ Eithers.mapList (var "forCase") (var "csCases") $
       right $ Core.termCases $
         Core.caseStatement (var "tname") (var "rdflt") (var "rcases")) $
@@ -646,7 +646,7 @@ etaExpandTypedTerm = define "etaExpandTypedTerm" $
       _Term_application>>: "a" ~>
         "lhs" <~ Core.applicationFunction (var "a") $
         "rhs" <~ Core.applicationArgument (var "a") $
-        "rhs2" <<~ var "rewrite" @@ true @@ false @@ list ([] :: [TTerm Type]) @@ var "recurse" @@ var "tx" @@ var "rhs" $
+        "rhs2" <<~ var "rewrite" @@ true @@ false @@ list ([] :: [TypedTerm Type]) @@ var "recurse" @@ var "tx" @@ var "rhs" $
         "lhsarity" <<~ var "arityOf" @@ var "tx" @@ var "lhs" $
         "lhs2" <<~ var "rewriteSpine" @@ var "lhs" $
         "a2" <~ Core.termApplication (Core.application (var "lhs2") (var "rhs2")) $
@@ -669,13 +669,13 @@ etaExpandTypedTerm = define "etaExpandTypedTerm" $
       _Term_typeLambda>>: "tl" ~>
         "txt" <~ Scoping.extendGraphForTypeLambda @@ var "tx" @@ var "tl" $
         var "recurse" @@ var "txt" @@ var "term"]) $
-  Rewriting.rewriteTermWithContextM @@ (var "rewrite" @@ true @@ false @@ list ([] :: [TTerm Type])) @@ var "tx0" @@ var "term0"
+  Rewriting.rewriteTermWithContextM @@ (var "rewrite" @@ true @@ false @@ list ([] :: [TypedTerm Type])) @@ var "tx0" @@ var "term0"
 
 -- TODO: this function probably needs to be replaced with a function which takes not only a Graph, but an extended Graph.
 --       etaExpansionArity won't give the correct answer unless it has access to the full lexical environment
 --       of each subterm in which it is applied, including lambda-bound variables as well as nested let-bound variables.
 --       The new function need not be monadic, because we don't need to call typeOf; it just needs accurate type lookups.
-etaExpansionArity :: TTermDefinition (Graph -> Term -> Int)
+etaExpansionArity :: TypedTermDefinition (Graph -> Term -> Int)
 etaExpansionArity = define "etaExpansionArity" $
   doc ("Calculate the arity for eta expansion"
     <> " Note: this is a \"trusty\" function which assumes the graph is well-formed, i.e. no dangling references.") $
@@ -700,7 +700,7 @@ etaExpansionArity = define "etaExpansionArity" $
           (Lexical.lookupBinding @@ var "graph" @@ var "name")
           ("b" ~> Core.bindingTypeScheme $ var "b"))]
 
-etaReduceTerm :: TTermDefinition (Term -> Term)
+etaReduceTerm :: TypedTermDefinition (Term -> Term)
 etaReduceTerm = define "etaReduceTerm" $
   doc "Eta-reduce a term by removing redundant lambda abstractions" $
   "term" ~>
@@ -736,7 +736,10 @@ etaReduceTerm = define "etaReduceTerm" $
         (Core.annotatedTermAnnotation $ var "at"),
     _Term_lambda>>: "l" ~> var "reduceLambda" @@ var "l"]
 
-reduceTerm :: TTermDefinition (Context -> Graph -> Bool -> Term -> Prelude.Either Error Term)
+formatError :: TypedTerm (Error -> String)
+formatError = "e" ~> ShowError.error_ @@ var "e"
+
+reduceTerm :: TypedTermDefinition (InferenceContext -> Graph -> Bool -> Term -> Prelude.Either Error Term)
 reduceTerm = define "reduceTerm" $
   doc "A term evaluation function which is alternatively lazy or eager" $
   "cx" ~> "graph" ~> "eager" ~> "term" ~>
@@ -768,7 +771,7 @@ reduceTerm = define "reduceTerm" $
       ("f" ~> Equality.equal (Core.fieldName $ var "f") (Core.projectionFieldName $ var "proj"))
       (var "fields")) $
     Maybes.maybe
-      (Ctx.failInContext (Error.errorResolution $ Error.resolutionErrorNoMatchingField $ Error.noMatchingFieldError (Core.projectionFieldName $ var "proj")) (var "cx"))
+      (left (Error.errorResolution $ Error.resolutionErrorNoMatchingField $ Error.noMatchingFieldError (Core.projectionFieldName $ var "proj")))
       ("mf" ~> right $ Core.fieldTerm $ var "mf")
       (var "matching")) $
   "applyCases" <~ ("cs" ~> "reducedArg" ~>
@@ -778,7 +781,7 @@ reduceTerm = define "reduceTerm" $
       (Core.caseStatementCases $ var "cs")) $
     Maybes.maybe
       (Maybes.maybe
-        (Ctx.failInContext (Error.errorResolution $ Error.resolutionErrorNoMatchingField $ Error.noMatchingFieldError (Core.fieldName $ var "field")) (var "cx"))
+        (left (Error.errorResolution $ Error.resolutionErrorNoMatchingField $ Error.noMatchingFieldError (Core.fieldName $ var "field")))
         (reify right)
         (Core.caseStatementDefault $ var "cs"))
       ("mf" ~> right $ Core.termApplication $ Core.application
@@ -914,15 +917,15 @@ reduceTerm = define "reduceTerm" $
     "inner" <<~ Logic.ifElse (var "doRecurse" @@ var "eager" @@ var "mid")
       (var "recurse" @@ var "mid")
       (right $ var "mid") $
-    var "applyIfNullary" @@ var "eager" @@ var "inner" @@ (list ([] :: [TTerm Term]))) $
+    var "applyIfNullary" @@ var "eager" @@ var "inner" @@ (list ([] :: [TypedTerm Term]))) $
   Rewriting.rewriteTermM @@ var "mapping" @@ var "term"
 
-termIsClosed :: TTermDefinition (Term -> Bool)
+termIsClosed :: TypedTermDefinition (Term -> Bool)
 termIsClosed = define "termIsClosed" $
   doc "Whether a term is closed, i.e. represents a complete program" $
   "term" ~> Sets.null $ Variables.freeVariablesInTerm @@ var "term"
 
-termIsValue :: TTermDefinition (Term -> Bool)
+termIsValue :: TypedTermDefinition (Term -> Bool)
 termIsValue = define "termIsValue" $
   doc "Whether a term has been fully reduced to a value" $
   "term" ~>

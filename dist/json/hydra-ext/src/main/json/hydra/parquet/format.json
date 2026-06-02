@@ -1469,5 +1469,8 @@
                         "body": {"maybe": {"literal": {"binary": {}}}}}}}]}}},
           "variables": []}}}],
   "dependencies": [{"module": "hydra.core"}],
-  "description": "A model for the Parquet format. Based on the Thrift-based specification at:\n  https://github.com/apache/parquet-format/blob/master/src/main/thrift/parquet.thrift",
+  "metadata": {
+    "comments": [],
+    "description": "A model for the Parquet format. Based on the Thrift-based specification at:\n  https://github.com/apache/parquet-format/blob/master/src/main/thrift/parquet.thrift",
+    "seeAlso": []},
   "name": "hydra.parquet.format"}

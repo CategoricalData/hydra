@@ -68,8 +68,14 @@ they were committed before the ignore rule was added and need `git rm --cached`:
 ## Finding stale generated files
 
 When a Hydra module is renamed or deleted, or when types within a module are renamed or deleted,
-the old generated files remain.
-The sync scripts generate new files but **never delete old ones**.
+old generated files can remain.
+The build prunes stale outputs via `bootstrap-from-json --prune-stale` and an orphan-aware
+`digest-check fresh` (#357, #393): the recorded output digest is the keep-set, and files in an
+emitted package's output dir that are absent from the keep-set are deleted in place.
+This pruning is **per-package and gated on that package re-emitting** — so orphans can still
+survive when the owning package is a cache hit, or when a module is removed from the emission set
+entirely (its output dir is no longer reconciled). Treat the audit below as a backstop for those
+gaps, not a routine necessity.
 
 This is especially problematic in Java, where each type becomes its own `.java` file —
 renaming a single type leaves an orphan class file on the classpath.
@@ -82,7 +88,7 @@ renaming a single type leaves an orphan class file on the classpath.
 | Module deleted | Old files in every implementation |
 | Type renamed (within a module) | Old `.java` file in Java |
 | Type deleted (within a module) | Old `.java` file in Java |
-| Namespace split (`hydra.error` → `hydra.error.core` + `hydra.error.checking` + ...) | Old unsplit files in every implementation |
+| Module split (`hydra.error` → `hydra.error.core` + `hydra.error.checking` + ...) | Old unsplit files in every implementation |
 
 ### Where to look
 
@@ -187,7 +193,7 @@ rm <stale-files>
 
 # Verify each implementation still builds
 cd heads/haskell && stack build && stack test
-./gradlew :hydra-java:compileTestJava
+(cd heads/java && ./gradlew :hydra-java:compileTestJava)
 cd heads/python && uv run pytest
 # etc.
 ```
@@ -196,7 +202,7 @@ cd heads/python && uv run pytest
 
 These refactoring patterns are especially prone to leaving orphans:
 
-- **Namespace splits**: When `hydra.foo` is split into `hydra.foo.bar` and `hydra.foo.baz`,
+- **Module splits**: When `hydra.foo` is split into `hydra.foo.bar` and `hydra.foo.baz`,
   the old `foo.hs` / `foo.py` / `foo.java` / `foo.clj` etc. remain.
   The decoder, encoder, and DSL modules also split
   (`Decode/Foo.hs` → `Decode/Foo/Bar.hs` + `Decode/Foo/Baz.hs`).
@@ -234,10 +240,10 @@ linked against an out-of-date kernel.
 The Haskell sync executables (`update-json-main`, `update-json-test`, `update-json-manifest`,
 `bootstrap-from-json`, `verify-json-kernel`, etc.) are compiled by Stack and cached under
 `heads/haskell/.stack-work/install/`.
-Each binary has constants, type names, namespace strings, and serialized term fragments
+Each binary has constants, type names, module-name strings, and serialized term fragments
 **baked in at link time** from whatever the kernel looked like when the binary was built.
-If you rename a kernel namespace, regenerate `dist/haskell/hydra-kernel/`, then run a generation
-exec without rebuilding it first, the exec emits the **old** namespace string into the JSON
+If you rename a kernel module name, regenerate `dist/haskell/hydra-kernel/`, then run a generation
+exec without rebuilding it first, the exec emits the **old** module-name string into the JSON
 output — even though the kernel sources on disk are correct.
 
 `sync-haskell.sh` does call `stack build` between phases, so in principle Stack should
@@ -259,7 +265,7 @@ in `dist/json/`** (or, transitively, in any language target that copies content 
 
 Stale binary cache shows up as:
 
-- A specific text pattern (an old namespace, an old type name, a removed function name)
+- A specific text pattern (an old module name, an old type name, a removed function name)
   appearing in `dist/json/` or in language-target outputs **after** sync-all completes.
 - The same pattern absent from all hand-written sources (`packages/`, `heads/`, `dist/haskell/`).
 - Mtimes on the offending dist files showing they were rewritten by the recent sync,
@@ -297,7 +303,7 @@ from source. A full rebuild from cold cache takes 30–60 minutes.
 #### When to suspect this hazard
 
 After any of:
-- A namespace rename across the kernel (e.g., #290's `hydra.module` → `hydra.packaging`).
+- A module-name rename across the kernel (e.g., #290's `hydra.module` → `hydra.packaging`).
 - An ext-prefix removal (#331).
 - A type rename in `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Types/`.
 - A move of a primitive between libraries.
@@ -497,7 +503,7 @@ remains:
 - `dist/haskell/hydra-kernel/src/test/haskell/Hydra/Test/TestEnv.hs` —
   the Haskell-level runtime counterpart of the DSL stub
   `Hydra.Sources.Test.TestEnv`. The kernel filters `hydra.test.testEnv`
-  from emitted output (via `testSkipEmitNamespaces` in
+  from emitted output (via `testSkipEmitModuleNames` in
   `Hydra.Sources.Test.All`), so this file is left alone by regeneration.
   Tolerated for now because the Haskell test build's source set spans
   `dist/haskell/.../src/test/haskell/`, and moving the file to `heads/`
@@ -516,7 +522,7 @@ by the per-target `assemble-distribution.sh`. The pattern, target by target:
 - Emacs Lisp: `heads/lisp/emacs-lisp/src/test/emacs-lisp/hydra/test/test_env.el`
 - Scheme: `heads/lisp/scheme/src/test/scheme/hydra/test/test_env.scm`
 
-Each provides `hydra_test_test_env_test_context` (a `Context` value) and
+Each provides `hydra_test_test_env_test_context` (an `InferenceContext` value) and
 `hydra_test_test_env_test_graph` (a function `Map Name Type → Map Name Term → Graph`),
 matching the DSL signature in `Hydra.Sources.Test.TestEnv`. Scala and the
 four Lisp dialects (Clojure, Common Lisp, Emacs Lisp, Scheme) curry the
@@ -547,10 +553,45 @@ definition bodies appear in **alphabetical order** within each module.
 This applies to:
 - Kernel Source modules (`packages/hydra-kernel/src/main/haskell/Hydra/Sources/`)
 - Per-language coder Source modules (`packages/hydra-haskell/`, `packages/hydra-java/`, `packages/hydra-python/`, `packages/hydra-scala/`, `packages/hydra-lisp/`, `packages/hydra-ext/`, `packages/hydra-pg/`, `packages/hydra-rdf/`, `packages/hydra-coq/`, `packages/hydra-typescript/`, `packages/hydra-bench/`)
-- Hand-written runtime modules (`heads/haskell/src/main/haskell/Hydra/`)
+- Hand-written runtime modules (`heads/haskell/src/main/haskell/Hydra/`),
+  including the hand-written DSL helper libraries under
+  `heads/haskell/src/main/haskell/Hydra/Dsl/` and its `Meta/`, `Meta/Lib/`,
+  and `Deep/Lib/` subdirectories. These are pure Haskell modules without a
+  `definitions` list, but each module's top-level binding *bodies* must
+  still appear in alphabetical order within their respective sections.
 
 Generated files inherit their ordering from Source modules,
 so fixing the Source fixes all implementations.
+
+**Sort order is case-sensitive ASCII** — uppercase before lowercase,
+matching `checkDefinitionOrdering`. E.g. `substTypesInTerm` sorts
+before `substituteInBinding` because `T` (0x54) precedes `i` (0x69).
+
+**Exemption: conventional anchors.** Some bindings are positioned by
+convention rather than alphabetical order and should be left where they
+are. These include:
+
+- Source-module anchors: `module_`, `ns`, `definitions`, `define`,
+  `self`, `ext`.
+- Registry-file anchors: `mainModules`, `kernelModules`,
+  `kernelTypesModules`, `kernelPrimaryTermsModules`,
+  `kernelTermsModules`, `dslSourceModules`, `kernelDslInputModules`,
+  `haskellDslInputModules`, `haskellModules`, `jsonModules`,
+  `otherModules`, `bootstrapTypeModules`, `dslTypeModules`,
+  `hydraExtModules`. The whole `Sources/All.hs` style of registry file
+  (one per package) is exempt from the ordering check entirely; their
+  bindings are list aliases that have a logical layered order.
+- Operator definitions (any binding whose name begins with a
+  non-alphanumeric character, e.g. `(@@)`, `(<.>)`, `(>:)`). These are
+  conventionally placed at the top of a module as a block before the
+  alphabetical bindings; they retain whatever internal order makes sense
+  (often by precedence or usage), not alphabetical.
+
+**Section boundaries.** A file may be divided into multiple alphabetical
+sections separated by comment dividers (e.g. `-- Unary functions`,
+`-- Binary functions`, or `----------------------------------------`).
+Each section is alphabetized internally; bindings do not move across
+section boundaries. Section ordering itself is by convention.
 
 **Generator-derived modules are exempt.** The `hydra.dsl.*`, `hydra.encode.*`,
 and `hydra.decode.*` module families are produced by `dslModule`,
@@ -579,7 +620,20 @@ For each Source module, walk the file and confirm that top-level bindings
 appear in the same order as their entries in the `definitions` list.
 
 **Fixing violations:** reorder both the `definitions` list entry *and* the corresponding
-definition body together — they must stay in sync.
+definition body together — they must stay in sync. When the module has no
+`definitions` list (e.g. hand-written DSL helpers under `Hydra/Dsl/`), only
+the body order applies. Reordering pure Haskell bindings has no semantic
+effect — Haskell does not depend on top-level declaration order.
+
+**When reordering, move each binding together with all of its attached
+material**: doc comments above it, its type signature line(s), its
+`where`-clauses, and any pragmas. Do not split these.
+
+After reordering source files, run `bin/sync.sh --hosts all --targets all`
+to regenerate downstream artifacts (a body reorder in a Source module
+changes the file order in `dist/haskell/`, even when the underlying
+`definitions` list — which controls emission order in target languages
+— is already sorted).
 
 When reordering, preserve the original list shape.
 Term-style modules (e.g. `Hydra/Sources/Kernel/Terms/*.hs`) wrap each
@@ -712,7 +766,7 @@ All implementations should have the same number of passing tests
    cd heads/haskell && stack test 2>&1 | tail -5
 
    # Java
-   ./gradlew :hydra-java:test 2>&1 | grep -E 'tests.*passed'
+   (cd heads/java && ./gradlew :hydra-java:test) 2>&1 | grep -E 'tests.*passed'
 
    # Python
    cd heads/python && uv run pytest --tb=no -q 2>&1 | tail -3

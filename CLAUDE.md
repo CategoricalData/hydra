@@ -13,13 +13,16 @@ It explores an isomorphism between typed lambda calculus and labeled hypergraphs
 Hydra is self-hosting: the kernel is defined in Haskell-based DSLs and code-generated
 into eight host languages spanning five implementation families:
 Haskell, Java, Python, Scala, and Lisp (Clojure, Common Lisp, Emacs Lisp, Scheme — sharing one coder).
-All eight pass the common test suite.
+All eight pass the common test suite as targets; Haskell, Java, Python, Scala, and the JVM/native
+Lisp dialects also self-host (Emacs Lisp is still maturing as a host — see README implementation
+status).
 
 The Java and Python coder DSL sources (`packages/hydra-{java,python}/`) are now
-authored in Java and Python respectively (host-native), with legacy Haskell DSL
-copies retained as a backup through 0.15. See `bin/generate-hydra-java-from-java.sh`
-and `bin/generate-hydra-python-from-python.sh` for the self-host Phase-1 scripts.
-The main sync sequence will switch over to these before 0.16.
+authored in Java and Python respectively (host-native). The native sources are authoritative for the
+generated output: the main sync regenerates `dist/json/hydra-{java,python}` from them in Phase 5
+(`bin/generate-hydra-java-from-java.sh`, `bin/generate-hydra-python-from-python.sh`). The legacy
+Haskell DSL copies are retained as a Phase-1 cold-start bootstrap fallback through 0.16 and are slated
+for deletion in 0.17 (#346).
 
 A ninth target, Go (`hydra-go`, `heads/go/`), is a "head bud" — the kernel can be generated
 to Go via `bin/sync-go.sh`, but the Go coder still has emission bugs and the head's
@@ -106,13 +109,24 @@ At the beginning of every new session, follow these steps **before doing any oth
 ### During the session
 
 - **Save progress periodically**: Update the branch plan at milestones or approach changes.
-- **Commit workflow**: Make frequent `WIP:` checkpoint commits when code is stable.
-  All commit messages must be short (120 characters or less), single-line, no
-  "Co-Authored-By:" line. Include the issue number at the end of the message
-  when on a feature branch (e.g., `Regenerated hydra-haskell after kernel changes. For #137`).
-  When ready to finalize, ask the user about squashing:
-  soft-reset WIP commits, re-commit as focused topic groups, source changes first,
-  generated files last.
+- **Commit workflow**:
+  - **Every interim commit starts with `WIP:`** — the prefix marks unfinalized work
+    that has not yet been squashed. No exceptions while iterating on a feature branch:
+    fix-up, regen, test-green, and checkpoint commits all need it.
+  - **Squashed commits drop the `WIP:` prefix** — once a topic group has been
+    consolidated via the squash workflow, it represents shippable history.
+    The absence of `WIP:` is what tells a reader the work is finalized.
+    See [.claude/commands/squash.md](.claude/commands/squash.md).
+  - **All commit messages are short (≤120 chars), single-line, no body.**
+    No `Co-Authored-By` line. End with `For #<issue>` (or `Resolves #<issue>`
+    if this branch closes it). Example:
+    `Regenerated hydra-haskell after kernel changes. For #137`.
+  - **If one line isn't enough, use more commits, not a body.** Each commit
+    should be one focused change with a one-line summary. Splitting into
+    several focused commits is always better than appending a body.
+  - **When ready to finalize**: ask the user about squashing. Soft-reset
+    WIP commits, re-commit as focused topic groups, source changes first,
+    generated files last. See [.claude/commands/squash.md](.claude/commands/squash.md).
 
 ### When waiting on long-running work
 
@@ -152,10 +166,12 @@ and [docs/implementation.md](docs/implementation.md).
 
 Two hard rules:
 
-- **Read freely from other worktrees; modify only your assigned one.**
-  Reading sibling worktrees and `wiki/` is fine.
-  Edits, commits, branch operations, and `git add`/`restore`/`reset` happen
-  only inside your assigned worktree. The sole exception is the
+- **Read freely from other worktrees; modify only your assigned one — except
+  the wiki, which is OK to edit.** Reading sibling worktrees is fine. Edits,
+  commits, branch operations, and `git add`/`restore`/`reset` for branch code
+  happen only inside your assigned worktree. **`wiki/` is an exception**:
+  editing wiki pages is fine and expected when keeping user-facing
+  documentation in sync with the branch's work. The other exception is the
   cross-worktree inbox (see [claude/cross-worktree-messages.md](claude/cross-worktree-messages.md)).
 - **Never edit files under `hydra.git/` directly.** It is the shared object
   store; only git commands modify it.
@@ -234,6 +250,7 @@ Primary entry point — the doc most likely to answer the question by task:
 | Coding style + import conventions | [Coding style wiki](https://github.com/CategoricalData/hydra/wiki/Coding-style) |
 | Build/test commands per language | per-package READMEs under `packages/hydra-<lang>/README.md` |
 | Concepts (System F, design) | [Concepts wiki](https://github.com/CategoricalData/hydra/wiki/Concepts) |
+| Packaging model (packages, modules, definitions, entity metadata) | [Packaging wiki](https://github.com/CategoricalData/hydra/wiki/Packaging) |
 | Property graphs | [Property graphs wiki](https://github.com/CategoricalData/hydra/wiki/Property-graphs) / [hydra-pg README](packages/hydra-pg/README.md) |
 | RDF / SHACL | [RDF wiki](https://github.com/CategoricalData/hydra/wiki/RDF) / [hydra-rdf README](packages/hydra-rdf/README.md) |
 | Inference benchmarks | [hydra-bench README](packages/hydra-bench/README.md) — synthetic workloads + `bin/run-inference-bench.sh` |
@@ -289,6 +306,8 @@ Current commands:
 - `/sync-clojure`, `/sync-common-lisp`, `/sync-emacs-lisp`,
   `/sync-scheme` — Lisp dialect sync wrappers
 - `/sync-bench` — regenerate hydra-bench (opt-in; not part of `/sync`)
+- `/test` — target-language test validation (default: triad; closes the
+  `/sync` ↔ CI gap where sync only runs Haskell `stack test`)
 
 ## Coding style (read the full guide!)
 
@@ -336,6 +355,11 @@ These are non-negotiable and tend to be violated under pressure.
    Scope by CWD or absolute path; prefer killing only background tasks you spawned
    in this session, tracked by their task ID.
    When in doubt, ask first.
+6. **Never file a GitHub issue (or PR, comment, label, close) without showing the
+   draft and getting explicit approval first.** Write the full draft, show it in the
+   reply, and wait. "Draft the issue" or "write it up" means *show me*, not *file it* —
+   filing is a separate, explicit go-ahead. This applies to any action touching shared
+   project state. See `feedback_no_unauthorized_github_actions.md`.
 
 ## Mental models
 

@@ -168,5 +168,8 @@
         "name": "hydra.json.schema.SchemaReference",
         "typeScheme": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}}}],
   "dependencies": [{"module": "hydra.json.model"}, {"module": "hydra.core"}],
-  "description": "A model for JSON Schema. Based on https://cswr.github.io/JsonSchema/spec/grammar",
+  "metadata": {
+    "comments": [],
+    "description": "A model for JSON Schema. Based on https://cswr.github.io/JsonSchema/spec/grammar",
+    "seeAlso": []},
   "name": "hydra.json.schema"}

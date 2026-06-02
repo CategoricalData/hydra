@@ -62,16 +62,16 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> ([ShowCore.ns] L.++ kernelTypesModuleNames),
-            moduleDescription = Just "String representations of hydra.typing types"}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just "String representations of hydra.typing types")}
   where
    definitions = [
      toDefinition typeConstraint,
      toDefinition typeSubst]
 
-define :: String -> TTerm a -> TTermDefinition a
+define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModule module_
 
-typeConstraint :: TTermDefinition (TypeConstraint -> String)
+typeConstraint :: TypedTermDefinition (TypeConstraint -> String)
 typeConstraint = define "typeConstraint" $
   doc "Show a type constraint as a string" $
   lambda "tc" $ lets [
@@ -82,7 +82,7 @@ typeConstraint = define "typeConstraint" $
       string "≡",
       ShowCore.type_ @@ var "rtyp"]
 
-typeSubst :: TTermDefinition (TypeSubst -> String)
+typeSubst :: TypedTermDefinition (TypeSubst -> String)
 typeSubst = define "typeSubst" $
   doc "Show a type substitution as a string" $
   lambda "ts" $ lets [
