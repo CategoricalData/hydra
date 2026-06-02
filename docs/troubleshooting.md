@@ -148,6 +148,25 @@ enums.
 **Fix**: Update `TermVariant`/`TypeVariant` in the relevant `Meta.hs` source file, then
 rebuild and regenerate.
 
+### "Found N untyped binding(s) ..."
+
+**Symptom**: Phase 1 aborts with `Found N untyped binding(s) (after case hoisting); each must
+carry a type scheme at this stage. ... Offending bindings (module :: name): hydra.foo :: hydra.foo.bar, …`.
+
+**Cause**: A term definition reached the type-checking gate (post-inference, or on a no-infer
+path) without a type scheme. This is legitimate *only* for DSL-defined modules **before**
+inference — derived modules (`encode`/`decode`/`dsl`) and post-inference modules must carry a
+signature on every term definition. The usual real cause is **stale `dist/json/.../*.json`
+field shapes after a kernel record-field rename**: the old JSON decodes against the new schema
+with the renamed field unread, so the definition loses its signature and surfaces here rather
+than at the decode site. (Seen in #368: `"typeScheme"` JSON vs the renamed `"signature"` field.)
+
+**Fix**: Regenerate the affected package's JSON (the error names the module). For Java/Python
+packages, `update-json-main --include-java-python` after busting the input caches; for others,
+`assemble-distribution.sh <pkg>`. Don't patch bindings one at a time — a field rename hits every
+record in the package. Per #414 the message names the source module + the likely cause precisely;
+a record decoder also names the expected type ("expected a record of type T") on a shape mismatch.
+
 ## Python issues
 
 ### Naming collisions with reserved words
