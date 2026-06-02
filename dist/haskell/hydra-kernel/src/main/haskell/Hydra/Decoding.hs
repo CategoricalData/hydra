@@ -1181,7 +1181,9 @@ decodeRecordTypeImpl tname rt =
                     Core.caseStatementTypeName = (Core.Name "hydra.core.Term"),
                     Core.caseStatementDefault = (Just (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
                       Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
-                      Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected record"))}))))),
+                      Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString (Strings.cat [
+                        "expected a record of type ",
+                        (Core.unName tname)])))}))))),
                     Core.caseStatementCases = [
                       Core.Field {
                         Core.fieldName = (Core.Name "record"),

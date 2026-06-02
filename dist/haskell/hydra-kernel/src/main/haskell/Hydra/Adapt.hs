@@ -356,14 +356,25 @@ dataGraphToDefinitions constraints doInfer doExpand doHoistCaseStatements doHois
                               Core.letBody = Core.TermUnit}
                         letAfter = Hoisting.hoistPolymorphicLetBindings isParentBinding letBefore
                     in (Core.letBindings letAfter)
+          qualifyUntyped =
+                  \b ->
+                    let nm = Core.unName (Core.bindingName b)
+                    in (Maybes.maybe (Strings.cat2 "(no module) " nm) (\ns -> Strings.cat [
+                      Packaging.unModuleName ns,
+                      " :: ",
+                      nm]) (Names.moduleNameOf (Core.bindingName b)))
           checkBindingsTyped =
                   \debugLabel -> \bindings ->
                     let untypedBindings =
-                            Lists.map (\b -> Core.unName (Core.bindingName b)) (Lists.filter (\b -> Logic.not (Maybes.isJust (Core.bindingTypeScheme b))) bindings)
+                            Lists.map qualifyUntyped (Lists.filter (\b -> Logic.not (Maybes.isJust (Core.bindingTypeScheme b))) bindings)
                     in (Logic.ifElse (Lists.null untypedBindings) (Right bindings) (Left (Errors.ErrorOther (Errors.OtherError (Strings.cat [
-                      "Found untyped bindings (",
+                      "Found ",
+                      (LibLiterals.showInt32 (Lists.length untypedBindings)),
+                      " untyped binding(s) (",
                       debugLabel,
-                      "): ",
+                      "); each must carry a type scheme at this stage. ",
+                      "This usually means stale dist/json field shapes after a kernel record rename ",
+                      "(regenerate the affected package's JSON). Offending bindings (module :: name): ",
                       (Strings.intercalate ", " untypedBindings)])))))
           normalizeBindings =
                   \bindings -> Lists.map (\b -> Core.Binding {
