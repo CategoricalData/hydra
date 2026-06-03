@@ -413,7 +413,7 @@ const main = async (): Promise<void> => {
   // `const capitalize = mapFirstLetter(toUpper);` which fails under the
   // TS coder's flat-call ABI.
   const allModules = modulesByPath.map((m) => m.module);
-  const cx = lexical.emptyContext;
+  const cx = lexical.emptyInferenceContext;
   const outMain = join(opts.output, "src/main", opts.target);
   const outTest = join(opts.output, "src/test", opts.target);
 
