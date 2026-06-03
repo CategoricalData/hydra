@@ -47,6 +47,14 @@ fi
 
 cd "$HYDRA_ROOT/heads/typescript"
 
+# Ensure npm dependencies (notably tsx) are installed. First-time contributors
+# don't have node_modules/, and the demo's per-cell error otherwise is opaque
+# ("Cannot find module 'tsx/dist/cli.mjs'"). Idempotent: skip if already present.
+if [ ! -d node_modules/tsx ]; then
+    echo "TypeScript host: installing npm dependencies (one-time)..."
+    npm install --no-fund --no-audit >/dev/null
+fi
+
 # Bump the V8 stack so the TS-implemented kernel checker can recurse
 # through deeply-nested Hydra terms (notably during TS->Java codegen,
 # where the Java coder hits typeOfTerm/typeOfApplication ~11x more
