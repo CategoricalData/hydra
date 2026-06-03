@@ -399,6 +399,33 @@ for H in $HOSTS; do
     # infrastructure). Skip the host=go and host=typescript rows of
     # Phase 4 until promotion is complete.
     if [ "$H" = "go" ] || [ "$H" = "typescript" ]; then continue; fi
+
+    # Static host dependencies. Hand-written sources under heads/<H>/ may
+    # reference hydra-<X> classes at compile time even when X is not in
+    # --targets. e.g. heads/java/src/main/java/hydra/Generation.java imports
+    # hydra.lisp.* and hydra.typeScript.*, so dist/java/{hydra-lisp,hydra-
+    # typescript} must exist before any later phase triggers a heads/java
+    # gradle compile (Phase 5 native DSL→JSON, test runs, etc.). The Layer-1
+    # assembler is cheap (JSON→target transform, no host compile required)
+    # and digest-skips on warm runs, so we always pre-assemble these here.
+    # Audit follow-up needed for other hosts (#409 finding #2).
+    case "$H" in
+        java)
+            STATIC_DEPS="hydra-lisp hydra-typescript"
+            ;;
+        scala)
+            STATIC_DEPS="hydra-haskell hydra-java hydra-python"
+            ;;
+        *)
+            STATIC_DEPS=""
+            ;;
+    esac
+    for dep in $STATIC_DEPS; do
+        echo ""
+        echo "--- $dep -> $H (host static dep) ---"
+        "$HYDRA_ROOT/heads/$H/bin/assemble-distribution.sh" "$dep"
+    done
+
     for T in $TARGETS; do
         # Map target language to its coder package.
         case "$T" in
