@@ -354,10 +354,9 @@ banner1 "Phase 3: hydra-kernel + hydra-pg + hydra-rdf into each language"
 echo ""
 for L in $LANG_UNION; do
     if [ "$L" = "haskell" ]; then continue; fi
-    # The Go and TypeScript heads are "head buds": only hydra-kernel is
-    # meaningful for them today. Skip hydra-pg / hydra-rdf into them
-    # until corresponding runtime bindings exist (issue #289 for Go,
-    # #126 for TypeScript).
+    # Go remains a "head bud" (#289): only hydra-kernel meaningful today.
+    # TypeScript was promoted by #126; still only kernel is wired through here
+    # because hydra-pg / hydra-rdf TypeScript runtime bindings haven't landed yet.
     if [ "$L" = "go" ] || [ "$L" = "typescript" ]; then
         for pkg in hydra-kernel; do
             echo ""
@@ -394,11 +393,10 @@ banner1 "Phase 4: Cross-host coders (hydra-<target> in host's language)"
 echo ""
 for H in $HOSTS; do
     if [ "$H" = "haskell" ]; then continue; fi
-    # Go and TypeScript heads are "head buds": they cannot yet host
-    # generation of any coder package in their own language (no DSL
-    # infrastructure). Skip the host=go and host=typescript rows of
-    # Phase 4 until promotion is complete.
-    if [ "$H" = "go" ] || [ "$H" = "typescript" ]; then continue; fi
+    # Go remains a "head bud" (#289): no DSL infrastructure, can't host generation.
+    # TypeScript was promoted by #126 and now has heads/typescript/bin/assemble-distribution.sh;
+    # let it through.
+    if [ "$H" = "go" ]; then continue; fi
 
     # Static host dependencies. Hand-written sources under heads/<H>/ may
     # reference hydra-<X> classes at compile time even when X is not in
@@ -438,7 +436,7 @@ for H in $HOSTS; do
         echo "--- $pkg -> $H ---"
         # Dispatch to host H's assembler so post-processing patches apply.
         case "$H" in
-            java|python|scala)
+            java|python|scala|typescript)
                 "$HYDRA_ROOT/heads/$H/bin/assemble-distribution.sh" "$pkg"
                 ;;
             clojure|scheme|common-lisp|emacs-lisp)
