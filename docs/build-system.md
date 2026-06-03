@@ -193,6 +193,13 @@ A change that dirties most of the universe (e.g. a kernel-wide rename) thus stay
 within the per-package memory envelope on the incremental path too, instead of falling
 back to a single mega-inference over the full dirty set.
 
+The incremental path is what makes day-to-day development affordable: a typical
+edit dirties a handful of modules, and reusing the already-inferred type schemes
+for the rest skips both the inference work and the disk write for every clean
+package. The per-package iteration keeps the dirty-set work bounded; the
+warm-cache seed keeps the clean-set work near-zero. The result is that a
+single-package edit is a single-package re-inference, not a universe-wide one.
+
 ## The cache model
 
 Every layer of the pipeline caches its work. All caches are content-hash based
