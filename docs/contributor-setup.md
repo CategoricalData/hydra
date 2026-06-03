@@ -58,11 +58,16 @@ With this you can edit kernel DSL sources, regenerate the Haskell kernel, and ru
     `install-ghc: false` to prevent surprise downloads.
   - If you see warnings about untested GHC/Cabal versions, run `stack upgrade`.
     See the Stack section of [packages/hydra-haskell/README.md](../packages/hydra-haskell/README.md#troubleshooting).
-- **`python3`** ≥ 3.9.
-  Several pipeline helpers under `bin/lib/` are written in Python, so it is required even when
-  you are not generating Python code.
+- **`python3`** — two version floors apply:
+  - **System `python3` ≥ 3.9** is enough for the pipeline helpers under `bin/lib/`.
+    Required even when you are not generating Python code.
+  - **Python ≥ 3.12** is required to run the Python target's test suite — generated
+    `test_json.py` uses PEP 695 `type X = ...` syntax.
+    `heads/python/pyproject.toml` declares `requires-python = ">=3.12"`.
+    If your system Python is older, install 3.12 via `uv python install 3.12` (see uv
+    below) — uv will pick it up automatically when running tests through `uv run`.
   - macOS / Linux: usually preinstalled; otherwise install from your package manager.
-  - Verify: `python3 --version`
+  - Verify: `python3 --version`; for the 3.12+ check, `uv python list` after installing uv.
 
 ### Test it
 
@@ -95,6 +100,25 @@ This is what runs before merging changes upstream.
   - Verify: `java -version`
 - **`gradle`** is **not** required separately — the repo uses the Gradle Wrapper (`./gradlew`).
   Bringing your own Gradle is fine if you have it.
+- **`uv`** (Astral's single-binary Python tool) is required when Python is a host —
+  `bin/generate-hydra-python-from-python.sh` (invoked by Phase 5 of `bin/sync.sh`)
+  hard-defaults to `uv` and has no `python3` fallback; missing it kills the sync
+  ~28 min in. See #409 branch finding #3.
+  ```bash
+  curl -LsSf https://astral.sh/uv/install.sh | sh
+  ```
+  Adds `uv` and `uvx` to `~/.local/bin/`. Make sure that directory is on `PATH`.
+  Verify: `uv --version`.
+- **`JAVA_HOME`** must be exported before running `/sync` or `/bootstrap` if any host
+  or target is Java.
+  `bin/sync.sh` currently does not auto-discover `JAVA_HOME` on Linux — see #409
+  branch finding #1.
+  On Debian/Ubuntu with OpenJDK 17 installed, add this to your shell profile
+  (`~/.bashrc` or `~/.zshrc`):
+  ```bash
+  export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
+  ```
+  Verify: `echo "$JAVA_HOME" && "$JAVA_HOME/bin/java" -version`.
 
 Python 3 from Tier 1 covers both pipeline helpers and the Python target itself; no additional install needed.
 
