@@ -40,6 +40,9 @@ __pycache__/
 .pytest_cache/
 .ruff_cache/
 
+# Clojure CLI tools.deps cache
+.cpcache/
+
 # Node
 node_modules/
 
