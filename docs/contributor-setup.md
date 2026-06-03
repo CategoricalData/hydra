@@ -164,10 +164,21 @@ Required for `/sync` with `--hosts all --targets all`, `/bootstrap all`, and iss
     rm linux-install.sh
     ```
   - Verify: `clojure --version`
-- **`sbcl`** for Common Lisp.
+- **`sbcl`** for Common Lisp, plus **Quicklisp with `cl-ppcre` installed**.
+  CL target tests load `cl-ppcre` via ASDF; without it SBCL exits with
+  `ASDF/FIND-COMPONENT:MISSING-COMPONENT Component :CL-PPCRE not found`.
   - macOS: `brew install sbcl`
   - Linux: `sudo apt install -y sbcl` / `sudo dnf install -y sbcl`
-  - Verify: `sbcl --version`
+  - Then install Quicklisp once (per machine, not per worktree):
+    ```bash
+    curl -O https://beta.quicklisp.org/quicklisp.lisp
+    sbcl --no-sysinit --no-userinit --load quicklisp.lisp \
+         --eval '(quicklisp-quickstart:install)' \
+         --eval '(ql:add-to-init-file)' --quit
+    sbcl --eval '(ql:quickload :cl-ppcre)' --quit
+    rm quicklisp.lisp
+    ```
+  - Verify: `sbcl --version` and `sbcl --non-interactive --eval '(asdf:load-system :cl-ppcre)'` (silent success).
 - **`emacs`** for Emacs Lisp (used in `--batch` mode).
   Emacs Lisp is the least mature host — expect rough edges.
   - macOS: `brew install emacs`
