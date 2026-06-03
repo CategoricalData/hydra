@@ -52,6 +52,7 @@ TOOLS=(
     "kernel,triad,full,go|Haskell Stack|stack|stack --numeric-version|brew install haskell-stack  |  curl -sSL https://get.haskellstack.org/ | sh"
     "kernel,triad,full,go|Python 3|python3|python3 --version|brew install python@3.12  |  apt install python3"
     "triad,full,go|JDK (>=11)|java|java -version|brew install --cask temurin@17  |  apt install openjdk-17-jdk"
+    "triad,full|uv (Python tool; required when Python is host)|uv|uv --version|curl -LsSf https://astral.sh/uv/install.sh | sh"
     "full|Scala sbt|sbt|sbt --numeric-version|brew install sbt  |  see https://www.scala-sbt.org/download.html"
     "full|Clojure CLI|clojure|clojure --version|brew install clojure/tools/clojure  |  see https://clojure.org/guides/install_clojure"
     "full|SBCL (Common Lisp)|sbcl|sbcl --version|brew install sbcl  |  apt install sbcl"
