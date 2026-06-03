@@ -22,9 +22,10 @@ Extra flags (e.g. `--no-tests`) are forwarded. Runs:
 - Phase 3: emit `hydra-kernel` into `dist/typescript/hydra-kernel/`
   (assemble-distribution.sh copies the hand-written runtime alongside)
 
-TypeScript is a "head bud" — Phase 4 (`host=typescript`) is skipped
-because the TS runtime cannot yet host generation of coder packages in
-TypeScript's own language. See issue #126.
+Post-#126: TypeScript can host generation; Phase 4 routes through
+`heads/typescript/bin/assemble-distribution.sh`. Phase 3 still emits only
+hydra-kernel into `dist/typescript/`; hydra-pg / hydra-rdf TypeScript runtime
+bindings haven't landed.
 
 This script does **not** run the TypeScript test suite. To validate the
 generated code, run the TypeScript head's test entry point or do a
