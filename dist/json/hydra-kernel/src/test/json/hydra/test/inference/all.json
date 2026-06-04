@@ -4,7 +4,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "The group of all inference tests"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The group of all inference tests"}}}]},
             "body": {
               "record": {
                 "fields": [

@@ -4,7 +4,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Create a DOT label attribute"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Create a DOT label attribute"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -24,7 +24,9 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Create DOT label attributes with a node style"}}}],
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "Create DOT label attributes with a node style"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -154,7 +156,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "The 'element' node style"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The 'element' node style"}}}]},
             "body": {"literal": {"string": "element"}}}},
         "name": "hydra.graphviz.coder.nodeStyleElement",
         "signature": {"parameters": [], "result": {"type": {"literal": {"string": {}}}}, "typeParameters": []}}},
@@ -162,7 +164,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "The 'primitive' node style"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The 'primitive' node style"}}}]},
             "body": {"literal": {"string": "primitive"}}}},
         "name": "hydra.graphviz.coder.nodeStylePrimitive",
         "signature": {"parameters": [], "result": {"type": {"literal": {"string": {}}}}, "typeParameters": []}}},
@@ -170,7 +172,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "The 'simple' node style"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The 'simple' node style"}}}]},
             "body": {"literal": {"string": "simple"}}}},
         "name": "hydra.graphviz.coder.nodeStyleSimple",
         "signature": {"parameters": [], "result": {"type": {"literal": {"string": {}}}}, "typeParameters": []}}},
@@ -178,7 +180,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "The 'variable' node style"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The 'variable' node style"}}}]},
             "body": {"literal": {"string": "variable"}}}},
         "name": "hydra.graphviz.coder.nodeStyleVariable",
         "signature": {"parameters": [], "result": {"type": {"literal": {"string": {}}}}, "typeParameters": []}}},
@@ -186,10 +188,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Construct a map from namespace to prefix for all standard libraries"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Construct a map from namespace to prefix for all standard libraries"}}}]},
             "body": {
               "map": [
                 {
@@ -240,7 +243,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Compute a label and node style for a term"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Compute a label and node style for a term"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -723,7 +727,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a term to a full DOT graph"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a term to a full DOT graph"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -753,8 +757,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {"key": "description", "value": {"literal": {"string": "Convert a term to full DOT statements showing term structure"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Convert a term to full DOT statements showing term structure"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1827,7 +1834,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a term to an subterm-style DOT graph"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a term to an subterm-style DOT graph"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1857,7 +1865,9 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a term to subterm-style DOT statements"}}}],
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a term to subterm-style DOT statements"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2053,7 +2063,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Create a DOT edge statement"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Create a DOT edge statement"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2095,7 +2105,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Create a DOT NodeId from an Id"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Create a DOT NodeId from an Id"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2117,7 +2127,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Create a DOT NodeOrSubgraph from an Id"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Create a DOT NodeOrSubgraph from an Id"}}}]},
             "body": {
               "lambda": {
                 "body": {

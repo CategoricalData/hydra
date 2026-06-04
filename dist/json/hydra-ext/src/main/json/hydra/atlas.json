@@ -5,7 +5,11 @@
         "body": {
           "body": {
             "annotated": {
-              "annotation": [{"key": "description", "value": {"literal": {"string": "class that captures details of a struct-attribute."}}}],
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "class that captures details of a struct-attribute."}}}]},
               "body": {
                 "record": [
                   {"name": "name", "type": {"maybe": {"literal": {"string": {}}}}},
@@ -47,10 +51,11 @@
         "body": {
           "body": {
             "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {"literal": {"string": "Base class that captures common-attributes for all Atlas types."}}}],
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "Base class that captures common-attributes for all Atlas types."}}}]},
               "body": {
                 "record": [
                   {"name": "category", "type": {"maybe": {"variable": "hydra.atlas.TypeCategory"}}},
@@ -72,7 +77,8 @@
         "body": {
           "body": {
             "annotated": {
-              "annotation": [{"key": "description", "value": {"literal": {"string": "class that captures details of a constraint."}}}],
+              "annotation": {
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "class that captures details of a constraint."}}}]},
               "body": {
                 "record": [
                   {"name": "type", "type": {"maybe": {"literal": {"string": {}}}}},
@@ -84,7 +90,9 @@
         "body": {
           "body": {
             "annotated": {
-              "annotation": [{"key": "description", "value": {"literal": {"string": "class that captures details of a entity-type."}}}],
+              "annotation": {
+                "map": [
+                  {"key": {"variable": "description"}, "value": {"literal": {"string": "class that captures details of a entity-type."}}}]},
               "body": {
                 "record": [
                   {"name": "asAtlasStruct", "type": {"variable": "hydra.atlas.AtlasStructDef"}},
@@ -93,30 +101,33 @@
                     "name": "subTypes",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "the value of this field is derived from 'superTypes' specified in all AtlasEntityDef"}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "the value of this field is derived from 'superTypes' specified in all AtlasEntityDef"}}}]},
                         "body": {"set": {"literal": {"string": {}}}}}}},
                   {
                     "name": "relationshipAttributeDefs",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {
-                              "literal": {"string": "the value of this field is derived from all the relationshipDefs this entityType is referenced in"}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {
+                                "literal": {"string": "the value of this field is derived from all the relationshipDefs this entityType is referenced in"}}}]},
                         "body": {"list": {"variable": "hydra.atlas.AtlasRelationshipAttributeDef"}}}}},
                   {
                     "name": "businessAttributeDefs",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {
-                              "literal": {"string": "the value of this field is derived from all the businessMetadataDefs this entityType is referenced in"}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {
+                                "literal": {"string": "the value of this field is derived from all the businessMetadataDefs this entityType is referenced in"}}}]},
                         "body": {"map": {"keys": {"literal": {"string": {}}}, "values": {"list": {"variable": "hydra.atlas.AtlasAttributeDef"}}}}}}}]}}},
           "variables": []},
         "name": "hydra.atlas.AtlasEntityDef"}},
@@ -125,7 +136,11 @@
         "body": {
           "body": {
             "annotated": {
-              "annotation": [{"key": "description", "value": {"literal": {"string": "class that captures details of a struct-attribute."}}}],
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "class that captures details of a struct-attribute."}}}]},
               "body": {
                 "record": [
                   {"name": "asAtlasAttribute", "type": {"variable": "hydra.atlas.AtlasAttributeDef"}},
@@ -138,7 +153,9 @@
         "body": {
           "body": {
             "annotated": {
-              "annotation": [{"key": "description", "value": {"literal": {"string": "class that captures details of a struct-type."}}}],
+              "annotation": {
+                "map": [
+                  {"key": {"variable": "description"}, "value": {"literal": {"string": "class that captures details of a struct-type."}}}]},
               "body": {
                 "record": [
                   {"name": "asAtlasBaseType", "type": {"variable": "hydra.atlas.AtlasBaseTypeDef"}},

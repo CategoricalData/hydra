@@ -2,6 +2,7 @@
 -- | Hydra-to-Avro encoder: converts Hydra types and terms to Avro schemas and JSON values
 
 module Hydra.Avro.Encoder where
+import qualified Hydra.Annotations as Annotations
 import qualified Hydra.Avro.Environment as Environment
 import qualified Hydra.Avro.Schema as Schema
 import qualified Hydra.Coders as Coders
@@ -212,7 +213,7 @@ extractAnnotations typ =
     case typ of
       Core.TypeAnnotated v0 ->
         let inner = Core.annotatedTypeBody v0
-            anns = Core.annotatedTypeAnnotation v0
+            anns = Annotations.getAnnotationMap (Core.annotatedTypeAnnotation v0)
             innerResult = extractAnnotations inner
             innerAnns = Pairs.first innerResult
             bareType = Pairs.second innerResult

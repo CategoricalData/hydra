@@ -4,7 +4,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Add generation namespace prefix"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Add generation namespace prefix"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -26,7 +26,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Build a Term representing a convertCase function call"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Build a Term representing a convertCase function call"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -106,7 +110,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Build a Term representing a topologicalSort function call"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Build a Term representing a topologicalSort function call"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -149,10 +157,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Build a Term representing a topologicalSortComponents function call"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Build a Term representing a topologicalSortComponents function call"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -195,10 +204,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Collect all test cases from a test group (flattening hierarchy)"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Collect all test cases from a test group (flattening hierarchy)"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -241,7 +251,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Encode an adjacency list as a Term"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Encode an adjacency list as a Term"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -334,7 +344,9 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Encode CaseConvention as a Term (unit variant)"}}}],
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "Encode CaseConvention as a Term (unit variant)"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -404,7 +416,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Encode Either [[Int]] [Int] as a Term"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Encode Either [[Int]] [Int] as a Term"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -461,7 +474,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Encode an Int as a Term"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Encode an Int as a Term"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -486,7 +499,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Encode [Int] as a Term"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Encode [Int] as a Term"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -519,7 +532,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Encode [[Int]] as a Term"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Encode [[Int]] as a Term"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -553,7 +566,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Transform module with generation namespace"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Transform module with generation namespace"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -598,7 +612,7 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Pass through test cases unchanged"}}}],
+                "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Pass through test cases unchanged"}}}]},
                 "body": {"lambda": {"body": {"maybe": {"variable": "tcm"}}, "domain": {"variable": "t0"}, "parameter": "tcm"}}}},
             "parameter": "t0"}},
         "name": "hydra.test.transform.transformTestCase",
@@ -610,10 +624,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Transform test group hierarchy to only include delegated evaluation tests"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Transform test group hierarchy to only include delegated evaluation tests"}}}]},
             "body": {
               "lambda": {
                 "body": {

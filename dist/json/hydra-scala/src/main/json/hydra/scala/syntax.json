@@ -5,7 +5,11 @@
         "body": {
           "body": {
             "annotated": {
-              "annotation": [{"key": "description", "value": {"literal": {"string": "A wrapper for strings used in scala.Predef contexts."}}}],
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A wrapper for strings used in scala.Predef contexts."}}}]},
               "body": {"wrap": {"literal": {"string": {}}}}}},
           "variables": []},
         "name": "hydra.scala.syntax.PredefString"}},
@@ -14,7 +18,11 @@
         "body": {
           "body": {
             "annotated": {
-              "annotation": [{"key": "description", "value": {"literal": {"string": "A Scala 2 symbol literal (corresponds to scala.Symbol)."}}}],
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A Scala 2 symbol literal (corresponds to scala.Symbol)."}}}]},
               "body": {"record": [{"name": "name", "type": {"literal": {"string": {}}}}]}}},
           "variables": []},
         "name": "hydra.scala.syntax.ScalaSymbol"}},
@@ -23,10 +31,11 @@
         "body": {
           "body": {
             "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {"literal": {"string": "The root of the Scalameta tree hierarchy. Each arm names a major AST category."}}}],
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "The root of the Scalameta tree hierarchy. Each arm names a major AST category."}}}]},
               "body": {
                 "union": [
                   {"name": "ref", "type": {"variable": "hydra.scala.syntax.Ref"}},

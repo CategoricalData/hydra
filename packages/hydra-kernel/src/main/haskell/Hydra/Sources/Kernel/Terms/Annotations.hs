@@ -4,13 +4,15 @@ module Hydra.Sources.Kernel.Terms.Annotations where
 -- Standard imports for kernel terms modules
 import Hydra.Kernel hiding (
   aggregateAnnotations, commentsFromBinding, commentsFromFieldType,
+  getAnnotationMap,
   getDescription, getTermAnnotation, getTermDescription,
   getType, getTypeAnnotation, getTypeClasses,
   getTypeDescription, isNativeType, hasDescription,
   hasTypeDescription,
   normalizeTermAnnotations, normalizeTypeAnnotations, setAnnotation,
   setDescription, setTermAnnotation, setTermDescription, setType, setTypeAnnotation, setTypeClasses,
-  setTypeDescription, termAnnotationInternal, typeAnnotationInternal)
+  setTypeDescription, termAnnotationInternal, typeAnnotationInternal,
+  wrapAnnotationMap)
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Paths    as Paths
 import qualified Hydra.Dsl.Annotations       as Annotations
@@ -85,6 +87,7 @@ module_ = Module {
      toDefinition aggregateAnnotations,
      toDefinition commentsFromBinding,
      toDefinition commentsFromFieldType,
+     toDefinition getAnnotationMap,
      toDefinition getDescription,
      toDefinition getTermAnnotation,
      toDefinition getTermDescription,
@@ -106,7 +109,8 @@ module_ = Module {
      toDefinition setTypeClasses,
      toDefinition setTypeDescription,
      toDefinition termAnnotationInternal,
-     toDefinition typeAnnotationInternal]
+     toDefinition typeAnnotationInternal,
+     toDefinition wrapAnnotationMap]
 
 define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModule module_
@@ -232,7 +236,7 @@ normalizeTermAnnotations = define "normalizeTermAnnotations" $
   "stripped" <~ Strip.deannotateTerm @@ var "term" $
   Logic.ifElse (Maps.null (var "anns"))
     (var "stripped")
-    (Core.termAnnotated (Core.annotatedTerm (var "stripped") (var "anns")))
+    (Core.termAnnotated (Core.annotatedTerm (var "stripped") (wrapAnnotationMap @@ var "anns")))
 
 normalizeTypeAnnotations :: TypedTermDefinition (Type -> Type)
 normalizeTypeAnnotations = define "normalizeTypeAnnotations" $
@@ -242,7 +246,7 @@ normalizeTypeAnnotations = define "normalizeTypeAnnotations" $
   "stripped" <~ Strip.deannotateType @@ var "typ" $
   Logic.ifElse (Maps.null (var "anns"))
     (var "stripped")
-    (Core.typeAnnotated (Core.annotatedType (var "stripped") (var "anns")))
+    (Core.typeAnnotated (Core.annotatedType (var "stripped") (wrapAnnotationMap @@ var "anns")))
 
 setAnnotation :: TypedTermDefinition (Name -> Maybe Term -> M.Map Name Term -> M.Map Name Term)
 setAnnotation = define "setAnnotation" $
@@ -264,7 +268,7 @@ setTermAnnotation = define "setTermAnnotation" $
   "anns" <~ setAnnotation @@ var "key" @@ var "val" @@ (termAnnotationInternal @@ var "term") $
   Logic.ifElse (Maps.null (var "anns"))
     (var "term'")
-    (Core.termAnnotated (Core.annotatedTerm (var "term'") (var "anns")))
+    (Core.termAnnotated (Core.annotatedTerm (var "term'") (wrapAnnotationMap @@ var "anns")))
 
 setTermDescription :: TypedTermDefinition (Maybe String -> Term -> Term)
 setTermDescription = define "setTermDescription" $
@@ -286,7 +290,7 @@ setTypeAnnotation = define "setTypeAnnotation" $
   "anns" <~ setAnnotation @@ var "key" @@ var "val" @@ (typeAnnotationInternal @@ var "typ") $
   Logic.ifElse (Maps.null (var "anns"))
     (var "typ'")
-    (Core.typeAnnotated (Core.annotatedType (var "typ'") (var "anns")))
+    (Core.typeAnnotated (Core.annotatedType (var "typ'") (wrapAnnotationMap @@ var "anns")))
 
 setTypeClasses :: TypedTermDefinition (M.Map Name (S.Set Name) -> Term -> Term)
 setTypeClasses = define "setTypeClasses" $
@@ -320,7 +324,7 @@ termAnnotationInternal = define "termAnnotationInternal" $
   aggregateAnnotations
     @@ var "getAnn"
     @@ ("at" ~> Core.annotatedTermBody $ var "at")
-    @@ ("at" ~> Core.annotatedTermAnnotation $ var "at")
+    @@ ("at" ~> getAnnotationMap @@ (Core.annotatedTermAnnotation $ var "at"))
     @@ var "term"
 
 typeAnnotationInternal :: TypedTermDefinition (Type -> M.Map Name Term)
@@ -333,8 +337,52 @@ typeAnnotationInternal = define "typeAnnotationInternal" $
   aggregateAnnotations
     @@ var "getAnn"
     @@ ("at" ~> Core.annotatedTypeBody $ var "at")
-    @@ ("at" ~> Core.annotatedTypeAnnotation $ var "at")
+    @@ ("at" ~> getAnnotationMap @@ (Core.annotatedTypeAnnotation $ var "at"))
     @@ var "typ"
+
+-- | Project a Map<Name, Term> out of an annotation Term. If the Term is a
+-- TermMap whose keys are TermVariable-encoded names, returns those
+-- (Name, value) entries; for any other shape, returns the empty map.
+--
+-- This codifies Hydra's annotation map convention on top of the new
+-- Term-typed annotation field (#386): annotations may be any Term, but
+-- map-shaped annotations with TermVariable keys round-trip through
+-- this and wrapAnnotationMap.
+--
+-- For backwards compatibility during the #386 migration, also recognizes
+-- TermWrap-encoded Name keys (the previous EncodeCore.name shape). This
+-- legacy branch can be removed once every package has been re-synced.
+getAnnotationMap :: TypedTermDefinition (Term -> M.Map Name Term)
+getAnnotationMap = define "getAnnotationMap" $
+  doc ("Project a Map<Name, Term> out of an annotation Term."
+    <> " For a TermMap with TermVariable-shaped keys (or, transitionally,"
+    <> " TermWrap-encoded Name keys), returns those (Name, value) entries;"
+    <> " for any other shape, returns the empty map.") $
+  "t" ~> "extractName" <~ ("k" ~> cases _Term (var "k")
+    (Just nothing) [
+    _Term_variable>>: "n" ~> just (var "n"),
+    _Term_wrap>>: "w" ~> cases _Term (Core.wrappedTermBody $ var "w")
+      (Just nothing) [
+      _Term_literal>>: "l" ~> cases _Literal (var "l")
+        (Just nothing) [
+        _Literal_string>>: "s" ~> just (Core.name (var "s"))]]]) $
+    "fromEntry" <~ ("p" ~>
+      "k" <~ Pairs.first (var "p") $
+      "v" <~ Pairs.second (var "p") $
+      Maybes.map ("n" ~> pair (var "n") (var "v")) (var "extractName" @@ var "k")) $
+    cases _Term (var "t")
+      (Just Maps.empty) [
+      _Term_map>>: "m" ~> Maps.fromList
+        (Maybes.cat (Lists.map (var "fromEntry") (Maps.toList (var "m"))))]
+
+-- | Wrap a Map<Name, Term> as a TermMap annotation. Each Name key becomes a
+-- TermVariable. Inverse of getAnnotationMap on map-shaped inputs.
+wrapAnnotationMap :: TypedTermDefinition (M.Map Name Term -> Term)
+wrapAnnotationMap = define "wrapAnnotationMap" $
+  doc "Wrap a Map<Name, Term> as a TermMap annotation. Each Name key becomes a TermVariable." $
+  "m" ~> Core.termMap (Maps.fromList
+    (Lists.map ("p" ~> pair (Core.termVariable (Pairs.first (var "p"))) (Pairs.second (var "p")))
+      (Maps.toList (var "m"))))
 
 -- | Helper (not a registered definition) for creating a type binding from a name and type.
 -- This was previously the deprecated "typeElement" definition.
@@ -344,5 +392,5 @@ typeBinding =
   "schemaTerm" <~ Core.termVariable (Core.nameLift _Type) $
   "dataTerm" <~ normalizeTermAnnotations @@ (Core.termAnnotated (Core.annotatedTerm
     (encoderFor _Type @@ var "typ")
-    (Maps.fromList (list [pair (Constants.keyType) (var "schemaTerm")])))) $
+    (wrapAnnotationMap @@ Maps.fromList (list [pair (Constants.keyType) (var "schemaTerm")])))) $
   Core.binding (var "name") (var "dataTerm") (just (Core.typeScheme (list ([] :: [TypedTerm Name])) (Core.typeVariable $ Core.nameLift _Type) Phantoms.nothing))

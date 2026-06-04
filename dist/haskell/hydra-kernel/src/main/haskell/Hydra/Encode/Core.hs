@@ -22,7 +22,7 @@ annotatedTerm x =
           Core.fieldTerm = (term (Core.annotatedTermBody x))},
         Core.Field {
           Core.fieldName = (Core.Name "annotation"),
-          Core.fieldTerm = ((\m -> Core.TermMap (Maps.bimap name term m)) (Core.annotatedTermAnnotation x))}]})
+          Core.fieldTerm = (term (Core.annotatedTermAnnotation x))}]})
 -- | Encoder for hydra.core.AnnotatedType
 annotatedType :: Core.AnnotatedType -> Core.Term
 annotatedType x =
@@ -34,7 +34,7 @@ annotatedType x =
           Core.fieldTerm = (type_ (Core.annotatedTypeBody x))},
         Core.Field {
           Core.fieldName = (Core.Name "annotation"),
-          Core.fieldTerm = ((\m -> Core.TermMap (Maps.bimap name term m)) (Core.annotatedTypeAnnotation x))}]})
+          Core.fieldTerm = (term (Core.annotatedTypeAnnotation x))}]})
 -- | Encoder for hydra.core.Application
 application :: Core.Application -> Core.Term
 application x =

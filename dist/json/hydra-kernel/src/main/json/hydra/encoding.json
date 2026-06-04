@@ -6,7 +6,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Transform a type binding into an encoder binding"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Transform a type binding into an encoder binding"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -121,10 +125,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Generate a binding name for an encoder function from a type name"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Generate a binding name for an encoder function from a type name"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -235,7 +240,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Generate an encoder for an Either type"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Generate an encoder for an Either type"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -342,7 +348,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Generate the encoder for a field's value"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Generate the encoder for a field's value"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -425,7 +432,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Encode a float value based on its float type"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Encode a float value based on its float type"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -487,7 +495,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Generate an encoder for a polymorphic (forall) type"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Generate an encoder for a polymorphic (forall) type"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -527,7 +539,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Encode an Injection as a term"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Encode an Injection as a term"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -627,7 +639,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Encode an integer value based on its integer type"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Encode an integer value based on its integer type"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -738,7 +754,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Generate an encoder for a list type"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Generate an encoder for a list type"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -823,7 +839,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Generate an encoder for a literal type"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Generate an encoder for a literal type"}}}]},
             "body": {
               "cases": {
                 "cases": [
@@ -1250,7 +1267,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Generate an encoder for a map type"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Generate an encoder for a map type"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1359,7 +1376,9 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Transform a type module into an encoder module"}}}],
+                "annotation": {
+                  "map": [
+                    {"key": {"variable": "description"}, "value": {"literal": {"string": "Transform a type module into an encoder module"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -1697,18 +1716,21 @@
                                                                                                                         "term": {
                                                                                                                           "application": {
                                                                                                                             "argument": {
-                                                                                                                              "list": [
-                                                                                                                                {
-                                                                                                                                  "typeApplication": {
-                                                                                                                                    "body": {
+                                                                                                                              "application": {
+                                                                                                                                "argument": {
+                                                                                                                                  "list": [
+                                                                                                                                    {
                                                                                                                                       "typeApplication": {
-                                                                                                                                        "body": {"pair": {"first": {"variable": "hydra.constants.keyType"}, "second": {"variable": "schemaTerm"}}},
-                                                                                                                                        "type": {"variable": "hydra.core.Name"}}},
-                                                                                                                                    "type": {"variable": "hydra.core.Term"}}}]},
-                                                                                                                            "function": {
-                                                                                                                              "typeApplication": {
-                                                                                                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.maps.fromList"}, "type": {"variable": "hydra.core.Name"}}},
-                                                                                                                                "type": {"variable": "hydra.core.Term"}}}}}}],
+                                                                                                                                        "body": {
+                                                                                                                                          "typeApplication": {
+                                                                                                                                            "body": {"pair": {"first": {"variable": "hydra.constants.keyType"}, "second": {"variable": "schemaTerm"}}},
+                                                                                                                                            "type": {"variable": "hydra.core.Name"}}},
+                                                                                                                                        "type": {"variable": "hydra.core.Term"}}}]},
+                                                                                                                                "function": {
+                                                                                                                                  "typeApplication": {
+                                                                                                                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.maps.fromList"}, "type": {"variable": "hydra.core.Name"}}},
+                                                                                                                                    "type": {"variable": "hydra.core.Term"}}}}},
+                                                                                                                            "function": {"variable": "hydra.annotations.wrapAnnotationMap"}}}}],
                                                                                                                     "typeName": "hydra.core.AnnotatedTerm"}}},
                                                                                                               "typeName": "hydra.core.Term"}},
                                                                                                           "function": {"variable": "hydra.annotations.normalizeTermAnnotations"}}},
@@ -1791,7 +1813,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Generate an encoder module name from a source module name"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Generate an encoder module name from a source module name"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1864,7 +1890,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Encode a Name as a term"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Encode a Name as a term"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1901,7 +1927,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Generate an encoder for a Maybe type"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Generate an encoder for a Maybe type"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1986,7 +2013,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Generate an encoder for a pair type"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Generate an encoder for a pair type"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2093,10 +2120,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Generate an encoder for a record type (unnamed — should not be called directly)"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Generate an encoder for a record type (unnamed — should not be called directly)"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2117,10 +2145,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Generate an encoder for a record type with the given element name"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Generate an encoder for a record type with the given element name"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2321,7 +2350,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Generate an encoder for a set type"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Generate an encoder for a set type"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2406,7 +2435,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Generate an encoder term for a Type"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Generate an encoder term for a Type"}}}]},
             "body": {
               "cases": {
                 "cases": [
@@ -2671,10 +2700,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Generate an encoder term for a Type, with the element name for nominal types"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Generate an encoder term for a Type, with the element name for nominal types"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2986,7 +3016,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Generate an encoder for a union type (placeholder name)"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Generate an encoder for a union type (placeholder name)"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3007,10 +3041,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Generate an encoder for a union type with the given element name"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Generate an encoder for a union type with the given element name"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3075,7 +3110,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Generate an encoder for a wrapped type (placeholder name)"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Generate an encoder for a wrapped type (placeholder name)"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3096,10 +3135,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Generate an encoder for a wrapped type with the given element name"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Generate an encoder for a wrapped type with the given element name"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3216,7 +3256,9 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Collect forall type variable names from a type"}}}],
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "Collect forall type variable names from a type"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3269,7 +3311,9 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Collect type variables needing Ord constraints"}}}],
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "Collect type variables needing Ord constraints"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3498,7 +3542,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Collect all type variable names from a type expression"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Collect all type variable names from a type expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3698,7 +3746,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Get full result type for encoder input"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Get full result type for encoder input"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3994,10 +4043,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Get full result type for encoder input, using element name for nominal types"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Get full result type for encoder input, using element name for nominal types"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4286,7 +4336,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Build encoder function type"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Build encoder function type"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4336,10 +4386,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Build encoder function type with element name for nominal types"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Build encoder function type with element name for nominal types"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4399,10 +4450,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Construct a TypeScheme for an encoder function from a source type"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Construct a TypeScheme for an encoder function from a source type"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4525,10 +4577,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Construct a TypeScheme for an encoder function, with element name for nominal types"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Construct a TypeScheme for an encoder function, with element name for nominal types"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4662,7 +4715,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Filter bindings to only encodable type definitions"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Filter bindings to only encodable type definitions"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -4729,7 +4786,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Check if a binding is encodable (serializable type)"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Check if a binding is encodable (serializable type)"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -4801,7 +4862,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Check whether a type is the unit type"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Check whether a type is the unit type"}}}]},
             "body": {
               "cases": {
                 "cases": [
@@ -4819,7 +4881,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Prepend encoder types for forall parameters to base type"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Prepend encoder types for forall parameters to base type"}}}]},
             "body": {
               "lambda": {
                 "body": {

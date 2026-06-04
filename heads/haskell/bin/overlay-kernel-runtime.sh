@@ -29,6 +29,17 @@ mkdir -p "$KERNEL_DST"
 cp -R "$KERNEL_RUNTIME_SRC"/. "$KERNEL_DST/"
 echo "    hydra-kernel: overlaid $(find "$KERNEL_RUNTIME_SRC" -name '*.hs' | wc -l | tr -d ' ') hand-written runtime module(s)"
 
+# hydra-kernel test bridge: hand-written test infra (Hydra.Test.TestEnv) referenced
+# by the generated TestGraph. MERGE onto the generated src/test dist (shares the dir
+# with generated test modules, so merge — never wipe).
+KERNEL_TEST_SRC="$HYDRA_ROOT_DIR/overlay/haskell/hydra-kernel/src/test/haskell"
+KERNEL_TEST_DST="$HYDRA_ROOT_DIR/dist/haskell/hydra-kernel/src/test/haskell"
+if [ -d "$KERNEL_TEST_SRC" ]; then
+  mkdir -p "$KERNEL_TEST_DST"
+  cp -R "$KERNEL_TEST_SRC"/. "$KERNEL_TEST_DST/"
+  echo "    hydra-kernel: overlaid $(find "$KERNEL_TEST_SRC" -name '*.hs' | wc -l | tr -d ' ') hand-written test module(s)"
+fi
+
 # hydra umbrella: its own dedicated package dir (no generated content to merge).
 UMBRELLA_SRC="$HYDRA_ROOT_DIR/overlay/haskell/hydra/src/main/haskell"
 UMBRELLA_DST="$HYDRA_ROOT_DIR/dist/haskell/hydra/src/main/haskell"

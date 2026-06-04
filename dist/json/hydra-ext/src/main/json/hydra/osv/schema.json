@@ -14,12 +14,13 @@
         "body": {
           "body": {
             "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {
-                    "literal": {
-                      "string": "One of a limited set of defined ecosystems, currently Go, npm, OSS-Fuzz, PyPI, RubyGems, crates.io, Packagist, Maven, NuGet, Linux, Debian, Hex, Android, GitHub Actions, or Pub"}}}],
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {
+                        "string": "One of a limited set of defined ecosystems, currently Go, npm, OSS-Fuzz, PyPI, RubyGems, crates.io, Packagist, Maven, NuGet, Linux, Debian, Hex, Android, GitHub Actions, or Pub"}}}]},
               "body": {"wrap": {"literal": {"string": {}}}}}},
           "variables": []},
         "name": "hydra.osv.schema.Ecosystem"}},
@@ -32,10 +33,11 @@
                 "name": "schemaVersion",
                 "type": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {"literal": {"string": "The default value is '1.0.0', matching version 1.0 of the OSV Schema"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "The default value is '1.0.0', matching version 1.0 of the OSV Schema"}}}]},
                     "body": {"maybe": {"variable": "hydra.osv.schema.OsvVersion"}}}}},
               {"name": "id", "type": {"variable": "hydra.osv.schema.Id"}},
               {"name": "modified", "type": {"variable": "hydra.osv.schema.Timestamp"}},
@@ -67,12 +69,13 @@
         "body": {
           "body": {
             "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {
-                    "literal": {
-                      "string": "A string of the format <DB>-<ENTRYID>, where DB names the database and ENTRYID is in the format used by the database. For example: OSV-2020-111, CVE-2021-3114, or GHSA-vp9c-fpxx-744v"}}}],
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {
+                        "string": "A string of the format <DB>-<ENTRYID>, where DB names the database and ENTRYID is in the format used by the database. For example: OSV-2020-111, CVE-2021-3114, or GHSA-vp9c-fpxx-744v"}}}]},
               "body": {"wrap": {"literal": {"string": {}}}}}},
           "variables": []},
         "name": "hydra.osv.schema.Id"}},
@@ -81,7 +84,7 @@
         "body": {
           "body": {
             "annotated": {
-              "annotation": [{"key": "description", "value": {"literal": {"string": "CommonMark markdown text"}}}],
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "CommonMark markdown text"}}}]},
               "body": {"wrap": {"literal": {"string": {}}}}}},
           "variables": []},
         "name": "hydra.osv.schema.Markdown"}},
@@ -90,10 +93,11 @@
         "body": {
           "body": {
             "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {"literal": {"string": "A string which follows the SemVer 2.0.0 format, with no leading 'v' prefix"}}}],
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A string which follows the SemVer 2.0.0 format, with no leading 'v' prefix"}}}]},
               "body": {"wrap": {"literal": {"string": {}}}}}},
           "variables": []},
         "name": "hydra.osv.schema.OsvVersion"}},
@@ -131,10 +135,11 @@
         "body": {
           "body": {
             "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {"literal": {"string": "One of ADVISORY, ARTICLE, REPORT, FIX, GIT, PACKAGE, EVIDENCE, or WEB"}}}],
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "One of ADVISORY, ARTICLE, REPORT, FIX, GIT, PACKAGE, EVIDENCE, or WEB"}}}]},
               "body": {"wrap": {"literal": {"string": {}}}}}},
           "variables": []},
         "name": "hydra.osv.schema.ReferenceType"}},
@@ -154,7 +159,8 @@
         "body": {
           "body": {
             "annotated": {
-              "annotation": [{"key": "description", "value": {"literal": {"string": "The value CVSS_V3, or future supported types"}}}],
+              "annotation": {
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The value CVSS_V3, or future supported types"}}}]},
               "body": {"wrap": {"literal": {"string": {}}}}}},
           "variables": []},
         "name": "hydra.osv.schema.SeverityType"}},
@@ -163,7 +169,11 @@
         "body": {
           "body": {
             "annotated": {
-              "annotation": [{"key": "description", "value": {"literal": {"string": "An RFC3339-formatted timestamp in UTC (ending in 'Z')"}}}],
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "An RFC3339-formatted timestamp in UTC (ending in 'Z')"}}}]},
               "body": {"wrap": {"literal": {"string": {}}}}}},
           "variables": []},
         "name": "hydra.osv.schema.Timestamp"}},
@@ -173,7 +183,11 @@
         "body": {
           "body": {
             "annotated": {
-              "annotation": [{"key": "description", "value": {"literal": {"string": "A version number in an ecosystem-specific format"}}}],
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A version number in an ecosystem-specific format"}}}]},
               "body": {"wrap": {"literal": {"string": {}}}}}},
           "variables": []},
         "name": "hydra.osv.schema.Version"}},
@@ -182,10 +196,11 @@
         "body": {
           "body": {
             "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {"literal": {"string": "An ecosystem-specific version number, or the string '*' representing infinity"}}}],
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "An ecosystem-specific version number, or the string '*' representing infinity"}}}]},
               "body": {"wrap": {"literal": {"string": {}}}}}},
           "variables": []},
         "name": "hydra.osv.schema.VersionOrStar"}},
@@ -194,12 +209,13 @@
         "body": {
           "body": {
             "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {
-                    "literal": {
-                      "string": "An ecosystem-specific version number, or the string '0' representing a version that sorts before any other version"}}}],
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {
+                        "string": "An ecosystem-specific version number, or the string '0' representing a version that sorts before any other version"}}}]},
               "body": {"wrap": {"literal": {"string": {}}}}}},
           "variables": []},
         "name": "hydra.osv.schema.VersionOrZero"}},
@@ -218,7 +234,11 @@
         "body": {
           "body": {
             "annotated": {
-              "annotation": [{"key": "description", "value": {"literal": {"string": "One of the values 'SEMVER', 'ECOSYSTEM', or 'GIT"}}}],
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "One of the values 'SEMVER', 'ECOSYSTEM', or 'GIT"}}}]},
               "body": {"wrap": {"literal": {"string": {}}}}}},
           "variables": []},
         "name": "hydra.osv.schema.VersionType"}}],

@@ -4,7 +4,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Alpha convert a variable in a term"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Alpha convert a variable in a term"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -38,10 +38,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [
-                  {
-                    "key": "description",
-                    "value": {"literal": {"string": "Eagerly beta-reduce a type by substituting type arguments into type lambdas"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Eagerly beta-reduce a type by substituting type arguments into type lambdas"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -332,12 +333,13 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {
-                    "string": "Apply the special rules:\n    ((\\x.e1) e2) == e1, where x does not appear free in e1\n  and\n     ((\\x.e1) e2) = e1[x/e2]\nThese are both limited forms of beta reduction which help to \"clean up\" a term without fully evaluating it."}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {
+                      "string": "Apply the special rules:\n    ((\\x.e1) e2) == e1, where x does not appear free in e1\n  and\n     ((\\x.e1) e2) = e1[x/e2]\nThese are both limited forms of beta reduction which help to \"clean up\" a term without fully evaluating it."}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -470,12 +472,13 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {
-                    "string": "Compile-time flag controlling whether primitive invocations are counted during evaluation. For demo and instrumentation purposes."}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {
+                      "string": "Compile-time flag controlling whether primitive invocations are counted during evaluation. For demo and instrumentation purposes."}}}]},
             "body": {"literal": {"boolean": true}}}},
         "name": "hydra.reduction.countPrimitiveInvocations",
         "signature": {"parameters": [], "result": {"type": {"literal": {"boolean": {}}}}, "typeParameters": []}}},
@@ -483,12 +486,13 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {
-                    "string": "Recursively transform terms to eliminate partial application, e.g. 'add 42' becomes '\\x.add 42 x'. Uses the Graph to look up types for arity calculation. Bare primitives and variables are NOT expanded; eliminations and partial applications are. This version properly tracks the Graph through nested scopes."}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {
+                      "string": "Recursively transform terms to eliminate partial application, e.g. 'add 42' becomes '\\x.add 42 x'. Uses the Graph to look up types for arity calculation. Bare primitives and variables are NOT expanded; eliminations and partial applications are. This version properly tracks the Graph through nested scopes."}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1228,14 +1232,17 @@
                                                                                                                                           "name": "annotation",
                                                                                                                                           "term": {
                                                                                                                                             "application": {
-                                                                                                                                              "argument": {"application": {"argument": {"variable": "ct"}, "function": {"variable": "hydra.encode.core.type"}}},
-                                                                                                                                              "function": {
+                                                                                                                                              "argument": {
                                                                                                                                                 "application": {
-                                                                                                                                                  "argument": {"wrap": {"body": {"literal": {"string": "type"}}, "typeName": "hydra.core.Name"}},
+                                                                                                                                                  "argument": {"application": {"argument": {"variable": "ct"}, "function": {"variable": "hydra.encode.core.type"}}},
                                                                                                                                                   "function": {
-                                                                                                                                                    "typeApplication": {
-                                                                                                                                                      "body": {"typeApplication": {"body": {"variable": "hydra.lib.maps.singleton"}, "type": {"variable": "hydra.core.Name"}}},
-                                                                                                                                                      "type": {"variable": "hydra.core.Term"}}}}}}}}],
+                                                                                                                                                    "application": {
+                                                                                                                                                      "argument": {"wrap": {"body": {"literal": {"string": "type"}}, "typeName": "hydra.core.Name"}},
+                                                                                                                                                      "function": {
+                                                                                                                                                        "typeApplication": {
+                                                                                                                                                          "body": {"typeApplication": {"body": {"variable": "hydra.lib.maps.singleton"}, "type": {"variable": "hydra.core.Name"}}},
+                                                                                                                                                          "type": {"variable": "hydra.core.Term"}}}}}}},
+                                                                                                                                              "function": {"variable": "hydra.annotations.wrapAnnotationMap"}}}}],
                                                                                                                                       "typeName": "hydra.core.AnnotatedTerm"}}},
                                                                                                                                 "typeName": "hydra.core.Term"}},
                                                                                                                             "domain": {"variable": "hydra.core.Type"},
@@ -3039,12 +3046,13 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {
-                    "string": "Recursively transform arbitrary terms like 'add 42' into terms like '\\x.add 42 x', eliminating partial application. Variable references are not expanded. This is useful for targets like Python with weaker support for currying than Hydra or Haskell. Note: this is a \"trusty\" function which assumes the graph is well-formed, i.e. no dangling references. It also assumes that type inference has already been performed. After eta expansion, type inference needs to be performed again, as new, untyped lambdas may have been added."}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {
+                      "string": "Recursively transform arbitrary terms like 'add 42' into terms like '\\x.add 42 x', eliminating partial application. Variable references are not expanded. This is useful for targets like Python with weaker support for currying than Hydra or Haskell. Note: this is a \"trusty\" function which assumes the graph is well-formed, i.e. no dangling references. It also assumes that type inference has already been performed. After eta expansion, type inference needs to be performed again, as new, untyped lambdas may have been added."}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3097,7 +3105,7 @@
                                                                                                       "application": {
                                                                                                         "argument": {"variable": "at"},
                                                                                                         "function": {"project": {"fieldName": "annotation", "typeName": "hydra.core.AnnotatedTerm"}}}},
-                                                                                                    "typeScheme": {"body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Term"}}}, "variables": []}}],
+                                                                                                    "typeScheme": {"body": {"variable": "hydra.core.Term"}, "variables": []}}],
                                                                                                 "body": {
                                                                                                   "typeApplication": {
                                                                                                     "body": {
@@ -4607,12 +4615,13 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {
-                    "string": "Calculate the arity for eta expansion Note: this is a \"trusty\" function which assumes the graph is well-formed, i.e. no dangling references."}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {
+                      "string": "Calculate the arity for eta expansion Note: this is a \"trusty\" function which assumes the graph is well-formed, i.e. no dangling references."}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4754,8 +4763,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {"key": "description", "value": {"literal": {"string": "Eta-reduce a term by removing redundant lambda abstractions"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Eta-reduce a term by removing redundant lambda abstractions"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4981,10 +4993,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "A term evaluation function which is alternatively lazy or eager"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "A term evaluation function which is alternatively lazy or eager"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -6837,8 +6850,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {"key": "description", "value": {"literal": {"string": "Whether a term is closed, i.e. represents a complete program"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Whether a term is closed, i.e. represents a complete program"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -6856,7 +6872,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Whether a term has been fully reduced to a value"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Whether a term has been fully reduced to a value"}}}]},
             "body": {
               "lambda": {
                 "body": {

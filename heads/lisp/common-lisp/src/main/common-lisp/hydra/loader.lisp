@@ -431,25 +431,59 @@
        (or (member (first form) '(defpackage in-package) :test #'eq)
            (keywordp (first form)))))
 
+(defun hydra-letrec-binding-lambda-p (binding)
+  "True if a letrec binding's RHS is syntactically a CL lambda. Non-lambda
+   bindings (string/number/struct value computations) cannot be safely
+   dispatcher-wrapped: the dispatcher would intercept value references and
+   surface a function where the kernel expects the value."
+  (let ((rhs (second binding)))
+    (and (consp rhs)
+         (or (eq (car rhs) 'cl:lambda) (eq (car rhs) 'lambda)))))
+
 (defun hydra-transform-letrec (form)
   "Transform (letrec ((name init) ...) body...) to CL-compatible form.
-   Uses let + mutable cells (setf) to implement Scheme's letrec semantics.
-   We cannot use CL's labels because Hydra-generated code passes recursive
-   function names as values (to higher-order functions), which requires
-   Lisp-1 semantics (single namespace)."
+
+   Lambda bindings are wrapped with a mutable-cell dispatcher so that recursive
+   self- and mutual-references work as in Scheme letrec — even when the
+   recursive function name is passed as a higher-order value, which is why we
+   cannot use CL's labels (it would put recursive names in the function
+   namespace only, breaking Lisp-1 value passing).
+
+   Non-lambda bindings (e.g. string/value computations) are emitted as plain
+   lexical variables that are SETQ'd in source order after the dispatcher
+   bindings are in scope. This preserves Scheme letrec semantics for the
+   common kernel-emitted shape (singleton self-referential lambda + a chain of
+   pure value bindings, e.g. hydra/haskell/utils.lisp:326) without the
+   loader silently substituting a dispatcher lambda for what should be a
+   string. See issue #426."
   (when (and (consp form) (eq (first form) 'letrec))
     (let* ((bindings (second form))
            (body (cddr form))
-           (cell-names (mapcar (lambda (b) (intern (format nil "~A-CELL" (first b)))) bindings)))
+           (names (mapcar #'first bindings))
+           (lambda-bindings (remove-if-not #'hydra-letrec-binding-lambda-p bindings))
+           (value-bindings (remove-if     #'hydra-letrec-binding-lambda-p bindings))
+           (cell-names (mapcar (lambda (b)
+                                 (intern (format nil "~A-CELL" (first b))))
+                               lambda-bindings)))
       `(let ,(mapcar (lambda (cn) `(,cn (list nil))) cell-names)
-         (let ,(mapcar (lambda (b cn)
-                         `(,(first b) (lambda (&rest args) (apply (car ,cn) args))))
-                       bindings cell-names)
-           ,@(mapcar (lambda (b cn)
-                       `(setf (car ,cn) ,(hydra-fix-curried-calls (second b)
-                                            (mapcar #'first bindings))))
-                     bindings cell-names)
-           ,@(mapcar (lambda (f) (hydra-fix-curried-calls f (mapcar #'first bindings)))
+         (let ,(append
+                 ;; Lambda bindings: dispatcher into the mutable cell.
+                 (mapcar (lambda (b cn)
+                           `(,(first b)
+                              (lambda (&rest args)
+                                (apply (car ,cn) args))))
+                         lambda-bindings cell-names)
+                 ;; Value bindings: nil placeholder, mutated in source order
+                 ;; once the dispatcher names are in scope.
+                 (mapcar (lambda (b) `(,(first b) cl:nil))
+                         value-bindings))
+           ,@(mapcar (lambda (b)
+                       (let ((init (hydra-fix-curried-calls (second b) names)))
+                         (if (hydra-letrec-binding-lambda-p b)
+                             `(setf (car ,(intern (format nil "~A-CELL" (first b)))) ,init)
+                             `(setq ,(first b) ,init))))
+                     bindings)  ;; preserve source order
+           ,@(mapcar (lambda (f) (hydra-fix-curried-calls f names))
                      body))))))
 
 (defun hydra-transform-form (form)

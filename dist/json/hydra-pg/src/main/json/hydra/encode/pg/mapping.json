@@ -4,7 +4,9 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Encoder for hydra.pg.mapping.AnnotationSchema"}}}],
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "Encoder for hydra.pg.mapping.AnnotationSchema"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -379,7 +381,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Encoder for hydra.pg.mapping.EdgeSpec"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Encoder for hydra.pg.mapping.EdgeSpec"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -492,7 +495,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Encoder for hydra.pg.mapping.ElementSpec"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Encoder for hydra.pg.mapping.ElementSpec"}}}]},
             "body": {
               "cases": {
                 "cases": [
@@ -562,7 +566,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Encoder for hydra.pg.mapping.PropertySpec"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Encoder for hydra.pg.mapping.PropertySpec"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -620,7 +625,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Encoder for hydra.pg.mapping.ValueSpec"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Encoder for hydra.pg.mapping.ValueSpec"}}}]},
             "body": {
               "cases": {
                 "cases": [
@@ -709,7 +715,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Encoder for hydra.pg.mapping.VertexSpec"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Encoder for hydra.pg.mapping.VertexSpec"}}}]},
             "body": {
               "lambda": {
                 "body": {

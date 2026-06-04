@@ -4,7 +4,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Show a case convention as a string"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Show a case convention as a string"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -37,7 +37,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Show a comparison result as a string"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Show a comparison result as a string"}}}]},
             "body": {
               "lambda": {
                 "body": {

@@ -6,7 +6,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Interpreter-friendly applicative apply for List terms."}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Interpreter-friendly applicative apply for List terms."}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -137,7 +141,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Interpreter-friendly monadic bind for List terms."}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Interpreter-friendly monadic bind for List terms."}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -247,7 +255,8 @@
                   "typeLambda": {
                     "body": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "Interpreter-friendly concat2 for List terms."}}}],
+                        "annotation": {
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Interpreter-friendly concat2 for List terms."}}}]},
                         "body": {
                           "lambda": {
                             "body": {
@@ -317,7 +326,9 @@
                   "typeLambda": {
                     "body": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "Interpreter-friendly dropWhile for List terms."}}}],
+                        "annotation": {
+                          "map": [
+                            {"key": {"variable": "description"}, "value": {"literal": {"string": "Interpreter-friendly dropWhile for List terms."}}}]},
                         "body": {
                           "lambda": {
                             "body": {
@@ -413,7 +424,8 @@
                   "typeLambda": {
                     "body": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "Interpreter-friendly elem for List terms."}}}],
+                        "annotation": {
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Interpreter-friendly elem for List terms."}}}]},
                         "body": {
                           "lambda": {
                             "body": {
@@ -524,7 +536,8 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Interpreter-friendly filter for List terms."}}}],
+                "annotation": {
+                  "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Interpreter-friendly filter for List terms."}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -692,7 +705,8 @@
                   "typeLambda": {
                     "body": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "Interpreter-friendly find for List terms."}}}],
+                        "annotation": {
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Interpreter-friendly find for List terms."}}}]},
                         "body": {
                           "lambda": {
                             "body": {
@@ -782,7 +796,9 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Interpreter-friendly left fold for List terms."}}}],
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "Interpreter-friendly left fold for List terms."}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -909,7 +925,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Interpreter-friendly right fold for List terms."}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Interpreter-friendly right fold for List terms."}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1039,7 +1059,8 @@
                   "typeLambda": {
                     "body": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "Interpreter-friendly group for List terms."}}}],
+                        "annotation": {
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Interpreter-friendly group for List terms."}}}]},
                         "body": {
                           "lambda": {
                             "body": {
@@ -1836,7 +1857,11 @@
                   "typeLambda": {
                     "body": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "Interpreter-friendly intercalate for List terms."}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "Interpreter-friendly intercalate for List terms."}}}]},
                         "body": {
                           "lambda": {
                             "body": {
@@ -1928,7 +1953,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Interpreter-friendly intersperse for List terms."}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Interpreter-friendly intersperse for List terms."}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -2047,7 +2076,8 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Interpreter-friendly map for List terms."}}}],
+                "annotation": {
+                  "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Interpreter-friendly map for List terms."}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -2150,7 +2180,9 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Interpreter-friendly maybeHead for List terms."}}}],
+                "annotation": {
+                  "map": [
+                    {"key": {"variable": "description"}, "value": {"literal": {"string": "Interpreter-friendly maybeHead for List terms."}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -2238,7 +2270,8 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Interpreter-friendly nub for List terms."}}}],
+                "annotation": {
+                  "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Interpreter-friendly nub for List terms."}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -2503,7 +2536,9 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Interpreter-friendly partition for List terms."}}}],
+                "annotation": {
+                  "map": [
+                    {"key": {"variable": "description"}, "value": {"literal": {"string": "Interpreter-friendly partition for List terms."}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -2811,7 +2846,8 @@
                   "typeLambda": {
                     "body": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "Interpreter-friendly pure for List terms."}}}],
+                        "annotation": {
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Interpreter-friendly pure for List terms."}}}]},
                         "body": {
                           "lambda": {
                             "body": {
@@ -2853,7 +2889,9 @@
                   "typeLambda": {
                     "body": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "Interpreter-friendly replicate for List terms."}}}],
+                        "annotation": {
+                          "map": [
+                            {"key": {"variable": "description"}, "value": {"literal": {"string": "Interpreter-friendly replicate for List terms."}}}]},
                         "body": {
                           "lambda": {
                             "body": {
@@ -2987,7 +3025,9 @@
                   "typeLambda": {
                     "body": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "Interpreter-friendly singleton for List terms."}}}],
+                        "annotation": {
+                          "map": [
+                            {"key": {"variable": "description"}, "value": {"literal": {"string": "Interpreter-friendly singleton for List terms."}}}]},
                         "body": {
                           "lambda": {
                             "body": {
@@ -3029,7 +3069,8 @@
                   "typeLambda": {
                     "body": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "Interpreter-friendly sort for List terms."}}}],
+                        "annotation": {
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Interpreter-friendly sort for List terms."}}}]},
                         "body": {
                           "lambda": {
                             "body": {
@@ -3104,7 +3145,8 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Interpreter-friendly sortOn for List terms."}}}],
+                "annotation": {
+                  "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Interpreter-friendly sortOn for List terms."}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -3403,7 +3445,8 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Interpreter-friendly span for List terms."}}}],
+                "annotation": {
+                  "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Interpreter-friendly span for List terms."}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -3914,7 +3957,8 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Interpreter-friendly uncons for List terms."}}}],
+                "annotation": {
+                  "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Interpreter-friendly uncons for List terms."}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -4024,7 +4068,8 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Interpreter-friendly zipWith for List terms."}}}],
+                "annotation": {
+                  "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Interpreter-friendly zipWith for List terms."}}}]},
                 "body": {
                   "lambda": {
                     "body": {

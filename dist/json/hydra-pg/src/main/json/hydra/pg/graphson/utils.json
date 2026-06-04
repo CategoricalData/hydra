@@ -6,10 +6,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [
-                  {
-                    "key": "description",
-                    "value": {"literal": {"string": "Convert a list of property graph elements to a list of vertices with their adjacent edges"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Convert a list of property graph elements to a list of vertices with their adjacent edges"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -623,7 +624,8 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Encode a String value as a GraphSON Value"}}}],
+                "annotation": {
+                  "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Encode a String value as a GraphSON Value"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -647,10 +649,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Encode a Hydra Term as a GraphSON Value. Supports literals and unit values."}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Encode a Hydra Term as a GraphSON Value. Supports literals and unit values."}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -926,10 +929,11 @@
               "typeLambda": {
                 "body": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {"literal": {"string": "Convert property graph elements to a list of GraphSON JSON values"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "Convert property graph elements to a list of GraphSON JSON values"}}}]},
                     "body": {
                       "lambda": {
                         "body": {

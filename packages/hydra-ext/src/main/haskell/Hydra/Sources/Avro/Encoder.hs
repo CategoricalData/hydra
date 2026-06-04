@@ -353,7 +353,7 @@ extractAnnotations = define "extractAnnotations" $
     cases _Type (var "typ") (Just (pair Maps.empty (var "typ"))) [
       _Type_annotated>>: lambda "at" $ lets [
         "inner">: project _AnnotatedType _AnnotatedType_body @@ var "at",
-        "anns">: project _AnnotatedType _AnnotatedType_annotation @@ var "at",
+        "anns">: Annotations.getAnnotationMap @@ (project _AnnotatedType _AnnotatedType_annotation @@ var "at"),
         "innerResult">: extractAnnotations @@ var "inner",
         "innerAnns">: Pairs.first (var "innerResult"),
         "bareType">: Pairs.second (var "innerResult")] $

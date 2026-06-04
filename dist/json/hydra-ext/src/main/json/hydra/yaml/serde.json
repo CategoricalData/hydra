@@ -4,7 +4,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Escape single quotes by doubling them"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Escape single quotes by doubling them"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -58,7 +59,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Check if a string has leading or trailing whitespace"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Check if a string has leading or trailing whitespace"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -132,7 +137,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a YAML node to a string"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Serialize a YAML node to a string"}}}]},
             "body": {
               "lambda": {
                 "body": {"application": {"argument": {"variable": "node"}, "function": {"variable": "hydra.yaml.serde.writeNode"}}},
@@ -147,7 +152,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Indent all lines of a string by 2 spaces"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Indent all lines of a string by 2 spaces"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -190,7 +196,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Check if character codes represent a decimal number"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Check if character codes represent a decimal number"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -389,7 +399,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Check if a string looks like a number"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Check if a string looks like a number"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -550,7 +561,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Check if a string needs quoting in YAML"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Check if a string needs quoting in YAML"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -651,7 +663,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Write a mapping entry in block style"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Write a mapping entry in block style"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -796,10 +809,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Write a mapping entry for the first item of a sequence element"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Write a mapping entry for the first item of a sequence element"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -944,7 +958,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Write a YAML node as a top-level value in block style"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Write a YAML node as a top-level value in block style"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1066,7 +1084,9 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Write a node inline (for use as a mapping key)"}}}],
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "Write a node inline (for use as a mapping key)"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1200,7 +1220,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Write a scalar value"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Write a scalar value"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1268,7 +1288,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Write a sequence item in block style"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Write a sequence item in block style"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1473,7 +1494,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Write a string value, quoting if necessary"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Write a string value, quoting if necessary"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1504,7 +1526,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "YAML reserved words that need quoting"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "YAML reserved words that need quoting"}}}]},
             "body": {
               "list": [
                 {"literal": {"string": "true"}},
@@ -1535,7 +1558,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "YAML special characters that trigger quoting"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "YAML special characters that trigger quoting"}}}]},
             "body": {"literal": {"string": ": {}[]#,&*!|>'\"%@`"}}}},
         "name": "hydra.yaml.serde.yamlSpecialChars",
         "signature": {"parameters": [], "result": {"type": {"literal": {"string": {}}}}, "typeParameters": []}}}],

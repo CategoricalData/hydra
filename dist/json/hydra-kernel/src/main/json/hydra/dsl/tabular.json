@@ -4,7 +4,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for hydra.tabular.ColumnType"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL constructor for hydra.tabular.ColumnType"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -69,8 +70,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {"key": "description", "value": {"literal": {"string": "DSL accessor for the name field of hydra.tabular.ColumnType"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the name field of hydra.tabular.ColumnType"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -122,8 +126,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {"key": "description", "value": {"literal": {"string": "DSL accessor for the type field of hydra.tabular.ColumnType"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the type field of hydra.tabular.ColumnType"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -174,7 +181,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL updater for the name field of hydra.tabular.ColumnType"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the name field of hydra.tabular.ColumnType"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -267,7 +278,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL updater for the type field of hydra.tabular.ColumnType"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the type field of hydra.tabular.ColumnType"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -358,7 +373,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for the hydra.tabular.DataRow wrapper"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL constructor for the hydra.tabular.DataRow wrapper"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -398,7 +417,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL accessor for the body of hydra.tabular.DataRow"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the body of hydra.tabular.DataRow"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -446,7 +469,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for the hydra.tabular.HeaderRow wrapper"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL constructor for the hydra.tabular.HeaderRow wrapper"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -484,7 +511,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL accessor for the body of hydra.tabular.HeaderRow"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the body of hydra.tabular.HeaderRow"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -528,7 +559,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for hydra.tabular.Table"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL constructor for hydra.tabular.Table"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -572,10 +604,11 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [
-                              {
-                                "key": "description",
-                                "value": {"literal": {"string": "The data rows of the table. Each row must have the same number of cells."}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {"literal": {"string": "The data rows of the table. Each row must have the same number of cells."}}}]},
                             "body": {"list": {"application": {"argument": {"variable": "v"}, "function": {"variable": "hydra.tabular.DataRow"}}}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "data"}},
@@ -583,12 +616,13 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {
-                              "literal": {
-                                "string": "The optional header row of the table. If present, the header must have the same number of cells as each data row."}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {
+                                "literal": {
+                                  "string": "The optional header row of the table. If present, the header must have the same number of cells as each data row."}}}]},
                         "body": {"maybe": {"variable": "hydra.tabular.HeaderRow"}}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "header"}}}},
@@ -602,12 +636,13 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {
-                            "literal": {
-                              "string": "The optional header row of the table. If present, the header must have the same number of cells as each data row."}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {
+                              "literal": {
+                                "string": "The optional header row of the table. If present, the header must have the same number of cells as each data row."}}}]},
                       "body": {"maybe": {"variable": "hydra.tabular.HeaderRow"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -617,10 +652,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "The data rows of the table. Each row must have the same number of cells."}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "The data rows of the table. Each row must have the same number of cells."}}}]},
                       "body": {"list": {"application": {"argument": {"variable": "v"}, "function": {"variable": "hydra.tabular.DataRow"}}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -633,7 +669,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL accessor for the header field of hydra.tabular.Table"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the header field of hydra.tabular.Table"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -686,12 +726,13 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {
-                          "literal": {
-                            "string": "The optional header row of the table. If present, the header must have the same number of cells as each data row."}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {
+                            "literal": {
+                              "string": "The optional header row of the table. If present, the header must have the same number of cells as each data row."}}}]},
                     "body": {"maybe": {"variable": "hydra.tabular.HeaderRow"}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": [{"constraints": [], "name": "v"}]}}},
@@ -699,7 +740,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL accessor for the data field of hydra.tabular.Table"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the data field of hydra.tabular.Table"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -752,10 +797,11 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {"literal": {"string": "The data rows of the table. Each row must have the same number of cells."}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "The data rows of the table. Each row must have the same number of cells."}}}]},
                     "body": {"list": {"application": {"argument": {"variable": "v"}, "function": {"variable": "hydra.tabular.DataRow"}}}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": [{"constraints": [], "name": "v"}]}}},
@@ -763,7 +809,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL updater for the header field of hydra.tabular.Table"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the header field of hydra.tabular.Table"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -833,12 +883,13 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [
-                              {
-                                "key": "description",
-                                "value": {
-                                  "literal": {
-                                    "string": "The optional header row of the table. If present, the header must have the same number of cells as each data row."}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {
+                                    "literal": {
+                                      "string": "The optional header row of the table. If present, the header must have the same number of cells as each data row."}}}]},
                             "body": {"maybe": {"variable": "hydra.tabular.HeaderRow"}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -864,12 +915,13 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {
-                            "literal": {
-                              "string": "The optional header row of the table. If present, the header must have the same number of cells as each data row."}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {
+                              "literal": {
+                                "string": "The optional header row of the table. If present, the header must have the same number of cells as each data row."}}}]},
                       "body": {"maybe": {"variable": "hydra.tabular.HeaderRow"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -882,7 +934,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL updater for the data field of hydra.tabular.Table"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the data field of hydra.tabular.Table"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -952,10 +1008,11 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [
-                              {
-                                "key": "description",
-                                "value": {"literal": {"string": "The data rows of the table. Each row must have the same number of cells."}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {"literal": {"string": "The data rows of the table. Each row must have the same number of cells."}}}]},
                             "body": {"list": {"application": {"argument": {"variable": "v"}, "function": {"variable": "hydra.tabular.DataRow"}}}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -981,10 +1038,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "The data rows of the table. Each row must have the same number of cells."}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "The data rows of the table. Each row must have the same number of cells."}}}]},
                       "body": {"list": {"application": {"argument": {"variable": "v"}, "function": {"variable": "hydra.tabular.DataRow"}}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -997,7 +1055,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for hydra.tabular.TableType"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL constructor for hydra.tabular.TableType"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1064,7 +1123,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL accessor for the name field of hydra.tabular.TableType"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the name field of hydra.tabular.TableType"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1116,10 +1179,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the columns field of hydra.tabular.TableType"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the columns field of hydra.tabular.TableType"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1171,7 +1235,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL updater for the name field of hydra.tabular.TableType"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the name field of hydra.tabular.TableType"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1264,8 +1332,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {"key": "description", "value": {"literal": {"string": "DSL updater for the columns field of hydra.tabular.TableType"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the columns field of hydra.tabular.TableType"}}}]},
             "body": {
               "lambda": {
                 "body": {

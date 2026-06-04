@@ -1217,7 +1217,7 @@ encodeCaseArms cx g baseName (cf:cfs) st = do
     then encodeTerm cx g (Core.TermApplication $ Core.Application cfterm vExpr) stForArm
     else do
       -- For non-unit variants, pass v.Value to the case function
-      let vValue = Core.TermAnnotated $ Core.AnnotatedTerm vExpr M.empty  -- placeholder
+      let vValue = Core.TermAnnotated $ Core.AnnotatedTerm vExpr (Core.TermMap M.empty)  -- placeholder; empty TermMap matches the convention
       -- Generate: cfterm(v.Value) by encoding as function application where the arg is a field access
       (cfExpr, st1') <- encodeTerm cx g cfterm stForArm
       let goVValue = goFieldAccess "v" "Value"

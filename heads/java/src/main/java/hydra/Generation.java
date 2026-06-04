@@ -496,12 +496,7 @@ public class Generation {
         final hydra.util.CaseConvention cc = caseConv;
         generateSources(
                 mod -> defs -> cx -> g -> {
-                    // TODO: lisp.Coder excluded due to stale visitor patterns; needs regeneration.
-                    // Until then, fail loudly with a typed error so callers (Generation.generateSources)
-                    // don't ClassCastException on Either.Left<String,...>.
-                    hydra.util.Either result = new hydra.util.Either.Left(
-                        new hydra.errors.Error_.Other(
-                            new hydra.errors.OtherError("Lisp code generation temporarily disabled for dialect " + d)));
+                    hydra.util.Either result = hydra.lisp.Coder.moduleToLisp(d, mod, defs, cx, g);
                     if (result instanceof hydra.util.Either.Left) {
                         return result;
                     }

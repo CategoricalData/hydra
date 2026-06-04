@@ -4,7 +4,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Decoder for hydra.util.CaseConvention"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Decoder for hydra.util.CaseConvention"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -373,7 +374,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Decoder for hydra.util.Comparison"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Decoder for hydra.util.Comparison"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -692,7 +693,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Decoder for hydra.util.FileExtension"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Decoder for hydra.util.FileExtension"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -879,7 +881,7 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Decoder for hydra.util.ModuleNames"}}}],
+                "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Decoder for hydra.util.ModuleNames"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -1097,7 +1099,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Decoder for hydra.util.Precision"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Decoder for hydra.util.Precision"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1455,7 +1457,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Decoder for hydra.util.QualifiedName"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Decoder for hydra.util.QualifiedName"}}}]},
             "body": {
               "lambda": {
                 "body": {

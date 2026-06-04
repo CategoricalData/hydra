@@ -4,7 +4,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Get the C++ class name from a Hydra Name"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Get the C++ class name from a Hydra Name"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -22,7 +23,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Create a type reference, optionally wrapped in shared_ptr"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Create a type reference, optionally wrapped in shared_ptr"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -84,7 +89,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Encode an enum value with appropriate naming convention"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Encode an enum value with appropriate naming convention"}}}]},
             "body": {
               "application": {
                 "argument": {"inject": {"field": {"name": "upperSnake", "term": {"unit": {}}}, "typeName": "hydra.util.CaseConvention"}},
@@ -100,7 +109,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Encode a field name with appropriate naming convention"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Encode a field name with appropriate naming convention"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -130,7 +143,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Encode a name with specified convention"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Encode a name with specified convention"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -314,7 +328,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Encode a qualified name with namespace"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Encode a qualified name with namespace"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -438,7 +453,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Encode a namespace as a C++ namespace string"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Encode a namespace as a C++ namespace string"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -474,7 +490,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Encode a type variable name"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Encode a type variable name"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -492,7 +508,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Get the forward header name for a namespace"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Get the forward header name for a namespace"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -515,7 +532,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Create a namespace declaration wrapping inner declarations"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Create a namespace declaration wrapping inner declarations"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -548,7 +569,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Get the partial visitor name for a type"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Get the partial visitor name for a type"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -572,7 +594,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Sanitize a name to be valid in C++"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Sanitize a name to be valid in C++"}}}]},
             "body": {
               "application": {
                 "argument": {"variable": "hydra.cpp.language.cppReservedWords"},
@@ -586,7 +608,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Create a reference to a term variable"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Create a reference to a term variable"}}}]},
             "body": {
               "application": {
                 "argument": {"inject": {"field": {"name": "lowerSnake", "term": {"unit": {}}}, "typeName": "hydra.util.CaseConvention"}},
@@ -602,7 +625,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Create a reference to a type variable"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Create a reference to a type variable"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -642,7 +666,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Create a variable reference expression"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Create a variable reference expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -680,7 +705,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Get the variant name by combining type name and field name"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Get the variant name by combining type name and field name"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -713,7 +742,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Get the visitor name for a type"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Get the visitor name for a type"}}}]},
             "body": {
               "lambda": {
                 "body": {

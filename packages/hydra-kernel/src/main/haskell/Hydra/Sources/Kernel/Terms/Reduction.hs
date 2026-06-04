@@ -291,7 +291,7 @@ etaExpandTerm = define "etaExpandTerm" $
        -- Annotate fullyApplied with its codomain type so downstream coders can determine the return type
        "fullyApplied" <~ Maybes.maybe (var "fullyAppliedRaw")
          ("ct" ~> Core.termAnnotated $ Core.annotatedTerm (var "fullyAppliedRaw")
-           (Maps.singleton (Core.name (string "type")) (Phantoms.encoderFor _Type @@ var "ct")))
+           (Annotations.wrapAnnotationMap @@ Maps.singleton (Core.name (string "type")) (Phantoms.encoderFor _Type @@ var "ct")))
          (var "codomainType") $
        -- Step 2: Wrap with lambdas from inside out by reversing indices: \v1 -> \v2 -> ... -> fullyApplied
        -- Using foldl with reversed indices+domains gives us: for [2,1], wrap v2 first (innermost), then v1 (outermost)

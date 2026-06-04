@@ -4,10 +4,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Find the arity (expected number of arguments) of a primitive constant or function"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Find the arity (expected number of arguments) of a primitive constant or function"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -34,7 +35,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Find the arity (expected number of arguments) of a term"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Find the arity (expected number of arguments) of a term"}}}]},
             "body": {
               "cases": {
                 "cases": [
@@ -116,7 +121,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Find the arity (expected number of arguments) of a type"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Find the arity (expected number of arguments) of a type"}}}]},
             "body": {
               "cases": {
                 "cases": [
@@ -191,10 +200,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Find the arity (expected number of arguments) of a type scheme"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Find the arity (expected number of arguments) of a type scheme"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -213,11 +223,12 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {"string": "Uncurry a type expression into a list of types, turning a function type a -> b into cons a (uncurryType b)"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {"string": "Uncurry a type expression into a list of types, turning a function type a -> b into cons a (uncurryType b)"}}}]},
             "body": {
               "lambda": {
                 "body": {

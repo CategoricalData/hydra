@@ -10,7 +10,7 @@
                   "typeLambda": {
                     "body": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "Interpreter-friendly even."}}}],
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Interpreter-friendly even."}}}]},
                         "body": {
                           "lambda": {
                             "body": {
@@ -183,7 +183,7 @@
                   "typeLambda": {
                     "body": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "Interpreter-friendly odd."}}}],
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Interpreter-friendly odd."}}}]},
                         "body": {
                           "lambda": {
                             "body": {

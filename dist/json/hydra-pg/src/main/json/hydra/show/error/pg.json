@@ -4,7 +4,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Show an invalid edge error as a string"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Show an invalid edge error as a string"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -79,7 +80,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Show an invalid element property error as a string"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Show an invalid element property error as a string"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -116,10 +121,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [
-                  {
-                    "key": "description",
-                    "value": {"literal": {"string": "Show an invalid graph edge error as a string, given a value printer"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Show an invalid graph edge error as a string, given a value printer"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -175,10 +181,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [
-                  {
-                    "key": "description",
-                    "value": {"literal": {"string": "Show an invalid graph error as a string, given a value printer"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Show an invalid graph error as a string, given a value printer"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -243,10 +250,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [
-                  {
-                    "key": "description",
-                    "value": {"literal": {"string": "Show an invalid graph vertex error as a string, given a value printer"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Show an invalid graph vertex error as a string, given a value printer"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -300,7 +308,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Show an invalid property error as a string"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Show an invalid property error as a string"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -354,7 +363,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Show an invalid value error as a string"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Show an invalid value error as a string"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -383,7 +393,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Show an invalid vertex error as a string"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Show an invalid vertex error as a string"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -430,7 +441,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Show a no-such-edge-label error as a string"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Show a no-such-edge-label error as a string"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -457,7 +469,9 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Show a no-such-vertex-label error as a string"}}}],
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "Show a no-such-vertex-label error as a string"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -484,7 +498,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Show a wrong-vertex-label error as a string"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Show a wrong-vertex-label error as a string"}}}]},
             "body": {
               "lambda": {
                 "body": {

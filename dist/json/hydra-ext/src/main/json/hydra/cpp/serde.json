@@ -4,7 +4,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert an access specifier to an expression"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert an access specifier to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -53,7 +54,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert an add operation to an expression"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert an add operation to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -94,7 +96,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert an additive expression to an expression"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Convert an additive expression to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -137,7 +143,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert an and expression to an expression"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert an and expression to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -172,7 +179,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert an assignment expression to an expression"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Convert an assignment expression to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -208,7 +219,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert an assignment operator to an expression"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Convert an assignment operator to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -306,7 +321,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a base specifier to an expression"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a base specifier to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -344,7 +360,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a basic type to an expression"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a basic type to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -429,7 +446,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a bitwise and operation to an expression"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Convert a bitwise and operation to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -469,7 +490,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a bitwise or operation to an expression"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Convert a bitwise or operation to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -510,7 +535,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a bitwise xor operation to an expression"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Convert a bitwise xor operation to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -550,7 +579,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a boolean literal to an expression"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a boolean literal to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -574,7 +604,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a capture to an expression"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a capture to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -621,7 +651,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a capture list to an expression"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a capture list to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -671,7 +702,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a case statement to an expression"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a case statement to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -712,7 +744,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a case value to an expression"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a case value to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -757,7 +790,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a class body to an expression"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a class body to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -798,7 +832,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a class declaration to an expression"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a class declaration to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -890,7 +925,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a class key to an expression"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a class key to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -940,7 +976,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a class specifier to an expression"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a class specifier to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1021,7 +1058,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a comma expression to an expression"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a comma expression to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1061,7 +1099,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a comment to an expression"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a comment to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1097,7 +1135,9 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a compound statement to an expression"}}}],
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a compound statement to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1128,7 +1168,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a conditional expression to an expression"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Convert a conditional expression to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1163,7 +1207,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a constructor declaration to an expression"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Convert a constructor declaration to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1273,7 +1321,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a declaration to an expression"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a declaration to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1348,7 +1397,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a define directive to an expression"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a define directive to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1450,7 +1500,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a destructor declaration to an expression"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Convert a destructor declaration to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1545,7 +1599,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a divide operation to an expression"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a divide operation to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1585,7 +1640,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a do statement to an expression"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a do statement to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1636,7 +1692,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert an elif directive to an expression"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert an elif directive to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1665,7 +1722,8 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Convert an else directive to an expression"}}}],
+                "annotation": {
+                  "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert an else directive to an expression"}}}]},
                 "body": {
                   "lambda": {
                     "body": {"application": {"argument": {"literal": {"string": "#else"}}, "function": {"variable": "hydra.serialization.cst"}}},
@@ -1683,7 +1741,8 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Convert an endif directive to an expression"}}}],
+                "annotation": {
+                  "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert an endif directive to an expression"}}}]},
                 "body": {
                   "lambda": {
                     "body": {"application": {"argument": {"literal": {"string": "#endif"}}, "function": {"variable": "hydra.serialization.cst"}}},
@@ -1699,7 +1758,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert an equal operation to an expression"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert an equal operation to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1740,7 +1800,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert an equality expression to an expression"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Convert an equality expression to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1782,7 +1846,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert an error directive to an expression"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert an error directive to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1809,7 +1874,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert an exclusive or expression to an expression"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Convert an exclusive or expression to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1844,7 +1913,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert an explicit assignment to an expression"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Convert an explicit assignment to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1892,7 +1965,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert an expression to an expression"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert an expression to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1927,7 +2001,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a for-init to an expression"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a for-init to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1973,7 +2047,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a for statement to an expression"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a for statement to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2043,7 +2118,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a function application to an expression"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Convert a function application to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2094,7 +2173,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a function body to an expression"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a function body to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2149,7 +2229,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a function call operation to an expression"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Convert a function call operation to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2199,7 +2283,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a function declaration to an expression"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Convert a function declaration to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2312,7 +2400,9 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a function identifier to an expression"}}}],
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a function identifier to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2347,7 +2437,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a function specifier prefix to an expression"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Convert a function specifier prefix to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2396,7 +2490,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a function specifier suffix to an expression"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Convert a function specifier suffix to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2445,7 +2543,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a function type to an expression"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a function type to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2495,7 +2594,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a greater-than-or-equal operation to an expression"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Convert a greater-than-or-equal operation to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2535,7 +2638,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a greater-than operation to an expression"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Convert a greater-than operation to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2575,7 +2682,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert an if directive to an expression"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert an if directive to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2602,7 +2710,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert an ifdef directive to an expression"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert an ifdef directive to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2629,7 +2738,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert an ifndef directive to an expression"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert an ifndef directive to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2656,7 +2766,9 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert an include directive to an expression"}}}],
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "Convert an include directive to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2709,7 +2821,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert an inclusive or expression to an expression"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Convert an inclusive or expression to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2745,7 +2861,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert an integer literal to an expression"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert an integer literal to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2815,7 +2932,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert an iteration statement to an expression"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Convert an iteration statement to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2864,7 +2985,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a jump statement to an expression"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a jump statement to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2947,7 +3069,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a labeled statement to an expression"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a labeled statement to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2991,7 +3114,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a lambda expression to an expression"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a lambda expression to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3094,7 +3218,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a left shift operation to an expression"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Convert a left shift operation to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3134,7 +3262,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a less-than-or-equal operation to an expression"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Convert a less-than-or-equal operation to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3174,7 +3306,9 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a less-than operation to an expression"}}}],
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a less-than operation to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3214,7 +3348,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a line directive to an expression"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a line directive to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3285,7 +3420,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a literal to an expression"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a literal to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3374,7 +3509,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a logical and expression to an expression"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Convert a logical and expression to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3410,7 +3549,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a logical and operation to an expression"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Convert a logical and operation to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3451,7 +3594,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a logical or expression to an expression"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Convert a logical or expression to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3486,7 +3633,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a logical or operation to an expression"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Convert a logical or operation to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3527,7 +3678,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a map to an expression"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a map to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3593,7 +3744,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a map entry to an expression"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a map entry to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3640,7 +3792,9 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a member initializer to an expression"}}}],
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a member initializer to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3690,7 +3844,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a member access operation to an expression"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Convert a member access operation to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3729,7 +3887,9 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a member declaration to an expression"}}}],
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a member declaration to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3804,7 +3964,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a member specification to an expression"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Convert a member specification to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3855,7 +4019,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a modulo operation to an expression"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a modulo operation to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3895,7 +4060,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a multiplicative expression to an expression"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Convert a multiplicative expression to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3944,7 +4113,9 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a multiply operation to an expression"}}}],
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a multiply operation to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3984,7 +4155,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a namespace declaration to an expression"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Convert a namespace declaration to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4046,7 +4221,9 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a not-equal operation to an expression"}}}],
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a not-equal operation to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4087,7 +4264,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert an optional to an expression"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert an optional to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4154,7 +4332,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert overloaded lambdas to an expression"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert overloaded lambdas to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4195,7 +4374,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a parameter to an expression"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a parameter to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4291,7 +4471,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a pattern match to an expression"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a pattern match to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4336,7 +4517,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a pointer member access operation to an expression"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Convert a pointer member access operation to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4375,7 +4560,9 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a postfix expression to an expression"}}}],
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a postfix expression to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4468,7 +4655,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a pragma directive to an expression"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a pragma directive to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4492,7 +4680,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a preprocessor directive to an expression"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Convert a preprocessor directive to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4612,7 +4804,9 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a primary expression to an expression"}}}],
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a primary expression to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4664,7 +4858,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a program to an expression"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a program to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4804,7 +4998,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a qualified identifier to an expression"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Convert a qualified identifier to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4842,7 +5040,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a qualified type to an expression"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a qualified type to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4936,7 +5135,9 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a range-for statement to an expression"}}}],
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a range-for statement to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -5005,7 +5206,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a relational expression to an expression"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Convert a relational expression to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -5062,7 +5267,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a right shift operation to an expression"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Convert a right shift operation to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -5102,7 +5311,9 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a selection statement to an expression"}}}],
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a selection statement to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -5179,7 +5390,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a set to an expression"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a set to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -5236,7 +5447,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a shift expression to an expression"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a shift expression to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -5278,7 +5490,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a sizeof expression to an expression"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a sizeof expression to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -5305,7 +5518,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a statement to an expression"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a statement to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -5392,7 +5606,9 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a subscript operation to an expression"}}}],
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a subscript operation to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -5433,7 +5649,9 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a subtract operation to an expression"}}}],
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a subtract operation to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -5474,7 +5692,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a switch statement to an expression"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a switch statement to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -5535,7 +5754,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a template argument to an expression"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a template argument to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -5570,7 +5790,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a template declaration to an expression"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Convert a template declaration to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -5659,8 +5883,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {"key": "description", "value": {"literal": {"string": "Convert a template function call operation to an expression"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Convert a template function call operation to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -5734,7 +5961,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a template type to an expression"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a template type to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -5788,7 +6016,9 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a ternary expression to an expression"}}}],
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a ternary expression to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -5838,10 +6068,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Convert a string to a C++ comment. Empty single-line comments emit `//` (no trailing space)."}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Convert a string to a C++ comment. Empty single-line comments emit `//` (no trailing space)."}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -5892,7 +6123,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a type expression to an expression"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a type expression to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -5948,7 +6180,9 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a typedef declaration to an expression"}}}],
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a typedef declaration to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -6022,7 +6256,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a unary expression to an expression"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a unary expression to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -6064,7 +6299,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a unary operation to an expression"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a unary operation to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -6103,7 +6339,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a unary operator to an expression"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a unary operator to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -6180,7 +6417,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert an undef directive to an expression"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert an undef directive to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -6207,7 +6445,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a variable declaration to an expression"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Convert a variable declaration to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -6336,7 +6578,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a vector to an expression"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a vector to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -6396,7 +6638,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a visitor to an expression"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a visitor to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -6431,7 +6673,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a warning directive to an expression"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a warning directive to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -6458,7 +6701,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a while statement to an expression"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a while statement to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
