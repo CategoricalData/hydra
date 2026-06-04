@@ -468,8 +468,17 @@ const main = async (): Promise<void> => {
   // (`Hydra.Haskell.*`).
   const emitPkgs = new Set<string>(["hydra-kernel"]);
   if (opts.target === "haskell") emitPkgs.add("hydra-haskell");
+  // Filter skip-emit test namespaces (e.g. hydra.test.testEnv): these are
+  // type-only stubs in the DSL whose hand-written per-language counterparts
+  // are the source of truth. Emitting them would overwrite hand-written code
+  // that registers primitives for the test graph.
+  // Mirrors testSkipEmitModuleNames in Hydra.Sources.Test.All.
+  const testSkipEmit = new Set<string>(["hydra.test.testEnv"]);
   const mainMods = modulesByPath.filter((m) => !m.isTest && emitPkgs.has(m.pkg)).map((m) => m.module);
-  const testMods = modulesByPath.filter((m) => m.isTest && emitPkgs.has(m.pkg)).map((m) => m.module);
+  const testMods = modulesByPath
+    .filter((m) => m.isTest && emitPkgs.has(m.pkg))
+    .filter((m) => !testSkipEmit.has((m.module as { name?: { value?: string } } | null)?.name?.value ?? ""))
+    .map((m) => m.module);
   const mainFileCount = writeOne(false, mainMods);
   const testFileCount = writeOne(true, testMods);
 
