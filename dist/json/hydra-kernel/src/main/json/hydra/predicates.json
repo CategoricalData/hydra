@@ -4,7 +4,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Check if a binding needs to be treated as a function"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Check if a binding needs to be treated as a function"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -112,10 +116,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Check if a term needs to be treated as a function rather than a simple value"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Check if a term needs to be treated as a function rather than a simple value"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -189,7 +194,9 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Check if a variable is bound to a complex term"}}}],
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "Check if a variable is bound to a complex term"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -347,10 +354,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Determines whether a given term is an encoded term (meta-level term)"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Determines whether a given term is an encoded term (meta-level term)"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -402,7 +410,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Determines whether a given term is an encoded type"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Determines whether a given term is an encoded type"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -454,10 +466,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Check if a row type represents an enum (all fields are unit-typed)"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Check if a row type represents an enum (all fields are unit-typed)"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -504,7 +517,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Check if a type is an enum type"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Check if a type is an enum type"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -533,12 +546,13 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {
-                    "string": "Check whether a type is a nominal type definition (record, union, wrap, or forall wrapping one). Type aliases (applications, functions, literal types, etc.) return false."}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {
+                      "string": "Check whether a type is a nominal type definition (record, union, wrap, or forall wrapping one). Type aliases (applications, functions, literal types, etc.) return false."}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -584,10 +598,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [
-                  {
-                    "key": "description",
-                    "value": {"literal": {"string": "Check if an element is serializable (no function types in dependencies) (Either version)"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Check if an element is serializable (no function types in dependencies) (Either version)"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -740,10 +755,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [
-                  {
-                    "key": "description",
-                    "value": {"literal": {"string": "Check if a type (by name) is serializable, resolving all type dependencies (Either version)"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Check if a type (by name) is serializable, resolving all type dependencies (Either version)"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -893,10 +909,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Check if a type is serializable (no function types in the type itself)"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Check if a type is serializable (no function types in the type itself)"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -967,7 +984,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Check if a term is trivially cheap (no thunking needed)"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Check if a term is trivially cheap (no thunking needed)"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1155,10 +1176,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Check whether a type is a type (always true for non-encoded types)"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Check whether a type is a type (always true for non-encoded types)"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1221,7 +1243,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Check whether a term is the unit term"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Check whether a term is the unit term"}}}]},
             "body": {
               "cases": {
                 "cases": [
@@ -1239,7 +1262,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Check whether a type is the unit type"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Check whether a type is the unit type"}}}]},
             "body": {
               "cases": {
                 "cases": [
@@ -1259,10 +1283,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [
-                  {
-                    "key": "description",
-                    "value": {"literal": {"string": "Get all type dependencies for a given type name (Either version)"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Get all type dependencies for a given type name (Either version)"}}}]},
                 "body": {
                   "lambda": {
                     "body": {

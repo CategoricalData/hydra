@@ -8,7 +8,8 @@
               "typeLambda": {
                 "body": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "Interpreter-friendly bimap for Pair terms."}}}],
+                    "annotation": {
+                      "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Interpreter-friendly bimap for Pair terms."}}}]},
                     "body": {
                       "lambda": {
                         "body": {
@@ -153,7 +154,8 @@
               "typeLambda": {
                 "body": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "Interpreter-friendly first for Pair terms."}}}],
+                    "annotation": {
+                      "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Interpreter-friendly first for Pair terms."}}}]},
                     "body": {
                       "lambda": {
                         "body": {
@@ -238,7 +240,8 @@
               "typeLambda": {
                 "body": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "Interpreter-friendly second for Pair terms."}}}],
+                    "annotation": {
+                      "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Interpreter-friendly second for Pair terms."}}}]},
                     "body": {
                       "lambda": {
                         "body": {

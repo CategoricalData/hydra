@@ -4,7 +4,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Extract an arbitrary-precision integer value from a term"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Extract an arbitrary-precision integer value from a term"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -60,7 +64,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Extract a bigint value from an IntegerValue"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Extract a bigint value from an IntegerValue"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -117,7 +122,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Extract a binary data value from a term"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Extract a binary data value from a term"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -157,7 +163,9 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Extract a binary literal from a Literal value"}}}],
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "Extract a binary literal from a Literal value"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -214,7 +222,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Extract a boolean value from a term"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Extract a boolean value from a term"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -254,7 +262,9 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Extract a boolean literal from a Literal value"}}}],
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "Extract a boolean literal from a Literal value"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -311,7 +321,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Extract a specific case handler from a case statement term"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Extract a specific case handler from a case statement term"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -448,7 +462,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Extract case statement from a term"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Extract case statement from a term"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -590,7 +604,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Extract an arbitrary-precision decimal value from a term"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Extract an arbitrary-precision decimal value from a term"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -630,7 +648,9 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Extract a decimal literal from a Literal value"}}}],
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "Extract a decimal literal from a Literal value"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -691,10 +711,11 @@
               "typeLambda": {
                 "body": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {"literal": {"string": "Decode an Either value using the provided left and right decoders"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "Decode an Either value using the provided left and right decoders"}}}]},
                     "body": {
                       "lambda": {
                         "body": {
@@ -874,8 +895,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [
-                  {"key": "description", "value": {"literal": {"string": "Decode a list of elements using the provided element decoder"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Decode a list of elements using the provided element decoder"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -974,7 +998,11 @@
               "typeLambda": {
                 "body": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "Decode a Map using the provided key and value decoders"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "Decode a Map using the provided key and value decoders"}}}]},
                     "body": {
                       "lambda": {
                         "body": {
@@ -1182,7 +1210,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Decode a Maybe value using the provided element decoder"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Decode a Maybe value using the provided element decoder"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -1282,7 +1314,11 @@
               "typeLambda": {
                 "body": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "Decode a Pair using the provided first and second decoders"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "Decode a Pair using the provided first and second decoders"}}}]},
                     "body": {
                       "lambda": {
                         "body": {
@@ -1447,7 +1483,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Decode a Set using the provided element decoder"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Decode a Set using the provided element decoder"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -1557,7 +1597,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Decode a unit value"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Decode a unit value"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1624,7 +1664,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Decode a wrapped value using the provided body decoder"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Decode a wrapped value using the provided body decoder"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -1716,10 +1760,11 @@
               "typeLambda": {
                 "body": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {"literal": {"string": "Extract an either value from a term, applying functions to the left and right values"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "Extract an either value from a term, applying functions to the left and right values"}}}]},
                     "body": {
                       "lambda": {
                         "body": {
@@ -1896,7 +1941,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Extract the left and right types from an either type"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Extract the left and right types from an either type"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1962,7 +2011,8 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Extract a field value from a list of fields"}}}],
+                "annotation": {
+                  "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Extract a field value from a list of fields"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -2175,7 +2225,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Extract a 32-bit floating-point value from a term"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Extract a 32-bit floating-point value from a term"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2231,7 +2285,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Extract a float32 value from a FloatValue"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Extract a float32 value from a FloatValue"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2288,7 +2343,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Extract a 64-bit floating-point value from a term"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Extract a 64-bit floating-point value from a term"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2344,7 +2403,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Extract a float64 value from a FloatValue"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Extract a float64 value from a FloatValue"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2401,7 +2461,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Extract a floating-point literal from a Literal value"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Extract a floating-point literal from a Literal value"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2458,7 +2522,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Extract a float value from a term"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Extract a float value from a term"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2498,7 +2562,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Extract a function type from a type"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Extract a function type from a type"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2562,7 +2626,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Extract a field from a union term"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Extract a field from a union term"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2718,7 +2782,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Extract a 16-bit signed integer value from a term"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Extract a 16-bit signed integer value from a term"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2774,7 +2842,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Extract an int16 value from an IntegerValue"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Extract an int16 value from an IntegerValue"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2831,7 +2900,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Extract a 32-bit signed integer value from a term"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Extract a 32-bit signed integer value from a term"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2887,7 +2960,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Extract an int32 value from an IntegerValue"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Extract an int32 value from an IntegerValue"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2944,7 +3018,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Extract a 64-bit signed integer value from a term"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Extract a 64-bit signed integer value from a term"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3000,7 +3078,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Extract an int64 value from an IntegerValue"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Extract an int64 value from an IntegerValue"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3057,7 +3136,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Extract an 8-bit signed integer value from a term"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Extract an 8-bit signed integer value from a term"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3113,7 +3196,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Extract an int8 value from an IntegerValue"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Extract an int8 value from an IntegerValue"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3170,7 +3254,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Extract an integer literal from a Literal value"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Extract an integer literal from a Literal value"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3227,7 +3315,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Extract an integer value from a term"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Extract an integer value from a term"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3267,7 +3356,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Extract a lambda from a term"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Extract a lambda from a term"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3349,7 +3438,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Extract the body of a lambda term"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Extract the body of a lambda term"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3385,7 +3474,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Extract a let expression from a term"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Extract a let expression from a term"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3467,7 +3557,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Extract a binding with the given name from a let term"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Extract a binding with the given name from a let term"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3661,7 +3755,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Extract a list of terms from a term"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Extract a list of terms from a term"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3743,7 +3837,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Extract the first element of a list term"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Extract the first element of a list term"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3833,10 +3928,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [
-                  {
-                    "key": "description",
-                    "value": {"literal": {"string": "Extract a list of values from a term, mapping a function over each element"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Extract a list of values from a term, mapping a function over each element"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -3903,7 +3999,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Extract the element type from a list type"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Extract the element type from a list type"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3967,7 +4064,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Extract a literal value from a term"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Extract a literal value from a term"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4053,10 +4150,11 @@
               "typeLambda": {
                 "body": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {"literal": {"string": "Extract a map of key-value pairs from a term, mapping functions over each key and value"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "Extract a map of key-value pairs from a term, mapping functions over each key and value"}}}]},
                     "body": {
                       "lambda": {
                         "body": {
@@ -4297,7 +4395,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Extract the key and value types from a map type"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Extract the key and value types from a map type"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4363,10 +4465,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [
-                  {
-                    "key": "description",
-                    "value": {"literal": {"string": "Extract an optional value from a term, applying a function to the value if present"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Extract an optional value from a term, applying a function to the value if present"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -4497,7 +4600,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Extract the base type from an optional type"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Extract the base type from an optional type"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4563,7 +4667,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Ensure a function has the expected number of arguments"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Ensure a function has the expected number of arguments"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -4661,10 +4769,11 @@
               "typeLambda": {
                 "body": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {"literal": {"string": "Extract a pair of values from a term, applying functions to each component"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "Extract a pair of values from a term, applying functions to each component"}}}]},
                     "body": {
                       "lambda": {
                         "body": {
@@ -4839,7 +4948,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Extract a record's fields from a term"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Extract a record's fields from a term"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4953,7 +5063,8 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Extract the field types from a record type"}}}],
+                "annotation": {
+                  "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Extract the field types from a record type"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -5031,7 +5142,11 @@
                   "typeLambda": {
                     "body": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "Require a field from a record's field map and decode it"}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "Require a field from a record's field map and decode it"}}}]},
                         "body": {
                           "lambda": {
                             "body": {
@@ -5128,7 +5243,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Extract a set of terms from a term"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Extract a set of terms from a term"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -5212,10 +5327,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [
-                  {
-                    "key": "description",
-                    "value": {"literal": {"string": "Extract a set of values from a term, mapping a function over each element"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Extract a set of values from a term, mapping a function over each element"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -5282,7 +5398,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Extract the element type from a set type"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Extract the element type from a set type"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -5346,7 +5463,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Extract a string value from a term"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Extract a string value from a term"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -5386,7 +5503,9 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Extract a string literal from a Literal value"}}}],
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "Extract a string literal from a Literal value"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -5443,10 +5562,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Strip annotations and dereference variables, returning Either DecodingError Term"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Strip annotations and dereference variables, returning Either DecodingError Term"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -5496,7 +5616,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Extract a record from a term"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Extract a record from a term"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -5578,7 +5698,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a Record's fields to a Map from Name to Term"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Convert a Record's fields to a Map from Name to Term"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -5624,7 +5748,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Extract a 16-bit unsigned integer value from a term"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Extract a 16-bit unsigned integer value from a term"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -5680,7 +5808,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Extract a uint16 value from an IntegerValue"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Extract a uint16 value from an IntegerValue"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -5737,7 +5866,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Extract a 32-bit unsigned integer value from a term"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Extract a 32-bit unsigned integer value from a term"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -5793,7 +5926,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Extract a uint32 value from an IntegerValue"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Extract a uint32 value from an IntegerValue"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -5850,7 +5984,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Extract a 64-bit unsigned integer value from a term"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Extract a 64-bit unsigned integer value from a term"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -5906,7 +6044,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Extract a uint64 value from an IntegerValue"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Extract a uint64 value from an IntegerValue"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -5963,7 +6102,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Extract an 8-bit unsigned integer value from a term"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Extract an 8-bit unsigned integer value from a term"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -6019,7 +6162,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Extract a uint8 value from an IntegerValue"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Extract a uint8 value from an IntegerValue"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -6078,7 +6222,8 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Extract the field types from a union type"}}}],
+                "annotation": {
+                  "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Extract the field types from a union type"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -6150,7 +6295,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Extract a unit value from a term"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Extract a unit value from a term"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -6207,10 +6352,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Extract a unit variant (a variant with an empty record value) from a union term"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Extract a unit variant (a variant with an empty record value) from a union term"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -6287,7 +6433,9 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Extract the wrapped value from a wrapped term"}}}],
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "Extract the wrapped value from a wrapped term"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -6456,7 +6604,8 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Extract the wrapped type from a wrapper type"}}}],
+                "annotation": {
+                  "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Extract the wrapped type from a wrapper type"}}}]},
                 "body": {
                   "lambda": {
                     "body": {

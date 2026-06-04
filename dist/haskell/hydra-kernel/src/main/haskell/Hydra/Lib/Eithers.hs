@@ -108,10 +108,10 @@ bimap =
                       Core.applicationFunction = (Core.TermVariable (Core.Name "g")),
                       Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))))}))})),
                 Core.applicationArgument = (Core.TermVariable (Core.Name "e"))}))}))}))})),
-        Core.annotatedTermAnnotation = (M.fromList [
+        Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
           (
-            Core.Name "description",
-            (Core.TermLiteral (Core.LiteralString "Map over both sides of an Either, defined in terms of either.")))])})))}
+            Core.TermVariable (Core.Name "description"),
+            (Core.TermLiteral (Core.LiteralString "Map over both sides of an Either, defined in terms of either.")))]))})))}
 bind :: Packaging.PrimitiveDefinition
 bind =
     Packaging.PrimitiveDefinition {
@@ -176,8 +176,10 @@ bind =
                     Core.lambdaBody = (Core.TermEither (Left (Core.TermVariable (Core.Name "x"))))}))})),
                 Core.applicationArgument = (Core.TermVariable (Core.Name "f"))})),
               Core.applicationArgument = (Core.TermVariable (Core.Name "e"))}))}))})),
-        Core.annotatedTermAnnotation = (M.fromList [
-          (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Monadic bind for Either, defined in terms of either.")))])})))}
+        Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
+          (
+            Core.TermVariable (Core.Name "description"),
+            (Core.TermLiteral (Core.LiteralString "Monadic bind for Either, defined in terms of either.")))]))})))}
 either :: Packaging.PrimitiveDefinition
 either =
     Packaging.PrimitiveDefinition {
@@ -339,10 +341,10 @@ fromLeft =
                   Core.lambdaDomain = Nothing,
                   Core.lambdaBody = (Core.TermVariable (Core.Name "def"))}))})),
               Core.applicationArgument = (Core.TermVariable (Core.Name "e"))}))}))})),
-        Core.annotatedTermAnnotation = (M.fromList [
+        Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
           (
-            Core.Name "description",
-            (Core.TermLiteral (Core.LiteralString "Extract the Left value or return a default, defined in terms of either.")))])})))}
+            Core.TermVariable (Core.Name "description"),
+            (Core.TermLiteral (Core.LiteralString "Extract the Left value or return a default, defined in terms of either.")))]))})))}
 fromRight :: Packaging.PrimitiveDefinition
 fromRight =
     Packaging.PrimitiveDefinition {
@@ -400,10 +402,10 @@ fromRight =
                   Core.lambdaDomain = Nothing,
                   Core.lambdaBody = (Core.TermVariable (Core.Name "x"))}))})),
               Core.applicationArgument = (Core.TermVariable (Core.Name "e"))}))}))})),
-        Core.annotatedTermAnnotation = (M.fromList [
+        Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
           (
-            Core.Name "description",
-            (Core.TermLiteral (Core.LiteralString "Extract the Right value or return a default, defined in terms of either.")))])})))}
+            Core.TermVariable (Core.Name "description"),
+            (Core.TermLiteral (Core.LiteralString "Extract the Right value or return a default, defined in terms of either.")))]))})))}
 isLeft :: Packaging.PrimitiveDefinition
 isLeft =
     Packaging.PrimitiveDefinition {
@@ -453,10 +455,10 @@ isLeft =
                 Core.lambdaDomain = Nothing,
                 Core.lambdaBody = (Core.TermLiteral (Core.LiteralBoolean False))}))})),
             Core.applicationArgument = (Core.TermVariable (Core.Name "e"))}))})),
-        Core.annotatedTermAnnotation = (M.fromList [
+        Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
           (
-            Core.Name "description",
-            (Core.TermLiteral (Core.LiteralString "Check whether an Either is a Left value, defined in terms of either.")))])})))}
+            Core.TermVariable (Core.Name "description"),
+            (Core.TermLiteral (Core.LiteralString "Check whether an Either is a Left value, defined in terms of either.")))]))})))}
 isRight :: Packaging.PrimitiveDefinition
 isRight =
     Packaging.PrimitiveDefinition {
@@ -506,10 +508,10 @@ isRight =
                 Core.lambdaDomain = Nothing,
                 Core.lambdaBody = (Core.TermLiteral (Core.LiteralBoolean True))}))})),
             Core.applicationArgument = (Core.TermVariable (Core.Name "e"))}))})),
-        Core.annotatedTermAnnotation = (M.fromList [
+        Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
           (
-            Core.Name "description",
-            (Core.TermLiteral (Core.LiteralString "Check whether an Either is a Right value, defined in terms of either.")))])})))}
+            Core.TermVariable (Core.Name "description"),
+            (Core.TermLiteral (Core.LiteralString "Check whether an Either is a Right value, defined in terms of either.")))]))})))}
 lefts :: Packaging.PrimitiveDefinition
 lefts =
     Packaging.PrimitiveDefinition {
@@ -610,10 +612,10 @@ map =
                     Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
                     Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))))}))})),
               Core.applicationArgument = (Core.TermVariable (Core.Name "e"))}))}))})),
-        Core.annotatedTermAnnotation = (M.fromList [
+        Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
           (
-            Core.Name "description",
-            (Core.TermLiteral (Core.LiteralString "Map a function over the Right side, defined in terms of either.")))])})))}
+            Core.TermVariable (Core.Name "description"),
+            (Core.TermLiteral (Core.LiteralString "Map a function over the Right side, defined in terms of either.")))]))})))}
 mapList :: Packaging.PrimitiveDefinition
 mapList =
     Packaging.PrimitiveDefinition {

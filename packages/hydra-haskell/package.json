@@ -1,6 +1,6 @@
 {
   "name": "hydra-haskell",
-  "description": "Haskell support for the Hydra programming language: syntax model and coder DSL sources",
+  "description": "Haskell support for Hydra",
   "sourceLanguage": "haskell",
   "dependencies": ["hydra-kernel"]
 }

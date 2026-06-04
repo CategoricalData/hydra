@@ -78,7 +78,7 @@
       "primitive": {
         "defaultImplementation": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Return a value unchanged."}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Return a value unchanged."}}}]},
             "body": {"lambda": {"body": {"variable": "x"}, "parameter": "x"}}}},
         "isPure": true,
         "isTotal": true,
@@ -131,10 +131,11 @@
       "primitive": {
         "defaultImplementation": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Return the maximum of two values, defined in terms of gte and ifElse."}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Return the maximum of two values, defined in terms of gte and ifElse."}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -174,10 +175,11 @@
       "primitive": {
         "defaultImplementation": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Return the minimum of two values, defined in terms of lte and ifElse."}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Return the minimum of two values, defined in terms of lte and ifElse."}}}]},
             "body": {
               "lambda": {
                 "body": {

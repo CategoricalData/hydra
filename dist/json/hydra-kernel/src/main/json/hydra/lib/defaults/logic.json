@@ -10,7 +10,7 @@
                   "typeLambda": {
                     "body": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "Interpreter-friendly logical AND."}}}],
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Interpreter-friendly logical AND."}}}]},
                         "body": {
                           "lambda": {
                             "body": {
@@ -106,7 +106,7 @@
                   "typeLambda": {
                     "body": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "Interpreter-friendly logical NOT."}}}],
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Interpreter-friendly logical NOT."}}}]},
                         "body": {
                           "lambda": {
                             "body": {
@@ -204,7 +204,7 @@
                   "typeLambda": {
                     "body": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "Interpreter-friendly logical OR."}}}],
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Interpreter-friendly logical OR."}}}]},
                         "body": {
                           "lambda": {
                             "body": {

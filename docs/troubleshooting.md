@@ -80,16 +80,15 @@ A stub that throws `UnsupportedOperationException` will cause runtime failures.
 See `overlay/java/hydra-kernel/src/main/java/hydra/lib/lists/Map.java` for a higher-order example
 using `hydra.dsl.Terms` helpers (`lambda`, `app`, `variable`, etc.).
 
-### Higher-order primitives (`prim2Eval`)
+### Higher-order primitives
 
-In `Libraries.hs`, primitives are registered with either `prim1`/`prim2`/`prim3` (simple)
-or `prim1Eval`/`prim2Eval`/`prim3Eval` (higher-order). The `Eval` variants have an
-additional "eval element" in `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Eval/Lib/`,
-generated into `dist/java/hydra-kernel/src/main/java/hydra/eval/lib/`.
-
-**Both paths matter**: The reducer calls `implementation()` for all primitives, so even
-`prim2Eval` primitives need a working `implementation()` in their Java
-`PrimitiveFunction` class.
+Higher-order primitives (e.g. `lists.map`, `lists.foldl`, `eithers.bind`) are
+declared the same way as first-order primitives, via `primDef`/`primNoDef` in
+their `Hydra/Sources/Kernel/Lib/<Sub>.hs` registry. Their higher-orderness is
+expressed in the `TermSignature` (function-typed value parameters) rather than
+via a separate registration path. On the Haskell host, the same `prim*` family
+in `Hydra.Dsl.Prims` pairs each name with its native implementation; the
+native implementation must accept and apply its function arguments correctly.
 
 ### Key files for Java debugging
 
@@ -97,7 +96,6 @@ generated into `dist/java/hydra-kernel/src/main/java/hydra/eval/lib/`.
 |---------|------|
 | Primitive registration | `overlay/java/hydra-kernel/src/main/java/hydra/lib/Libraries.java` (#418) |
 | Primitive classes | `overlay/java/hydra-kernel/src/main/java/hydra/lib/<library>/` (#418) |
-| Generated eval elements | `dist/java/hydra-kernel/src/main/java/hydra/eval/lib/` |
 | DSL term builders | `overlay/java/hydra-kernel/src/main/java/hydra/dsl/Terms.java` (#418) |
 | Either utilities | `overlay/java/hydra-kernel/src/main/java/hydra/util/Either.java` (#418) |
 | Test runner | `heads/java/src/test/java/hydra/TestSuiteRunner.java` |
@@ -294,7 +292,7 @@ See [extending tests](recipes/extending-tests.md#floating-point-test-portability
 ## Annotated `Core.Term` values in test fixtures
 
 When a Hydra-DSL test fixture builds a `Core.Term` value that needs to be a
-`TermAnnotated` -- e.g. to test a validator that inspects annotation maps --
+`TermAnnotated` -- e.g. to test a validator that inspects annotation Terms --
 do **not** use `Phantoms.doc` to attach the annotation.
 The Haskell coder's `encodeTerm` strips outer-layer annotations before its
 variant dispatch (the description, if any, has already been captured at the
@@ -302,17 +300,26 @@ enclosing binding via `getTermDescription` and emitted as a Haskell comment).
 That stripping silently drops the annotation when the annotated term is
 nested inside a record literal rather than at a definition's top level.
 
-Use the explicit data-constructor form instead:
+Use the explicit data-constructor form instead. Since #386 the
+`AnnotatedTerm.annotation` field is typed as `Term`, not `Map Name Term`,
+so the second argument to `Core.annotatedTerm` is a `Term`. Use
+`wrapAnnotationMap` to encode a host-side `Map Name Term`:
 
 ```haskell
 Core.termAnnotated $ Core.annotatedTerm
   someBody
-  (Maps.fromList $ list [Phantoms.pair (Core.name $ string "description")
-    (Core.termLiteral $ Core.literalString $ string "...")])
+  (wrapAnnotationMap @@ (Maps.fromList $ list [
+    Phantoms.pair (Core.name $ string "description")
+      (Core.termLiteral $ Core.literalString $ string "...")]))
 ```
 
-This produces a `TermInject _Term "annotated" ...` Hydra term, which the coder
-treats as data and emits as `Core.TermAnnotated (Core.AnnotatedTerm{...})`.
+Or build the annotation Term directly using the canonical
+`inject(Term){map: TermMap[(TermVariable key, value), …]}` shape (e.g. via
+the test-suite helpers in `Hydra.Sources.Test.Annotations` such as
+`annotatedExp` / `annotatedExp1`).
+
+Either form produces a `TermInject _Term "annotated" ...` Hydra term, which
+the coder treats as data and emits as `Core.TermAnnotated (Core.AnnotatedTerm{...})`.
 
 ## Related resources
 
