@@ -68,6 +68,22 @@ docs/work/
 # through the 0.15 release to support bootstrapping from a fresh clone.
 # All other target-language trees are regenerated from dist/json/ and
 # not checked in.
+#
+# Exception within the tracked dist/haskell/ tree (#418): the hand-written
+# distribution-package content that sync-haskell.sh OVERLAYS from its canonical
+# home under the top-level overlay/haskell/ tree is NOT committed — it would
+# duplicate the canonical source, and the whole dist/haskell/ tree leaves Git
+# after 0.16.0 anyway. The canonical copies under overlay/haskell/ ARE tracked.
+#   - hydra umbrella package (entirely copied)
+dist/haskell/hydra/
+#   - hydra-kernel hand-written runtime (copied from dist-packages/hydra-kernel/)
+dist/haskell/hydra-kernel/src/main/haskell/Hydra/Settings.hs
+dist/haskell/hydra-kernel/src/main/haskell/Hydra/Kernel.hs
+dist/haskell/hydra-kernel/src/main/haskell/Hydra/Haskell/Lib/
+dist/haskell/hydra-kernel/src/main/haskell/Hydra/Dsl/Terms.hs
+dist/haskell/hydra-kernel/src/main/haskell/Hydra/Dsl/Literals.hs
+dist/haskell/hydra-kernel/src/main/haskell/Hydra/Dsl/Meta/Common.hs
+
 dist/clojure/
 dist/common-lisp/
 dist/coq/

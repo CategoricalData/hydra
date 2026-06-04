@@ -38,6 +38,17 @@ dependencies:
 library:
   source-dirs:
     - src/main/haskell
+    # NOTE: the hand-written kernel runtime (Hydra.Settings, Hydra.Kernel,
+    # Hydra.Haskell.Lib.*, Hydra.Dsl.{Terms,Literals,Meta.Common}) is deliberately
+    # NOT on the head's compile path. Its canonical source lives, uncompiled, in
+    # overlay/haskell/hydra-kernel/ (top-level overlay/ tree); sync-haskell.sh
+    # overlays it INTO dist/haskell/hydra-kernel/, already a source-dir below — so the head
+    # compiles those modules from the dist copy, exactly once. Adding the overlay
+    # tree here too would double-compile them. This mirrors how the Java/Python
+    # heads compile the kernel runtime only from the dist/ copy, and is
+    # forward-compatible with the planned switch to a hydra-kernel-0.16.0 package
+    # dependency: the runtime will then come from the dependency, with no local
+    # copy on the head's compile path to conflict with it (#418).
     - ../../demos/src/main/haskell
     - ../../dist/haskell/hydra-kernel/src/main/haskell
     - ../../dist/haskell/hydra-haskell/src/main/haskell
