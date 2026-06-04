@@ -4,10 +4,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "The equality type class: instances support structural equality."}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "The equality type class: instances support structural equality."}}}]},
             "body": {
               "record": {
                 "fields": [{"name": "description", "term": {"literal": {"string": "Equality: instances support structural equality."}}}],
@@ -18,10 +19,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "The ordering type class: instances support total ordering (and equality)."}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "The ordering type class: instances support total ordering (and equality)."}}}]},
             "body": {
               "record": {
                 "fields": [{"name": "description", "term": {"literal": {"string": "Ordering: instances support total ordering (and equality)."}}}],

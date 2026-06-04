@@ -4,10 +4,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "The colon operator used to separate keys and values in JSON objects"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "The colon operator used to separate keys and values in JSON objects"}}}]},
             "body": {
               "record": {
                 "fields": [
@@ -33,12 +34,13 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {
-                    "string": "Encode a byte (0..255) as a two-character lowercase hex string. Non-byte inputs yield placeholder '?' characters."}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {
+                      "string": "Encode a byte (0..255) as a two-character lowercase hex string. Non-byte inputs yield placeholder '?' characters."}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -137,7 +139,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Escape and quote a string for JSON output"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Escape and quote a string for JSON output"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -335,7 +338,9 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a key-value pair to an AST expression"}}}],
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a key-value pair to an AST expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -390,7 +395,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a JSON value to a string"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Serialize a JSON value to a string"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -408,8 +413,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {"key": "description", "value": {"literal": {"string": "Convert a JSON value to an AST expression for serialization"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Convert a JSON value to an AST expression for serialization"}}}]},
             "body": {
               "lambda": {
                 "body": {

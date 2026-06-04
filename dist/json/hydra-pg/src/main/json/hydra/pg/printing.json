@@ -6,7 +6,9 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Print an edge using the provided value printer"}}}],
+                "annotation": {
+                  "map": [
+                    {"key": {"variable": "description"}, "value": {"literal": {"string": "Print an edge using the provided value printer"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -153,7 +155,9 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Print a graph using the provided value printer"}}}],
+                "annotation": {
+                  "map": [
+                    {"key": {"variable": "description"}, "value": {"literal": {"string": "Print a graph using the provided value printer"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -221,7 +225,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Print a lazy graph using the provided value printer"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Print a lazy graph using the provided value printer"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -344,7 +352,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Print a property using the provided value printer"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Print a property using the provided value printer"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -383,7 +395,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Print a vertex using the provided value printer"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Print a vertex using the provided value printer"}}}]},
                 "body": {
                   "lambda": {
                     "body": {

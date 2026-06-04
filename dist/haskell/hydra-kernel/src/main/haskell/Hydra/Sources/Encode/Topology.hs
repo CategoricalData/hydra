@@ -67,8 +67,8 @@ module_ =
                                 Core.applicationArgument = (Core.TermVariable (Core.Name "hydra.encode.topology.vertex"))})),
                               Core.applicationArgument = (Core.TermVariable (Core.Name "xs"))}))}}))}))})),
                     Core.applicationArgument = (Core.TermVariable (Core.Name "m"))}))}}))})),
-            Core.annotatedTermAnnotation = (M.fromList [
-              (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Encoder for hydra.topology.Graph")))])}))}),
+            Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
+              (Core.TermVariable (Core.Name "description"), (Core.TermLiteral (Core.LiteralString "Encoder for hydra.topology.Graph")))]))}))}),
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.encode.topology.tarjanState"),
           Packaging.termDefinitionMetadata = Nothing,
@@ -319,8 +319,10 @@ module_ =
                                       Core.projectionTypeName = (Core.Name "hydra.topology.TarjanState"),
                                       Core.projectionFieldName = (Core.Name "sccs")})),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))})),
-            Core.annotatedTermAnnotation = (M.fromList [
-              (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Encoder for hydra.topology.TarjanState")))])}))})),
+            Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
+              (
+                Core.TermVariable (Core.Name "description"),
+                (Core.TermLiteral (Core.LiteralString "Encoder for hydra.topology.TarjanState")))]))}))})),
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.encode.topology.vertex"),
           Packaging.termDefinitionMetadata = Nothing,
@@ -352,5 +354,5 @@ module_ =
                         Core.injectionField = Core.Field {
                           Core.fieldName = (Core.Name "int32"),
                           Core.fieldTerm = (Core.TermVariable (Core.Name "x"))}}))}}))}}))})),
-            Core.annotatedTermAnnotation = (M.fromList [
-              (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Encoder for hydra.topology.Vertex")))])}))}))]}
+            Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
+              (Core.TermVariable (Core.Name "description"), (Core.TermLiteral (Core.LiteralString "Encoder for hydra.topology.Vertex")))]))}))}))]}

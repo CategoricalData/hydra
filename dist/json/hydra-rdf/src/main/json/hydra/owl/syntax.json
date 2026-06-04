@@ -118,7 +118,9 @@
         "body": {
           "body": {
             "annotated": {
-              "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/owl2-syntax/#Classes"}}}],
+              "annotation": {
+                "map": [
+                  {"key": {"variable": "description"}, "value": {"literal": {"string": "See https://www.w3.org/TR/owl2-syntax/#Classes"}}}]},
               "body": {"wrap": {"unit": {}}}}},
           "variables": []},
         "name": "hydra.owl.syntax.Class"}},
@@ -127,19 +129,24 @@
         "body": {
           "body": {
             "annotated": {
-              "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/owl2-syntax/#Datatypes"}}}],
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "See https://www.w3.org/TR/owl2-syntax/#Datatypes"}}}]},
               "body": {
                 "union": [
                   {
                     "name": "xmlSchema",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {
-                              "literal": {
-                                "string": "Note: XML Schema datatypes are treated as a special case in this model (not in the OWL 2 specification itself) because they are particularly common"}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {
+                                "literal": {
+                                  "string": "Note: XML Schema datatypes are treated as a special case in this model (not in the OWL 2 specification itself) because they are particularly common"}}}]},
                         "body": {"variable": "hydra.xml.schema.Datatype"}}}},
                   {"name": "other", "type": {"variable": "hydra.rdf.syntax.Iri"}}]}}},
           "variables": []},
@@ -149,7 +156,11 @@
         "body": {
           "body": {
             "annotated": {
-              "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/owl2-syntax/#Object_Properties"}}}],
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "See https://www.w3.org/TR/owl2-syntax/#Object_Properties"}}}]},
               "body": {"wrap": {"unit": {}}}}},
           "variables": []},
         "name": "hydra.owl.syntax.ObjectProperty"}},
@@ -188,7 +199,11 @@
         "body": {
           "body": {
             "annotated": {
-              "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/owl2-syntax/#Data_Ranges"}}}],
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "See https://www.w3.org/TR/owl2-syntax/#Data_Ranges"}}}]},
               "body": {
                 "union": [
                   {"name": "dataComplementOf", "type": {"variable": "hydra.owl.syntax.DataComplementOf"}},
@@ -204,10 +219,11 @@
         "body": {
           "body": {
             "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {"literal": {"string": "See https://www.w3.org/TR/owl2-syntax/#Intersection_of_Data_Ranges"}}}],
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "See https://www.w3.org/TR/owl2-syntax/#Intersection_of_Data_Ranges"}}}]},
               "body": {"wrap": {"list": {"variable": "hydra.owl.syntax.DataRange"}}}}},
           "variables": []},
         "name": "hydra.owl.syntax.DataIntersectionOf"}},
@@ -216,8 +232,11 @@
         "body": {
           "body": {
             "annotated": {
-              "annotation": [
-                {"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/owl2-syntax/#Union_of_Data_Ranges"}}}],
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "See https://www.w3.org/TR/owl2-syntax/#Union_of_Data_Ranges"}}}]},
               "body": {"wrap": {"list": {"variable": "hydra.owl.syntax.DataRange"}}}}},
           "variables": []},
         "name": "hydra.owl.syntax.DataUnionOf"}},
@@ -226,10 +245,11 @@
         "body": {
           "body": {
             "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {"literal": {"string": "See https://www.w3.org/TR/owl2-syntax/#Complement_of_Data_Ranges"}}}],
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "See https://www.w3.org/TR/owl2-syntax/#Complement_of_Data_Ranges"}}}]},
               "body": {"wrap": {"variable": "hydra.owl.syntax.DataRange"}}}},
           "variables": []},
         "name": "hydra.owl.syntax.DataComplementOf"}},
@@ -238,10 +258,11 @@
         "body": {
           "body": {
             "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {"literal": {"string": "See https://www.w3.org/TR/owl2-syntax/#Enumeration_of_Literals"}}}],
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "See https://www.w3.org/TR/owl2-syntax/#Enumeration_of_Literals"}}}]},
               "body": {"wrap": {"list": {"variable": "hydra.rdf.syntax.Literal"}}}}},
           "variables": []},
         "name": "hydra.owl.syntax.DataOneOf"}},
@@ -250,8 +271,11 @@
         "body": {
           "body": {
             "annotated": {
-              "annotation": [
-                {"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/owl2-syntax/#Datatype_Restrictions"}}}],
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "See https://www.w3.org/TR/owl2-syntax/#Datatype_Restrictions"}}}]},
               "body": {
                 "record": [
                   {"name": "datatype", "type": {"variable": "hydra.owl.syntax.Datatype"}},
@@ -276,12 +300,13 @@
                 "name": "xmlSchema",
                 "type": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {
-                          "literal": {
-                            "string": "Note: XML Schema constraining facets are treated as a special case in this model (not in the OWL 2 specification itself) because they are particularly common"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {
+                            "literal": {
+                              "string": "Note: XML Schema constraining facets are treated as a special case in this model (not in the OWL 2 specification itself) because they are particularly common"}}}]},
                     "body": {"variable": "hydra.xml.schema.ConstrainingFacet"}}}},
               {"name": "other", "type": {"variable": "hydra.rdf.syntax.Iri"}}]},
           "variables": []},
@@ -362,7 +387,11 @@
         "body": {
           "body": {
             "annotated": {
-              "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/owl2-syntax/#Minimum_Cardinality"}}}],
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "See https://www.w3.org/TR/owl2-syntax/#Minimum_Cardinality"}}}]},
               "body": {
                 "record": [
                   {"name": "bound", "type": {"literal": {"integer": {"bigint": {}}}}},
@@ -375,7 +404,11 @@
         "body": {
           "body": {
             "annotated": {
-              "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/owl2-syntax/#Maximum_Cardinality"}}}],
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "See https://www.w3.org/TR/owl2-syntax/#Maximum_Cardinality"}}}]},
               "body": {
                 "record": [
                   {"name": "bound", "type": {"literal": {"integer": {"bigint": {}}}}},
@@ -388,7 +421,11 @@
         "body": {
           "body": {
             "annotated": {
-              "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/owl2-syntax/#Exact_Cardinality"}}}],
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "See https://www.w3.org/TR/owl2-syntax/#Exact_Cardinality"}}}]},
               "body": {
                 "record": [
                   {"name": "bound", "type": {"literal": {"integer": {"bigint": {}}}}},
@@ -458,7 +495,9 @@
         "body": {
           "body": {
             "annotated": {
-              "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/owl2-syntax/#Axioms"}}}],
+              "annotation": {
+                "map": [
+                  {"key": {"variable": "description"}, "value": {"literal": {"string": "See https://www.w3.org/TR/owl2-syntax/#Axioms"}}}]},
               "body": {
                 "union": [
                   {"name": "annotationAxiom", "type": {"variable": "hydra.owl.syntax.AnnotationAxiom"}},
@@ -515,10 +554,11 @@
         "body": {
           "body": {
             "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {"literal": {"string": "See https://www.w3.org/TR/owl2-syntax/#Disjoint_Union_of_Class_Expressions"}}}],
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "See https://www.w3.org/TR/owl2-syntax/#Disjoint_Union_of_Class_Expressions"}}}]},
               "body": {
                 "record": [
                   {"name": "annotations", "type": {"list": {"variable": "hydra.owl.syntax.Annotation"}}},
@@ -579,10 +619,11 @@
         "body": {
           "body": {
             "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {"literal": {"string": "See https://www.w3.org/TR/owl2-syntax/#Object_Property_Domain"}}}],
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "See https://www.w3.org/TR/owl2-syntax/#Object_Property_Domain"}}}]},
               "body": {
                 "record": [
                   {"name": "annotations", "type": {"list": {"variable": "hydra.owl.syntax.Annotation"}}},
@@ -595,8 +636,11 @@
         "body": {
           "body": {
             "annotated": {
-              "annotation": [
-                {"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/owl2-syntax/#Object_Property_Range"}}}],
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "See https://www.w3.org/TR/owl2-syntax/#Object_Property_Range"}}}]},
               "body": {
                 "record": [
                   {"name": "annotations", "type": {"list": {"variable": "hydra.owl.syntax.Annotation"}}},
@@ -762,7 +806,8 @@
         "body": {
           "body": {
             "annotated": {
-              "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/owl2-syntax/#Keys"}}}],
+              "annotation": {
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "See https://www.w3.org/TR/owl2-syntax/#Keys"}}}]},
               "body": {
                 "record": [
                   {"name": "annotations", "type": {"list": {"variable": "hydra.owl.syntax.Annotation"}}},

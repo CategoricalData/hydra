@@ -243,7 +243,7 @@ metadataIsPreserved = do
         annotatedStringType
   where
     annotatedStringType :: Type
-    annotatedStringType = TypeAnnotated $ AnnotatedType Types.string $ M.fromList [
+    annotatedStringType = TypeAnnotated $ AnnotatedType Types.string $ Terms.annotationMapAsTerm $ M.fromList [
       (keyDescription, Terms.string "The string literal type"),
       (keyType, EncodeCore.type_ $ TypeVariable _Type)]
 

@@ -4,10 +4,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the constant variant of hydra.java.environment.JavaSymbolClass"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the constant variant of hydra.java.environment.JavaSymbolClass"}}}]},
             "body": {
               "wrap": {
                 "body": {
@@ -42,10 +43,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the nullaryFunction variant of hydra.java.environment.JavaSymbolClass"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the nullaryFunction variant of hydra.java.environment.JavaSymbolClass"}}}]},
             "body": {
               "wrap": {
                 "body": {
@@ -80,10 +82,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the hoistedLambda variant of hydra.java.environment.JavaSymbolClass"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the hoistedLambda variant of hydra.java.environment.JavaSymbolClass"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -115,10 +118,11 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "A hoisted lambda wrapped in type lambdas. The Int is the number of curried lambda parameters."}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "A hoisted lambda wrapped in type lambdas. The Int is the number of curried lambda parameters."}}}]},
                         "body": {"literal": {"integer": {"int32": {}}}}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}},
@@ -132,10 +136,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "A hoisted lambda wrapped in type lambdas. The Int is the number of curried lambda parameters."}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "A hoisted lambda wrapped in type lambdas. The Int is the number of curried lambda parameters."}}}]},
                       "body": {"literal": {"integer": {"int32": {}}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -146,10 +151,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the unaryFunction variant of hydra.java.environment.JavaSymbolClass"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the unaryFunction variant of hydra.java.environment.JavaSymbolClass"}}}]},
             "body": {
               "wrap": {
                 "body": {
@@ -184,10 +190,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the localVariable variant of hydra.java.environment.JavaSymbolClass"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the localVariable variant of hydra.java.environment.JavaSymbolClass"}}}]},
             "body": {
               "wrap": {
                 "body": {
@@ -222,7 +229,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for hydra.java.environment.JavaFeatures"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL constructor for hydra.java.environment.JavaFeatures"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -258,7 +269,11 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "Whether the diamond operator (<>) is supported (Java 7+)"}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "Whether the diamond operator (<>) is supported (Java 7+)"}}}]},
                         "body": {"literal": {"boolean": {}}}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "supportsDiamondOperator"}}}},
@@ -272,7 +287,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "Whether the diamond operator (<>) is supported (Java 7+)"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "Whether the diamond operator (<>) is supported (Java 7+)"}}}]},
                       "body": {"literal": {"boolean": {}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -283,10 +302,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the supportsDiamondOperator field of hydra.java.environment.JavaFeatures"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the supportsDiamondOperator field of hydra.java.environment.JavaFeatures"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -337,7 +357,11 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "Whether the diamond operator (<>) is supported (Java 7+)"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "Whether the diamond operator (<>) is supported (Java 7+)"}}}]},
                     "body": {"literal": {"boolean": {}}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -345,10 +369,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the supportsDiamondOperator field of hydra.java.environment.JavaFeatures"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the supportsDiamondOperator field of hydra.java.environment.JavaFeatures"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -386,7 +411,11 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "Whether the diamond operator (<>) is supported (Java 7+)"}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {"literal": {"string": "Whether the diamond operator (<>) is supported (Java 7+)"}}}]},
                             "body": {"literal": {"boolean": {}}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -408,7 +437,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "Whether the diamond operator (<>) is supported (Java 7+)"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "Whether the diamond operator (<>) is supported (Java 7+)"}}}]},
                       "body": {"literal": {"boolean": {}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -419,7 +452,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for hydra.java.environment.Aliases"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL constructor for hydra.java.environment.Aliases"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -577,10 +614,11 @@
                                                                   "application": {
                                                                     "argument": {
                                                                       "annotated": {
-                                                                        "annotation": [
-                                                                          {
-                                                                            "key": "description",
-                                                                            "value": {"literal": {"string": "Variables that have been thunked (wrapped in Supplier) for lazy evaluation"}}}],
+                                                                        "annotation": {
+                                                                          "map": [
+                                                                            {
+                                                                              "key": {"variable": "description"},
+                                                                              "value": {"literal": {"string": "Variables that have been thunked (wrapped in Supplier) for lazy evaluation"}}}]},
                                                                         "body": {"set": {"variable": "hydra.core.Name"}}}},
                                                                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                                                                 "parameter": "thunkedVars"}},
@@ -588,10 +626,11 @@
                                                               "application": {
                                                                 "argument": {
                                                                   "annotated": {
-                                                                    "annotation": [
-                                                                      {
-                                                                        "key": "description",
-                                                                        "value": {"literal": {"string": "The enclosing method's codomain (return type), used for casting pair expressions"}}}],
+                                                                    "annotation": {
+                                                                      "map": [
+                                                                        {
+                                                                          "key": {"variable": "description"},
+                                                                          "value": {"literal": {"string": "The enclosing method's codomain (return type), used for casting pair expressions"}}}]},
                                                                     "body": {"maybe": {"variable": "hydra.core.Type"}}}},
                                                                 "function": {"variable": "hydra.typed.TypedTerm"}}},
                                                             "parameter": "methodCodomain"}},
@@ -599,10 +638,11 @@
                                                           "application": {
                                                             "argument": {
                                                               "annotated": {
-                                                                "annotation": [
-                                                                  {
-                                                                    "key": "description",
-                                                                    "value": {"literal": {"string": "Type variables that actually appear in the method's formal parameter types"}}}],
+                                                                "annotation": {
+                                                                  "map": [
+                                                                    {
+                                                                      "key": {"variable": "description"},
+                                                                      "value": {"literal": {"string": "Type variables that actually appear in the method's formal parameter types"}}}]},
                                                                 "body": {"set": {"variable": "hydra.core.Name"}}}},
                                                             "function": {"variable": "hydra.typed.TypedTerm"}}},
                                                         "parameter": "trustedTypeVars"}},
@@ -610,11 +650,12 @@
                                                       "application": {
                                                         "argument": {
                                                           "annotated": {
-                                                            "annotation": [
-                                                              {
-                                                                "key": "description",
-                                                                "value": {
-                                                                  "literal": {"string": "Type variable substitution: maps fresh inference variable names to canonical scheme variable names"}}}],
+                                                            "annotation": {
+                                                              "map": [
+                                                                {
+                                                                  "key": {"variable": "description"},
+                                                                  "value": {
+                                                                    "literal": {"string": "Type variable substitution: maps fresh inference variable names to canonical scheme variable names"}}}]},
                                                             "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Name"}}}}},
                                                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                                                     "parameter": "typeVarSubst"}},
@@ -622,10 +663,11 @@
                                                   "application": {
                                                     "argument": {
                                                       "annotated": {
-                                                        "annotation": [
-                                                          {
-                                                            "key": "description",
-                                                            "value": {"literal": {"string": "Lambda-bound variables (including hoisted captures with qualified names)"}}}],
+                                                        "annotation": {
+                                                          "map": [
+                                                            {
+                                                              "key": {"variable": "description"},
+                                                              "value": {"literal": {"string": "Lambda-bound variables (including hoisted captures with qualified names)"}}}]},
                                                         "body": {"set": {"variable": "hydra.core.Name"}}}},
                                                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                                                 "parameter": "lambdaVars"}},
@@ -633,10 +675,11 @@
                                               "application": {
                                                 "argument": {
                                                   "annotated": {
-                                                    "annotation": [
-                                                      {
-                                                        "key": "description",
-                                                        "value": {"literal": {"string": "Variable renames for avoiding shadowing (maps Hydra name to Java name)"}}}],
+                                                    "annotation": {
+                                                      "map": [
+                                                        {
+                                                          "key": {"variable": "description"},
+                                                          "value": {"literal": {"string": "Variable renames for avoiding shadowing (maps Hydra name to Java name)"}}}]},
                                                     "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Name"}}}}},
                                                 "function": {"variable": "hydra.typed.TypedTerm"}}},
                                             "parameter": "varRenames"}},
@@ -644,10 +687,11 @@
                                           "application": {
                                             "argument": {
                                               "annotated": {
-                                                "annotation": [
-                                                  {
-                                                    "key": "description",
-                                                    "value": {"literal": {"string": "All in-scope Java variable names (for avoiding lambda parameter shadowing)"}}}],
+                                                "annotation": {
+                                                  "map": [
+                                                    {
+                                                      "key": {"variable": "description"},
+                                                      "value": {"literal": {"string": "All in-scope Java variable names (for avoiding lambda parameter shadowing)"}}}]},
                                                 "body": {"set": {"variable": "hydra.core.Name"}}}},
                                             "function": {"variable": "hydra.typed.TypedTerm"}}},
                                         "parameter": "inScopeJavaVars"}},
@@ -655,10 +699,11 @@
                                       "application": {
                                         "argument": {
                                           "annotated": {
-                                            "annotation": [
-                                              {
-                                                "key": "description",
-                                                "value": {"literal": {"string": "Local variables that have polymorphic types (declared with raw types)"}}}],
+                                            "annotation": {
+                                              "map": [
+                                                {
+                                                  "key": {"variable": "description"},
+                                                  "value": {"literal": {"string": "Local variables that have polymorphic types (declared with raw types)"}}}]},
                                             "body": {"set": {"variable": "hydra.core.Name"}}}},
                                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                                     "parameter": "polymorphicLocals"}},
@@ -666,10 +711,11 @@
                                   "application": {
                                     "argument": {
                                       "annotated": {
-                                        "annotation": [
-                                          {
-                                            "key": "description",
-                                            "value": {"literal": {"string": "Type parameters that are in scope (from method-level type parameters)"}}}],
+                                        "annotation": {
+                                          "map": [
+                                            {
+                                              "key": {"variable": "description"},
+                                              "value": {"literal": {"string": "Type parameters that are in scope (from method-level type parameters)"}}}]},
                                         "body": {"set": {"variable": "hydra.core.Name"}}}},
                                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                                 "parameter": "inScopeTypeParams"}},
@@ -677,7 +723,7 @@
                               "application": {
                                 "argument": {
                                   "annotated": {
-                                    "annotation": [{"key": "description", "value": {"literal": {"string": "Variables that are self-recursive"}}}],
+                                    "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Variables that are self-recursive"}}}]},
                                     "body": {"set": {"variable": "hydra.core.Name"}}}},
                                 "function": {"variable": "hydra.typed.TypedTerm"}}},
                             "parameter": "recursiveVars"}},
@@ -685,7 +731,8 @@
                           "application": {
                             "argument": {
                               "annotated": {
-                                "annotation": [{"key": "description", "value": {"literal": {"string": "Variables bound in pattern matching branches"}}}],
+                                "annotation": {
+                                  "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Variables bound in pattern matching branches"}}}]},
                                 "body": {"set": {"variable": "hydra.core.Name"}}}},
                             "function": {"variable": "hydra.typed.TypedTerm"}}},
                         "parameter": "branchVars"}},
@@ -693,7 +740,8 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "Maps namespaces to Java package names"}}}],
+                            "annotation": {
+                              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Maps namespaces to Java package names"}}}]},
                             "body": {"map": {"keys": {"variable": "hydra.packaging.ModuleName"}, "values": {"variable": "hydra.java.syntax.PackageName"}}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "packages"}},
@@ -701,7 +749,7 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "Current module namespace context"}}}],
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Current module namespace context"}}}]},
                         "body": {"variable": "hydra.packaging.ModuleName"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "currentNamespace"}}}},
@@ -715,7 +763,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "Current module namespace context"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Current module namespace context"}}}]},
                       "body": {"variable": "hydra.packaging.ModuleName"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -725,7 +773,8 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "Maps namespaces to Java package names"}}}],
+                      "annotation": {
+                        "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Maps namespaces to Java package names"}}}]},
                       "body": {"map": {"keys": {"variable": "hydra.packaging.ModuleName"}, "values": {"variable": "hydra.java.syntax.PackageName"}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -735,7 +784,8 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "Variables bound in pattern matching branches"}}}],
+                      "annotation": {
+                        "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Variables bound in pattern matching branches"}}}]},
                       "body": {"set": {"variable": "hydra.core.Name"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -745,7 +795,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "Variables that are self-recursive"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Variables that are self-recursive"}}}]},
                       "body": {"set": {"variable": "hydra.core.Name"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -755,10 +805,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "Type parameters that are in scope (from method-level type parameters)"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "Type parameters that are in scope (from method-level type parameters)"}}}]},
                       "body": {"set": {"variable": "hydra.core.Name"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -768,10 +819,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "Local variables that have polymorphic types (declared with raw types)"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "Local variables that have polymorphic types (declared with raw types)"}}}]},
                       "body": {"set": {"variable": "hydra.core.Name"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -781,10 +833,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "All in-scope Java variable names (for avoiding lambda parameter shadowing)"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "All in-scope Java variable names (for avoiding lambda parameter shadowing)"}}}]},
                       "body": {"set": {"variable": "hydra.core.Name"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -794,10 +847,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "Variable renames for avoiding shadowing (maps Hydra name to Java name)"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "Variable renames for avoiding shadowing (maps Hydra name to Java name)"}}}]},
                       "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Name"}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -807,10 +861,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "Lambda-bound variables (including hoisted captures with qualified names)"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "Lambda-bound variables (including hoisted captures with qualified names)"}}}]},
                       "body": {"set": {"variable": "hydra.core.Name"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -820,11 +875,12 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {
-                            "literal": {"string": "Type variable substitution: maps fresh inference variable names to canonical scheme variable names"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {
+                              "literal": {"string": "Type variable substitution: maps fresh inference variable names to canonical scheme variable names"}}}]},
                       "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Name"}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -834,10 +890,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "Type variables that actually appear in the method's formal parameter types"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "Type variables that actually appear in the method's formal parameter types"}}}]},
                       "body": {"set": {"variable": "hydra.core.Name"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -847,10 +904,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "The enclosing method's codomain (return type), used for casting pair expressions"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "The enclosing method's codomain (return type), used for casting pair expressions"}}}]},
                       "body": {"maybe": {"variable": "hydra.core.Type"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -860,10 +918,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "Variables that have been thunked (wrapped in Supplier) for lazy evaluation"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "Variables that have been thunked (wrapped in Supplier) for lazy evaluation"}}}]},
                       "body": {"set": {"variable": "hydra.core.Name"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -874,10 +933,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the currentNamespace field of hydra.java.environment.Aliases"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the currentNamespace field of hydra.java.environment.Aliases"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -928,7 +988,7 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "Current module namespace context"}}}],
+                    "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Current module namespace context"}}}]},
                     "body": {"variable": "hydra.packaging.ModuleName"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -936,10 +996,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the packages field of hydra.java.environment.Aliases"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the packages field of hydra.java.environment.Aliases"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -988,7 +1049,8 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "Maps namespaces to Java package names"}}}],
+                    "annotation": {
+                      "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Maps namespaces to Java package names"}}}]},
                     "body": {"map": {"keys": {"variable": "hydra.packaging.ModuleName"}, "values": {"variable": "hydra.java.syntax.PackageName"}}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -996,10 +1058,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the branchVars field of hydra.java.environment.Aliases"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the branchVars field of hydra.java.environment.Aliases"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1048,7 +1111,8 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "Variables bound in pattern matching branches"}}}],
+                    "annotation": {
+                      "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Variables bound in pattern matching branches"}}}]},
                     "body": {"set": {"variable": "hydra.core.Name"}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -1056,10 +1120,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the recursiveVars field of hydra.java.environment.Aliases"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the recursiveVars field of hydra.java.environment.Aliases"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1110,7 +1175,7 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "Variables that are self-recursive"}}}],
+                    "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Variables that are self-recursive"}}}]},
                     "body": {"set": {"variable": "hydra.core.Name"}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -1118,10 +1183,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the inScopeTypeParams field of hydra.java.environment.Aliases"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the inScopeTypeParams field of hydra.java.environment.Aliases"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1172,10 +1238,11 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {"literal": {"string": "Type parameters that are in scope (from method-level type parameters)"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "Type parameters that are in scope (from method-level type parameters)"}}}]},
                     "body": {"set": {"variable": "hydra.core.Name"}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -1183,10 +1250,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the polymorphicLocals field of hydra.java.environment.Aliases"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the polymorphicLocals field of hydra.java.environment.Aliases"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1237,10 +1305,11 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {"literal": {"string": "Local variables that have polymorphic types (declared with raw types)"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "Local variables that have polymorphic types (declared with raw types)"}}}]},
                     "body": {"set": {"variable": "hydra.core.Name"}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -1248,10 +1317,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the inScopeJavaVars field of hydra.java.environment.Aliases"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the inScopeJavaVars field of hydra.java.environment.Aliases"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1302,10 +1372,11 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {"literal": {"string": "All in-scope Java variable names (for avoiding lambda parameter shadowing)"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "All in-scope Java variable names (for avoiding lambda parameter shadowing)"}}}]},
                     "body": {"set": {"variable": "hydra.core.Name"}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -1313,10 +1384,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the varRenames field of hydra.java.environment.Aliases"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the varRenames field of hydra.java.environment.Aliases"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1365,10 +1437,11 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {"literal": {"string": "Variable renames for avoiding shadowing (maps Hydra name to Java name)"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "Variable renames for avoiding shadowing (maps Hydra name to Java name)"}}}]},
                     "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Name"}}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -1376,10 +1449,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the lambdaVars field of hydra.java.environment.Aliases"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the lambdaVars field of hydra.java.environment.Aliases"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1428,10 +1502,11 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {"literal": {"string": "Lambda-bound variables (including hoisted captures with qualified names)"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "Lambda-bound variables (including hoisted captures with qualified names)"}}}]},
                     "body": {"set": {"variable": "hydra.core.Name"}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -1439,10 +1514,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the typeVarSubst field of hydra.java.environment.Aliases"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the typeVarSubst field of hydra.java.environment.Aliases"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1493,11 +1569,12 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {
-                          "literal": {"string": "Type variable substitution: maps fresh inference variable names to canonical scheme variable names"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {
+                            "literal": {"string": "Type variable substitution: maps fresh inference variable names to canonical scheme variable names"}}}]},
                     "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Name"}}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -1505,10 +1582,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the trustedTypeVars field of hydra.java.environment.Aliases"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the trustedTypeVars field of hydra.java.environment.Aliases"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1559,10 +1637,11 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {"literal": {"string": "Type variables that actually appear in the method's formal parameter types"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "Type variables that actually appear in the method's formal parameter types"}}}]},
                     "body": {"set": {"variable": "hydra.core.Name"}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -1570,10 +1649,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the methodCodomain field of hydra.java.environment.Aliases"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the methodCodomain field of hydra.java.environment.Aliases"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1624,10 +1704,11 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {"literal": {"string": "The enclosing method's codomain (return type), used for casting pair expressions"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "The enclosing method's codomain (return type), used for casting pair expressions"}}}]},
                     "body": {"maybe": {"variable": "hydra.core.Type"}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -1635,10 +1716,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the thunkedVars field of hydra.java.environment.Aliases"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the thunkedVars field of hydra.java.environment.Aliases"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1687,10 +1769,11 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {"literal": {"string": "Variables that have been thunked (wrapped in Supplier) for lazy evaluation"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "Variables that have been thunked (wrapped in Supplier) for lazy evaluation"}}}]},
                     "body": {"set": {"variable": "hydra.core.Name"}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -1698,10 +1781,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the currentNamespace field of hydra.java.environment.Aliases"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the currentNamespace field of hydra.java.environment.Aliases"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2163,7 +2247,7 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "Current module namespace context"}}}],
+                            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Current module namespace context"}}}]},
                             "body": {"variable": "hydra.packaging.ModuleName"}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -2185,7 +2269,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "Current module namespace context"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Current module namespace context"}}}]},
                       "body": {"variable": "hydra.packaging.ModuleName"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -2196,10 +2280,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the packages field of hydra.java.environment.Aliases"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the packages field of hydra.java.environment.Aliases"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2663,7 +2748,8 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "Maps namespaces to Java package names"}}}],
+                            "annotation": {
+                              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Maps namespaces to Java package names"}}}]},
                             "body": {"map": {"keys": {"variable": "hydra.packaging.ModuleName"}, "values": {"variable": "hydra.java.syntax.PackageName"}}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -2685,7 +2771,8 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "Maps namespaces to Java package names"}}}],
+                      "annotation": {
+                        "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Maps namespaces to Java package names"}}}]},
                       "body": {"map": {"keys": {"variable": "hydra.packaging.ModuleName"}, "values": {"variable": "hydra.java.syntax.PackageName"}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -2696,10 +2783,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the branchVars field of hydra.java.environment.Aliases"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the branchVars field of hydra.java.environment.Aliases"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3163,7 +3251,8 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "Variables bound in pattern matching branches"}}}],
+                            "annotation": {
+                              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Variables bound in pattern matching branches"}}}]},
                             "body": {"set": {"variable": "hydra.core.Name"}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -3185,7 +3274,8 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "Variables bound in pattern matching branches"}}}],
+                      "annotation": {
+                        "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Variables bound in pattern matching branches"}}}]},
                       "body": {"set": {"variable": "hydra.core.Name"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -3196,10 +3286,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the recursiveVars field of hydra.java.environment.Aliases"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the recursiveVars field of hydra.java.environment.Aliases"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3661,7 +3752,7 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "Variables that are self-recursive"}}}],
+                            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Variables that are self-recursive"}}}]},
                             "body": {"set": {"variable": "hydra.core.Name"}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -3683,7 +3774,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "Variables that are self-recursive"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Variables that are self-recursive"}}}]},
                       "body": {"set": {"variable": "hydra.core.Name"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -3694,10 +3785,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the inScopeTypeParams field of hydra.java.environment.Aliases"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the inScopeTypeParams field of hydra.java.environment.Aliases"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4159,10 +4251,11 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [
-                              {
-                                "key": "description",
-                                "value": {"literal": {"string": "Type parameters that are in scope (from method-level type parameters)"}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {"literal": {"string": "Type parameters that are in scope (from method-level type parameters)"}}}]},
                             "body": {"set": {"variable": "hydra.core.Name"}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -4184,10 +4277,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "Type parameters that are in scope (from method-level type parameters)"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "Type parameters that are in scope (from method-level type parameters)"}}}]},
                       "body": {"set": {"variable": "hydra.core.Name"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -4198,10 +4292,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the polymorphicLocals field of hydra.java.environment.Aliases"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the polymorphicLocals field of hydra.java.environment.Aliases"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4663,10 +4758,11 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [
-                              {
-                                "key": "description",
-                                "value": {"literal": {"string": "Local variables that have polymorphic types (declared with raw types)"}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {"literal": {"string": "Local variables that have polymorphic types (declared with raw types)"}}}]},
                             "body": {"set": {"variable": "hydra.core.Name"}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -4688,10 +4784,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "Local variables that have polymorphic types (declared with raw types)"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "Local variables that have polymorphic types (declared with raw types)"}}}]},
                       "body": {"set": {"variable": "hydra.core.Name"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -4702,10 +4799,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the inScopeJavaVars field of hydra.java.environment.Aliases"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the inScopeJavaVars field of hydra.java.environment.Aliases"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -5167,10 +5265,11 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [
-                              {
-                                "key": "description",
-                                "value": {"literal": {"string": "All in-scope Java variable names (for avoiding lambda parameter shadowing)"}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {"literal": {"string": "All in-scope Java variable names (for avoiding lambda parameter shadowing)"}}}]},
                             "body": {"set": {"variable": "hydra.core.Name"}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -5192,10 +5291,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "All in-scope Java variable names (for avoiding lambda parameter shadowing)"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "All in-scope Java variable names (for avoiding lambda parameter shadowing)"}}}]},
                       "body": {"set": {"variable": "hydra.core.Name"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -5206,10 +5306,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the varRenames field of hydra.java.environment.Aliases"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the varRenames field of hydra.java.environment.Aliases"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -5673,10 +5774,11 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [
-                              {
-                                "key": "description",
-                                "value": {"literal": {"string": "Variable renames for avoiding shadowing (maps Hydra name to Java name)"}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {"literal": {"string": "Variable renames for avoiding shadowing (maps Hydra name to Java name)"}}}]},
                             "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Name"}}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -5698,10 +5800,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "Variable renames for avoiding shadowing (maps Hydra name to Java name)"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "Variable renames for avoiding shadowing (maps Hydra name to Java name)"}}}]},
                       "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Name"}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -5712,10 +5815,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the lambdaVars field of hydra.java.environment.Aliases"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the lambdaVars field of hydra.java.environment.Aliases"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -6179,10 +6283,11 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [
-                              {
-                                "key": "description",
-                                "value": {"literal": {"string": "Lambda-bound variables (including hoisted captures with qualified names)"}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {"literal": {"string": "Lambda-bound variables (including hoisted captures with qualified names)"}}}]},
                             "body": {"set": {"variable": "hydra.core.Name"}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -6204,10 +6309,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "Lambda-bound variables (including hoisted captures with qualified names)"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "Lambda-bound variables (including hoisted captures with qualified names)"}}}]},
                       "body": {"set": {"variable": "hydra.core.Name"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -6218,10 +6324,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the typeVarSubst field of hydra.java.environment.Aliases"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the typeVarSubst field of hydra.java.environment.Aliases"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -6683,11 +6790,12 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [
-                              {
-                                "key": "description",
-                                "value": {
-                                  "literal": {"string": "Type variable substitution: maps fresh inference variable names to canonical scheme variable names"}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {
+                                    "literal": {"string": "Type variable substitution: maps fresh inference variable names to canonical scheme variable names"}}}]},
                             "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Name"}}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -6709,11 +6817,12 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {
-                            "literal": {"string": "Type variable substitution: maps fresh inference variable names to canonical scheme variable names"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {
+                              "literal": {"string": "Type variable substitution: maps fresh inference variable names to canonical scheme variable names"}}}]},
                       "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Name"}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -6724,10 +6833,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the trustedTypeVars field of hydra.java.environment.Aliases"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the trustedTypeVars field of hydra.java.environment.Aliases"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -7189,10 +7299,11 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [
-                              {
-                                "key": "description",
-                                "value": {"literal": {"string": "Type variables that actually appear in the method's formal parameter types"}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {"literal": {"string": "Type variables that actually appear in the method's formal parameter types"}}}]},
                             "body": {"set": {"variable": "hydra.core.Name"}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -7214,10 +7325,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "Type variables that actually appear in the method's formal parameter types"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "Type variables that actually appear in the method's formal parameter types"}}}]},
                       "body": {"set": {"variable": "hydra.core.Name"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -7228,10 +7340,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the methodCodomain field of hydra.java.environment.Aliases"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the methodCodomain field of hydra.java.environment.Aliases"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -7693,10 +7806,11 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [
-                              {
-                                "key": "description",
-                                "value": {"literal": {"string": "The enclosing method's codomain (return type), used for casting pair expressions"}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {"literal": {"string": "The enclosing method's codomain (return type), used for casting pair expressions"}}}]},
                             "body": {"maybe": {"variable": "hydra.core.Type"}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -7718,10 +7832,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "The enclosing method's codomain (return type), used for casting pair expressions"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "The enclosing method's codomain (return type), used for casting pair expressions"}}}]},
                       "body": {"maybe": {"variable": "hydra.core.Type"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -7732,10 +7847,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the thunkedVars field of hydra.java.environment.Aliases"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the thunkedVars field of hydra.java.environment.Aliases"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -8199,10 +8315,11 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [
-                              {
-                                "key": "description",
-                                "value": {"literal": {"string": "Variables that have been thunked (wrapped in Supplier) for lazy evaluation"}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {"literal": {"string": "Variables that have been thunked (wrapped in Supplier) for lazy evaluation"}}}]},
                             "body": {"set": {"variable": "hydra.core.Name"}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -8224,10 +8341,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "Variables that have been thunked (wrapped in Supplier) for lazy evaluation"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "Variables that have been thunked (wrapped in Supplier) for lazy evaluation"}}}]},
                       "body": {"set": {"variable": "hydra.core.Name"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -8238,7 +8356,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for hydra.java.environment.JavaEnvironment"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL constructor for hydra.java.environment.JavaEnvironment"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -8282,7 +8404,7 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "Graph context for type inference"}}}],
+                            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Graph context for type inference"}}}]},
                             "body": {"variable": "hydra.graph.Graph"}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "graph"}},
@@ -8290,7 +8412,7 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "Aliases and context state"}}}],
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Aliases and context state"}}}]},
                         "body": {"variable": "hydra.java.environment.Aliases"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "aliases"}}}},
@@ -8304,7 +8426,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "Aliases and context state"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Aliases and context state"}}}]},
                       "body": {"variable": "hydra.java.environment.Aliases"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -8314,7 +8436,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "Graph context for type inference"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Graph context for type inference"}}}]},
                       "body": {"variable": "hydra.graph.Graph"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -8325,10 +8447,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the aliases field of hydra.java.environment.JavaEnvironment"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the aliases field of hydra.java.environment.JavaEnvironment"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -8377,7 +8500,7 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "Aliases and context state"}}}],
+                    "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Aliases and context state"}}}]},
                     "body": {"variable": "hydra.java.environment.Aliases"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -8385,10 +8508,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the graph field of hydra.java.environment.JavaEnvironment"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the graph field of hydra.java.environment.JavaEnvironment"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -8437,7 +8561,7 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "Graph context for type inference"}}}],
+                    "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Graph context for type inference"}}}]},
                     "body": {"variable": "hydra.graph.Graph"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -8445,10 +8569,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the aliases field of hydra.java.environment.JavaEnvironment"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the aliases field of hydra.java.environment.JavaEnvironment"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -8518,7 +8643,7 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "Aliases and context state"}}}],
+                            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Aliases and context state"}}}]},
                             "body": {"variable": "hydra.java.environment.Aliases"}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -8540,7 +8665,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "Aliases and context state"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Aliases and context state"}}}]},
                       "body": {"variable": "hydra.java.environment.Aliases"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -8551,10 +8676,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the graph field of hydra.java.environment.JavaEnvironment"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the graph field of hydra.java.environment.JavaEnvironment"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -8624,7 +8750,7 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "Graph context for type inference"}}}],
+                            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Graph context for type inference"}}}]},
                             "body": {"variable": "hydra.graph.Graph"}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -8646,7 +8772,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "Graph context for type inference"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Graph context for type inference"}}}]},
                       "body": {"variable": "hydra.graph.Graph"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {

@@ -4,7 +4,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Strip type annotations from the top levels of a term"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Strip type annotations from the top levels of a term"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -61,10 +65,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Strip all annotations (including System F type annotations) from the top levels of a term"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Strip all annotations (including System F type annotations) from the top levels of a term"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -97,7 +102,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Strip all annotations from a term"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Strip all annotations from a term"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -132,10 +137,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Strip any top-level type lambdas from a type, extracting the (possibly nested) type body"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Strip any top-level type lambdas from a type, extracting the (possibly nested) type body"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -168,7 +174,9 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Recursively strip all annotations from a type"}}}],
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "Recursively strip all annotations from a type"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -234,7 +242,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Recursively strip all annotations from a type scheme"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Recursively strip all annotations from a type scheme"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -288,12 +300,13 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {
-                    "string": "Strip System F type annotations from the top levels of a term, but leave application-specific annotations intact"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {
+                      "string": "Strip System F type annotations from the top levels of a term, but leave application-specific annotations intact"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -322,7 +335,7 @@
                                               "application": {
                                                 "argument": {"variable": "at"},
                                                 "function": {"project": {"fieldName": "annotation", "typeName": "hydra.core.AnnotatedTerm"}}}},
-                                            "typeScheme": {"body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Term"}}}, "variables": []}}],
+                                            "typeScheme": {"body": {"variable": "hydra.core.Term"}, "variables": []}}],
                                         "body": {
                                           "inject": {
                                             "field": {
@@ -376,10 +389,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Recursively remove term annotations, including within subterms"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Recursively remove term annotations, including within subterms"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -439,10 +453,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Recursively remove type annotations, including within subtypes"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Recursively remove type annotations, including within subtypes"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -508,12 +523,13 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {
-                    "string": "Strip type annotations (TypeLambda, TypeApplication, binding type schemes) from terms while preserving lambda domain types and other annotations"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {
+                      "string": "Strip type annotations (TypeLambda, TypeApplication, binding type schemes) from terms while preserving lambda domain types and other annotations"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -648,10 +664,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Strip type annotations from terms while preserving other annotations"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Strip type annotations from terms while preserving other annotations"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -810,11 +827,12 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {"string": "Strip outer type lambda wrappers from a term, preserving type application wrappers and annotations"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {"string": "Strip outer type lambda wrappers from a term, preserving type application wrappers and annotations"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -843,7 +861,7 @@
                                               "application": {
                                                 "argument": {"variable": "at"},
                                                 "function": {"project": {"fieldName": "annotation", "typeName": "hydra.core.AnnotatedTerm"}}}},
-                                            "typeScheme": {"body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Term"}}}, "variables": []}}],
+                                            "typeScheme": {"body": {"variable": "hydra.core.Term"}, "variables": []}}],
                                         "body": {
                                           "inject": {
                                             "field": {

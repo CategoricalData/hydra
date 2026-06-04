@@ -4,10 +4,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Convert a JSON value to a YAML node. Always succeeds since YAML is a superset of JSON."}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Convert a JSON value to a YAML node. Always succeeds since YAML is a superset of JSON."}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -175,7 +176,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Encode a Hydra term to a YAML node via JSON encoding."}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Encode a Hydra term to a YAML node via JSON encoding."}}}]},
             "body": {
               "lambda": {
                 "body": {

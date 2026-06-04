@@ -4,7 +4,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Language constraints for C++"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Language constraints for C++"}}}]},
             "body": {
               "let": {
                 "bindings": [
@@ -130,7 +130,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "A set of reserved words in C++"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A set of reserved words in C++"}}}]},
             "body": {
               "let": {
                 "bindings": [
@@ -138,7 +138,11 @@
                     "name": "cppKeywords",
                     "term": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "C++ keywords, including C++11/14/17/20 additions"}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "C++ keywords, including C++11/14/17/20 additions"}}}]},
                         "body": {
                           "list": [
                             {"literal": {"string": "alignas"}},
@@ -238,7 +242,7 @@
                     "name": "cppPreprocessor",
                     "term": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "C++ preprocessor directives"}}}],
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "C++ preprocessor directives"}}}]},
                         "body": {
                           "list": [
                             {"literal": {"string": "#define"}},
@@ -258,10 +262,11 @@
                     "name": "cppStlTypes",
                     "term": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "Common STL types and namespaces that should be treated as reserved"}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "Common STL types and namespaces that should be treated as reserved"}}}]},
                         "body": {
                           "list": [
                             {"literal": {"string": "std"}},
@@ -297,7 +302,8 @@
                       "typeLambda": {
                         "body": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "Reserved words which are specific to Hydra"}}}],
+                            "annotation": {
+                              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Reserved words which are specific to Hydra"}}}]},
                             "body": {"typeApplication": {"body": {"list": []}, "type": {"variable": "t0"}}}}},
                         "parameter": "t0"}},
                     "typeScheme": {"body": {"list": {"variable": "t0"}}, "variables": ["t0"]}}],

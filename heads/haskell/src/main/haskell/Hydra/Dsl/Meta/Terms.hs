@@ -13,6 +13,7 @@ import qualified Hydra.Dsl.Meta.Core as Core
 import qualified Hydra.Encode.Core as EncodeCore
 import Hydra.Dsl.Meta.Base
 import qualified Hydra.Dsl.Meta.Phantoms as Phantoms
+import qualified Hydra.Dsl.Meta.Lib.Maps as Maps
 
 import qualified Data.ByteString as B
 import qualified Data.List as L
@@ -36,21 +37,31 @@ f <.> g = compose f g
 (@@) :: TypedTerm Term -> TypedTerm Term -> TypedTerm Term
 f @@ x = apply f x
 
--- | Create a term-encoded annotated term (term with type annotations)
+-- | Attach a map of annotations to a term-encoded term, wrapping the map as a
+-- TermMap annotation per Hydra's convention (#386). Each Name key is lifted
+-- to a TermVariable in the resulting TermMap.
+-- Distinct from 'Phantoms.annot' (which attaches a single annotation by key).
+-- Example: annots (Phantoms.map M.empty) (int32 42)
+annots :: TypedTerm (M.Map Name Term) -> TypedTerm Term -> TypedTerm Term
+annots annMap term = Core.termAnnotated $ Core.annotatedTerm term (annotationMapToTerm annMap)
+
+-- | Create a term-encoded annotated term (term with type annotations).
+-- The map argument is wrapped as a TermMap annotation per Hydra's convention.
 -- Example: annotated (int32 42) (Phantoms.map M.empty)
 annotated :: TypedTerm Term -> TypedTerm (M.Map Name Term) -> TypedTerm Term
-annotated term annMap = Core.termAnnotated $ Core.annotatedTerm term annMap
+annotated term annMap = Core.termAnnotated $ Core.annotatedTerm term (annotationMapToTerm annMap)
+
+-- | Lift a term-encoded Map<Name, Term> to a term-encoded TermMap with each
+-- Name key wrapped as a TermVariable. The canonical encoding for Hydra's
+-- annotation map convention after #386.
+annotationMapToTerm :: TypedTerm (M.Map Name Term) -> TypedTerm Term
+annotationMapToTerm m = Core.termMap
+  (Maps.mapKeys (Phantoms.lambda "n" (Core.termVariable (Phantoms.var "n"))) m)
 
 annotatedTerm :: TypedTerm Term -> TypedTerm Term -> TypedTerm Term
 annotatedTerm body ann = inject (Core.nameLift _Term) "annotated" $ record (Core.nameLift _AnnotatedTerm) [
   _AnnotatedTerm_body>>: body,
   _AnnotatedTerm_annotation>>: ann]
-
--- | Attach a map of annotations to a term-encoded term.
--- Distinct from 'Phantoms.annot' (which attaches a single annotation by key).
--- Example: annots (Phantoms.map M.empty) (int32 42)
-annots :: TypedTerm (M.Map Name Term) -> TypedTerm Term -> TypedTerm Term
-annots annMap term = Core.termAnnotated $ Core.annotatedTerm term annMap
 
 -- | Apply a term-encoded function to a term-encoded argument
 -- Example: apply (var "add") (int32 1)

@@ -5,8 +5,11 @@
         "body": {
           "body": {
             "annotated": {
-              "annotation": [
-                {"key": "description", "value": {"literal": {"string": "An association of a named term (element) with a phantom type"}}}],
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "An association of a named term (element) with a phantom type"}}}]},
               "body": {
                 "forall": {
                   "body": {
@@ -15,13 +18,13 @@
                         "name": "name",
                         "type": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the term"}}}],
+                            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The name of the term"}}}]},
                             "body": {"variable": "hydra.core.Name"}}}},
                       {
                         "name": "term",
                         "type": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "The term with its phantom type"}}}],
+                            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The term with its phantom type"}}}]},
                             "body": {"application": {"argument": {"variable": "a"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}}}]},
                   "parameter": "a"}}}},
           "variables": []},
@@ -31,7 +34,8 @@
         "body": {
           "body": {
             "annotated": {
-              "annotation": [{"key": "description", "value": {"literal": {"string": "An association of a term with a phantom type"}}}],
+              "annotation": {
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An association of a term with a phantom type"}}}]},
               "body": {"forall": {"body": {"wrap": {"variable": "hydra.core.Term"}}, "parameter": "a"}}}},
           "variables": []},
         "name": "hydra.typed.TypedTerm"}},
@@ -40,7 +44,11 @@
         "body": {
           "body": {
             "annotated": {
-              "annotation": [{"key": "description", "value": {"literal": {"string": "An association of a term definition with a phantom type"}}}],
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "An association of a term definition with a phantom type"}}}]},
               "body": {
                 "forall": {
                   "body": {
@@ -49,13 +57,13 @@
                         "name": "name",
                         "type": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the term"}}}],
+                            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The name of the term"}}}]},
                             "body": {"variable": "hydra.core.Name"}}}},
                       {
                         "name": "term",
                         "type": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "The term with its phantom type"}}}],
+                            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The term with its phantom type"}}}]},
                             "body": {"application": {"argument": {"variable": "a"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}}}]},
                   "parameter": "a"}}}},
           "variables": []},

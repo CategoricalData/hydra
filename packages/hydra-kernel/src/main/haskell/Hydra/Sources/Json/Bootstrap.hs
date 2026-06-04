@@ -64,8 +64,8 @@ typesByNameDefinition = TermDefinition {
 typesByNameTerm :: Term
 typesByNameTerm = TermAnnotated $ AnnotatedTerm {
     annotatedTermBody = TermMap $ M.fromList entries,
-    annotatedTermAnnotation = M.fromList [
-      (Name "description", TermLiteral $ LiteralString
+    annotatedTermAnnotation = TermMap $ M.fromList [
+      (TermVariable (Name "description"), TermLiteral $ LiteralString
         ("A bootstrap typing environment for decoding modules from JSON."
           ++ " Maps each kernel type name to its encoded type, used to seed JSON"
           ++ " decoding before the full kernel graph is available."))]}
@@ -77,5 +77,5 @@ typesByNameTerm = TermAnnotated $ AnnotatedTerm {
       annotateAsType (EncodeCore.type_ (typeSchemeBody (typeDefinitionBody td))))
     annotateAsType encoded = TermAnnotated $ AnnotatedTerm {
       annotatedTermBody = encoded,
-      annotatedTermAnnotation = M.fromList [
-        (Name "type", TermVariable (Name "hydra.core.Type"))]}
+      annotatedTermAnnotation = TermMap $ M.fromList [
+        (TermVariable (Name "type"), TermVariable (Name "hydra.core.Type"))]}

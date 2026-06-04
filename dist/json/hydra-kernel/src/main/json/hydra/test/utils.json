@@ -8,10 +8,11 @@
               "typeLambda": {
                 "body": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {"literal": {"string": "Run type inference on all terms in a TestGroup to ensure lambdas have domain types"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "Run type inference on all terms in a TestGroup to ensure lambdas have domain types"}}}]},
                     "body": {
                       "lambda": {
                         "body": {
@@ -157,7 +158,9 @@
               "typeLambda": {
                 "body": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "Run type inference on the terms in a test case"}}}],
+                    "annotation": {
+                      "map": [
+                        {"key": {"variable": "description"}, "value": {"literal": {"string": "Run type inference on the terms in a test case"}}}]},
                     "body": {
                       "lambda": {
                         "body": {
@@ -237,7 +240,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Run type inference on a single term"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Run type inference on a single term"}}}]},
             "body": {
               "lambda": {
                 "body": {

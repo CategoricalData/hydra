@@ -4,7 +4,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Language constraints for LinkedIn Pegasus (PDL)"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Language constraints for LinkedIn Pegasus (PDL)"}}}]},
             "body": {
               "let": {
                 "bindings": [

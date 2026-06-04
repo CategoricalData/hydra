@@ -4,7 +4,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for hydra.topology.OrderingIsomorphism"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL constructor for hydra.topology.OrderingIsomorphism"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -48,7 +52,11 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "Mapping from target ordering to source ordering"}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {"literal": {"string": "Mapping from target ordering to source ordering"}}}]},
                             "body": {"function": {"codomain": {"list": {"variable": "a"}}, "domain": {"list": {"variable": "a"}}}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "decode"}},
@@ -56,7 +64,11 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "Mapping from source ordering to target ordering"}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "Mapping from source ordering to target ordering"}}}]},
                         "body": {"function": {"codomain": {"list": {"variable": "a"}}, "domain": {"list": {"variable": "a"}}}}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "encode"}}}},
@@ -70,7 +82,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "Mapping from source ordering to target ordering"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "Mapping from source ordering to target ordering"}}}]},
                       "body": {"function": {"codomain": {"list": {"variable": "a"}}, "domain": {"list": {"variable": "a"}}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -80,7 +96,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "Mapping from target ordering to source ordering"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "Mapping from target ordering to source ordering"}}}]},
                       "body": {"function": {"codomain": {"list": {"variable": "a"}}, "domain": {"list": {"variable": "a"}}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -93,10 +113,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the encode field of hydra.topology.OrderingIsomorphism"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the encode field of hydra.topology.OrderingIsomorphism"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -149,7 +170,11 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "Mapping from source ordering to target ordering"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "Mapping from source ordering to target ordering"}}}]},
                     "body": {"function": {"codomain": {"list": {"variable": "a"}}, "domain": {"list": {"variable": "a"}}}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": [{"constraints": [], "name": "a"}]}}},
@@ -157,10 +182,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the decode field of hydra.topology.OrderingIsomorphism"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the decode field of hydra.topology.OrderingIsomorphism"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -213,7 +239,11 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "Mapping from target ordering to source ordering"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "Mapping from target ordering to source ordering"}}}]},
                     "body": {"function": {"codomain": {"list": {"variable": "a"}}, "domain": {"list": {"variable": "a"}}}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": [{"constraints": [], "name": "a"}]}}},
@@ -221,10 +251,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the encode field of hydra.topology.OrderingIsomorphism"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the encode field of hydra.topology.OrderingIsomorphism"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -294,7 +325,11 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "Mapping from source ordering to target ordering"}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {"literal": {"string": "Mapping from source ordering to target ordering"}}}]},
                             "body": {"function": {"codomain": {"list": {"variable": "a"}}, "domain": {"list": {"variable": "a"}}}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -320,7 +355,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "Mapping from source ordering to target ordering"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "Mapping from source ordering to target ordering"}}}]},
                       "body": {"function": {"codomain": {"list": {"variable": "a"}}, "domain": {"list": {"variable": "a"}}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -333,10 +372,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the decode field of hydra.topology.OrderingIsomorphism"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the decode field of hydra.topology.OrderingIsomorphism"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -406,7 +446,11 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "Mapping from target ordering to source ordering"}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {"literal": {"string": "Mapping from target ordering to source ordering"}}}]},
                             "body": {"function": {"codomain": {"list": {"variable": "a"}}, "domain": {"list": {"variable": "a"}}}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -432,7 +476,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "Mapping from target ordering to source ordering"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "Mapping from target ordering to source ordering"}}}]},
                       "body": {"function": {"codomain": {"list": {"variable": "a"}}, "domain": {"list": {"variable": "a"}}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -445,7 +493,9 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for hydra.topology.TarjanState"}}}],
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "DSL constructor for hydra.topology.TarjanState"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -529,10 +579,11 @@
                                       "application": {
                                         "argument": {
                                           "annotated": {
-                                            "annotation": [
-                                              {
-                                                "key": "description",
-                                                "value": {"literal": {"string": "Accumulated strongly connected components, each a list of vertices"}}}],
+                                            "annotation": {
+                                              "map": [
+                                                {
+                                                  "key": {"variable": "description"},
+                                                  "value": {"literal": {"string": "Accumulated strongly connected components, each a list of vertices"}}}]},
                                             "body": {"list": {"list": {"variable": "hydra.topology.Vertex"}}}}},
                                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                                     "parameter": "sccs"}},
@@ -540,7 +591,11 @@
                                   "application": {
                                     "argument": {
                                       "annotated": {
-                                        "annotation": [{"key": "description", "value": {"literal": {"string": "Set of vertices currently on the stack, for quick lookup"}}}],
+                                        "annotation": {
+                                          "map": [
+                                            {
+                                              "key": {"variable": "description"},
+                                              "value": {"literal": {"string": "Set of vertices currently on the stack, for quick lookup"}}}]},
                                         "body": {"set": {"variable": "hydra.topology.Vertex"}}}},
                                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                                 "parameter": "onStack"}},
@@ -548,7 +603,11 @@
                               "application": {
                                 "argument": {
                                   "annotated": {
-                                    "annotation": [{"key": "description", "value": {"literal": {"string": "Current DFS stack, with vertices in reverse order"}}}],
+                                    "annotation": {
+                                      "map": [
+                                        {
+                                          "key": {"variable": "description"},
+                                          "value": {"literal": {"string": "Current DFS stack, with vertices in reverse order"}}}]},
                                     "body": {"list": {"variable": "hydra.topology.Vertex"}}}},
                                 "function": {"variable": "hydra.typed.TypedTerm"}}},
                             "parameter": "stack"}},
@@ -556,10 +615,11 @@
                           "application": {
                             "argument": {
                               "annotated": {
-                                "annotation": [
-                                  {
-                                    "key": "description",
-                                    "value": {"literal": {"string": "Mapping from vertices to their lowest reachable index in the DFS traversal"}}}],
+                                "annotation": {
+                                  "map": [
+                                    {
+                                      "key": {"variable": "description"},
+                                      "value": {"literal": {"string": "Mapping from vertices to their lowest reachable index in the DFS traversal"}}}]},
                                 "body": {"map": {"keys": {"variable": "hydra.topology.Vertex"}, "values": {"literal": {"integer": {"int32": {}}}}}}}},
                             "function": {"variable": "hydra.typed.TypedTerm"}}},
                         "parameter": "lowLinks"}},
@@ -567,8 +627,11 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [
-                              {"key": "description", "value": {"literal": {"string": "Mapping from vertices to their indices in the DFS traversal"}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {"literal": {"string": "Mapping from vertices to their indices in the DFS traversal"}}}]},
                             "body": {"map": {"keys": {"variable": "hydra.topology.Vertex"}, "values": {"literal": {"integer": {"int32": {}}}}}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "indices"}},
@@ -576,7 +639,11 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "Next available index for vertices in the DFS traversal"}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "Next available index for vertices in the DFS traversal"}}}]},
                         "body": {"literal": {"integer": {"int32": {}}}}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "counter"}}}},
@@ -590,7 +657,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "Next available index for vertices in the DFS traversal"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "Next available index for vertices in the DFS traversal"}}}]},
                       "body": {"literal": {"integer": {"int32": {}}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -600,8 +671,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {"key": "description", "value": {"literal": {"string": "Mapping from vertices to their indices in the DFS traversal"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "Mapping from vertices to their indices in the DFS traversal"}}}]},
                       "body": {"map": {"keys": {"variable": "hydra.topology.Vertex"}, "values": {"literal": {"integer": {"int32": {}}}}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -611,10 +685,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "Mapping from vertices to their lowest reachable index in the DFS traversal"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "Mapping from vertices to their lowest reachable index in the DFS traversal"}}}]},
                       "body": {"map": {"keys": {"variable": "hydra.topology.Vertex"}, "values": {"literal": {"integer": {"int32": {}}}}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -624,7 +699,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "Current DFS stack, with vertices in reverse order"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "Current DFS stack, with vertices in reverse order"}}}]},
                       "body": {"list": {"variable": "hydra.topology.Vertex"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -634,7 +713,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "Set of vertices currently on the stack, for quick lookup"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "Set of vertices currently on the stack, for quick lookup"}}}]},
                       "body": {"set": {"variable": "hydra.topology.Vertex"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -644,10 +727,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "Accumulated strongly connected components, each a list of vertices"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "Accumulated strongly connected components, each a list of vertices"}}}]},
                       "body": {"list": {"list": {"variable": "hydra.topology.Vertex"}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -658,10 +742,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the counter field of hydra.topology.TarjanState"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the counter field of hydra.topology.TarjanState"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -710,7 +795,11 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "Next available index for vertices in the DFS traversal"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "Next available index for vertices in the DFS traversal"}}}]},
                     "body": {"literal": {"integer": {"int32": {}}}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -718,10 +807,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the indices field of hydra.topology.TarjanState"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the indices field of hydra.topology.TarjanState"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -770,8 +860,11 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [
-                      {"key": "description", "value": {"literal": {"string": "Mapping from vertices to their indices in the DFS traversal"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "Mapping from vertices to their indices in the DFS traversal"}}}]},
                     "body": {"map": {"keys": {"variable": "hydra.topology.Vertex"}, "values": {"literal": {"integer": {"int32": {}}}}}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -779,10 +872,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the lowLinks field of hydra.topology.TarjanState"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the lowLinks field of hydra.topology.TarjanState"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -831,10 +925,11 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {"literal": {"string": "Mapping from vertices to their lowest reachable index in the DFS traversal"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "Mapping from vertices to their lowest reachable index in the DFS traversal"}}}]},
                     "body": {"map": {"keys": {"variable": "hydra.topology.Vertex"}, "values": {"literal": {"integer": {"int32": {}}}}}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -842,10 +937,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the stack field of hydra.topology.TarjanState"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the stack field of hydra.topology.TarjanState"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -894,7 +990,11 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "Current DFS stack, with vertices in reverse order"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "Current DFS stack, with vertices in reverse order"}}}]},
                     "body": {"list": {"variable": "hydra.topology.Vertex"}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -902,10 +1002,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the onStack field of hydra.topology.TarjanState"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the onStack field of hydra.topology.TarjanState"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -954,7 +1055,11 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "Set of vertices currently on the stack, for quick lookup"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "Set of vertices currently on the stack, for quick lookup"}}}]},
                     "body": {"set": {"variable": "hydra.topology.Vertex"}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -962,10 +1067,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the sccs field of hydra.topology.TarjanState"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the sccs field of hydra.topology.TarjanState"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1014,10 +1120,11 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {"literal": {"string": "Accumulated strongly connected components, each a list of vertices"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "Accumulated strongly connected components, each a list of vertices"}}}]},
                     "body": {"list": {"list": {"variable": "hydra.topology.Vertex"}}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -1025,10 +1132,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the counter field of hydra.topology.TarjanState"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the counter field of hydra.topology.TarjanState"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1234,7 +1342,11 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "Next available index for vertices in the DFS traversal"}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {"literal": {"string": "Next available index for vertices in the DFS traversal"}}}]},
                             "body": {"literal": {"integer": {"int32": {}}}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -1256,7 +1368,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "Next available index for vertices in the DFS traversal"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "Next available index for vertices in the DFS traversal"}}}]},
                       "body": {"literal": {"integer": {"int32": {}}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -1267,10 +1383,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the indices field of hydra.topology.TarjanState"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the indices field of hydra.topology.TarjanState"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1476,8 +1593,11 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [
-                              {"key": "description", "value": {"literal": {"string": "Mapping from vertices to their indices in the DFS traversal"}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {"literal": {"string": "Mapping from vertices to their indices in the DFS traversal"}}}]},
                             "body": {"map": {"keys": {"variable": "hydra.topology.Vertex"}, "values": {"literal": {"integer": {"int32": {}}}}}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -1499,8 +1619,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {"key": "description", "value": {"literal": {"string": "Mapping from vertices to their indices in the DFS traversal"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "Mapping from vertices to their indices in the DFS traversal"}}}]},
                       "body": {"map": {"keys": {"variable": "hydra.topology.Vertex"}, "values": {"literal": {"integer": {"int32": {}}}}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -1511,10 +1634,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the lowLinks field of hydra.topology.TarjanState"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the lowLinks field of hydra.topology.TarjanState"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1720,10 +1844,11 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [
-                              {
-                                "key": "description",
-                                "value": {"literal": {"string": "Mapping from vertices to their lowest reachable index in the DFS traversal"}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {"literal": {"string": "Mapping from vertices to their lowest reachable index in the DFS traversal"}}}]},
                             "body": {"map": {"keys": {"variable": "hydra.topology.Vertex"}, "values": {"literal": {"integer": {"int32": {}}}}}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -1745,10 +1870,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "Mapping from vertices to their lowest reachable index in the DFS traversal"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "Mapping from vertices to their lowest reachable index in the DFS traversal"}}}]},
                       "body": {"map": {"keys": {"variable": "hydra.topology.Vertex"}, "values": {"literal": {"integer": {"int32": {}}}}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -1759,10 +1885,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the stack field of hydra.topology.TarjanState"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the stack field of hydra.topology.TarjanState"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1968,7 +2095,11 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "Current DFS stack, with vertices in reverse order"}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {"literal": {"string": "Current DFS stack, with vertices in reverse order"}}}]},
                             "body": {"list": {"variable": "hydra.topology.Vertex"}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -1990,7 +2121,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "Current DFS stack, with vertices in reverse order"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "Current DFS stack, with vertices in reverse order"}}}]},
                       "body": {"list": {"variable": "hydra.topology.Vertex"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -2001,10 +2136,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the onStack field of hydra.topology.TarjanState"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the onStack field of hydra.topology.TarjanState"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2210,7 +2346,11 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "Set of vertices currently on the stack, for quick lookup"}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {"literal": {"string": "Set of vertices currently on the stack, for quick lookup"}}}]},
                             "body": {"set": {"variable": "hydra.topology.Vertex"}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -2232,7 +2372,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "Set of vertices currently on the stack, for quick lookup"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "Set of vertices currently on the stack, for quick lookup"}}}]},
                       "body": {"set": {"variable": "hydra.topology.Vertex"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -2243,8 +2387,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {"key": "description", "value": {"literal": {"string": "DSL updater for the sccs field of hydra.topology.TarjanState"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the sccs field of hydra.topology.TarjanState"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2450,10 +2597,11 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [
-                              {
-                                "key": "description",
-                                "value": {"literal": {"string": "Accumulated strongly connected components, each a list of vertices"}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {"literal": {"string": "Accumulated strongly connected components, each a list of vertices"}}}]},
                             "body": {"list": {"list": {"variable": "hydra.topology.Vertex"}}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -2475,10 +2623,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "Accumulated strongly connected components, each a list of vertices"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "Accumulated strongly connected components, each a list of vertices"}}}]},
                       "body": {"list": {"list": {"variable": "hydra.topology.Vertex"}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {

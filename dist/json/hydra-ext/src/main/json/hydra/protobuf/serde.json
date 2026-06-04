@@ -4,7 +4,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the deprecated option"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The name of the deprecated option"}}}]},
             "body": {"literal": {"string": "deprecated"}}}},
         "name": "hydra.protobuf.serde.deprecatedOptionName",
         "signature": {"parameters": [], "result": {"type": {"literal": {"string": {}}}}, "typeParameters": []}}},
@@ -12,10 +12,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "A special Protobuf option name for descriptions (documentation)"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "A special Protobuf option name for descriptions (documentation)"}}}]},
             "body": {"literal": {"string": "_description"}}}},
         "name": "hydra.protobuf.serde.descriptionOptionName",
         "signature": {"parameters": [], "result": {"type": {"literal": {"string": {}}}}, "typeParameters": []}}},
@@ -23,10 +24,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Filter out internal options (those whose names start with underscore)"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Filter out internal options (those whose names start with underscore)"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -75,7 +77,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Prepend an optional description comment to an expression"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Prepend an optional description comment to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -251,10 +257,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Wrap expressions in a curly-braced block with double-newline separation"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Wrap expressions in a curly-braced block with double-newline separation"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -276,7 +283,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Append a semicolon to an expression"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Append a semicolon to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -297,7 +304,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a definition to an expression"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a definition to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -333,7 +341,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert an enum definition to an expression"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert an enum definition to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -401,7 +410,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert an enum value to an expression"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert an enum value to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -462,7 +472,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a field to an expression"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a field to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -689,7 +699,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a field option to an expression"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a field option to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -728,10 +739,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Convert field options to an optional bracket-enclosed expression"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Convert field options to an optional bracket-enclosed expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -785,7 +797,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a field type to an expression"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a field type to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -872,7 +885,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a file-level option to an expression"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a file-level option to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -915,10 +929,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Convert file-level options to an optional newline-separated expression"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Convert file-level options to an optional newline-separated expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -969,7 +984,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a file reference to an import expression"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Convert a file reference to an import expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -999,7 +1018,9 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a message definition to an expression"}}}],
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a message definition to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1066,7 +1087,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a proto file to an expression"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a proto file to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1251,7 +1273,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a scalar type to an expression"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a scalar type to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1320,7 +1343,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a simple type to an expression"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a simple type to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1358,7 +1382,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a value to an expression"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a value to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {

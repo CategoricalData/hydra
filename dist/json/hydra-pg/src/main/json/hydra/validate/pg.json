@@ -6,10 +6,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [
-                  {
-                    "key": "description",
-                    "value": {"literal": {"string": "Append a rule-tagged InvalidEdgeError finding to a ValidationResult."}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Append a rule-tagged InvalidEdgeError finding to a ValidationResult."}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -244,10 +245,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [
-                  {
-                    "key": "description",
-                    "value": {"literal": {"string": "Append a rule-tagged InvalidGraphError finding to a ValidationResult."}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Append a rule-tagged InvalidGraphError finding to a ValidationResult."}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -482,10 +484,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [
-                  {
-                    "key": "description",
-                    "value": {"literal": {"string": "Append a rule-tagged InvalidElementPropertyError finding to a ValidationResult."}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Append a rule-tagged InvalidElementPropertyError finding to a ValidationResult."}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -720,12 +723,13 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [
-                  {
-                    "key": "description",
-                    "value": {
-                      "literal": {
-                        "string": "Append a rule-tagged InvalidVertexError finding to a ValidationResult, classifying as error or warning per the profile and respecting maxErrors/maxWarnings bounds."}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {
+                        "literal": {
+                          "string": "Append a rule-tagged InvalidVertexError finding to a ValidationResult, classifying as error or warning per the profile and respecting maxErrors/maxWarnings bounds."}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -958,12 +962,13 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {
-                    "string": "The default validation profile for property-graph validation. Every PG rule classified as an error; no warnings; maxErrors=1, maxWarnings=20."}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {
+                      "string": "The default validation profile for property-graph validation. Every PG rule classified as an error; no warnings; maxErrors=1, maxWarnings=20."}}}]},
             "body": {
               "record": {
                 "fields": [
@@ -1006,10 +1011,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "True iff the given rule name appears in the profile's errorRules or warningRules."}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "True iff the given rule name appears in the profile's errorRules or warningRules."}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1058,12 +1064,13 @@
               "typeLambda": {
                 "body": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {
-                          "literal": {
-                            "string": "Validate an edge against its EdgeType under the given ValidationProfile, returning a ValidationResult InvalidEdgeError."}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {
+                            "literal": {
+                              "string": "Validate an edge against its EdgeType under the given ValidationProfile, returning a ValidationResult InvalidEdgeError."}}}]},
                     "body": {
                       "lambda": {
                         "body": {
@@ -1890,12 +1897,13 @@
               "typeLambda": {
                 "body": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {
-                          "literal": {
-                            "string": "Validate a property graph against a GraphSchema under the given ValidationProfile, threading a ValidationResult InvalidGraphError accumulator. Errors hard-stop traversal once maxErrors is reached."}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {
+                            "literal": {
+                              "string": "Validate a property graph against a GraphSchema under the given ValidationProfile, threading a ValidationResult InvalidGraphError accumulator. Errors hard-stop traversal once maxErrors is reached."}}}]},
                     "body": {
                       "lambda": {
                         "body": {
@@ -2430,12 +2438,13 @@
               "typeLambda": {
                 "body": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {
-                          "literal": {
-                            "string": "Validate a map of properties against a list of PropertyType under the given ValidationProfile, returning a ValidationResult InvalidElementPropertyError."}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {
+                            "literal": {
+                              "string": "Validate a map of properties against a list of PropertyType under the given ValidationProfile, returning a ValidationResult InvalidElementPropertyError."}}}]},
                     "body": {
                       "lambda": {
                         "body": {
@@ -3029,12 +3038,13 @@
               "typeLambda": {
                 "body": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {
-                          "literal": {
-                            "string": "Validate a vertex against its VertexType under the given ValidationProfile, returning a ValidationResult InvalidVertexError."}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {
+                            "literal": {
+                              "string": "Validate a vertex against its VertexType under the given ValidationProfile, returning a ValidationResult InvalidVertexError."}}}]},
                     "body": {
                       "lambda": {
                         "body": {
