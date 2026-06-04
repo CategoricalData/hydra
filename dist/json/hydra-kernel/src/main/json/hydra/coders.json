@@ -2,8 +2,7 @@
   "definitions": [
     {
       "type": {
-        "name": "hydra.coders.Adapter",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [
@@ -57,11 +56,11 @@
                           "parameter": "v1"}},
                       "parameter": "t2"}},
                   "parameter": "t1"}}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.coders.Adapter"}},
     {
       "type": {
-        "name": "hydra.coders.AdapterContext",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [
@@ -100,11 +99,11 @@
                                       "application": {
                                         "argument": {"variable": "hydra.core.Type"},
                                         "function": {"application": {"argument": {"variable": "hydra.core.Type"}, "function": {"variable": "hydra.coders.Adapter"}}}}}}}}}}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.coders.AdapterContext"}},
     {
       "type": {
-        "name": "hydra.coders.Bicoder",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [
@@ -161,11 +160,11 @@
                           "parameter": "v1"}},
                       "parameter": "t2"}},
                   "parameter": "t1"}}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.coders.Bicoder"}},
     {
       "type": {
-        "name": "hydra.coders.Coder",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [
@@ -214,21 +213,21 @@
                                     "domain": {"variable": "hydra.typing.InferenceContext"}}}}}}]},
                       "parameter": "v2"}},
                   "parameter": "v1"}}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.coders.Coder"}},
     {
       "type": {
-        "name": "hydra.coders.CoderDirection",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [
                 {"key": "description", "value": {"literal": {"string": "Indicates either the 'out' or the 'in' direction of a coder"}}}],
               "body": {"union": [{"name": "encode", "type": {"unit": {}}}, {"name": "decode", "type": {"unit": {}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.coders.CoderDirection"}},
     {
       "type": {
-        "name": "hydra.coders.Language",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [
@@ -247,11 +246,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The constraints which characterize the language"}}}],
                         "body": {"variable": "hydra.coders.LanguageConstraints"}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.coders.Language"}},
     {
       "type": {
-        "name": "hydra.coders.LanguageConstraints",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [
@@ -299,20 +298,20 @@
                             "key": "description",
                             "value": {"literal": {"string": "A logical set of types, as a predicate which tests a type for inclusion"}}}],
                         "body": {"function": {"codomain": {"literal": {"boolean": {}}}, "domain": {"variable": "hydra.core.Type"}}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.coders.LanguageConstraints"}},
     {
       "type": {
-        "name": "hydra.coders.LanguageName",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "The unique name of a language"}}}],
               "body": {"wrap": {"literal": {"string": {}}}}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.coders.LanguageName"}},
     {
       "type": {
-        "name": "hydra.coders.SymmetricAdapter",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [
@@ -335,11 +334,11 @@
                                   "function": {"application": {"argument": {"variable": "t"}, "function": {"variable": "hydra.coders.Adapter"}}}}}}}}},
                       "parameter": "v"}},
                   "parameter": "t"}}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.coders.SymmetricAdapter"}},
     {
       "type": {
-        "name": "hydra.coders.TraversalOrder",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "Specifies either a pre-order or post-order traversal"}}}],
@@ -353,11 +352,11 @@
                     "name": "post",
                     "type": {
                       "annotated": {"annotation": [{"key": "description", "value": {"literal": {"string": "Post-order traversal"}}}], "body": {"unit": {}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.coders.TraversalOrder"}},
     {
       "type": {
-        "name": "hydra.coders.TypeAdapter",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [
@@ -378,7 +377,8 @@
                                 "application": {"argument": {"variable": "hydra.core.Type"}, "function": {"variable": "hydra.coders.SymmetricAdapter"}}}}}}},
                       "domain": {"variable": "hydra.core.Type"}}},
                   "domain": {"variable": "hydra.coders.AdapterContext"}}}}},
-          "variables": []}}}],
+          "variables": []},
+        "name": "hydra.coders.TypeAdapter"}}],
   "dependencies": [
     {"module": "hydra.errors"},
     {"module": "hydra.graph"},

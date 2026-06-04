@@ -2,15 +2,7 @@
   "definitions": [
     {
       "term": {
-        "name": "hydra.decode.relational.columnName",
-        "signature": {
-          "parameters": [
-            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.graph.Graph"}},
-            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.core.Term"}}],
-          "result": {
-            "type": {"either": {"left": {"variable": "hydra.errors.DecodingError"}, "right": {"variable": "hydra.relational.ColumnName"}}}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Decoder for hydra.relational.ColumnName"}}}],
             "body": {
@@ -34,8 +26,7 @@
                                       "cases": {
                                         "cases": [
                                           {
-                                            "name": "wrap",
-                                            "term": {
+                                            "handler": {
                                               "lambda": {
                                                 "body": {
                                                   "application": {
@@ -69,8 +60,7 @@
                                                                                       "cases": {
                                                                                         "cases": [
                                                                                           {
-                                                                                            "name": "literal",
-                                                                                            "term": {
+                                                                                            "handler": {
                                                                                               "lambda": {
                                                                                                 "body": {
                                                                                                   "application": {
@@ -79,8 +69,7 @@
                                                                                                       "cases": {
                                                                                                         "cases": [
                                                                                                           {
-                                                                                                            "name": "string",
-                                                                                                            "term": {
+                                                                                                            "handler": {
                                                                                                               "lambda": {
                                                                                                                 "body": {
                                                                                                                   "typeApplication": {
@@ -88,7 +77,8 @@
                                                                                                                       "typeApplication": {"body": {"either": {"right": {"variable": "s"}}}, "type": {"variable": "hydra.errors.DecodingError"}}},
                                                                                                                     "type": {"literal": {"string": {}}}}},
                                                                                                                 "domain": {"literal": {"string": {}}},
-                                                                                                                "parameter": "s"}}}],
+                                                                                                                "parameter": "s"}},
+                                                                                                            "name": "string"}],
                                                                                                         "default": {
                                                                                                           "typeApplication": {
                                                                                                             "body": {
@@ -100,7 +90,8 @@
                                                                                                             "type": {"literal": {"string": {}}}}},
                                                                                                         "typeName": "hydra.core.Literal"}}}},
                                                                                                 "domain": {"variable": "hydra.core.Literal"},
-                                                                                                "parameter": "v"}}}],
+                                                                                                "parameter": "v"}},
+                                                                                            "name": "literal"}],
                                                                                         "default": {
                                                                                           "typeApplication": {
                                                                                             "body": {
@@ -150,7 +141,8 @@
                                                                 "type": {"variable": "hydra.relational.ColumnName"}}},
                                                             "type": {"variable": "hydra.errors.DecodingError"}}}}}}},
                                                 "domain": {"variable": "hydra.core.WrappedTerm"},
-                                                "parameter": "wrappedTerm"}}}],
+                                                "parameter": "wrappedTerm"}},
+                                            "name": "wrap"}],
                                         "default": {
                                           "typeApplication": {
                                             "body": {
@@ -184,31 +176,18 @@
                     "domain": {"variable": "hydra.core.Term"},
                     "parameter": "raw"}},
                 "domain": {"variable": "hydra.graph.Graph"},
-                "parameter": "cx"}}}}}},
-    {
-      "term": {
-        "name": "hydra.decode.relational.columnSchema",
+                "parameter": "cx"}}}},
+        "name": "hydra.decode.relational.columnName",
         "signature": {
           "parameters": [
-            {
-              "isLazy": false,
-              "name": "arg0",
-              "type": {
-                "function": {
-                  "codomain": {
-                    "function": {
-                      "codomain": {"either": {"left": {"variable": "hydra.errors.DecodingError"}, "right": {"variable": "t0"}}},
-                      "domain": {"variable": "hydra.core.Term"}}},
-                  "domain": {"variable": "hydra.graph.Graph"}}}},
-            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.graph.Graph"}},
-            {"isLazy": false, "name": "arg2", "type": {"variable": "hydra.core.Term"}}],
+            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.graph.Graph"}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.core.Term"}}],
           "result": {
-            "type": {
-              "either": {
-                "left": {"variable": "hydra.errors.DecodingError"},
-                "right": {"application": {"argument": {"variable": "t0"}, "function": {"variable": "hydra.relational.ColumnSchema"}}}}}},
-          "typeParameters": [{"constraints": [], "name": "t0"}]},
-        "term": {
+            "type": {"either": {"left": {"variable": "hydra.errors.DecodingError"}, "right": {"variable": "hydra.relational.ColumnName"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "typeLambda": {
             "body": {
               "annotated": {
@@ -236,8 +215,7 @@
                                               "cases": {
                                                 "cases": [
                                                   {
-                                                    "name": "record",
-                                                    "term": {
+                                                    "handler": {
                                                       "lambda": {
                                                         "body": {
                                                           "let": {
@@ -334,13 +312,18 @@
                                                                             "type": {"variable": "hydra.relational.ColumnName"}}},
                                                                         "type": {"application": {"argument": {"variable": "t0"}, "function": {"variable": "hydra.relational.ColumnSchema"}}}}}}}}}}},
                                                         "domain": {"variable": "hydra.core.Record"},
-                                                        "parameter": "record"}}}],
+                                                        "parameter": "record"}},
+                                                    "name": "record"}],
                                                 "default": {
                                                   "typeApplication": {
                                                     "body": {
                                                       "typeApplication": {
                                                         "body": {
-                                                          "either": {"left": {"wrap": {"body": {"literal": {"string": "expected record"}}, "typeName": "hydra.errors.DecodingError"}}}},
+                                                          "either": {
+                                                            "left": {
+                                                              "wrap": {
+                                                                "body": {"literal": {"string": "expected a record of type hydra.relational.ColumnSchema"}},
+                                                                "typeName": "hydra.errors.DecodingError"}}}},
                                                         "type": {"variable": "hydra.errors.DecodingError"}}},
                                                     "type": {"application": {"argument": {"variable": "t0"}, "function": {"variable": "hydra.relational.ColumnSchema"}}}}},
                                                 "typeName": "hydra.core.Term"}}}},
@@ -380,18 +363,31 @@
                             "domain": {"variable": "hydra.core.Term"}}},
                         "domain": {"variable": "hydra.graph.Graph"}}},
                     "parameter": "t"}}}},
-            "parameter": "t0"}}}},
-    {
-      "term": {
-        "name": "hydra.decode.relational.foreignKey",
+            "parameter": "t0"}},
+        "name": "hydra.decode.relational.columnSchema",
         "signature": {
           "parameters": [
-            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.graph.Graph"}},
-            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.core.Term"}}],
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {
+                "function": {
+                  "codomain": {
+                    "function": {
+                      "codomain": {"either": {"left": {"variable": "hydra.errors.DecodingError"}, "right": {"variable": "t0"}}},
+                      "domain": {"variable": "hydra.core.Term"}}},
+                  "domain": {"variable": "hydra.graph.Graph"}}}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.graph.Graph"}},
+            {"isLazy": false, "name": "arg2", "type": {"variable": "hydra.core.Term"}}],
           "result": {
-            "type": {"either": {"left": {"variable": "hydra.errors.DecodingError"}, "right": {"variable": "hydra.relational.ForeignKey"}}}},
-          "typeParameters": []},
-        "term": {
+            "type": {
+              "either": {
+                "left": {"variable": "hydra.errors.DecodingError"},
+                "right": {"application": {"argument": {"variable": "t0"}, "function": {"variable": "hydra.relational.ColumnSchema"}}}}}},
+          "typeParameters": [{"constraints": [], "name": "t0"}]}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Decoder for hydra.relational.ForeignKey"}}}],
             "body": {
@@ -415,8 +411,7 @@
                                       "cases": {
                                         "cases": [
                                           {
-                                            "name": "record",
-                                            "term": {
+                                            "handler": {
                                               "lambda": {
                                                 "body": {
                                                   "let": {
@@ -522,13 +517,18 @@
                                                                     "type": {"variable": "hydra.relational.RelationName"}}},
                                                                 "type": {"variable": "hydra.relational.ForeignKey"}}}}}}}}},
                                                 "domain": {"variable": "hydra.core.Record"},
-                                                "parameter": "record"}}}],
+                                                "parameter": "record"}},
+                                            "name": "record"}],
                                         "default": {
                                           "typeApplication": {
                                             "body": {
                                               "typeApplication": {
                                                 "body": {
-                                                  "either": {"left": {"wrap": {"body": {"literal": {"string": "expected record"}}, "typeName": "hydra.errors.DecodingError"}}}},
+                                                  "either": {
+                                                    "left": {
+                                                      "wrap": {
+                                                        "body": {"literal": {"string": "expected a record of type hydra.relational.ForeignKey"}},
+                                                        "typeName": "hydra.errors.DecodingError"}}}},
                                                 "type": {"variable": "hydra.errors.DecodingError"}}},
                                             "type": {"variable": "hydra.relational.ForeignKey"}}},
                                         "typeName": "hydra.core.Term"}}}},
@@ -556,18 +556,18 @@
                     "domain": {"variable": "hydra.core.Term"},
                     "parameter": "raw"}},
                 "domain": {"variable": "hydra.graph.Graph"},
-                "parameter": "cx"}}}}}},
-    {
-      "term": {
-        "name": "hydra.decode.relational.primaryKey",
+                "parameter": "cx"}}}},
+        "name": "hydra.decode.relational.foreignKey",
         "signature": {
           "parameters": [
             {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.graph.Graph"}},
             {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.core.Term"}}],
           "result": {
-            "type": {"either": {"left": {"variable": "hydra.errors.DecodingError"}, "right": {"variable": "hydra.relational.PrimaryKey"}}}},
-          "typeParameters": []},
-        "term": {
+            "type": {"either": {"left": {"variable": "hydra.errors.DecodingError"}, "right": {"variable": "hydra.relational.ForeignKey"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Decoder for hydra.relational.PrimaryKey"}}}],
             "body": {
@@ -591,8 +591,7 @@
                                       "cases": {
                                         "cases": [
                                           {
-                                            "name": "wrap",
-                                            "term": {
+                                            "handler": {
                                               "lambda": {
                                                 "body": {
                                                   "application": {
@@ -626,7 +625,8 @@
                                                                 "type": {"variable": "hydra.relational.PrimaryKey"}}},
                                                             "type": {"variable": "hydra.errors.DecodingError"}}}}}}},
                                                 "domain": {"variable": "hydra.core.WrappedTerm"},
-                                                "parameter": "wrappedTerm"}}}],
+                                                "parameter": "wrappedTerm"}},
+                                            "name": "wrap"}],
                                         "default": {
                                           "typeApplication": {
                                             "body": {
@@ -660,31 +660,18 @@
                     "domain": {"variable": "hydra.core.Term"},
                     "parameter": "raw"}},
                 "domain": {"variable": "hydra.graph.Graph"},
-                "parameter": "cx"}}}}}},
-    {
-      "term": {
-        "name": "hydra.decode.relational.relation",
+                "parameter": "cx"}}}},
+        "name": "hydra.decode.relational.primaryKey",
         "signature": {
           "parameters": [
-            {
-              "isLazy": false,
-              "name": "arg0",
-              "type": {
-                "function": {
-                  "codomain": {
-                    "function": {
-                      "codomain": {"either": {"left": {"variable": "hydra.errors.DecodingError"}, "right": {"variable": "t0"}}},
-                      "domain": {"variable": "hydra.core.Term"}}},
-                  "domain": {"variable": "hydra.graph.Graph"}}}},
-            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.graph.Graph"}},
-            {"isLazy": false, "name": "arg2", "type": {"variable": "hydra.core.Term"}}],
+            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.graph.Graph"}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.core.Term"}}],
           "result": {
-            "type": {
-              "either": {
-                "left": {"variable": "hydra.errors.DecodingError"},
-                "right": {"application": {"argument": {"variable": "t0"}, "function": {"variable": "hydra.relational.Relation"}}}}}},
-          "typeParameters": [{"constraints": [], "name": "t0"}]},
-        "term": {
+            "type": {"either": {"left": {"variable": "hydra.errors.DecodingError"}, "right": {"variable": "hydra.relational.PrimaryKey"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "typeLambda": {
             "body": {
               "annotated": {
@@ -712,8 +699,7 @@
                                               "cases": {
                                                 "cases": [
                                                   {
-                                                    "name": "wrap",
-                                                    "term": {
+                                                    "handler": {
                                                       "lambda": {
                                                         "body": {
                                                           "application": {
@@ -755,7 +741,8 @@
                                                                         "type": {"application": {"argument": {"variable": "t0"}, "function": {"variable": "hydra.relational.Relation"}}}}},
                                                                     "type": {"variable": "hydra.errors.DecodingError"}}}}}}},
                                                         "domain": {"variable": "hydra.core.WrappedTerm"},
-                                                        "parameter": "wrappedTerm"}}}],
+                                                        "parameter": "wrappedTerm"}},
+                                                    "name": "wrap"}],
                                                 "default": {
                                                   "typeApplication": {
                                                     "body": {
@@ -801,18 +788,31 @@
                             "domain": {"variable": "hydra.core.Term"}}},
                         "domain": {"variable": "hydra.graph.Graph"}}},
                     "parameter": "v"}}}},
-            "parameter": "t0"}}}},
-    {
-      "term": {
-        "name": "hydra.decode.relational.relationName",
+            "parameter": "t0"}},
+        "name": "hydra.decode.relational.relation",
         "signature": {
           "parameters": [
-            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.graph.Graph"}},
-            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.core.Term"}}],
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {
+                "function": {
+                  "codomain": {
+                    "function": {
+                      "codomain": {"either": {"left": {"variable": "hydra.errors.DecodingError"}, "right": {"variable": "t0"}}},
+                      "domain": {"variable": "hydra.core.Term"}}},
+                  "domain": {"variable": "hydra.graph.Graph"}}}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.graph.Graph"}},
+            {"isLazy": false, "name": "arg2", "type": {"variable": "hydra.core.Term"}}],
           "result": {
-            "type": {"either": {"left": {"variable": "hydra.errors.DecodingError"}, "right": {"variable": "hydra.relational.RelationName"}}}},
-          "typeParameters": []},
-        "term": {
+            "type": {
+              "either": {
+                "left": {"variable": "hydra.errors.DecodingError"},
+                "right": {"application": {"argument": {"variable": "t0"}, "function": {"variable": "hydra.relational.Relation"}}}}}},
+          "typeParameters": [{"constraints": [], "name": "t0"}]}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Decoder for hydra.relational.RelationName"}}}],
             "body": {
@@ -836,8 +836,7 @@
                                       "cases": {
                                         "cases": [
                                           {
-                                            "name": "wrap",
-                                            "term": {
+                                            "handler": {
                                               "lambda": {
                                                 "body": {
                                                   "application": {
@@ -871,8 +870,7 @@
                                                                                       "cases": {
                                                                                         "cases": [
                                                                                           {
-                                                                                            "name": "literal",
-                                                                                            "term": {
+                                                                                            "handler": {
                                                                                               "lambda": {
                                                                                                 "body": {
                                                                                                   "application": {
@@ -881,8 +879,7 @@
                                                                                                       "cases": {
                                                                                                         "cases": [
                                                                                                           {
-                                                                                                            "name": "string",
-                                                                                                            "term": {
+                                                                                                            "handler": {
                                                                                                               "lambda": {
                                                                                                                 "body": {
                                                                                                                   "typeApplication": {
@@ -890,7 +887,8 @@
                                                                                                                       "typeApplication": {"body": {"either": {"right": {"variable": "s"}}}, "type": {"variable": "hydra.errors.DecodingError"}}},
                                                                                                                     "type": {"literal": {"string": {}}}}},
                                                                                                                 "domain": {"literal": {"string": {}}},
-                                                                                                                "parameter": "s"}}}],
+                                                                                                                "parameter": "s"}},
+                                                                                                            "name": "string"}],
                                                                                                         "default": {
                                                                                                           "typeApplication": {
                                                                                                             "body": {
@@ -902,7 +900,8 @@
                                                                                                             "type": {"literal": {"string": {}}}}},
                                                                                                         "typeName": "hydra.core.Literal"}}}},
                                                                                                 "domain": {"variable": "hydra.core.Literal"},
-                                                                                                "parameter": "v"}}}],
+                                                                                                "parameter": "v"}},
+                                                                                            "name": "literal"}],
                                                                                         "default": {
                                                                                           "typeApplication": {
                                                                                             "body": {
@@ -952,7 +951,8 @@
                                                                 "type": {"variable": "hydra.relational.RelationName"}}},
                                                             "type": {"variable": "hydra.errors.DecodingError"}}}}}}},
                                                 "domain": {"variable": "hydra.core.WrappedTerm"},
-                                                "parameter": "wrappedTerm"}}}],
+                                                "parameter": "wrappedTerm"}},
+                                            "name": "wrap"}],
                                         "default": {
                                           "typeApplication": {
                                             "body": {
@@ -986,31 +986,18 @@
                     "domain": {"variable": "hydra.core.Term"},
                     "parameter": "raw"}},
                 "domain": {"variable": "hydra.graph.Graph"},
-                "parameter": "cx"}}}}}},
-    {
-      "term": {
-        "name": "hydra.decode.relational.relationSchema",
+                "parameter": "cx"}}}},
+        "name": "hydra.decode.relational.relationName",
         "signature": {
           "parameters": [
-            {
-              "isLazy": false,
-              "name": "arg0",
-              "type": {
-                "function": {
-                  "codomain": {
-                    "function": {
-                      "codomain": {"either": {"left": {"variable": "hydra.errors.DecodingError"}, "right": {"variable": "t0"}}},
-                      "domain": {"variable": "hydra.core.Term"}}},
-                  "domain": {"variable": "hydra.graph.Graph"}}}},
-            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.graph.Graph"}},
-            {"isLazy": false, "name": "arg2", "type": {"variable": "hydra.core.Term"}}],
+            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.graph.Graph"}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.core.Term"}}],
           "result": {
-            "type": {
-              "either": {
-                "left": {"variable": "hydra.errors.DecodingError"},
-                "right": {"application": {"argument": {"variable": "t0"}, "function": {"variable": "hydra.relational.RelationSchema"}}}}}},
-          "typeParameters": [{"constraints": [], "name": "t0"}]},
-        "term": {
+            "type": {"either": {"left": {"variable": "hydra.errors.DecodingError"}, "right": {"variable": "hydra.relational.RelationName"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "typeLambda": {
             "body": {
               "annotated": {
@@ -1038,8 +1025,7 @@
                                               "cases": {
                                                 "cases": [
                                                   {
-                                                    "name": "record",
-                                                    "term": {
+                                                    "handler": {
                                                       "lambda": {
                                                         "body": {
                                                           "let": {
@@ -1229,13 +1215,18 @@
                                                                             "type": {"variable": "hydra.relational.RelationName"}}},
                                                                         "type": {"application": {"argument": {"variable": "t0"}, "function": {"variable": "hydra.relational.RelationSchema"}}}}}}}}}}},
                                                         "domain": {"variable": "hydra.core.Record"},
-                                                        "parameter": "record"}}}],
+                                                        "parameter": "record"}},
+                                                    "name": "record"}],
                                                 "default": {
                                                   "typeApplication": {
                                                     "body": {
                                                       "typeApplication": {
                                                         "body": {
-                                                          "either": {"left": {"wrap": {"body": {"literal": {"string": "expected record"}}, "typeName": "hydra.errors.DecodingError"}}}},
+                                                          "either": {
+                                                            "left": {
+                                                              "wrap": {
+                                                                "body": {"literal": {"string": "expected a record of type hydra.relational.RelationSchema"}},
+                                                                "typeName": "hydra.errors.DecodingError"}}}},
                                                         "type": {"variable": "hydra.errors.DecodingError"}}},
                                                     "type": {"application": {"argument": {"variable": "t0"}, "function": {"variable": "hydra.relational.RelationSchema"}}}}},
                                                 "typeName": "hydra.core.Term"}}}},
@@ -1275,10 +1266,8 @@
                             "domain": {"variable": "hydra.core.Term"}}},
                         "domain": {"variable": "hydra.graph.Graph"}}},
                     "parameter": "t"}}}},
-            "parameter": "t0"}}}},
-    {
-      "term": {
-        "name": "hydra.decode.relational.relationship",
+            "parameter": "t0"}},
+        "name": "hydra.decode.relational.relationSchema",
         "signature": {
           "parameters": [
             {
@@ -1297,9 +1286,11 @@
             "type": {
               "either": {
                 "left": {"variable": "hydra.errors.DecodingError"},
-                "right": {"application": {"argument": {"variable": "t0"}, "function": {"variable": "hydra.relational.Relationship"}}}}}},
-          "typeParameters": [{"constraints": [{"simple": "ordering"}], "name": "t0"}]},
-        "term": {
+                "right": {"application": {"argument": {"variable": "t0"}, "function": {"variable": "hydra.relational.RelationSchema"}}}}}},
+          "typeParameters": [{"constraints": [], "name": "t0"}]}}},
+    {
+      "term": {
+        "body": {
           "typeLambda": {
             "body": {
               "annotated": {
@@ -1327,8 +1318,7 @@
                                               "cases": {
                                                 "cases": [
                                                   {
-                                                    "name": "wrap",
-                                                    "term": {
+                                                    "handler": {
                                                       "lambda": {
                                                         "body": {
                                                           "application": {
@@ -1377,7 +1367,8 @@
                                                                         "type": {"application": {"argument": {"variable": "t0"}, "function": {"variable": "hydra.relational.Relationship"}}}}},
                                                                     "type": {"variable": "hydra.errors.DecodingError"}}}}}}},
                                                         "domain": {"variable": "hydra.core.WrappedTerm"},
-                                                        "parameter": "wrappedTerm"}}}],
+                                                        "parameter": "wrappedTerm"}},
+                                                    "name": "wrap"}],
                                                 "default": {
                                                   "typeApplication": {
                                                     "body": {
@@ -1423,10 +1414,8 @@
                             "domain": {"variable": "hydra.core.Term"}}},
                         "domain": {"variable": "hydra.graph.Graph"}}},
                     "parameter": "v"}}}},
-            "parameter": "t0"}}}},
-    {
-      "term": {
-        "name": "hydra.decode.relational.row",
+            "parameter": "t0"}},
+        "name": "hydra.decode.relational.relationship",
         "signature": {
           "parameters": [
             {
@@ -1445,9 +1434,11 @@
             "type": {
               "either": {
                 "left": {"variable": "hydra.errors.DecodingError"},
-                "right": {"application": {"argument": {"variable": "t0"}, "function": {"variable": "hydra.relational.Row"}}}}}},
-          "typeParameters": [{"constraints": [], "name": "t0"}]},
-        "term": {
+                "right": {"application": {"argument": {"variable": "t0"}, "function": {"variable": "hydra.relational.Relationship"}}}}}},
+          "typeParameters": [{"constraints": [{"simple": "ordering"}], "name": "t0"}]}}},
+    {
+      "term": {
+        "body": {
           "typeLambda": {
             "body": {
               "annotated": {
@@ -1475,8 +1466,7 @@
                                               "cases": {
                                                 "cases": [
                                                   {
-                                                    "name": "wrap",
-                                                    "term": {
+                                                    "handler": {
                                                       "lambda": {
                                                         "body": {
                                                           "application": {
@@ -1509,7 +1499,8 @@
                                                                         "type": {"application": {"argument": {"variable": "t0"}, "function": {"variable": "hydra.relational.Row"}}}}},
                                                                     "type": {"variable": "hydra.errors.DecodingError"}}}}}}},
                                                         "domain": {"variable": "hydra.core.WrappedTerm"},
-                                                        "parameter": "wrappedTerm"}}}],
+                                                        "parameter": "wrappedTerm"}},
+                                                    "name": "wrap"}],
                                                 "default": {
                                                   "typeApplication": {
                                                     "body": {
@@ -1555,7 +1546,28 @@
                             "domain": {"variable": "hydra.core.Term"}}},
                         "domain": {"variable": "hydra.graph.Graph"}}},
                     "parameter": "v"}}}},
-            "parameter": "t0"}}}}],
+            "parameter": "t0"}},
+        "name": "hydra.decode.relational.row",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {
+                "function": {
+                  "codomain": {
+                    "function": {
+                      "codomain": {"either": {"left": {"variable": "hydra.errors.DecodingError"}, "right": {"variable": "t0"}}},
+                      "domain": {"variable": "hydra.core.Term"}}},
+                  "domain": {"variable": "hydra.graph.Graph"}}}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.graph.Graph"}},
+            {"isLazy": false, "name": "arg2", "type": {"variable": "hydra.core.Term"}}],
+          "result": {
+            "type": {
+              "either": {
+                "left": {"variable": "hydra.errors.DecodingError"},
+                "right": {"application": {"argument": {"variable": "t0"}, "function": {"variable": "hydra.relational.Row"}}}}}},
+          "typeParameters": [{"constraints": [], "name": "t0"}]}}}],
   "dependencies": [
     {"module": "hydra.extract.core"},
     {"module": "hydra.lexical"},

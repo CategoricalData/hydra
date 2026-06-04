@@ -200,8 +200,8 @@ object Libraries:
   private def mkPrimDef(name: String, ts: TypeScheme): hydra.packaging.PrimitiveDefinition =
     hydra.packaging.PrimitiveDefinition(
       name,
-      hydra.scoping.typeSchemeToTermSignature(ts),
       None,
+      hydra.scoping.typeSchemeToTermSignature(ts),
       true,
       true,
       None)
@@ -245,7 +245,7 @@ object Libraries:
   private def tSchemeConstrained(vars: Seq[(String, Seq[String])], t: Type): TypeScheme =
     val varNames = vars.map(_._1)
     val constraints = vars.collect { case (name, classes) if classes.nonEmpty =>
-      name -> TypeVariableMetadata(classes.map(c => TypeClassConstraint.simple(c)))
+      name -> TypeVariableConstraints(classes.map(c => TypeClassConstraint.simple(c)))
     }.toMap
     TypeScheme(varNames, t, if constraints.isEmpty then None else Some(constraints))
 

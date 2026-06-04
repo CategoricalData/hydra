@@ -34,7 +34,7 @@ parseError cx raw =
           _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx2 raw2)) fieldMap cx) (\field_remainder -> Right (Parsing.ParseError {
           Parsing.parseErrorMessage = field_message,
           Parsing.parseErrorRemainder = field_remainder}))))
-      _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+      _ -> Left (Errors.DecodingError "expected a record of type hydra.parsing.ParseError")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.parsing.ParseResult
 parseResult :: (Graph.Graph -> Core.Term -> Either Errors.DecodingError t0) -> Graph.Graph -> Core.Term -> Either Errors.DecodingError (Parsing.ParseResult t0)
 parseResult a cx raw =
@@ -65,4 +65,4 @@ parseSuccess a cx raw =
           _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx2 raw2)) fieldMap cx) (\field_remainder -> Right (Parsing.ParseSuccess {
           Parsing.parseSuccessValue = field_value,
           Parsing.parseSuccessRemainder = field_remainder}))))
-      _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+      _ -> Left (Errors.DecodingError "expected a record of type hydra.parsing.ParseSuccess")) (ExtractCore.stripWithDecodingError cx raw)

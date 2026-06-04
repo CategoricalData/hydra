@@ -2,9 +2,7 @@
   "definitions": [
     {
       "term": {
-        "name": "hydra.graphql.language.graphqlLanguage",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.coders.Language"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Language constraints for GraphQL"}}}],
             "body": {
@@ -86,8 +84,7 @@
                               "cases": {
                                 "cases": [
                                   {
-                                    "name": "maybe",
-                                    "term": {
+                                    "handler": {
                                       "lambda": {
                                         "body": {
                                           "application": {
@@ -96,12 +93,13 @@
                                               "cases": {
                                                 "cases": [
                                                   {
-                                                    "name": "maybe",
-                                                    "term": {"lambda": {"body": {"literal": {"boolean": false}}, "domain": {"variable": "hydra.core.Type"}, "parameter": "_"}}}],
+                                                    "handler": {"lambda": {"body": {"literal": {"boolean": false}}, "domain": {"variable": "hydra.core.Type"}, "parameter": "_"}},
+                                                    "name": "maybe"}],
                                                 "default": {"literal": {"boolean": true}},
                                                 "typeName": "hydra.core.Type"}}}},
                                         "domain": {"variable": "hydra.core.Type"},
-                                        "parameter": "inner"}}}],
+                                        "parameter": "inner"}},
+                                    "name": "maybe"}],
                                 "default": {"literal": {"boolean": true}},
                                 "typeName": "hydra.core.Type"}}}},
                         "domain": {"variable": "hydra.core.Type"},
@@ -127,18 +125,20 @@
                               {"name": "typeVariants", "term": {"variable": "typeVariants"}},
                               {"name": "types", "term": {"variable": "typePredicate"}}],
                             "typeName": "hydra.coders.LanguageConstraints"}}}],
-                    "typeName": "hydra.coders.Language"}}}}}}}},
+                    "typeName": "hydra.coders.Language"}}}}}},
+        "name": "hydra.graphql.language.graphqlLanguage",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.coders.Language"}}, "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.graphql.language.graphqlReservedWords",
-        "signature": {"parameters": [], "result": {"type": {"set": {"literal": {"string": {}}}}}, "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "A set of reserved words in GraphQL"}}}],
             "body": {
               "application": {
                 "argument": {"list": [{"literal": {"string": "true"}}, {"literal": {"string": "false"}}]},
-                "function": {"typeApplication": {"body": {"variable": "hydra.lib.sets.fromList"}, "type": {"literal": {"string": {}}}}}}}}}}}],
+                "function": {"typeApplication": {"body": {"variable": "hydra.lib.sets.fromList"}, "type": {"literal": {"string": {}}}}}}}}},
+        "name": "hydra.graphql.language.graphqlReservedWords",
+        "signature": {"parameters": [], "result": {"type": {"set": {"literal": {"string": {}}}}}, "typeParameters": []}}}],
   "dependencies": [
     {"module": "hydra.lexical"},
     {"module": "hydra.strip"},

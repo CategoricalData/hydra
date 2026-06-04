@@ -71,6 +71,18 @@ and primitive-metadata reification.
   into a single `Module.dependencies` field (#354).
 - Migrated kernel definition names with underscores to camelCase (#348).
 - Eliminated `Hydra.Module.Compat` shim (#315).
+- Split the monolithic `hydra` Hackage distribution into per-package
+  distributions (#418), mirroring the per-package layout already used for Java
+  (Maven Central) and Python (PyPI). The 0.16.0 Haskell publish set is
+  `hydra-kernel`, `hydra-haskell`, and a new `hydra` umbrella package whose
+  `Hydra` module re-exports the kernel surface (`Hydra.Kernel`) plus the Haskell
+  coder's `moduleToHaskell` / `moduleToHaskellModule`, preserving a single
+  convenient entry point and the existing Hackage landing page. Inter-package
+  dependencies are exact-version-pinned and published leaves-first; a
+  dependency-closure guard prevents publishing a package whose Hydra
+  dependencies are not themselves in the publish set. New tooling:
+  `heads/haskell/bin/{assemble-haskell-distribution,publish-hackage,verify-haskell-distribution}.sh`
+  and `bin/lib/generate-haskell-package-build.py`.
 
 ### Bug fixes
 
@@ -93,6 +105,9 @@ and primitive-metadata reification.
   `float64ToBigfloat`, `readBigfloat`, `showBigfloat`, `roundBigfloat`. New
   primitives `float32ToFloat64` and `float64ToFloat32` (the latter lossy)
   replace the removed bigfloat-routed conversions.
+- Removed `heads/haskell/bin/assemble-hackage-sdist.sh` (#418), the 0.15-era
+  bridge that flattened the multi-source-dir Haskell head into one self-contained
+  `hydra` sdist. Superseded by the per-package assembler (see Improvements).
 
 ---
 

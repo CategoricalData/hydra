@@ -2,14 +2,7 @@
   "definitions": [
     {
       "term": {
-        "name": "hydra.dsl.ast.associativityNone",
-        "signature": {
-          "parameters": [],
-          "result": {
-            "type": {
-              "application": {"argument": {"variable": "hydra.ast.Associativity"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -37,17 +30,17 @@
                                   "typeName": "hydra.core.Field"}}}],
                           "typeName": "hydra.core.Injection"}}},
                     "typeName": "hydra.core.Term"}},
-                "typeName": "hydra.typed.TypedTerm"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.ast.associativityLeft",
+                "typeName": "hydra.typed.TypedTerm"}}}},
+        "name": "hydra.dsl.ast.associativityNone",
         "signature": {
           "parameters": [],
           "result": {
             "type": {
               "application": {"argument": {"variable": "hydra.ast.Associativity"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -75,17 +68,17 @@
                                   "typeName": "hydra.core.Field"}}}],
                           "typeName": "hydra.core.Injection"}}},
                     "typeName": "hydra.core.Term"}},
-                "typeName": "hydra.typed.TypedTerm"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.ast.associativityRight",
+                "typeName": "hydra.typed.TypedTerm"}}}},
+        "name": "hydra.dsl.ast.associativityLeft",
         "signature": {
           "parameters": [],
           "result": {
             "type": {
               "application": {"argument": {"variable": "hydra.ast.Associativity"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -113,17 +106,17 @@
                                   "typeName": "hydra.core.Field"}}}],
                           "typeName": "hydra.core.Injection"}}},
                     "typeName": "hydra.core.Term"}},
-                "typeName": "hydra.typed.TypedTerm"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.ast.associativityBoth",
+                "typeName": "hydra.typed.TypedTerm"}}}},
+        "name": "hydra.dsl.ast.associativityRight",
         "signature": {
           "parameters": [],
           "result": {
             "type": {
               "application": {"argument": {"variable": "hydra.ast.Associativity"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -151,46 +144,17 @@
                                   "typeName": "hydra.core.Field"}}}],
                           "typeName": "hydra.core.Injection"}}},
                     "typeName": "hydra.core.Term"}},
-                "typeName": "hydra.typed.TypedTerm"}}}}}},
+                "typeName": "hydra.typed.TypedTerm"}}}},
+        "name": "hydra.dsl.ast.associativityBoth",
+        "signature": {
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"argument": {"variable": "hydra.ast.Associativity"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.dsl.ast.blockStyle",
-        "signature": {
-          "parameters": [
-            {
-              "isLazy": false,
-              "name": "arg0",
-              "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "An optional indentation string"}}}],
-                      "body": {"maybe": {"literal": {"string": {}}}}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
-            {
-              "isLazy": false,
-              "name": "arg1",
-              "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "Whether to place a newline before the content"}}}],
-                      "body": {"literal": {"boolean": {}}}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
-            {
-              "isLazy": false,
-              "name": "arg2",
-              "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "Whether to place a newline after the content"}}}],
-                      "body": {"literal": {"boolean": {}}}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
-          "result": {
-            "type": {"application": {"argument": {"variable": "hydra.ast.BlockStyle"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for hydra.ast.BlockStyle"}}}],
             "body": {
@@ -269,26 +233,46 @@
                         "annotation": [{"key": "description", "value": {"literal": {"string": "An optional indentation string"}}}],
                         "body": {"maybe": {"literal": {"string": {}}}}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "indent"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.ast.blockStyleIndent",
+                "parameter": "indent"}}}},
+        "name": "hydra.dsl.ast.blockStyle",
         "signature": {
           "parameters": [
             {
               "isLazy": false,
               "name": "arg0",
-              "type": {"application": {"argument": {"variable": "hydra.ast.BlockStyle"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "An optional indentation string"}}}],
+                      "body": {"maybe": {"literal": {"string": {}}}}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "Whether to place a newline before the content"}}}],
+                      "body": {"literal": {"boolean": {}}}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg2",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "Whether to place a newline after the content"}}}],
+                      "body": {"literal": {"boolean": {}}}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
-            "type": {
-              "application": {
-                "argument": {
-                  "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "An optional indentation string"}}}],
-                    "body": {"maybe": {"literal": {"string": {}}}}}},
-                "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+            "type": {"application": {"argument": {"variable": "hydra.ast.BlockStyle"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL accessor for the indent field of hydra.ast.BlockStyle"}}}],
             "body": {
@@ -324,10 +308,8 @@
                         "typeName": "hydra.core.Term"}},
                     "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {"application": {"argument": {"variable": "hydra.ast.BlockStyle"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.ast.blockStyleNewlineBeforeContent",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.ast.blockStyleIndent",
         "signature": {
           "parameters": [
             {
@@ -339,11 +321,13 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "Whether to place a newline before the content"}}}],
-                    "body": {"literal": {"boolean": {}}}}},
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "An optional indentation string"}}}],
+                    "body": {"maybe": {"literal": {"string": {}}}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -384,10 +368,8 @@
                         "typeName": "hydra.core.Term"}},
                     "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {"application": {"argument": {"variable": "hydra.ast.BlockStyle"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.ast.blockStyleNewlineAfterContent",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.ast.blockStyleNewlineBeforeContent",
         "signature": {
           "parameters": [
             {
@@ -399,11 +381,13 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "Whether to place a newline after the content"}}}],
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "Whether to place a newline before the content"}}}],
                     "body": {"literal": {"boolean": {}}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -444,30 +428,26 @@
                         "typeName": "hydra.core.Term"}},
                     "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {"application": {"argument": {"variable": "hydra.ast.BlockStyle"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.ast.blockStyleWithIndent",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.ast.blockStyleNewlineAfterContent",
         "signature": {
           "parameters": [
             {
               "isLazy": false,
               "name": "arg0",
-              "type": {"application": {"argument": {"variable": "hydra.ast.BlockStyle"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-            {
-              "isLazy": false,
-              "name": "arg1",
-              "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "An optional indentation string"}}}],
-                      "body": {"maybe": {"literal": {"string": {}}}}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+              "type": {"application": {"argument": {"variable": "hydra.ast.BlockStyle"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
-            "type": {"application": {"argument": {"variable": "hydra.ast.BlockStyle"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+            "type": {
+              "application": {
+                "argument": {
+                  "annotated": {
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "Whether to place a newline after the content"}}}],
+                    "body": {"literal": {"boolean": {}}}}},
+                "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL updater for the indent field of hydra.ast.BlockStyle"}}}],
             "body": {
@@ -586,10 +566,8 @@
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {"application": {"argument": {"variable": "hydra.ast.BlockStyle"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.ast.blockStyleWithNewlineBeforeContent",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.ast.blockStyleWithIndent",
         "signature": {
           "parameters": [
             {
@@ -603,13 +581,15 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "Whether to place a newline before the content"}}}],
-                      "body": {"literal": {"boolean": {}}}}},
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "An optional indentation string"}}}],
+                      "body": {"maybe": {"literal": {"string": {}}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {"application": {"argument": {"variable": "hydra.ast.BlockStyle"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -729,10 +709,8 @@
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {"application": {"argument": {"variable": "hydra.ast.BlockStyle"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.ast.blockStyleWithNewlineAfterContent",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.ast.blockStyleWithNewlineBeforeContent",
         "signature": {
           "parameters": [
             {
@@ -746,13 +724,15 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "Whether to place a newline after the content"}}}],
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "Whether to place a newline before the content"}}}],
                       "body": {"literal": {"boolean": {}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {"application": {"argument": {"variable": "hydra.ast.BlockStyle"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -872,22 +852,14 @@
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {"application": {"argument": {"variable": "hydra.ast.BlockStyle"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.ast.bracketExpr",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.ast.blockStyleWithNewlineAfterContent",
         "signature": {
           "parameters": [
             {
               "isLazy": false,
               "name": "arg0",
-              "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The bracket pair enclosing the expression"}}}],
-                      "body": {"variable": "hydra.ast.Brackets"}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
+              "type": {"application": {"argument": {"variable": "hydra.ast.BlockStyle"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
               "isLazy": false,
               "name": "arg1",
@@ -895,23 +867,15 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The expression within the brackets"}}}],
-                      "body": {"variable": "hydra.ast.Expr"}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
-            {
-              "isLazy": false,
-              "name": "arg2",
-              "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The formatting style for the bracketed block"}}}],
-                      "body": {"variable": "hydra.ast.BlockStyle"}}},
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "Whether to place a newline after the content"}}}],
+                      "body": {"literal": {"boolean": {}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
-            "type": {"application": {"argument": {"variable": "hydra.ast.BracketExpr"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+            "type": {"application": {"argument": {"variable": "hydra.ast.BlockStyle"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for hydra.ast.BracketExpr"}}}],
             "body": {
@@ -986,26 +950,46 @@
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The bracket pair enclosing the expression"}}}],
                         "body": {"variable": "hydra.ast.Brackets"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "brackets"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.ast.bracketExprBrackets",
+                "parameter": "brackets"}}}},
+        "name": "hydra.dsl.ast.bracketExpr",
         "signature": {
           "parameters": [
             {
               "isLazy": false,
               "name": "arg0",
-              "type": {"application": {"argument": {"variable": "hydra.ast.BracketExpr"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The bracket pair enclosing the expression"}}}],
+                      "body": {"variable": "hydra.ast.Brackets"}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The expression within the brackets"}}}],
+                      "body": {"variable": "hydra.ast.Expr"}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg2",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The formatting style for the bracketed block"}}}],
+                      "body": {"variable": "hydra.ast.BlockStyle"}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
-            "type": {
-              "application": {
-                "argument": {
-                  "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The bracket pair enclosing the expression"}}}],
-                    "body": {"variable": "hydra.ast.Brackets"}}},
-                "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+            "type": {"application": {"argument": {"variable": "hydra.ast.BracketExpr"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {"key": "description", "value": {"literal": {"string": "DSL accessor for the brackets field of hydra.ast.BracketExpr"}}}],
@@ -1042,10 +1026,8 @@
                         "typeName": "hydra.core.Term"}},
                     "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {"application": {"argument": {"variable": "hydra.ast.BracketExpr"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.ast.bracketExprEnclosed",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.ast.bracketExprBrackets",
         "signature": {
           "parameters": [
             {
@@ -1057,11 +1039,13 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The expression within the brackets"}}}],
-                    "body": {"variable": "hydra.ast.Expr"}}},
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "The bracket pair enclosing the expression"}}}],
+                    "body": {"variable": "hydra.ast.Brackets"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {"key": "description", "value": {"literal": {"string": "DSL accessor for the enclosed field of hydra.ast.BracketExpr"}}}],
@@ -1098,10 +1082,8 @@
                         "typeName": "hydra.core.Term"}},
                     "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {"application": {"argument": {"variable": "hydra.ast.BracketExpr"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.ast.bracketExprStyle",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.ast.bracketExprEnclosed",
         "signature": {
           "parameters": [
             {
@@ -1113,11 +1095,13 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The formatting style for the bracketed block"}}}],
-                    "body": {"variable": "hydra.ast.BlockStyle"}}},
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "The expression within the brackets"}}}],
+                    "body": {"variable": "hydra.ast.Expr"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL accessor for the style field of hydra.ast.BracketExpr"}}}],
             "body": {
@@ -1153,30 +1137,26 @@
                         "typeName": "hydra.core.Term"}},
                     "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {"application": {"argument": {"variable": "hydra.ast.BracketExpr"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.ast.bracketExprWithBrackets",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.ast.bracketExprStyle",
         "signature": {
           "parameters": [
             {
               "isLazy": false,
               "name": "arg0",
-              "type": {"application": {"argument": {"variable": "hydra.ast.BracketExpr"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-            {
-              "isLazy": false,
-              "name": "arg1",
-              "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The bracket pair enclosing the expression"}}}],
-                      "body": {"variable": "hydra.ast.Brackets"}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+              "type": {"application": {"argument": {"variable": "hydra.ast.BracketExpr"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
-            "type": {"application": {"argument": {"variable": "hydra.ast.BracketExpr"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+            "type": {
+              "application": {
+                "argument": {
+                  "annotated": {
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "The formatting style for the bracketed block"}}}],
+                    "body": {"variable": "hydra.ast.BlockStyle"}}},
+                "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {"key": "description", "value": {"literal": {"string": "DSL updater for the brackets field of hydra.ast.BracketExpr"}}}],
@@ -1288,10 +1268,8 @@
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {"application": {"argument": {"variable": "hydra.ast.BracketExpr"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.ast.bracketExprWithEnclosed",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.ast.bracketExprWithBrackets",
         "signature": {
           "parameters": [
             {
@@ -1305,13 +1283,15 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The expression within the brackets"}}}],
-                      "body": {"variable": "hydra.ast.Expr"}}},
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The bracket pair enclosing the expression"}}}],
+                      "body": {"variable": "hydra.ast.Brackets"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {"application": {"argument": {"variable": "hydra.ast.BracketExpr"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {"key": "description", "value": {"literal": {"string": "DSL updater for the enclosed field of hydra.ast.BracketExpr"}}}],
@@ -1423,10 +1403,8 @@
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {"application": {"argument": {"variable": "hydra.ast.BracketExpr"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.ast.bracketExprWithStyle",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.ast.bracketExprWithEnclosed",
         "signature": {
           "parameters": [
             {
@@ -1440,13 +1418,15 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The formatting style for the bracketed block"}}}],
-                      "body": {"variable": "hydra.ast.BlockStyle"}}},
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The expression within the brackets"}}}],
+                      "body": {"variable": "hydra.ast.Expr"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {"application": {"argument": {"variable": "hydra.ast.BracketExpr"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL updater for the style field of hydra.ast.BracketExpr"}}}],
             "body": {
@@ -1557,22 +1537,14 @@
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {"application": {"argument": {"variable": "hydra.ast.BracketExpr"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.ast.brackets",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.ast.bracketExprWithStyle",
         "signature": {
           "parameters": [
             {
               "isLazy": false,
               "name": "arg0",
-              "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The opening bracket symbol"}}}],
-                      "body": {"variable": "hydra.ast.Symbol"}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
+              "type": {"application": {"argument": {"variable": "hydra.ast.BracketExpr"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
               "isLazy": false,
               "name": "arg1",
@@ -1580,13 +1552,15 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The closing bracket symbol"}}}],
-                      "body": {"variable": "hydra.ast.Symbol"}}},
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The formatting style for the bracketed block"}}}],
+                      "body": {"variable": "hydra.ast.BlockStyle"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
-            "type": {"application": {"argument": {"variable": "hydra.ast.Brackets"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+            "type": {"application": {"argument": {"variable": "hydra.ast.BracketExpr"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for hydra.ast.Brackets"}}}],
             "body": {
@@ -1643,26 +1617,36 @@
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The opening bracket symbol"}}}],
                         "body": {"variable": "hydra.ast.Symbol"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "open"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.ast.bracketsOpen",
+                "parameter": "open"}}}},
+        "name": "hydra.dsl.ast.brackets",
         "signature": {
           "parameters": [
             {
               "isLazy": false,
               "name": "arg0",
-              "type": {"application": {"argument": {"variable": "hydra.ast.Brackets"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The opening bracket symbol"}}}],
+                      "body": {"variable": "hydra.ast.Symbol"}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The closing bracket symbol"}}}],
+                      "body": {"variable": "hydra.ast.Symbol"}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
-            "type": {
-              "application": {
-                "argument": {
-                  "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The opening bracket symbol"}}}],
-                    "body": {"variable": "hydra.ast.Symbol"}}},
-                "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+            "type": {"application": {"argument": {"variable": "hydra.ast.Brackets"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL accessor for the open field of hydra.ast.Brackets"}}}],
             "body": {
@@ -1698,10 +1682,8 @@
                         "typeName": "hydra.core.Term"}},
                     "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {"application": {"argument": {"variable": "hydra.ast.Brackets"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.ast.bracketsClose",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.ast.bracketsOpen",
         "signature": {
           "parameters": [
             {
@@ -1713,11 +1695,13 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The closing bracket symbol"}}}],
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "The opening bracket symbol"}}}],
                     "body": {"variable": "hydra.ast.Symbol"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL accessor for the close field of hydra.ast.Brackets"}}}],
             "body": {
@@ -1753,30 +1737,26 @@
                         "typeName": "hydra.core.Term"}},
                     "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {"application": {"argument": {"variable": "hydra.ast.Brackets"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.ast.bracketsWithOpen",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.ast.bracketsClose",
         "signature": {
           "parameters": [
             {
               "isLazy": false,
               "name": "arg0",
-              "type": {"application": {"argument": {"variable": "hydra.ast.Brackets"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-            {
-              "isLazy": false,
-              "name": "arg1",
-              "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The opening bracket symbol"}}}],
-                      "body": {"variable": "hydra.ast.Symbol"}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+              "type": {"application": {"argument": {"variable": "hydra.ast.Brackets"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
-            "type": {"application": {"argument": {"variable": "hydra.ast.Brackets"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+            "type": {
+              "application": {
+                "argument": {
+                  "annotated": {
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "The closing bracket symbol"}}}],
+                    "body": {"variable": "hydra.ast.Symbol"}}},
+                "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL updater for the open field of hydra.ast.Brackets"}}}],
             "body": {
@@ -1853,10 +1833,8 @@
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {"application": {"argument": {"variable": "hydra.ast.Brackets"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.ast.bracketsWithClose",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.ast.bracketsWithOpen",
         "signature": {
           "parameters": [
             {
@@ -1870,13 +1848,15 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The closing bracket symbol"}}}],
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The opening bracket symbol"}}}],
                       "body": {"variable": "hydra.ast.Symbol"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {"application": {"argument": {"variable": "hydra.ast.Brackets"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL updater for the close field of hydra.ast.Brackets"}}}],
             "body": {
@@ -1953,26 +1933,30 @@
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {"application": {"argument": {"variable": "hydra.ast.Brackets"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.ast.exprConst",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.ast.bracketsWithClose",
         "signature": {
           "parameters": [
             {
               "isLazy": false,
               "name": "arg0",
+              "type": {"application": {"argument": {"variable": "hydra.ast.Brackets"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
               "type": {
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "A constant symbol"}}}],
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The closing bracket symbol"}}}],
                       "body": {"variable": "hydra.ast.Symbol"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
-            "type": {"application": {"argument": {"variable": "hydra.ast.Expr"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+            "type": {"application": {"argument": {"variable": "hydra.ast.Brackets"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL injection for the const variant of hydra.ast.Expr"}}}],
             "body": {
@@ -2009,10 +1993,8 @@
                         "annotation": [{"key": "description", "value": {"literal": {"string": "A constant symbol"}}}],
                         "body": {"variable": "hydra.ast.Symbol"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.ast.exprIndent",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.ast.exprConst",
         "signature": {
           "parameters": [
             {
@@ -2022,13 +2004,15 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "An indented expression"}}}],
-                      "body": {"variable": "hydra.ast.IndentedExpression"}}},
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "A constant symbol"}}}],
+                      "body": {"variable": "hydra.ast.Symbol"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {"application": {"argument": {"variable": "hydra.ast.Expr"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL injection for the indent variant of hydra.ast.Expr"}}}],
             "body": {
@@ -2065,10 +2049,8 @@
                         "annotation": [{"key": "description", "value": {"literal": {"string": "An indented expression"}}}],
                         "body": {"variable": "hydra.ast.IndentedExpression"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.ast.exprOp",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.ast.exprIndent",
         "signature": {
           "parameters": [
             {
@@ -2078,13 +2060,15 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "An operator expression"}}}],
-                      "body": {"variable": "hydra.ast.OpExpr"}}},
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "An indented expression"}}}],
+                      "body": {"variable": "hydra.ast.IndentedExpression"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {"application": {"argument": {"variable": "hydra.ast.Expr"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL injection for the op variant of hydra.ast.Expr"}}}],
             "body": {
@@ -2121,10 +2105,8 @@
                         "annotation": [{"key": "description", "value": {"literal": {"string": "An operator expression"}}}],
                         "body": {"variable": "hydra.ast.OpExpr"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.ast.exprBrackets",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.ast.exprOp",
         "signature": {
           "parameters": [
             {
@@ -2134,13 +2116,15 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "A bracketed expression"}}}],
-                      "body": {"variable": "hydra.ast.BracketExpr"}}},
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "An operator expression"}}}],
+                      "body": {"variable": "hydra.ast.OpExpr"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {"application": {"argument": {"variable": "hydra.ast.Expr"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL injection for the brackets variant of hydra.ast.Expr"}}}],
             "body": {
@@ -2177,10 +2161,8 @@
                         "annotation": [{"key": "description", "value": {"literal": {"string": "A bracketed expression"}}}],
                         "body": {"variable": "hydra.ast.BracketExpr"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.ast.exprSeq",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.ast.exprBrackets",
         "signature": {
           "parameters": [
             {
@@ -2190,18 +2172,15 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {
-                            "literal": {
-                              "string": "A sequence of expressions joined by a separator, treated as structural layout (not subject to parenthesization)"}}}],
-                      "body": {"variable": "hydra.ast.SeqExpr"}}},
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "A bracketed expression"}}}],
+                      "body": {"variable": "hydra.ast.BracketExpr"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {"application": {"argument": {"variable": "hydra.ast.Expr"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL injection for the seq variant of hydra.ast.Expr"}}}],
             "body": {
@@ -2243,10 +2222,8 @@
                                 "string": "A sequence of expressions joined by a separator, treated as structural layout (not subject to parenthesization)"}}}],
                         "body": {"variable": "hydra.ast.SeqExpr"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.ast.indentStyleAllLines",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.ast.exprSeq",
         "signature": {
           "parameters": [
             {
@@ -2256,13 +2233,20 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "Indent all lines with the given string"}}}],
-                      "body": {"literal": {"string": {}}}}},
+                      "annotation": [
+                        {
+                          "key": "description",
+                          "value": {
+                            "literal": {
+                              "string": "A sequence of expressions joined by a separator, treated as structural layout (not subject to parenthesization)"}}}],
+                      "body": {"variable": "hydra.ast.SeqExpr"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
-            "type": {"application": {"argument": {"variable": "hydra.ast.IndentStyle"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+            "type": {"application": {"argument": {"variable": "hydra.ast.Expr"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -2302,10 +2286,8 @@
                         "annotation": [{"key": "description", "value": {"literal": {"string": "Indent all lines with the given string"}}}],
                         "body": {"literal": {"string": {}}}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.ast.indentStyleSubsequentLines",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.ast.indentStyleAllLines",
         "signature": {
           "parameters": [
             {
@@ -2315,13 +2297,15 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "Indent only lines after the first with the given string"}}}],
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "Indent all lines with the given string"}}}],
                       "body": {"literal": {"string": {}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {"application": {"argument": {"variable": "hydra.ast.IndentStyle"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -2361,10 +2345,8 @@
                         "annotation": [{"key": "description", "value": {"literal": {"string": "Indent only lines after the first with the given string"}}}],
                         "body": {"literal": {"string": {}}}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.ast.indentedExpression",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.ast.indentStyleSubsequentLines",
         "signature": {
           "parameters": [
             {
@@ -2374,24 +2356,15 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The indentation style"}}}],
-                      "body": {"variable": "hydra.ast.IndentStyle"}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
-            {
-              "isLazy": false,
-              "name": "arg1",
-              "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The expression to be indented"}}}],
-                      "body": {"variable": "hydra.ast.Expr"}}},
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "Indent only lines after the first with the given string"}}}],
+                      "body": {"literal": {"string": {}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
-            "type": {
-              "application": {"argument": {"variable": "hydra.ast.IndentedExpression"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+            "type": {"application": {"argument": {"variable": "hydra.ast.IndentStyle"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for hydra.ast.IndentedExpression"}}}],
             "body": {
@@ -2448,27 +2421,37 @@
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The indentation style"}}}],
                         "body": {"variable": "hydra.ast.IndentStyle"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "style"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.ast.indentedExpressionStyle",
+                "parameter": "style"}}}},
+        "name": "hydra.dsl.ast.indentedExpression",
         "signature": {
           "parameters": [
             {
               "isLazy": false,
               "name": "arg0",
               "type": {
-                "application": {"argument": {"variable": "hydra.ast.IndentedExpression"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The indentation style"}}}],
+                      "body": {"variable": "hydra.ast.IndentStyle"}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The expression to be indented"}}}],
+                      "body": {"variable": "hydra.ast.Expr"}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
-              "application": {
-                "argument": {
-                  "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The indentation style"}}}],
-                    "body": {"variable": "hydra.ast.IndentStyle"}}},
-                "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+              "application": {"argument": {"variable": "hydra.ast.IndentedExpression"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -2508,10 +2491,8 @@
                     "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.ast.IndentedExpression"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.ast.indentedExpressionExpr",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.ast.indentedExpressionStyle",
         "signature": {
           "parameters": [
             {
@@ -2524,11 +2505,13 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The expression to be indented"}}}],
-                    "body": {"variable": "hydra.ast.Expr"}}},
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "The indentation style"}}}],
+                    "body": {"variable": "hydra.ast.IndentStyle"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -2568,32 +2551,27 @@
                     "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.ast.IndentedExpression"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.ast.indentedExpressionWithStyle",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.ast.indentedExpressionExpr",
         "signature": {
           "parameters": [
             {
               "isLazy": false,
               "name": "arg0",
               "type": {
-                "application": {"argument": {"variable": "hydra.ast.IndentedExpression"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-            {
-              "isLazy": false,
-              "name": "arg1",
-              "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The indentation style"}}}],
-                      "body": {"variable": "hydra.ast.IndentStyle"}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+                "application": {"argument": {"variable": "hydra.ast.IndentedExpression"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.ast.IndentedExpression"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+              "application": {
+                "argument": {
+                  "annotated": {
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "The expression to be indented"}}}],
+                    "body": {"variable": "hydra.ast.Expr"}}},
+                "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -2674,10 +2652,8 @@
                     "parameter": "newVal"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.ast.IndentedExpression"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.ast.indentedExpressionWithExpr",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.ast.indentedExpressionWithStyle",
         "signature": {
           "parameters": [
             {
@@ -2692,14 +2668,16 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The expression to be indented"}}}],
-                      "body": {"variable": "hydra.ast.Expr"}}},
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The indentation style"}}}],
+                      "body": {"variable": "hydra.ast.IndentStyle"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {"argument": {"variable": "hydra.ast.IndentedExpression"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -2780,22 +2758,15 @@
                     "parameter": "newVal"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.ast.IndentedExpression"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.ast.op",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.ast.indentedExpressionWithExpr",
         "signature": {
           "parameters": [
             {
               "isLazy": false,
               "name": "arg0",
               "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The operator symbol"}}}],
-                      "body": {"variable": "hydra.ast.Symbol"}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
+                "application": {"argument": {"variable": "hydra.ast.IndentedExpression"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
               "isLazy": false,
               "name": "arg1",
@@ -2803,32 +2774,16 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The padding around the operator"}}}],
-                      "body": {"variable": "hydra.ast.Padding"}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
-            {
-              "isLazy": false,
-              "name": "arg2",
-              "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The precedence of the operator"}}}],
-                      "body": {"variable": "hydra.ast.Precedence"}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
-            {
-              "isLazy": false,
-              "name": "arg3",
-              "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The associativity of the operator"}}}],
-                      "body": {"variable": "hydra.ast.Associativity"}}},
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The expression to be indented"}}}],
+                      "body": {"variable": "hydra.ast.Expr"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
-          "result": {"type": {"application": {"argument": {"variable": "hydra.ast.Op"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "result": {
+            "type": {
+              "application": {"argument": {"variable": "hydra.ast.IndentedExpression"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for hydra.ast.Op"}}}],
             "body": {
@@ -2919,26 +2874,55 @@
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The operator symbol"}}}],
                         "body": {"variable": "hydra.ast.Symbol"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "symbol"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.ast.opSymbol",
+                "parameter": "symbol"}}}},
+        "name": "hydra.dsl.ast.op",
         "signature": {
           "parameters": [
             {
               "isLazy": false,
               "name": "arg0",
-              "type": {"application": {"argument": {"variable": "hydra.ast.Op"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
-          "result": {
-            "type": {
-              "application": {
-                "argument": {
-                  "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The operator symbol"}}}],
-                    "body": {"variable": "hydra.ast.Symbol"}}},
-                "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The operator symbol"}}}],
+                      "body": {"variable": "hydra.ast.Symbol"}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The padding around the operator"}}}],
+                      "body": {"variable": "hydra.ast.Padding"}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg2",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The precedence of the operator"}}}],
+                      "body": {"variable": "hydra.ast.Precedence"}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg3",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The associativity of the operator"}}}],
+                      "body": {"variable": "hydra.ast.Associativity"}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+          "result": {"type": {"application": {"argument": {"variable": "hydra.ast.Op"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL accessor for the symbol field of hydra.ast.Op"}}}],
             "body": {
@@ -2972,10 +2956,8 @@
                         "typeName": "hydra.core.Term"}},
                     "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {"application": {"argument": {"variable": "hydra.ast.Op"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.ast.opPadding",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.ast.opSymbol",
         "signature": {
           "parameters": [
             {
@@ -2987,11 +2969,13 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The padding around the operator"}}}],
-                    "body": {"variable": "hydra.ast.Padding"}}},
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "The operator symbol"}}}],
+                    "body": {"variable": "hydra.ast.Symbol"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL accessor for the padding field of hydra.ast.Op"}}}],
             "body": {
@@ -3025,10 +3009,8 @@
                         "typeName": "hydra.core.Term"}},
                     "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {"application": {"argument": {"variable": "hydra.ast.Op"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.ast.opPrecedence",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.ast.opPadding",
         "signature": {
           "parameters": [
             {
@@ -3040,11 +3022,13 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The precedence of the operator"}}}],
-                    "body": {"variable": "hydra.ast.Precedence"}}},
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "The padding around the operator"}}}],
+                    "body": {"variable": "hydra.ast.Padding"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL accessor for the precedence field of hydra.ast.Op"}}}],
             "body": {
@@ -3078,10 +3062,8 @@
                         "typeName": "hydra.core.Term"}},
                     "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {"application": {"argument": {"variable": "hydra.ast.Op"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.ast.opAssociativity",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.ast.opPrecedence",
         "signature": {
           "parameters": [
             {
@@ -3093,11 +3075,13 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The associativity of the operator"}}}],
-                    "body": {"variable": "hydra.ast.Associativity"}}},
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "The precedence of the operator"}}}],
+                    "body": {"variable": "hydra.ast.Precedence"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL accessor for the associativity field of hydra.ast.Op"}}}],
             "body": {
@@ -3133,29 +3117,26 @@
                         "typeName": "hydra.core.Term"}},
                     "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {"application": {"argument": {"variable": "hydra.ast.Op"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.ast.opWithSymbol",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.ast.opAssociativity",
         "signature": {
           "parameters": [
             {
               "isLazy": false,
               "name": "arg0",
-              "type": {"application": {"argument": {"variable": "hydra.ast.Op"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-            {
-              "isLazy": false,
-              "name": "arg1",
-              "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The operator symbol"}}}],
-                      "body": {"variable": "hydra.ast.Symbol"}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
-          "result": {"type": {"application": {"argument": {"variable": "hydra.ast.Op"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+              "type": {"application": {"argument": {"variable": "hydra.ast.Op"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+          "result": {
+            "type": {
+              "application": {
+                "argument": {
+                  "annotated": {
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "The associativity of the operator"}}}],
+                    "body": {"variable": "hydra.ast.Associativity"}}},
+                "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL updater for the symbol field of hydra.ast.Op"}}}],
             "body": {
@@ -3294,10 +3275,8 @@
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {"application": {"argument": {"variable": "hydra.ast.Op"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.ast.opWithPadding",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.ast.opWithSymbol",
         "signature": {
           "parameters": [
             {
@@ -3311,12 +3290,14 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The padding around the operator"}}}],
-                      "body": {"variable": "hydra.ast.Padding"}}},
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The operator symbol"}}}],
+                      "body": {"variable": "hydra.ast.Symbol"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {"type": {"application": {"argument": {"variable": "hydra.ast.Op"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL updater for the padding field of hydra.ast.Op"}}}],
             "body": {
@@ -3455,10 +3436,8 @@
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {"application": {"argument": {"variable": "hydra.ast.Op"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.ast.opWithPrecedence",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.ast.opWithPadding",
         "signature": {
           "parameters": [
             {
@@ -3472,12 +3451,14 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The precedence of the operator"}}}],
-                      "body": {"variable": "hydra.ast.Precedence"}}},
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The padding around the operator"}}}],
+                      "body": {"variable": "hydra.ast.Padding"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {"type": {"application": {"argument": {"variable": "hydra.ast.Op"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL updater for the precedence field of hydra.ast.Op"}}}],
             "body": {
@@ -3616,10 +3597,8 @@
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {"application": {"argument": {"variable": "hydra.ast.Op"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.ast.opWithAssociativity",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.ast.opWithPrecedence",
         "signature": {
           "parameters": [
             {
@@ -3633,12 +3612,14 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The associativity of the operator"}}}],
-                      "body": {"variable": "hydra.ast.Associativity"}}},
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The precedence of the operator"}}}],
+                      "body": {"variable": "hydra.ast.Precedence"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {"type": {"application": {"argument": {"variable": "hydra.ast.Op"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL updater for the associativity field of hydra.ast.Op"}}}],
             "body": {
@@ -3775,22 +3756,14 @@
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {"application": {"argument": {"variable": "hydra.ast.Op"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.ast.opExpr",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.ast.opWithAssociativity",
         "signature": {
           "parameters": [
             {
               "isLazy": false,
               "name": "arg0",
-              "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The operator"}}}],
-                      "body": {"variable": "hydra.ast.Op"}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
+              "type": {"application": {"argument": {"variable": "hydra.ast.Op"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
               "isLazy": false,
               "name": "arg1",
@@ -3798,23 +3771,14 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The left-hand side operand"}}}],
-                      "body": {"variable": "hydra.ast.Expr"}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
-            {
-              "isLazy": false,
-              "name": "arg2",
-              "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The right-hand side operand"}}}],
-                      "body": {"variable": "hydra.ast.Expr"}}},
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The associativity of the operator"}}}],
+                      "body": {"variable": "hydra.ast.Associativity"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
-          "result": {
-            "type": {"application": {"argument": {"variable": "hydra.ast.OpExpr"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "result": {"type": {"application": {"argument": {"variable": "hydra.ast.Op"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for hydra.ast.OpExpr"}}}],
             "body": {
@@ -3889,26 +3853,46 @@
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The operator"}}}],
                         "body": {"variable": "hydra.ast.Op"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "op"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.ast.opExprOp",
+                "parameter": "op"}}}},
+        "name": "hydra.dsl.ast.opExpr",
         "signature": {
           "parameters": [
             {
               "isLazy": false,
               "name": "arg0",
-              "type": {"application": {"argument": {"variable": "hydra.ast.OpExpr"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The operator"}}}],
+                      "body": {"variable": "hydra.ast.Op"}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The left-hand side operand"}}}],
+                      "body": {"variable": "hydra.ast.Expr"}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg2",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The right-hand side operand"}}}],
+                      "body": {"variable": "hydra.ast.Expr"}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
-            "type": {
-              "application": {
-                "argument": {
-                  "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The operator"}}}],
-                    "body": {"variable": "hydra.ast.Op"}}},
-                "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+            "type": {"application": {"argument": {"variable": "hydra.ast.OpExpr"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL accessor for the op field of hydra.ast.OpExpr"}}}],
             "body": {
@@ -3944,10 +3928,8 @@
                         "typeName": "hydra.core.Term"}},
                     "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {"application": {"argument": {"variable": "hydra.ast.OpExpr"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.ast.opExprLhs",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.ast.opExprOp",
         "signature": {
           "parameters": [
             {
@@ -3959,11 +3941,13 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The left-hand side operand"}}}],
-                    "body": {"variable": "hydra.ast.Expr"}}},
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "The operator"}}}],
+                    "body": {"variable": "hydra.ast.Op"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL accessor for the lhs field of hydra.ast.OpExpr"}}}],
             "body": {
@@ -3999,10 +3983,8 @@
                         "typeName": "hydra.core.Term"}},
                     "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {"application": {"argument": {"variable": "hydra.ast.OpExpr"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.ast.opExprRhs",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.ast.opExprLhs",
         "signature": {
           "parameters": [
             {
@@ -4014,11 +3996,13 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The right-hand side operand"}}}],
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "The left-hand side operand"}}}],
                     "body": {"variable": "hydra.ast.Expr"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL accessor for the rhs field of hydra.ast.OpExpr"}}}],
             "body": {
@@ -4054,30 +4038,26 @@
                         "typeName": "hydra.core.Term"}},
                     "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {"application": {"argument": {"variable": "hydra.ast.OpExpr"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.ast.opExprWithOp",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.ast.opExprRhs",
         "signature": {
           "parameters": [
             {
               "isLazy": false,
               "name": "arg0",
-              "type": {"application": {"argument": {"variable": "hydra.ast.OpExpr"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-            {
-              "isLazy": false,
-              "name": "arg1",
-              "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The operator"}}}],
-                      "body": {"variable": "hydra.ast.Op"}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+              "type": {"application": {"argument": {"variable": "hydra.ast.OpExpr"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
-            "type": {"application": {"argument": {"variable": "hydra.ast.OpExpr"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+            "type": {
+              "application": {
+                "argument": {
+                  "annotated": {
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "The right-hand side operand"}}}],
+                    "body": {"variable": "hydra.ast.Expr"}}},
+                "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL updater for the op field of hydra.ast.OpExpr"}}}],
             "body": {
@@ -4188,10 +4168,8 @@
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {"application": {"argument": {"variable": "hydra.ast.OpExpr"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.ast.opExprWithLhs",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.ast.opExprWithOp",
         "signature": {
           "parameters": [
             {
@@ -4205,13 +4183,15 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The left-hand side operand"}}}],
-                      "body": {"variable": "hydra.ast.Expr"}}},
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The operator"}}}],
+                      "body": {"variable": "hydra.ast.Op"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {"application": {"argument": {"variable": "hydra.ast.OpExpr"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL updater for the lhs field of hydra.ast.OpExpr"}}}],
             "body": {
@@ -4322,10 +4302,8 @@
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {"application": {"argument": {"variable": "hydra.ast.OpExpr"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.ast.opExprWithRhs",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.ast.opExprWithLhs",
         "signature": {
           "parameters": [
             {
@@ -4339,13 +4317,15 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The right-hand side operand"}}}],
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The left-hand side operand"}}}],
                       "body": {"variable": "hydra.ast.Expr"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {"application": {"argument": {"variable": "hydra.ast.OpExpr"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL updater for the rhs field of hydra.ast.OpExpr"}}}],
             "body": {
@@ -4456,22 +4436,14 @@
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {"application": {"argument": {"variable": "hydra.ast.OpExpr"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.ast.padding",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.ast.opExprWithRhs",
         "signature": {
           "parameters": [
             {
               "isLazy": false,
               "name": "arg0",
-              "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "Padding to the left of the operator"}}}],
-                      "body": {"variable": "hydra.ast.Ws"}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
+              "type": {"application": {"argument": {"variable": "hydra.ast.OpExpr"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
               "isLazy": false,
               "name": "arg1",
@@ -4479,13 +4451,15 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "Padding to the right of the operator"}}}],
-                      "body": {"variable": "hydra.ast.Ws"}}},
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The right-hand side operand"}}}],
+                      "body": {"variable": "hydra.ast.Expr"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
-            "type": {"application": {"argument": {"variable": "hydra.ast.Padding"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+            "type": {"application": {"argument": {"variable": "hydra.ast.OpExpr"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for hydra.ast.Padding"}}}],
             "body": {
@@ -4542,26 +4516,36 @@
                         "annotation": [{"key": "description", "value": {"literal": {"string": "Padding to the left of the operator"}}}],
                         "body": {"variable": "hydra.ast.Ws"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "left"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.ast.paddingLeft",
+                "parameter": "left"}}}},
+        "name": "hydra.dsl.ast.padding",
         "signature": {
           "parameters": [
             {
               "isLazy": false,
               "name": "arg0",
-              "type": {"application": {"argument": {"variable": "hydra.ast.Padding"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "Padding to the left of the operator"}}}],
+                      "body": {"variable": "hydra.ast.Ws"}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "Padding to the right of the operator"}}}],
+                      "body": {"variable": "hydra.ast.Ws"}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
-            "type": {
-              "application": {
-                "argument": {
-                  "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "Padding to the left of the operator"}}}],
-                    "body": {"variable": "hydra.ast.Ws"}}},
-                "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+            "type": {"application": {"argument": {"variable": "hydra.ast.Padding"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL accessor for the left field of hydra.ast.Padding"}}}],
             "body": {
@@ -4597,10 +4581,8 @@
                         "typeName": "hydra.core.Term"}},
                     "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {"application": {"argument": {"variable": "hydra.ast.Padding"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.ast.paddingRight",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.ast.paddingLeft",
         "signature": {
           "parameters": [
             {
@@ -4612,11 +4594,13 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "Padding to the right of the operator"}}}],
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "Padding to the left of the operator"}}}],
                     "body": {"variable": "hydra.ast.Ws"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL accessor for the right field of hydra.ast.Padding"}}}],
             "body": {
@@ -4652,30 +4636,26 @@
                         "typeName": "hydra.core.Term"}},
                     "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {"application": {"argument": {"variable": "hydra.ast.Padding"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.ast.paddingWithLeft",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.ast.paddingRight",
         "signature": {
           "parameters": [
             {
               "isLazy": false,
               "name": "arg0",
-              "type": {"application": {"argument": {"variable": "hydra.ast.Padding"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-            {
-              "isLazy": false,
-              "name": "arg1",
-              "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "Padding to the left of the operator"}}}],
-                      "body": {"variable": "hydra.ast.Ws"}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+              "type": {"application": {"argument": {"variable": "hydra.ast.Padding"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
-            "type": {"application": {"argument": {"variable": "hydra.ast.Padding"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+            "type": {
+              "application": {
+                "argument": {
+                  "annotated": {
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "Padding to the right of the operator"}}}],
+                    "body": {"variable": "hydra.ast.Ws"}}},
+                "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL updater for the left field of hydra.ast.Padding"}}}],
             "body": {
@@ -4752,10 +4732,8 @@
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {"application": {"argument": {"variable": "hydra.ast.Padding"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.ast.paddingWithRight",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.ast.paddingWithLeft",
         "signature": {
           "parameters": [
             {
@@ -4769,13 +4747,15 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "Padding to the right of the operator"}}}],
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "Padding to the left of the operator"}}}],
                       "body": {"variable": "hydra.ast.Ws"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {"application": {"argument": {"variable": "hydra.ast.Padding"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL updater for the right field of hydra.ast.Padding"}}}],
             "body": {
@@ -4852,21 +4832,30 @@
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {"application": {"argument": {"variable": "hydra.ast.Padding"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.ast.precedence",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.ast.paddingWithRight",
         "signature": {
           "parameters": [
             {
               "isLazy": false,
               "name": "arg0",
+              "type": {"application": {"argument": {"variable": "hydra.ast.Padding"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
               "type": {
-                "application": {"argument": {"literal": {"integer": {"int32": {}}}}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "Padding to the right of the operator"}}}],
+                      "body": {"variable": "hydra.ast.Ws"}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
-            "type": {"application": {"argument": {"variable": "hydra.ast.Precedence"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+            "type": {"application": {"argument": {"variable": "hydra.ast.Padding"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for the hydra.ast.Precedence wrapper"}}}],
             "body": {
@@ -4891,21 +4880,21 @@
                     "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
                   "application": {"argument": {"literal": {"integer": {"int32": {}}}}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.ast.unPrecedence",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.ast.precedence",
         "signature": {
           "parameters": [
             {
               "isLazy": false,
               "name": "arg0",
-              "type": {"application": {"argument": {"variable": "hydra.ast.Precedence"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+              "type": {
+                "application": {"argument": {"literal": {"integer": {"int32": {}}}}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
-            "type": {
-              "application": {"argument": {"literal": {"integer": {"int32": {}}}}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+            "type": {"application": {"argument": {"variable": "hydra.ast.Precedence"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL accessor for the body of hydra.ast.Precedence"}}}],
             "body": {
@@ -4934,36 +4923,21 @@
                         "typeName": "hydra.core.Term"}},
                     "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {"application": {"argument": {"variable": "hydra.ast.Precedence"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.ast.seqExpr",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.ast.unPrecedence",
         "signature": {
           "parameters": [
             {
               "isLazy": false,
               "name": "arg0",
-              "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The separator operator"}}}],
-                      "body": {"variable": "hydra.ast.Op"}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
-            {
-              "isLazy": false,
-              "name": "arg1",
-              "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The expressions to join"}}}],
-                      "body": {"list": {"variable": "hydra.ast.Expr"}}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+              "type": {"application": {"argument": {"variable": "hydra.ast.Precedence"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
-            "type": {"application": {"argument": {"variable": "hydra.ast.SeqExpr"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+            "type": {
+              "application": {"argument": {"literal": {"integer": {"int32": {}}}}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for hydra.ast.SeqExpr"}}}],
             "body": {
@@ -5020,26 +4994,36 @@
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The separator operator"}}}],
                         "body": {"variable": "hydra.ast.Op"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "op"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.ast.seqExprOp",
+                "parameter": "op"}}}},
+        "name": "hydra.dsl.ast.seqExpr",
         "signature": {
           "parameters": [
             {
               "isLazy": false,
               "name": "arg0",
-              "type": {"application": {"argument": {"variable": "hydra.ast.SeqExpr"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The separator operator"}}}],
+                      "body": {"variable": "hydra.ast.Op"}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The expressions to join"}}}],
+                      "body": {"list": {"variable": "hydra.ast.Expr"}}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
-            "type": {
-              "application": {
-                "argument": {
-                  "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The separator operator"}}}],
-                    "body": {"variable": "hydra.ast.Op"}}},
-                "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+            "type": {"application": {"argument": {"variable": "hydra.ast.SeqExpr"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL accessor for the op field of hydra.ast.SeqExpr"}}}],
             "body": {
@@ -5075,10 +5059,8 @@
                         "typeName": "hydra.core.Term"}},
                     "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {"application": {"argument": {"variable": "hydra.ast.SeqExpr"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.ast.seqExprElements",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.ast.seqExprOp",
         "signature": {
           "parameters": [
             {
@@ -5090,11 +5072,13 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The expressions to join"}}}],
-                    "body": {"list": {"variable": "hydra.ast.Expr"}}}},
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "The separator operator"}}}],
+                    "body": {"variable": "hydra.ast.Op"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL accessor for the elements field of hydra.ast.SeqExpr"}}}],
             "body": {
@@ -5130,30 +5114,26 @@
                         "typeName": "hydra.core.Term"}},
                     "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {"application": {"argument": {"variable": "hydra.ast.SeqExpr"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.ast.seqExprWithOp",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.ast.seqExprElements",
         "signature": {
           "parameters": [
             {
               "isLazy": false,
               "name": "arg0",
-              "type": {"application": {"argument": {"variable": "hydra.ast.SeqExpr"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-            {
-              "isLazy": false,
-              "name": "arg1",
-              "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The separator operator"}}}],
-                      "body": {"variable": "hydra.ast.Op"}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+              "type": {"application": {"argument": {"variable": "hydra.ast.SeqExpr"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
-            "type": {"application": {"argument": {"variable": "hydra.ast.SeqExpr"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+            "type": {
+              "application": {
+                "argument": {
+                  "annotated": {
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "The expressions to join"}}}],
+                    "body": {"list": {"variable": "hydra.ast.Expr"}}}},
+                "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL updater for the op field of hydra.ast.SeqExpr"}}}],
             "body": {
@@ -5230,10 +5210,8 @@
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {"application": {"argument": {"variable": "hydra.ast.SeqExpr"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.ast.seqExprWithElements",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.ast.seqExprWithOp",
         "signature": {
           "parameters": [
             {
@@ -5247,13 +5225,15 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The expressions to join"}}}],
-                      "body": {"list": {"variable": "hydra.ast.Expr"}}}},
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The separator operator"}}}],
+                      "body": {"variable": "hydra.ast.Op"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {"application": {"argument": {"variable": "hydra.ast.SeqExpr"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL updater for the elements field of hydra.ast.SeqExpr"}}}],
             "body": {
@@ -5330,20 +5310,30 @@
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {"application": {"argument": {"variable": "hydra.ast.SeqExpr"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.ast.symbol",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.ast.seqExprWithElements",
         "signature": {
           "parameters": [
             {
               "isLazy": false,
               "name": "arg0",
-              "type": {"application": {"argument": {"literal": {"string": {}}}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+              "type": {"application": {"argument": {"variable": "hydra.ast.SeqExpr"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The expressions to join"}}}],
+                      "body": {"list": {"variable": "hydra.ast.Expr"}}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
-            "type": {"application": {"argument": {"variable": "hydra.ast.Symbol"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+            "type": {"application": {"argument": {"variable": "hydra.ast.SeqExpr"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for the hydra.ast.Symbol wrapper"}}}],
             "body": {
@@ -5367,19 +5357,20 @@
                         "typeName": "hydra.core.Term"}},
                     "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {"application": {"argument": {"literal": {"string": {}}}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.ast.unSymbol",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.ast.symbol",
         "signature": {
           "parameters": [
             {
               "isLazy": false,
               "name": "arg0",
-              "type": {"application": {"argument": {"variable": "hydra.ast.Symbol"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
-          "result": {"type": {"application": {"argument": {"literal": {"string": {}}}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+              "type": {"application": {"argument": {"literal": {"string": {}}}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+          "result": {
+            "type": {"application": {"argument": {"variable": "hydra.ast.Symbol"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL accessor for the body of hydra.ast.Symbol"}}}],
             "body": {
@@ -5408,15 +5399,19 @@
                         "typeName": "hydra.core.Term"}},
                     "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {"application": {"argument": {"variable": "hydra.ast.Symbol"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.ast.unSymbol",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {"application": {"argument": {"variable": "hydra.ast.Symbol"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+          "result": {"type": {"application": {"argument": {"literal": {"string": {}}}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.dsl.ast.wsNone",
-        "signature": {
-          "parameters": [],
-          "result": {"type": {"application": {"argument": {"variable": "hydra.ast.Ws"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL injection for the none variant of hydra.ast.Ws"}}}],
             "body": {
@@ -5439,15 +5434,15 @@
                                   "typeName": "hydra.core.Field"}}}],
                           "typeName": "hydra.core.Injection"}}},
                     "typeName": "hydra.core.Term"}},
-                "typeName": "hydra.typed.TypedTerm"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.ast.wsSpace",
+                "typeName": "hydra.typed.TypedTerm"}}}},
+        "name": "hydra.dsl.ast.wsNone",
         "signature": {
           "parameters": [],
           "result": {"type": {"application": {"argument": {"variable": "hydra.ast.Ws"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL injection for the space variant of hydra.ast.Ws"}}}],
             "body": {
@@ -5470,15 +5465,15 @@
                                   "typeName": "hydra.core.Field"}}}],
                           "typeName": "hydra.core.Injection"}}},
                     "typeName": "hydra.core.Term"}},
-                "typeName": "hydra.typed.TypedTerm"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.ast.wsBreak",
+                "typeName": "hydra.typed.TypedTerm"}}}},
+        "name": "hydra.dsl.ast.wsSpace",
         "signature": {
           "parameters": [],
           "result": {"type": {"application": {"argument": {"variable": "hydra.ast.Ws"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL injection for the break variant of hydra.ast.Ws"}}}],
             "body": {
@@ -5501,25 +5496,15 @@
                                   "typeName": "hydra.core.Field"}}}],
                           "typeName": "hydra.core.Injection"}}},
                     "typeName": "hydra.core.Term"}},
-                "typeName": "hydra.typed.TypedTerm"}}}}}},
+                "typeName": "hydra.typed.TypedTerm"}}}},
+        "name": "hydra.dsl.ast.wsBreak",
+        "signature": {
+          "parameters": [],
+          "result": {"type": {"application": {"argument": {"variable": "hydra.ast.Ws"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.dsl.ast.wsBreakAndIndent",
-        "signature": {
-          "parameters": [
-            {
-              "isLazy": false,
-              "name": "arg0",
-              "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "A line break followed by indentation"}}}],
-                      "body": {"literal": {"string": {}}}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
-          "result": {"type": {"application": {"argument": {"variable": "hydra.ast.Ws"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {"key": "description", "value": {"literal": {"string": "DSL injection for the breakAndIndent variant of hydra.ast.Ws"}}}],
@@ -5555,15 +5540,25 @@
                         "annotation": [{"key": "description", "value": {"literal": {"string": "A line break followed by indentation"}}}],
                         "body": {"literal": {"string": {}}}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.ast.wsBreakAndIndent",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "A line break followed by indentation"}}}],
+                      "body": {"literal": {"string": {}}}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+          "result": {"type": {"application": {"argument": {"variable": "hydra.ast.Ws"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.dsl.ast.wsDoubleBreak",
-        "signature": {
-          "parameters": [],
-          "result": {"type": {"application": {"argument": {"variable": "hydra.ast.Ws"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL injection for the doubleBreak variant of hydra.ast.Ws"}}}],
             "body": {
@@ -5586,7 +5581,12 @@
                                   "typeName": "hydra.core.Field"}}}],
                           "typeName": "hydra.core.Injection"}}},
                     "typeName": "hydra.core.Term"}},
-                "typeName": "hydra.typed.TypedTerm"}}}}}}],
+                "typeName": "hydra.typed.TypedTerm"}}}},
+        "name": "hydra.dsl.ast.wsDoubleBreak",
+        "signature": {
+          "parameters": [],
+          "result": {"type": {"application": {"argument": {"variable": "hydra.ast.Ws"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}}],
   "dependencies": [{"module": "hydra.ast"}, {"module": "hydra.typed"}, {"module": "hydra.core"}, {"module": "hydra.dsl.core"}],
   "metadata": {"comments": [], "description": "DSL functions for hydra.ast", "seeAlso": []},
   "name": "hydra.dsl.ast"}

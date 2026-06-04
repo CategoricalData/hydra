@@ -87,8 +87,8 @@ public final class Defs {
                         d = new Definition.Term(new TermDefinition(
                             fqName,
                             Maybe.<EntityMetadata>nothing(),
-                            bodySupplier.get(),
-                            Maybe.<TermSignature>nothing()));
+                            Maybe.<TermSignature>nothing(),
+                            bodySupplier.get()));
                         cached = d;
                     }
                 }

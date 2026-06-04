@@ -98,7 +98,7 @@ reorderDefs defs =
           sortedTermDefs =
                   Lists.concat (Sorting.topologicalSortNodes (\d -> case d of
                     Packaging.DefinitionTerm v0 -> Packaging.termDefinitionName v0) (\d -> case d of
-                    Packaging.DefinitionTerm v0 -> Sets.toList (Variables.freeVariablesInTerm (Packaging.termDefinitionTerm v0))
+                    Packaging.DefinitionTerm v0 -> Sets.toList (Variables.freeVariablesInTerm (Packaging.termDefinitionBody v0))
                     _ -> []) termDefsWrapped)
       in (Lists.concat [
         typeDefs,

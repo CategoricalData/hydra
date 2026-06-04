@@ -201,7 +201,7 @@ constructModule = haskellCoderDefinition "constructModule" $
     cases _Definition (var "def") Nothing [
       _Definition_type>>: "type" ~> lets [
         "name">: Packaging.typeDefinitionName $ var "type",
-        "typ">: Core.typeSchemeBody $ Packaging.typeDefinitionTypeScheme $ var "type"] $
+        "typ">: Core.typeSchemeBody $ Packaging.typeDefinitionBody $ var "type"] $
         toTypeDeclarationsFrom @@ var "namespaces" @@ var "name" @@ var "typ" @@ var "cx" @@ var "g",
       _Definition_term>>: "term" ~>
         "d" <<~ toDataDeclaration @@ var "namespaces" @@ var "term" @@ var "cx" @@ var "g" $
@@ -297,8 +297,8 @@ encodeCaseExpression = haskellCoderDefinition "encodeCaseExpression" $
     "def">: Core.caseStatementDefault $ var "stmt",
     "fields">: Core.caseStatementCases $ var "stmt",
     "toAlt">: "fieldMap" ~> "field" ~> lets [
-      "fn">: Core.fieldName $ var "field",
-      "fun'">: Core.fieldTerm $ var "field",
+      "fn">: Core.caseAlternativeName $ var "field",
+      "fun'">: Core.caseAlternativeHandler $ var "field",
       "v0">: Strings.cat2 (string "v") (Literals.showInt32 $ var "depth"),
       "raw">: MetaTerms.apply (var "fun'") (Core.termVariable $ Core.name $ var "v0"),
       "rhsTerm">: Dependencies.simplifyTerm @@ var "raw",
@@ -759,7 +759,7 @@ gatherMetadata = haskellCoderDefinition "gatherMetadata" $
     "addDef" <~ ("meta" ~> "def" ~>
       cases _Definition (var "def") Nothing [
         _Definition_term>>: "termDef" ~>
-          "term" <~ Packaging.termDefinitionTerm (var "termDef") $
+          "term" <~ Packaging.termDefinitionBody (var "termDef") $
           "metaWithTerm" <~ (Rewriting.foldOverTerm @@ Coders.traversalOrderPre
             @@ ("m" ~> "t" ~> extendMetaForTerm @@ var "m" @@ var "t") @@ var "meta" @@ var "term") $
           Maybes.maybe (var "metaWithTerm")
@@ -768,7 +768,7 @@ gatherMetadata = haskellCoderDefinition "gatherMetadata" $
                 @@ ("m" ~> "t" ~> extendMetaForType @@ var "m" @@ var "t") @@ var "metaWithTerm" @@ (Core.typeSchemeBody $ var "ts"))
             (Maybes.map Scoping.termSignatureToTypeScheme $ Packaging.termDefinitionSignature $ var "termDef"),
         _Definition_type>>: "typeDef" ~>
-          "typ" <~ (Core.typeSchemeBody $ Packaging.typeDefinitionTypeScheme (var "typeDef")) $
+          "typ" <~ (Core.typeSchemeBody $ Packaging.typeDefinitionBody (var "typeDef")) $
           Rewriting.foldOverType @@ Coders.traversalOrderPre
             @@ ("m" ~> "t" ~> extendMetaForType @@ var "m" @@ var "t") @@ var "meta" @@ var "typ"]) $
     Lists.foldl (var "addDef") (asTerm emptyMetadata) (var "defs")
@@ -893,7 +893,7 @@ toDataDeclaration = haskellCoderDefinition "toDataDeclaration" $
   doc "Convert a Hydra term definition to a Haskell declaration with comments" $
   "namespaces" ~> "def" ~> "cx" ~> "g" ~> lets [
     "name">: Packaging.termDefinitionName $ var "def",
-    "term">: Packaging.termDefinitionTerm $ var "def",
+    "term">: Packaging.termDefinitionBody $ var "def",
     "typ">: Maybes.map Scoping.termSignatureToTypeScheme $ Packaging.termDefinitionSignature $ var "def",
     "hname">: HaskellUtilsSource.simpleName @@ (Names.localNameOf @@ var "name"),
     "rewriteValueBinding">: "vb" ~>
@@ -1111,8 +1111,8 @@ typeDecl = haskellCoderDefinition "typeDecl" $
             nothing),
       "forVariableType">: "vname" ~> lets [
         "qname">: Names.qualifyName @@ var "vname",
-        "mns">: Packaging.qualifiedNameModuleName $ var "qname",
-        "local">: Packaging.qualifiedNameLocal $ var "qname"] $
+        "mns">: Util.qualifiedNameModuleName $ var "qname",
+        "local">: Util.qualifiedNameLocal $ var "qname"] $
         Maybes.map ("ns" ~> Core.termVariable $ Names.qname @@ var "ns" @@ (Strings.cat $ list [string "_", var "local", string "_type_"])) (var "mns")] $
       Maybes.fromMaybe (var "recurse" @@ var "term") (Maybes.bind (var "variantResult") (var "forType")),
     "finalTerm">: Rewriting.rewriteTerm @@ var "rewrite" @@ var "rawTerm"] $
@@ -1128,10 +1128,10 @@ typeDecl = haskellCoderDefinition "typeDecl" $
     right $ var "decl"
 
 -- | Extract TypeScheme class constraints into the Map format used by encodeTypeWithClassAssertions.
--- TypeScheme constraints are Maybe (Map Name TypeVariableMetadata), where TypeVariableMetadata
+-- TypeScheme constraints are Maybe (Map Name TypeVariableConstraints), where TypeVariableConstraints
 -- has a 'classes' field of type Set TypeClassConstraint. Each TypeClassConstraint.simple
 -- carries the name of a built-in type class binding under hydra.classes.
-typeSchemeConstraintsToClassMap :: TypedTermDefinition (Maybe (M.Map Name TypeVariableMetadata) -> M.Map Name (S.Set Name))
+typeSchemeConstraintsToClassMap :: TypedTermDefinition (Maybe (M.Map Name TypeVariableConstraints) -> M.Map Name (S.Set Name))
 typeSchemeConstraintsToClassMap = haskellCoderDefinition "typeSchemeConstraintsToClassMap" $
   doc "Project type scheme constraints to a map of type variables to typeclass names" $
   "maybeConstraints" ~> lets [
@@ -1142,7 +1142,7 @@ typeSchemeConstraintsToClassMap = haskellCoderDefinition "typeSchemeConstraintsT
       ("constraints" ~>
         Maps.map
           ("meta" ~> Sets.fromList $
-            Maybes.cat $ Lists.map (var "constraintToName") $ Core.typeVariableMetadataClasses (var "meta"))
+            Maybes.cat $ Lists.map (var "constraintToName") $ Core.typeVariableConstraintsClasses (var "meta"))
           (var "constraints"))
       (var "maybeConstraints")
 

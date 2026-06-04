@@ -2,8 +2,7 @@
   "definitions": [
     {
       "type": {
-        "name": "hydra.haskell.syntax.Alternative",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A pattern-matching alternative"}}}],
@@ -27,11 +26,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "Optional local bindings"}}}],
                         "body": {"maybe": {"variable": "hydra.haskell.syntax.LocalBindings"}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.haskell.syntax.Alternative"}},
     {
       "type": {
-        "name": "hydra.haskell.syntax.Constraint",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A type constraint"}}}],
@@ -49,11 +48,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "A tuple of constraints"}}}],
                         "body": {"list": {"variable": "hydra.haskell.syntax.Constraint"}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.haskell.syntax.Constraint"}},
     {
       "type": {
-        "name": "hydra.haskell.syntax.ClassConstraint",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A class constraint"}}}],
@@ -71,20 +70,20 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The types to which the class is applied"}}}],
                         "body": {"list": {"variable": "hydra.haskell.syntax.Type"}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.haskell.syntax.ClassConstraint"}},
     {
       "type": {
-        "name": "hydra.haskell.syntax.CaseRhs",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "The right-hand side of a pattern-matching alternative"}}}],
               "body": {"wrap": {"variable": "hydra.haskell.syntax.Expression"}}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.haskell.syntax.CaseRhs"}},
     {
       "type": {
-        "name": "hydra.haskell.syntax.Constructor",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A data constructor"}}}],
@@ -102,11 +101,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "A record constructor"}}}],
                         "body": {"variable": "hydra.haskell.syntax.RecordConstructor"}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.haskell.syntax.Constructor"}},
     {
       "type": {
-        "name": "hydra.haskell.syntax.PositionalConstructor",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "An ordinary (positional) data constructor"}}}],
@@ -130,11 +129,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "Optional comments"}}}],
                         "body": {"maybe": {"literal": {"string": {}}}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.haskell.syntax.PositionalConstructor"}},
     {
       "type": {
-        "name": "hydra.haskell.syntax.RecordConstructor",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A record-style data constructor"}}}],
@@ -158,11 +157,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "Optional comments"}}}],
                         "body": {"maybe": {"literal": {"string": {}}}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.haskell.syntax.RecordConstructor"}},
     {
       "type": {
-        "name": "hydra.haskell.syntax.DataDeclaration",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A data type declaration"}}}],
@@ -204,20 +203,20 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "Optional comments"}}}],
                         "body": {"maybe": {"literal": {"string": {}}}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.haskell.syntax.DataDeclaration"}},
     {
       "type": {
-        "name": "hydra.haskell.syntax.DataKeyword",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "The 'data' versus 'newtype keyword"}}}],
               "body": {"union": [{"name": "data", "type": {"unit": {}}}, {"name": "newtype", "type": {"unit": {}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.haskell.syntax.DataKeyword"}},
     {
       "type": {
-        "name": "hydra.haskell.syntax.Declaration",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A data or value declaration"}}}],
@@ -247,11 +246,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "A typed binding"}}}],
                         "body": {"variable": "hydra.haskell.syntax.TypedBinding"}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.haskell.syntax.Declaration"}},
     {
       "type": {
-        "name": "hydra.haskell.syntax.DeclarationHead",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "The left-hand side of a declaration"}}}],
@@ -269,11 +268,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "A simple name"}}}],
                         "body": {"variable": "hydra.haskell.syntax.Name"}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.haskell.syntax.DeclarationHead"}},
     {
       "type": {
-        "name": "hydra.haskell.syntax.ApplicationDeclarationHead",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "An application-style declaration head"}}}],
@@ -291,20 +290,20 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The type variable operand"}}}],
                         "body": {"variable": "hydra.haskell.syntax.Variable"}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.haskell.syntax.ApplicationDeclarationHead"}},
     {
       "type": {
-        "name": "hydra.haskell.syntax.DerivingClause",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A 'deriving' clause"}}}],
               "body": {"wrap": {"list": {"variable": "hydra.haskell.syntax.Name"}}}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.haskell.syntax.DerivingClause"}},
     {
       "type": {
-        "name": "hydra.haskell.syntax.Export",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "An export statement"}}}],
@@ -322,11 +321,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "An exported module"}}}],
                         "body": {"variable": "hydra.haskell.syntax.ModuleName"}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.haskell.syntax.Export"}},
     {
       "type": {
-        "name": "hydra.haskell.syntax.Expression",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A data expression"}}}],
@@ -428,11 +427,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "A variable reference"}}}],
                         "body": {"variable": "hydra.haskell.syntax.Name"}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.haskell.syntax.Expression"}},
     {
       "type": {
-        "name": "hydra.haskell.syntax.ApplicationExpression",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "An application expression"}}}],
@@ -450,11 +449,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The argument"}}}],
                         "body": {"variable": "hydra.haskell.syntax.Expression"}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.haskell.syntax.ApplicationExpression"}},
     {
       "type": {
-        "name": "hydra.haskell.syntax.CaseExpression",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A case expression"}}}],
@@ -472,11 +471,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The pattern-matching alternatives"}}}],
                         "body": {"list": {"variable": "hydra.haskell.syntax.Alternative"}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.haskell.syntax.CaseExpression"}},
     {
       "type": {
-        "name": "hydra.haskell.syntax.RecordExpression",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A record constructor expression"}}}],
@@ -494,11 +493,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The field assignments"}}}],
                         "body": {"list": {"variable": "hydra.haskell.syntax.FieldUpdate"}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.haskell.syntax.RecordExpression"}},
     {
       "type": {
-        "name": "hydra.haskell.syntax.IfExpression",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "An 'if' expression"}}}],
@@ -522,11 +521,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The 'else' branch"}}}],
                         "body": {"variable": "hydra.haskell.syntax.Expression"}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.haskell.syntax.IfExpression"}},
     {
       "type": {
-        "name": "hydra.haskell.syntax.InfixExpression",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "An infix application expression"}}}],
@@ -550,11 +549,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The right-hand operand"}}}],
                         "body": {"variable": "hydra.haskell.syntax.Expression"}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.haskell.syntax.InfixExpression"}},
     {
       "type": {
-        "name": "hydra.haskell.syntax.LambdaExpression",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A lambda expression"}}}],
@@ -572,11 +571,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The body of the lambda"}}}],
                         "body": {"variable": "hydra.haskell.syntax.Expression"}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.haskell.syntax.LambdaExpression"}},
     {
       "type": {
-        "name": "hydra.haskell.syntax.LetExpression",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A 'let' expression"}}}],
@@ -594,11 +593,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The body of the let expression"}}}],
                         "body": {"variable": "hydra.haskell.syntax.Expression"}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.haskell.syntax.LetExpression"}},
     {
       "type": {
-        "name": "hydra.haskell.syntax.SectionExpression",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A section expression"}}}],
@@ -616,11 +615,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The operand"}}}],
                         "body": {"variable": "hydra.haskell.syntax.Expression"}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.haskell.syntax.SectionExpression"}},
     {
       "type": {
-        "name": "hydra.haskell.syntax.TypedExpression",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A type signature expression"}}}],
@@ -638,11 +637,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The type signature"}}}],
                         "body": {"variable": "hydra.haskell.syntax.Type"}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.haskell.syntax.TypedExpression"}},
     {
       "type": {
-        "name": "hydra.haskell.syntax.RecordUpdateExpression",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "An update record expression"}}}],
@@ -660,11 +659,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The field updates"}}}],
                         "body": {"list": {"variable": "hydra.haskell.syntax.FieldUpdate"}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.haskell.syntax.RecordUpdateExpression"}},
     {
       "type": {
-        "name": "hydra.haskell.syntax.Field",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A field (name/type pair)"}}}],
@@ -688,11 +687,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "Optional comments"}}}],
                         "body": {"maybe": {"literal": {"string": {}}}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.haskell.syntax.Field"}},
     {
       "type": {
-        "name": "hydra.haskell.syntax.FieldUpdate",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A field name and value"}}}],
@@ -710,11 +709,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The field value"}}}],
                         "body": {"variable": "hydra.haskell.syntax.Expression"}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.haskell.syntax.FieldUpdate"}},
     {
       "type": {
-        "name": "hydra.haskell.syntax.Import",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "An import statement"}}}],
@@ -744,11 +743,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "Optional import specification"}}}],
                         "body": {"maybe": {"variable": "hydra.haskell.syntax.ImportSpec"}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.haskell.syntax.Import"}},
     {
       "type": {
-        "name": "hydra.haskell.syntax.ImportSpec",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "An import specification"}}}],
@@ -766,20 +765,20 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "A list of imports to exclude"}}}],
                         "body": {"list": {"variable": "hydra.haskell.syntax.NamedImportExport"}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.haskell.syntax.ImportSpec"}},
     {
       "type": {
-        "name": "hydra.haskell.syntax.ImportModifier",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "An import modifier ('pattern' or 'type')"}}}],
               "body": {"union": [{"name": "pattern", "type": {"unit": {}}}, {"name": "type", "type": {"unit": {}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.haskell.syntax.ImportModifier"}},
     {
       "type": {
-        "name": "hydra.haskell.syntax.NamedImportExport",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "An import or export specification"}}}],
@@ -803,11 +802,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "Optional subspecification"}}}],
                         "body": {"maybe": {"variable": "hydra.haskell.syntax.ImportExportSubspec"}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.haskell.syntax.NamedImportExport"}},
     {
       "type": {
-        "name": "hydra.haskell.syntax.ImportExportSubspec",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A subspecification within an import/export"}}}],
@@ -823,11 +822,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "Import/export specific names"}}}],
                         "body": {"list": {"variable": "hydra.haskell.syntax.Name"}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.haskell.syntax.ImportExportSubspec"}},
     {
       "type": {
-        "name": "hydra.haskell.syntax.Literal",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A literal value"}}}],
@@ -869,11 +868,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "A string literal"}}}],
                         "body": {"literal": {"string": {}}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.haskell.syntax.Literal"}},
     {
       "type": {
-        "name": "hydra.haskell.syntax.LocalBinding",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A local binding"}}}],
@@ -891,20 +890,20 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "A value binding"}}}],
                         "body": {"variable": "hydra.haskell.syntax.ValueBinding"}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.haskell.syntax.LocalBinding"}},
     {
       "type": {
-        "name": "hydra.haskell.syntax.LocalBindings",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A collection of local bindings"}}}],
               "body": {"wrap": {"list": {"variable": "hydra.haskell.syntax.LocalBinding"}}}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.haskell.syntax.LocalBindings"}},
     {
       "type": {
-        "name": "hydra.haskell.syntax.Module",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A Haskell module"}}}],
@@ -928,11 +927,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "Module declarations"}}}],
                         "body": {"list": {"variable": "hydra.haskell.syntax.Declaration"}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.haskell.syntax.Module"}},
     {
       "type": {
-        "name": "hydra.haskell.syntax.ModuleHead",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A module head"}}}],
@@ -956,20 +955,20 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "Export list"}}}],
                         "body": {"list": {"variable": "hydra.haskell.syntax.Export"}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.haskell.syntax.ModuleHead"}},
     {
       "type": {
-        "name": "hydra.haskell.syntax.ModuleName",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A module name"}}}],
               "body": {"wrap": {"literal": {"string": {}}}}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.haskell.syntax.ModuleName"}},
     {
       "type": {
-        "name": "hydra.haskell.syntax.Name",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A name"}}}],
@@ -987,20 +986,20 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "A normal name"}}}],
                         "body": {"variable": "hydra.haskell.syntax.QualifiedName"}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.haskell.syntax.Name"}},
     {
       "type": {
-        "name": "hydra.haskell.syntax.NamePart",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A component of a qualified name"}}}],
               "body": {"wrap": {"literal": {"string": {}}}}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.haskell.syntax.NamePart"}},
     {
       "type": {
-        "name": "hydra.haskell.syntax.Operator",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "An operator"}}}],
@@ -1018,11 +1017,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "A normal infix operator"}}}],
                         "body": {"variable": "hydra.haskell.syntax.QualifiedName"}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.haskell.syntax.Operator"}},
     {
       "type": {
-        "name": "hydra.haskell.syntax.Pattern",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A pattern"}}}],
@@ -1080,11 +1079,11 @@
                     "name": "wildcard",
                     "type": {
                       "annotated": {"annotation": [{"key": "description", "value": {"literal": {"string": "A wildcard pattern"}}}], "body": {"unit": {}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.haskell.syntax.Pattern"}},
     {
       "type": {
-        "name": "hydra.haskell.syntax.ApplicationPattern",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "An application pattern"}}}],
@@ -1102,11 +1101,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The pattern arguments"}}}],
                         "body": {"list": {"variable": "hydra.haskell.syntax.Pattern"}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.haskell.syntax.ApplicationPattern"}},
     {
       "type": {
-        "name": "hydra.haskell.syntax.AsPattern",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "An 'as' pattern"}}}],
@@ -1124,11 +1123,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The inner pattern"}}}],
                         "body": {"variable": "hydra.haskell.syntax.Pattern"}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.haskell.syntax.AsPattern"}},
     {
       "type": {
-        "name": "hydra.haskell.syntax.RecordPattern",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A record pattern"}}}],
@@ -1146,11 +1145,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The field patterns"}}}],
                         "body": {"list": {"variable": "hydra.haskell.syntax.PatternField"}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.haskell.syntax.RecordPattern"}},
     {
       "type": {
-        "name": "hydra.haskell.syntax.TypedPattern",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A typed pattern"}}}],
@@ -1168,11 +1167,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The type annotation"}}}],
                         "body": {"variable": "hydra.haskell.syntax.Type"}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.haskell.syntax.TypedPattern"}},
     {
       "type": {
-        "name": "hydra.haskell.syntax.PatternField",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A pattern field"}}}],
@@ -1190,11 +1189,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The field pattern"}}}],
                         "body": {"variable": "hydra.haskell.syntax.Pattern"}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.haskell.syntax.PatternField"}},
     {
       "type": {
-        "name": "hydra.haskell.syntax.QualifiedName",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A qualified name"}}}],
@@ -1212,29 +1211,29 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The unqualified name part"}}}],
                         "body": {"variable": "hydra.haskell.syntax.NamePart"}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.haskell.syntax.QualifiedName"}},
     {
       "type": {
-        "name": "hydra.haskell.syntax.RightHandSide",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A right-hand side of a binding"}}}],
               "body": {"wrap": {"variable": "hydra.haskell.syntax.Expression"}}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.haskell.syntax.RightHandSide"}},
     {
       "type": {
-        "name": "hydra.haskell.syntax.Statement",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A do-notation statement"}}}],
               "body": {"wrap": {"variable": "hydra.haskell.syntax.Expression"}}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.haskell.syntax.Statement"}},
     {
       "type": {
-        "name": "hydra.haskell.syntax.Type",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A type expression"}}}],
@@ -1282,11 +1281,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "A type variable or type name"}}}],
                         "body": {"variable": "hydra.haskell.syntax.Name"}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.haskell.syntax.Type"}},
     {
       "type": {
-        "name": "hydra.haskell.syntax.ApplicationType",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "An application type"}}}],
@@ -1304,11 +1303,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The type argument"}}}],
                         "body": {"variable": "hydra.haskell.syntax.Type"}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.haskell.syntax.ApplicationType"}},
     {
       "type": {
-        "name": "hydra.haskell.syntax.ConstrainedType",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A type with a context (type class constraints)"}}}],
@@ -1326,11 +1325,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The constrained type"}}}],
                         "body": {"variable": "hydra.haskell.syntax.Type"}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.haskell.syntax.ConstrainedType"}},
     {
       "type": {
-        "name": "hydra.haskell.syntax.FunctionType",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A function type"}}}],
@@ -1348,11 +1347,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The codomain type"}}}],
                         "body": {"variable": "hydra.haskell.syntax.Type"}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.haskell.syntax.FunctionType"}},
     {
       "type": {
-        "name": "hydra.haskell.syntax.InfixType",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "An infix type application"}}}],
@@ -1376,11 +1375,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The right-hand type"}}}],
                         "body": {"variable": "hydra.haskell.syntax.Type"}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.haskell.syntax.InfixType"}},
     {
       "type": {
-        "name": "hydra.haskell.syntax.TypeSynonymDeclaration",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A type synonym declaration"}}}],
@@ -1404,11 +1403,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "Optional comments"}}}],
                         "body": {"maybe": {"literal": {"string": {}}}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.haskell.syntax.TypeSynonymDeclaration"}},
     {
       "type": {
-        "name": "hydra.haskell.syntax.TypeSignature",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A type signature"}}}],
@@ -1426,11 +1425,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The type"}}}],
                         "body": {"variable": "hydra.haskell.syntax.Type"}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.haskell.syntax.TypeSignature"}},
     {
       "type": {
-        "name": "hydra.haskell.syntax.TypedBinding",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A binding with its type signature"}}}],
@@ -1454,11 +1453,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "Optional comments"}}}],
                         "body": {"maybe": {"literal": {"string": {}}}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.haskell.syntax.TypedBinding"}},
     {
       "type": {
-        "name": "hydra.haskell.syntax.ValueBinding",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A value binding"}}}],
@@ -1470,11 +1469,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "A simple value binding"}}}],
                         "body": {"variable": "hydra.haskell.syntax.SimpleValueBinding"}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.haskell.syntax.ValueBinding"}},
     {
       "type": {
-        "name": "hydra.haskell.syntax.SimpleValueBinding",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A simple value binding"}}}],
@@ -1504,16 +1503,17 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "Optional comments"}}}],
                         "body": {"maybe": {"literal": {"string": {}}}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.haskell.syntax.SimpleValueBinding"}},
     {
       "type": {
-        "name": "hydra.haskell.syntax.Variable",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A type variable"}}}],
               "body": {"wrap": {"variable": "hydra.haskell.syntax.Name"}}}},
-          "variables": []}}}],
+          "variables": []},
+        "name": "hydra.haskell.syntax.Variable"}}],
   "dependencies": [{"module": "hydra.core"}],
   "metadata": {
     "comments": [],

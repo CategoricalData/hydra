@@ -316,9 +316,14 @@ ordering or the upstream cache instead.
 Three categories of files coexist under `dist/<lang>/<pkg>/src/{main,test}/<lang>/`:
 
 1. Generator output from `bootstrap-from-json` (most files).
-2. Hand-written runtime support copied in by `copy-kernel-runtime.sh`
-   (Java + Python only): `hydra/Adapters.java`, `hydra/util/...`,
-   `hydra/dsl/...`, etc.
+2. Hand-written runtime support **overlaid in** from the top-level `overlay/<lang>/<pkg>/`
+   tree (#418): for Haskell by `sync-haskell.sh`, for Java/Python by `copy-kernel-runtime.sh`
+   (Step 0 of `assemble-distribution.sh hydra-kernel`). E.g. Java `hydra/Adapters.java`,
+   `hydra/util/...`, `hydra/dsl/...`; Haskell `Hydra/Settings.hs`, `Hydra/Haskell/Lib/*`.
+   Canonical edit point is `overlay/<lang>/`, NOT `dist/` (and no longer `heads/<lang>/src`
+   for the big three). TypeScript still copies from `heads/typescript/src` pending migration.
+   NOTE: for Haskell, `dist/haskell/` is tracked but the overlaid copies are GITIGNORED
+   (canonical lives in `overlay/haskell/`); for Java/Python the whole `dist/<lang>/` is gitignored.
 3. Hand-written skip-emit stubs whose namespace appears in
    `testSkipEmitModuleNames` (currently `hydra.test.testEnv`):
    `dist/haskell/.../Hydra/Test/TestEnv.hs` and per-Lisp-dialect
@@ -331,6 +336,30 @@ three categories alive. The mechanism for protecting (2) is the
 `--keep-paths-from` manifest emitted by `copy-kernel-runtime.sh --manifest`;
 the mechanism for (3) is to include skip-emit namespaces in the keep set
 (via the pre-filter `testModsForKeep` in bootstrap-from-json).
+
+### The head must NOT compile the overlay runtime directly (#418)
+
+The hand-written kernel runtime for the big three lives in `overlay/<lang>/hydra-kernel/`
+and is overlaid into `dist/<lang>/hydra-kernel/` by sync. **A head must compile that runtime
+from exactly one place — the `dist/` copy — never also from `overlay/`.** Two consequences if
+you forget:
+
+- **Double-compile now.** The Haskell head's `package.yaml` already lists
+  `../../dist/haskell/hydra-kernel/src/main/haskell`. Adding `overlay/haskell/hydra-kernel/...`
+  as a *second* source-dir makes GHC see every runtime module twice ("module appears in multiple
+  files"). hpack source-dirs are **directory-granular** (no per-file include/exclude), which is
+  exactly why the runtime had to be relocated into a dedicated `overlay/` tree rather than
+  excluded in place — the trick Java/Python use (Gradle/hatch file-level `include` lists in the
+  rollup) does not translate to hpack.
+- **Dependency conflict later.** When a head switches to a versioned `hydra-kernel-0.16.x`
+  package dependency (#370), that dependency *provides* `Hydra.Settings`, `Hydra.Haskell.Lib.*`,
+  etc. If the head also compiled a local copy, you get a multiple-provider clash. Compiling only
+  from the dist copy keeps the switchover conflict-free.
+
+Corollary for the **bootstrap** (`demos/bootstrapping/bin/setup-<lang>-target.sh`): these stitch
+a flat single-tree build, so they must overlay the runtime from `overlay/<lang>/hydra-kernel/`
+(not from `heads/<lang>/src`, which no longer holds it for the big three). Forgetting this is a
+silent "Could not find module Hydra.Settings / hydra.lib.* not found" at bootstrap compile time.
 
 ### `moduleFilePaths` is target-specific; Java is not 1-to-1
 
@@ -383,13 +412,16 @@ and sync passes Phase 1, expect a second wave of issues in:
   contains hand-written helpers like `generation.py:228` (filter on
   `m.namespace.value`) and `bootstrap.py` that all need the field
   rename — these are checked at *use* time, not import time, so they
-  pass Python import but break Phase 1.
+  pass Python import but break Phase 1. (Since #418 the hand-written
+  kernel *runtime* — `hydra/{lib,dsl,sources}`, `tools.py` — lives in
+  `overlay/python/hydra-kernel/`, not `heads/python/src`; grep both.)
 
 The full sync cycle for cross-host C3 took ~10 iterations before all
 runtime callsites were caught; each iteration was a 15-minute sync
 exposing the next callsite. After the schema-side sync passes Phase 1,
 proactively grep across `packages/hydra-{java,python,scala}/src/`,
-`heads/{java,python,scala}/`, and `bin/` for the OLD field/type name
+`heads/{java,python,scala}/`, `overlay/{java,python,haskell}/` (the relocated
+hand-written kernel runtime, #418), and `bin/` for the OLD field/type name
 before relying on sync to surface it.
 
 A separate chicken-and-egg surfaces on **warm trees** after the rename
@@ -430,39 +462,70 @@ referenced *anywhere* in the manifest, and the file's basename is the
 type name not a path). Manual `rm` is required; safe because the next
 assemble regenerates the new-named file.
 
-### Deleting a `dist/json/<pkg>/build/main/digest.json` causes Phase 2 silent exit
+### Reordering record fields is a breaking change, and "same-set" records still fail to unify
 
-`assemble_refresh_digest` in `bin/lib/assemble-common.sh` is gated by
-`[ -f "$input_digest" ] && (cd ... && stack exec digest-check refresh ...)`.
-Under `set -e`, when the input digest file is missing the `[ -f ]` returns 1
-and the whole `&& (...)` returns 1, killing the calling `assemble-distribution.sh`
-silently — no error to stderr, no "FAILED" banner. The next package in the
-sync loop never runs.
+Reordering the fields of a kernel record (e.g. `PrimitiveDefinition`,
+`TermDefinition` in #369) is NOT cosmetic. Hydra's inference treats record
+types as **order-sensitive**: `update-json` fails with `cannot unify
+record{...} with record{...}` where both sides list the *identical* field
+set, merely permuted. The culprit is a DSL-Term-literal *decoder* (in
+`dist/.../Sources/Decode/*.hs`) that constructs the `Core.Record`
+field-by-field in the old order — reorder those field blocks to match the new
+schema. Encoders are safe (they `project` by name). Separately, every
+*positional* constructor call breaks: the generated `Dsl.Packaging` builder
+*function* (`termDefinition name metadata signature body`) and the 12
+hand-written `PrimitiveDefinition`/`TermDefinition` sites
+(`reference_primitivedefinition_handwritten_sites`) — Haskell flags these as
+type errors, looser hosts don't. Full playbook + the `CaseStatement.cases ::
+[Field] → [CaseAlternative]` new-carrier-type variant are in
+[docs/recipes/extending-hydra-core.md](../docs/recipes/extending-hydra-core.md)
+under "Reordering fields…" / "Introducing a new carrier type…".
 
-Symptom: `bin/sync.sh` Phase 2 exits EXIT=1 after writing the first package's
-files ("Done: N main files") with no error message and no Phase 3 banner.
+### Deleting a `dist/json/<pkg>/build/main/digest.json` (Phase 2 missing-input handling)
 
-Recovery: when you nuke a `dist/json/<pkg>/build/main/digest.json` to force
-regen, also nuke `heads/haskell/.stack-work/phase1-input-cache.txt`. The
-Phase 1 cache miss triggers a full Phase 1 rerun, which regenerates the
-json digest as part of `update-json-manifest`. Without busting the Phase 1
-cache, Phase 1 stays skipped and the dist/json side never gets a new digest,
-so Phase 2 keeps re-failing the same way.
+Fixed in #414. Previously, `assemble_refresh_digest` in `bin/lib/assemble-common.sh`
+was gated by `[ -f "$input_digest" ] && (cd ... && stack exec digest-check refresh ...)`.
+Under `set -e`, a missing input digest made `[ -f ]` return 1, the whole `&& (...)`
+return 1, and the calling `assemble-distribution.sh` died *silently* — no stderr, no
+banner, no further packages. The symptom was `bin/sync.sh` Phase 2 exiting EXIT=1 after
+the first package with no error and no Phase 3 banner.
+
+`assemble_refresh_digest` now uses an explicit `if [ ! -f "$input_digest" ]; then
+<named error>; return 1; fi`, so a missing input digest at refresh time aborts loudly
+naming the missing path (it is a genuine upstream inconsistency at that point —
+generation just consumed the input). `assemble_check_fresh` likewise pre-checks
+explicitly and no longer `2>/dev/null`-suppresses digest-check's own cause-naming output.
+
+Recovery is unchanged: when you nuke a `dist/json/<pkg>/build/main/digest.json` to force
+regen, also nuke `heads/haskell/.stack-work/phase1-input-cache.txt` so the Phase 1 cache
+miss regenerates the json digest via `update-json-manifest`. The difference post-#414 is
+that a forgotten input digest now surfaces as a named error instead of a silent exit.
 
 Documented in the build-system cache model
-([docs/build-system.md §Cache files are not tracked](../docs/build-system.md#cache-files-are-not-tracked)),
-but the silent-exit mechanism deserves the explicit pitfall callout.
+([docs/build-system.md §Cache files are not tracked](../docs/build-system.md#cache-files-are-not-tracked)).
 
 ### "Found untyped bindings (after case hoisting)" usually means stale JSON field shapes
 
 A non-baseline package whose `dist/json/.../*.json` files were generated
 before a kernel record-field rename can carry stale field names that match
-no current `TermDefinition` shape. The Haskell decoder silently falls back
-to "untyped" and Phase 1 eventually fails with `Found N untyped bindings
-(after case hoisting): ...`. Seen during the #368 merge: `dist/json/hydra-java/...`
-JSON files still had `"typeScheme": {...}` while `TermDefinition` had renamed
-the field to `"signature"` (#156), so every Java/Python definition lost its
-type and downstream inference saw a wall of untyped bindings.
+no current `TermDefinition` shape, leaving definitions without a signature.
+Phase 1 then fails at the `checkBindingsTyped` gate. Seen during the #368
+merge: `dist/json/hydra-java/...` JSON files still had `"typeScheme": {...}`
+while `TermDefinition` had renamed the field to `"signature"` (#156), so every
+Java/Python definition lost its type and downstream inference saw a wall of
+untyped bindings.
+
+Post-#414 the error is more pointed: `checkBindingsTyped` now names each
+offending binding qualified by its source module (`<module> :: <name>`),
+states the expected-at-this-stage invariant, and explicitly suggests "stale
+dist/json field shapes after a kernel record rename (regenerate the affected
+package's JSON)". Record decoders also name the expected type on a shape
+mismatch ("expected a record of type T"). So the message points at the module
+to regenerate instead of dumping bare local names — that was the #368 pain
+(the failure surfaced at the gate but never said *where from*, costing ~10
+debug iterations). Note the contract: missing signatures are legitimate for
+DSL-defined modules *before* inference; the gate only rejects them on the
+post-inference / no-infer and derived-module paths.
 
 Recovery: regenerate the affected packages' JSON. If the rename only affects
 Java/Python packages (which native generators own per #344), the targeted
@@ -604,7 +667,7 @@ unification. Built-in primitives like `hydra.lib.maps.lookup` carry
 {tag: "nothing"}`) and inference still *runs*, but emits the wrong scheme
 (no constraints) for downstream uses — tests like `(forall t0. (ordering t0)
 => ...)` fail because the actual scheme is missing the constraint clause. See
-`heads/java/src/main/java/hydra/dsl/Types.java` (`ORD`, `EQ`, `NONE`,
+`overlay/java/hydra-kernel/src/main/java/hydra/dsl/Types.java` (`ORD`, `EQ`, `NONE`,
 `constrained1..4`, `schemeOrd`, `schemeEq`) for the canonical per-primitive
 constraint assignments to mirror.
 

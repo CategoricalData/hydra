@@ -23,7 +23,7 @@ typedBinding a cx raw =
         in (Eithers.bind (ExtractCore.requireField "name" DecodeCore.name fieldMap cx) (\field_name -> Eithers.bind (ExtractCore.requireField "term" (typedTerm a) fieldMap cx) (\field_term -> Right (Typed.TypedBinding {
           Typed.typedBindingName = field_name,
           Typed.typedBindingTerm = field_term}))))
-      _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+      _ -> Left (Errors.DecodingError "expected a record of type hydra.typed.TypedBinding")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.typed.TypedTerm
 typedTerm :: t0 -> Graph.Graph -> Core.Term -> Either Errors.DecodingError (Typed.TypedTerm t1)
 typedTerm a cx raw =
@@ -39,4 +39,4 @@ typedTermDefinition a cx raw =
         in (Eithers.bind (ExtractCore.requireField "name" DecodeCore.name fieldMap cx) (\field_name -> Eithers.bind (ExtractCore.requireField "term" (typedTerm a) fieldMap cx) (\field_term -> Right (Typed.TypedTermDefinition {
           Typed.typedTermDefinitionName = field_name,
           Typed.typedTermDefinitionTerm = field_term}))))
-      _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+      _ -> Left (Errors.DecodingError "expected a record of type hydra.typed.TypedTermDefinition")) (ExtractCore.stripWithDecodingError cx raw)

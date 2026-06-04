@@ -2,14 +2,7 @@
   "definitions": [
     {
       "term": {
-        "name": "hydra.dsl.query.comparisonConstraintEqual",
-        "signature": {
-          "parameters": [],
-          "result": {
-            "type": {
-              "application": {"argument": {"variable": "hydra.query.ComparisonConstraint"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -37,17 +30,17 @@
                                   "typeName": "hydra.core.Field"}}}],
                           "typeName": "hydra.core.Injection"}}},
                     "typeName": "hydra.core.Term"}},
-                "typeName": "hydra.typed.TypedTerm"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.query.comparisonConstraintNotEqual",
+                "typeName": "hydra.typed.TypedTerm"}}}},
+        "name": "hydra.dsl.query.comparisonConstraintEqual",
         "signature": {
           "parameters": [],
           "result": {
             "type": {
               "application": {"argument": {"variable": "hydra.query.ComparisonConstraint"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -75,17 +68,17 @@
                                   "typeName": "hydra.core.Field"}}}],
                           "typeName": "hydra.core.Injection"}}},
                     "typeName": "hydra.core.Term"}},
-                "typeName": "hydra.typed.TypedTerm"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.query.comparisonConstraintLessThan",
+                "typeName": "hydra.typed.TypedTerm"}}}},
+        "name": "hydra.dsl.query.comparisonConstraintNotEqual",
         "signature": {
           "parameters": [],
           "result": {
             "type": {
               "application": {"argument": {"variable": "hydra.query.ComparisonConstraint"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -113,17 +106,17 @@
                                   "typeName": "hydra.core.Field"}}}],
                           "typeName": "hydra.core.Injection"}}},
                     "typeName": "hydra.core.Term"}},
-                "typeName": "hydra.typed.TypedTerm"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.query.comparisonConstraintGreaterThan",
+                "typeName": "hydra.typed.TypedTerm"}}}},
+        "name": "hydra.dsl.query.comparisonConstraintLessThan",
         "signature": {
           "parameters": [],
           "result": {
             "type": {
               "application": {"argument": {"variable": "hydra.query.ComparisonConstraint"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -151,17 +144,17 @@
                                   "typeName": "hydra.core.Field"}}}],
                           "typeName": "hydra.core.Injection"}}},
                     "typeName": "hydra.core.Term"}},
-                "typeName": "hydra.typed.TypedTerm"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.query.comparisonConstraintLessThanOrEqual",
+                "typeName": "hydra.typed.TypedTerm"}}}},
+        "name": "hydra.dsl.query.comparisonConstraintGreaterThan",
         "signature": {
           "parameters": [],
           "result": {
             "type": {
               "application": {"argument": {"variable": "hydra.query.ComparisonConstraint"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -189,17 +182,17 @@
                                   "typeName": "hydra.core.Field"}}}],
                           "typeName": "hydra.core.Injection"}}},
                     "typeName": "hydra.core.Term"}},
-                "typeName": "hydra.typed.TypedTerm"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.query.comparisonConstraintGreaterThanOrEqual",
+                "typeName": "hydra.typed.TypedTerm"}}}},
+        "name": "hydra.dsl.query.comparisonConstraintLessThanOrEqual",
         "signature": {
           "parameters": [],
           "result": {
             "type": {
               "application": {"argument": {"variable": "hydra.query.ComparisonConstraint"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -229,55 +222,17 @@
                                   "typeName": "hydra.core.Field"}}}],
                           "typeName": "hydra.core.Injection"}}},
                     "typeName": "hydra.core.Term"}},
-                "typeName": "hydra.typed.TypedTerm"}}}}}},
+                "typeName": "hydra.typed.TypedTerm"}}}},
+        "name": "hydra.dsl.query.comparisonConstraintGreaterThanOrEqual",
+        "signature": {
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"argument": {"variable": "hydra.query.ComparisonConstraint"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.dsl.query.edge",
-        "signature": {
-          "parameters": [
-            {
-              "isLazy": false,
-              "name": "arg0",
-              "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "The name of a record type, for which the edge also specifies an out- and an in- projection"}}}],
-                      "body": {"variable": "hydra.core.Name"}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
-            {
-              "isLazy": false,
-              "name": "arg1",
-              "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "The field representing the out-projection of the edge. Defaults to 'out'."}}}],
-                      "body": {"maybe": {"variable": "hydra.core.Name"}}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
-            {
-              "isLazy": false,
-              "name": "arg2",
-              "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "The field representing the in-projection of the edge. Defaults to 'in'."}}}],
-                      "body": {"maybe": {"variable": "hydra.core.Name"}}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
-          "result": {
-            "type": {"application": {"argument": {"variable": "hydra.query.Edge"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for hydra.query.Edge"}}}],
             "body": {
@@ -361,29 +316,55 @@
                             "value": {"literal": {"string": "The name of a record type, for which the edge also specifies an out- and an in- projection"}}}],
                         "body": {"variable": "hydra.core.Name"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "type"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.query.edgeType",
+                "parameter": "type"}}}},
+        "name": "hydra.dsl.query.edge",
         "signature": {
           "parameters": [
             {
               "isLazy": false,
               "name": "arg0",
-              "type": {"application": {"argument": {"variable": "hydra.query.Edge"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "key": "description",
+                          "value": {"literal": {"string": "The name of a record type, for which the edge also specifies an out- and an in- projection"}}}],
+                      "body": {"variable": "hydra.core.Name"}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "key": "description",
+                          "value": {"literal": {"string": "The field representing the out-projection of the edge. Defaults to 'out'."}}}],
+                      "body": {"maybe": {"variable": "hydra.core.Name"}}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg2",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "key": "description",
+                          "value": {"literal": {"string": "The field representing the in-projection of the edge. Defaults to 'in'."}}}],
+                      "body": {"maybe": {"variable": "hydra.core.Name"}}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
-            "type": {
-              "application": {
-                "argument": {
-                  "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {"literal": {"string": "The name of a record type, for which the edge also specifies an out- and an in- projection"}}}],
-                    "body": {"variable": "hydra.core.Name"}}},
-                "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+            "type": {"application": {"argument": {"variable": "hydra.query.Edge"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL accessor for the type field of hydra.query.Edge"}}}],
             "body": {
@@ -419,10 +400,8 @@
                         "typeName": "hydra.core.Term"}},
                     "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {"application": {"argument": {"variable": "hydra.query.Edge"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.query.edgeOut",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.query.edgeType",
         "signature": {
           "parameters": [
             {
@@ -437,11 +416,13 @@
                     "annotation": [
                       {
                         "key": "description",
-                        "value": {"literal": {"string": "The field representing the out-projection of the edge. Defaults to 'out'."}}}],
-                    "body": {"maybe": {"variable": "hydra.core.Name"}}}},
+                        "value": {"literal": {"string": "The name of a record type, for which the edge also specifies an out- and an in- projection"}}}],
+                    "body": {"variable": "hydra.core.Name"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL accessor for the out field of hydra.query.Edge"}}}],
             "body": {
@@ -477,10 +458,8 @@
                         "typeName": "hydra.core.Term"}},
                     "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {"application": {"argument": {"variable": "hydra.query.Edge"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.query.edgeIn",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.query.edgeOut",
         "signature": {
           "parameters": [
             {
@@ -495,11 +474,13 @@
                     "annotation": [
                       {
                         "key": "description",
-                        "value": {"literal": {"string": "The field representing the in-projection of the edge. Defaults to 'in'."}}}],
+                        "value": {"literal": {"string": "The field representing the out-projection of the edge. Defaults to 'out'."}}}],
                     "body": {"maybe": {"variable": "hydra.core.Name"}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL accessor for the in field of hydra.query.Edge"}}}],
             "body": {
@@ -535,33 +516,29 @@
                         "typeName": "hydra.core.Term"}},
                     "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {"application": {"argument": {"variable": "hydra.query.Edge"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.query.edgeWithType",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.query.edgeIn",
         "signature": {
           "parameters": [
             {
               "isLazy": false,
               "name": "arg0",
-              "type": {"application": {"argument": {"variable": "hydra.query.Edge"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-            {
-              "isLazy": false,
-              "name": "arg1",
-              "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "The name of a record type, for which the edge also specifies an out- and an in- projection"}}}],
-                      "body": {"variable": "hydra.core.Name"}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+              "type": {"application": {"argument": {"variable": "hydra.query.Edge"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
-            "type": {"application": {"argument": {"variable": "hydra.query.Edge"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+            "type": {
+              "application": {
+                "argument": {
+                  "annotated": {
+                    "annotation": [
+                      {
+                        "key": "description",
+                        "value": {"literal": {"string": "The field representing the in-projection of the edge. Defaults to 'in'."}}}],
+                    "body": {"maybe": {"variable": "hydra.core.Name"}}}},
+                "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL updater for the type field of hydra.query.Edge"}}}],
             "body": {
@@ -675,10 +652,8 @@
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {"application": {"argument": {"variable": "hydra.query.Edge"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.query.edgeWithOut",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.query.edgeWithType",
         "signature": {
           "parameters": [
             {
@@ -695,13 +670,15 @@
                       "annotation": [
                         {
                           "key": "description",
-                          "value": {"literal": {"string": "The field representing the out-projection of the edge. Defaults to 'out'."}}}],
-                      "body": {"maybe": {"variable": "hydra.core.Name"}}}},
+                          "value": {"literal": {"string": "The name of a record type, for which the edge also specifies an out- and an in- projection"}}}],
+                      "body": {"variable": "hydra.core.Name"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {"application": {"argument": {"variable": "hydra.query.Edge"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL updater for the out field of hydra.query.Edge"}}}],
             "body": {
@@ -815,10 +792,8 @@
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {"application": {"argument": {"variable": "hydra.query.Edge"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.query.edgeWithIn",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.query.edgeWithOut",
         "signature": {
           "parameters": [
             {
@@ -835,13 +810,15 @@
                       "annotation": [
                         {
                           "key": "description",
-                          "value": {"literal": {"string": "The field representing the in-projection of the edge. Defaults to 'in'."}}}],
+                          "value": {"literal": {"string": "The field representing the out-projection of the edge. Defaults to 'out'."}}}],
                       "body": {"maybe": {"variable": "hydra.core.Name"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {"application": {"argument": {"variable": "hydra.query.Edge"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL updater for the in field of hydra.query.Edge"}}}],
             "body": {
@@ -955,22 +932,14 @@
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {"application": {"argument": {"variable": "hydra.query.Edge"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.query.graphPattern",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.query.edgeWithIn",
         "signature": {
           "parameters": [
             {
               "isLazy": false,
               "name": "arg0",
-              "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the component graph"}}}],
-                      "body": {"variable": "hydra.core.Name"}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
+              "type": {"application": {"argument": {"variable": "hydra.query.Edge"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
               "isLazy": false,
               "name": "arg1",
@@ -978,14 +947,18 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The patterns to match within the subgraph"}}}],
-                      "body": {"list": {"variable": "hydra.query.Pattern"}}}},
+                      "annotation": [
+                        {
+                          "key": "description",
+                          "value": {"literal": {"string": "The field representing the in-projection of the edge. Defaults to 'in'."}}}],
+                      "body": {"maybe": {"variable": "hydra.core.Name"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
-            "type": {
-              "application": {"argument": {"variable": "hydra.query.GraphPattern"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+            "type": {"application": {"argument": {"variable": "hydra.query.Edge"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for hydra.query.GraphPattern"}}}],
             "body": {
@@ -1042,27 +1015,37 @@
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the component graph"}}}],
                         "body": {"variable": "hydra.core.Name"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "graph"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.query.graphPatternGraph",
+                "parameter": "graph"}}}},
+        "name": "hydra.dsl.query.graphPattern",
         "signature": {
           "parameters": [
             {
               "isLazy": false,
               "name": "arg0",
               "type": {
-                "application": {"argument": {"variable": "hydra.query.GraphPattern"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the component graph"}}}],
+                      "body": {"variable": "hydra.core.Name"}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The patterns to match within the subgraph"}}}],
+                      "body": {"list": {"variable": "hydra.query.Pattern"}}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
-              "application": {
-                "argument": {
-                  "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the component graph"}}}],
-                    "body": {"variable": "hydra.core.Name"}}},
-                "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+              "application": {"argument": {"variable": "hydra.query.GraphPattern"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {"key": "description", "value": {"literal": {"string": "DSL accessor for the graph field of hydra.query.GraphPattern"}}}],
@@ -1100,10 +1083,8 @@
                     "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.query.GraphPattern"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.query.graphPatternPatterns",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.query.graphPatternGraph",
         "signature": {
           "parameters": [
             {
@@ -1116,11 +1097,13 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The patterns to match within the subgraph"}}}],
-                    "body": {"list": {"variable": "hydra.query.Pattern"}}}},
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the component graph"}}}],
+                    "body": {"variable": "hydra.core.Name"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -1160,32 +1143,27 @@
                     "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.query.GraphPattern"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.query.graphPatternWithGraph",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.query.graphPatternPatterns",
         "signature": {
           "parameters": [
             {
               "isLazy": false,
               "name": "arg0",
               "type": {
-                "application": {"argument": {"variable": "hydra.query.GraphPattern"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-            {
-              "isLazy": false,
-              "name": "arg1",
-              "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the component graph"}}}],
-                      "body": {"variable": "hydra.core.Name"}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+                "application": {"argument": {"variable": "hydra.query.GraphPattern"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.query.GraphPattern"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+              "application": {
+                "argument": {
+                  "annotated": {
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "The patterns to match within the subgraph"}}}],
+                    "body": {"list": {"variable": "hydra.query.Pattern"}}}},
+                "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {"key": "description", "value": {"literal": {"string": "DSL updater for the graph field of hydra.query.GraphPattern"}}}],
@@ -1264,10 +1242,8 @@
                     "parameter": "newVal"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.query.GraphPattern"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.query.graphPatternWithPatterns",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.query.graphPatternWithGraph",
         "signature": {
           "parameters": [
             {
@@ -1282,14 +1258,16 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The patterns to match within the subgraph"}}}],
-                      "body": {"list": {"variable": "hydra.query.Pattern"}}}},
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the component graph"}}}],
+                      "body": {"variable": "hydra.core.Name"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {"argument": {"variable": "hydra.query.GraphPattern"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -1370,29 +1348,32 @@
                     "parameter": "newVal"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.query.GraphPattern"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.query.nodeTerm",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.query.graphPatternWithPatterns",
         "signature": {
           "parameters": [
             {
               "isLazy": false,
               "name": "arg0",
               "type": {
+                "application": {"argument": {"variable": "hydra.query.GraphPattern"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "A graph term; an expression which is valid in the graph being matched"}}}],
-                      "body": {"variable": "hydra.core.Term"}}},
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The patterns to match within the subgraph"}}}],
+                      "body": {"list": {"variable": "hydra.query.Pattern"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
-            "type": {"application": {"argument": {"variable": "hydra.query.Node"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+            "type": {
+              "application": {"argument": {"variable": "hydra.query.GraphPattern"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL injection for the term variant of hydra.query.Node"}}}],
             "body": {
@@ -1432,10 +1413,8 @@
                             "value": {"literal": {"string": "A graph term; an expression which is valid in the graph being matched"}}}],
                         "body": {"variable": "hydra.core.Term"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.query.nodeVariable",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.query.nodeTerm",
         "signature": {
           "parameters": [
             {
@@ -1445,13 +1424,18 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "A query variable, not to be confused with a variable term"}}}],
-                      "body": {"variable": "hydra.query.Variable"}}},
+                      "annotation": [
+                        {
+                          "key": "description",
+                          "value": {"literal": {"string": "A graph term; an expression which is valid in the graph being matched"}}}],
+                      "body": {"variable": "hydra.core.Term"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {"application": {"argument": {"variable": "hydra.query.Node"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL injection for the variable variant of hydra.query.Node"}}}],
             "body": {
@@ -1488,16 +1472,26 @@
                         "annotation": [{"key": "description", "value": {"literal": {"string": "A query variable, not to be confused with a variable term"}}}],
                         "body": {"variable": "hydra.query.Variable"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.query.nodeWildcard",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.query.nodeVariable",
         "signature": {
-          "parameters": [],
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "A query variable, not to be confused with a variable term"}}}],
+                      "body": {"variable": "hydra.query.Variable"}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {"application": {"argument": {"variable": "hydra.query.Node"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL injection for the wildcard variant of hydra.query.Node"}}}],
             "body": {
@@ -1522,26 +1516,16 @@
                                   "typeName": "hydra.core.Field"}}}],
                           "typeName": "hydra.core.Injection"}}},
                     "typeName": "hydra.core.Term"}},
-                "typeName": "hydra.typed.TypedTerm"}}}}}},
+                "typeName": "hydra.typed.TypedTerm"}}}},
+        "name": "hydra.dsl.query.nodeWildcard",
+        "signature": {
+          "parameters": [],
+          "result": {
+            "type": {"application": {"argument": {"variable": "hydra.query.Node"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.dsl.query.pathStep",
-        "signature": {
-          "parameters": [
-            {
-              "isLazy": false,
-              "name": "arg0",
-              "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "A path given by a single step"}}}],
-                      "body": {"variable": "hydra.query.Step"}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
-          "result": {
-            "type": {"application": {"argument": {"variable": "hydra.query.Path"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL injection for the step variant of hydra.query.Path"}}}],
             "body": {
@@ -1578,10 +1562,8 @@
                         "annotation": [{"key": "description", "value": {"literal": {"string": "A path given by a single step"}}}],
                         "body": {"variable": "hydra.query.Step"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.query.pathRegex",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.query.pathStep",
         "signature": {
           "parameters": [
             {
@@ -1591,16 +1573,15 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "A path given by a regular expression quantifier applied to another path"}}}],
-                      "body": {"variable": "hydra.query.RegexSequence"}}},
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "A path given by a single step"}}}],
+                      "body": {"variable": "hydra.query.Step"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {"application": {"argument": {"variable": "hydra.query.Path"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL injection for the regex variant of hydra.query.Path"}}}],
             "body": {
@@ -1640,10 +1621,8 @@
                             "value": {"literal": {"string": "A path given by a regular expression quantifier applied to another path"}}}],
                         "body": {"variable": "hydra.query.RegexSequence"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.query.pathInverse",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.query.pathRegex",
         "signature": {
           "parameters": [
             {
@@ -1653,13 +1632,18 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "A path given by the inverse of another path"}}}],
-                      "body": {"variable": "hydra.query.Path"}}},
+                      "annotation": [
+                        {
+                          "key": "description",
+                          "value": {"literal": {"string": "A path given by a regular expression quantifier applied to another path"}}}],
+                      "body": {"variable": "hydra.query.RegexSequence"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {"application": {"argument": {"variable": "hydra.query.Path"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL injection for the inverse variant of hydra.query.Path"}}}],
             "body": {
@@ -1696,10 +1680,8 @@
                         "annotation": [{"key": "description", "value": {"literal": {"string": "A path given by the inverse of another path"}}}],
                         "body": {"variable": "hydra.query.Path"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.query.pathEquation",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.query.pathInverse",
         "signature": {
           "parameters": [
             {
@@ -1709,24 +1691,15 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The left-hand side of the equation"}}}],
-                      "body": {"variable": "hydra.query.Path"}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
-            {
-              "isLazy": false,
-              "name": "arg1",
-              "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The right-hand side of the equation"}}}],
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "A path given by the inverse of another path"}}}],
                       "body": {"variable": "hydra.query.Path"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
-            "type": {
-              "application": {"argument": {"variable": "hydra.query.PathEquation"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+            "type": {"application": {"argument": {"variable": "hydra.query.Path"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for hydra.query.PathEquation"}}}],
             "body": {
@@ -1783,27 +1756,37 @@
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The left-hand side of the equation"}}}],
                         "body": {"variable": "hydra.query.Path"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "left"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.query.pathEquationLeft",
+                "parameter": "left"}}}},
+        "name": "hydra.dsl.query.pathEquation",
         "signature": {
           "parameters": [
             {
               "isLazy": false,
               "name": "arg0",
               "type": {
-                "application": {"argument": {"variable": "hydra.query.PathEquation"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The left-hand side of the equation"}}}],
+                      "body": {"variable": "hydra.query.Path"}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The right-hand side of the equation"}}}],
+                      "body": {"variable": "hydra.query.Path"}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
-              "application": {
-                "argument": {
-                  "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The left-hand side of the equation"}}}],
-                    "body": {"variable": "hydra.query.Path"}}},
-                "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+              "application": {"argument": {"variable": "hydra.query.PathEquation"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {"key": "description", "value": {"literal": {"string": "DSL accessor for the left field of hydra.query.PathEquation"}}}],
@@ -1841,10 +1824,8 @@
                     "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.query.PathEquation"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.query.pathEquationRight",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.query.pathEquationLeft",
         "signature": {
           "parameters": [
             {
@@ -1857,11 +1838,13 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The right-hand side of the equation"}}}],
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "The left-hand side of the equation"}}}],
                     "body": {"variable": "hydra.query.Path"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {"key": "description", "value": {"literal": {"string": "DSL accessor for the right field of hydra.query.PathEquation"}}}],
@@ -1899,32 +1882,27 @@
                     "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.query.PathEquation"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.query.pathEquationWithLeft",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.query.pathEquationRight",
         "signature": {
           "parameters": [
             {
               "isLazy": false,
               "name": "arg0",
               "type": {
-                "application": {"argument": {"variable": "hydra.query.PathEquation"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-            {
-              "isLazy": false,
-              "name": "arg1",
-              "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The left-hand side of the equation"}}}],
-                      "body": {"variable": "hydra.query.Path"}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+                "application": {"argument": {"variable": "hydra.query.PathEquation"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.query.PathEquation"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+              "application": {
+                "argument": {
+                  "annotated": {
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "The right-hand side of the equation"}}}],
+                    "body": {"variable": "hydra.query.Path"}}},
+                "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL updater for the left field of hydra.query.PathEquation"}}}],
             "body": {
@@ -2002,10 +1980,8 @@
                     "parameter": "newVal"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.query.PathEquation"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.query.pathEquationWithRight",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.query.pathEquationWithLeft",
         "signature": {
           "parameters": [
             {
@@ -2020,14 +1996,16 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The right-hand side of the equation"}}}],
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The left-hand side of the equation"}}}],
                       "body": {"variable": "hydra.query.Path"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {"argument": {"variable": "hydra.query.PathEquation"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {"key": "description", "value": {"literal": {"string": "DSL updater for the right field of hydra.query.PathEquation"}}}],
@@ -2106,26 +2084,32 @@
                     "parameter": "newVal"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.query.PathEquation"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.query.patternTriple",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.query.pathEquationWithRight",
         "signature": {
           "parameters": [
             {
               "isLazy": false,
               "name": "arg0",
               "type": {
+                "application": {"argument": {"variable": "hydra.query.PathEquation"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "A subject/predicate/object pattern"}}}],
-                      "body": {"variable": "hydra.query.TriplePattern"}}},
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The right-hand side of the equation"}}}],
+                      "body": {"variable": "hydra.query.Path"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
-            "type": {"application": {"argument": {"variable": "hydra.query.Pattern"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+            "type": {
+              "application": {"argument": {"variable": "hydra.query.PathEquation"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {"key": "description", "value": {"literal": {"string": "DSL injection for the triple variant of hydra.query.Pattern"}}}],
@@ -2163,10 +2147,8 @@
                         "annotation": [{"key": "description", "value": {"literal": {"string": "A subject/predicate/object pattern"}}}],
                         "body": {"variable": "hydra.query.TriplePattern"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.query.patternNegation",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.query.patternTriple",
         "signature": {
           "parameters": [
             {
@@ -2176,13 +2158,15 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The negation of another pattern"}}}],
-                      "body": {"variable": "hydra.query.Pattern"}}},
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "A subject/predicate/object pattern"}}}],
+                      "body": {"variable": "hydra.query.TriplePattern"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {"application": {"argument": {"variable": "hydra.query.Pattern"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -2222,10 +2206,8 @@
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The negation of another pattern"}}}],
                         "body": {"variable": "hydra.query.Pattern"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.query.patternConjunction",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.query.patternNegation",
         "signature": {
           "parameters": [
             {
@@ -2235,13 +2217,15 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The conjunction ('and') of several other patterns"}}}],
-                      "body": {"list": {"variable": "hydra.query.Pattern"}}}},
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The negation of another pattern"}}}],
+                      "body": {"variable": "hydra.query.Pattern"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {"application": {"argument": {"variable": "hydra.query.Pattern"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -2281,10 +2265,8 @@
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The conjunction ('and') of several other patterns"}}}],
                         "body": {"list": {"variable": "hydra.query.Pattern"}}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.query.patternDisjunction",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.query.patternConjunction",
         "signature": {
           "parameters": [
             {
@@ -2294,13 +2276,15 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The disjunction (inclusive 'or') of several other patterns"}}}],
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The conjunction ('and') of several other patterns"}}}],
                       "body": {"list": {"variable": "hydra.query.Pattern"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {"application": {"argument": {"variable": "hydra.query.Pattern"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -2340,10 +2324,8 @@
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The disjunction (inclusive 'or') of several other patterns"}}}],
                         "body": {"list": {"variable": "hydra.query.Pattern"}}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.query.patternGraph",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.query.patternDisjunction",
         "signature": {
           "parameters": [
             {
@@ -2353,13 +2335,15 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "A pattern which matches within a named subgraph"}}}],
-                      "body": {"variable": "hydra.query.GraphPattern"}}},
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The disjunction (inclusive 'or') of several other patterns"}}}],
+                      "body": {"list": {"variable": "hydra.query.Pattern"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {"application": {"argument": {"variable": "hydra.query.Pattern"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL injection for the graph variant of hydra.query.Pattern"}}}],
             "body": {
@@ -2396,10 +2380,8 @@
                         "annotation": [{"key": "description", "value": {"literal": {"string": "A pattern which matches within a named subgraph"}}}],
                         "body": {"variable": "hydra.query.GraphPattern"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.query.patternImplication",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.query.patternGraph",
         "signature": {
           "parameters": [
             {
@@ -2409,27 +2391,15 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The pattern which, if it matches, triggers the constraint"}}}],
-                      "body": {"variable": "hydra.query.Pattern"}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
-            {
-              "isLazy": false,
-              "name": "arg1",
-              "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "The pattern which must also match when the antecedent matches"}}}],
-                      "body": {"variable": "hydra.query.Pattern"}}},
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "A pattern which matches within a named subgraph"}}}],
+                      "body": {"variable": "hydra.query.GraphPattern"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
-            "type": {
-              "application": {"argument": {"variable": "hydra.query.PatternImplication"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+            "type": {"application": {"argument": {"variable": "hydra.query.Pattern"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for hydra.query.PatternImplication"}}}],
             "body": {
@@ -2489,27 +2459,40 @@
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The pattern which, if it matches, triggers the constraint"}}}],
                         "body": {"variable": "hydra.query.Pattern"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "antecedent"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.query.patternImplicationAntecedent",
+                "parameter": "antecedent"}}}},
+        "name": "hydra.dsl.query.patternImplication",
         "signature": {
           "parameters": [
             {
               "isLazy": false,
               "name": "arg0",
               "type": {
-                "application": {"argument": {"variable": "hydra.query.PatternImplication"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The pattern which, if it matches, triggers the constraint"}}}],
+                      "body": {"variable": "hydra.query.Pattern"}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "key": "description",
+                          "value": {"literal": {"string": "The pattern which must also match when the antecedent matches"}}}],
+                      "body": {"variable": "hydra.query.Pattern"}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
-              "application": {
-                "argument": {
-                  "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The pattern which, if it matches, triggers the constraint"}}}],
-                    "body": {"variable": "hydra.query.Pattern"}}},
-                "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+              "application": {"argument": {"variable": "hydra.query.PatternImplication"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -2549,10 +2532,8 @@
                     "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.query.PatternImplication"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.query.patternImplicationConsequent",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.query.patternImplicationAntecedent",
         "signature": {
           "parameters": [
             {
@@ -2565,14 +2546,13 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {"literal": {"string": "The pattern which must also match when the antecedent matches"}}}],
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "The pattern which, if it matches, triggers the constraint"}}}],
                     "body": {"variable": "hydra.query.Pattern"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -2612,32 +2592,30 @@
                     "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.query.PatternImplication"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.query.patternImplicationWithAntecedent",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.query.patternImplicationConsequent",
         "signature": {
           "parameters": [
             {
               "isLazy": false,
               "name": "arg0",
               "type": {
-                "application": {"argument": {"variable": "hydra.query.PatternImplication"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-            {
-              "isLazy": false,
-              "name": "arg1",
-              "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The pattern which, if it matches, triggers the constraint"}}}],
-                      "body": {"variable": "hydra.query.Pattern"}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+                "application": {"argument": {"variable": "hydra.query.PatternImplication"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.query.PatternImplication"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+              "application": {
+                "argument": {
+                  "annotated": {
+                    "annotation": [
+                      {
+                        "key": "description",
+                        "value": {"literal": {"string": "The pattern which must also match when the antecedent matches"}}}],
+                    "body": {"variable": "hydra.query.Pattern"}}},
+                "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -2718,10 +2696,8 @@
                     "parameter": "newVal"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.query.PatternImplication"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.query.patternImplicationWithConsequent",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.query.patternImplicationWithAntecedent",
         "signature": {
           "parameters": [
             {
@@ -2736,17 +2712,16 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "The pattern which must also match when the antecedent matches"}}}],
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The pattern which, if it matches, triggers the constraint"}}}],
                       "body": {"variable": "hydra.query.Pattern"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {"argument": {"variable": "hydra.query.PatternImplication"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -2830,22 +2805,15 @@
                     "parameter": "newVal"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.query.PatternImplication"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.query.query",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.query.patternImplicationWithConsequent",
         "signature": {
           "parameters": [
             {
               "isLazy": false,
               "name": "arg0",
               "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The variables selected by the query"}}}],
-                      "body": {"list": {"variable": "hydra.query.Variable"}}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
+                "application": {"argument": {"variable": "hydra.query.PatternImplication"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
               "isLazy": false,
               "name": "arg1",
@@ -2853,13 +2821,19 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The patterns to be matched"}}}],
-                      "body": {"list": {"variable": "hydra.query.Pattern"}}}},
+                      "annotation": [
+                        {
+                          "key": "description",
+                          "value": {"literal": {"string": "The pattern which must also match when the antecedent matches"}}}],
+                      "body": {"variable": "hydra.query.Pattern"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
-            "type": {"application": {"argument": {"variable": "hydra.query.Query"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+            "type": {
+              "application": {"argument": {"variable": "hydra.query.PatternImplication"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for hydra.query.Query"}}}],
             "body": {
@@ -2916,26 +2890,36 @@
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The variables selected by the query"}}}],
                         "body": {"list": {"variable": "hydra.query.Variable"}}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "variables"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.query.queryVariables",
+                "parameter": "variables"}}}},
+        "name": "hydra.dsl.query.query",
         "signature": {
           "parameters": [
             {
               "isLazy": false,
               "name": "arg0",
-              "type": {"application": {"argument": {"variable": "hydra.query.Query"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The variables selected by the query"}}}],
+                      "body": {"list": {"variable": "hydra.query.Variable"}}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The patterns to be matched"}}}],
+                      "body": {"list": {"variable": "hydra.query.Pattern"}}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
-            "type": {
-              "application": {
-                "argument": {
-                  "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The variables selected by the query"}}}],
-                    "body": {"list": {"variable": "hydra.query.Variable"}}}},
-                "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+            "type": {"application": {"argument": {"variable": "hydra.query.Query"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL accessor for the variables field of hydra.query.Query"}}}],
             "body": {
@@ -2971,10 +2955,8 @@
                         "typeName": "hydra.core.Term"}},
                     "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {"application": {"argument": {"variable": "hydra.query.Query"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.query.queryPatterns",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.query.queryVariables",
         "signature": {
           "parameters": [
             {
@@ -2986,11 +2968,13 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The patterns to be matched"}}}],
-                    "body": {"list": {"variable": "hydra.query.Pattern"}}}},
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "The variables selected by the query"}}}],
+                    "body": {"list": {"variable": "hydra.query.Variable"}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL accessor for the patterns field of hydra.query.Query"}}}],
             "body": {
@@ -3026,30 +3010,26 @@
                         "typeName": "hydra.core.Term"}},
                     "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {"application": {"argument": {"variable": "hydra.query.Query"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.query.queryWithVariables",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.query.queryPatterns",
         "signature": {
           "parameters": [
             {
               "isLazy": false,
               "name": "arg0",
-              "type": {"application": {"argument": {"variable": "hydra.query.Query"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-            {
-              "isLazy": false,
-              "name": "arg1",
-              "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The variables selected by the query"}}}],
-                      "body": {"list": {"variable": "hydra.query.Variable"}}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+              "type": {"application": {"argument": {"variable": "hydra.query.Query"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
-            "type": {"application": {"argument": {"variable": "hydra.query.Query"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+            "type": {
+              "application": {
+                "argument": {
+                  "annotated": {
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "The patterns to be matched"}}}],
+                    "body": {"list": {"variable": "hydra.query.Pattern"}}}},
+                "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL updater for the variables field of hydra.query.Query"}}}],
             "body": {
@@ -3126,10 +3106,8 @@
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {"application": {"argument": {"variable": "hydra.query.Query"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.query.queryWithPatterns",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.query.queryWithVariables",
         "signature": {
           "parameters": [
             {
@@ -3143,13 +3121,15 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The patterns to be matched"}}}],
-                      "body": {"list": {"variable": "hydra.query.Pattern"}}}},
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The variables selected by the query"}}}],
+                      "body": {"list": {"variable": "hydra.query.Variable"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {"application": {"argument": {"variable": "hydra.query.Query"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL updater for the patterns field of hydra.query.Query"}}}],
             "body": {
@@ -3226,22 +3206,14 @@
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {"application": {"argument": {"variable": "hydra.query.Query"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.query.range",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.query.queryWithPatterns",
         "signature": {
           "parameters": [
             {
               "isLazy": false,
               "name": "arg0",
-              "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The minimum value (inclusive)"}}}],
-                      "body": {"literal": {"integer": {"int32": {}}}}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
+              "type": {"application": {"argument": {"variable": "hydra.query.Query"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
               "isLazy": false,
               "name": "arg1",
@@ -3249,13 +3221,15 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The maximum value (inclusive)"}}}],
-                      "body": {"literal": {"integer": {"int32": {}}}}}},
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The patterns to be matched"}}}],
+                      "body": {"list": {"variable": "hydra.query.Pattern"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
-            "type": {"application": {"argument": {"variable": "hydra.query.Range"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+            "type": {"application": {"argument": {"variable": "hydra.query.Query"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for hydra.query.Range"}}}],
             "body": {
@@ -3312,26 +3286,36 @@
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The minimum value (inclusive)"}}}],
                         "body": {"literal": {"integer": {"int32": {}}}}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "min"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.query.rangeMin",
+                "parameter": "min"}}}},
+        "name": "hydra.dsl.query.range",
         "signature": {
           "parameters": [
             {
               "isLazy": false,
               "name": "arg0",
-              "type": {"application": {"argument": {"variable": "hydra.query.Range"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The minimum value (inclusive)"}}}],
+                      "body": {"literal": {"integer": {"int32": {}}}}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The maximum value (inclusive)"}}}],
+                      "body": {"literal": {"integer": {"int32": {}}}}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
-            "type": {
-              "application": {
-                "argument": {
-                  "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The minimum value (inclusive)"}}}],
-                    "body": {"literal": {"integer": {"int32": {}}}}}},
-                "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+            "type": {"application": {"argument": {"variable": "hydra.query.Range"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL accessor for the min field of hydra.query.Range"}}}],
             "body": {
@@ -3367,10 +3351,8 @@
                         "typeName": "hydra.core.Term"}},
                     "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {"application": {"argument": {"variable": "hydra.query.Range"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.query.rangeMax",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.query.rangeMin",
         "signature": {
           "parameters": [
             {
@@ -3382,11 +3364,13 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The maximum value (inclusive)"}}}],
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "The minimum value (inclusive)"}}}],
                     "body": {"literal": {"integer": {"int32": {}}}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL accessor for the max field of hydra.query.Range"}}}],
             "body": {
@@ -3422,30 +3406,26 @@
                         "typeName": "hydra.core.Term"}},
                     "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {"application": {"argument": {"variable": "hydra.query.Range"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.query.rangeWithMin",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.query.rangeMax",
         "signature": {
           "parameters": [
             {
               "isLazy": false,
               "name": "arg0",
-              "type": {"application": {"argument": {"variable": "hydra.query.Range"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-            {
-              "isLazy": false,
-              "name": "arg1",
-              "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The minimum value (inclusive)"}}}],
-                      "body": {"literal": {"integer": {"int32": {}}}}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+              "type": {"application": {"argument": {"variable": "hydra.query.Range"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
-            "type": {"application": {"argument": {"variable": "hydra.query.Range"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+            "type": {
+              "application": {
+                "argument": {
+                  "annotated": {
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "The maximum value (inclusive)"}}}],
+                    "body": {"literal": {"integer": {"int32": {}}}}}},
+                "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL updater for the min field of hydra.query.Range"}}}],
             "body": {
@@ -3522,10 +3502,8 @@
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {"application": {"argument": {"variable": "hydra.query.Range"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.query.rangeWithMax",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.query.rangeWithMin",
         "signature": {
           "parameters": [
             {
@@ -3539,13 +3517,15 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The maximum value (inclusive)"}}}],
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The minimum value (inclusive)"}}}],
                       "body": {"literal": {"integer": {"int32": {}}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {"application": {"argument": {"variable": "hydra.query.Range"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL updater for the max field of hydra.query.Range"}}}],
             "body": {
@@ -3622,17 +3602,30 @@
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {"application": {"argument": {"variable": "hydra.query.Range"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.query.rangeWithMax",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {"application": {"argument": {"variable": "hydra.query.Range"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The maximum value (inclusive)"}}}],
+                      "body": {"literal": {"integer": {"int32": {}}}}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+          "result": {
+            "type": {"application": {"argument": {"variable": "hydra.query.Range"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.dsl.query.regexQuantifierOne",
-        "signature": {
-          "parameters": [],
-          "result": {
-            "type": {
-              "application": {"argument": {"variable": "hydra.query.RegexQuantifier"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -3660,17 +3653,17 @@
                                   "typeName": "hydra.core.Field"}}}],
                           "typeName": "hydra.core.Injection"}}},
                     "typeName": "hydra.core.Term"}},
-                "typeName": "hydra.typed.TypedTerm"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.query.regexQuantifierZeroOrOne",
+                "typeName": "hydra.typed.TypedTerm"}}}},
+        "name": "hydra.dsl.query.regexQuantifierOne",
         "signature": {
           "parameters": [],
           "result": {
             "type": {
               "application": {"argument": {"variable": "hydra.query.RegexQuantifier"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -3698,17 +3691,17 @@
                                   "typeName": "hydra.core.Field"}}}],
                           "typeName": "hydra.core.Injection"}}},
                     "typeName": "hydra.core.Term"}},
-                "typeName": "hydra.typed.TypedTerm"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.query.regexQuantifierZeroOrMore",
+                "typeName": "hydra.typed.TypedTerm"}}}},
+        "name": "hydra.dsl.query.regexQuantifierZeroOrOne",
         "signature": {
           "parameters": [],
           "result": {
             "type": {
               "application": {"argument": {"variable": "hydra.query.RegexQuantifier"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -3736,17 +3729,17 @@
                                   "typeName": "hydra.core.Field"}}}],
                           "typeName": "hydra.core.Injection"}}},
                     "typeName": "hydra.core.Term"}},
-                "typeName": "hydra.typed.TypedTerm"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.query.regexQuantifierOneOrMore",
+                "typeName": "hydra.typed.TypedTerm"}}}},
+        "name": "hydra.dsl.query.regexQuantifierZeroOrMore",
         "signature": {
           "parameters": [],
           "result": {
             "type": {
               "application": {"argument": {"variable": "hydra.query.RegexQuantifier"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -3774,27 +3767,17 @@
                                   "typeName": "hydra.core.Field"}}}],
                           "typeName": "hydra.core.Injection"}}},
                     "typeName": "hydra.core.Term"}},
-                "typeName": "hydra.typed.TypedTerm"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.query.regexQuantifierExactly",
+                "typeName": "hydra.typed.TypedTerm"}}}},
+        "name": "hydra.dsl.query.regexQuantifierOneOrMore",
         "signature": {
-          "parameters": [
-            {
-              "isLazy": false,
-              "name": "arg0",
-              "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The {n} quantifier; matches exactly n occurrences"}}}],
-                      "body": {"literal": {"integer": {"int32": {}}}}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+          "parameters": [],
           "result": {
             "type": {
               "application": {"argument": {"variable": "hydra.query.RegexQuantifier"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -3834,10 +3817,8 @@
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The {n} quantifier; matches exactly n occurrences"}}}],
                         "body": {"literal": {"integer": {"int32": {}}}}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.query.regexQuantifierAtLeast",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.query.regexQuantifierExactly",
         "signature": {
           "parameters": [
             {
@@ -3847,14 +3828,16 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The {n,} quantifier; matches at least n occurrences"}}}],
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The {n} quantifier; matches exactly n occurrences"}}}],
                       "body": {"literal": {"integer": {"int32": {}}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {"argument": {"variable": "hydra.query.RegexQuantifier"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -3894,10 +3877,8 @@
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The {n,} quantifier; matches at least n occurrences"}}}],
                         "body": {"literal": {"integer": {"int32": {}}}}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.query.regexQuantifierRange",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.query.regexQuantifierAtLeast",
         "signature": {
           "parameters": [
             {
@@ -3907,17 +3888,16 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "The {n, m} quantifier; matches between n and m (inclusive) occurrences"}}}],
-                      "body": {"variable": "hydra.query.Range"}}},
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The {n,} quantifier; matches at least n occurrences"}}}],
+                      "body": {"literal": {"integer": {"int32": {}}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {"argument": {"variable": "hydra.query.RegexQuantifier"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -3960,10 +3940,8 @@
                             "value": {"literal": {"string": "The {n, m} quantifier; matches between n and m (inclusive) occurrences"}}}],
                         "body": {"variable": "hydra.query.Range"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.query.regexSequence",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.query.regexQuantifierRange",
         "signature": {
           "parameters": [
             {
@@ -3973,24 +3951,19 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The path to which the quantifier applies"}}}],
-                      "body": {"variable": "hydra.query.Path"}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
-            {
-              "isLazy": false,
-              "name": "arg1",
-              "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The quantifier"}}}],
-                      "body": {"variable": "hydra.query.RegexQuantifier"}}},
+                      "annotation": [
+                        {
+                          "key": "description",
+                          "value": {"literal": {"string": "The {n, m} quantifier; matches between n and m (inclusive) occurrences"}}}],
+                      "body": {"variable": "hydra.query.Range"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.query.RegexSequence"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+              "application": {"argument": {"variable": "hydra.query.RegexQuantifier"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for hydra.query.RegexSequence"}}}],
             "body": {
@@ -4047,27 +4020,37 @@
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The path to which the quantifier applies"}}}],
                         "body": {"variable": "hydra.query.Path"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "path"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.query.regexSequencePath",
+                "parameter": "path"}}}},
+        "name": "hydra.dsl.query.regexSequence",
         "signature": {
           "parameters": [
             {
               "isLazy": false,
               "name": "arg0",
               "type": {
-                "application": {"argument": {"variable": "hydra.query.RegexSequence"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The path to which the quantifier applies"}}}],
+                      "body": {"variable": "hydra.query.Path"}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The quantifier"}}}],
+                      "body": {"variable": "hydra.query.RegexQuantifier"}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
-              "application": {
-                "argument": {
-                  "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The path to which the quantifier applies"}}}],
-                    "body": {"variable": "hydra.query.Path"}}},
-                "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+              "application": {"argument": {"variable": "hydra.query.RegexSequence"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {"key": "description", "value": {"literal": {"string": "DSL accessor for the path field of hydra.query.RegexSequence"}}}],
@@ -4105,10 +4088,8 @@
                     "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.query.RegexSequence"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.query.regexSequenceQuantifier",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.query.regexSequencePath",
         "signature": {
           "parameters": [
             {
@@ -4121,11 +4102,13 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The quantifier"}}}],
-                    "body": {"variable": "hydra.query.RegexQuantifier"}}},
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "The path to which the quantifier applies"}}}],
+                    "body": {"variable": "hydra.query.Path"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -4165,32 +4148,27 @@
                     "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.query.RegexSequence"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.query.regexSequenceWithPath",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.query.regexSequenceQuantifier",
         "signature": {
           "parameters": [
             {
               "isLazy": false,
               "name": "arg0",
               "type": {
-                "application": {"argument": {"variable": "hydra.query.RegexSequence"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-            {
-              "isLazy": false,
-              "name": "arg1",
-              "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The path to which the quantifier applies"}}}],
-                      "body": {"variable": "hydra.query.Path"}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+                "application": {"argument": {"variable": "hydra.query.RegexSequence"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.query.RegexSequence"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+              "application": {
+                "argument": {
+                  "annotated": {
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "The quantifier"}}}],
+                    "body": {"variable": "hydra.query.RegexQuantifier"}}},
+                "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {"key": "description", "value": {"literal": {"string": "DSL updater for the path field of hydra.query.RegexSequence"}}}],
@@ -4269,10 +4247,8 @@
                     "parameter": "newVal"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.query.RegexSequence"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.query.regexSequenceWithQuantifier",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.query.regexSequenceWithPath",
         "signature": {
           "parameters": [
             {
@@ -4287,14 +4263,16 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The quantifier"}}}],
-                      "body": {"variable": "hydra.query.RegexQuantifier"}}},
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The path to which the quantifier applies"}}}],
+                      "body": {"variable": "hydra.query.Path"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {"argument": {"variable": "hydra.query.RegexSequence"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -4375,26 +4353,32 @@
                     "parameter": "newVal"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.query.RegexSequence"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.query.stepEdge",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.query.regexSequenceWithQuantifier",
         "signature": {
           "parameters": [
             {
               "isLazy": false,
               "name": "arg0",
               "type": {
+                "application": {"argument": {"variable": "hydra.query.RegexSequence"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "An out-to-in traversal of an abstract edge"}}}],
-                      "body": {"variable": "hydra.query.Edge"}}},
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The quantifier"}}}],
+                      "body": {"variable": "hydra.query.RegexQuantifier"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
-            "type": {"application": {"argument": {"variable": "hydra.query.Step"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+            "type": {
+              "application": {"argument": {"variable": "hydra.query.RegexSequence"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL injection for the edge variant of hydra.query.Step"}}}],
             "body": {
@@ -4431,10 +4415,8 @@
                         "annotation": [{"key": "description", "value": {"literal": {"string": "An out-to-in traversal of an abstract edge"}}}],
                         "body": {"variable": "hydra.query.Edge"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.query.stepProject",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.query.stepEdge",
         "signature": {
           "parameters": [
             {
@@ -4444,13 +4426,15 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "A projection from a record through one of its fields"}}}],
-                      "body": {"variable": "hydra.core.Projection"}}},
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "An out-to-in traversal of an abstract edge"}}}],
+                      "body": {"variable": "hydra.query.Edge"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {"application": {"argument": {"variable": "hydra.query.Step"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL injection for the project variant of hydra.query.Step"}}}],
             "body": {
@@ -4487,10 +4471,8 @@
                         "annotation": [{"key": "description", "value": {"literal": {"string": "A projection from a record through one of its fields"}}}],
                         "body": {"variable": "hydra.core.Projection"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.query.stepCompare",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.query.stepProject",
         "signature": {
           "parameters": [
             {
@@ -4500,13 +4482,15 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "A comparison of two terms"}}}],
-                      "body": {"variable": "hydra.query.ComparisonConstraint"}}},
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "A projection from a record through one of its fields"}}}],
+                      "body": {"variable": "hydra.core.Projection"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {"application": {"argument": {"variable": "hydra.query.Step"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL injection for the compare variant of hydra.query.Step"}}}],
             "body": {
@@ -4543,10 +4527,8 @@
                         "annotation": [{"key": "description", "value": {"literal": {"string": "A comparison of two terms"}}}],
                         "body": {"variable": "hydra.query.ComparisonConstraint"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.query.triplePattern",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.query.stepCompare",
         "signature": {
           "parameters": [
             {
@@ -4556,34 +4538,15 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The subject of the pattern"}}}],
-                      "body": {"variable": "hydra.query.Node"}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
-            {
-              "isLazy": false,
-              "name": "arg1",
-              "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The predicate (property) of the pattern"}}}],
-                      "body": {"variable": "hydra.query.Path"}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
-            {
-              "isLazy": false,
-              "name": "arg2",
-              "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The object of the pattern"}}}],
-                      "body": {"variable": "hydra.query.Node"}}},
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "A comparison of two terms"}}}],
+                      "body": {"variable": "hydra.query.ComparisonConstraint"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
-            "type": {
-              "application": {"argument": {"variable": "hydra.query.TriplePattern"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+            "type": {"application": {"argument": {"variable": "hydra.query.Step"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for hydra.query.TriplePattern"}}}],
             "body": {
@@ -4658,27 +4621,47 @@
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The subject of the pattern"}}}],
                         "body": {"variable": "hydra.query.Node"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "subject"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.query.triplePatternSubject",
+                "parameter": "subject"}}}},
+        "name": "hydra.dsl.query.triplePattern",
         "signature": {
           "parameters": [
             {
               "isLazy": false,
               "name": "arg0",
               "type": {
-                "application": {"argument": {"variable": "hydra.query.TriplePattern"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The subject of the pattern"}}}],
+                      "body": {"variable": "hydra.query.Node"}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The predicate (property) of the pattern"}}}],
+                      "body": {"variable": "hydra.query.Path"}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg2",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The object of the pattern"}}}],
+                      "body": {"variable": "hydra.query.Node"}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
-              "application": {
-                "argument": {
-                  "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The subject of the pattern"}}}],
-                    "body": {"variable": "hydra.query.Node"}}},
-                "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+              "application": {"argument": {"variable": "hydra.query.TriplePattern"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -4718,10 +4701,8 @@
                     "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.query.TriplePattern"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.query.triplePatternPredicate",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.query.triplePatternSubject",
         "signature": {
           "parameters": [
             {
@@ -4734,11 +4715,13 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The predicate (property) of the pattern"}}}],
-                    "body": {"variable": "hydra.query.Path"}}},
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "The subject of the pattern"}}}],
+                    "body": {"variable": "hydra.query.Node"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -4778,10 +4761,8 @@
                     "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.query.TriplePattern"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.query.triplePatternObject",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.query.triplePatternPredicate",
         "signature": {
           "parameters": [
             {
@@ -4794,11 +4775,13 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The object of the pattern"}}}],
-                    "body": {"variable": "hydra.query.Node"}}},
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "The predicate (property) of the pattern"}}}],
+                    "body": {"variable": "hydra.query.Path"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -4838,32 +4821,27 @@
                     "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.query.TriplePattern"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.query.triplePatternWithSubject",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.query.triplePatternObject",
         "signature": {
           "parameters": [
             {
               "isLazy": false,
               "name": "arg0",
               "type": {
-                "application": {"argument": {"variable": "hydra.query.TriplePattern"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-            {
-              "isLazy": false,
-              "name": "arg1",
-              "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The subject of the pattern"}}}],
-                      "body": {"variable": "hydra.query.Node"}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+                "application": {"argument": {"variable": "hydra.query.TriplePattern"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.query.TriplePattern"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+              "application": {
+                "argument": {
+                  "annotated": {
+                    "annotation": [{"key": "description", "value": {"literal": {"string": "The object of the pattern"}}}],
+                    "body": {"variable": "hydra.query.Node"}}},
+                "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -4978,10 +4956,8 @@
                     "parameter": "newVal"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.query.TriplePattern"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.query.triplePatternWithPredicate",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.query.triplePatternWithSubject",
         "signature": {
           "parameters": [
             {
@@ -4996,14 +4972,16 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The predicate (property) of the pattern"}}}],
-                      "body": {"variable": "hydra.query.Path"}}},
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The subject of the pattern"}}}],
+                      "body": {"variable": "hydra.query.Node"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {"argument": {"variable": "hydra.query.TriplePattern"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -5118,10 +5096,8 @@
                     "parameter": "newVal"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.query.TriplePattern"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.query.triplePatternWithObject",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.query.triplePatternWithPredicate",
         "signature": {
           "parameters": [
             {
@@ -5136,14 +5112,16 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The object of the pattern"}}}],
-                      "body": {"variable": "hydra.query.Node"}}},
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The predicate (property) of the pattern"}}}],
+                      "body": {"variable": "hydra.query.Path"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
               "application": {"argument": {"variable": "hydra.query.TriplePattern"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -5258,20 +5236,32 @@
                     "parameter": "newVal"}},
                 "domain": {
                   "application": {"argument": {"variable": "hydra.query.TriplePattern"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "original"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.query.variable",
+                "parameter": "original"}}}},
+        "name": "hydra.dsl.query.triplePatternWithObject",
         "signature": {
           "parameters": [
             {
               "isLazy": false,
               "name": "arg0",
-              "type": {"application": {"argument": {"literal": {"string": {}}}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+              "type": {
+                "application": {"argument": {"variable": "hydra.query.TriplePattern"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The object of the pattern"}}}],
+                      "body": {"variable": "hydra.query.Node"}}},
+                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
-            "type": {"application": {"argument": {"variable": "hydra.query.Variable"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+            "type": {
+              "application": {"argument": {"variable": "hydra.query.TriplePattern"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for the hydra.query.Variable wrapper"}}}],
             "body": {
@@ -5295,19 +5285,20 @@
                         "typeName": "hydra.core.Term"}},
                     "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {"application": {"argument": {"literal": {"string": {}}}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.query.unVariable",
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.query.variable",
         "signature": {
           "parameters": [
             {
               "isLazy": false,
               "name": "arg0",
-              "type": {"application": {"argument": {"variable": "hydra.query.Variable"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
-          "result": {"type": {"application": {"argument": {"literal": {"string": {}}}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []},
-        "term": {
+              "type": {"application": {"argument": {"literal": {"string": {}}}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+          "result": {
+            "type": {"application": {"argument": {"variable": "hydra.query.Variable"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "DSL accessor for the body of hydra.query.Variable"}}}],
             "body": {
@@ -5336,7 +5327,16 @@
                         "typeName": "hydra.core.Term"}},
                     "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {"application": {"argument": {"variable": "hydra.query.Variable"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}}}}],
+                "parameter": "x"}}}},
+        "name": "hydra.dsl.query.unVariable",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {"application": {"argument": {"variable": "hydra.query.Variable"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+          "result": {"type": {"application": {"argument": {"literal": {"string": {}}}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+          "typeParameters": []}}}],
   "dependencies": [{"module": "hydra.query"}, {"module": "hydra.typed"}, {"module": "hydra.core"}, {"module": "hydra.dsl.core"}],
   "metadata": {"comments": [], "description": "DSL functions for hydra.query", "seeAlso": []},
   "name": "hydra.dsl.query"}

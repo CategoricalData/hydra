@@ -49,7 +49,7 @@ public class Generation {
     public static Graph bootstrapGraph() {
         Map<Name, Term> boundTerms = new HashMap<>();
         Map<Name, TypeScheme> boundTypes = new HashMap<>();
-        Map<Name, hydra.core.TypeVariableMetadata> classConstraints = new HashMap<>();
+        Map<Name, hydra.core.TypeVariableConstraints> classConstraints = new HashMap<>();
         java.util.Set<Name> lambdaVariables = new HashSet<>();
         Map<Name, Term> metadata = new HashMap<>();
 
@@ -496,8 +496,12 @@ public class Generation {
         final hydra.util.CaseConvention cc = caseConv;
         generateSources(
                 mod -> defs -> cx -> g -> {
-                    // TODO: lisp.Coder excluded due to stale visitor patterns; needs regeneration
-                    hydra.util.Either result = new hydra.util.Either.Left("Lisp code generation temporarily disabled");
+                    // TODO: lisp.Coder excluded due to stale visitor patterns; needs regeneration.
+                    // Until then, fail loudly with a typed error so callers (Generation.generateSources)
+                    // don't ClassCastException on Either.Left<String,...>.
+                    hydra.util.Either result = new hydra.util.Either.Left(
+                        new hydra.errors.Error_.Other(
+                            new hydra.errors.OtherError("Lisp code generation temporarily disabled for dialect " + d)));
                     if (result instanceof hydra.util.Either.Left) {
                         return result;
                     }
@@ -506,7 +510,7 @@ public class Generation {
                             hydra.Serialization.parenthesize(
                                     hydra.lisp.Serde.programToExpr(program)));
                     String filePath = hydra.Names.moduleNameToFilePath(
-                            cc, new hydra.packaging.FileExtension(fileExt), mod.name);
+                            cc, new hydra.util.FileExtension(fileExt), mod.name);
                     Map<String, String> fileMap = new java.util.TreeMap<>();
                     fileMap.put(filePath, code);
                     return new hydra.util.Either.Right(fileMap);
@@ -537,9 +541,9 @@ public class Generation {
             d.accept(new Definition.Visitor<Void>() {
                 @Override public Void visit(Definition.Term td) {
                     TermDefinition t = td.value;
-                    Term newTerm = Strip.removeTypesFromTerm(t.term);
+                    Term newTerm = Strip.removeTypesFromTerm(t.body);
                     Maybe<TermSignature> newType = Maybe.nothing();
-                    stripped.add(new Definition.Term(new TermDefinition(t.name, hydra.util.Maybe.nothing(), newTerm, newType)));
+                    stripped.add(new Definition.Term(new TermDefinition(t.name, hydra.util.Maybe.nothing(), newType, newTerm)));
                     return null;
                 }
                 @Override public Void visit(Definition.Type td) {

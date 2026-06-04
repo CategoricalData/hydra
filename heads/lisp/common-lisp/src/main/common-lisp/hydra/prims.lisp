@@ -74,14 +74,14 @@
          (all-vars (collect-type-vars-ordered fun-type))
          (detected-vars (remove-if (lambda (v) (find #\. v)) all-vars))
          (vars (if variables variables detected-vars))
-         ;; Build constraints map. After #156, TypeVariableMetadata.classes is
+         ;; Build constraints map. After #156, TypeVariableConstraints.classes is
          ;; a Seq[TypeClassConstraint], not Set[String]; wrap each class name.
          (constraint-map
           (when constraints
             (funcall hydra_lib_maps_from_list
                      (mapcar (lambda (entry)
                                (list (first entry)
-                                     (make-type_variable_metadata
+                                     (make-type_variable_constraints
                                       (wrap-constraints (cdr entry)))))
                              constraints))))
          ;; TypeScheme.constraints is Maybe(Map): wrap as (:just m) or (:nothing).
@@ -94,7 +94,7 @@
   "Build a PrimitiveDefinition (#156 shape) from name + signature."
   (let* ((ts (build-type-scheme variables inputs output constraints))
          (sig (funcall hydra_scoping_type_scheme_to_term_signature ts)))
-    (make-hydra_packaging_primitive_definition pname sig (list :nothing) t t (list :nothing))))
+    (make-hydra_packaging_primitive_definition pname (list :nothing) sig t t (list :nothing))))
 
 ;; ============================================================================
 ;; Error helpers

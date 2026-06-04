@@ -190,6 +190,10 @@ rewriteAndFoldTerm = define "rewriteAndFoldTerm" $
       "r" <~ var "recurse" @@ var "val" @@ Core.fieldTerm (var "field") $
       pair (Pairs.first $ var "r") (Core.field (Core.fieldName $ var "field") (Pairs.second $ var "r"))) $
     "forFields" <~ var "forMany" @@ var "forField" @@ ("x" ~> var "x") $
+    "forCaseAlternative" <~ ("val" ~> "alt" ~>
+      "r" <~ var "recurse" @@ var "val" @@ Core.caseAlternativeHandler (var "alt") $
+      pair (Pairs.first $ var "r") (Core.caseAlternative (Core.caseAlternativeName $ var "alt") (Pairs.second $ var "r"))) $
+    "forCaseAlternatives" <~ var "forMany" @@ var "forCaseAlternative" @@ ("x" ~> var "x") $
     "forPair" <~ ("val" ~> "kv" ~>
       "rk" <~ var "recurse" @@ var "val" @@ (Pairs.first $ var "kv") $
       "rv" <~ var "recurse" @@ (Pairs.first $ var "rk") @@ (Pairs.second $ var "kv") $
@@ -225,7 +229,7 @@ rewriteAndFoldTerm = define "rewriteAndFoldTerm" $
         "val1" <~ optCases (var "rmd")
           (var "val0")
           (reify Pairs.first) $
-        "rcases" <~ var "forFields" @@ var "val1" @@ (Core.caseStatementCases $ var "cs") $
+        "rcases" <~ var "forCaseAlternatives" @@ var "val1" @@ (Core.caseStatementCases $ var "cs") $
         pair
           (Pairs.first $ var "rcases")
           (Core.termCases $ Core.caseStatement
@@ -450,8 +454,8 @@ rewriteAndFoldTermWithPath = define "rewriteAndFoldTermWithPath" $
           @@ var "val1"
           @@ Lists.map
             ("f" ~> pair
-              (Paths.subtermStepUnionCasesBranch $ Core.fieldName $ var "f")
-              (Core.fieldTerm $ var "f"))
+              (Paths.subtermStepUnionCasesBranch $ Core.caseAlternativeName $ var "f")
+              (Core.caseAlternativeHandler $ var "f"))
             (Core.caseStatementCases $ var "cs") $
         pair
           (Pairs.first $ var "rcases")
@@ -459,11 +463,11 @@ rewriteAndFoldTermWithPath = define "rewriteAndFoldTermWithPath" $
             (Core.caseStatementTypeName $ var "cs")
             (Maybes.map (reify Pairs.second) (var "rmd"))
             (Lists.map
-              ("ft" ~> Core.field
+              ("ft" ~> Core.caseAlternative
                 (Pairs.first $ var "ft")
                 (Pairs.second $ var "ft"))
               (Lists.zip
-                (Lists.map (reify Core.fieldName) (Core.caseStatementCases $ var "cs"))
+                (Lists.map (reify Core.caseAlternativeName) (Core.caseStatementCases $ var "cs"))
                 (Pairs.second $ var "rcases")))),
       _Term_either>>: "e" ~> Eithers.either_
         ("l" ~>
@@ -626,6 +630,7 @@ rewriteTerm = define "rewriteTerm" $
   "f" ~> "term0" ~>
   "fsub" <~ ("recurse" ~> "term" ~>
     "forField" <~ ("f" ~> Core.fieldWithTerm (var "f") (var "recurse" @@ (Core.fieldTerm $ var "f"))) $
+    "forCaseAlternative" <~ ("a" ~> Core.caseAlternativeWithHandler (var "a") (var "recurse" @@ (Core.caseAlternativeHandler $ var "a"))) $
     "forLet" <~ ("lt" ~>
       "mapBinding" <~ ("b" ~> Core.binding
         (Core.bindingName $ var "b")
@@ -647,7 +652,7 @@ rewriteTerm = define "rewriteTerm" $
       _Term_cases>>: "cs" ~> Core.termCases $ Core.caseStatement
         (Core.caseStatementTypeName $ var "cs")
         (Maybes.map (var "recurse") (Core.caseStatementDefault $ var "cs"))
-        (Lists.map (var "forField") (Core.caseStatementCases $ var "cs")),
+        (Lists.map (var "forCaseAlternative") (Core.caseStatementCases $ var "cs")),
       _Term_either>>: "e" ~> Core.termEither $ Eithers.either_
         ("l" ~> left $ var "recurse" @@ var "l")
         ("r" ~> right $ var "recurse" @@ var "r")
@@ -696,6 +701,9 @@ rewriteTermM = define "rewriteTermM" $
     "forField" <~ ("field" ~>
       "t" <<~ var "recurse" @@ Core.fieldTerm (var "field") $
       right $ Core.fieldWithTerm (var "field") (var "t")) $
+    "forCaseAlternative" <~ ("alt" ~>
+      "t" <<~ var "recurse" @@ Core.caseAlternativeHandler (var "alt") $
+      right $ Core.caseAlternativeWithHandler (var "alt") (var "t")) $
     "forPair" <~ ("kv" ~>
       "k" <<~ var "recurse" @@ (Pairs.first $ var "kv") $
       "v" <<~ var "recurse" @@ (Pairs.second $ var "kv") $
@@ -721,7 +729,7 @@ rewriteTermM = define "rewriteTermM" $
         Eithers.map
           ("rcases" ~> Core.termCases $
             Core.caseStatement (var "n") (var "rdef") (var "rcases"))
-          (Eithers.mapList (var "forField") (var "csCases")),
+          (Eithers.mapList (var "forCaseAlternative") (var "csCases")),
       _Term_either>>: "e" ~>
         "re" <<~ Eithers.either_
           ("l" ~> Eithers.map (reify left) $ var "recurse" @@ var "l")
@@ -797,6 +805,7 @@ rewriteTermWithContext = define "rewriteTermWithContext" $
   "forSubterms" <~ ("recurse0" ~> "cx" ~> "term" ~>
     "recurse" <~ var "recurse0" @@ var "cx" $
     "forField" <~ ("field" ~> Core.fieldWithTerm (var "field") (var "recurse" @@ (Core.fieldTerm $ var "field"))) $
+    "forCaseAlternative" <~ ("alt" ~> Core.caseAlternativeWithHandler (var "alt") (var "recurse" @@ (Core.caseAlternativeHandler $ var "alt"))) $
     "forLet" <~ ("lt" ~>
       "mapBinding" <~ ("b" ~> Core.binding
         (Core.bindingName $ var "b")
@@ -818,7 +827,7 @@ rewriteTermWithContext = define "rewriteTermWithContext" $
       _Term_cases>>: "cs" ~> Core.termCases $ Core.caseStatement
         (Core.caseStatementTypeName $ var "cs")
         (Maybes.map (var "recurse") (Core.caseStatementDefault $ var "cs"))
-        (Lists.map (var "forField") (Core.caseStatementCases $ var "cs")),
+        (Lists.map (var "forCaseAlternative") (Core.caseStatementCases $ var "cs")),
       _Term_either>>: "e" ~> Core.termEither $ Eithers.either_
         ("l" ~> left $ var "recurse" @@ var "l")
         ("r" ~> right $ var "recurse" @@ var "r")
@@ -868,6 +877,9 @@ rewriteTermWithContextM = define "rewriteTermWithContextM" $
     "forField" <~ ("field" ~>
       "t" <<~ var "recurse" @@ Core.fieldTerm (var "field") $
       right $ Core.fieldWithTerm (var "field") (var "t")) $
+    "forCaseAlternative" <~ ("alt" ~>
+      "t" <<~ var "recurse" @@ Core.caseAlternativeHandler (var "alt") $
+      right $ Core.caseAlternativeWithHandler (var "alt") (var "t")) $
     "forPair" <~ ("kv" ~>
       "k" <<~ var "recurse" @@ (Pairs.first $ var "kv") $
       "v" <<~ var "recurse" @@ (Pairs.second $ var "kv") $
@@ -893,7 +905,7 @@ rewriteTermWithContextM = define "rewriteTermWithContextM" $
         Eithers.map
           ("rcases" ~> Core.termCases $
             Core.caseStatement (var "n") (var "rdef") (var "rcases"))
-          (Eithers.mapList (var "forField") (var "csCases")),
+          (Eithers.mapList (var "forCaseAlternative") (var "csCases")),
       _Term_either>>: "e" ~>
         "re" <<~ Eithers.either_
           ("l" ~> Eithers.map (reify left) $ var "recurse" @@ var "l")
@@ -1101,7 +1113,7 @@ subterms = define "subterms" $
       Core.applicationArgument $ var "p"],
     _Term_cases>>: "cs" ~> Lists.concat2
       (Maybes.maybe (list ([] :: [TypedTerm Term])) ("t" ~> list [var "t"]) (Core.caseStatementDefault $ var "cs"))
-      (Lists.map (reify Core.fieldTerm) (Core.caseStatementCases $ var "cs")),
+      (Lists.map (reify Core.caseAlternativeHandler) (Core.caseStatementCases $ var "cs")),
     _Term_either>>: "e" ~> Eithers.either_
       ("l" ~> list [var "l"])
       ("r" ~> list [var "r"])
@@ -1141,7 +1153,7 @@ subtermsWithSteps = define "subtermsWithSteps" $
         ("t" ~> single Paths.subtermStepUnionCasesDefault $ var "t")
         (Core.caseStatementDefault $ var "cs"))
       (Lists.map
-        ("f" ~> result (Paths.subtermStepUnionCasesBranch $ Core.fieldName $ var "f") $ Core.fieldTerm $ var "f")
+        ("f" ~> result (Paths.subtermStepUnionCasesBranch $ Core.caseAlternativeName $ var "f") $ Core.caseAlternativeHandler $ var "f")
         (Core.caseStatementCases $ var "cs")),
     _Term_either>>: "e" ~> none, -- TODO: add steps when SubtermStep type is updated
     _Term_lambda>>: "l" ~> single Paths.subtermStepLambdaBody $ Core.lambdaBody $ var "l",

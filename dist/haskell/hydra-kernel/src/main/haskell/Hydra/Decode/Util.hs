@@ -54,6 +54,16 @@ comparison cx raw =
           (Core.unName fname),
           " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
       _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)
+-- | Decoder for hydra.util.FileExtension
+fileExtension :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Util.FileExtension
+fileExtension cx raw =
+    Eithers.either (\err -> Left err) (\stripped -> case stripped of
+      Core.TermWrap v0 -> Eithers.map (\b -> Util.FileExtension b) ((\raw2 -> Eithers.either (\err -> Left err) (\stripped2 -> case stripped2 of
+        Core.TermLiteral v1 -> case v1 of
+          Core.LiteralString v2 -> Right v2
+          _ -> Left (Errors.DecodingError "expected string literal")
+        _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx raw2)) (Core.wrappedTermBody v0))
+      _ -> Left (Errors.DecodingError "expected wrapped type")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.util.ModuleNames
 moduleNames :: (Graph.Graph -> Core.Term -> Either Errors.DecodingError t0) -> Graph.Graph -> Core.Term -> Either Errors.DecodingError (Util.ModuleNames t0)
 moduleNames n cx raw =
@@ -63,7 +73,7 @@ moduleNames n cx raw =
         in (Eithers.bind (ExtractCore.requireField "focus" (ExtractCore.decodePair Packaging.moduleName n) fieldMap cx) (\field_focus -> Eithers.bind (ExtractCore.requireField "mapping" (ExtractCore.decodeMap Packaging.moduleName n) fieldMap cx) (\field_mapping -> Right (Util.ModuleNames {
           Util.moduleNamesFocus = field_focus,
           Util.moduleNamesMapping = field_mapping}))))
-      _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+      _ -> Left (Errors.DecodingError "expected a record of type hydra.util.ModuleNames")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.util.Precision
 precision :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Util.Precision
 precision cx raw =
@@ -89,3 +99,17 @@ precision cx raw =
           (Core.unName fname),
           " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
       _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)
+-- | Decoder for hydra.util.QualifiedName
+qualifiedName :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Util.QualifiedName
+qualifiedName cx raw =
+    Eithers.either (\err -> Left err) (\stripped -> case stripped of
+      Core.TermRecord v0 ->
+        let fieldMap = ExtractCore.toFieldMap v0
+        in (Eithers.bind (ExtractCore.requireField "moduleName" (ExtractCore.decodeMaybe Packaging.moduleName) fieldMap cx) (\field_moduleName -> Eithers.bind (ExtractCore.requireField "local" (\cx2 -> \raw2 -> Eithers.either (\err -> Left err) (\stripped2 -> case stripped2 of
+          Core.TermLiteral v1 -> case v1 of
+            Core.LiteralString v2 -> Right v2
+            _ -> Left (Errors.DecodingError "expected string literal")
+          _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx2 raw2)) fieldMap cx) (\field_local -> Right (Util.QualifiedName {
+          Util.qualifiedNameModuleName = field_moduleName,
+          Util.qualifiedNameLocal = field_local}))))
+      _ -> Left (Errors.DecodingError "expected a record of type hydra.util.QualifiedName")) (ExtractCore.stripWithDecodingError cx raw)

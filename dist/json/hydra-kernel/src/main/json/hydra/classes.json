@@ -2,9 +2,7 @@
   "definitions": [
     {
       "term": {
-        "name": "hydra.classes.equality",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.typing.TypeClass"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -13,12 +11,12 @@
             "body": {
               "record": {
                 "fields": [{"name": "description", "term": {"literal": {"string": "Equality: instances support structural equality."}}}],
-                "typeName": "hydra.typing.TypeClass"}}}}}},
+                "typeName": "hydra.typing.TypeClass"}}}},
+        "name": "hydra.classes.equality",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.typing.TypeClass"}}, "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.classes.ordering",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.typing.TypeClass"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -27,7 +25,9 @@
             "body": {
               "record": {
                 "fields": [{"name": "description", "term": {"literal": {"string": "Ordering: instances support total ordering (and equality)."}}}],
-                "typeName": "hydra.typing.TypeClass"}}}}}}],
+                "typeName": "hydra.typing.TypeClass"}}}},
+        "name": "hydra.classes.ordering",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.typing.TypeClass"}}, "typeParameters": []}}}],
   "dependencies": [
     {"module": "hydra.paths"},
     {"module": "hydra.ast"},

@@ -2,20 +2,7 @@
   "definitions": [
     {
       "term": {
-        "name": "hydra.pg.printing.printEdge",
-        "signature": {
-          "parameters": [
-            {
-              "isLazy": false,
-              "name": "arg0",
-              "type": {"function": {"codomain": {"literal": {"string": {}}}, "domain": {"variable": "t0"}}}},
-            {
-              "isLazy": false,
-              "name": "arg1",
-              "type": {"application": {"argument": {"variable": "t0"}, "function": {"variable": "hydra.pg.model.Edge"}}}}],
-          "result": {"type": {"literal": {"string": {}}}},
-          "typeParameters": [{"constraints": [], "name": "t0"}]},
-        "term": {
+        "body": {
           "typeLambda": {
             "body": {
               "annotated": {
@@ -146,10 +133,8 @@
                         "parameter": "edge"}},
                     "domain": {"function": {"codomain": {"literal": {"string": {}}}, "domain": {"variable": "t0"}}},
                     "parameter": "printValue"}}}},
-            "parameter": "t0"}}}},
-    {
-      "term": {
-        "name": "hydra.pg.printing.printGraph",
+            "parameter": "t0"}},
+        "name": "hydra.pg.printing.printEdge",
         "signature": {
           "parameters": [
             {
@@ -159,10 +144,12 @@
             {
               "isLazy": false,
               "name": "arg1",
-              "type": {"application": {"argument": {"variable": "t0"}, "function": {"variable": "hydra.pg.model.Graph"}}}}],
+              "type": {"application": {"argument": {"variable": "t0"}, "function": {"variable": "hydra.pg.model.Edge"}}}}],
           "result": {"type": {"literal": {"string": {}}}},
-          "typeParameters": [{"constraints": [{"simple": "ordering"}], "name": "t0"}]},
-        "term": {
+          "typeParameters": [{"constraints": [], "name": "t0"}]}}},
+    {
+      "term": {
+        "body": {
           "typeLambda": {
             "body": {
               "annotated": {
@@ -214,10 +201,8 @@
                         "parameter": "graph"}},
                     "domain": {"function": {"codomain": {"literal": {"string": {}}}, "domain": {"variable": "t0"}}},
                     "parameter": "printValue"}}}},
-            "parameter": "t0"}}}},
-    {
-      "term": {
-        "name": "hydra.pg.printing.printLazyGraph",
+            "parameter": "t0"}},
+        "name": "hydra.pg.printing.printGraph",
         "signature": {
           "parameters": [
             {
@@ -227,10 +212,12 @@
             {
               "isLazy": false,
               "name": "arg1",
-              "type": {"application": {"argument": {"variable": "t0"}, "function": {"variable": "hydra.pg.model.LazyGraph"}}}}],
+              "type": {"application": {"argument": {"variable": "t0"}, "function": {"variable": "hydra.pg.model.Graph"}}}}],
           "result": {"type": {"literal": {"string": {}}}},
-          "typeParameters": [{"constraints": [], "name": "t0"}]},
-        "term": {
+          "typeParameters": [{"constraints": [{"simple": "ordering"}], "name": "t0"}]}}},
+    {
+      "term": {
+        "body": {
           "typeLambda": {
             "body": {
               "annotated": {
@@ -337,21 +324,23 @@
                         "parameter": "lg"}},
                     "domain": {"function": {"codomain": {"literal": {"string": {}}}, "domain": {"variable": "t0"}}},
                     "parameter": "printValue"}}}},
-            "parameter": "t0"}}}},
-    {
-      "term": {
-        "name": "hydra.pg.printing.printProperty",
+            "parameter": "t0"}},
+        "name": "hydra.pg.printing.printLazyGraph",
         "signature": {
           "parameters": [
             {
               "isLazy": false,
               "name": "arg0",
               "type": {"function": {"codomain": {"literal": {"string": {}}}, "domain": {"variable": "t0"}}}},
-            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.pg.model.PropertyKey"}},
-            {"isLazy": false, "name": "arg2", "type": {"variable": "t0"}}],
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {"application": {"argument": {"variable": "t0"}, "function": {"variable": "hydra.pg.model.LazyGraph"}}}}],
           "result": {"type": {"literal": {"string": {}}}},
-          "typeParameters": [{"constraints": [], "name": "t0"}]},
-        "term": {
+          "typeParameters": [{"constraints": [], "name": "t0"}]}}},
+    {
+      "term": {
+        "body": {
           "typeLambda": {
             "body": {
               "annotated": {
@@ -376,23 +365,21 @@
                         "parameter": "key"}},
                     "domain": {"function": {"codomain": {"literal": {"string": {}}}, "domain": {"variable": "t0"}}},
                     "parameter": "printValue"}}}},
-            "parameter": "t0"}}}},
-    {
-      "term": {
-        "name": "hydra.pg.printing.printVertex",
+            "parameter": "t0"}},
+        "name": "hydra.pg.printing.printProperty",
         "signature": {
           "parameters": [
             {
               "isLazy": false,
               "name": "arg0",
               "type": {"function": {"codomain": {"literal": {"string": {}}}, "domain": {"variable": "t0"}}}},
-            {
-              "isLazy": false,
-              "name": "arg1",
-              "type": {"application": {"argument": {"variable": "t0"}, "function": {"variable": "hydra.pg.model.Vertex"}}}}],
+            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.pg.model.PropertyKey"}},
+            {"isLazy": false, "name": "arg2", "type": {"variable": "t0"}}],
           "result": {"type": {"literal": {"string": {}}}},
-          "typeParameters": [{"constraints": [], "name": "t0"}]},
-        "term": {
+          "typeParameters": [{"constraints": [], "name": "t0"}]}}},
+    {
+      "term": {
+        "body": {
           "typeLambda": {
             "body": {
               "annotated": {
@@ -496,7 +483,20 @@
                         "parameter": "vertex"}},
                     "domain": {"function": {"codomain": {"literal": {"string": {}}}, "domain": {"variable": "t0"}}},
                     "parameter": "printValue"}}}},
-            "parameter": "t0"}}}}],
+            "parameter": "t0"}},
+        "name": "hydra.pg.printing.printVertex",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {"function": {"codomain": {"literal": {"string": {}}}, "domain": {"variable": "t0"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {"application": {"argument": {"variable": "t0"}, "function": {"variable": "hydra.pg.model.Vertex"}}}}],
+          "result": {"type": {"literal": {"string": {}}}},
+          "typeParameters": [{"constraints": [], "name": "t0"}]}}}],
   "dependencies": [
     {"module": "hydra.pg.model"},
     {"module": "hydra.paths"},

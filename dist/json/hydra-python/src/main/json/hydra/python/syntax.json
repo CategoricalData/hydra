@@ -2,91 +2,87 @@
   "definitions": [
     {
       "type": {
-        "name": "hydra.python.syntax.AnnotatedStatement",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "comment", "type": {"literal": {"string": {}}}},
               {"name": "statement", "type": {"variable": "hydra.python.syntax.Statement"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.syntax.AnnotatedStatement"}},
     {
       "type": {
-        "name": "hydra.python.syntax.Module",
-        "typeScheme": {"body": {"wrap": {"list": {"list": {"variable": "hydra.python.syntax.Statement"}}}}, "variables": []}}},
+        "body": {"body": {"wrap": {"list": {"list": {"variable": "hydra.python.syntax.Statement"}}}}, "variables": []},
+        "name": "hydra.python.syntax.Module"}},
     {
       "type": {
-        "name": "hydra.python.syntax.QuoteStyle",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "single", "type": {"unit": {}}},
               {"name": "double", "type": {"unit": {}}},
               {"name": "tripleSingle", "type": {"unit": {}}},
               {"name": "tripleDouble", "type": {"unit": {}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.syntax.QuoteStyle"}},
     {
       "type": {
-        "name": "hydra.python.syntax.StringPrefix",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "raw", "type": {"unit": {}}},
               {"name": "bytes", "type": {"unit": {}}},
               {"name": "rawBytes", "type": {"unit": {}}},
               {"name": "unicode", "type": {"unit": {}}}]},
-          "variables": []}}},
-    {
-      "type": {"name": "hydra.python.syntax.Name", "typeScheme": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.syntax.StringPrefix"}},
+    {"type": {"body": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}, "name": "hydra.python.syntax.Name"}},
     {
       "type": {
-        "name": "hydra.python.syntax.Number",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "integer", "type": {"literal": {"integer": {"bigint": {}}}}},
               {"name": "float", "type": {"literal": {"float": {"float64": {}}}}},
               {"name": "imaginary", "type": {"literal": {"float": {"float64": {}}}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.syntax.Number"}},
     {
       "type": {
-        "name": "hydra.python.syntax.String",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "value", "type": {"literal": {"string": {}}}},
               {"name": "prefix", "type": {"maybe": {"variable": "hydra.python.syntax.StringPrefix"}}},
               {"name": "quoteStyle", "type": {"variable": "hydra.python.syntax.QuoteStyle"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.syntax.String"}},
+    {
+      "type": {"body": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}, "name": "hydra.python.syntax.TypeComment"}},
     {
       "type": {
-        "name": "hydra.python.syntax.TypeComment",
-        "typeScheme": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
+        "body": {"body": {"wrap": {"list": {"variable": "hydra.python.syntax.Statement"}}}, "variables": []},
+        "name": "hydra.python.syntax.File"}},
     {
       "type": {
-        "name": "hydra.python.syntax.File",
-        "typeScheme": {"body": {"wrap": {"list": {"variable": "hydra.python.syntax.Statement"}}}, "variables": []}}},
+        "body": {"body": {"wrap": {"variable": "hydra.python.syntax.Statement"}}, "variables": []},
+        "name": "hydra.python.syntax.Interactive"}},
     {
       "type": {
-        "name": "hydra.python.syntax.Interactive",
-        "typeScheme": {"body": {"wrap": {"variable": "hydra.python.syntax.Statement"}}, "variables": []}}},
+        "body": {"body": {"wrap": {"list": {"variable": "hydra.python.syntax.Expression"}}}, "variables": []},
+        "name": "hydra.python.syntax.Eval"}},
     {
       "type": {
-        "name": "hydra.python.syntax.Eval",
-        "typeScheme": {"body": {"wrap": {"list": {"variable": "hydra.python.syntax.Expression"}}}, "variables": []}}},
-    {
-      "type": {
-        "name": "hydra.python.syntax.Statement",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "compound", "type": {"variable": "hydra.python.syntax.CompoundStatement"}},
               {"name": "simple", "type": {"list": {"variable": "hydra.python.syntax.SimpleStatement"}}},
               {"name": "annotated", "type": {"variable": "hydra.python.syntax.AnnotatedStatement"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.syntax.Statement"}},
     {
       "type": {
-        "name": "hydra.python.syntax.SimpleStatement",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "assignment", "type": {"variable": "hydra.python.syntax.Assignment"}},
@@ -103,11 +99,11 @@
               {"name": "continue", "type": {"unit": {}}},
               {"name": "global", "type": {"list": {"variable": "hydra.python.syntax.Name"}}},
               {"name": "nonlocal", "type": {"list": {"variable": "hydra.python.syntax.Name"}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.syntax.SimpleStatement"}},
     {
       "type": {
-        "name": "hydra.python.syntax.CompoundStatement",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "function", "type": {"variable": "hydra.python.syntax.FunctionDefinition"}},
@@ -118,60 +114,60 @@
               {"name": "try", "type": {"variable": "hydra.python.syntax.TryStatement"}},
               {"name": "while", "type": {"variable": "hydra.python.syntax.WhileStatement"}},
               {"name": "match", "type": {"variable": "hydra.python.syntax.MatchStatement"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.syntax.CompoundStatement"}},
     {
       "type": {
-        "name": "hydra.python.syntax.Assignment",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "typed", "type": {"variable": "hydra.python.syntax.TypedAssignment"}},
               {"name": "untyped", "type": {"variable": "hydra.python.syntax.UntypedAssignment"}},
               {"name": "aug", "type": {"variable": "hydra.python.syntax.AugAssignment"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.syntax.Assignment"}},
     {
       "type": {
-        "name": "hydra.python.syntax.TypedAssignment",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "lhs", "type": {"variable": "hydra.python.syntax.SingleTarget"}},
               {"name": "type", "type": {"variable": "hydra.python.syntax.Expression"}},
               {"name": "rhs", "type": {"maybe": {"variable": "hydra.python.syntax.AnnotatedRhs"}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.syntax.TypedAssignment"}},
     {
       "type": {
-        "name": "hydra.python.syntax.UntypedAssignment",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "targets", "type": {"list": {"variable": "hydra.python.syntax.StarTarget"}}},
               {"name": "rhs", "type": {"variable": "hydra.python.syntax.AnnotatedRhs"}},
               {"name": "typeComment", "type": {"maybe": {"variable": "hydra.python.syntax.TypeComment"}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.syntax.UntypedAssignment"}},
     {
       "type": {
-        "name": "hydra.python.syntax.AugAssignment",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "lhs", "type": {"variable": "hydra.python.syntax.SingleTarget"}},
               {"name": "augassign", "type": {"variable": "hydra.python.syntax.AugAssign"}},
               {"name": "rhs", "type": {"variable": "hydra.python.syntax.AnnotatedRhs"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.syntax.AugAssignment"}},
     {
       "type": {
-        "name": "hydra.python.syntax.AnnotatedRhs",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "yield", "type": {"variable": "hydra.python.syntax.YieldExpression"}},
               {"name": "star", "type": {"list": {"variable": "hydra.python.syntax.StarExpression"}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.syntax.AnnotatedRhs"}},
     {
       "type": {
-        "name": "hydra.python.syntax.AugAssign",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "plusEqual", "type": {"unit": {}}},
@@ -187,119 +183,119 @@
               {"name": "rightShiftEqual", "type": {"unit": {}}},
               {"name": "starStarEqual", "type": {"unit": {}}},
               {"name": "doubleSlashEqual", "type": {"unit": {}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.syntax.AugAssign"}},
     {
       "type": {
-        "name": "hydra.python.syntax.ReturnStatement",
-        "typeScheme": {"body": {"wrap": {"list": {"variable": "hydra.python.syntax.StarExpression"}}}, "variables": []}}},
+        "body": {"body": {"wrap": {"list": {"variable": "hydra.python.syntax.StarExpression"}}}, "variables": []},
+        "name": "hydra.python.syntax.ReturnStatement"}},
     {
       "type": {
-        "name": "hydra.python.syntax.RaiseStatement",
-        "typeScheme": {"body": {"wrap": {"maybe": {"variable": "hydra.python.syntax.RaiseExpression"}}}, "variables": []}}},
+        "body": {"body": {"wrap": {"maybe": {"variable": "hydra.python.syntax.RaiseExpression"}}}, "variables": []},
+        "name": "hydra.python.syntax.RaiseStatement"}},
     {
       "type": {
-        "name": "hydra.python.syntax.RaiseExpression",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "expression", "type": {"variable": "hydra.python.syntax.Expression"}},
               {"name": "from", "type": {"maybe": {"variable": "hydra.python.syntax.Expression"}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.syntax.RaiseExpression"}},
     {
       "type": {
-        "name": "hydra.python.syntax.DelStatement",
-        "typeScheme": {"body": {"wrap": {"variable": "hydra.python.syntax.DelTargets"}}, "variables": []}}},
+        "body": {"body": {"wrap": {"variable": "hydra.python.syntax.DelTargets"}}, "variables": []},
+        "name": "hydra.python.syntax.DelStatement"}},
     {
       "type": {
-        "name": "hydra.python.syntax.YieldStatement",
-        "typeScheme": {"body": {"wrap": {"variable": "hydra.python.syntax.YieldExpression"}}, "variables": []}}},
+        "body": {"body": {"wrap": {"variable": "hydra.python.syntax.YieldExpression"}}, "variables": []},
+        "name": "hydra.python.syntax.YieldStatement"}},
     {
       "type": {
-        "name": "hydra.python.syntax.AssertStatement",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "expression1", "type": {"variable": "hydra.python.syntax.Expression"}},
               {"name": "expression2", "type": {"maybe": {"variable": "hydra.python.syntax.Expression"}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.syntax.AssertStatement"}},
     {
       "type": {
-        "name": "hydra.python.syntax.ImportStatement",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "name", "type": {"variable": "hydra.python.syntax.ImportName"}},
               {"name": "from", "type": {"variable": "hydra.python.syntax.ImportFrom"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.syntax.ImportStatement"}},
     {
       "type": {
-        "name": "hydra.python.syntax.ImportName",
-        "typeScheme": {"body": {"wrap": {"list": {"variable": "hydra.python.syntax.DottedAsName"}}}, "variables": []}}},
+        "body": {"body": {"wrap": {"list": {"variable": "hydra.python.syntax.DottedAsName"}}}, "variables": []},
+        "name": "hydra.python.syntax.ImportName"}},
     {
       "type": {
-        "name": "hydra.python.syntax.ImportFrom",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "prefixes", "type": {"list": {"variable": "hydra.python.syntax.RelativeImportPrefix"}}},
               {"name": "dottedName", "type": {"maybe": {"variable": "hydra.python.syntax.DottedName"}}},
               {"name": "targets", "type": {"variable": "hydra.python.syntax.ImportFromTargets"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.syntax.ImportFrom"}},
     {
       "type": {
-        "name": "hydra.python.syntax.RelativeImportPrefix",
-        "typeScheme": {
+        "body": {
           "body": {"union": [{"name": "dot", "type": {"unit": {}}}, {"name": "ellipsis", "type": {"unit": {}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.syntax.RelativeImportPrefix"}},
     {
       "type": {
-        "name": "hydra.python.syntax.ImportFromTargets",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "simple", "type": {"list": {"variable": "hydra.python.syntax.ImportFromAsName"}}},
               {"name": "parens", "type": {"list": {"variable": "hydra.python.syntax.ImportFromAsName"}}},
               {"name": "star", "type": {"unit": {}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.syntax.ImportFromTargets"}},
     {
       "type": {
-        "name": "hydra.python.syntax.ImportFromAsName",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "name", "type": {"variable": "hydra.python.syntax.Name"}},
               {"name": "as", "type": {"maybe": {"variable": "hydra.python.syntax.Name"}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.syntax.ImportFromAsName"}},
     {
       "type": {
-        "name": "hydra.python.syntax.DottedAsName",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "name", "type": {"variable": "hydra.python.syntax.DottedName"}},
               {"name": "as", "type": {"maybe": {"variable": "hydra.python.syntax.Name"}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.syntax.DottedAsName"}},
     {
       "type": {
-        "name": "hydra.python.syntax.DottedName",
-        "typeScheme": {"body": {"wrap": {"list": {"variable": "hydra.python.syntax.Name"}}}, "variables": []}}},
+        "body": {"body": {"wrap": {"list": {"variable": "hydra.python.syntax.Name"}}}, "variables": []},
+        "name": "hydra.python.syntax.DottedName"}},
     {
       "type": {
-        "name": "hydra.python.syntax.Block",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "indented", "type": {"list": {"list": {"variable": "hydra.python.syntax.Statement"}}}},
               {"name": "simple", "type": {"list": {"variable": "hydra.python.syntax.SimpleStatement"}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.syntax.Block"}},
     {
       "type": {
-        "name": "hydra.python.syntax.Decorators",
-        "typeScheme": {"body": {"wrap": {"list": {"variable": "hydra.python.syntax.NamedExpression"}}}, "variables": []}}},
+        "body": {"body": {"wrap": {"list": {"variable": "hydra.python.syntax.NamedExpression"}}}, "variables": []},
+        "name": "hydra.python.syntax.Decorators"}},
     {
       "type": {
-        "name": "hydra.python.syntax.ClassDefinition",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "decorators", "type": {"maybe": {"variable": "hydra.python.syntax.Decorators"}}},
@@ -307,20 +303,20 @@
               {"name": "typeParams", "type": {"list": {"variable": "hydra.python.syntax.TypeParameter"}}},
               {"name": "arguments", "type": {"maybe": {"variable": "hydra.python.syntax.Args"}}},
               {"name": "body", "type": {"variable": "hydra.python.syntax.Block"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.syntax.ClassDefinition"}},
     {
       "type": {
-        "name": "hydra.python.syntax.FunctionDefinition",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "decorators", "type": {"maybe": {"variable": "hydra.python.syntax.Decorators"}}},
               {"name": "raw", "type": {"variable": "hydra.python.syntax.FunctionDefRaw"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.syntax.FunctionDefinition"}},
     {
       "type": {
-        "name": "hydra.python.syntax.FunctionDefRaw",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "async", "type": {"literal": {"boolean": {}}}},
@@ -330,11 +326,11 @@
               {"name": "returnType", "type": {"maybe": {"variable": "hydra.python.syntax.Expression"}}},
               {"name": "funcTypeComment", "type": {"maybe": {"variable": "hydra.python.syntax.FuncTypeComment"}}},
               {"name": "block", "type": {"variable": "hydra.python.syntax.Block"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.syntax.FunctionDefRaw"}},
     {
       "type": {
-        "name": "hydra.python.syntax.Parameters",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "slashNoDefault", "type": {"variable": "hydra.python.syntax.SlashNoDefaultParameters"}},
@@ -342,205 +338,205 @@
               {"name": "paramNoDefault", "type": {"variable": "hydra.python.syntax.ParamNoDefaultParameters"}},
               {"name": "paramWithDefault", "type": {"variable": "hydra.python.syntax.ParamWithDefaultParameters"}},
               {"name": "starEtc", "type": {"variable": "hydra.python.syntax.StarEtc"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.syntax.Parameters"}},
     {
       "type": {
-        "name": "hydra.python.syntax.SlashNoDefaultParameters",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "slash", "type": {"variable": "hydra.python.syntax.SlashNoDefault"}},
               {"name": "paramNoDefault", "type": {"list": {"variable": "hydra.python.syntax.ParamNoDefault"}}},
               {"name": "paramWithDefault", "type": {"list": {"variable": "hydra.python.syntax.ParamWithDefault"}}},
               {"name": "starEtc", "type": {"maybe": {"variable": "hydra.python.syntax.StarEtc"}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.syntax.SlashNoDefaultParameters"}},
     {
       "type": {
-        "name": "hydra.python.syntax.SlashWithDefaultParameters",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "paramNoDefault", "type": {"list": {"variable": "hydra.python.syntax.ParamNoDefault"}}},
               {"name": "paramWithDefault", "type": {"list": {"variable": "hydra.python.syntax.ParamWithDefault"}}},
               {"name": "starEtc", "type": {"maybe": {"variable": "hydra.python.syntax.StarEtc"}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.syntax.SlashWithDefaultParameters"}},
     {
       "type": {
-        "name": "hydra.python.syntax.ParamNoDefaultParameters",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "paramNoDefault", "type": {"list": {"variable": "hydra.python.syntax.ParamNoDefault"}}},
               {"name": "paramWithDefault", "type": {"list": {"variable": "hydra.python.syntax.ParamWithDefault"}}},
               {"name": "starEtc", "type": {"maybe": {"variable": "hydra.python.syntax.StarEtc"}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.syntax.ParamNoDefaultParameters"}},
     {
       "type": {
-        "name": "hydra.python.syntax.ParamWithDefaultParameters",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "paramWithDefault", "type": {"list": {"variable": "hydra.python.syntax.ParamWithDefault"}}},
               {"name": "starEtc", "type": {"maybe": {"variable": "hydra.python.syntax.StarEtc"}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.syntax.ParamWithDefaultParameters"}},
     {
       "type": {
-        "name": "hydra.python.syntax.SlashNoDefault",
-        "typeScheme": {"body": {"wrap": {"list": {"variable": "hydra.python.syntax.ParamNoDefault"}}}, "variables": []}}},
+        "body": {"body": {"wrap": {"list": {"variable": "hydra.python.syntax.ParamNoDefault"}}}, "variables": []},
+        "name": "hydra.python.syntax.SlashNoDefault"}},
     {
       "type": {
-        "name": "hydra.python.syntax.SlashWithDefault",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "paramNoDefault", "type": {"list": {"variable": "hydra.python.syntax.ParamNoDefault"}}},
               {"name": "paramWithDefault", "type": {"list": {"variable": "hydra.python.syntax.ParamWithDefault"}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.syntax.SlashWithDefault"}},
     {
       "type": {
-        "name": "hydra.python.syntax.StarEtc",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "starNoDefault", "type": {"variable": "hydra.python.syntax.NoDefaultStarEtc"}},
               {"name": "starNoDefaultStarAnnotation", "type": {"variable": "hydra.python.syntax.NoDefaultStarAnnotationStarEtc"}},
               {"name": "starComma", "type": {"variable": "hydra.python.syntax.CommaStarEtc"}},
               {"name": "keywords", "type": {"variable": "hydra.python.syntax.Keywords"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.syntax.StarEtc"}},
     {
       "type": {
-        "name": "hydra.python.syntax.NoDefaultStarEtc",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "paramNoDefault", "type": {"variable": "hydra.python.syntax.ParamNoDefault"}},
               {"name": "paramMaybeDefault", "type": {"list": {"variable": "hydra.python.syntax.ParamMaybeDefault"}}},
               {"name": "keywords", "type": {"maybe": {"variable": "hydra.python.syntax.Keywords"}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.syntax.NoDefaultStarEtc"}},
     {
       "type": {
-        "name": "hydra.python.syntax.NoDefaultStarAnnotationStarEtc",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "paramNoDefaultStarAnnotation", "type": {"variable": "hydra.python.syntax.ParamNoDefaultStarAnnotation"}},
               {"name": "paramMaybeDefault", "type": {"list": {"variable": "hydra.python.syntax.ParamMaybeDefault"}}},
               {"name": "keywords", "type": {"maybe": {"variable": "hydra.python.syntax.Keywords"}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.syntax.NoDefaultStarAnnotationStarEtc"}},
     {
       "type": {
-        "name": "hydra.python.syntax.CommaStarEtc",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "paramMaybeDefault", "type": {"list": {"variable": "hydra.python.syntax.ParamMaybeDefault"}}},
               {"name": "keywords", "type": {"maybe": {"variable": "hydra.python.syntax.Keywords"}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.syntax.CommaStarEtc"}},
     {
       "type": {
-        "name": "hydra.python.syntax.Keywords",
-        "typeScheme": {"body": {"wrap": {"variable": "hydra.python.syntax.ParamNoDefault"}}, "variables": []}}},
+        "body": {"body": {"wrap": {"variable": "hydra.python.syntax.ParamNoDefault"}}, "variables": []},
+        "name": "hydra.python.syntax.Keywords"}},
     {
       "type": {
-        "name": "hydra.python.syntax.ParamNoDefault",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "param", "type": {"variable": "hydra.python.syntax.Param"}},
               {"name": "typeComment", "type": {"maybe": {"variable": "hydra.python.syntax.TypeComment"}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.syntax.ParamNoDefault"}},
     {
       "type": {
-        "name": "hydra.python.syntax.ParamNoDefaultStarAnnotation",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "paramStarAnnotation", "type": {"variable": "hydra.python.syntax.ParamStarAnnotation"}},
               {"name": "typeComment", "type": {"maybe": {"variable": "hydra.python.syntax.TypeComment"}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.syntax.ParamNoDefaultStarAnnotation"}},
     {
       "type": {
-        "name": "hydra.python.syntax.ParamWithDefault",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "param", "type": {"variable": "hydra.python.syntax.Param"}},
               {"name": "default", "type": {"variable": "hydra.python.syntax.Default"}},
               {"name": "typeComment", "type": {"maybe": {"variable": "hydra.python.syntax.TypeComment"}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.syntax.ParamWithDefault"}},
     {
       "type": {
-        "name": "hydra.python.syntax.ParamMaybeDefault",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "param", "type": {"variable": "hydra.python.syntax.Param"}},
               {"name": "default", "type": {"maybe": {"variable": "hydra.python.syntax.Default"}}},
               {"name": "typeComment", "type": {"maybe": {"variable": "hydra.python.syntax.TypeComment"}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.syntax.ParamMaybeDefault"}},
     {
       "type": {
-        "name": "hydra.python.syntax.Param",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "name", "type": {"variable": "hydra.python.syntax.Name"}},
               {"name": "annotation", "type": {"maybe": {"variable": "hydra.python.syntax.Annotation"}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.syntax.Param"}},
     {
       "type": {
-        "name": "hydra.python.syntax.ParamStarAnnotation",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "name", "type": {"variable": "hydra.python.syntax.Name"}},
               {"name": "annotation", "type": {"variable": "hydra.python.syntax.StarAnnotation"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.syntax.ParamStarAnnotation"}},
     {
       "type": {
-        "name": "hydra.python.syntax.Annotation",
-        "typeScheme": {"body": {"wrap": {"variable": "hydra.python.syntax.Expression"}}, "variables": []}}},
+        "body": {"body": {"wrap": {"variable": "hydra.python.syntax.Expression"}}, "variables": []},
+        "name": "hydra.python.syntax.Annotation"}},
     {
       "type": {
-        "name": "hydra.python.syntax.StarAnnotation",
-        "typeScheme": {"body": {"wrap": {"variable": "hydra.python.syntax.StarExpression"}}, "variables": []}}},
+        "body": {"body": {"wrap": {"variable": "hydra.python.syntax.StarExpression"}}, "variables": []},
+        "name": "hydra.python.syntax.StarAnnotation"}},
     {
       "type": {
-        "name": "hydra.python.syntax.Default",
-        "typeScheme": {"body": {"wrap": {"variable": "hydra.python.syntax.Expression"}}, "variables": []}}},
+        "body": {"body": {"wrap": {"variable": "hydra.python.syntax.Expression"}}, "variables": []},
+        "name": "hydra.python.syntax.Default"}},
     {
       "type": {
-        "name": "hydra.python.syntax.IfStatement",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "condition", "type": {"variable": "hydra.python.syntax.NamedExpression"}},
               {"name": "body", "type": {"variable": "hydra.python.syntax.Block"}},
               {"name": "continuation", "type": {"maybe": {"variable": "hydra.python.syntax.IfTail"}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.syntax.IfStatement"}},
     {
       "type": {
-        "name": "hydra.python.syntax.IfTail",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "elif", "type": {"variable": "hydra.python.syntax.IfStatement"}},
               {"name": "else", "type": {"variable": "hydra.python.syntax.Block"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.syntax.IfTail"}},
     {
       "type": {
-        "name": "hydra.python.syntax.WhileStatement",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "condition", "type": {"variable": "hydra.python.syntax.NamedExpression"}},
               {"name": "body", "type": {"variable": "hydra.python.syntax.Block"}},
               {"name": "else", "type": {"maybe": {"variable": "hydra.python.syntax.Block"}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.syntax.WhileStatement"}},
     {
       "type": {
-        "name": "hydra.python.syntax.ForStatement",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "async", "type": {"literal": {"boolean": {}}}},
@@ -549,163 +545,163 @@
               {"name": "typeComment", "type": {"maybe": {"variable": "hydra.python.syntax.TypeComment"}}},
               {"name": "body", "type": {"variable": "hydra.python.syntax.Block"}},
               {"name": "else", "type": {"maybe": {"variable": "hydra.python.syntax.Block"}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.syntax.ForStatement"}},
     {
       "type": {
-        "name": "hydra.python.syntax.WithStatement",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "async", "type": {"literal": {"boolean": {}}}},
               {"name": "items", "type": {"list": {"variable": "hydra.python.syntax.WithItem"}}},
               {"name": "typeComment", "type": {"maybe": {"variable": "hydra.python.syntax.TypeComment"}}},
               {"name": "body", "type": {"variable": "hydra.python.syntax.Block"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.syntax.WithStatement"}},
     {
       "type": {
-        "name": "hydra.python.syntax.WithItem",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "expression", "type": {"variable": "hydra.python.syntax.Expression"}},
               {"name": "as", "type": {"maybe": {"variable": "hydra.python.syntax.StarTarget"}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.syntax.WithItem"}},
     {
       "type": {
-        "name": "hydra.python.syntax.TryStatement",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "finally", "type": {"variable": "hydra.python.syntax.TryFinallyStatement"}},
               {"name": "except", "type": {"variable": "hydra.python.syntax.TryExceptStatement"}},
               {"name": "exceptStar", "type": {"variable": "hydra.python.syntax.TryExceptStarStatement"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.syntax.TryStatement"}},
     {
       "type": {
-        "name": "hydra.python.syntax.TryFinallyStatement",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "body", "type": {"variable": "hydra.python.syntax.Block"}},
               {"name": "finally", "type": {"variable": "hydra.python.syntax.Block"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.syntax.TryFinallyStatement"}},
     {
       "type": {
-        "name": "hydra.python.syntax.TryExceptStatement",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "body", "type": {"variable": "hydra.python.syntax.Block"}},
               {"name": "excepts", "type": {"list": {"variable": "hydra.python.syntax.ExceptBlock"}}},
               {"name": "else", "type": {"maybe": {"variable": "hydra.python.syntax.Block"}}},
               {"name": "finally", "type": {"maybe": {"variable": "hydra.python.syntax.Block"}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.syntax.TryExceptStatement"}},
     {
       "type": {
-        "name": "hydra.python.syntax.TryExceptStarStatement",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "body", "type": {"variable": "hydra.python.syntax.Block"}},
               {"name": "excepts", "type": {"list": {"variable": "hydra.python.syntax.ExceptStarBlock"}}},
               {"name": "else", "type": {"maybe": {"variable": "hydra.python.syntax.Block"}}},
               {"name": "finally", "type": {"maybe": {"variable": "hydra.python.syntax.Block"}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.syntax.TryExceptStarStatement"}},
     {
       "type": {
-        "name": "hydra.python.syntax.ExceptBlock",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "expression", "type": {"maybe": {"variable": "hydra.python.syntax.ExceptExpression"}}},
               {"name": "body", "type": {"variable": "hydra.python.syntax.Block"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.syntax.ExceptBlock"}},
     {
       "type": {
-        "name": "hydra.python.syntax.ExceptExpression",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "expression", "type": {"variable": "hydra.python.syntax.Expression"}},
               {"name": "as", "type": {"maybe": {"variable": "hydra.python.syntax.Name"}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.syntax.ExceptExpression"}},
     {
       "type": {
-        "name": "hydra.python.syntax.ExceptStarBlock",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "expression", "type": {"variable": "hydra.python.syntax.Expression"}},
               {"name": "as", "type": {"maybe": {"variable": "hydra.python.syntax.Name"}}},
               {"name": "body", "type": {"variable": "hydra.python.syntax.Block"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.syntax.ExceptStarBlock"}},
     {
       "type": {
-        "name": "hydra.python.syntax.MatchStatement",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "subject", "type": {"variable": "hydra.python.syntax.SubjectExpression"}},
               {"name": "cases", "type": {"list": {"variable": "hydra.python.syntax.CaseBlock"}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.syntax.MatchStatement"}},
     {
       "type": {
-        "name": "hydra.python.syntax.SubjectExpression",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "tuple", "type": {"list": {"variable": "hydra.python.syntax.StarNamedExpression"}}},
               {"name": "simple", "type": {"variable": "hydra.python.syntax.NamedExpression"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.syntax.SubjectExpression"}},
     {
       "type": {
-        "name": "hydra.python.syntax.CaseBlock",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "patterns", "type": {"variable": "hydra.python.syntax.Patterns"}},
               {"name": "guard", "type": {"maybe": {"variable": "hydra.python.syntax.Guard"}}},
               {"name": "body", "type": {"variable": "hydra.python.syntax.Block"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.syntax.CaseBlock"}},
     {
       "type": {
-        "name": "hydra.python.syntax.Guard",
-        "typeScheme": {"body": {"wrap": {"variable": "hydra.python.syntax.NamedExpression"}}, "variables": []}}},
+        "body": {"body": {"wrap": {"variable": "hydra.python.syntax.NamedExpression"}}, "variables": []},
+        "name": "hydra.python.syntax.Guard"}},
     {
       "type": {
-        "name": "hydra.python.syntax.Patterns",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "sequence", "type": {"variable": "hydra.python.syntax.OpenSequencePattern"}},
               {"name": "pattern", "type": {"variable": "hydra.python.syntax.Pattern"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.syntax.Patterns"}},
     {
       "type": {
-        "name": "hydra.python.syntax.Pattern",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "as", "type": {"variable": "hydra.python.syntax.AsPattern"}},
               {"name": "or", "type": {"variable": "hydra.python.syntax.OrPattern"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.syntax.Pattern"}},
     {
       "type": {
-        "name": "hydra.python.syntax.AsPattern",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "pattern", "type": {"variable": "hydra.python.syntax.OrPattern"}},
               {"name": "as", "type": {"variable": "hydra.python.syntax.PatternCaptureTarget"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.syntax.AsPattern"}},
     {
       "type": {
-        "name": "hydra.python.syntax.OrPattern",
-        "typeScheme": {"body": {"wrap": {"list": {"variable": "hydra.python.syntax.ClosedPattern"}}}, "variables": []}}},
+        "body": {"body": {"wrap": {"list": {"variable": "hydra.python.syntax.ClosedPattern"}}}, "variables": []},
+        "name": "hydra.python.syntax.OrPattern"}},
     {
       "type": {
-        "name": "hydra.python.syntax.ClosedPattern",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "literal", "type": {"variable": "hydra.python.syntax.LiteralExpression"}},
@@ -716,11 +712,11 @@
               {"name": "sequence", "type": {"variable": "hydra.python.syntax.SequencePattern"}},
               {"name": "mapping", "type": {"variable": "hydra.python.syntax.MappingPattern"}},
               {"name": "class", "type": {"variable": "hydra.python.syntax.ClassPattern"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.syntax.ClosedPattern"}},
     {
       "type": {
-        "name": "hydra.python.syntax.LiteralExpression",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "number", "type": {"variable": "hydra.python.syntax.SignedNumber"}},
@@ -729,334 +725,334 @@
               {"name": "none", "type": {"unit": {}}},
               {"name": "true", "type": {"unit": {}}},
               {"name": "false", "type": {"unit": {}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.syntax.LiteralExpression"}},
     {
       "type": {
-        "name": "hydra.python.syntax.ComplexNumber",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "real", "type": {"variable": "hydra.python.syntax.SignedRealNumber"}},
               {"name": "plusOrMinus", "type": {"variable": "hydra.python.syntax.PlusOrMinus"}},
               {"name": "imaginary", "type": {"variable": "hydra.python.syntax.ImaginaryNumber"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.syntax.ComplexNumber"}},
     {
       "type": {
-        "name": "hydra.python.syntax.PlusOrMinus",
-        "typeScheme": {"body": {"union": [{"name": "plus", "type": {"unit": {}}}, {"name": "minus", "type": {"unit": {}}}]}, "variables": []}}},
+        "body": {"body": {"union": [{"name": "plus", "type": {"unit": {}}}, {"name": "minus", "type": {"unit": {}}}]}, "variables": []},
+        "name": "hydra.python.syntax.PlusOrMinus"}},
     {
       "type": {
-        "name": "hydra.python.syntax.SignedNumber",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "sign", "type": {"variable": "hydra.python.syntax.PlusOrMinus"}},
               {"name": "number", "type": {"variable": "hydra.python.syntax.Number"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.syntax.SignedNumber"}},
     {
       "type": {
-        "name": "hydra.python.syntax.SignedRealNumber",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "sign", "type": {"variable": "hydra.python.syntax.PlusOrMinus"}},
               {"name": "number", "type": {"variable": "hydra.python.syntax.RealNumber"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.syntax.SignedRealNumber"}},
     {
       "type": {
-        "name": "hydra.python.syntax.RealNumber",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "integer", "type": {"literal": {"integer": {"bigint": {}}}}},
               {"name": "float", "type": {"literal": {"float": {"float64": {}}}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.syntax.RealNumber"}},
     {
       "type": {
-        "name": "hydra.python.syntax.ImaginaryNumber",
-        "typeScheme": {"body": {"wrap": {"literal": {"float": {"float64": {}}}}}, "variables": []}}},
+        "body": {"body": {"wrap": {"literal": {"float": {"float64": {}}}}}, "variables": []},
+        "name": "hydra.python.syntax.ImaginaryNumber"}},
     {
       "type": {
-        "name": "hydra.python.syntax.CapturePattern",
-        "typeScheme": {"body": {"wrap": {"variable": "hydra.python.syntax.PatternCaptureTarget"}}, "variables": []}}},
+        "body": {"body": {"wrap": {"variable": "hydra.python.syntax.PatternCaptureTarget"}}, "variables": []},
+        "name": "hydra.python.syntax.CapturePattern"}},
     {
       "type": {
-        "name": "hydra.python.syntax.PatternCaptureTarget",
-        "typeScheme": {"body": {"wrap": {"variable": "hydra.python.syntax.Name"}}, "variables": []}}},
+        "body": {"body": {"wrap": {"variable": "hydra.python.syntax.Name"}}, "variables": []},
+        "name": "hydra.python.syntax.PatternCaptureTarget"}},
     {
       "type": {
-        "name": "hydra.python.syntax.ValuePattern",
-        "typeScheme": {"body": {"wrap": {"variable": "hydra.python.syntax.Attribute"}}, "variables": []}}},
+        "body": {"body": {"wrap": {"variable": "hydra.python.syntax.Attribute"}}, "variables": []},
+        "name": "hydra.python.syntax.ValuePattern"}},
     {
       "type": {
-        "name": "hydra.python.syntax.Attribute",
-        "typeScheme": {"body": {"wrap": {"list": {"variable": "hydra.python.syntax.Name"}}}, "variables": []}}},
+        "body": {"body": {"wrap": {"list": {"variable": "hydra.python.syntax.Name"}}}, "variables": []},
+        "name": "hydra.python.syntax.Attribute"}},
     {
       "type": {
-        "name": "hydra.python.syntax.NameOrAttribute",
-        "typeScheme": {"body": {"wrap": {"list": {"variable": "hydra.python.syntax.Name"}}}, "variables": []}}},
+        "body": {"body": {"wrap": {"list": {"variable": "hydra.python.syntax.Name"}}}, "variables": []},
+        "name": "hydra.python.syntax.NameOrAttribute"}},
     {
       "type": {
-        "name": "hydra.python.syntax.GroupPattern",
-        "typeScheme": {"body": {"wrap": {"variable": "hydra.python.syntax.Pattern"}}, "variables": []}}},
+        "body": {"body": {"wrap": {"variable": "hydra.python.syntax.Pattern"}}, "variables": []},
+        "name": "hydra.python.syntax.GroupPattern"}},
     {
       "type": {
-        "name": "hydra.python.syntax.SequencePattern",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "list", "type": {"maybe": {"variable": "hydra.python.syntax.MaybeSequencePattern"}}},
               {"name": "tuple", "type": {"maybe": {"variable": "hydra.python.syntax.OpenSequencePattern"}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.syntax.SequencePattern"}},
     {
       "type": {
-        "name": "hydra.python.syntax.OpenSequencePattern",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "head", "type": {"variable": "hydra.python.syntax.MaybeStarPattern"}},
               {"name": "tail", "type": {"maybe": {"variable": "hydra.python.syntax.MaybeSequencePattern"}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.syntax.OpenSequencePattern"}},
     {
       "type": {
-        "name": "hydra.python.syntax.MaybeSequencePattern",
-        "typeScheme": {"body": {"wrap": {"list": {"variable": "hydra.python.syntax.MaybeStarPattern"}}}, "variables": []}}},
+        "body": {"body": {"wrap": {"list": {"variable": "hydra.python.syntax.MaybeStarPattern"}}}, "variables": []},
+        "name": "hydra.python.syntax.MaybeSequencePattern"}},
     {
       "type": {
-        "name": "hydra.python.syntax.MaybeStarPattern",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "star", "type": {"variable": "hydra.python.syntax.StarPattern"}},
               {"name": "pattern", "type": {"variable": "hydra.python.syntax.Pattern"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.syntax.MaybeStarPattern"}},
     {
       "type": {
-        "name": "hydra.python.syntax.StarPattern",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "capture", "type": {"variable": "hydra.python.syntax.PatternCaptureTarget"}},
               {"name": "wildcard", "type": {"unit": {}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.syntax.StarPattern"}},
     {
       "type": {
-        "name": "hydra.python.syntax.MappingPattern",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "items", "type": {"maybe": {"variable": "hydra.python.syntax.ItemsPattern"}}},
               {"name": "doubleStar", "type": {"maybe": {"variable": "hydra.python.syntax.DoubleStarPattern"}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.syntax.MappingPattern"}},
     {
       "type": {
-        "name": "hydra.python.syntax.ItemsPattern",
-        "typeScheme": {"body": {"wrap": {"list": {"variable": "hydra.python.syntax.KeyValuePattern"}}}, "variables": []}}},
+        "body": {"body": {"wrap": {"list": {"variable": "hydra.python.syntax.KeyValuePattern"}}}, "variables": []},
+        "name": "hydra.python.syntax.ItemsPattern"}},
     {
       "type": {
-        "name": "hydra.python.syntax.KeyValuePattern",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "key", "type": {"variable": "hydra.python.syntax.LiteralExpressionOrAttribute"}},
               {"name": "value", "type": {"variable": "hydra.python.syntax.Pattern"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.syntax.KeyValuePattern"}},
     {
       "type": {
-        "name": "hydra.python.syntax.LiteralExpressionOrAttribute",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "literal", "type": {"variable": "hydra.python.syntax.LiteralExpression"}},
               {"name": "attribute", "type": {"variable": "hydra.python.syntax.Attribute"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.syntax.LiteralExpressionOrAttribute"}},
     {
       "type": {
-        "name": "hydra.python.syntax.DoubleStarPattern",
-        "typeScheme": {"body": {"wrap": {"variable": "hydra.python.syntax.PatternCaptureTarget"}}, "variables": []}}},
+        "body": {"body": {"wrap": {"variable": "hydra.python.syntax.PatternCaptureTarget"}}, "variables": []},
+        "name": "hydra.python.syntax.DoubleStarPattern"}},
     {
       "type": {
-        "name": "hydra.python.syntax.ClassPattern",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "nameOrAttribute", "type": {"variable": "hydra.python.syntax.NameOrAttribute"}},
               {"name": "positionalPatterns", "type": {"maybe": {"variable": "hydra.python.syntax.PositionalPatterns"}}},
               {"name": "keywordPatterns", "type": {"maybe": {"variable": "hydra.python.syntax.KeywordPatterns"}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.syntax.ClassPattern"}},
     {
       "type": {
-        "name": "hydra.python.syntax.PositionalPatterns",
-        "typeScheme": {"body": {"wrap": {"list": {"variable": "hydra.python.syntax.Pattern"}}}, "variables": []}}},
+        "body": {"body": {"wrap": {"list": {"variable": "hydra.python.syntax.Pattern"}}}, "variables": []},
+        "name": "hydra.python.syntax.PositionalPatterns"}},
     {
       "type": {
-        "name": "hydra.python.syntax.KeywordPatterns",
-        "typeScheme": {"body": {"wrap": {"list": {"variable": "hydra.python.syntax.KeywordPattern"}}}, "variables": []}}},
+        "body": {"body": {"wrap": {"list": {"variable": "hydra.python.syntax.KeywordPattern"}}}, "variables": []},
+        "name": "hydra.python.syntax.KeywordPatterns"}},
     {
       "type": {
-        "name": "hydra.python.syntax.KeywordPattern",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "name", "type": {"variable": "hydra.python.syntax.Name"}},
               {"name": "pattern", "type": {"variable": "hydra.python.syntax.Pattern"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.syntax.KeywordPattern"}},
     {
       "type": {
-        "name": "hydra.python.syntax.TypeAlias",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "name", "type": {"variable": "hydra.python.syntax.Name"}},
               {"name": "typeParams", "type": {"list": {"variable": "hydra.python.syntax.TypeParameter"}}},
               {"name": "expression", "type": {"variable": "hydra.python.syntax.Expression"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.syntax.TypeAlias"}},
     {
       "type": {
-        "name": "hydra.python.syntax.TypeParameter",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "simple", "type": {"variable": "hydra.python.syntax.SimpleTypeParameter"}},
               {"name": "star", "type": {"variable": "hydra.python.syntax.StarTypeParameter"}},
               {"name": "doubleStar", "type": {"variable": "hydra.python.syntax.DoubleStarTypeParameter"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.syntax.TypeParameter"}},
     {
       "type": {
-        "name": "hydra.python.syntax.SimpleTypeParameter",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "name", "type": {"variable": "hydra.python.syntax.Name"}},
               {"name": "bound", "type": {"maybe": {"variable": "hydra.python.syntax.Expression"}}},
               {"name": "default", "type": {"maybe": {"variable": "hydra.python.syntax.Expression"}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.syntax.SimpleTypeParameter"}},
     {
       "type": {
-        "name": "hydra.python.syntax.StarTypeParameter",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "name", "type": {"variable": "hydra.python.syntax.Name"}},
               {"name": "default", "type": {"maybe": {"variable": "hydra.python.syntax.StarExpression"}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.syntax.StarTypeParameter"}},
     {
       "type": {
-        "name": "hydra.python.syntax.DoubleStarTypeParameter",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "name", "type": {"variable": "hydra.python.syntax.Name"}},
               {"name": "default", "type": {"maybe": {"variable": "hydra.python.syntax.Expression"}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.syntax.DoubleStarTypeParameter"}},
     {
       "type": {
-        "name": "hydra.python.syntax.Expression",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "conditional", "type": {"variable": "hydra.python.syntax.Conditional"}},
               {"name": "simple", "type": {"variable": "hydra.python.syntax.Disjunction"}},
               {"name": "lambda", "type": {"variable": "hydra.python.syntax.Lambda"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.syntax.Expression"}},
     {
       "type": {
-        "name": "hydra.python.syntax.Conditional",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "body", "type": {"variable": "hydra.python.syntax.Disjunction"}},
               {"name": "if", "type": {"variable": "hydra.python.syntax.Disjunction"}},
               {"name": "else", "type": {"variable": "hydra.python.syntax.Expression"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.syntax.Conditional"}},
     {
       "type": {
-        "name": "hydra.python.syntax.YieldExpression",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "from", "type": {"variable": "hydra.python.syntax.Expression"}},
               {"name": "simple", "type": {"list": {"variable": "hydra.python.syntax.StarExpression"}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.syntax.YieldExpression"}},
     {
       "type": {
-        "name": "hydra.python.syntax.StarExpression",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "star", "type": {"variable": "hydra.python.syntax.BitwiseOr"}},
               {"name": "simple", "type": {"variable": "hydra.python.syntax.Expression"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.syntax.StarExpression"}},
     {
       "type": {
-        "name": "hydra.python.syntax.StarNamedExpressions",
-        "typeScheme": {"body": {"wrap": {"list": {"variable": "hydra.python.syntax.StarNamedExpression"}}}, "variables": []}}},
+        "body": {"body": {"wrap": {"list": {"variable": "hydra.python.syntax.StarNamedExpression"}}}, "variables": []},
+        "name": "hydra.python.syntax.StarNamedExpressions"}},
     {
       "type": {
-        "name": "hydra.python.syntax.StarNamedExpression",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "star", "type": {"variable": "hydra.python.syntax.BitwiseOr"}},
               {"name": "simple", "type": {"variable": "hydra.python.syntax.NamedExpression"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.syntax.StarNamedExpression"}},
     {
       "type": {
-        "name": "hydra.python.syntax.AssignmentExpression",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "name", "type": {"variable": "hydra.python.syntax.Name"}},
               {"name": "expression", "type": {"variable": "hydra.python.syntax.Expression"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.syntax.AssignmentExpression"}},
     {
       "type": {
-        "name": "hydra.python.syntax.NamedExpression",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "assignment", "type": {"variable": "hydra.python.syntax.AssignmentExpression"}},
               {"name": "simple", "type": {"variable": "hydra.python.syntax.Expression"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.syntax.NamedExpression"}},
     {
       "type": {
-        "name": "hydra.python.syntax.Disjunction",
-        "typeScheme": {"body": {"wrap": {"list": {"variable": "hydra.python.syntax.Conjunction"}}}, "variables": []}}},
+        "body": {"body": {"wrap": {"list": {"variable": "hydra.python.syntax.Conjunction"}}}, "variables": []},
+        "name": "hydra.python.syntax.Disjunction"}},
     {
       "type": {
-        "name": "hydra.python.syntax.Conjunction",
-        "typeScheme": {"body": {"wrap": {"list": {"variable": "hydra.python.syntax.Inversion"}}}, "variables": []}}},
+        "body": {"body": {"wrap": {"list": {"variable": "hydra.python.syntax.Inversion"}}}, "variables": []},
+        "name": "hydra.python.syntax.Conjunction"}},
     {
       "type": {
-        "name": "hydra.python.syntax.Inversion",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "not", "type": {"variable": "hydra.python.syntax.Inversion"}},
               {"name": "simple", "type": {"variable": "hydra.python.syntax.Comparison"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.syntax.Inversion"}},
     {
       "type": {
-        "name": "hydra.python.syntax.Comparison",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "lhs", "type": {"variable": "hydra.python.syntax.BitwiseOr"}},
               {"name": "rhs", "type": {"list": {"variable": "hydra.python.syntax.CompareOpBitwiseOrPair"}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.syntax.Comparison"}},
     {
       "type": {
-        "name": "hydra.python.syntax.CompareOpBitwiseOrPair",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "operator", "type": {"variable": "hydra.python.syntax.CompareOp"}},
               {"name": "rhs", "type": {"variable": "hydra.python.syntax.BitwiseOr"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.syntax.CompareOpBitwiseOrPair"}},
     {
       "type": {
-        "name": "hydra.python.syntax.CompareOp",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "eq", "type": {"unit": {}}},
@@ -1069,100 +1065,100 @@
               {"name": "in", "type": {"unit": {}}},
               {"name": "isnot", "type": {"unit": {}}},
               {"name": "is", "type": {"unit": {}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.syntax.CompareOp"}},
     {
       "type": {
-        "name": "hydra.python.syntax.BitwiseOr",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "lhs", "type": {"maybe": {"variable": "hydra.python.syntax.BitwiseOr"}}},
               {"name": "rhs", "type": {"variable": "hydra.python.syntax.BitwiseXor"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.syntax.BitwiseOr"}},
     {
       "type": {
-        "name": "hydra.python.syntax.BitwiseXor",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "lhs", "type": {"maybe": {"variable": "hydra.python.syntax.BitwiseXor"}}},
               {"name": "rhs", "type": {"variable": "hydra.python.syntax.BitwiseAnd"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.syntax.BitwiseXor"}},
     {
       "type": {
-        "name": "hydra.python.syntax.BitwiseAnd",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "lhs", "type": {"maybe": {"variable": "hydra.python.syntax.BitwiseAnd"}}},
               {"name": "rhs", "type": {"variable": "hydra.python.syntax.ShiftExpression"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.syntax.BitwiseAnd"}},
     {
       "type": {
-        "name": "hydra.python.syntax.ShiftExpression",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "lhs", "type": {"maybe": {"variable": "hydra.python.syntax.ShiftLhs"}}},
               {"name": "rhs", "type": {"variable": "hydra.python.syntax.Sum"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.syntax.ShiftExpression"}},
     {
       "type": {
-        "name": "hydra.python.syntax.ShiftLhs",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "operand", "type": {"variable": "hydra.python.syntax.ShiftExpression"}},
               {"name": "operator", "type": {"variable": "hydra.python.syntax.ShiftOp"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.syntax.ShiftLhs"}},
     {
       "type": {
-        "name": "hydra.python.syntax.ShiftOp",
-        "typeScheme": {"body": {"union": [{"name": "left", "type": {"unit": {}}}, {"name": "right", "type": {"unit": {}}}]}, "variables": []}}},
+        "body": {"body": {"union": [{"name": "left", "type": {"unit": {}}}, {"name": "right", "type": {"unit": {}}}]}, "variables": []},
+        "name": "hydra.python.syntax.ShiftOp"}},
     {
       "type": {
-        "name": "hydra.python.syntax.Sum",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "lhs", "type": {"maybe": {"variable": "hydra.python.syntax.SumLhs"}}},
               {"name": "rhs", "type": {"variable": "hydra.python.syntax.Term"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.syntax.Sum"}},
     {
       "type": {
-        "name": "hydra.python.syntax.SumLhs",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "operand", "type": {"variable": "hydra.python.syntax.Sum"}},
               {"name": "operator", "type": {"variable": "hydra.python.syntax.SumOp"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.syntax.SumLhs"}},
     {
       "type": {
-        "name": "hydra.python.syntax.SumOp",
-        "typeScheme": {"body": {"union": [{"name": "add", "type": {"unit": {}}}, {"name": "sub", "type": {"unit": {}}}]}, "variables": []}}},
+        "body": {"body": {"union": [{"name": "add", "type": {"unit": {}}}, {"name": "sub", "type": {"unit": {}}}]}, "variables": []},
+        "name": "hydra.python.syntax.SumOp"}},
     {
       "type": {
-        "name": "hydra.python.syntax.Term",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "lhs", "type": {"maybe": {"variable": "hydra.python.syntax.TermLhs"}}},
               {"name": "rhs", "type": {"variable": "hydra.python.syntax.Factor"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.syntax.Term"}},
     {
       "type": {
-        "name": "hydra.python.syntax.TermLhs",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "operand", "type": {"variable": "hydra.python.syntax.Term"}},
               {"name": "operator", "type": {"variable": "hydra.python.syntax.TermOp"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.syntax.TermLhs"}},
     {
       "type": {
-        "name": "hydra.python.syntax.TermOp",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "mul", "type": {"unit": {}}},
@@ -1170,106 +1166,106 @@
               {"name": "floordiv", "type": {"unit": {}}},
               {"name": "mod", "type": {"unit": {}}},
               {"name": "matmul", "type": {"unit": {}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.syntax.TermOp"}},
     {
       "type": {
-        "name": "hydra.python.syntax.Factor",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "positive", "type": {"variable": "hydra.python.syntax.Factor"}},
               {"name": "negative", "type": {"variable": "hydra.python.syntax.Factor"}},
               {"name": "complement", "type": {"variable": "hydra.python.syntax.Factor"}},
               {"name": "simple", "type": {"variable": "hydra.python.syntax.Power"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.syntax.Factor"}},
     {
       "type": {
-        "name": "hydra.python.syntax.Power",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "lhs", "type": {"variable": "hydra.python.syntax.AwaitPrimary"}},
               {"name": "rhs", "type": {"maybe": {"variable": "hydra.python.syntax.Factor"}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.syntax.Power"}},
     {
       "type": {
-        "name": "hydra.python.syntax.AwaitPrimary",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "await", "type": {"literal": {"boolean": {}}}},
               {"name": "primary", "type": {"variable": "hydra.python.syntax.Primary"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.syntax.AwaitPrimary"}},
     {
       "type": {
-        "name": "hydra.python.syntax.Primary",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "simple", "type": {"variable": "hydra.python.syntax.Atom"}},
               {"name": "compound", "type": {"variable": "hydra.python.syntax.PrimaryWithRhs"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.syntax.Primary"}},
     {
       "type": {
-        "name": "hydra.python.syntax.PrimaryWithRhs",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "primary", "type": {"variable": "hydra.python.syntax.Primary"}},
               {"name": "rhs", "type": {"variable": "hydra.python.syntax.PrimaryRhs"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.syntax.PrimaryWithRhs"}},
     {
       "type": {
-        "name": "hydra.python.syntax.PrimaryRhs",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "project", "type": {"variable": "hydra.python.syntax.Name"}},
               {"name": "genexp", "type": {"variable": "hydra.python.syntax.Genexp"}},
               {"name": "call", "type": {"variable": "hydra.python.syntax.Args"}},
               {"name": "slices", "type": {"variable": "hydra.python.syntax.Slices"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.syntax.PrimaryRhs"}},
     {
       "type": {
-        "name": "hydra.python.syntax.Slices",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "head", "type": {"variable": "hydra.python.syntax.Slice"}},
               {"name": "tail", "type": {"list": {"variable": "hydra.python.syntax.SliceOrStarredExpression"}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.syntax.Slices"}},
     {
       "type": {
-        "name": "hydra.python.syntax.SliceOrStarredExpression",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "slice", "type": {"variable": "hydra.python.syntax.Slice"}},
               {"name": "starred", "type": {"variable": "hydra.python.syntax.StarredExpression"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.syntax.SliceOrStarredExpression"}},
     {
       "type": {
-        "name": "hydra.python.syntax.Slice",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "named", "type": {"variable": "hydra.python.syntax.NamedExpression"}},
               {"name": "slice_", "type": {"variable": "hydra.python.syntax.SliceExpression"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.syntax.Slice"}},
     {
       "type": {
-        "name": "hydra.python.syntax.SliceExpression",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "start", "type": {"maybe": {"variable": "hydra.python.syntax.Expression"}}},
               {"name": "stop", "type": {"maybe": {"variable": "hydra.python.syntax.Expression"}}},
               {"name": "step", "type": {"maybe": {"variable": "hydra.python.syntax.Expression"}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.syntax.SliceExpression"}},
     {
       "type": {
-        "name": "hydra.python.syntax.Atom",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "name", "type": {"variable": "hydra.python.syntax.Name"}},
@@ -1288,312 +1284,312 @@
               {"name": "dictcomp", "type": {"variable": "hydra.python.syntax.Dictcomp"}},
               {"name": "setcomp", "type": {"variable": "hydra.python.syntax.Setcomp"}},
               {"name": "ellipsis", "type": {"unit": {}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.syntax.Atom"}},
     {
       "type": {
-        "name": "hydra.python.syntax.Group",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "yield", "type": {"variable": "hydra.python.syntax.YieldExpression"}},
               {"name": "expression", "type": {"variable": "hydra.python.syntax.NamedExpression"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.syntax.Group"}},
     {
       "type": {
-        "name": "hydra.python.syntax.Lambda",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "params", "type": {"variable": "hydra.python.syntax.LambdaParameters"}},
               {"name": "body", "type": {"variable": "hydra.python.syntax.Expression"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.syntax.Lambda"}},
     {
       "type": {
-        "name": "hydra.python.syntax.LambdaParameters",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "slashNoDefault", "type": {"maybe": {"variable": "hydra.python.syntax.LambdaSlashNoDefault"}}},
               {"name": "paramNoDefault", "type": {"list": {"variable": "hydra.python.syntax.LambdaParamNoDefault"}}},
               {"name": "paramWithDefault", "type": {"list": {"variable": "hydra.python.syntax.LambdaParamWithDefault"}}},
               {"name": "starEtc", "type": {"maybe": {"variable": "hydra.python.syntax.LambdaStarEtc"}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.syntax.LambdaParameters"}},
     {
       "type": {
-        "name": "hydra.python.syntax.LambdaSlashNoDefault",
-        "typeScheme": {
+        "body": {
           "body": {"record": [{"name": "parameters", "type": {"list": {"variable": "hydra.python.syntax.LambdaParamNoDefault"}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.syntax.LambdaSlashNoDefault"}},
     {
       "type": {
-        "name": "hydra.python.syntax.LambdaSlashWithDefault",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "paramNoDefault", "type": {"list": {"variable": "hydra.python.syntax.LambdaParamNoDefault"}}},
               {"name": "paramWithDefault", "type": {"list": {"variable": "hydra.python.syntax.LambdaParamWithDefault"}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.syntax.LambdaSlashWithDefault"}},
     {
       "type": {
-        "name": "hydra.python.syntax.LambdaStarEtc",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "star", "type": {"literal": {"boolean": {}}}},
               {"name": "paramNoDefault", "type": {"variable": "hydra.python.syntax.LambdaParamNoDefault"}},
               {"name": "paramMaybeDefault", "type": {"list": {"variable": "hydra.python.syntax.LambdaParamMaybeDefault"}}},
               {"name": "kwds", "type": {"variable": "hydra.python.syntax.LambdaKwds"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.syntax.LambdaStarEtc"}},
     {
       "type": {
-        "name": "hydra.python.syntax.LambdaKwds",
-        "typeScheme": {"body": {"wrap": {"variable": "hydra.python.syntax.LambdaParamNoDefault"}}, "variables": []}}},
+        "body": {"body": {"wrap": {"variable": "hydra.python.syntax.LambdaParamNoDefault"}}, "variables": []},
+        "name": "hydra.python.syntax.LambdaKwds"}},
     {
       "type": {
-        "name": "hydra.python.syntax.LambdaParamNoDefault",
-        "typeScheme": {"body": {"wrap": {"variable": "hydra.python.syntax.Name"}}, "variables": []}}},
+        "body": {"body": {"wrap": {"variable": "hydra.python.syntax.Name"}}, "variables": []},
+        "name": "hydra.python.syntax.LambdaParamNoDefault"}},
     {
       "type": {
-        "name": "hydra.python.syntax.LambdaParamWithDefault",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "param", "type": {"variable": "hydra.python.syntax.Name"}},
               {"name": "default", "type": {"maybe": {"variable": "hydra.python.syntax.Default"}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.syntax.LambdaParamWithDefault"}},
     {
       "type": {
-        "name": "hydra.python.syntax.LambdaParamMaybeDefault",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "param", "type": {"variable": "hydra.python.syntax.Name"}},
               {"name": "default", "type": {"maybe": {"variable": "hydra.python.syntax.Default"}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.syntax.LambdaParamMaybeDefault"}},
     {
       "type": {
-        "name": "hydra.python.syntax.List",
-        "typeScheme": {"body": {"wrap": {"list": {"variable": "hydra.python.syntax.StarNamedExpression"}}}, "variables": []}}},
+        "body": {"body": {"wrap": {"list": {"variable": "hydra.python.syntax.StarNamedExpression"}}}, "variables": []},
+        "name": "hydra.python.syntax.List"}},
     {
       "type": {
-        "name": "hydra.python.syntax.Tuple",
-        "typeScheme": {"body": {"wrap": {"list": {"variable": "hydra.python.syntax.StarNamedExpression"}}}, "variables": []}}},
+        "body": {"body": {"wrap": {"list": {"variable": "hydra.python.syntax.StarNamedExpression"}}}, "variables": []},
+        "name": "hydra.python.syntax.Tuple"}},
     {
       "type": {
-        "name": "hydra.python.syntax.Set",
-        "typeScheme": {"body": {"wrap": {"list": {"variable": "hydra.python.syntax.StarNamedExpression"}}}, "variables": []}}},
+        "body": {"body": {"wrap": {"list": {"variable": "hydra.python.syntax.StarNamedExpression"}}}, "variables": []},
+        "name": "hydra.python.syntax.Set"}},
     {
       "type": {
-        "name": "hydra.python.syntax.Dict",
-        "typeScheme": {"body": {"wrap": {"list": {"variable": "hydra.python.syntax.DoubleStarredKvpair"}}}, "variables": []}}},
+        "body": {"body": {"wrap": {"list": {"variable": "hydra.python.syntax.DoubleStarredKvpair"}}}, "variables": []},
+        "name": "hydra.python.syntax.Dict"}},
     {
       "type": {
-        "name": "hydra.python.syntax.DoubleStarredKvpair",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "starred", "type": {"variable": "hydra.python.syntax.BitwiseOr"}},
               {"name": "pair", "type": {"variable": "hydra.python.syntax.Kvpair"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.syntax.DoubleStarredKvpair"}},
     {
       "type": {
-        "name": "hydra.python.syntax.Kvpair",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "key", "type": {"variable": "hydra.python.syntax.Expression"}},
               {"name": "value", "type": {"variable": "hydra.python.syntax.Expression"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.syntax.Kvpair"}},
     {
       "type": {
-        "name": "hydra.python.syntax.ForIfClauses",
-        "typeScheme": {"body": {"wrap": {"list": {"variable": "hydra.python.syntax.ForIfClause"}}}, "variables": []}}},
+        "body": {"body": {"wrap": {"list": {"variable": "hydra.python.syntax.ForIfClause"}}}, "variables": []},
+        "name": "hydra.python.syntax.ForIfClauses"}},
     {
       "type": {
-        "name": "hydra.python.syntax.ForIfClause",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "async", "type": {"literal": {"boolean": {}}}},
               {"name": "targets", "type": {"list": {"variable": "hydra.python.syntax.StarTarget"}}},
               {"name": "in", "type": {"variable": "hydra.python.syntax.Disjunction"}},
               {"name": "ifs", "type": {"list": {"variable": "hydra.python.syntax.Disjunction"}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.syntax.ForIfClause"}},
     {
       "type": {
-        "name": "hydra.python.syntax.Listcomp",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "expression", "type": {"variable": "hydra.python.syntax.NamedExpression"}},
               {"name": "forIfClauses", "type": {"variable": "hydra.python.syntax.ForIfClauses"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.syntax.Listcomp"}},
     {
       "type": {
-        "name": "hydra.python.syntax.Setcomp",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "expression", "type": {"variable": "hydra.python.syntax.NamedExpression"}},
               {"name": "forIfClauses", "type": {"variable": "hydra.python.syntax.ForIfClauses"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.syntax.Setcomp"}},
     {
       "type": {
-        "name": "hydra.python.syntax.Genexp",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "head", "type": {"variable": "hydra.python.syntax.GenexpHead"}},
               {"name": "tail", "type": {"variable": "hydra.python.syntax.ForIfClauses"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.syntax.Genexp"}},
     {
       "type": {
-        "name": "hydra.python.syntax.GenexpHead",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "assignment", "type": {"variable": "hydra.python.syntax.AssignmentExpression"}},
               {"name": "expression", "type": {"variable": "hydra.python.syntax.Expression"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.syntax.GenexpHead"}},
     {
       "type": {
-        "name": "hydra.python.syntax.Dictcomp",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "kvpair", "type": {"variable": "hydra.python.syntax.Kvpair"}},
               {"name": "forIfClauses", "type": {"variable": "hydra.python.syntax.ForIfClauses"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.syntax.Dictcomp"}},
     {
       "type": {
-        "name": "hydra.python.syntax.Args",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "positional", "type": {"list": {"variable": "hydra.python.syntax.PosArg"}}},
               {"name": "kwargOrStarred", "type": {"list": {"variable": "hydra.python.syntax.KwargOrStarred"}}},
               {"name": "kwargOrDoubleStarred", "type": {"list": {"variable": "hydra.python.syntax.KwargOrDoubleStarred"}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.syntax.Args"}},
     {
       "type": {
-        "name": "hydra.python.syntax.PosArg",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "starred", "type": {"variable": "hydra.python.syntax.StarredExpression"}},
               {"name": "assignment", "type": {"variable": "hydra.python.syntax.AssignmentExpression"}},
               {"name": "expression", "type": {"variable": "hydra.python.syntax.Expression"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.syntax.PosArg"}},
     {
       "type": {
-        "name": "hydra.python.syntax.StarredExpression",
-        "typeScheme": {"body": {"wrap": {"variable": "hydra.python.syntax.Expression"}}, "variables": []}}},
+        "body": {"body": {"wrap": {"variable": "hydra.python.syntax.Expression"}}, "variables": []},
+        "name": "hydra.python.syntax.StarredExpression"}},
     {
       "type": {
-        "name": "hydra.python.syntax.KwargOrStarred",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "kwarg", "type": {"variable": "hydra.python.syntax.Kwarg"}},
               {"name": "starred", "type": {"variable": "hydra.python.syntax.StarredExpression"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.syntax.KwargOrStarred"}},
     {
       "type": {
-        "name": "hydra.python.syntax.Kwarg",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "name", "type": {"variable": "hydra.python.syntax.Name"}},
               {"name": "value", "type": {"variable": "hydra.python.syntax.Expression"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.syntax.Kwarg"}},
     {
       "type": {
-        "name": "hydra.python.syntax.KwargOrDoubleStarred",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "kwarg", "type": {"variable": "hydra.python.syntax.Kwarg"}},
               {"name": "doubleStarred", "type": {"variable": "hydra.python.syntax.Expression"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.syntax.KwargOrDoubleStarred"}},
     {
       "type": {
-        "name": "hydra.python.syntax.StarTargetsListSeq",
-        "typeScheme": {"body": {"wrap": {"list": {"variable": "hydra.python.syntax.StarTarget"}}}, "variables": []}}},
+        "body": {"body": {"wrap": {"list": {"variable": "hydra.python.syntax.StarTarget"}}}, "variables": []},
+        "name": "hydra.python.syntax.StarTargetsListSeq"}},
     {
       "type": {
-        "name": "hydra.python.syntax.StarTargetsTupleSeq",
-        "typeScheme": {"body": {"wrap": {"list": {"variable": "hydra.python.syntax.StarTarget"}}}, "variables": []}}},
+        "body": {"body": {"wrap": {"list": {"variable": "hydra.python.syntax.StarTarget"}}}, "variables": []},
+        "name": "hydra.python.syntax.StarTargetsTupleSeq"}},
     {
       "type": {
-        "name": "hydra.python.syntax.StarTarget",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "starred", "type": {"variable": "hydra.python.syntax.StarTarget"}},
               {"name": "unstarred", "type": {"variable": "hydra.python.syntax.TargetWithStarAtom"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.syntax.StarTarget"}},
     {
       "type": {
-        "name": "hydra.python.syntax.TargetWithStarAtom",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "project", "type": {"variable": "hydra.python.syntax.TPrimaryAndName"}},
               {"name": "slices", "type": {"variable": "hydra.python.syntax.TPrimaryAndSlices"}},
               {"name": "atom", "type": {"variable": "hydra.python.syntax.StarAtom"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.syntax.TargetWithStarAtom"}},
     {
       "type": {
-        "name": "hydra.python.syntax.TPrimaryAndName",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "primary", "type": {"variable": "hydra.python.syntax.TPrimary"}},
               {"name": "name", "type": {"variable": "hydra.python.syntax.Name"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.syntax.TPrimaryAndName"}},
     {
       "type": {
-        "name": "hydra.python.syntax.TPrimaryAndSlices",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "primary", "type": {"variable": "hydra.python.syntax.TPrimary"}},
               {"name": "slices", "type": {"variable": "hydra.python.syntax.Slices"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.syntax.TPrimaryAndSlices"}},
     {
       "type": {
-        "name": "hydra.python.syntax.StarAtom",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "name", "type": {"variable": "hydra.python.syntax.Name"}},
               {"name": "targetWithStarAtom", "type": {"variable": "hydra.python.syntax.TargetWithStarAtom"}},
               {"name": "starTargetsTupleSeq", "type": {"maybe": {"variable": "hydra.python.syntax.StarTargetsTupleSeq"}}},
               {"name": "starTargetsListSeq", "type": {"maybe": {"variable": "hydra.python.syntax.StarTargetsListSeq"}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.syntax.StarAtom"}},
     {
       "type": {
-        "name": "hydra.python.syntax.SingleTarget",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "subscriptAttributeTarget", "type": {"variable": "hydra.python.syntax.SingleSubscriptAttributeTarget"}},
               {"name": "name", "type": {"variable": "hydra.python.syntax.Name"}},
               {"name": "parens", "type": {"variable": "hydra.python.syntax.SingleTarget"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.syntax.SingleTarget"}},
     {
       "type": {
-        "name": "hydra.python.syntax.SingleSubscriptAttributeTarget",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "primaryAndName", "type": {"variable": "hydra.python.syntax.TPrimaryAndName"}},
               {"name": "primaryAndSlices", "type": {"variable": "hydra.python.syntax.TPrimaryAndSlices"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.syntax.SingleSubscriptAttributeTarget"}},
     {
       "type": {
-        "name": "hydra.python.syntax.TPrimary",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "primaryAndName", "type": {"variable": "hydra.python.syntax.TPrimaryAndName"}},
@@ -1601,63 +1597,64 @@
               {"name": "primaryAndGenexp", "type": {"variable": "hydra.python.syntax.TPrimaryAndGenexp"}},
               {"name": "primaryAndArguments", "type": {"variable": "hydra.python.syntax.TPrimaryAndArguments"}},
               {"name": "atom", "type": {"variable": "hydra.python.syntax.Atom"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.syntax.TPrimary"}},
     {
       "type": {
-        "name": "hydra.python.syntax.TPrimaryAndGenexp",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "primary", "type": {"variable": "hydra.python.syntax.TPrimary"}},
               {"name": "genexp", "type": {"variable": "hydra.python.syntax.Genexp"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.syntax.TPrimaryAndGenexp"}},
     {
       "type": {
-        "name": "hydra.python.syntax.TPrimaryAndArguments",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "primary", "type": {"variable": "hydra.python.syntax.TPrimary"}},
               {"name": "arguments", "type": {"maybe": {"variable": "hydra.python.syntax.Args"}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.syntax.TPrimaryAndArguments"}},
     {
       "type": {
-        "name": "hydra.python.syntax.DelTargets",
-        "typeScheme": {"body": {"wrap": {"list": {"variable": "hydra.python.syntax.DelTarget"}}}, "variables": []}}},
+        "body": {"body": {"wrap": {"list": {"variable": "hydra.python.syntax.DelTarget"}}}, "variables": []},
+        "name": "hydra.python.syntax.DelTargets"}},
     {
       "type": {
-        "name": "hydra.python.syntax.DelTarget",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "primaryAndName", "type": {"variable": "hydra.python.syntax.TPrimaryAndName"}},
               {"name": "primaryAndSlices", "type": {"variable": "hydra.python.syntax.TPrimaryAndSlices"}},
               {"name": "delTAtom", "type": {"variable": "hydra.python.syntax.DelTAtom"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.syntax.DelTarget"}},
     {
       "type": {
-        "name": "hydra.python.syntax.DelTAtom",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "name", "type": {"variable": "hydra.python.syntax.Name"}},
               {"name": "target", "type": {"variable": "hydra.python.syntax.DelTarget"}},
               {"name": "targets", "type": {"variable": "hydra.python.syntax.DelTargets"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.syntax.DelTAtom"}},
     {
       "type": {
-        "name": "hydra.python.syntax.TypeExpression",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "expression", "type": {"variable": "hydra.python.syntax.Expression"}},
               {"name": "starredExpression", "type": {"variable": "hydra.python.syntax.Expression"}},
               {"name": "doubleStarredExpression", "type": {"variable": "hydra.python.syntax.Expression"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.python.syntax.TypeExpression"}},
     {
       "type": {
-        "name": "hydra.python.syntax.FuncTypeComment",
-        "typeScheme": {"body": {"wrap": {"variable": "hydra.python.syntax.TypeComment"}}, "variables": []}}}],
+        "body": {"body": {"wrap": {"variable": "hydra.python.syntax.TypeComment"}}, "variables": []},
+        "name": "hydra.python.syntax.FuncTypeComment"}}],
   "dependencies": [{"module": "hydra.core"}],
   "metadata": {
     "comments": [],

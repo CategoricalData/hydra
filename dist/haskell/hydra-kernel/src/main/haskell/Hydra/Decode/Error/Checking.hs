@@ -80,7 +80,7 @@ incorrectUnificationError cx raw =
         let fieldMap = ExtractCore.toFieldMap v0
         in (Eithers.bind (ExtractCore.requireField "substitution" Typing.typeSubst fieldMap cx) (\field_substitution -> Right (Checking.IncorrectUnificationError {
           Checking.incorrectUnificationErrorSubstitution = field_substitution})))
-      _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+      _ -> Left (Errors.DecodingError "expected a record of type hydra.error.checking.IncorrectUnificationError")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.error.checking.NotAForallTypeError
 notAForallTypeError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Checking.NotAForallTypeError
 notAForallTypeError cx raw =
@@ -90,7 +90,7 @@ notAForallTypeError cx raw =
         in (Eithers.bind (ExtractCore.requireField "type" DecodeCore.type_ fieldMap cx) (\field_type -> Eithers.bind (ExtractCore.requireField "typeArguments" (ExtractCore.decodeList DecodeCore.type_) fieldMap cx) (\field_typeArguments -> Right (Checking.NotAForallTypeError {
           Checking.notAForallTypeErrorType = field_type,
           Checking.notAForallTypeErrorTypeArguments = field_typeArguments}))))
-      _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+      _ -> Left (Errors.DecodingError "expected a record of type hydra.error.checking.NotAForallTypeError")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.error.checking.NotAFunctionTypeError
 notAFunctionTypeError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Checking.NotAFunctionTypeError
 notAFunctionTypeError cx raw =
@@ -99,7 +99,7 @@ notAFunctionTypeError cx raw =
         let fieldMap = ExtractCore.toFieldMap v0
         in (Eithers.bind (ExtractCore.requireField "type" DecodeCore.type_ fieldMap cx) (\field_type -> Right (Checking.NotAFunctionTypeError {
           Checking.notAFunctionTypeErrorType = field_type})))
-      _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+      _ -> Left (Errors.DecodingError "expected a record of type hydra.error.checking.NotAFunctionTypeError")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.error.checking.OtherCheckingError
 otherCheckingError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Checking.OtherCheckingError
 otherCheckingError cx raw =
@@ -113,7 +113,7 @@ otherCheckingError cx raw =
           _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx2 raw2)) fieldMap cx) (\field_message -> Right (Checking.OtherCheckingError {
           Checking.otherCheckingErrorPath = field_path,
           Checking.otherCheckingErrorMessage = field_message}))))
-      _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+      _ -> Left (Errors.DecodingError "expected a record of type hydra.error.checking.OtherCheckingError")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.error.checking.TypeArityMismatchError
 typeArityMismatchError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Checking.TypeArityMismatchError
 typeArityMismatchError cx raw =
@@ -137,7 +137,7 @@ typeArityMismatchError cx raw =
           Checking.typeArityMismatchErrorExpectedArity = field_expectedArity,
           Checking.typeArityMismatchErrorActualArity = field_actualArity,
           Checking.typeArityMismatchErrorTypeArguments = field_typeArguments}))))))
-      _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+      _ -> Left (Errors.DecodingError "expected a record of type hydra.error.checking.TypeArityMismatchError")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.error.checking.TypeMismatchError
 typeMismatchError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Checking.TypeMismatchError
 typeMismatchError cx raw =
@@ -147,7 +147,7 @@ typeMismatchError cx raw =
         in (Eithers.bind (ExtractCore.requireField "expectedType" DecodeCore.type_ fieldMap cx) (\field_expectedType -> Eithers.bind (ExtractCore.requireField "actualType" DecodeCore.type_ fieldMap cx) (\field_actualType -> Right (Checking.TypeMismatchError {
           Checking.typeMismatchErrorExpectedType = field_expectedType,
           Checking.typeMismatchErrorActualType = field_actualType}))))
-      _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+      _ -> Left (Errors.DecodingError "expected a record of type hydra.error.checking.TypeMismatchError")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.error.checking.UnboundTypeVariablesError
 unboundTypeVariablesError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Checking.UnboundTypeVariablesError
 unboundTypeVariablesError cx raw =
@@ -157,7 +157,7 @@ unboundTypeVariablesError cx raw =
         in (Eithers.bind (ExtractCore.requireField "variables" (ExtractCore.decodeSet DecodeCore.name) fieldMap cx) (\field_variables -> Eithers.bind (ExtractCore.requireField "type" DecodeCore.type_ fieldMap cx) (\field_type -> Right (Checking.UnboundTypeVariablesError {
           Checking.unboundTypeVariablesErrorVariables = field_variables,
           Checking.unboundTypeVariablesErrorType = field_type}))))
-      _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+      _ -> Left (Errors.DecodingError "expected a record of type hydra.error.checking.UnboundTypeVariablesError")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.error.checking.UndefinedTermVariableCheckingError
 undefinedTermVariableCheckingError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Checking.UndefinedTermVariableCheckingError
 undefinedTermVariableCheckingError cx raw =
@@ -167,7 +167,7 @@ undefinedTermVariableCheckingError cx raw =
         in (Eithers.bind (ExtractCore.requireField "path" Paths.subtermPath fieldMap cx) (\field_path -> Eithers.bind (ExtractCore.requireField "name" DecodeCore.name fieldMap cx) (\field_name -> Right (Checking.UndefinedTermVariableCheckingError {
           Checking.undefinedTermVariableCheckingErrorPath = field_path,
           Checking.undefinedTermVariableCheckingErrorName = field_name}))))
-      _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+      _ -> Left (Errors.DecodingError "expected a record of type hydra.error.checking.UndefinedTermVariableCheckingError")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.error.checking.UnequalTypesError
 unequalTypesError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Checking.UnequalTypesError
 unequalTypesError cx raw =
@@ -181,7 +181,7 @@ unequalTypesError cx raw =
           _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx2 raw2)) fieldMap cx) (\field_description -> Right (Checking.UnequalTypesError {
           Checking.unequalTypesErrorTypes = field_types,
           Checking.unequalTypesErrorDescription = field_description}))))
-      _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+      _ -> Left (Errors.DecodingError "expected a record of type hydra.error.checking.UnequalTypesError")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.error.checking.UnsupportedTermVariantError
 unsupportedTermVariantError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Checking.UnsupportedTermVariantError
 unsupportedTermVariantError cx raw =
@@ -190,7 +190,7 @@ unsupportedTermVariantError cx raw =
         let fieldMap = ExtractCore.toFieldMap v0
         in (Eithers.bind (ExtractCore.requireField "termVariant" Variants.termVariant fieldMap cx) (\field_termVariant -> Right (Checking.UnsupportedTermVariantError {
           Checking.unsupportedTermVariantErrorTermVariant = field_termVariant})))
-      _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+      _ -> Left (Errors.DecodingError "expected a record of type hydra.error.checking.UnsupportedTermVariantError")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.error.checking.UntypedLambdaError
 untypedLambdaError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Checking.UntypedLambdaError
 untypedLambdaError cx raw =
@@ -199,7 +199,7 @@ untypedLambdaError cx raw =
         let fieldMap = ExtractCore.toFieldMap v0
         in (Right (Checking.UntypedLambdaError {
         }))
-      _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+      _ -> Left (Errors.DecodingError "expected a record of type hydra.error.checking.UntypedLambdaError")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.error.checking.UntypedLetBindingError
 untypedLetBindingError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Checking.UntypedLetBindingError
 untypedLetBindingError cx raw =
@@ -208,7 +208,7 @@ untypedLetBindingError cx raw =
         let fieldMap = ExtractCore.toFieldMap v0
         in (Eithers.bind (ExtractCore.requireField "binding" DecodeCore.binding fieldMap cx) (\field_binding -> Right (Checking.UntypedLetBindingError {
           Checking.untypedLetBindingErrorBinding = field_binding})))
-      _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+      _ -> Left (Errors.DecodingError "expected a record of type hydra.error.checking.UntypedLetBindingError")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.error.checking.UntypedTermVariableCheckingError
 untypedTermVariableCheckingError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Checking.UntypedTermVariableCheckingError
 untypedTermVariableCheckingError cx raw =
@@ -218,4 +218,4 @@ untypedTermVariableCheckingError cx raw =
         in (Eithers.bind (ExtractCore.requireField "path" Paths.subtermPath fieldMap cx) (\field_path -> Eithers.bind (ExtractCore.requireField "name" DecodeCore.name fieldMap cx) (\field_name -> Right (Checking.UntypedTermVariableCheckingError {
           Checking.untypedTermVariableCheckingErrorPath = field_path,
           Checking.untypedTermVariableCheckingErrorName = field_name}))))
-      _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+      _ -> Left (Errors.DecodingError "expected a record of type hydra.error.checking.UntypedTermVariableCheckingError")) (ExtractCore.stripWithDecodingError cx raw)

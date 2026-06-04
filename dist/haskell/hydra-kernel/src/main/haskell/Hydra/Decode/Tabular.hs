@@ -24,7 +24,7 @@ columnType cx raw =
         in (Eithers.bind (ExtractCore.requireField "name" Relational.columnName fieldMap cx) (\field_name -> Eithers.bind (ExtractCore.requireField "type" DecodeCore.type_ fieldMap cx) (\field_type -> Right (Tabular.ColumnType {
           Tabular.columnTypeName = field_name,
           Tabular.columnTypeType = field_type}))))
-      _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+      _ -> Left (Errors.DecodingError "expected a record of type hydra.tabular.ColumnType")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.tabular.DataRow
 dataRow :: (Graph.Graph -> Core.Term -> Either Errors.DecodingError t0) -> Graph.Graph -> Core.Term -> Either Errors.DecodingError (Tabular.DataRow t0)
 dataRow v cx raw =
@@ -50,7 +50,7 @@ table v cx raw =
         in (Eithers.bind (ExtractCore.requireField "header" (ExtractCore.decodeMaybe headerRow) fieldMap cx) (\field_header -> Eithers.bind (ExtractCore.requireField "data" (ExtractCore.decodeList (dataRow v)) fieldMap cx) (\field_data -> Right (Tabular.Table {
           Tabular.tableHeader = field_header,
           Tabular.tableData = field_data}))))
-      _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+      _ -> Left (Errors.DecodingError "expected a record of type hydra.tabular.Table")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.tabular.TableType
 tableType :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Tabular.TableType
 tableType cx raw =
@@ -60,4 +60,4 @@ tableType cx raw =
         in (Eithers.bind (ExtractCore.requireField "name" Relational.relationName fieldMap cx) (\field_name -> Eithers.bind (ExtractCore.requireField "columns" (ExtractCore.decodeList columnType) fieldMap cx) (\field_columns -> Right (Tabular.TableType {
           Tabular.tableTypeName = field_name,
           Tabular.tableTypeColumns = field_columns}))))
-      _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+      _ -> Left (Errors.DecodingError "expected a record of type hydra.tabular.TableType")) (ExtractCore.stripWithDecodingError cx raw)

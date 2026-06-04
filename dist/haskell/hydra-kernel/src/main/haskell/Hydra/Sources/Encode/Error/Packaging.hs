@@ -34,7 +34,18 @@ module_ =
         Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.encode.error.packaging.conflictingModuleNameError"),
           Packaging.termDefinitionMetadata = Nothing,
-          Packaging.termDefinitionTerm = (Core.TermAnnotated (Core.AnnotatedTerm {
+          Packaging.termDefinitionSignature = (Just (Typing.TermSignature {
+            Typing.termSignatureTypeParameters = [],
+            Typing.termSignatureParameters = [
+              Typing.Parameter {
+                Typing.parameterName = (Core.Name "arg0"),
+                Typing.parameterDescription = Nothing,
+                Typing.parameterType = (Core.TypeVariable (Core.Name "hydra.error.packaging.ConflictingModuleNameError")),
+                Typing.parameterIsLazy = False}],
+            Typing.termSignatureResult = Typing.Result {
+              Typing.resultDescription = Nothing,
+              Typing.resultType = (Core.TypeVariable (Core.Name "hydra.core.Term"))}})),
+          Packaging.termDefinitionBody = (Core.TermAnnotated (Core.AnnotatedTerm {
             Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
               Core.lambdaParameter = (Core.Name "x"),
               Core.lambdaDomain = Nothing,
@@ -90,22 +101,22 @@ module_ =
             Core.annotatedTermAnnotation = (M.fromList [
               (
                 Core.Name "description",
-                (Core.TermLiteral (Core.LiteralString "Encoder for hydra.error.packaging.ConflictingModuleNameError")))])})),
+                (Core.TermLiteral (Core.LiteralString "Encoder for hydra.error.packaging.ConflictingModuleNameError")))])}))}),
+        (Packaging.DefinitionTerm (Packaging.TermDefinition {
+          Packaging.termDefinitionName = (Core.Name "hydra.encode.error.packaging.conflictingVariantNameError"),
+          Packaging.termDefinitionMetadata = Nothing,
           Packaging.termDefinitionSignature = (Just (Typing.TermSignature {
             Typing.termSignatureTypeParameters = [],
             Typing.termSignatureParameters = [
               Typing.Parameter {
                 Typing.parameterName = (Core.Name "arg0"),
                 Typing.parameterDescription = Nothing,
-                Typing.parameterType = (Core.TypeVariable (Core.Name "hydra.error.packaging.ConflictingModuleNameError")),
+                Typing.parameterType = (Core.TypeVariable (Core.Name "hydra.error.packaging.ConflictingVariantNameError")),
                 Typing.parameterIsLazy = False}],
             Typing.termSignatureResult = Typing.Result {
               Typing.resultDescription = Nothing,
-              Typing.resultType = (Core.TypeVariable (Core.Name "hydra.core.Term"))}}))}),
-        (Packaging.DefinitionTerm (Packaging.TermDefinition {
-          Packaging.termDefinitionName = (Core.Name "hydra.encode.error.packaging.conflictingVariantNameError"),
-          Packaging.termDefinitionMetadata = Nothing,
-          Packaging.termDefinitionTerm = (Core.TermAnnotated (Core.AnnotatedTerm {
+              Typing.resultType = (Core.TypeVariable (Core.Name "hydra.core.Term"))}})),
+          Packaging.termDefinitionBody = (Core.TermAnnotated (Core.AnnotatedTerm {
             Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
               Core.lambdaParameter = (Core.Name "x"),
               Core.lambdaDomain = Nothing,
@@ -195,22 +206,22 @@ module_ =
             Core.annotatedTermAnnotation = (M.fromList [
               (
                 Core.Name "description",
-                (Core.TermLiteral (Core.LiteralString "Encoder for hydra.error.packaging.ConflictingVariantNameError")))])})),
+                (Core.TermLiteral (Core.LiteralString "Encoder for hydra.error.packaging.ConflictingVariantNameError")))])}))})),
+        (Packaging.DefinitionTerm (Packaging.TermDefinition {
+          Packaging.termDefinitionName = (Core.Name "hydra.encode.error.packaging.definitionNotInModuleNameError"),
+          Packaging.termDefinitionMetadata = Nothing,
           Packaging.termDefinitionSignature = (Just (Typing.TermSignature {
             Typing.termSignatureTypeParameters = [],
             Typing.termSignatureParameters = [
               Typing.Parameter {
                 Typing.parameterName = (Core.Name "arg0"),
                 Typing.parameterDescription = Nothing,
-                Typing.parameterType = (Core.TypeVariable (Core.Name "hydra.error.packaging.ConflictingVariantNameError")),
+                Typing.parameterType = (Core.TypeVariable (Core.Name "hydra.error.packaging.DefinitionNotInModuleNameError")),
                 Typing.parameterIsLazy = False}],
             Typing.termSignatureResult = Typing.Result {
               Typing.resultDescription = Nothing,
-              Typing.resultType = (Core.TypeVariable (Core.Name "hydra.core.Term"))}}))})),
-        (Packaging.DefinitionTerm (Packaging.TermDefinition {
-          Packaging.termDefinitionName = (Core.Name "hydra.encode.error.packaging.definitionNotInModuleNameError"),
-          Packaging.termDefinitionMetadata = Nothing,
-          Packaging.termDefinitionTerm = (Core.TermAnnotated (Core.AnnotatedTerm {
+              Typing.resultType = (Core.TypeVariable (Core.Name "hydra.core.Term"))}})),
+          Packaging.termDefinitionBody = (Core.TermAnnotated (Core.AnnotatedTerm {
             Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
               Core.lambdaParameter = (Core.Name "x"),
               Core.lambdaDomain = Nothing,
@@ -266,22 +277,22 @@ module_ =
             Core.annotatedTermAnnotation = (M.fromList [
               (
                 Core.Name "description",
-                (Core.TermLiteral (Core.LiteralString "Encoder for hydra.error.packaging.DefinitionNotInModuleNameError")))])})),
+                (Core.TermLiteral (Core.LiteralString "Encoder for hydra.error.packaging.DefinitionNotInModuleNameError")))])}))})),
+        (Packaging.DefinitionTerm (Packaging.TermDefinition {
+          Packaging.termDefinitionName = (Core.Name "hydra.encode.error.packaging.definitionsOutOfOrderError"),
+          Packaging.termDefinitionMetadata = Nothing,
           Packaging.termDefinitionSignature = (Just (Typing.TermSignature {
             Typing.termSignatureTypeParameters = [],
             Typing.termSignatureParameters = [
               Typing.Parameter {
                 Typing.parameterName = (Core.Name "arg0"),
                 Typing.parameterDescription = Nothing,
-                Typing.parameterType = (Core.TypeVariable (Core.Name "hydra.error.packaging.DefinitionNotInModuleNameError")),
+                Typing.parameterType = (Core.TypeVariable (Core.Name "hydra.error.packaging.DefinitionsOutOfOrderError")),
                 Typing.parameterIsLazy = False}],
             Typing.termSignatureResult = Typing.Result {
               Typing.resultDescription = Nothing,
-              Typing.resultType = (Core.TypeVariable (Core.Name "hydra.core.Term"))}}))})),
-        (Packaging.DefinitionTerm (Packaging.TermDefinition {
-          Packaging.termDefinitionName = (Core.Name "hydra.encode.error.packaging.definitionsOutOfOrderError"),
-          Packaging.termDefinitionMetadata = Nothing,
-          Packaging.termDefinitionTerm = (Core.TermAnnotated (Core.AnnotatedTerm {
+              Typing.resultType = (Core.TypeVariable (Core.Name "hydra.core.Term"))}})),
+          Packaging.termDefinitionBody = (Core.TermAnnotated (Core.AnnotatedTerm {
             Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
               Core.lambdaParameter = (Core.Name "x"),
               Core.lambdaDomain = Nothing,
@@ -354,22 +365,22 @@ module_ =
             Core.annotatedTermAnnotation = (M.fromList [
               (
                 Core.Name "description",
-                (Core.TermLiteral (Core.LiteralString "Encoder for hydra.error.packaging.DefinitionsOutOfOrderError")))])})),
+                (Core.TermLiteral (Core.LiteralString "Encoder for hydra.error.packaging.DefinitionsOutOfOrderError")))])}))})),
+        (Packaging.DefinitionTerm (Packaging.TermDefinition {
+          Packaging.termDefinitionName = (Core.Name "hydra.encode.error.packaging.duplicateDefinitionNameError"),
+          Packaging.termDefinitionMetadata = Nothing,
           Packaging.termDefinitionSignature = (Just (Typing.TermSignature {
             Typing.termSignatureTypeParameters = [],
             Typing.termSignatureParameters = [
               Typing.Parameter {
                 Typing.parameterName = (Core.Name "arg0"),
                 Typing.parameterDescription = Nothing,
-                Typing.parameterType = (Core.TypeVariable (Core.Name "hydra.error.packaging.DefinitionsOutOfOrderError")),
+                Typing.parameterType = (Core.TypeVariable (Core.Name "hydra.error.packaging.DuplicateDefinitionNameError")),
                 Typing.parameterIsLazy = False}],
             Typing.termSignatureResult = Typing.Result {
               Typing.resultDescription = Nothing,
-              Typing.resultType = (Core.TypeVariable (Core.Name "hydra.core.Term"))}}))})),
-        (Packaging.DefinitionTerm (Packaging.TermDefinition {
-          Packaging.termDefinitionName = (Core.Name "hydra.encode.error.packaging.duplicateDefinitionNameError"),
-          Packaging.termDefinitionMetadata = Nothing,
-          Packaging.termDefinitionTerm = (Core.TermAnnotated (Core.AnnotatedTerm {
+              Typing.resultType = (Core.TypeVariable (Core.Name "hydra.core.Term"))}})),
+          Packaging.termDefinitionBody = (Core.TermAnnotated (Core.AnnotatedTerm {
             Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
               Core.lambdaParameter = (Core.Name "x"),
               Core.lambdaDomain = Nothing,
@@ -425,22 +436,22 @@ module_ =
             Core.annotatedTermAnnotation = (M.fromList [
               (
                 Core.Name "description",
-                (Core.TermLiteral (Core.LiteralString "Encoder for hydra.error.packaging.DuplicateDefinitionNameError")))])})),
+                (Core.TermLiteral (Core.LiteralString "Encoder for hydra.error.packaging.DuplicateDefinitionNameError")))])}))})),
+        (Packaging.DefinitionTerm (Packaging.TermDefinition {
+          Packaging.termDefinitionName = (Core.Name "hydra.encode.error.packaging.duplicateModuleNameError"),
+          Packaging.termDefinitionMetadata = Nothing,
           Packaging.termDefinitionSignature = (Just (Typing.TermSignature {
             Typing.termSignatureTypeParameters = [],
             Typing.termSignatureParameters = [
               Typing.Parameter {
                 Typing.parameterName = (Core.Name "arg0"),
                 Typing.parameterDescription = Nothing,
-                Typing.parameterType = (Core.TypeVariable (Core.Name "hydra.error.packaging.DuplicateDefinitionNameError")),
+                Typing.parameterType = (Core.TypeVariable (Core.Name "hydra.error.packaging.DuplicateModuleNameError")),
                 Typing.parameterIsLazy = False}],
             Typing.termSignatureResult = Typing.Result {
               Typing.resultDescription = Nothing,
-              Typing.resultType = (Core.TypeVariable (Core.Name "hydra.core.Term"))}}))})),
-        (Packaging.DefinitionTerm (Packaging.TermDefinition {
-          Packaging.termDefinitionName = (Core.Name "hydra.encode.error.packaging.duplicateModuleNameError"),
-          Packaging.termDefinitionMetadata = Nothing,
-          Packaging.termDefinitionTerm = (Core.TermAnnotated (Core.AnnotatedTerm {
+              Typing.resultType = (Core.TypeVariable (Core.Name "hydra.core.Term"))}})),
+          Packaging.termDefinitionBody = (Core.TermAnnotated (Core.AnnotatedTerm {
             Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
               Core.lambdaParameter = (Core.Name "x"),
               Core.lambdaDomain = Nothing,
@@ -479,22 +490,22 @@ module_ =
             Core.annotatedTermAnnotation = (M.fromList [
               (
                 Core.Name "description",
-                (Core.TermLiteral (Core.LiteralString "Encoder for hydra.error.packaging.DuplicateModuleNameError")))])})),
+                (Core.TermLiteral (Core.LiteralString "Encoder for hydra.error.packaging.DuplicateModuleNameError")))])}))})),
+        (Packaging.DefinitionTerm (Packaging.TermDefinition {
+          Packaging.termDefinitionName = (Core.Name "hydra.encode.error.packaging.invalidDefinitionNameError"),
+          Packaging.termDefinitionMetadata = Nothing,
           Packaging.termDefinitionSignature = (Just (Typing.TermSignature {
             Typing.termSignatureTypeParameters = [],
             Typing.termSignatureParameters = [
               Typing.Parameter {
                 Typing.parameterName = (Core.Name "arg0"),
                 Typing.parameterDescription = Nothing,
-                Typing.parameterType = (Core.TypeVariable (Core.Name "hydra.error.packaging.DuplicateModuleNameError")),
+                Typing.parameterType = (Core.TypeVariable (Core.Name "hydra.error.packaging.InvalidDefinitionNameError")),
                 Typing.parameterIsLazy = False}],
             Typing.termSignatureResult = Typing.Result {
               Typing.resultDescription = Nothing,
-              Typing.resultType = (Core.TypeVariable (Core.Name "hydra.core.Term"))}}))})),
-        (Packaging.DefinitionTerm (Packaging.TermDefinition {
-          Packaging.termDefinitionName = (Core.Name "hydra.encode.error.packaging.invalidDefinitionNameError"),
-          Packaging.termDefinitionMetadata = Nothing,
-          Packaging.termDefinitionTerm = (Core.TermAnnotated (Core.AnnotatedTerm {
+              Typing.resultType = (Core.TypeVariable (Core.Name "hydra.core.Term"))}})),
+          Packaging.termDefinitionBody = (Core.TermAnnotated (Core.AnnotatedTerm {
             Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
               Core.lambdaParameter = (Core.Name "x"),
               Core.lambdaDomain = Nothing,
@@ -567,29 +578,29 @@ module_ =
             Core.annotatedTermAnnotation = (M.fromList [
               (
                 Core.Name "description",
-                (Core.TermLiteral (Core.LiteralString "Encoder for hydra.error.packaging.InvalidDefinitionNameError")))])})),
+                (Core.TermLiteral (Core.LiteralString "Encoder for hydra.error.packaging.InvalidDefinitionNameError")))])}))})),
+        (Packaging.DefinitionTerm (Packaging.TermDefinition {
+          Packaging.termDefinitionName = (Core.Name "hydra.encode.error.packaging.invalidModuleError"),
+          Packaging.termDefinitionMetadata = Nothing,
           Packaging.termDefinitionSignature = (Just (Typing.TermSignature {
             Typing.termSignatureTypeParameters = [],
             Typing.termSignatureParameters = [
               Typing.Parameter {
                 Typing.parameterName = (Core.Name "arg0"),
                 Typing.parameterDescription = Nothing,
-                Typing.parameterType = (Core.TypeVariable (Core.Name "hydra.error.packaging.InvalidDefinitionNameError")),
+                Typing.parameterType = (Core.TypeVariable (Core.Name "hydra.error.packaging.InvalidModuleError")),
                 Typing.parameterIsLazy = False}],
             Typing.termSignatureResult = Typing.Result {
               Typing.resultDescription = Nothing,
-              Typing.resultType = (Core.TypeVariable (Core.Name "hydra.core.Term"))}}))})),
-        (Packaging.DefinitionTerm (Packaging.TermDefinition {
-          Packaging.termDefinitionName = (Core.Name "hydra.encode.error.packaging.invalidModuleError"),
-          Packaging.termDefinitionMetadata = Nothing,
-          Packaging.termDefinitionTerm = (Core.TermAnnotated (Core.AnnotatedTerm {
+              Typing.resultType = (Core.TypeVariable (Core.Name "hydra.core.Term"))}})),
+          Packaging.termDefinitionBody = (Core.TermAnnotated (Core.AnnotatedTerm {
             Core.annotatedTermBody = (Core.TermCases (Core.CaseStatement {
               Core.caseStatementTypeName = (Core.Name "hydra.error.packaging.InvalidModuleError"),
               Core.caseStatementDefault = Nothing,
               Core.caseStatementCases = [
-                Core.Field {
-                  Core.fieldName = (Core.Name "conflictingVariantName"),
-                  Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                Core.CaseAlternative {
+                  Core.caseAlternativeName = (Core.Name "conflictingVariantName"),
+                  Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "y"),
                     Core.lambdaDomain = Nothing,
                     Core.lambdaBody = (Core.TermInject (Core.Injection {
@@ -619,9 +630,9 @@ module_ =
                                     Core.fieldTerm = (Core.TermApplication (Core.Application {
                                       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.error.packaging.conflictingVariantNameError")),
                                       Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}]}))}]}))}}))}))},
-                Core.Field {
-                  Core.fieldName = (Core.Name "definitionNotInModuleName"),
-                  Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                Core.CaseAlternative {
+                  Core.caseAlternativeName = (Core.Name "definitionNotInModuleName"),
+                  Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "y"),
                     Core.lambdaDomain = Nothing,
                     Core.lambdaBody = (Core.TermInject (Core.Injection {
@@ -651,9 +662,9 @@ module_ =
                                     Core.fieldTerm = (Core.TermApplication (Core.Application {
                                       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.error.packaging.definitionNotInModuleNameError")),
                                       Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}]}))}]}))}}))}))},
-                Core.Field {
-                  Core.fieldName = (Core.Name "definitionsOutOfOrder"),
-                  Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                Core.CaseAlternative {
+                  Core.caseAlternativeName = (Core.Name "definitionsOutOfOrder"),
+                  Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "y"),
                     Core.lambdaDomain = Nothing,
                     Core.lambdaBody = (Core.TermInject (Core.Injection {
@@ -683,9 +694,9 @@ module_ =
                                     Core.fieldTerm = (Core.TermApplication (Core.Application {
                                       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.error.packaging.definitionsOutOfOrderError")),
                                       Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}]}))}]}))}}))}))},
-                Core.Field {
-                  Core.fieldName = (Core.Name "duplicateDefinitionName"),
-                  Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                Core.CaseAlternative {
+                  Core.caseAlternativeName = (Core.Name "duplicateDefinitionName"),
+                  Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "y"),
                     Core.lambdaDomain = Nothing,
                     Core.lambdaBody = (Core.TermInject (Core.Injection {
@@ -715,9 +726,9 @@ module_ =
                                     Core.fieldTerm = (Core.TermApplication (Core.Application {
                                       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.error.packaging.duplicateDefinitionNameError")),
                                       Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}]}))}]}))}}))}))},
-                Core.Field {
-                  Core.fieldName = (Core.Name "invalidDefinitionName"),
-                  Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                Core.CaseAlternative {
+                  Core.caseAlternativeName = (Core.Name "invalidDefinitionName"),
+                  Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "y"),
                     Core.lambdaDomain = Nothing,
                     Core.lambdaBody = (Core.TermInject (Core.Injection {
@@ -747,9 +758,9 @@ module_ =
                                     Core.fieldTerm = (Core.TermApplication (Core.Application {
                                       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.error.packaging.invalidDefinitionNameError")),
                                       Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}]}))}]}))}}))}))},
-                Core.Field {
-                  Core.fieldName = (Core.Name "invalidModuleNameConvention"),
-                  Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                Core.CaseAlternative {
+                  Core.caseAlternativeName = (Core.Name "invalidModuleNameConvention"),
+                  Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "y"),
                     Core.lambdaDomain = Nothing,
                     Core.lambdaBody = (Core.TermInject (Core.Injection {
@@ -779,9 +790,9 @@ module_ =
                                     Core.fieldTerm = (Core.TermApplication (Core.Application {
                                       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.error.packaging.invalidModuleNameConventionError")),
                                       Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}]}))}]}))}}))}))},
-                Core.Field {
-                  Core.fieldName = (Core.Name "missingDocumentation"),
-                  Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                Core.CaseAlternative {
+                  Core.caseAlternativeName = (Core.Name "missingDocumentation"),
+                  Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "y"),
                     Core.lambdaDomain = Nothing,
                     Core.lambdaBody = (Core.TermInject (Core.Injection {
@@ -812,22 +823,22 @@ module_ =
                                       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.error.packaging.missingDocumentationError")),
                                       Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}]}))}]}))}}))}))}]})),
             Core.annotatedTermAnnotation = (M.fromList [
-              (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Encoder for hydra.error.packaging.InvalidModuleError")))])})),
+              (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Encoder for hydra.error.packaging.InvalidModuleError")))])}))})),
+        (Packaging.DefinitionTerm (Packaging.TermDefinition {
+          Packaging.termDefinitionName = (Core.Name "hydra.encode.error.packaging.invalidModuleNameConventionError"),
+          Packaging.termDefinitionMetadata = Nothing,
           Packaging.termDefinitionSignature = (Just (Typing.TermSignature {
             Typing.termSignatureTypeParameters = [],
             Typing.termSignatureParameters = [
               Typing.Parameter {
                 Typing.parameterName = (Core.Name "arg0"),
                 Typing.parameterDescription = Nothing,
-                Typing.parameterType = (Core.TypeVariable (Core.Name "hydra.error.packaging.InvalidModuleError")),
+                Typing.parameterType = (Core.TypeVariable (Core.Name "hydra.error.packaging.InvalidModuleNameConventionError")),
                 Typing.parameterIsLazy = False}],
             Typing.termSignatureResult = Typing.Result {
               Typing.resultDescription = Nothing,
-              Typing.resultType = (Core.TypeVariable (Core.Name "hydra.core.Term"))}}))})),
-        (Packaging.DefinitionTerm (Packaging.TermDefinition {
-          Packaging.termDefinitionName = (Core.Name "hydra.encode.error.packaging.invalidModuleNameConventionError"),
-          Packaging.termDefinitionMetadata = Nothing,
-          Packaging.termDefinitionTerm = (Core.TermAnnotated (Core.AnnotatedTerm {
+              Typing.resultType = (Core.TypeVariable (Core.Name "hydra.core.Term"))}})),
+          Packaging.termDefinitionBody = (Core.TermAnnotated (Core.AnnotatedTerm {
             Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
               Core.lambdaParameter = (Core.Name "x"),
               Core.lambdaDomain = Nothing,
@@ -866,29 +877,29 @@ module_ =
             Core.annotatedTermAnnotation = (M.fromList [
               (
                 Core.Name "description",
-                (Core.TermLiteral (Core.LiteralString "Encoder for hydra.error.packaging.InvalidModuleNameConventionError")))])})),
+                (Core.TermLiteral (Core.LiteralString "Encoder for hydra.error.packaging.InvalidModuleNameConventionError")))])}))})),
+        (Packaging.DefinitionTerm (Packaging.TermDefinition {
+          Packaging.termDefinitionName = (Core.Name "hydra.encode.error.packaging.invalidPackageError"),
+          Packaging.termDefinitionMetadata = Nothing,
           Packaging.termDefinitionSignature = (Just (Typing.TermSignature {
             Typing.termSignatureTypeParameters = [],
             Typing.termSignatureParameters = [
               Typing.Parameter {
                 Typing.parameterName = (Core.Name "arg0"),
                 Typing.parameterDescription = Nothing,
-                Typing.parameterType = (Core.TypeVariable (Core.Name "hydra.error.packaging.InvalidModuleNameConventionError")),
+                Typing.parameterType = (Core.TypeVariable (Core.Name "hydra.error.packaging.InvalidPackageError")),
                 Typing.parameterIsLazy = False}],
             Typing.termSignatureResult = Typing.Result {
               Typing.resultDescription = Nothing,
-              Typing.resultType = (Core.TypeVariable (Core.Name "hydra.core.Term"))}}))})),
-        (Packaging.DefinitionTerm (Packaging.TermDefinition {
-          Packaging.termDefinitionName = (Core.Name "hydra.encode.error.packaging.invalidPackageError"),
-          Packaging.termDefinitionMetadata = Nothing,
-          Packaging.termDefinitionTerm = (Core.TermAnnotated (Core.AnnotatedTerm {
+              Typing.resultType = (Core.TypeVariable (Core.Name "hydra.core.Term"))}})),
+          Packaging.termDefinitionBody = (Core.TermAnnotated (Core.AnnotatedTerm {
             Core.annotatedTermBody = (Core.TermCases (Core.CaseStatement {
               Core.caseStatementTypeName = (Core.Name "hydra.error.packaging.InvalidPackageError"),
               Core.caseStatementDefault = Nothing,
               Core.caseStatementCases = [
-                Core.Field {
-                  Core.fieldName = (Core.Name "conflictingModuleName"),
-                  Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                Core.CaseAlternative {
+                  Core.caseAlternativeName = (Core.Name "conflictingModuleName"),
+                  Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "y"),
                     Core.lambdaDomain = Nothing,
                     Core.lambdaBody = (Core.TermInject (Core.Injection {
@@ -918,9 +929,9 @@ module_ =
                                     Core.fieldTerm = (Core.TermApplication (Core.Application {
                                       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.error.packaging.conflictingModuleNameError")),
                                       Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}]}))}]}))}}))}))},
-                Core.Field {
-                  Core.fieldName = (Core.Name "duplicateModuleName"),
-                  Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                Core.CaseAlternative {
+                  Core.caseAlternativeName = (Core.Name "duplicateModuleName"),
+                  Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "y"),
                     Core.lambdaDomain = Nothing,
                     Core.lambdaBody = (Core.TermInject (Core.Injection {
@@ -950,9 +961,9 @@ module_ =
                                     Core.fieldTerm = (Core.TermApplication (Core.Application {
                                       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.error.packaging.duplicateModuleNameError")),
                                       Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}]}))}]}))}}))}))},
-                Core.Field {
-                  Core.fieldName = (Core.Name "invalidModule"),
-                  Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                Core.CaseAlternative {
+                  Core.caseAlternativeName = (Core.Name "invalidModule"),
+                  Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "y"),
                     Core.lambdaDomain = Nothing,
                     Core.lambdaBody = (Core.TermInject (Core.Injection {
@@ -982,9 +993,9 @@ module_ =
                                     Core.fieldTerm = (Core.TermApplication (Core.Application {
                                       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.error.packaging.invalidModuleError")),
                                       Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}]}))}]}))}}))}))},
-                Core.Field {
-                  Core.fieldName = (Core.Name "invalidPackageName"),
-                  Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                Core.CaseAlternative {
+                  Core.caseAlternativeName = (Core.Name "invalidPackageName"),
+                  Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "y"),
                     Core.lambdaDomain = Nothing,
                     Core.lambdaBody = (Core.TermInject (Core.Injection {
@@ -1015,22 +1026,22 @@ module_ =
                                       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.error.packaging.invalidPackageNameError")),
                                       Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}]}))}]}))}}))}))}]})),
             Core.annotatedTermAnnotation = (M.fromList [
-              (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Encoder for hydra.error.packaging.InvalidPackageError")))])})),
+              (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Encoder for hydra.error.packaging.InvalidPackageError")))])}))})),
+        (Packaging.DefinitionTerm (Packaging.TermDefinition {
+          Packaging.termDefinitionName = (Core.Name "hydra.encode.error.packaging.invalidPackageNameError"),
+          Packaging.termDefinitionMetadata = Nothing,
           Packaging.termDefinitionSignature = (Just (Typing.TermSignature {
             Typing.termSignatureTypeParameters = [],
             Typing.termSignatureParameters = [
               Typing.Parameter {
                 Typing.parameterName = (Core.Name "arg0"),
                 Typing.parameterDescription = Nothing,
-                Typing.parameterType = (Core.TypeVariable (Core.Name "hydra.error.packaging.InvalidPackageError")),
+                Typing.parameterType = (Core.TypeVariable (Core.Name "hydra.error.packaging.InvalidPackageNameError")),
                 Typing.parameterIsLazy = False}],
             Typing.termSignatureResult = Typing.Result {
               Typing.resultDescription = Nothing,
-              Typing.resultType = (Core.TypeVariable (Core.Name "hydra.core.Term"))}}))})),
-        (Packaging.DefinitionTerm (Packaging.TermDefinition {
-          Packaging.termDefinitionName = (Core.Name "hydra.encode.error.packaging.invalidPackageNameError"),
-          Packaging.termDefinitionMetadata = Nothing,
-          Packaging.termDefinitionTerm = (Core.TermAnnotated (Core.AnnotatedTerm {
+              Typing.resultType = (Core.TypeVariable (Core.Name "hydra.core.Term"))}})),
+          Packaging.termDefinitionBody = (Core.TermAnnotated (Core.AnnotatedTerm {
             Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
               Core.lambdaParameter = (Core.Name "x"),
               Core.lambdaDomain = Nothing,
@@ -1069,22 +1080,22 @@ module_ =
             Core.annotatedTermAnnotation = (M.fromList [
               (
                 Core.Name "description",
-                (Core.TermLiteral (Core.LiteralString "Encoder for hydra.error.packaging.InvalidPackageNameError")))])})),
+                (Core.TermLiteral (Core.LiteralString "Encoder for hydra.error.packaging.InvalidPackageNameError")))])}))})),
+        (Packaging.DefinitionTerm (Packaging.TermDefinition {
+          Packaging.termDefinitionName = (Core.Name "hydra.encode.error.packaging.missingDocumentationError"),
+          Packaging.termDefinitionMetadata = Nothing,
           Packaging.termDefinitionSignature = (Just (Typing.TermSignature {
             Typing.termSignatureTypeParameters = [],
             Typing.termSignatureParameters = [
               Typing.Parameter {
                 Typing.parameterName = (Core.Name "arg0"),
                 Typing.parameterDescription = Nothing,
-                Typing.parameterType = (Core.TypeVariable (Core.Name "hydra.error.packaging.InvalidPackageNameError")),
+                Typing.parameterType = (Core.TypeVariable (Core.Name "hydra.error.packaging.MissingDocumentationError")),
                 Typing.parameterIsLazy = False}],
             Typing.termSignatureResult = Typing.Result {
               Typing.resultDescription = Nothing,
-              Typing.resultType = (Core.TypeVariable (Core.Name "hydra.core.Term"))}}))})),
-        (Packaging.DefinitionTerm (Packaging.TermDefinition {
-          Packaging.termDefinitionName = (Core.Name "hydra.encode.error.packaging.missingDocumentationError"),
-          Packaging.termDefinitionMetadata = Nothing,
-          Packaging.termDefinitionTerm = (Core.TermAnnotated (Core.AnnotatedTerm {
+              Typing.resultType = (Core.TypeVariable (Core.Name "hydra.core.Term"))}})),
+          Packaging.termDefinitionBody = (Core.TermAnnotated (Core.AnnotatedTerm {
             Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
               Core.lambdaParameter = (Core.Name "x"),
               Core.lambdaDomain = Nothing,
@@ -1140,15 +1151,4 @@ module_ =
             Core.annotatedTermAnnotation = (M.fromList [
               (
                 Core.Name "description",
-                (Core.TermLiteral (Core.LiteralString "Encoder for hydra.error.packaging.MissingDocumentationError")))])})),
-          Packaging.termDefinitionSignature = (Just (Typing.TermSignature {
-            Typing.termSignatureTypeParameters = [],
-            Typing.termSignatureParameters = [
-              Typing.Parameter {
-                Typing.parameterName = (Core.Name "arg0"),
-                Typing.parameterDescription = Nothing,
-                Typing.parameterType = (Core.TypeVariable (Core.Name "hydra.error.packaging.MissingDocumentationError")),
-                Typing.parameterIsLazy = False}],
-            Typing.termSignatureResult = Typing.Result {
-              Typing.resultDescription = Nothing,
-              Typing.resultType = (Core.TypeVariable (Core.Name "hydra.core.Term"))}}))}))]}
+                (Core.TermLiteral (Core.LiteralString "Encoder for hydra.error.packaging.MissingDocumentationError")))])}))}))]}

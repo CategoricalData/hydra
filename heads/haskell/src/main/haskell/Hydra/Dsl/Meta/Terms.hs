@@ -308,9 +308,9 @@ mapTerm1 m = inject (Core.nameLift _Term) "map" $ Core.termMap m
 -- Example: match (name "Result") nothing ["success">: int32 42, "error">: string "fail"]
 match :: AsTerm t Name => t -> TypedTerm (Maybe Term) -> [(TypedTerm Name, TypedTerm Term)] -> TypedTerm Term
 match tname def pairs = Core.termCases
-    $ Core.caseStatement (asTerm tname) def $ Phantoms.list $ toField pairs
+    $ Core.caseStatement (asTerm tname) def $ Phantoms.list $ toCaseAlternative pairs
   where
-    toField = fmap (\(n, t) -> Core.field n t)
+    toCaseAlternative = fmap (\(n, t) -> Core.caseAlternative n t)
 
 --meta :: TypedTerm a -> TypedTerm Term
 --meta (TypedTerm term) = TypedTerm $ EncodeCore.term term

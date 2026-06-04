@@ -43,7 +43,25 @@ module_ =
         Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.decode.tabular.columnType"),
           Packaging.termDefinitionMetadata = Nothing,
-          Packaging.termDefinitionTerm = (Core.TermAnnotated (Core.AnnotatedTerm {
+          Packaging.termDefinitionSignature = (Just (Typing.TermSignature {
+            Typing.termSignatureTypeParameters = [],
+            Typing.termSignatureParameters = [
+              Typing.Parameter {
+                Typing.parameterName = (Core.Name "arg0"),
+                Typing.parameterDescription = Nothing,
+                Typing.parameterType = (Core.TypeVariable (Core.Name "hydra.graph.Graph")),
+                Typing.parameterIsLazy = False},
+              Typing.Parameter {
+                Typing.parameterName = (Core.Name "arg1"),
+                Typing.parameterDescription = Nothing,
+                Typing.parameterType = (Core.TypeVariable (Core.Name "hydra.core.Term")),
+                Typing.parameterIsLazy = False}],
+            Typing.termSignatureResult = Typing.Result {
+              Typing.resultDescription = Nothing,
+              Typing.resultType = (Core.TypeEither (Core.EitherType {
+                Core.eitherTypeLeft = (Core.TypeVariable (Core.Name "hydra.errors.DecodingError")),
+                Core.eitherTypeRight = (Core.TypeVariable (Core.Name "hydra.tabular.ColumnType"))}))}})),
+          Packaging.termDefinitionBody = (Core.TermAnnotated (Core.AnnotatedTerm {
             Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
               Core.lambdaParameter = (Core.Name "cx"),
               Core.lambdaDomain = Nothing,
@@ -66,11 +84,11 @@ module_ =
                           Core.caseStatementTypeName = (Core.Name "hydra.core.Term"),
                           Core.caseStatementDefault = (Just (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
                             Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
-                            Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected record"))}))))),
+                            Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected a record of type hydra.tabular.ColumnType"))}))))),
                           Core.caseStatementCases = [
-                            Core.Field {
-                              Core.fieldName = (Core.Name "record"),
-                              Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                            Core.CaseAlternative {
+                              Core.caseAlternativeName = (Core.Name "record"),
+                              Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                                 Core.lambdaParameter = (Core.Name "record"),
                                 Core.lambdaDomain = Nothing,
                                 Core.lambdaBody = (Core.TermLet (Core.Let {
@@ -127,91 +145,10 @@ module_ =
                       Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
                     Core.applicationArgument = (Core.TermVariable (Core.Name "raw"))}))}))}))})),
             Core.annotatedTermAnnotation = (M.fromList [
-              (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Decoder for hydra.tabular.ColumnType")))])})),
-          Packaging.termDefinitionSignature = (Just (Typing.TermSignature {
-            Typing.termSignatureTypeParameters = [],
-            Typing.termSignatureParameters = [
-              Typing.Parameter {
-                Typing.parameterName = (Core.Name "arg0"),
-                Typing.parameterDescription = Nothing,
-                Typing.parameterType = (Core.TypeVariable (Core.Name "hydra.graph.Graph")),
-                Typing.parameterIsLazy = False},
-              Typing.Parameter {
-                Typing.parameterName = (Core.Name "arg1"),
-                Typing.parameterDescription = Nothing,
-                Typing.parameterType = (Core.TypeVariable (Core.Name "hydra.core.Term")),
-                Typing.parameterIsLazy = False}],
-            Typing.termSignatureResult = Typing.Result {
-              Typing.resultDescription = Nothing,
-              Typing.resultType = (Core.TypeEither (Core.EitherType {
-                Core.eitherTypeLeft = (Core.TypeVariable (Core.Name "hydra.errors.DecodingError")),
-                Core.eitherTypeRight = (Core.TypeVariable (Core.Name "hydra.tabular.ColumnType"))}))}}))}),
+              (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Decoder for hydra.tabular.ColumnType")))])}))}),
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.decode.tabular.dataRow"),
           Packaging.termDefinitionMetadata = Nothing,
-          Packaging.termDefinitionTerm = (Core.TermAnnotated (Core.AnnotatedTerm {
-            Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
-              Core.lambdaParameter = (Core.Name "v"),
-              Core.lambdaDomain = Nothing,
-              Core.lambdaBody = (Core.TermLambda (Core.Lambda {
-                Core.lambdaParameter = (Core.Name "cx"),
-                Core.lambdaDomain = Nothing,
-                Core.lambdaBody = (Core.TermLambda (Core.Lambda {
-                  Core.lambdaParameter = (Core.Name "raw"),
-                  Core.lambdaDomain = Nothing,
-                  Core.lambdaBody = (Core.TermApplication (Core.Application {
-                    Core.applicationFunction = (Core.TermApplication (Core.Application {
-                      Core.applicationFunction = (Core.TermApplication (Core.Application {
-                        Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.eithers.either")),
-                        Core.applicationArgument = (Core.TermLambda (Core.Lambda {
-                          Core.lambdaParameter = (Core.Name "err"),
-                          Core.lambdaDomain = Nothing,
-                          Core.lambdaBody = (Core.TermEither (Left (Core.TermVariable (Core.Name "err"))))}))})),
-                      Core.applicationArgument = (Core.TermLambda (Core.Lambda {
-                        Core.lambdaParameter = (Core.Name "stripped"),
-                        Core.lambdaDomain = Nothing,
-                        Core.lambdaBody = (Core.TermApplication (Core.Application {
-                          Core.applicationFunction = (Core.TermCases (Core.CaseStatement {
-                            Core.caseStatementTypeName = (Core.Name "hydra.core.Term"),
-                            Core.caseStatementDefault = (Just (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
-                              Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
-                              Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected wrapped type"))}))))),
-                            Core.caseStatementCases = [
-                              Core.Field {
-                                Core.fieldName = (Core.Name "wrap"),
-                                Core.fieldTerm = (Core.TermLambda (Core.Lambda {
-                                  Core.lambdaParameter = (Core.Name "wrappedTerm"),
-                                  Core.lambdaDomain = Nothing,
-                                  Core.lambdaBody = (Core.TermApplication (Core.Application {
-                                    Core.applicationFunction = (Core.TermApplication (Core.Application {
-                                      Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.eithers.map")),
-                                      Core.applicationArgument = (Core.TermLambda (Core.Lambda {
-                                        Core.lambdaParameter = (Core.Name "b"),
-                                        Core.lambdaDomain = Nothing,
-                                        Core.lambdaBody = (Core.TermWrap (Core.WrappedTerm {
-                                          Core.wrappedTermTypeName = (Core.Name "hydra.tabular.DataRow"),
-                                          Core.wrappedTermBody = (Core.TermVariable (Core.Name "b"))}))}))})),
-                                    Core.applicationArgument = (Core.TermApplication (Core.Application {
-                                      Core.applicationFunction = (Core.TermApplication (Core.Application {
-                                        Core.applicationFunction = (Core.TermApplication (Core.Application {
-                                          Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.core.decodeList")),
-                                          Core.applicationArgument = (Core.TermApplication (Core.Application {
-                                            Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.core.decodeMaybe")),
-                                            Core.applicationArgument = (Core.TermVariable (Core.Name "v"))}))})),
-                                        Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
-                                      Core.applicationArgument = (Core.TermApplication (Core.Application {
-                                        Core.applicationFunction = (Core.TermProject (Core.Projection {
-                                          Core.projectionTypeName = (Core.Name "hydra.core.WrappedTerm"),
-                                          Core.projectionFieldName = (Core.Name "body")})),
-                                        Core.applicationArgument = (Core.TermVariable (Core.Name "wrappedTerm"))}))}))}))}))}]})),
-                          Core.applicationArgument = (Core.TermVariable (Core.Name "stripped"))}))}))})),
-                    Core.applicationArgument = (Core.TermApplication (Core.Application {
-                      Core.applicationFunction = (Core.TermApplication (Core.Application {
-                        Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.core.stripWithDecodingError")),
-                        Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
-                      Core.applicationArgument = (Core.TermVariable (Core.Name "raw"))}))}))}))}))})),
-            Core.annotatedTermAnnotation = (M.fromList [
-              (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Decoder for hydra.tabular.DataRow")))])})),
           Packaging.termDefinitionSignature = (Just (Typing.TermSignature {
             Typing.termSignatureTypeParameters = [
               Typing.TypeParameter {
@@ -245,11 +182,92 @@ module_ =
                 Core.eitherTypeLeft = (Core.TypeVariable (Core.Name "hydra.errors.DecodingError")),
                 Core.eitherTypeRight = (Core.TypeApplication (Core.ApplicationType {
                   Core.applicationTypeFunction = (Core.TypeVariable (Core.Name "hydra.tabular.DataRow")),
-                  Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "v"))}))}))}}))})),
+                  Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "v"))}))}))}})),
+          Packaging.termDefinitionBody = (Core.TermAnnotated (Core.AnnotatedTerm {
+            Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
+              Core.lambdaParameter = (Core.Name "v"),
+              Core.lambdaDomain = Nothing,
+              Core.lambdaBody = (Core.TermLambda (Core.Lambda {
+                Core.lambdaParameter = (Core.Name "cx"),
+                Core.lambdaDomain = Nothing,
+                Core.lambdaBody = (Core.TermLambda (Core.Lambda {
+                  Core.lambdaParameter = (Core.Name "raw"),
+                  Core.lambdaDomain = Nothing,
+                  Core.lambdaBody = (Core.TermApplication (Core.Application {
+                    Core.applicationFunction = (Core.TermApplication (Core.Application {
+                      Core.applicationFunction = (Core.TermApplication (Core.Application {
+                        Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.eithers.either")),
+                        Core.applicationArgument = (Core.TermLambda (Core.Lambda {
+                          Core.lambdaParameter = (Core.Name "err"),
+                          Core.lambdaDomain = Nothing,
+                          Core.lambdaBody = (Core.TermEither (Left (Core.TermVariable (Core.Name "err"))))}))})),
+                      Core.applicationArgument = (Core.TermLambda (Core.Lambda {
+                        Core.lambdaParameter = (Core.Name "stripped"),
+                        Core.lambdaDomain = Nothing,
+                        Core.lambdaBody = (Core.TermApplication (Core.Application {
+                          Core.applicationFunction = (Core.TermCases (Core.CaseStatement {
+                            Core.caseStatementTypeName = (Core.Name "hydra.core.Term"),
+                            Core.caseStatementDefault = (Just (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
+                              Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
+                              Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected wrapped type"))}))))),
+                            Core.caseStatementCases = [
+                              Core.CaseAlternative {
+                                Core.caseAlternativeName = (Core.Name "wrap"),
+                                Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
+                                  Core.lambdaParameter = (Core.Name "wrappedTerm"),
+                                  Core.lambdaDomain = Nothing,
+                                  Core.lambdaBody = (Core.TermApplication (Core.Application {
+                                    Core.applicationFunction = (Core.TermApplication (Core.Application {
+                                      Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.eithers.map")),
+                                      Core.applicationArgument = (Core.TermLambda (Core.Lambda {
+                                        Core.lambdaParameter = (Core.Name "b"),
+                                        Core.lambdaDomain = Nothing,
+                                        Core.lambdaBody = (Core.TermWrap (Core.WrappedTerm {
+                                          Core.wrappedTermTypeName = (Core.Name "hydra.tabular.DataRow"),
+                                          Core.wrappedTermBody = (Core.TermVariable (Core.Name "b"))}))}))})),
+                                    Core.applicationArgument = (Core.TermApplication (Core.Application {
+                                      Core.applicationFunction = (Core.TermApplication (Core.Application {
+                                        Core.applicationFunction = (Core.TermApplication (Core.Application {
+                                          Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.core.decodeList")),
+                                          Core.applicationArgument = (Core.TermApplication (Core.Application {
+                                            Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.core.decodeMaybe")),
+                                            Core.applicationArgument = (Core.TermVariable (Core.Name "v"))}))})),
+                                        Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
+                                      Core.applicationArgument = (Core.TermApplication (Core.Application {
+                                        Core.applicationFunction = (Core.TermProject (Core.Projection {
+                                          Core.projectionTypeName = (Core.Name "hydra.core.WrappedTerm"),
+                                          Core.projectionFieldName = (Core.Name "body")})),
+                                        Core.applicationArgument = (Core.TermVariable (Core.Name "wrappedTerm"))}))}))}))}))}]})),
+                          Core.applicationArgument = (Core.TermVariable (Core.Name "stripped"))}))}))})),
+                    Core.applicationArgument = (Core.TermApplication (Core.Application {
+                      Core.applicationFunction = (Core.TermApplication (Core.Application {
+                        Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.core.stripWithDecodingError")),
+                        Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
+                      Core.applicationArgument = (Core.TermVariable (Core.Name "raw"))}))}))}))}))})),
+            Core.annotatedTermAnnotation = (M.fromList [
+              (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Decoder for hydra.tabular.DataRow")))])}))})),
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.decode.tabular.headerRow"),
           Packaging.termDefinitionMetadata = Nothing,
-          Packaging.termDefinitionTerm = (Core.TermAnnotated (Core.AnnotatedTerm {
+          Packaging.termDefinitionSignature = (Just (Typing.TermSignature {
+            Typing.termSignatureTypeParameters = [],
+            Typing.termSignatureParameters = [
+              Typing.Parameter {
+                Typing.parameterName = (Core.Name "arg0"),
+                Typing.parameterDescription = Nothing,
+                Typing.parameterType = (Core.TypeVariable (Core.Name "hydra.graph.Graph")),
+                Typing.parameterIsLazy = False},
+              Typing.Parameter {
+                Typing.parameterName = (Core.Name "arg1"),
+                Typing.parameterDescription = Nothing,
+                Typing.parameterType = (Core.TypeVariable (Core.Name "hydra.core.Term")),
+                Typing.parameterIsLazy = False}],
+            Typing.termSignatureResult = Typing.Result {
+              Typing.resultDescription = Nothing,
+              Typing.resultType = (Core.TypeEither (Core.EitherType {
+                Core.eitherTypeLeft = (Core.TypeVariable (Core.Name "hydra.errors.DecodingError")),
+                Core.eitherTypeRight = (Core.TypeVariable (Core.Name "hydra.tabular.HeaderRow"))}))}})),
+          Packaging.termDefinitionBody = (Core.TermAnnotated (Core.AnnotatedTerm {
             Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
               Core.lambdaParameter = (Core.Name "cx"),
               Core.lambdaDomain = Nothing,
@@ -274,9 +292,9 @@ module_ =
                             Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
                             Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected wrapped type"))}))))),
                           Core.caseStatementCases = [
-                            Core.Field {
-                              Core.fieldName = (Core.Name "wrap"),
-                              Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                            Core.CaseAlternative {
+                              Core.caseAlternativeName = (Core.Name "wrap"),
+                              Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                                 Core.lambdaParameter = (Core.Name "wrappedTerm"),
                                 Core.lambdaDomain = Nothing,
                                 Core.lambdaBody = (Core.TermApplication (Core.Application {
@@ -316,9 +334,9 @@ module_ =
                                                         Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
                                                         Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected literal"))}))))),
                                                       Core.caseStatementCases = [
-                                                        Core.Field {
-                                                          Core.fieldName = (Core.Name "literal"),
-                                                          Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                                                        Core.CaseAlternative {
+                                                          Core.caseAlternativeName = (Core.Name "literal"),
+                                                          Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                                                             Core.lambdaParameter = (Core.Name "v"),
                                                             Core.lambdaDomain = Nothing,
                                                             Core.lambdaBody = (Core.TermApplication (Core.Application {
@@ -328,9 +346,9 @@ module_ =
                                                                   Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
                                                                   Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected string literal"))}))))),
                                                                 Core.caseStatementCases = [
-                                                                  Core.Field {
-                                                                    Core.fieldName = (Core.Name "string"),
-                                                                    Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                                                                  Core.CaseAlternative {
+                                                                    Core.caseAlternativeName = (Core.Name "string"),
+                                                                    Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                                                                       Core.lambdaParameter = (Core.Name "s"),
                                                                       Core.lambdaDomain = Nothing,
                                                                       Core.lambdaBody = (Core.TermEither (Right (Core.TermVariable (Core.Name "s"))))}))}]})),
@@ -354,17 +372,34 @@ module_ =
                       Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
                     Core.applicationArgument = (Core.TermVariable (Core.Name "raw"))}))}))}))})),
             Core.annotatedTermAnnotation = (M.fromList [
-              (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Decoder for hydra.tabular.HeaderRow")))])})),
+              (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Decoder for hydra.tabular.HeaderRow")))])}))})),
+        (Packaging.DefinitionTerm (Packaging.TermDefinition {
+          Packaging.termDefinitionName = (Core.Name "hydra.decode.tabular.table"),
+          Packaging.termDefinitionMetadata = Nothing,
           Packaging.termDefinitionSignature = (Just (Typing.TermSignature {
-            Typing.termSignatureTypeParameters = [],
+            Typing.termSignatureTypeParameters = [
+              Typing.TypeParameter {
+                Typing.typeParameterName = (Core.Name "v"),
+                Typing.typeParameterConstraints = []}],
             Typing.termSignatureParameters = [
               Typing.Parameter {
                 Typing.parameterName = (Core.Name "arg0"),
                 Typing.parameterDescription = Nothing,
-                Typing.parameterType = (Core.TypeVariable (Core.Name "hydra.graph.Graph")),
+                Typing.parameterType = (Core.TypeFunction (Core.FunctionType {
+                  Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.graph.Graph")),
+                  Core.functionTypeCodomain = (Core.TypeFunction (Core.FunctionType {
+                    Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.core.Term")),
+                    Core.functionTypeCodomain = (Core.TypeEither (Core.EitherType {
+                      Core.eitherTypeLeft = (Core.TypeVariable (Core.Name "hydra.errors.DecodingError")),
+                      Core.eitherTypeRight = (Core.TypeVariable (Core.Name "v"))}))}))})),
                 Typing.parameterIsLazy = False},
               Typing.Parameter {
                 Typing.parameterName = (Core.Name "arg1"),
+                Typing.parameterDescription = Nothing,
+                Typing.parameterType = (Core.TypeVariable (Core.Name "hydra.graph.Graph")),
+                Typing.parameterIsLazy = False},
+              Typing.Parameter {
+                Typing.parameterName = (Core.Name "arg2"),
                 Typing.parameterDescription = Nothing,
                 Typing.parameterType = (Core.TypeVariable (Core.Name "hydra.core.Term")),
                 Typing.parameterIsLazy = False}],
@@ -372,11 +407,10 @@ module_ =
               Typing.resultDescription = Nothing,
               Typing.resultType = (Core.TypeEither (Core.EitherType {
                 Core.eitherTypeLeft = (Core.TypeVariable (Core.Name "hydra.errors.DecodingError")),
-                Core.eitherTypeRight = (Core.TypeVariable (Core.Name "hydra.tabular.HeaderRow"))}))}}))})),
-        (Packaging.DefinitionTerm (Packaging.TermDefinition {
-          Packaging.termDefinitionName = (Core.Name "hydra.decode.tabular.table"),
-          Packaging.termDefinitionMetadata = Nothing,
-          Packaging.termDefinitionTerm = (Core.TermAnnotated (Core.AnnotatedTerm {
+                Core.eitherTypeRight = (Core.TypeApplication (Core.ApplicationType {
+                  Core.applicationTypeFunction = (Core.TypeVariable (Core.Name "hydra.tabular.Table")),
+                  Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "v"))}))}))}})),
+          Packaging.termDefinitionBody = (Core.TermAnnotated (Core.AnnotatedTerm {
             Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
               Core.lambdaParameter = (Core.Name "v"),
               Core.lambdaDomain = Nothing,
@@ -402,11 +436,11 @@ module_ =
                             Core.caseStatementTypeName = (Core.Name "hydra.core.Term"),
                             Core.caseStatementDefault = (Just (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
                               Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
-                              Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected record"))}))))),
+                              Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected a record of type hydra.tabular.Table"))}))))),
                             Core.caseStatementCases = [
-                              Core.Field {
-                                Core.fieldName = (Core.Name "record"),
-                                Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                              Core.CaseAlternative {
+                                Core.caseAlternativeName = (Core.Name "record"),
+                                Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                                   Core.lambdaParameter = (Core.Name "record"),
                                   Core.lambdaDomain = Nothing,
                                   Core.lambdaBody = (Core.TermLet (Core.Let {
@@ -469,31 +503,20 @@ module_ =
                         Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
                       Core.applicationArgument = (Core.TermVariable (Core.Name "raw"))}))}))}))}))})),
             Core.annotatedTermAnnotation = (M.fromList [
-              (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Decoder for hydra.tabular.Table")))])})),
+              (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Decoder for hydra.tabular.Table")))])}))})),
+        (Packaging.DefinitionTerm (Packaging.TermDefinition {
+          Packaging.termDefinitionName = (Core.Name "hydra.decode.tabular.tableType"),
+          Packaging.termDefinitionMetadata = Nothing,
           Packaging.termDefinitionSignature = (Just (Typing.TermSignature {
-            Typing.termSignatureTypeParameters = [
-              Typing.TypeParameter {
-                Typing.typeParameterName = (Core.Name "v"),
-                Typing.typeParameterConstraints = []}],
+            Typing.termSignatureTypeParameters = [],
             Typing.termSignatureParameters = [
               Typing.Parameter {
                 Typing.parameterName = (Core.Name "arg0"),
                 Typing.parameterDescription = Nothing,
-                Typing.parameterType = (Core.TypeFunction (Core.FunctionType {
-                  Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.graph.Graph")),
-                  Core.functionTypeCodomain = (Core.TypeFunction (Core.FunctionType {
-                    Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.core.Term")),
-                    Core.functionTypeCodomain = (Core.TypeEither (Core.EitherType {
-                      Core.eitherTypeLeft = (Core.TypeVariable (Core.Name "hydra.errors.DecodingError")),
-                      Core.eitherTypeRight = (Core.TypeVariable (Core.Name "v"))}))}))})),
-                Typing.parameterIsLazy = False},
-              Typing.Parameter {
-                Typing.parameterName = (Core.Name "arg1"),
-                Typing.parameterDescription = Nothing,
                 Typing.parameterType = (Core.TypeVariable (Core.Name "hydra.graph.Graph")),
                 Typing.parameterIsLazy = False},
               Typing.Parameter {
-                Typing.parameterName = (Core.Name "arg2"),
+                Typing.parameterName = (Core.Name "arg1"),
                 Typing.parameterDescription = Nothing,
                 Typing.parameterType = (Core.TypeVariable (Core.Name "hydra.core.Term")),
                 Typing.parameterIsLazy = False}],
@@ -501,13 +524,8 @@ module_ =
               Typing.resultDescription = Nothing,
               Typing.resultType = (Core.TypeEither (Core.EitherType {
                 Core.eitherTypeLeft = (Core.TypeVariable (Core.Name "hydra.errors.DecodingError")),
-                Core.eitherTypeRight = (Core.TypeApplication (Core.ApplicationType {
-                  Core.applicationTypeFunction = (Core.TypeVariable (Core.Name "hydra.tabular.Table")),
-                  Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "v"))}))}))}}))})),
-        (Packaging.DefinitionTerm (Packaging.TermDefinition {
-          Packaging.termDefinitionName = (Core.Name "hydra.decode.tabular.tableType"),
-          Packaging.termDefinitionMetadata = Nothing,
-          Packaging.termDefinitionTerm = (Core.TermAnnotated (Core.AnnotatedTerm {
+                Core.eitherTypeRight = (Core.TypeVariable (Core.Name "hydra.tabular.TableType"))}))}})),
+          Packaging.termDefinitionBody = (Core.TermAnnotated (Core.AnnotatedTerm {
             Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
               Core.lambdaParameter = (Core.Name "cx"),
               Core.lambdaDomain = Nothing,
@@ -530,11 +548,11 @@ module_ =
                           Core.caseStatementTypeName = (Core.Name "hydra.core.Term"),
                           Core.caseStatementDefault = (Just (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
                             Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
-                            Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected record"))}))))),
+                            Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected a record of type hydra.tabular.TableType"))}))))),
                           Core.caseStatementCases = [
-                            Core.Field {
-                              Core.fieldName = (Core.Name "record"),
-                              Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                            Core.CaseAlternative {
+                              Core.caseAlternativeName = (Core.Name "record"),
+                              Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                                 Core.lambdaParameter = (Core.Name "record"),
                                 Core.lambdaDomain = Nothing,
                                 Core.lambdaBody = (Core.TermLet (Core.Let {
@@ -593,22 +611,4 @@ module_ =
                       Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
                     Core.applicationArgument = (Core.TermVariable (Core.Name "raw"))}))}))}))})),
             Core.annotatedTermAnnotation = (M.fromList [
-              (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Decoder for hydra.tabular.TableType")))])})),
-          Packaging.termDefinitionSignature = (Just (Typing.TermSignature {
-            Typing.termSignatureTypeParameters = [],
-            Typing.termSignatureParameters = [
-              Typing.Parameter {
-                Typing.parameterName = (Core.Name "arg0"),
-                Typing.parameterDescription = Nothing,
-                Typing.parameterType = (Core.TypeVariable (Core.Name "hydra.graph.Graph")),
-                Typing.parameterIsLazy = False},
-              Typing.Parameter {
-                Typing.parameterName = (Core.Name "arg1"),
-                Typing.parameterDescription = Nothing,
-                Typing.parameterType = (Core.TypeVariable (Core.Name "hydra.core.Term")),
-                Typing.parameterIsLazy = False}],
-            Typing.termSignatureResult = Typing.Result {
-              Typing.resultDescription = Nothing,
-              Typing.resultType = (Core.TypeEither (Core.EitherType {
-                Core.eitherTypeLeft = (Core.TypeVariable (Core.Name "hydra.errors.DecodingError")),
-                Core.eitherTypeRight = (Core.TypeVariable (Core.Name "hydra.tabular.TableType"))}))}}))}))]}
+              (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Decoder for hydra.tabular.TableType")))])}))}))]}
