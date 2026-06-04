@@ -36,8 +36,8 @@ file.
 | Language | Registration file |
 |----------|-------------------|
 | Haskell | `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Libraries.hs` |
-| Java | `heads/java/src/main/java/hydra/lib/Libraries.java` |
-| Python | `heads/python/src/main/python/hydra/sources/libraries.py` |
+| Java | `overlay/java/hydra-kernel/src/main/java/hydra/lib/Libraries.java` (relocated by #418) |
+| Python | `overlay/python/hydra-kernel/src/main/python/hydra/sources/libraries.py` (relocated by #418) |
 | Scala | `heads/scala/src/main/scala/hydra/lib/Libraries.scala` |
 | Lisp (Clojure) | `heads/lisp/clojure/src/main/clojure/hydra/lib/libraries.clj` |
 
@@ -77,7 +77,7 @@ When a primitive test fails in Java, the call chain is:
 **If step 4 fails**: check the `implementation()` method of the primitive class.
 The `implementation()` method must construct a term-level result, not execute native code.
 A stub that throws `UnsupportedOperationException` will cause runtime failures.
-See `heads/java/src/main/java/hydra/lib/lists/Map.java` for a higher-order example
+See `overlay/java/hydra-kernel/src/main/java/hydra/lib/lists/Map.java` for a higher-order example
 using `hydra.dsl.Terms` helpers (`lambda`, `app`, `variable`, etc.).
 
 ### Higher-order primitives (`prim2Eval`)
@@ -95,11 +95,11 @@ generated into `dist/java/hydra-kernel/src/main/java/hydra/eval/lib/`.
 
 | Purpose | Path |
 |---------|------|
-| Primitive registration | `heads/java/src/main/java/hydra/lib/Libraries.java` |
-| Primitive classes | `heads/java/src/main/java/hydra/lib/<library>/` |
+| Primitive registration | `overlay/java/hydra-kernel/src/main/java/hydra/lib/Libraries.java` (#418) |
+| Primitive classes | `overlay/java/hydra-kernel/src/main/java/hydra/lib/<library>/` (#418) |
 | Generated eval elements | `dist/java/hydra-kernel/src/main/java/hydra/eval/lib/` |
-| DSL term builders | `heads/java/src/main/java/hydra/dsl/Terms.java` |
-| Either utilities | `heads/java/src/main/java/hydra/util/Either.java` |
+| DSL term builders | `overlay/java/hydra-kernel/src/main/java/hydra/dsl/Terms.java` (#418) |
+| Either utilities | `overlay/java/hydra-kernel/src/main/java/hydra/util/Either.java` (#418) |
 | Test runner | `heads/java/src/test/java/hydra/TestSuiteRunner.java` |
 | Reducer | `dist/java/hydra-kernel/src/main/java/hydra/reduction/Reduction.java` |
 
