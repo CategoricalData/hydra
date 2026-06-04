@@ -231,7 +231,10 @@ const convertTypeScheme = (ts: unknown): unknown => {
         const classNames = Array.isArray(classesArr)
           ? classesArr.map((c) => (typeof c === "string" ? { value: c } as Name : (c as Name)))
           : [];
-        pairs.push([k, { classes: libSets.fromList(classNames) }] as const);
+        // TypeVariableConstraints.classes is List<TypeClassConstraintSimple>
+        // (kernel Hydra.Sources.Kernel.Types.Core.typeVariableConstraints).
+        // Each entry is the injected `simple` variant carrying a Name.
+        pairs.push([k, { classes: classNames.map((n) => ({ tag: "simple", value: n })) }] as const);
       }
     }
     out.constraints = { tag: "just", value: libMaps.fromList(pairs) };
@@ -242,8 +245,11 @@ const convertTypeScheme = (ts: unknown): unknown => {
 };
 
 // Read a kernel JSON file and return both term and type bindings.
-// Each module definition is either `{type: {name, typeScheme}}` (a type
-// definition) or `{term: {name, term, typeScheme?}}` (a term binding).
+// Each module definition is either `{type: {name, body: TypeScheme}}`
+// (a type definition; field name `body` per kernel TypeDefinition record)
+// or `{term: {name, body: Term, signature?}}` (a term binding; field name
+// `body` per kernel TermDefinition record). See
+// Hydra.Sources.Kernel.Types.Packaging.{termDefinition,typeDefinition}.
 interface ModuleParts {
   readonly terms: ReadonlyArray<readonly [Name, Term]>;
   readonly types: ReadonlyArray<readonly [Name, TypeScheme]>;
@@ -255,25 +261,25 @@ const loadFile = (kernelJsonDir: string, ns: string): ModuleParts => {
   try { raw = readFileSync(filePath, "utf-8"); }
   catch { return { terms: [], types: [] }; }
   const parsed = JSON.parse(raw) as { definitions?: Array<{
-    term?: { name?: string; term?: unknown; typeScheme?: unknown };
-    type?: { name?: string; typeScheme?: unknown };
+    term?: { name?: string; body?: unknown };
+    type?: { name?: string; body?: unknown };
   }> };
   const terms: Array<readonly [Name, Term]> = [];
   const types: Array<readonly [Name, TypeScheme]> = [];
   for (const def of parsed.definitions ?? []) {
     if (def.term) {
       const inner = def.term;
-      if (!inner.name || inner.term === undefined) continue;
+      if (!inner.name || inner.body === undefined) continue;
       const name: Name = { value: inner.name } as Name;
       // Convert first, then strip type-level wrappers — the evaluator
       // works at the simply-typed level and chokes on typeApp heads.
-      const term = stripTypeAbstractions(convert(inner.term)) as Term;
+      const term = stripTypeAbstractions(convert(inner.body)) as Term;
       terms.push([name, term] as const);
     } else if (def.type) {
       const inner = def.type;
-      if (!inner.name || inner.typeScheme === undefined) continue;
+      if (!inner.name || inner.body === undefined) continue;
       const name: Name = { value: inner.name } as Name;
-      const scheme = convertTypeScheme(inner.typeScheme) as TypeScheme;
+      const scheme = convertTypeScheme(inner.body) as TypeScheme;
       types.push([name, scheme] as const);
     }
   }
