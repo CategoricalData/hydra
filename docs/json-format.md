@@ -98,6 +98,14 @@ Examples:
 - `Type.list (variable "T")` → `{"list": {"variable": "T"}}`
 - `Term.unit` → `{"unit": {}}` (nullary variants take an empty object payload; see [Empty objects](#empty-objects))
 
+The single-key shape is structurally dual to the record encoding for the
+opposite reason that records are objects: a record is a conjunction (it has
+*all* of its fields, which maps to a JSON object containing all its
+attributes), and an injection is a disjunction (it has *exactly one* of its
+fields, which maps to a JSON object containing one attribute). The variant
+key *is* the discriminator; there is no separate `"tag"` / `"value"`
+indirection to maintain.
+
 ## Records
 
 A *record type* (`Type.record`) encodes as a JSON **array** of `{"name": ..., "type": ...}`
@@ -142,6 +150,14 @@ record terms are runtime data and need a canonical order for byte-stable output.
 `null` only ever encodes a `Maybe.Nothing`. It is never used as a generic sentinel,
 never used to mean "missing value" in any other context, and never appears for a non-`Maybe` type.
 
+Each rule exists to eliminate an ambiguity the previous one would create if
+extended naively. Rule 1 works because no Hydra value other than `Maybe.Nothing`
+encodes to bare `null`. Rule 2 needs the array wrapper because without it the
+outer `Nothing` and the inner `Nothing` would both be bare `null` and a
+consumer couldn't tell them apart. Rule 3 omits the field in records because
+the absent key is unambiguous (record-term keys are never bound to `null`
+elsewhere), and the omission is more compact than encoding `null`.
+
 ## Empty values
 
 - `Type.unit`, and any nullary variant payload, encodes as `{}`.
@@ -169,6 +185,9 @@ reference Haskell encoder; equivalent total order for other encoders).
 {"first": <encoded a>, "second": <encoded b>}
 ```
 
+At the JSON layer, the encoding follows the [record rule](#records), using
+the special field names `first` and `second`.
+
 ## Eithers
 
 `Type.either` and `Term.either` encode as a single-key JSON object:
@@ -180,6 +199,9 @@ reference Haskell encoder; equivalent total order for other encoders).
 
 Decoders treat presence of `left` and absence of `right` (or vice versa) as the discriminator.
 A well-formed `Either` value never carries both keys.
+
+At the JSON layer, the encoding follows the [tagged-union rule](#tagged-unions),
+with `left` and `right` as the variant names.
 
 ## Wrapped types
 
@@ -234,6 +256,24 @@ older fixtures continue to load.
 Integer and float literals are themselves tagged with their precision class
 (`int8`/`int16`/`int32`/`int64`/`uint8`/.../`bigint` and `float32`/`float64`).
 
+### Integer formatting
+
+`Literal.integer` values encode according to whether the precision class can
+exceed JavaScript's `Number.MAX_SAFE_INTEGER` (`2^53 - 1`):
+
+- **As JSON numbers:** `int8`, `int16`, `int32`, `uint8`, `uint16`, `uint32`.
+  Every value of these types fits safely in a JS `Number`.
+- **As JSON strings:** `int64`, `uint64`, `bigint`.
+  Values of these types can exceed `2^53 - 1` and would lose precision if
+  read by a JavaScript consumer via `JSON.parse`. Strings preserve precision
+  on the wire.
+
+The threshold is the IEEE 754 double's integer-precision boundary, not the
+64-bit signed range. Typed-language consumers (Haskell, Java, Python, etc.)
+have arbitrary-precision integer types and don't need the string protection,
+but JavaScript's `Number` is the only integer type its `JSON.parse` produces,
+and the format protects against silent corruption on the JS side.
+
 ### Float formatting
 
 `Literal.float` values — including both `float32` and `float64` precisions — encode symmetrically:
@@ -245,6 +285,19 @@ Integer and float literals are themselves tagged with their precision class
   if the input is the float64 bit pattern `0.30000000000000004`, the encoder emits exactly that.
 - **Non-finite values and `-0.0`** encode as JSON strings — `"Infinity"`, `"-Infinity"`,
   `"NaN"`, `"-0.0"` — because JSON's number grammar cannot represent these.
+
+The four sentinels are the complete set of IEEE 754 `float32` / `float64` values that
+JSON's number grammar can't represent: `+Infinity` and `-Infinity` (overflow),
+`NaN` (any NaN bit pattern collapses to a single sentinel), and `-0.0` (because
+JSON's `-0` parses as `0` in many parsers, losing the sign of zero). Any other
+finite float survives the number grammar.
+
+The sentinel form is a string rather than an object wrapper (e.g.
+`{"nan": null}`) to keep the wire shape uniform: a `float32` or `float64`
+literal always appears as a single JSON scalar (number or string), never
+sometimes a scalar and sometimes an object. A consumer that wants to recognize
+a float literal only has to look at one position in the AST, regardless of the
+value.
 
 Decoders accept both shapes for either precision.
 The schema disambiguates `float32` from `float64`, just as it disambiguates `int8` from `int64`;
