@@ -143,12 +143,14 @@ const scheme = (t: Type, vars: readonly string[] = []): TypeScheme =>
   ({ variables: vars.map((v) => ({ value: v } as never)), body: t, constraints: { tag: "nothing" } } as never);
 
 // Build a TypeScheme with class constraints. `cs` is a list of [typeVar, [className, ...]] pairs.
-// At runtime, constraints have type `Maybe<Map<Name, {classes: Set<Name>}>>`.
-// The map keys are wrapped Names; the values are records with a `classes` Set<Name>.
+// At runtime, constraints have type `Maybe<Map<Name, TypeVariableConstraints>>`. The map keys
+// are wrapped Names; each value is `{classes: TypeClassConstraint[]}` where each constraint
+// is the injected variant `{tag: "simple", value: Name}` (TypeClassConstraintSimple) — see
+// kernel Hydra.Sources.Kernel.Types.Core.typeClassConstraint and .typeVariableConstraints.
 const schemeC = (t: Type, vars: readonly string[], cs: readonly (readonly [string, readonly string[]])[]): TypeScheme => {
   const m = libMaps.fromList(cs.map(([v, classes]) => [
     { value: v } as never,
-    { classes: libSets.fromList(classes.map((c) => ({ value: c } as never))) } as never,
+    { classes: classes.map((c) => ({ tag: "simple", value: { value: c } } as never)) } as never,
   ]));
   return {
     variables: vars.map((v) => ({ value: v } as never)),
