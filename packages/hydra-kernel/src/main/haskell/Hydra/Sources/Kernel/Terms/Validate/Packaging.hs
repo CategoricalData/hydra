@@ -252,12 +252,12 @@ checkDefinitionDocumentation = define "checkDefinitionDocumentation" $
               "term" <~ Packaging.termDefinitionBody (var "td") $
               cases _Term (var "term") (Just false) [
                 _Term_annotated>>: "at" ~>
-                  Annotations.hasDescription @@ (Core.annotatedTermAnnotation $ var "at")],
+                  Annotations.hasDescription @@ (Annotations.getAnnotationMap @@ (Core.annotatedTermAnnotation $ var "at"))],
             _Definition_type>>: "td" ~>
               "typ" <~ (Core.typeSchemeBody $ Packaging.typeDefinitionBody (var "td")) $
               cases _Type (var "typ") (Just false) [
                 _Type_annotated>>: "at" ~>
-                  Annotations.hasDescription @@ (Core.annotatedTypeAnnotation $ var "at")],
+                  Annotations.hasDescription @@ (Annotations.getAnnotationMap @@ (Core.annotatedTypeAnnotation $ var "at"))],
             _Definition_primitive>>: "pd" ~>
               Maybes.maybe false
                 ("em" ~> Logic.not (Equality.equal
