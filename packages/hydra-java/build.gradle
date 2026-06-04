@@ -112,15 +112,11 @@ tasks.register('printHeadsExtrasRuntimeClasspath') {
     }
 }
 
-// hydra/scala/** is excluded because the Scala coder's generated Java doesn't
-// type-check standalone (it's only used through the Scala dist). The matching
-// dsl wrapper hydra/dsl/scala/Syntax.java references hydra.scala.syntax.* types
-// that the above exclude removes, so it has to be excluded for the same reason.
-// (hydra/lisp/Coder.java was previously excluded as a generator wart; that wart
-// was fixed but the exclude was left in place — re-included by #409 audit.)
+// hydra/scala/** and hydra/dsl/scala/** used to be excluded here because the
+// Scala-coder-in-Java generator had warts that produced source javac rejected.
+// The wart is fixed — both packages now compile cleanly — so the excludes were
+// removed (#421). This mirrors the earlier hydra/lisp/Coder.java cleanup (#409).
 compileJava {
-    exclude '**/hydra/scala/**'
-    exclude '**/hydra/dsl/scala/**'
     options.fork = true
     options.forkOptions.memoryMaximumSize = '6g'
 }
