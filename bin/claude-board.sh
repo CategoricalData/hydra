@@ -39,8 +39,21 @@ for s in "${SESSIONS[@]}"; do
     TYPE[$s]="-"
     AGE_S[$s]="-"
 
-    if [ -f "$marker" ]; then
-        # Type from "type:" line or JSON payload.
+    # Live pane check: is there a "Do you want to proceed?" prompt visible
+    # right now? That's a more reliable signal than the marker, which can
+    # be stale if Stop hasn't fired yet in a long autonomous turn.
+    pane="$(tmux capture-pane -t "$s:0" -p 2>/dev/null || true)"
+    if echo "$pane" | grep -qE 'Do you want to proceed\?'; then
+        STATE[$s]="blocked"
+        TYPE[$s]="permission_prompt"
+        # Use the marker's mtime if available for age; otherwise unknown.
+        if [ -f "$marker" ]; then
+            mt="$(stat -c %Y "$marker" 2>/dev/null || echo 0)"
+            now="$(date +%s)"
+            AGE_S[$s]=$((now - mt))
+        fi
+    elif [ -f "$marker" ]; then
+        # No live prompt visible; rely on marker file for last-known state.
         t="$(sed -n 's/^type:[[:space:]]*//p' "$marker" | head -1)"
         if [ -z "$t" ]; then
             t="$(grep -oE '"notification_type"[[:space:]]*:[[:space:]]*"[^"]+"' "$marker" | head -1 | sed -E 's/.*"([^"]+)"$/\1/')"
@@ -48,13 +61,12 @@ for s in "${SESSIONS[@]}"; do
         [ -z "$t" ] && t="unknown"
         TYPE[$s]="$t"
 
-        # Age from file mtime.
         mt="$(stat -c %Y "$marker" 2>/dev/null || echo 0)"
         now="$(date +%s)"
         AGE_S[$s]=$((now - mt))
 
         case "$t" in
-            permission_prompt) STATE[$s]="blocked" ;;
+            permission_prompt) STATE[$s]="working" ;;  # marker stale; pane says no live prompt
             idle_prompt)       STATE[$s]="idle" ;;
             *)                 STATE[$s]="attn" ;;
         esac
