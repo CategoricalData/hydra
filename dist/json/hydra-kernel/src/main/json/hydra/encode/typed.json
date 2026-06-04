@@ -2,17 +2,7 @@
   "definitions": [
     {
       "term": {
-        "name": "hydra.encode.typed.typedBinding",
-        "signature": {
-          "parameters": [
-            {"isLazy": false, "name": "arg0", "type": {"variable": "t0"}},
-            {
-              "isLazy": false,
-              "name": "arg1",
-              "type": {"application": {"argument": {"variable": "t1"}, "function": {"variable": "hydra.typed.TypedBinding"}}}}],
-          "result": {"type": {"variable": "hydra.core.Term"}},
-          "typeParameters": [{"constraints": [], "name": "t0"}, {"constraints": [], "name": "t1"}]},
-        "term": {
+        "body": {
           "typeLambda": {
             "body": {
               "typeLambda": {
@@ -80,20 +70,20 @@
                         "domain": {"variable": "t0"},
                         "parameter": "a"}}}},
                 "parameter": "t1"}},
-            "parameter": "t0"}}}},
-    {
-      "term": {
-        "name": "hydra.encode.typed.typedTerm",
+            "parameter": "t0"}},
+        "name": "hydra.encode.typed.typedBinding",
         "signature": {
           "parameters": [
             {"isLazy": false, "name": "arg0", "type": {"variable": "t0"}},
             {
               "isLazy": false,
               "name": "arg1",
-              "type": {"application": {"argument": {"variable": "t1"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+              "type": {"application": {"argument": {"variable": "t1"}, "function": {"variable": "hydra.typed.TypedBinding"}}}}],
           "result": {"type": {"variable": "hydra.core.Term"}},
-          "typeParameters": [{"constraints": [], "name": "t0"}, {"constraints": [], "name": "t1"}]},
-        "term": {
+          "typeParameters": [{"constraints": [], "name": "t0"}, {"constraints": [], "name": "t1"}]}}},
+    {
+      "term": {
+        "body": {
           "typeLambda": {
             "body": {
               "typeLambda": {
@@ -130,20 +120,20 @@
                         "domain": {"variable": "t0"},
                         "parameter": "a"}}}},
                 "parameter": "t1"}},
-            "parameter": "t0"}}}},
-    {
-      "term": {
-        "name": "hydra.encode.typed.typedTermDefinition",
+            "parameter": "t0"}},
+        "name": "hydra.encode.typed.typedTerm",
         "signature": {
           "parameters": [
             {"isLazy": false, "name": "arg0", "type": {"variable": "t0"}},
             {
               "isLazy": false,
               "name": "arg1",
-              "type": {"application": {"argument": {"variable": "t1"}, "function": {"variable": "hydra.typed.TypedTermDefinition"}}}}],
+              "type": {"application": {"argument": {"variable": "t1"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {"type": {"variable": "hydra.core.Term"}},
-          "typeParameters": [{"constraints": [], "name": "t0"}, {"constraints": [], "name": "t1"}]},
-        "term": {
+          "typeParameters": [{"constraints": [], "name": "t0"}, {"constraints": [], "name": "t1"}]}}},
+    {
+      "term": {
+        "body": {
           "typeLambda": {
             "body": {
               "typeLambda": {
@@ -211,7 +201,17 @@
                         "domain": {"variable": "t0"},
                         "parameter": "a"}}}},
                 "parameter": "t1"}},
-            "parameter": "t0"}}}}],
+            "parameter": "t0"}},
+        "name": "hydra.encode.typed.typedTermDefinition",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "t0"}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {"application": {"argument": {"variable": "t1"}, "function": {"variable": "hydra.typed.TypedTermDefinition"}}}}],
+          "result": {"type": {"variable": "hydra.core.Term"}},
+          "typeParameters": [{"constraints": [], "name": "t0"}, {"constraints": [], "name": "t1"}]}}}],
   "dependencies": [{"module": "hydra.encode.core"}, {"module": "hydra.typed"}],
   "metadata": {"comments": [], "description": "Term encoders for hydra.typed", "seeAlso": []},
   "name": "hydra.encode.typed"}

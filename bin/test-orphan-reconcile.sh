@@ -122,7 +122,7 @@ if run_digest_check fresh > "$WORK/fresh-orphan.log" 2>&1; then
     if grep -q "eval/lib/Lists.txt" "$OUTPUT_DIGEST"; then
         fail "refreshed digest still references the orphan"; ok=0
     fi
-    [ "$ok" = 1 ] && { echo "  PASS"; PASS=$((PASS + 1)); }
+    if [ "$ok" = 1 ]; then echo "  PASS"; PASS=$((PASS + 1)); fi
 else
     cat "$WORK/fresh-orphan.log"; fail "fresh-with-orphan should reconcile and exit 0"
 fi
@@ -141,4 +141,4 @@ fi
 
 echo ""
 echo "=== test-orphan-reconcile.sh: $PASS pass, $FAIL fail ==="
-[ "$FAIL" -gt 0 ] && exit 1 || exit 0
+if [ "$FAIL" -gt 0 ]; then exit 1; else exit 0; fi

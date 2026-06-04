@@ -2,75 +2,73 @@
   "definitions": [
     {
       "term": {
-        "name": "hydra.test.serialization.arrowOp",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.ast.Op"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "application": {
             "argument": {"inject": {"field": {"name": "right", "term": {"unit": {}}}, "typeName": "hydra.ast.Associativity"}},
             "function": {
               "application": {
                 "argument": {"application": {"argument": {"literal": {"integer": {"int32": 1}}}, "function": {"variable": "hydra.lib.math.negate"}}},
-                "function": {"application": {"argument": {"literal": {"string": "->"}}, "function": {"variable": "hydra.serialization.op"}}}}}}}}},
+                "function": {"application": {"argument": {"literal": {"string": "->"}}, "function": {"variable": "hydra.serialization.op"}}}}}}},
+        "name": "hydra.test.serialization.arrowOp",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.ast.Op"}}, "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.test.serialization.gtOp",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.ast.Op"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "application": {
             "argument": {"inject": {"field": {"name": "none", "term": {"unit": {}}}, "typeName": "hydra.ast.Associativity"}},
             "function": {
               "application": {
                 "argument": {"literal": {"integer": {"int32": 4}}},
-                "function": {"application": {"argument": {"literal": {"string": ">"}}, "function": {"variable": "hydra.serialization.op"}}}}}}}}},
+                "function": {"application": {"argument": {"literal": {"string": ">"}}, "function": {"variable": "hydra.serialization.op"}}}}}}},
+        "name": "hydra.test.serialization.gtOp",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.ast.Op"}}, "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.test.serialization.plusOp",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.ast.Op"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "application": {
             "argument": {"inject": {"field": {"name": "both", "term": {"unit": {}}}, "typeName": "hydra.ast.Associativity"}},
             "function": {
               "application": {
                 "argument": {"literal": {"integer": {"int32": 6}}},
-                "function": {"application": {"argument": {"literal": {"string": "+"}}, "function": {"variable": "hydra.serialization.op"}}}}}}}}},
+                "function": {"application": {"argument": {"literal": {"string": "+"}}, "function": {"variable": "hydra.serialization.op"}}}}}}},
+        "name": "hydra.test.serialization.plusOp",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.ast.Op"}}, "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.test.serialization.multOp",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.ast.Op"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "application": {
             "argument": {"inject": {"field": {"name": "both", "term": {"unit": {}}}, "typeName": "hydra.ast.Associativity"}},
             "function": {
               "application": {
                 "argument": {"literal": {"integer": {"int32": 7}}},
-                "function": {"application": {"argument": {"literal": {"string": "*"}}, "function": {"variable": "hydra.serialization.op"}}}}}}}}},
+                "function": {"application": {"argument": {"literal": {"string": "*"}}, "function": {"variable": "hydra.serialization.op"}}}}}}},
+        "name": "hydra.test.serialization.multOp",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.ast.Op"}}, "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.test.serialization.lambdaOp",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.ast.Op"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "application": {
             "argument": {"inject": {"field": {"name": "right", "term": {"unit": {}}}, "typeName": "hydra.ast.Associativity"}},
             "function": {
               "application": {
                 "argument": {"application": {"argument": {"literal": {"integer": {"int32": 1}}}, "function": {"variable": "hydra.lib.math.negate"}}},
-                "function": {"application": {"argument": {"literal": {"string": "->"}}, "function": {"variable": "hydra.serialization.op"}}}}}}}}},
+                "function": {"application": {"argument": {"literal": {"string": "->"}}, "function": {"variable": "hydra.serialization.op"}}}}}}},
+        "name": "hydra.test.serialization.lambdaOp",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.ast.Op"}}, "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.test.serialization.caseOp",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.ast.Op"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "application": {
             "argument": {"inject": {"field": {"name": "none", "term": {"unit": {}}}, "typeName": "hydra.ast.Associativity"}},
             "function": {
               "application": {
                 "argument": {"literal": {"integer": {"int32": 0}}},
-                "function": {"application": {"argument": {"literal": {"string": "->"}}, "function": {"variable": "hydra.serialization.op"}}}}}}}}},
+                "function": {"application": {"argument": {"literal": {"string": "->"}}, "function": {"variable": "hydra.serialization.op"}}}}}}},
+        "name": "hydra.test.serialization.caseOp",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.ast.Op"}}, "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.test.serialization.allTests",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Test cases for AST serialization"}}}],
             "body": {
@@ -954,7 +952,9 @@
                   {
                     "name": "cases",
                     "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}],
-                "typeName": "hydra.testing.TestGroup"}}}}}}],
+                "typeName": "hydra.testing.TestGroup"}}}},
+        "name": "hydra.test.serialization.allTests",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []}}}],
   "dependencies": [
     {"module": "hydra.serialization"},
     {"module": "hydra.paths"},

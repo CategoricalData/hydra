@@ -1044,7 +1044,7 @@ findTypeDependencies = def "findTypeDependencies" $
           (just (Packaging.unModuleName (var "ns")))))
       (Sets.toList (Lists.foldl
         (lambda "acc" $ lambda "d" $
-          Sets.union (var "acc") (Dependencies.typeDependencyNames @@ boolean True @@ (Core.typeSchemeBody $ Packaging.typeDefinitionTypeScheme (var "d"))))
+          Sets.union (var "acc") (Dependencies.typeDependencyNames @@ boolean True @@ (Core.typeSchemeBody $ Packaging.typeDefinitionBody (var "d"))))
         (Sets.empty)
         (var "defs")))
 
@@ -1075,7 +1075,7 @@ generateTypeFile :: TypedTermDefinition (ModuleName -> TypeDefinition -> Inferen
 generateTypeFile = def "generateTypeFile" $
   lambda "ns" $ lambda "def_" $ "cx" ~> lambda "g" $
     "name" <~ Packaging.typeDefinitionName (var "def_") $
-    "typ" <~ (Core.typeSchemeBody $ Packaging.typeDefinitionTypeScheme (var "def_")) $
+    "typ" <~ (Core.typeSchemeBody $ Packaging.typeDefinitionBody (var "def_")) $
     "decls" <<~ (encodeTypeDefinition @@ var "cx" @@ var "g" @@ var "name" @@ var "typ") $
     "includes" <~ (findIncludes @@ boolean True @@ var "ns" @@ list [var "def_"]) $
       right (serializeHeaderFile @@ var "name" @@ var "includes"

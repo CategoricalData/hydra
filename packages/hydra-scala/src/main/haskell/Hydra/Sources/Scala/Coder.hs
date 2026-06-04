@@ -169,12 +169,12 @@ emptyList :: TypedTerm [a]
 emptyList = TypedTerm $ TermList []
 
 
-encodeCase :: TypedTermDefinition (InferenceContext -> Graph -> M.Map Name Type -> Maybe Name -> Field -> Either Error Scala.Case)
+encodeCase :: TypedTermDefinition (InferenceContext -> Graph -> M.Map Name Type -> Maybe Name -> CaseAlternative -> Either Error Scala.Case)
 encodeCase = def "encodeCase" $
   doc "Encode a case branch" $
   lambda "cx" $ lambda "g" $ lambda "ftypes" $ lambda "sn" $ lambda "f" $ lets [
-    "fname">: project _Field _Field_name @@ var "f",
-    "fterm">: project _Field _Field_term @@ var "f",
+    "fname">: project _CaseAlternative _CaseAlternative_name @@ var "f",
+    "fterm">: project _CaseAlternative _CaseAlternative_handler @@ var "f",
     -- Determine if the field has unit type: check ftypes if available, otherwise check if term is a lambda
     "isUnit">: Maybes.maybe
       -- If ftypes doesn't have this field, check the term structure
@@ -796,7 +796,7 @@ encodeTermDefinition = def "encodeTermDefinition" $
   doc "Encode a term definition as a Scala statement" $
   lambda "cx" $ lambda "g" $ lambda "td" $ lets [
     "name">: project _TermDefinition _TermDefinition_name @@ var "td",
-    "term">: project _TermDefinition _TermDefinition_term @@ var "td",
+    "term">: project _TermDefinition _TermDefinition_body @@ var "td",
     "lname">: ScalaUtilsSource.scalaEscapeName @@ (Names.localNameOf @@ var "name"),
     "typ'">: Maybes.maybe
       (Core.typeVariable (wrap _Name (string "hydra.core.Unit")))
@@ -948,7 +948,7 @@ encodeTypeDefinition = def "encodeTypeDefinition" $
   doc "Encode a type definition as a Scala statement" $
   lambda "cx" $ lambda "g" $ lambda "td" $ lets [
     "name">: project _TypeDefinition _TypeDefinition_name @@ var "td",
-    "typ">: Core.typeSchemeBody $ project _TypeDefinition _TypeDefinition_typeScheme @@ var "td",
+    "typ">: Core.typeSchemeBody $ project _TypeDefinition _TypeDefinition_body @@ var "td",
     "lname">: Names.localNameOf @@ var "name",
     "tname">: record _NameType [_NameType_value>>: var "lname"],
     "dname">: record _NameData [_NameData_value>>: wrap _PredefString (var "lname")],

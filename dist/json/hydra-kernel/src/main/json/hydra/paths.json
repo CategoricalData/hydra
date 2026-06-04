@@ -2,8 +2,7 @@
   "definitions": [
     {
       "type": {
-        "name": "hydra.paths.SubtermEdge",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [
@@ -28,11 +27,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The target node of the edge"}}}],
                         "body": {"variable": "hydra.paths.SubtermNode"}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.paths.SubtermEdge"}},
     {
       "type": {
-        "name": "hydra.paths.SubtermGraph",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [
@@ -53,11 +52,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "All edges in the graph"}}}],
                         "body": {"list": {"variable": "hydra.paths.SubtermEdge"}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.paths.SubtermGraph"}},
     {
       "type": {
-        "name": "hydra.paths.SubtermNode",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A node in a subterm graph, representing a term or subterm"}}}],
@@ -81,20 +80,20 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "A unique identifier for the node"}}}],
                         "body": {"literal": {"string": {}}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.paths.SubtermNode"}},
     {
       "type": {
-        "name": "hydra.paths.SubtermPath",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A sequence of subterm steps forming a path through a term"}}}],
               "body": {"wrap": {"list": {"variable": "hydra.paths.SubtermStep"}}}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.paths.SubtermPath"}},
     {
       "type": {
-        "name": "hydra.paths.SubtermStep",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [
@@ -226,11 +225,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "Access the term inside a wrapped term"}}}],
                         "body": {"unit": {}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.paths.SubtermStep"}},
     {
       "type": {
-        "name": "hydra.paths.SubtypeEdge",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [
@@ -255,11 +254,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The target node of the edge"}}}],
                         "body": {"variable": "hydra.paths.SubtypeNode"}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.paths.SubtypeEdge"}},
     {
       "type": {
-        "name": "hydra.paths.SubtypeGraph",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [
@@ -280,11 +279,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "All edges in the graph"}}}],
                         "body": {"list": {"variable": "hydra.paths.SubtypeEdge"}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.paths.SubtypeGraph"}},
     {
       "type": {
-        "name": "hydra.paths.SubtypeNode",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A node in a subtype graph, representing a type or subtype"}}}],
@@ -308,20 +307,20 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "A unique identifier for the node"}}}],
                         "body": {"literal": {"string": {}}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.paths.SubtypeNode"}},
     {
       "type": {
-        "name": "hydra.paths.SubtypePath",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A sequence of subtype steps forming a path through a type"}}}],
               "body": {"wrap": {"list": {"variable": "hydra.paths.SubtypeStep"}}}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.paths.SubtypePath"}},
     {
       "type": {
-        "name": "hydra.paths.SubtypeStep",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [
@@ -438,7 +437,8 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "Access the type inside a wrapped type"}}}],
                         "body": {"unit": {}}}}}]}}},
-          "variables": []}}}],
+          "variables": []},
+        "name": "hydra.paths.SubtypeStep"}}],
   "dependencies": [{"module": "hydra.core"}],
   "metadata": {"comments": [], "description": "A model for subterm and subtype access patterns", "seeAlso": []},
   "name": "hydra.paths"}

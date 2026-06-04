@@ -67,7 +67,7 @@ inferenceResult x =
           Core.fieldTerm = (typeSubst (Typing.inferenceResultSubst x))},
         Core.Field {
           Core.fieldName = (Core.Name "classConstraints"),
-          Core.fieldTerm = ((\m -> Core.TermMap (Maps.bimap EncodeCore.name EncodeCore.typeVariableMetadata m)) (Typing.inferenceResultClassConstraints x))},
+          Core.fieldTerm = ((\m -> Core.TermMap (Maps.bimap EncodeCore.name EncodeCore.typeVariableConstraints m)) (Typing.inferenceResultClassConstraints x))},
         Core.Field {
           Core.fieldName = (Core.Name "context"),
           Core.fieldTerm = (inferenceContext (Typing.inferenceResultContext x))}]})

@@ -1,22 +1,20 @@
 {
   "definitions": [
-    {
-      "type": {"name": "hydra.graphviz.dot.Id", "typeScheme": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
+    {"type": {"body": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}, "name": "hydra.graphviz.dot.Id"}},
     {
       "type": {
-        "name": "hydra.graphviz.dot.Graph",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "strict", "type": {"literal": {"boolean": {}}}},
               {"name": "directed", "type": {"literal": {"boolean": {}}}},
               {"name": "id", "type": {"maybe": {"variable": "hydra.graphviz.dot.Id"}}},
               {"name": "statements", "type": {"list": {"variable": "hydra.graphviz.dot.Stmt"}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.graphviz.dot.Graph"}},
     {
       "type": {
-        "name": "hydra.graphviz.dot.Stmt",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "node", "type": {"variable": "hydra.graphviz.dot.NodeStmt"}},
@@ -24,102 +22,102 @@
               {"name": "attr", "type": {"variable": "hydra.graphviz.dot.AttrStmt"}},
               {"name": "equals", "type": {"variable": "hydra.graphviz.dot.EqualityPair"}},
               {"name": "subgraph", "type": {"variable": "hydra.graphviz.dot.Subgraph"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.graphviz.dot.Stmt"}},
     {
       "type": {
-        "name": "hydra.graphviz.dot.EqualityPair",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "left", "type": {"variable": "hydra.graphviz.dot.Id"}},
               {"name": "right", "type": {"variable": "hydra.graphviz.dot.Id"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.graphviz.dot.EqualityPair"}},
     {
       "type": {
-        "name": "hydra.graphviz.dot.AttrStmt",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "type", "type": {"variable": "hydra.graphviz.dot.AttrType"}},
               {"name": "attributes", "type": {"variable": "hydra.graphviz.dot.AttrList"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.graphviz.dot.AttrStmt"}},
     {
       "type": {
-        "name": "hydra.graphviz.dot.AttrType",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "graph", "type": {"unit": {}}},
               {"name": "node", "type": {"unit": {}}},
               {"name": "edge", "type": {"unit": {}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.graphviz.dot.AttrType"}},
     {
       "type": {
-        "name": "hydra.graphviz.dot.AttrList",
-        "typeScheme": {"body": {"wrap": {"list": {"list": {"variable": "hydra.graphviz.dot.EqualityPair"}}}}, "variables": []}}},
+        "body": {"body": {"wrap": {"list": {"list": {"variable": "hydra.graphviz.dot.EqualityPair"}}}}, "variables": []},
+        "name": "hydra.graphviz.dot.AttrList"}},
     {
       "type": {
-        "name": "hydra.graphviz.dot.EdgeStmt",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "left", "type": {"variable": "hydra.graphviz.dot.NodeOrSubgraph"}},
               {"name": "right", "type": {"list": {"variable": "hydra.graphviz.dot.NodeOrSubgraph"}}},
               {"name": "attributes", "type": {"maybe": {"variable": "hydra.graphviz.dot.AttrList"}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.graphviz.dot.EdgeStmt"}},
     {
       "type": {
-        "name": "hydra.graphviz.dot.NodeOrSubgraph",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "node", "type": {"variable": "hydra.graphviz.dot.NodeId"}},
               {"name": "subgraph", "type": {"variable": "hydra.graphviz.dot.Subgraph"}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.graphviz.dot.NodeOrSubgraph"}},
     {
       "type": {
-        "name": "hydra.graphviz.dot.NodeStmt",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "id", "type": {"variable": "hydra.graphviz.dot.NodeId"}},
               {"name": "attributes", "type": {"maybe": {"variable": "hydra.graphviz.dot.AttrList"}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.graphviz.dot.NodeStmt"}},
     {
       "type": {
-        "name": "hydra.graphviz.dot.NodeId",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "id", "type": {"variable": "hydra.graphviz.dot.Id"}},
               {"name": "port", "type": {"maybe": {"variable": "hydra.graphviz.dot.Port"}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.graphviz.dot.NodeId"}},
     {
       "type": {
-        "name": "hydra.graphviz.dot.Port",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "id", "type": {"maybe": {"variable": "hydra.graphviz.dot.Id"}}},
               {"name": "position", "type": {"maybe": {"variable": "hydra.graphviz.dot.CompassPt"}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.graphviz.dot.Port"}},
     {
       "type": {
-        "name": "hydra.graphviz.dot.Subgraph",
-        "typeScheme": {
+        "body": {
           "body": {
             "record": [
               {"name": "subgraphId", "type": {"maybe": {"variable": "hydra.graphviz.dot.SubgraphId"}}},
               {"name": "statements", "type": {"list": {"variable": "hydra.graphviz.dot.Stmt"}}}]},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.graphviz.dot.Subgraph"}},
     {
       "type": {
-        "name": "hydra.graphviz.dot.SubgraphId",
-        "typeScheme": {"body": {"wrap": {"maybe": {"variable": "hydra.graphviz.dot.Id"}}}, "variables": []}}},
+        "body": {"body": {"wrap": {"maybe": {"variable": "hydra.graphviz.dot.Id"}}}, "variables": []},
+        "name": "hydra.graphviz.dot.SubgraphId"}},
     {
       "type": {
-        "name": "hydra.graphviz.dot.CompassPt",
-        "typeScheme": {
+        "body": {
           "body": {
             "union": [
               {"name": "n", "type": {"unit": {}}},
@@ -132,7 +130,8 @@
               {"name": "nw", "type": {"unit": {}}},
               {"name": "c", "type": {"unit": {}}},
               {"name": "none", "type": {"unit": {}}}]},
-          "variables": []}}}],
+          "variables": []},
+        "name": "hydra.graphviz.dot.CompassPt"}}],
   "dependencies": [{"module": "hydra.core"}],
   "metadata": {
     "comments": [],

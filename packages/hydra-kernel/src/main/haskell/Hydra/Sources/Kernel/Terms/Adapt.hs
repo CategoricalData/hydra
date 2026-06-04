@@ -380,8 +380,8 @@ adaptPrimitive = define "adaptPrimitive" $
     @@ Packaging.primitiveDefinitionSignature (var "def0") $
   "def1" <~ Packaging.primitiveDefinition
     (Packaging.primitiveDefinitionName (var "def0"))
-    (var "sig1")
     (Packaging.primitiveDefinitionMetadata (var "def0"))
+    (var "sig1")
     (Packaging.primitiveDefinitionIsPure (var "def0"))
     (Packaging.primitiveDefinitionIsTotal (var "def0"))
     (Packaging.primitiveDefinitionDefaultImplementation (var "def0")) $
@@ -588,13 +588,28 @@ dataGraphToDefinitions = define "dataGraphToDefinitions" $
     Core.letBindings $ var "letAfter") $
 
   -- Note: this is a rough test of typedness, as it only checks that the top-level bindings are typed.
+  -- A binding reaching this gate is past inference (or on a no-infer path), so a missing type scheme
+  -- is an error here — not the legitimate pre-inference "untyped" state of DSL-defined modules. The
+  -- error names each offending binding qualified by its source module (recovered from the binding's
+  -- namespace-qualified Name) so a stale/renamed-field regression points straight at the module to
+  -- regenerate, rather than dumping bare local names the way it used to (the #368/#414 pain: the
+  -- failure surfaced here but never said *where* from). See claude/pitfalls.md "Found untyped bindings".
+  "qualifyUntyped" <~ ("b" ~>
+    "nm" <~ Core.unName (Core.bindingName $ var "b") $
+    optCases (Names.moduleNameOf @@ (Core.bindingName $ var "b"))
+      (Strings.cat2 (string "(no module) ") (var "nm"))
+      ("ns" ~> Strings.concat [Packaging.unModuleName (var "ns"), string " :: ", var "nm"])) $
   "checkBindingsTyped" <~ ("debugLabel" ~> "bindings" ~>
-    "untypedBindings" <~ Lists.map ("b" ~> Core.unName (Core.bindingName $ var "b"))
+    "untypedBindings" <~ Lists.map (var "qualifyUntyped")
       (Lists.filter ("b" ~> Logic.not $ Maybes.isJust (Core.bindingTypeScheme $ var "b")) (var "bindings")) $
     Logic.ifElse (Lists.null $ var "untypedBindings")
       (right $ var "bindings")
       (left $ Error.errorOther $ Error.otherError $ Strings.concat [
-        string "Found untyped bindings (", var "debugLabel", string "): ",
+        string "Found ", Literals.showInt32 (Lists.length $ var "untypedBindings"),
+        string " untyped binding(s) (", var "debugLabel",
+        string "); each must carry a type scheme at this stage. ",
+        string "This usually means stale dist/json field shapes after a kernel record rename ",
+        string "(regenerate the affected package's JSON). Offending bindings (module :: name): ",
         Strings.intercalate (string ", ") (var "untypedBindings")])) $
 
   -- Normalize: push type applications inward past applications and lambdas.
@@ -702,8 +717,8 @@ dataGraphToDefinitions = define "dataGraphToDefinitions" $
       ("ts" ~> Packaging.termDefinition
         (Core.bindingName $ var "el")
         nothing
-        (Core.bindingTerm $ var "el")
-        (just $ Scoping.typeSchemeToTermSignature @@ var "ts"))
+        (just $ Scoping.typeSchemeToTermSignature @@ var "ts")
+        (Core.bindingTerm $ var "el"))
       (Core.bindingTypeScheme $ var "el")) $
   -- Filter to elements in the requested namespaces
   "selectedElements" <~ Lists.filter
@@ -916,6 +931,7 @@ pushTypeAppsInward = define "pushTypeAppsInward" $
           (var "typ")))]),
   "go">: ("t" ~>
     "forField" <~ ("fld" ~> Core.fieldWithTerm (var "fld") (var "go" @@ (Core.fieldTerm $ var "fld"))) $
+    "forCaseAlternative" <~ ("alt" ~> Core.caseAlternativeWithHandler (var "alt") (var "go" @@ (Core.caseAlternativeHandler $ var "alt"))) $
     "forLet" <~ ("lt" ~>
       "mapBinding" <~ ("b" ~> Core.binding
         (Core.bindingName $ var "b")
@@ -937,7 +953,7 @@ pushTypeAppsInward = define "pushTypeAppsInward" $
       _Term_cases>>: "cs" ~> Core.termCases $ Core.caseStatement
         (Core.caseStatementTypeName $ var "cs")
         (Maybes.map (var "go") (Core.caseStatementDefault $ var "cs"))
-        (Lists.map (var "forField") (Core.caseStatementCases $ var "cs")),
+        (Lists.map (var "forCaseAlternative") (Core.caseStatementCases $ var "cs")),
       _Term_either>>: "e" ~> Core.termEither $ Eithers.either_
         ("l" ~> left $ var "go" @@ var "l")
         ("r" ~> right $ var "go" @@ var "r")

@@ -454,8 +454,8 @@ mkDocumentedTermDef :: String -> TypedTerm Definition
 mkDocumentedTermDef fullName = Packaging.definitionTerm $ Packaging.termDefinition
   (nm fullName)
   Phantoms.nothing
-  documentedPlaceholderTerm
   (Phantoms.nothing :: TypedTerm (Maybe TermSignature))
+  documentedPlaceholderTerm
 
 -- | Build a Module with the given namespace and definitions and no dependencies.
 mkModule :: String -> [TypedTerm Definition] -> TypedTerm Module
@@ -483,8 +483,8 @@ mkUndocumentedTermDef :: String -> TypedTerm Definition
 mkUndocumentedTermDef fullName = Packaging.definitionTerm $ Packaging.termDefinition
   (nm fullName)
   Phantoms.nothing
-  placeholderTerm
   (Phantoms.nothing :: TypedTerm (Maybe TermSignature))
+  placeholderTerm
 
 -- ============================================================================
 -- Expected-value helpers

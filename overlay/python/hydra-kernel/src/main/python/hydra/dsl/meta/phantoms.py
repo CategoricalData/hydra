@@ -12,9 +12,9 @@ import hydra.constants
 import hydra.dsl.terms as terms
 import hydra.dsl.annotations as annotations
 import hydra.formatting
-from hydra.util import CaseConvention
+from hydra.util import CaseConvention, QualifiedName
 from hydra.core import Binding, Field, Name, Term, Type
-from hydra.packaging import Module, ModuleName, QualifiedName
+from hydra.packaging import Module, ModuleName
 from hydra.typed import TypedBinding, TypedTerm
 from hydra.dsl.python import FrozenDict, Maybe, Just, Nothing
 
@@ -235,7 +235,7 @@ def to_definition(tb: TypedBinding[A]):
     Mirrors Haskell's Hydra.Dsl.Meta.Phantoms.toDefinition.
     """
     from hydra.packaging import DefinitionTerm, TermDefinition
-    return DefinitionTerm(TermDefinition(tb.name, Nothing(), tb.term.value, Nothing()))
+    return DefinitionTerm(TermDefinition(tb.name, Nothing(), Nothing(), tb.term.value))
 
 
 def to_term_definition(tb: TypedBinding[A]):

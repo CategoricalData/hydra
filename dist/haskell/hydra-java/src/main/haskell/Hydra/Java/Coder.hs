@@ -141,9 +141,9 @@ applyOvergenSubstToTermAnnotations_go subst cx term =
       Core.TermCases v0 -> Core.TermCases (Core.CaseStatement {
         Core.caseStatementTypeName = (Core.caseStatementTypeName v0),
         Core.caseStatementDefault = (Maybes.map (\d -> applyOvergenSubstToTermAnnotations_go subst cx d) (Core.caseStatementDefault v0)),
-        Core.caseStatementCases = (Lists.map (\fld -> Core.Field {
-          Core.fieldName = (Core.fieldName fld),
-          Core.fieldTerm = (applyOvergenSubstToTermAnnotations_go subst cx (Core.fieldTerm fld))}) (Core.caseStatementCases v0))})
+        Core.caseStatementCases = (Lists.map (\fld -> Core.CaseAlternative {
+          Core.caseAlternativeName = (Core.caseAlternativeName fld),
+          Core.caseAlternativeHandler = (applyOvergenSubstToTermAnnotations_go subst cx (Core.caseAlternativeHandler fld))}) (Core.caseStatementCases v0))})
       Core.TermLet v0 -> Core.TermLet (Core.Let {
         Core.letBindings = (Lists.map (\b -> Core.Binding {
           Core.bindingName = (Core.bindingName b),
@@ -266,14 +266,14 @@ bindingNameToFilePath :: Core.Name -> String
 bindingNameToFilePath name =
 
       let qn = Names.qualifyName name
-          ns_ = Packaging.qualifiedNameModuleName qn
-          local = Packaging.qualifiedNameLocal qn
+          ns_ = Util.qualifiedNameModuleName qn
+          local = Util.qualifiedNameLocal qn
           sanitized = Formatting.sanitizeWithUnderscores Language.reservedWords local
           unq =
-                  Names.unqualifyName (Packaging.QualifiedName {
-                    Packaging.qualifiedNameModuleName = ns_,
-                    Packaging.qualifiedNameLocal = sanitized})
-      in (Names.nameToFilePath Util.CaseConventionCamel Util.CaseConventionPascal (Packaging.FileExtension "java") unq)
+                  Names.unqualifyName (Util.QualifiedName {
+                    Util.qualifiedNameModuleName = ns_,
+                    Util.qualifiedNameLocal = sanitized})
+      in (Names.nameToFilePath Util.CaseConventionCamel Util.CaseConventionPascal (Util.FileExtension "java") unq)
 bindingsToStatements :: JavaEnvironment.JavaEnvironment -> [Core.Binding] -> Typing.InferenceContext -> Graph.Graph -> Either Errors.Error ([Syntax.BlockStatement], JavaEnvironment.JavaEnvironment)
 bindingsToStatements env bindings cx g0 =
 
@@ -361,7 +361,7 @@ buildSubstFromAnnotations_go schemeVarSet g term =
       Core.TermCases v0 ->
         let defSubst = Maybes.cases (Core.caseStatementDefault v0) Maps.empty (\d -> buildSubstFromAnnotations_go schemeVarSet g d)
             caseSubsts =
-                    Lists.foldl (\acc -> \fld -> Maps.union acc (buildSubstFromAnnotations_go schemeVarSet g (Core.fieldTerm fld))) Maps.empty (Core.caseStatementCases v0)
+                    Lists.foldl (\acc -> \fld -> Maps.union acc (buildSubstFromAnnotations_go schemeVarSet g (Core.caseAlternativeHandler fld))) Maps.empty (Core.caseStatementCases v0)
         in (Maps.union defSubst caseSubsts)
       Core.TermLet v0 ->
         let bindingSubst =
@@ -999,15 +999,15 @@ elementJavaIdentifier :: Bool -> Bool -> JavaEnvironment.Aliases -> Core.Name ->
 elementJavaIdentifier isPrim isMethod aliases name =
 
       let qn = Names.qualifyName name
-          ns_ = Packaging.qualifiedNameModuleName qn
-          local = Packaging.qualifiedNameLocal qn
+          ns_ = Util.qualifiedNameModuleName qn
+          local = Util.qualifiedNameLocal qn
           sep = Logic.ifElse isMethod "::" "."
       in (Logic.ifElse isPrim (Syntax.Identifier (Strings.cat2 (Strings.cat2 (elementJavaIdentifier_qualify aliases ns_ (Formatting.capitalize local)) ".") JavaNames.applyMethodName)) (Maybes.cases ns_ (Syntax.Identifier (Utils.sanitizeJavaName local)) (\n -> Syntax.Identifier (Strings.cat2 (Strings.cat2 (elementJavaIdentifier_qualify aliases (namespaceParent n) (elementsClassName n)) sep) (Utils.sanitizeJavaName local)))))
 elementJavaIdentifier_qualify :: JavaEnvironment.Aliases -> Maybe Packaging.ModuleName -> String -> String
 elementJavaIdentifier_qualify aliases mns s =
-    Syntax.unIdentifier (Utils.nameToJavaName aliases (Names.unqualifyName (Packaging.QualifiedName {
-      Packaging.qualifiedNameModuleName = mns,
-      Packaging.qualifiedNameLocal = s})))
+    Syntax.unIdentifier (Utils.nameToJavaName aliases (Names.unqualifyName (Util.QualifiedName {
+      Util.qualifiedNameModuleName = mns,
+      Util.qualifiedNameLocal = s})))
 elementsClassName :: Packaging.ModuleName -> String
 elementsClassName ns =
 
@@ -1016,9 +1016,9 @@ elementsClassName ns =
       in (Formatting.sanitizeWithUnderscores Language.reservedWords (Formatting.capitalize (Maybes.fromMaybe nsStr (Lists.maybeLast parts))))
 elementsQualifiedName :: Packaging.ModuleName -> Core.Name
 elementsQualifiedName ns =
-    Names.unqualifyName (Packaging.QualifiedName {
-      Packaging.qualifiedNameModuleName = (namespaceParent ns),
-      Packaging.qualifiedNameLocal = (elementsClassName ns)})
+    Names.unqualifyName (Util.QualifiedName {
+      Util.qualifiedNameModuleName = (namespaceParent ns),
+      Util.qualifiedNameLocal = (elementsClassName ns)})
 encodeApplication :: JavaEnvironment.JavaEnvironment -> Core.Application -> Typing.InferenceContext -> Graph.Graph -> Either Errors.Error Syntax.Expression
 encodeApplication env app cx g0 =
 
@@ -1084,7 +1084,7 @@ encodeDefinitions mod defs cx g =
           termDefs = Pairs.second partitioned
           nonTypedefDefs =
                   Lists.filter (\td ->
-                    let typ = Core.typeSchemeBody (Packaging.typeDefinitionTypeScheme td)
+                    let typ = Core.typeSchemeBody (Packaging.typeDefinitionBody td)
                     in (isSerializableJavaType typ)) typeDefs
       in (Eithers.bind (Eithers.mapList (\td -> encodeTypeDefinition pkg aliases td cx g) nonTypedefDefs) (\typeUnits -> Eithers.bind (Logic.ifElse (Lists.null termDefs) (Right []) (Eithers.bind (Eithers.mapList (\td -> encodeTermDefinition env td cx g) termDefs) (\dataMembers -> Right [
         constructElementsInterface mod dataMembers]))) (\termUnits -> Right (Maps.fromList (Lists.concat2 typeUnits termUnits)))))
@@ -1351,7 +1351,7 @@ encodeTermDefinition :: JavaEnvironment.JavaEnvironment -> Packaging.TermDefinit
 encodeTermDefinition env tdef cx g =
 
       let name = Packaging.termDefinitionName tdef
-          term0 = Packaging.termDefinitionTerm tdef
+          term0 = Packaging.termDefinitionBody tdef
       in (Eithers.bind (Annotations.getTermDescription cx g term0) (\mDoc ->
         let ts =
                 Maybes.maybe (Core.TypeScheme {
@@ -1686,10 +1686,10 @@ encodeTermTCO env0 funcName paramNames tcoVarRenames tcoDepth term cx g =
                       matchDecl = Utils.varDeclarationStatement matchVarId jArgRaw
                       jArg = Utils.javaIdentifierToJavaExpression matchVarId
                   in (Eithers.bind (Eithers.mapList (\field ->
-                    let fieldName = Core.fieldName field
+                    let fieldName = Core.caseAlternativeName field
                         variantRefType =
                                 Utils.nameToJavaReferenceType aliases True domArgs tname (Just (Formatting.capitalize (Core.unName fieldName)))
-                    in case (Strip.deannotateTerm (Core.fieldTerm field)) of
+                    in case (Strip.deannotateTerm (Core.caseAlternativeHandler field)) of
                       Core.TermLambda v1 -> withLambda env v1 (\env2 ->
                         let lambdaParam = Core.lambdaParameter v1
                             branchBody = Core.lambdaBody v1
@@ -1767,7 +1767,7 @@ encodeTypeDefinition :: Syntax.PackageDeclaration -> JavaEnvironment.Aliases -> 
 encodeTypeDefinition pkg aliases tdef cx g =
 
       let name = Packaging.typeDefinitionName tdef
-          typ = Core.typeSchemeBody (Packaging.typeDefinitionTypeScheme tdef)
+          typ = Core.typeSchemeBody (Packaging.typeDefinitionBody tdef)
           serializable = isSerializableJavaType typ
           imports =
                   Logic.ifElse serializable [
@@ -2015,8 +2015,8 @@ functionCall env isPrim name args typeApps cx g =
               Syntax.methodInvocationHeader = header,
               Syntax.methodInvocationArguments = jargs})))) (
             let qn = Names.qualifyName name
-                mns = Packaging.qualifiedNameModuleName qn
-                localName = Packaging.qualifiedNameLocal qn
+                mns = Util.qualifiedNameModuleName qn
+                localName = Util.qualifiedNameLocal qn
             in (Maybes.cases mns (
               let header =
                       Syntax.MethodInvocation_HeaderSimple (Syntax.MethodName (overrideMethodName (elementJavaIdentifier isPrim False aliases name)))
@@ -2025,9 +2025,9 @@ functionCall env isPrim name args typeApps cx g =
                 Syntax.methodInvocationArguments = jargs})))) (\ns_ ->
               let classId = Utils.nameToJavaName aliases (elementsQualifiedName ns_)
                   methodId =
-                          Logic.ifElse isPrim (overrideMethodName (Syntax.Identifier (Strings.cat2 (Syntax.unIdentifier (Utils.nameToJavaName aliases (Names.unqualifyName (Packaging.QualifiedName {
-                            Packaging.qualifiedNameModuleName = (Just ns_),
-                            Packaging.qualifiedNameLocal = (Formatting.capitalize localName)})))) (Strings.cat2 "." JavaNames.applyMethodName)))) (Syntax.Identifier (Utils.sanitizeJavaName localName))
+                          Logic.ifElse isPrim (overrideMethodName (Syntax.Identifier (Strings.cat2 (Syntax.unIdentifier (Utils.nameToJavaName aliases (Names.unqualifyName (Util.QualifiedName {
+                            Util.qualifiedNameModuleName = (Just ns_),
+                            Util.qualifiedNameLocal = (Formatting.capitalize localName)})))) (Strings.cat2 "." JavaNames.applyMethodName)))) (Syntax.Identifier (Utils.sanitizeJavaName localName))
               in (Eithers.bind (Eithers.mapList (\t -> Eithers.bind (encodeType aliases Sets.empty t cx g) (\jt -> Eithers.bind (Utils.javaTypeToJavaReferenceType jt cx) (\rt -> Right (Syntax.TypeArgumentReference rt)))) typeApps) (\jTypeArgs -> Right (Utils.javaMethodInvocationToJavaExpression (Utils.methodInvocationStaticWithTypeArgs classId methodId jTypeArgs jargs))))))))))))
 getCodomain :: M.Map Core.Name Core.Term -> t0 -> Graph.Graph -> Either Errors.Error Core.Type
 getCodomain ann cx g = Eithers.map (\ft -> Core.functionTypeCodomain ft) (getFunctionType ann cx g)
@@ -2166,14 +2166,14 @@ isLambdaBoundIn :: Core.Name -> S.Set Core.Name -> Bool
 isLambdaBoundIn name lambdaVars =
     Logic.or (Sets.member name lambdaVars) (Logic.or (Logic.and (isLambdaBoundIn_isQualified name) (Maybes.isJust (Lists.find (\lv -> Logic.and (isLambdaBoundIn_isQualified lv) (Equality.equal (Names.localNameOf lv) (Names.localNameOf name))) (Sets.toList lambdaVars)))) (Logic.and (Logic.not (isLambdaBoundIn_isQualified name)) (Sets.member (Core.Name (Names.localNameOf name)) lambdaVars)))
 isLambdaBoundIn_isQualified :: Core.Name -> Bool
-isLambdaBoundIn_isQualified n = Maybes.isJust (Packaging.qualifiedNameModuleName (Names.qualifyName n))
+isLambdaBoundIn_isQualified n = Maybes.isJust (Util.qualifiedNameModuleName (Names.qualifyName n))
 isLambdaBoundVariable :: Core.Name -> Bool
 isLambdaBoundVariable name =
 
       let v = Core.unName name
       in (Equality.lte (Strings.length v) 4)
 isLocalVariable :: Core.Name -> Bool
-isLocalVariable name = Maybes.isNothing (Packaging.qualifiedNameModuleName (Names.qualifyName name))
+isLocalVariable name = Maybes.isNothing (Util.qualifiedNameModuleName (Names.qualifyName name))
 isNonComparableType :: Core.Type -> Bool
 isNonComparableType typ =
     case (Strip.deannotateType typ) of
@@ -2769,8 +2769,8 @@ typeAppNullaryOrHoisted :: JavaEnvironment.JavaEnvironment -> JavaEnvironment.Al
 typeAppNullaryOrHoisted env aliases anns tyapps jatyp body correctedTyp varName cls allTypeArgs cx g =
 
       let qn = Names.qualifyName varName
-          mns = Packaging.qualifiedNameModuleName qn
-          localName = Packaging.qualifiedNameLocal qn
+          mns = Util.qualifiedNameModuleName qn
+          localName = Util.qualifiedNameLocal qn
       in case cls of
         JavaEnvironment.JavaSymbolClassNullaryFunction -> Maybes.cases mns (typeAppFallbackCast env aliases anns tyapps jatyp body correctedTyp cx g) (\ns_ ->
           let classId = Utils.nameToJavaName aliases (elementsQualifiedName ns_)
@@ -2840,17 +2840,17 @@ variantCompareToMethod aliases tparams parentName variantName fields =
                     tagReturnStmt] valueCompareStmt
       in (Utils.methodDeclaration mods [] anns JavaNames.compareToMethodName [
         param] result (Just body))
-visitBranch :: JavaEnvironment.JavaEnvironment -> JavaEnvironment.Aliases -> Core.Type -> Core.Name -> Syntax.Type -> [Syntax.TypeArgument] -> Core.Field -> Typing.InferenceContext -> Graph.Graph -> Either Errors.Error Syntax.ClassBodyDeclarationWithComments
+visitBranch :: JavaEnvironment.JavaEnvironment -> JavaEnvironment.Aliases -> Core.Type -> Core.Name -> Syntax.Type -> [Syntax.TypeArgument] -> Core.CaseAlternative -> Typing.InferenceContext -> Graph.Graph -> Either Errors.Error Syntax.ClassBodyDeclarationWithComments
 visitBranch env aliases dom tname jcod targs field cx g =
 
       let jdom =
-              Syntax.TypeReference (Utils.nameToJavaReferenceType aliases True targs tname (Just (Formatting.capitalize (Core.unName (Core.fieldName field)))))
+              Syntax.TypeReference (Utils.nameToJavaReferenceType aliases True targs tname (Just (Formatting.capitalize (Core.unName (Core.caseAlternativeName field)))))
           mods = [
                 Syntax.MethodModifierPublic]
           anns = [
                 Utils.overrideAnnotation]
           result = Syntax.ResultType (Syntax.UnannType jcod)
-      in case (Strip.deannotateTerm (Core.fieldTerm field)) of
+      in case (Strip.deannotateTerm (Core.caseAlternativeHandler field)) of
         Core.TermLambda v0 -> withLambda env v0 (\env2 ->
           let lambdaParam = Core.lambdaParameter v0
               body = Core.lambdaBody v0
@@ -2869,7 +2869,7 @@ visitBranch env aliases dom tname jcod targs field cx g =
                           returnStmt]
                 in (Right (noComment (Utils.methodDeclaration mods [] anns JavaNames.visitMethodName [
                   param] result (Just allStmts)))))))))))
-        _ -> Left (Errors.ErrorOther (Errors.OtherError (Strings.cat2 "visitBranch: field term is not a lambda: " (ShowCore.term (Core.fieldTerm field)))))
+        _ -> Left (Errors.ErrorOther (Errors.OtherError (Strings.cat2 "visitBranch: field term is not a lambda: " (ShowCore.term (Core.caseAlternativeHandler field)))))
 withCommentString :: String -> Syntax.ClassBodyDeclaration -> Syntax.ClassBodyDeclarationWithComments
 withCommentString comment decl =
     Syntax.ClassBodyDeclarationWithComments {

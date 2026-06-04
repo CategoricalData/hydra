@@ -2,9 +2,7 @@
   "definitions": [
     {
       "term": {
-        "name": "hydra.json.writer.colonOp",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.ast.Op"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -28,15 +26,12 @@
                   {
                     "name": "associativity",
                     "term": {"inject": {"field": {"name": "none", "term": {"unit": {}}}, "typeName": "hydra.ast.Associativity"}}}],
-                "typeName": "hydra.ast.Op"}}}}}},
+                "typeName": "hydra.ast.Op"}}}},
+        "name": "hydra.json.writer.colonOp",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.ast.Op"}}, "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.json.writer.hexByte",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"integer": {"int32": {}}}}}],
-          "result": {"type": {"literal": {"string": {}}}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -132,15 +127,15 @@
                                 "argument": {"variable": "lo"},
                                 "function": {"application": {"argument": {"variable": "hi"}, "function": {"variable": "hydra.lib.strings.cat2"}}}}}}}}}}},
                 "domain": {"literal": {"integer": {"int32": {}}}},
-                "parameter": "c"}}}}}},
+                "parameter": "c"}}}},
+        "name": "hydra.json.writer.hexByte",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"integer": {"int32": {}}}}}],
+          "result": {"type": {"literal": {"string": {}}}},
+          "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.json.writer.jsonString",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"string": {}}}}],
-          "result": {"type": {"literal": {"string": {}}}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Escape and quote a string for JSON output"}}}],
             "body": {
@@ -330,19 +325,15 @@
                                         "function": {"application": {"argument": {"literal": {"string": "\""}}, "function": {"variable": "hydra.lib.strings.cat2"}}}}},
                                     "function": {"variable": "hydra.lib.strings.cat2"}}}}}}}}}}},
                 "domain": {"literal": {"string": {}}},
-                "parameter": "s"}}}}}},
+                "parameter": "s"}}}},
+        "name": "hydra.json.writer.jsonString",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"string": {}}}}],
+          "result": {"type": {"literal": {"string": {}}}},
+          "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.json.writer.keyValueToExpr",
-        "signature": {
-          "parameters": [
-            {
-              "isLazy": false,
-              "name": "arg0",
-              "type": {"pair": {"first": {"literal": {"string": {}}}, "second": {"variable": "hydra.json.model.Value"}}}}],
-          "result": {"type": {"variable": "hydra.ast.Expr"}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a key-value pair to an AST expression"}}}],
             "body": {
@@ -385,15 +376,19 @@
                                 "function": {
                                   "application": {"argument": {"variable": "hydra.json.writer.colonOp"}, "function": {"variable": "hydra.serialization.ifx"}}}}}}}}}}},
                 "domain": {"pair": {"first": {"literal": {"string": {}}}, "second": {"variable": "hydra.json.model.Value"}}},
-                "parameter": "pair"}}}}}},
+                "parameter": "pair"}}}},
+        "name": "hydra.json.writer.keyValueToExpr",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {"pair": {"first": {"literal": {"string": {}}}, "second": {"variable": "hydra.json.model.Value"}}}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.json.writer.printJson",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.json.model.Value"}}],
-          "result": {"type": {"literal": {"string": {}}}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a JSON value to a string"}}}],
             "body": {
@@ -403,15 +398,15 @@
                     "argument": {"application": {"argument": {"variable": "value"}, "function": {"variable": "hydra.json.writer.valueToExpr"}}},
                     "function": {"variable": "hydra.serialization.printExpr"}}},
                 "domain": {"variable": "hydra.json.model.Value"},
-                "parameter": "value"}}}}}},
-    {
-      "term": {
-        "name": "hydra.json.writer.valueToExpr",
+                "parameter": "value"}}}},
+        "name": "hydra.json.writer.printJson",
         "signature": {
           "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.json.model.Value"}}],
-          "result": {"type": {"variable": "hydra.ast.Expr"}},
-          "typeParameters": []},
-        "term": {
+          "result": {"type": {"literal": {"string": {}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {"key": "description", "value": {"literal": {"string": "Convert a JSON value to an AST expression for serialization"}}}],
@@ -424,8 +419,7 @@
                       "cases": {
                         "cases": [
                           {
-                            "name": "array",
-                            "term": {
+                            "handler": {
                               "lambda": {
                                 "body": {
                                   "application": {
@@ -441,10 +435,10 @@
                                                 "type": {"variable": "hydra.ast.Expr"}}}}}}},
                                     "function": {"variable": "hydra.serialization.bracketListAdaptive"}}},
                                 "domain": {"list": {"variable": "hydra.json.model.Value"}},
-                                "parameter": "arr"}}},
+                                "parameter": "arr"}},
+                            "name": "array"},
                           {
-                            "name": "boolean",
-                            "term": {
+                            "handler": {
                               "lambda": {
                                 "body": {
                                   "application": {
@@ -460,17 +454,17 @@
                                                 "function": {"typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"literal": {"string": {}}}}}}}}}}},
                                     "function": {"variable": "hydra.serialization.cst"}}},
                                 "domain": {"literal": {"boolean": {}}},
-                                "parameter": "b"}}},
+                                "parameter": "b"}},
+                            "name": "boolean"},
                           {
-                            "name": "null",
-                            "term": {
+                            "handler": {
                               "lambda": {
                                 "body": {"application": {"argument": {"literal": {"string": "null"}}, "function": {"variable": "hydra.serialization.cst"}}},
                                 "domain": {"unit": {}},
-                                "parameter": "_"}}},
+                                "parameter": "_"}},
+                            "name": "null"},
                           {
-                            "name": "number",
-                            "term": {
+                            "handler": {
                               "lambda": {
                                 "body": {
                                   "let": {
@@ -529,10 +523,10 @@
                                                                 "function": {"typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"literal": {"string": {}}}}}}}}}}},
                                                     "function": {"variable": "hydra.serialization.cst"}}}}}}}}}}},
                                 "domain": {"literal": {"decimal": {}}},
-                                "parameter": "n"}}},
+                                "parameter": "n"}},
+                            "name": "number"},
                           {
-                            "name": "object",
-                            "term": {
+                            "handler": {
                               "lambda": {
                                 "body": {
                                   "application": {
@@ -557,20 +551,26 @@
                                                 "type": {"variable": "hydra.ast.Expr"}}}}}}},
                                     "function": {"variable": "hydra.serialization.bracesListAdaptive"}}},
                                 "domain": {"map": {"keys": {"literal": {"string": {}}}, "values": {"variable": "hydra.json.model.Value"}}},
-                                "parameter": "obj"}}},
+                                "parameter": "obj"}},
+                            "name": "object"},
                           {
-                            "name": "string",
-                            "term": {
+                            "handler": {
                               "lambda": {
                                 "body": {
                                   "application": {
                                     "argument": {"application": {"argument": {"variable": "s"}, "function": {"variable": "hydra.json.writer.jsonString"}}},
                                     "function": {"variable": "hydra.serialization.cst"}}},
                                 "domain": {"literal": {"string": {}}},
-                                "parameter": "s"}}}],
+                                "parameter": "s"}},
+                            "name": "string"}],
                         "typeName": "hydra.json.model.Value"}}}},
                 "domain": {"variable": "hydra.json.model.Value"},
-                "parameter": "value"}}}}}}],
+                "parameter": "value"}}}},
+        "name": "hydra.json.writer.valueToExpr",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.json.model.Value"}}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}},
+          "typeParameters": []}}}],
   "dependencies": [
     {"module": "hydra.serialization"},
     {"module": "hydra.paths"},
