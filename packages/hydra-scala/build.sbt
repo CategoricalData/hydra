@@ -14,6 +14,12 @@ lazy val root = project
       baseDirectory.value / ".." / ".." / "dist" / "scala" / "hydra-java" / "src" / "main" / "scala",
       baseDirectory.value / ".." / ".." / "dist" / "scala" / "hydra-python" / "src" / "main" / "scala",
       baseDirectory.value / ".." / ".." / "dist" / "scala" / "hydra-scala" / "src" / "main" / "scala",
+      // hydra-typescript is intentionally NOT included here: the Scala-emitted
+      // typescript coder has a generator bug (Found: Any, Required: hydra.graph.Graph
+      // in analyzeFunctionTerm — coder.scala line 10) that prevents sbt compile.
+      // Once the Scala emitter is fixed, add hydra-typescript here AND enable
+      // the Scala host's writeTypeScript helper and Bootstrap.scala "typescript"
+      // case (currently elided for the same reason). Tracked separately.
       baseDirectory.value / ".." / ".." / "dist" / "scala" / "hydra-lisp" / "src" / "main" / "scala",
       baseDirectory.value / ".." / ".." / "heads" / "scala" / "src" / "main" / "scala",
     ),
