@@ -57,14 +57,39 @@ public interface Terms {
     // ===== Term annotations =====
 
     /**
-     * Attach an annotation to a term.
+     * Attach an annotation to a term, wrapping the map as a TermMap per Hydra's
+     * map convention (#386 — annotation is now a Term, not a Map<Name, Term>).
      * Example: annot(Map.of(name("comment"), string("A user ID")), var("userId"))
      * @param ann the annotation map
      * @param base the base term to annotate
      * @return the annotated term
      */
     static Term annot(Map<Name, Term> ann, Term base) {
-        return new Term.Annotated(new AnnotatedTerm(base, PersistentMap.<Name, Term>coerce(ann)));
+        return annot(annotationMapAsTerm(ann), base);
+    }
+
+    /**
+     * Attach an annotation Term to a term. The annotation may be of any shape;
+     * Hydra's helpers use the map convention but applications are free to use
+     * other shapes.
+     * @param ann the annotation term
+     * @param base the base term to annotate
+     * @return the annotated term
+     */
+    static Term annot(Term ann, Term base) {
+        return new Term.Annotated(new AnnotatedTerm(base, ann));
+    }
+
+    /**
+     * Wrap a Map<Name, Term> as a TermMap, the conventional annotation shape.
+     */
+    static Term annotationMapAsTerm(Map<Name, Term> ann) {
+        // Term.Map's key type is Term, so lift each Name to a Term.Variable.
+        PersistentMap<Term, Term> entries = PersistentMap.empty();
+        for (Map.Entry<Name, Term> e : ann.entrySet()) {
+            entries = entries.put(new Term.Variable(e.getKey()), e.getValue());
+        }
+        return new Term.Map(entries);
     }
 
     /**
