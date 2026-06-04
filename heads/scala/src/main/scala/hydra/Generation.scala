@@ -190,6 +190,44 @@ object Generation:
       doInfer = false, doExpand = false, doHoistCaseStatements = false, doHoistPolymorphicLetBindings = false,
       basePath, universe, mods)
 
+  // Scala→typescript dispatch is intentionally NOT wired here yet: the
+  // Scala-emitted typescript coder (dist/scala/hydra-typescript/.../coder.scala)
+  // has a generator bug — analyzeFunctionTerm gets Any instead of Graph at
+  // line 10 — so adding hydra-typescript to packages/hydra-scala/build.sbt
+  // breaks sbt compile. Bootstrap.scala likewise omits the "typescript" case
+  // for the same reason. Once the Scala emitter is fixed, restore writeTypeScript
+  // (mirroring writeScala flags + doHoistCaseStatements=true), add
+  // hydra-typescript to build.sbt, and add the dispatch case.
+
+  /** Generate source files for a Lisp dialect (Clojure, Scheme, Common Lisp,
+   *  or Emacs Lisp). Mirrors heads/java/.../Generation.java#writeLispDialect
+   *  and heads/python/.../generation.py#write_lisp_dialect.
+   */
+  def writeLispDialect(basePath: String, dialectName: String, fileExt: String,
+      universe: Seq[Module], mods: Seq[Module]): Int =
+    val dialect: hydra.lisp.syntax.Dialect = dialectName match
+      case "clojure"    => hydra.lisp.syntax.Dialect.clojure
+      case "scheme"     => hydra.lisp.syntax.Dialect.scheme
+      case "commonLisp" => hydra.lisp.syntax.Dialect.commonLisp
+      case "emacsLisp"  => hydra.lisp.syntax.Dialect.emacsLisp
+      case other        => throw new IllegalArgumentException(s"Unknown Lisp dialect: $other")
+    val caseConv: hydra.util.CaseConvention =
+      if dialectName == "clojure" then hydra.util.CaseConvention.camel
+      else hydra.util.CaseConvention.lowerSnake
+    generateSources(
+      mod => defs => cx => g =>
+        hydra.lisp.coder.moduleToLisp(dialect)(mod)(defs)(cx)(g) match
+          case Left(err) => Left(err)
+          case Right(program) =>
+            val code = hydra.serialization.printExpr(
+              hydra.serialization.parenthesize(
+                hydra.lisp.serde.programToExpr(program)))
+            val filePath = hydra.names.moduleNameToFilePath(caseConv)(fileExt)(mod.name)
+            Right(Map(filePath -> code)),
+      hydra.lisp.language.lispLanguage,
+      doInfer = false, doExpand = false, doHoistCaseStatements = false, doHoistPolymorphicLetBindings = false,
+      basePath, universe, mods)
+
   /** Format elapsed time for display. */
   def formatTime(millis: Long): String =
     if millis < 1000 then s"${millis}ms"
