@@ -13,6 +13,7 @@ import qualified Hydra.Graph as Graph
 import qualified Hydra.Hoisting as Hoisting
 import qualified Hydra.Json.Model as Model
 import qualified Hydra.Lexical as Lexical
+import qualified Hydra.Haskell.Lib.Maps as Maps
 import qualified Hydra.Haskell.Lib.Pairs as Pairs
 import qualified Hydra.Packaging as Packaging
 import qualified Hydra.Parsing as Parsing
@@ -1214,7 +1215,7 @@ allTests =
                             Core.CaseAlternative {
                               Core.caseAlternativeName = (Core.Name "nothing"),
                               Core.caseAlternativeHandler = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]})),
-                        Core.annotatedTermAnnotation = M.empty})),
+                        Core.annotatedTermAnnotation = (Core.TermMap (Maps.mapKeys (\n -> Core.TermVariable n) M.empty))})),
                       Core.bindingTypeScheme = Nothing}],
                   Core.letBody = (Core.TermVariable (Core.Name "f"))})))),
                 Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermLet (Core.Let {
@@ -1235,7 +1236,7 @@ allTests =
                             Core.CaseAlternative {
                               Core.caseAlternativeName = (Core.Name "nothing"),
                               Core.caseAlternativeHandler = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]})),
-                        Core.annotatedTermAnnotation = M.empty})),
+                        Core.annotatedTermAnnotation = (Core.TermMap (Maps.mapKeys (\n -> Core.TermVariable n) M.empty))})),
                       Core.bindingTypeScheme = Nothing}],
                   Core.letBody = (Core.TermVariable (Core.Name "f"))})))})),
               Testing.testCaseWithMetadataDescription = Nothing,

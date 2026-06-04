@@ -4,7 +4,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Language constraints for Apache Avro"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Language constraints for Apache Avro"}}}]},
             "body": {
               "let": {
                 "bindings": [

@@ -4,7 +4,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for hydra.pg.model.AdjacentEdge"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL constructor for hydra.pg.model.AdjacentEdge"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -68,7 +72,7 @@
                               "application": {
                                 "argument": {
                                   "annotated": {
-                                    "annotation": [{"key": "description", "value": {"literal": {"string": "A key/value map of edge properties"}}}],
+                                    "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A key/value map of edge properties"}}}]},
                                     "body": {"map": {"keys": {"variable": "hydra.pg.model.PropertyKey"}, "values": {"variable": "v"}}}}},
                                 "function": {"variable": "hydra.typed.TypedTerm"}}},
                             "parameter": "properties"}},
@@ -76,7 +80,11 @@
                           "application": {
                             "argument": {
                               "annotated": {
-                                "annotation": [{"key": "description", "value": {"literal": {"string": "The id of the other vertex adjacent to the edge"}}}],
+                                "annotation": {
+                                  "map": [
+                                    {
+                                      "key": {"variable": "description"},
+                                      "value": {"literal": {"string": "The id of the other vertex adjacent to the edge"}}}]},
                                 "body": {"variable": "v"}}},
                             "function": {"variable": "hydra.typed.TypedTerm"}}},
                         "parameter": "vertex"}},
@@ -84,7 +92,7 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "The unique identifier of the edge"}}}],
+                            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The unique identifier of the edge"}}}]},
                             "body": {"variable": "v"}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "id"}},
@@ -92,7 +100,7 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The label of the edge"}}}],
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The label of the edge"}}}]},
                         "body": {"variable": "hydra.pg.model.EdgeLabel"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "label"}}}},
@@ -106,7 +114,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The label of the edge"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The label of the edge"}}}]},
                       "body": {"variable": "hydra.pg.model.EdgeLabel"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -116,7 +124,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The unique identifier of the edge"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The unique identifier of the edge"}}}]},
                       "body": {"variable": "v"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -126,7 +134,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The id of the other vertex adjacent to the edge"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "The id of the other vertex adjacent to the edge"}}}]},
                       "body": {"variable": "v"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -136,7 +148,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "A key/value map of edge properties"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A key/value map of edge properties"}}}]},
                       "body": {"map": {"keys": {"variable": "hydra.pg.model.PropertyKey"}, "values": {"variable": "v"}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -149,10 +161,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the label field of hydra.pg.model.AdjacentEdge"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the label field of hydra.pg.model.AdjacentEdge"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -205,7 +218,7 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The label of the edge"}}}],
+                    "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The label of the edge"}}}]},
                     "body": {"variable": "hydra.pg.model.EdgeLabel"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": [{"constraints": [], "name": "v"}]}}},
@@ -213,8 +226,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {"key": "description", "value": {"literal": {"string": "DSL accessor for the id field of hydra.pg.model.AdjacentEdge"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the id field of hydra.pg.model.AdjacentEdge"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -267,7 +283,7 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The unique identifier of the edge"}}}],
+                    "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The unique identifier of the edge"}}}]},
                     "body": {"variable": "v"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": [{"constraints": [], "name": "v"}]}}},
@@ -275,10 +291,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the vertex field of hydra.pg.model.AdjacentEdge"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the vertex field of hydra.pg.model.AdjacentEdge"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -331,7 +348,11 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The id of the other vertex adjacent to the edge"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "The id of the other vertex adjacent to the edge"}}}]},
                     "body": {"variable": "v"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": [{"constraints": [], "name": "v"}]}}},
@@ -339,10 +360,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the properties field of hydra.pg.model.AdjacentEdge"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the properties field of hydra.pg.model.AdjacentEdge"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -395,7 +417,7 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "A key/value map of edge properties"}}}],
+                    "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A key/value map of edge properties"}}}]},
                     "body": {"map": {"keys": {"variable": "hydra.pg.model.PropertyKey"}, "values": {"variable": "v"}}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": [{"constraints": [], "name": "v"}]}}},
@@ -403,10 +425,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the label field of hydra.pg.model.AdjacentEdge"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the label field of hydra.pg.model.AdjacentEdge"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -544,7 +567,7 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "The label of the edge"}}}],
+                            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The label of the edge"}}}]},
                             "body": {"variable": "hydra.pg.model.EdgeLabel"}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -570,7 +593,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The label of the edge"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The label of the edge"}}}]},
                       "body": {"variable": "hydra.pg.model.EdgeLabel"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -583,8 +606,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {"key": "description", "value": {"literal": {"string": "DSL updater for the id field of hydra.pg.model.AdjacentEdge"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the id field of hydra.pg.model.AdjacentEdge"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -722,7 +748,7 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "The unique identifier of the edge"}}}],
+                            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The unique identifier of the edge"}}}]},
                             "body": {"variable": "v"}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -748,7 +774,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The unique identifier of the edge"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The unique identifier of the edge"}}}]},
                       "body": {"variable": "v"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -761,10 +787,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the vertex field of hydra.pg.model.AdjacentEdge"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the vertex field of hydra.pg.model.AdjacentEdge"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -902,7 +929,11 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "The id of the other vertex adjacent to the edge"}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {"literal": {"string": "The id of the other vertex adjacent to the edge"}}}]},
                             "body": {"variable": "v"}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -928,7 +959,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The id of the other vertex adjacent to the edge"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "The id of the other vertex adjacent to the edge"}}}]},
                       "body": {"variable": "v"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -941,10 +976,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the properties field of hydra.pg.model.AdjacentEdge"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the properties field of hydra.pg.model.AdjacentEdge"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1082,7 +1118,7 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "A key/value map of edge properties"}}}],
+                            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A key/value map of edge properties"}}}]},
                             "body": {"map": {"keys": {"variable": "hydra.pg.model.PropertyKey"}, "values": {"variable": "v"}}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -1108,7 +1144,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "A key/value map of edge properties"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A key/value map of edge properties"}}}]},
                       "body": {"map": {"keys": {"variable": "hydra.pg.model.PropertyKey"}, "values": {"variable": "v"}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -1121,10 +1157,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the out variant of hydra.pg.model.Direction"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the out variant of hydra.pg.model.Direction"}}}]},
             "body": {
               "wrap": {
                 "body": {
@@ -1159,8 +1196,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {"key": "description", "value": {"literal": {"string": "DSL injection for the in variant of hydra.pg.model.Direction"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the in variant of hydra.pg.model.Direction"}}}]},
             "body": {
               "wrap": {
                 "body": {
@@ -1195,10 +1235,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the both variant of hydra.pg.model.Direction"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the both variant of hydra.pg.model.Direction"}}}]},
             "body": {
               "wrap": {
                 "body": {
@@ -1233,10 +1274,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the undirected variant of hydra.pg.model.Direction"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the undirected variant of hydra.pg.model.Direction"}}}]},
             "body": {
               "wrap": {
                 "body": {
@@ -1271,7 +1313,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for hydra.pg.model.Edge"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL constructor for hydra.pg.model.Edge"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1345,7 +1388,7 @@
                                   "application": {
                                     "argument": {
                                       "annotated": {
-                                        "annotation": [{"key": "description", "value": {"literal": {"string": "A key/value map of edge properties"}}}],
+                                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A key/value map of edge properties"}}}]},
                                         "body": {"map": {"keys": {"variable": "hydra.pg.model.PropertyKey"}, "values": {"variable": "v"}}}}},
                                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                                 "parameter": "properties"}},
@@ -1353,7 +1396,8 @@
                               "application": {
                                 "argument": {
                                   "annotated": {
-                                    "annotation": [{"key": "description", "value": {"literal": {"string": "The id of the in-vertex (head) of the edge"}}}],
+                                    "annotation": {
+                                      "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The id of the in-vertex (head) of the edge"}}}]},
                                     "body": {"variable": "v"}}},
                                 "function": {"variable": "hydra.typed.TypedTerm"}}},
                             "parameter": "in"}},
@@ -1361,7 +1405,8 @@
                           "application": {
                             "argument": {
                               "annotated": {
-                                "annotation": [{"key": "description", "value": {"literal": {"string": "The id of the out-vertex (tail) of the edge"}}}],
+                                "annotation": {
+                                  "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The id of the out-vertex (tail) of the edge"}}}]},
                                 "body": {"variable": "v"}}},
                             "function": {"variable": "hydra.typed.TypedTerm"}}},
                         "parameter": "out"}},
@@ -1369,7 +1414,7 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "The unique identifier of the edge"}}}],
+                            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The unique identifier of the edge"}}}]},
                             "body": {"variable": "v"}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "id"}},
@@ -1377,7 +1422,7 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The label of the edge"}}}],
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The label of the edge"}}}]},
                         "body": {"variable": "hydra.pg.model.EdgeLabel"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "label"}}}},
@@ -1391,7 +1436,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The label of the edge"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The label of the edge"}}}]},
                       "body": {"variable": "hydra.pg.model.EdgeLabel"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -1401,7 +1446,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The unique identifier of the edge"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The unique identifier of the edge"}}}]},
                       "body": {"variable": "v"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -1411,7 +1456,8 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The id of the out-vertex (tail) of the edge"}}}],
+                      "annotation": {
+                        "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The id of the out-vertex (tail) of the edge"}}}]},
                       "body": {"variable": "v"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -1421,7 +1467,8 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The id of the in-vertex (head) of the edge"}}}],
+                      "annotation": {
+                        "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The id of the in-vertex (head) of the edge"}}}]},
                       "body": {"variable": "v"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -1431,7 +1478,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "A key/value map of edge properties"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A key/value map of edge properties"}}}]},
                       "body": {"map": {"keys": {"variable": "hydra.pg.model.PropertyKey"}, "values": {"variable": "v"}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -1444,7 +1491,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL accessor for the label field of hydra.pg.model.Edge"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the label field of hydra.pg.model.Edge"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1497,7 +1548,7 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The label of the edge"}}}],
+                    "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The label of the edge"}}}]},
                     "body": {"variable": "hydra.pg.model.EdgeLabel"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": [{"constraints": [], "name": "v"}]}}},
@@ -1505,7 +1556,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL accessor for the id field of hydra.pg.model.Edge"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the id field of hydra.pg.model.Edge"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1558,7 +1613,7 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The unique identifier of the edge"}}}],
+                    "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The unique identifier of the edge"}}}]},
                     "body": {"variable": "v"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": [{"constraints": [], "name": "v"}]}}},
@@ -1566,7 +1621,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL accessor for the out field of hydra.pg.model.Edge"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the out field of hydra.pg.model.Edge"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1619,7 +1678,8 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The id of the out-vertex (tail) of the edge"}}}],
+                    "annotation": {
+                      "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The id of the out-vertex (tail) of the edge"}}}]},
                     "body": {"variable": "v"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": [{"constraints": [], "name": "v"}]}}},
@@ -1627,7 +1687,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL accessor for the in field of hydra.pg.model.Edge"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the in field of hydra.pg.model.Edge"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1680,7 +1744,8 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The id of the in-vertex (head) of the edge"}}}],
+                    "annotation": {
+                      "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The id of the in-vertex (head) of the edge"}}}]},
                     "body": {"variable": "v"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": [{"constraints": [], "name": "v"}]}}},
@@ -1688,8 +1753,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {"key": "description", "value": {"literal": {"string": "DSL accessor for the properties field of hydra.pg.model.Edge"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the properties field of hydra.pg.model.Edge"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1742,7 +1810,7 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "A key/value map of edge properties"}}}],
+                    "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A key/value map of edge properties"}}}]},
                     "body": {"map": {"keys": {"variable": "hydra.pg.model.PropertyKey"}, "values": {"variable": "v"}}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": [{"constraints": [], "name": "v"}]}}},
@@ -1750,7 +1818,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL updater for the label field of hydra.pg.model.Edge"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the label field of hydra.pg.model.Edge"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1922,7 +1994,7 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "The label of the edge"}}}],
+                            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The label of the edge"}}}]},
                             "body": {"variable": "hydra.pg.model.EdgeLabel"}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -1948,7 +2020,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The label of the edge"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The label of the edge"}}}]},
                       "body": {"variable": "hydra.pg.model.EdgeLabel"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -1961,7 +2033,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL updater for the id field of hydra.pg.model.Edge"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the id field of hydra.pg.model.Edge"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2133,7 +2209,7 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "The unique identifier of the edge"}}}],
+                            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The unique identifier of the edge"}}}]},
                             "body": {"variable": "v"}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -2159,7 +2235,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The unique identifier of the edge"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The unique identifier of the edge"}}}]},
                       "body": {"variable": "v"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -2172,7 +2248,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL updater for the out field of hydra.pg.model.Edge"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the out field of hydra.pg.model.Edge"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2344,7 +2424,8 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "The id of the out-vertex (tail) of the edge"}}}],
+                            "annotation": {
+                              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The id of the out-vertex (tail) of the edge"}}}]},
                             "body": {"variable": "v"}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -2370,7 +2451,8 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The id of the out-vertex (tail) of the edge"}}}],
+                      "annotation": {
+                        "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The id of the out-vertex (tail) of the edge"}}}]},
                       "body": {"variable": "v"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -2383,7 +2465,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL updater for the in field of hydra.pg.model.Edge"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the in field of hydra.pg.model.Edge"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2555,7 +2641,8 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "The id of the in-vertex (head) of the edge"}}}],
+                            "annotation": {
+                              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The id of the in-vertex (head) of the edge"}}}]},
                             "body": {"variable": "v"}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -2581,7 +2668,8 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The id of the in-vertex (head) of the edge"}}}],
+                      "annotation": {
+                        "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The id of the in-vertex (head) of the edge"}}}]},
                       "body": {"variable": "v"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -2594,8 +2682,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {"key": "description", "value": {"literal": {"string": "DSL updater for the properties field of hydra.pg.model.Edge"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the properties field of hydra.pg.model.Edge"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2767,7 +2858,7 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "A key/value map of edge properties"}}}],
+                            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A key/value map of edge properties"}}}]},
                             "body": {"map": {"keys": {"variable": "hydra.pg.model.PropertyKey"}, "values": {"variable": "v"}}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -2793,7 +2884,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "A key/value map of edge properties"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A key/value map of edge properties"}}}]},
                       "body": {"map": {"keys": {"variable": "hydra.pg.model.PropertyKey"}, "values": {"variable": "v"}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -2806,7 +2897,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for the hydra.pg.model.EdgeLabel wrapper"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL constructor for the hydra.pg.model.EdgeLabel wrapper"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2844,7 +2939,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL accessor for the body of hydra.pg.model.EdgeLabel"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the body of hydra.pg.model.EdgeLabel"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2887,7 +2986,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for hydra.pg.model.EdgeType"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL constructor for hydra.pg.model.EdgeType"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2961,12 +3061,13 @@
                                   "application": {
                                     "argument": {
                                       "annotated": {
-                                        "annotation": [
-                                          {
-                                            "key": "description",
-                                            "value": {
-                                              "literal": {
-                                                "string": "A list of property types. The types are ordered for the sake of applications in which property order is significant."}}}],
+                                        "annotation": {
+                                          "map": [
+                                            {
+                                              "key": {"variable": "description"},
+                                              "value": {
+                                                "literal": {
+                                                  "string": "A list of property types. The types are ordered for the sake of applications in which property order is significant."}}}]},
                                         "body": {"list": {"application": {"argument": {"variable": "t"}, "function": {"variable": "hydra.pg.model.PropertyType"}}}}}},
                                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                                 "parameter": "properties"}},
@@ -2974,10 +3075,11 @@
                               "application": {
                                 "argument": {
                                   "annotated": {
-                                    "annotation": [
-                                      {
-                                        "key": "description",
-                                        "value": {"literal": {"string": "The label of the in-vertex (head) of any edge of this edge type"}}}],
+                                    "annotation": {
+                                      "map": [
+                                        {
+                                          "key": {"variable": "description"},
+                                          "value": {"literal": {"string": "The label of the in-vertex (head) of any edge of this edge type"}}}]},
                                     "body": {"variable": "hydra.pg.model.VertexLabel"}}},
                                 "function": {"variable": "hydra.typed.TypedTerm"}}},
                             "parameter": "in"}},
@@ -2985,10 +3087,11 @@
                           "application": {
                             "argument": {
                               "annotated": {
-                                "annotation": [
-                                  {
-                                    "key": "description",
-                                    "value": {"literal": {"string": "The label of the out-vertex (tail) of any edge of this edge type"}}}],
+                                "annotation": {
+                                  "map": [
+                                    {
+                                      "key": {"variable": "description"},
+                                      "value": {"literal": {"string": "The label of the out-vertex (tail) of any edge of this edge type"}}}]},
                                 "body": {"variable": "hydra.pg.model.VertexLabel"}}},
                             "function": {"variable": "hydra.typed.TypedTerm"}}},
                         "parameter": "out"}},
@@ -2996,7 +3099,11 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "The type of the id of any edge of this edge type"}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {"literal": {"string": "The type of the id of any edge of this edge type"}}}]},
                             "body": {"variable": "t"}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "id"}},
@@ -3004,7 +3111,8 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The label of any edge of this edge type"}}}],
+                        "annotation": {
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The label of any edge of this edge type"}}}]},
                         "body": {"variable": "hydra.pg.model.EdgeLabel"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "label"}}}},
@@ -3018,7 +3126,8 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The label of any edge of this edge type"}}}],
+                      "annotation": {
+                        "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The label of any edge of this edge type"}}}]},
                       "body": {"variable": "hydra.pg.model.EdgeLabel"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -3028,7 +3137,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The type of the id of any edge of this edge type"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "The type of the id of any edge of this edge type"}}}]},
                       "body": {"variable": "t"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -3038,10 +3151,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "The label of the out-vertex (tail) of any edge of this edge type"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "The label of the out-vertex (tail) of any edge of this edge type"}}}]},
                       "body": {"variable": "hydra.pg.model.VertexLabel"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -3051,10 +3165,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "The label of the in-vertex (head) of any edge of this edge type"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "The label of the in-vertex (head) of any edge of this edge type"}}}]},
                       "body": {"variable": "hydra.pg.model.VertexLabel"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -3064,12 +3179,13 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {
-                            "literal": {
-                              "string": "A list of property types. The types are ordered for the sake of applications in which property order is significant."}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {
+                              "literal": {
+                                "string": "A list of property types. The types are ordered for the sake of applications in which property order is significant."}}}]},
                       "body": {"list": {"application": {"argument": {"variable": "t"}, "function": {"variable": "hydra.pg.model.PropertyType"}}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -3082,8 +3198,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {"key": "description", "value": {"literal": {"string": "DSL accessor for the label field of hydra.pg.model.EdgeType"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the label field of hydra.pg.model.EdgeType"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3136,7 +3255,8 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The label of any edge of this edge type"}}}],
+                    "annotation": {
+                      "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The label of any edge of this edge type"}}}]},
                     "body": {"variable": "hydra.pg.model.EdgeLabel"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": [{"constraints": [], "name": "t"}]}}},
@@ -3144,7 +3264,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL accessor for the id field of hydra.pg.model.EdgeType"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the id field of hydra.pg.model.EdgeType"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3197,7 +3321,11 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The type of the id of any edge of this edge type"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "The type of the id of any edge of this edge type"}}}]},
                     "body": {"variable": "t"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": [{"constraints": [], "name": "t"}]}}},
@@ -3205,7 +3333,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL accessor for the out field of hydra.pg.model.EdgeType"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the out field of hydra.pg.model.EdgeType"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3258,10 +3390,11 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {"literal": {"string": "The label of the out-vertex (tail) of any edge of this edge type"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "The label of the out-vertex (tail) of any edge of this edge type"}}}]},
                     "body": {"variable": "hydra.pg.model.VertexLabel"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": [{"constraints": [], "name": "t"}]}}},
@@ -3269,7 +3402,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL accessor for the in field of hydra.pg.model.EdgeType"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the in field of hydra.pg.model.EdgeType"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3322,10 +3459,11 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {"literal": {"string": "The label of the in-vertex (head) of any edge of this edge type"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "The label of the in-vertex (head) of any edge of this edge type"}}}]},
                     "body": {"variable": "hydra.pg.model.VertexLabel"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": [{"constraints": [], "name": "t"}]}}},
@@ -3333,10 +3471,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the properties field of hydra.pg.model.EdgeType"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the properties field of hydra.pg.model.EdgeType"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3389,12 +3528,13 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {
-                          "literal": {
-                            "string": "A list of property types. The types are ordered for the sake of applications in which property order is significant."}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {
+                            "literal": {
+                              "string": "A list of property types. The types are ordered for the sake of applications in which property order is significant."}}}]},
                     "body": {"list": {"application": {"argument": {"variable": "t"}, "function": {"variable": "hydra.pg.model.PropertyType"}}}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": [{"constraints": [], "name": "t"}]}}},
@@ -3402,7 +3542,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL updater for the label field of hydra.pg.model.EdgeType"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the label field of hydra.pg.model.EdgeType"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3574,7 +3718,8 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "The label of any edge of this edge type"}}}],
+                            "annotation": {
+                              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The label of any edge of this edge type"}}}]},
                             "body": {"variable": "hydra.pg.model.EdgeLabel"}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -3600,7 +3745,8 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The label of any edge of this edge type"}}}],
+                      "annotation": {
+                        "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The label of any edge of this edge type"}}}]},
                       "body": {"variable": "hydra.pg.model.EdgeLabel"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -3613,7 +3759,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL updater for the id field of hydra.pg.model.EdgeType"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the id field of hydra.pg.model.EdgeType"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3785,7 +3935,11 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "The type of the id of any edge of this edge type"}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {"literal": {"string": "The type of the id of any edge of this edge type"}}}]},
                             "body": {"variable": "t"}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -3811,7 +3965,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The type of the id of any edge of this edge type"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "The type of the id of any edge of this edge type"}}}]},
                       "body": {"variable": "t"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -3824,7 +3982,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL updater for the out field of hydra.pg.model.EdgeType"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the out field of hydra.pg.model.EdgeType"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3996,10 +4158,11 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [
-                              {
-                                "key": "description",
-                                "value": {"literal": {"string": "The label of the out-vertex (tail) of any edge of this edge type"}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {"literal": {"string": "The label of the out-vertex (tail) of any edge of this edge type"}}}]},
                             "body": {"variable": "hydra.pg.model.VertexLabel"}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -4025,10 +4188,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "The label of the out-vertex (tail) of any edge of this edge type"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "The label of the out-vertex (tail) of any edge of this edge type"}}}]},
                       "body": {"variable": "hydra.pg.model.VertexLabel"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -4041,7 +4205,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL updater for the in field of hydra.pg.model.EdgeType"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the in field of hydra.pg.model.EdgeType"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4213,10 +4381,11 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [
-                              {
-                                "key": "description",
-                                "value": {"literal": {"string": "The label of the in-vertex (head) of any edge of this edge type"}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {"literal": {"string": "The label of the in-vertex (head) of any edge of this edge type"}}}]},
                             "body": {"variable": "hydra.pg.model.VertexLabel"}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -4242,10 +4411,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "The label of the in-vertex (head) of any edge of this edge type"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "The label of the in-vertex (head) of any edge of this edge type"}}}]},
                       "body": {"variable": "hydra.pg.model.VertexLabel"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -4258,10 +4428,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the properties field of hydra.pg.model.EdgeType"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the properties field of hydra.pg.model.EdgeType"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4433,12 +4604,13 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [
-                              {
-                                "key": "description",
-                                "value": {
-                                  "literal": {
-                                    "string": "A list of property types. The types are ordered for the sake of applications in which property order is significant."}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {
+                                    "literal": {
+                                      "string": "A list of property types. The types are ordered for the sake of applications in which property order is significant."}}}]},
                             "body": {"list": {"application": {"argument": {"variable": "t"}, "function": {"variable": "hydra.pg.model.PropertyType"}}}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -4464,12 +4636,13 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {
-                            "literal": {
-                              "string": "A list of property types. The types are ordered for the sake of applications in which property order is significant."}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {
+                              "literal": {
+                                "string": "A list of property types. The types are ordered for the sake of applications in which property order is significant."}}}]},
                       "body": {"list": {"application": {"argument": {"variable": "t"}, "function": {"variable": "hydra.pg.model.PropertyType"}}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -4482,10 +4655,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the vertex variant of hydra.pg.model.Element"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the vertex variant of hydra.pg.model.Element"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4538,8 +4712,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {"key": "description", "value": {"literal": {"string": "DSL injection for the edge variant of hydra.pg.model.Element"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the edge variant of hydra.pg.model.Element"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4592,10 +4769,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the vertex variant of hydra.pg.model.ElementKind"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the vertex variant of hydra.pg.model.ElementKind"}}}]},
             "body": {
               "wrap": {
                 "body": {
@@ -4630,10 +4808,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the edge variant of hydra.pg.model.ElementKind"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the edge variant of hydra.pg.model.ElementKind"}}}]},
             "body": {
               "wrap": {
                 "body": {
@@ -4668,7 +4847,9 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for hydra.pg.model.ElementTree"}}}],
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "DSL constructor for hydra.pg.model.ElementTree"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4745,10 +4926,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the self field of hydra.pg.model.ElementTree"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the self field of hydra.pg.model.ElementTree"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4806,10 +4988,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the dependencies field of hydra.pg.model.ElementTree"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the dependencies field of hydra.pg.model.ElementTree"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4869,8 +5052,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {"key": "description", "value": {"literal": {"string": "DSL updater for the self field of hydra.pg.model.ElementTree"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the self field of hydra.pg.model.ElementTree"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4975,10 +5161,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the dependencies field of hydra.pg.model.ElementTree"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the dependencies field of hydra.pg.model.ElementTree"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -5081,10 +5268,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the vertex variant of hydra.pg.model.ElementType"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the vertex variant of hydra.pg.model.ElementType"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -5137,10 +5325,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the edge variant of hydra.pg.model.ElementType"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the edge variant of hydra.pg.model.ElementType"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -5193,7 +5382,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for hydra.pg.model.ElementTypeTree"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL constructor for hydra.pg.model.ElementTypeTree"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -5270,10 +5463,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the self field of hydra.pg.model.ElementTypeTree"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the self field of hydra.pg.model.ElementTypeTree"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -5331,10 +5525,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the dependencies field of hydra.pg.model.ElementTypeTree"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the dependencies field of hydra.pg.model.ElementTypeTree"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -5394,10 +5589,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the self field of hydra.pg.model.ElementTypeTree"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the self field of hydra.pg.model.ElementTypeTree"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -5502,10 +5698,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the dependencies field of hydra.pg.model.ElementTypeTree"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the dependencies field of hydra.pg.model.ElementTypeTree"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -5608,7 +5805,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for hydra.pg.model.Graph"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL constructor for hydra.pg.model.Graph"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -5697,8 +5895,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {"key": "description", "value": {"literal": {"string": "DSL accessor for the vertices field of hydra.pg.model.Graph"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the vertices field of hydra.pg.model.Graph"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -5759,7 +5960,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL accessor for the edges field of hydra.pg.model.Graph"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the edges field of hydra.pg.model.Graph"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -5820,7 +6025,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL updater for the vertices field of hydra.pg.model.Graph"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the vertices field of hydra.pg.model.Graph"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -5929,7 +6138,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL updater for the edges field of hydra.pg.model.Graph"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the edges field of hydra.pg.model.Graph"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -6038,7 +6251,9 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for hydra.pg.model.GraphSchema"}}}],
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "DSL constructor for hydra.pg.model.GraphSchema"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -6082,10 +6297,11 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [
-                              {
-                                "key": "description",
-                                "value": {"literal": {"string": "A unique edge type for each edge label which may occur in a graph"}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {"literal": {"string": "A unique edge type for each edge label which may occur in a graph"}}}]},
                             "body": {
                               "map": {
                                 "keys": {"variable": "hydra.pg.model.EdgeLabel"},
@@ -6096,10 +6312,11 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "A unique vertex type for each vertex label which may occur in a graph"}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "A unique vertex type for each vertex label which may occur in a graph"}}}]},
                         "body": {
                           "map": {
                             "keys": {"variable": "hydra.pg.model.VertexLabel"},
@@ -6116,10 +6333,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "A unique vertex type for each vertex label which may occur in a graph"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "A unique vertex type for each vertex label which may occur in a graph"}}}]},
                       "body": {
                         "map": {
                           "keys": {"variable": "hydra.pg.model.VertexLabel"},
@@ -6132,10 +6350,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "A unique edge type for each edge label which may occur in a graph"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "A unique edge type for each edge label which may occur in a graph"}}}]},
                       "body": {
                         "map": {
                           "keys": {"variable": "hydra.pg.model.EdgeLabel"},
@@ -6151,10 +6370,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the vertices field of hydra.pg.model.GraphSchema"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the vertices field of hydra.pg.model.GraphSchema"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -6207,10 +6427,11 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {"literal": {"string": "A unique vertex type for each vertex label which may occur in a graph"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "A unique vertex type for each vertex label which may occur in a graph"}}}]},
                     "body": {
                       "map": {
                         "keys": {"variable": "hydra.pg.model.VertexLabel"},
@@ -6221,10 +6442,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the edges field of hydra.pg.model.GraphSchema"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the edges field of hydra.pg.model.GraphSchema"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -6277,10 +6499,11 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {"literal": {"string": "A unique edge type for each edge label which may occur in a graph"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "A unique edge type for each edge label which may occur in a graph"}}}]},
                     "body": {
                       "map": {
                         "keys": {"variable": "hydra.pg.model.EdgeLabel"},
@@ -6291,10 +6514,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the vertices field of hydra.pg.model.GraphSchema"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the vertices field of hydra.pg.model.GraphSchema"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -6364,10 +6588,11 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [
-                              {
-                                "key": "description",
-                                "value": {"literal": {"string": "A unique vertex type for each vertex label which may occur in a graph"}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {"literal": {"string": "A unique vertex type for each vertex label which may occur in a graph"}}}]},
                             "body": {
                               "map": {
                                 "keys": {"variable": "hydra.pg.model.VertexLabel"},
@@ -6396,10 +6621,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "A unique vertex type for each vertex label which may occur in a graph"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "A unique vertex type for each vertex label which may occur in a graph"}}}]},
                       "body": {
                         "map": {
                           "keys": {"variable": "hydra.pg.model.VertexLabel"},
@@ -6415,10 +6641,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the edges field of hydra.pg.model.GraphSchema"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the edges field of hydra.pg.model.GraphSchema"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -6488,10 +6715,11 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [
-                              {
-                                "key": "description",
-                                "value": {"literal": {"string": "A unique edge type for each edge label which may occur in a graph"}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {"literal": {"string": "A unique edge type for each edge label which may occur in a graph"}}}]},
                             "body": {
                               "map": {
                                 "keys": {"variable": "hydra.pg.model.EdgeLabel"},
@@ -6520,10 +6748,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "A unique edge type for each edge label which may occur in a graph"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "A unique edge type for each edge label which may occur in a graph"}}}]},
                       "body": {
                         "map": {
                           "keys": {"variable": "hydra.pg.model.EdgeLabel"},
@@ -6539,8 +6768,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {"key": "description", "value": {"literal": {"string": "DSL injection for the vertex variant of hydra.pg.model.Label"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the vertex variant of hydra.pg.model.Label"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -6586,7 +6818,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL injection for the edge variant of hydra.pg.model.Label"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the edge variant of hydra.pg.model.Label"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -6632,7 +6868,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for hydra.pg.model.LazyGraph"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL constructor for hydra.pg.model.LazyGraph"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -6709,10 +6946,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the vertices field of hydra.pg.model.LazyGraph"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the vertices field of hydra.pg.model.LazyGraph"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -6770,8 +7008,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {"key": "description", "value": {"literal": {"string": "DSL accessor for the edges field of hydra.pg.model.LazyGraph"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the edges field of hydra.pg.model.LazyGraph"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -6829,10 +7070,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the vertices field of hydra.pg.model.LazyGraph"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the vertices field of hydra.pg.model.LazyGraph"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -6935,8 +7177,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {"key": "description", "value": {"literal": {"string": "DSL updater for the edges field of hydra.pg.model.LazyGraph"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the edges field of hydra.pg.model.LazyGraph"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -7039,7 +7284,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for hydra.pg.model.Property"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL constructor for hydra.pg.model.Property"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -7083,7 +7329,7 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "The value of the property"}}}],
+                            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The value of the property"}}}]},
                             "body": {"variable": "v"}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "value"}},
@@ -7091,7 +7337,7 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "They key of the property"}}}],
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "They key of the property"}}}]},
                         "body": {"variable": "hydra.pg.model.PropertyKey"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "key"}}}},
@@ -7105,7 +7351,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "They key of the property"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "They key of the property"}}}]},
                       "body": {"variable": "hydra.pg.model.PropertyKey"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -7115,7 +7361,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The value of the property"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The value of the property"}}}]},
                       "body": {"variable": "v"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -7128,7 +7374,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL accessor for the key field of hydra.pg.model.Property"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the key field of hydra.pg.model.Property"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -7181,7 +7431,7 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "They key of the property"}}}],
+                    "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "They key of the property"}}}]},
                     "body": {"variable": "hydra.pg.model.PropertyKey"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": [{"constraints": [], "name": "v"}]}}},
@@ -7189,8 +7439,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {"key": "description", "value": {"literal": {"string": "DSL accessor for the value field of hydra.pg.model.Property"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the value field of hydra.pg.model.Property"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -7243,7 +7496,7 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The value of the property"}}}],
+                    "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The value of the property"}}}]},
                     "body": {"variable": "v"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": [{"constraints": [], "name": "v"}]}}},
@@ -7251,7 +7504,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL updater for the key field of hydra.pg.model.Property"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the key field of hydra.pg.model.Property"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -7321,7 +7578,7 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "They key of the property"}}}],
+                            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "They key of the property"}}}]},
                             "body": {"variable": "hydra.pg.model.PropertyKey"}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -7347,7 +7604,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "They key of the property"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "They key of the property"}}}]},
                       "body": {"variable": "hydra.pg.model.PropertyKey"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -7360,7 +7617,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL updater for the value field of hydra.pg.model.Property"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the value field of hydra.pg.model.Property"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -7430,7 +7691,7 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "The value of the property"}}}],
+                            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The value of the property"}}}]},
                             "body": {"variable": "v"}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -7456,7 +7717,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The value of the property"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The value of the property"}}}]},
                       "body": {"variable": "v"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -7469,7 +7730,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for the hydra.pg.model.PropertyKey wrapper"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL constructor for the hydra.pg.model.PropertyKey wrapper"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -7507,7 +7772,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL accessor for the body of hydra.pg.model.PropertyKey"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the body of hydra.pg.model.PropertyKey"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -7550,7 +7819,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for hydra.pg.model.PropertyType"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL constructor for hydra.pg.model.PropertyType"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -7604,10 +7877,11 @@
                           "application": {
                             "argument": {
                               "annotated": {
-                                "annotation": [
-                                  {
-                                    "key": "description",
-                                    "value": {"literal": {"string": "Whether the property is required; values may be omitted from a property map otherwise"}}}],
+                                "annotation": {
+                                  "map": [
+                                    {
+                                      "key": {"variable": "description"},
+                                      "value": {"literal": {"string": "Whether the property is required; values may be omitted from a property map otherwise"}}}]},
                                 "body": {"literal": {"boolean": {}}}}},
                             "function": {"variable": "hydra.typed.TypedTerm"}}},
                         "parameter": "required"}},
@@ -7615,7 +7889,7 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "The type of a property's value"}}}],
+                            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The type of a property's value"}}}]},
                             "body": {"variable": "t"}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "value"}},
@@ -7623,7 +7897,7 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "A property's key"}}}],
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A property's key"}}}]},
                         "body": {"variable": "hydra.pg.model.PropertyKey"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "key"}}}},
@@ -7637,7 +7911,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "A property's key"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A property's key"}}}]},
                       "body": {"variable": "hydra.pg.model.PropertyKey"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -7647,7 +7921,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The type of a property's value"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The type of a property's value"}}}]},
                       "body": {"variable": "t"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -7657,10 +7931,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "Whether the property is required; values may be omitted from a property map otherwise"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "Whether the property is required; values may be omitted from a property map otherwise"}}}]},
                       "body": {"literal": {"boolean": {}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -7673,10 +7948,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the key field of hydra.pg.model.PropertyType"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the key field of hydra.pg.model.PropertyType"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -7729,7 +8005,7 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "A property's key"}}}],
+                    "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A property's key"}}}]},
                     "body": {"variable": "hydra.pg.model.PropertyKey"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": [{"constraints": [], "name": "t"}]}}},
@@ -7737,10 +8013,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the value field of hydra.pg.model.PropertyType"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the value field of hydra.pg.model.PropertyType"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -7793,7 +8070,7 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The type of a property's value"}}}],
+                    "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The type of a property's value"}}}]},
                     "body": {"variable": "t"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": [{"constraints": [], "name": "t"}]}}},
@@ -7801,10 +8078,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the required field of hydra.pg.model.PropertyType"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the required field of hydra.pg.model.PropertyType"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -7857,10 +8135,11 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {"literal": {"string": "Whether the property is required; values may be omitted from a property map otherwise"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "Whether the property is required; values may be omitted from a property map otherwise"}}}]},
                     "body": {"literal": {"boolean": {}}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": [{"constraints": [], "name": "t"}]}}},
@@ -7868,8 +8147,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {"key": "description", "value": {"literal": {"string": "DSL updater for the key field of hydra.pg.model.PropertyType"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the key field of hydra.pg.model.PropertyType"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -7973,7 +8255,7 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "A property's key"}}}],
+                            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A property's key"}}}]},
                             "body": {"variable": "hydra.pg.model.PropertyKey"}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -7999,7 +8281,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "A property's key"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A property's key"}}}]},
                       "body": {"variable": "hydra.pg.model.PropertyKey"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -8012,10 +8294,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the value field of hydra.pg.model.PropertyType"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the value field of hydra.pg.model.PropertyType"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -8119,7 +8402,7 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "The type of a property's value"}}}],
+                            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The type of a property's value"}}}]},
                             "body": {"variable": "t"}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -8145,7 +8428,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The type of a property's value"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The type of a property's value"}}}]},
                       "body": {"variable": "t"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -8158,10 +8441,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the required field of hydra.pg.model.PropertyType"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the required field of hydra.pg.model.PropertyType"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -8265,10 +8549,11 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [
-                              {
-                                "key": "description",
-                                "value": {"literal": {"string": "Whether the property is required; values may be omitted from a property map otherwise"}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {"literal": {"string": "Whether the property is required; values may be omitted from a property map otherwise"}}}]},
                             "body": {"literal": {"boolean": {}}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -8294,10 +8579,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "Whether the property is required; values may be omitted from a property map otherwise"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "Whether the property is required; values may be omitted from a property map otherwise"}}}]},
                       "body": {"literal": {"boolean": {}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -8310,7 +8596,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for hydra.pg.model.Vertex"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL constructor for hydra.pg.model.Vertex"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -8364,7 +8651,8 @@
                           "application": {
                             "argument": {
                               "annotated": {
-                                "annotation": [{"key": "description", "value": {"literal": {"string": "A key/value map of vertex properties"}}}],
+                                "annotation": {
+                                  "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A key/value map of vertex properties"}}}]},
                                 "body": {"map": {"keys": {"variable": "hydra.pg.model.PropertyKey"}, "values": {"variable": "v"}}}}},
                             "function": {"variable": "hydra.typed.TypedTerm"}}},
                         "parameter": "properties"}},
@@ -8372,7 +8660,7 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "The unique identifier of the vertex"}}}],
+                            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The unique identifier of the vertex"}}}]},
                             "body": {"variable": "v"}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "id"}},
@@ -8380,7 +8668,7 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The label of the vertex"}}}],
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The label of the vertex"}}}]},
                         "body": {"variable": "hydra.pg.model.VertexLabel"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "label"}}}},
@@ -8394,7 +8682,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The label of the vertex"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The label of the vertex"}}}]},
                       "body": {"variable": "hydra.pg.model.VertexLabel"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -8404,7 +8692,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The unique identifier of the vertex"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The unique identifier of the vertex"}}}]},
                       "body": {"variable": "v"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -8414,7 +8702,8 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "A key/value map of vertex properties"}}}],
+                      "annotation": {
+                        "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A key/value map of vertex properties"}}}]},
                       "body": {"map": {"keys": {"variable": "hydra.pg.model.PropertyKey"}, "values": {"variable": "v"}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -8427,7 +8716,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL accessor for the label field of hydra.pg.model.Vertex"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the label field of hydra.pg.model.Vertex"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -8480,7 +8773,7 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The label of the vertex"}}}],
+                    "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The label of the vertex"}}}]},
                     "body": {"variable": "hydra.pg.model.VertexLabel"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": [{"constraints": [], "name": "v"}]}}},
@@ -8488,7 +8781,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL accessor for the id field of hydra.pg.model.Vertex"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the id field of hydra.pg.model.Vertex"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -8541,7 +8838,7 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The unique identifier of the vertex"}}}],
+                    "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The unique identifier of the vertex"}}}]},
                     "body": {"variable": "v"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": [{"constraints": [], "name": "v"}]}}},
@@ -8549,10 +8846,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the properties field of hydra.pg.model.Vertex"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the properties field of hydra.pg.model.Vertex"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -8605,7 +8903,8 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "A key/value map of vertex properties"}}}],
+                    "annotation": {
+                      "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A key/value map of vertex properties"}}}]},
                     "body": {"map": {"keys": {"variable": "hydra.pg.model.PropertyKey"}, "values": {"variable": "v"}}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": [{"constraints": [], "name": "v"}]}}},
@@ -8613,7 +8912,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL updater for the label field of hydra.pg.model.Vertex"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the label field of hydra.pg.model.Vertex"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -8717,7 +9020,7 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "The label of the vertex"}}}],
+                            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The label of the vertex"}}}]},
                             "body": {"variable": "hydra.pg.model.VertexLabel"}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -8743,7 +9046,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The label of the vertex"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The label of the vertex"}}}]},
                       "body": {"variable": "hydra.pg.model.VertexLabel"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -8756,7 +9059,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL updater for the id field of hydra.pg.model.Vertex"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the id field of hydra.pg.model.Vertex"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -8860,7 +9167,7 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "The unique identifier of the vertex"}}}],
+                            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The unique identifier of the vertex"}}}]},
                             "body": {"variable": "v"}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -8886,7 +9193,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The unique identifier of the vertex"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The unique identifier of the vertex"}}}]},
                       "body": {"variable": "v"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -8899,10 +9206,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the properties field of hydra.pg.model.Vertex"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the properties field of hydra.pg.model.Vertex"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -9006,7 +9314,8 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "A key/value map of vertex properties"}}}],
+                            "annotation": {
+                              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A key/value map of vertex properties"}}}]},
                             "body": {"map": {"keys": {"variable": "hydra.pg.model.PropertyKey"}, "values": {"variable": "v"}}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -9032,7 +9341,8 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "A key/value map of vertex properties"}}}],
+                      "annotation": {
+                        "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A key/value map of vertex properties"}}}]},
                       "body": {"map": {"keys": {"variable": "hydra.pg.model.PropertyKey"}, "values": {"variable": "v"}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -9045,7 +9355,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for the hydra.pg.model.VertexLabel wrapper"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL constructor for the hydra.pg.model.VertexLabel wrapper"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -9083,7 +9397,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL accessor for the body of hydra.pg.model.VertexLabel"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the body of hydra.pg.model.VertexLabel"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -9126,7 +9444,9 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for hydra.pg.model.VertexType"}}}],
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "DSL constructor for hydra.pg.model.VertexType"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -9180,12 +9500,13 @@
                           "application": {
                             "argument": {
                               "annotated": {
-                                "annotation": [
-                                  {
-                                    "key": "description",
-                                    "value": {
-                                      "literal": {
-                                        "string": "A list of property types. The types are ordered for the sake of applications in which property order is significant."}}}],
+                                "annotation": {
+                                  "map": [
+                                    {
+                                      "key": {"variable": "description"},
+                                      "value": {
+                                        "literal": {
+                                          "string": "A list of property types. The types are ordered for the sake of applications in which property order is significant."}}}]},
                                 "body": {"list": {"application": {"argument": {"variable": "t"}, "function": {"variable": "hydra.pg.model.PropertyType"}}}}}},
                             "function": {"variable": "hydra.typed.TypedTerm"}}},
                         "parameter": "properties"}},
@@ -9193,7 +9514,11 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "The type of the id of any vertex of this vertex type"}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {"literal": {"string": "The type of the id of any vertex of this vertex type"}}}]},
                             "body": {"variable": "t"}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "id"}},
@@ -9201,7 +9526,8 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The label of any vertex of this vertex type"}}}],
+                        "annotation": {
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The label of any vertex of this vertex type"}}}]},
                         "body": {"variable": "hydra.pg.model.VertexLabel"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "label"}}}},
@@ -9215,7 +9541,8 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The label of any vertex of this vertex type"}}}],
+                      "annotation": {
+                        "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The label of any vertex of this vertex type"}}}]},
                       "body": {"variable": "hydra.pg.model.VertexLabel"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -9225,7 +9552,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The type of the id of any vertex of this vertex type"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "The type of the id of any vertex of this vertex type"}}}]},
                       "body": {"variable": "t"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -9235,12 +9566,13 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {
-                            "literal": {
-                              "string": "A list of property types. The types are ordered for the sake of applications in which property order is significant."}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {
+                              "literal": {
+                                "string": "A list of property types. The types are ordered for the sake of applications in which property order is significant."}}}]},
                       "body": {"list": {"application": {"argument": {"variable": "t"}, "function": {"variable": "hydra.pg.model.PropertyType"}}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -9253,10 +9585,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the label field of hydra.pg.model.VertexType"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the label field of hydra.pg.model.VertexType"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -9309,7 +9642,8 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The label of any vertex of this vertex type"}}}],
+                    "annotation": {
+                      "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The label of any vertex of this vertex type"}}}]},
                     "body": {"variable": "hydra.pg.model.VertexLabel"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": [{"constraints": [], "name": "t"}]}}},
@@ -9317,7 +9651,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL accessor for the id field of hydra.pg.model.VertexType"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the id field of hydra.pg.model.VertexType"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -9370,7 +9708,11 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The type of the id of any vertex of this vertex type"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "The type of the id of any vertex of this vertex type"}}}]},
                     "body": {"variable": "t"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": [{"constraints": [], "name": "t"}]}}},
@@ -9378,10 +9720,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the properties field of hydra.pg.model.VertexType"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the properties field of hydra.pg.model.VertexType"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -9434,12 +9777,13 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {
-                          "literal": {
-                            "string": "A list of property types. The types are ordered for the sake of applications in which property order is significant."}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {
+                            "literal": {
+                              "string": "A list of property types. The types are ordered for the sake of applications in which property order is significant."}}}]},
                     "body": {"list": {"application": {"argument": {"variable": "t"}, "function": {"variable": "hydra.pg.model.PropertyType"}}}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": [{"constraints": [], "name": "t"}]}}},
@@ -9447,8 +9791,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {"key": "description", "value": {"literal": {"string": "DSL updater for the label field of hydra.pg.model.VertexType"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the label field of hydra.pg.model.VertexType"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -9552,7 +9899,8 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "The label of any vertex of this vertex type"}}}],
+                            "annotation": {
+                              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The label of any vertex of this vertex type"}}}]},
                             "body": {"variable": "hydra.pg.model.VertexLabel"}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -9578,7 +9926,8 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The label of any vertex of this vertex type"}}}],
+                      "annotation": {
+                        "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The label of any vertex of this vertex type"}}}]},
                       "body": {"variable": "hydra.pg.model.VertexLabel"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -9591,7 +9940,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL updater for the id field of hydra.pg.model.VertexType"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the id field of hydra.pg.model.VertexType"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -9695,7 +10048,11 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "The type of the id of any vertex of this vertex type"}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {"literal": {"string": "The type of the id of any vertex of this vertex type"}}}]},
                             "body": {"variable": "t"}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -9721,7 +10078,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The type of the id of any vertex of this vertex type"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "The type of the id of any vertex of this vertex type"}}}]},
                       "body": {"variable": "t"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -9734,10 +10095,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the properties field of hydra.pg.model.VertexType"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the properties field of hydra.pg.model.VertexType"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -9841,12 +10203,13 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [
-                              {
-                                "key": "description",
-                                "value": {
-                                  "literal": {
-                                    "string": "A list of property types. The types are ordered for the sake of applications in which property order is significant."}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {
+                                    "literal": {
+                                      "string": "A list of property types. The types are ordered for the sake of applications in which property order is significant."}}}]},
                             "body": {"list": {"application": {"argument": {"variable": "t"}, "function": {"variable": "hydra.pg.model.PropertyType"}}}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -9872,12 +10235,13 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {
-                            "literal": {
-                              "string": "A list of property types. The types are ordered for the sake of applications in which property order is significant."}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {
+                              "literal": {
+                                "string": "A list of property types. The types are ordered for the sake of applications in which property order is significant."}}}]},
                       "body": {"list": {"application": {"argument": {"variable": "t"}, "function": {"variable": "hydra.pg.model.PropertyType"}}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -9890,7 +10254,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for hydra.pg.model.VertexWithAdjacentEdges"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL constructor for hydra.pg.model.VertexWithAdjacentEdges"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -9944,10 +10312,11 @@
                           "application": {
                             "argument": {
                               "annotated": {
-                                "annotation": [
-                                  {
-                                    "key": "description",
-                                    "value": {"literal": {"string": "An adjacency list of edges in which the focus vertex is the tail (out-vertex) of the edge"}}}],
+                                "annotation": {
+                                  "map": [
+                                    {
+                                      "key": {"variable": "description"},
+                                      "value": {"literal": {"string": "An adjacency list of edges in which the focus vertex is the tail (out-vertex) of the edge"}}}]},
                                 "body": {"list": {"application": {"argument": {"variable": "v"}, "function": {"variable": "hydra.pg.model.AdjacentEdge"}}}}}},
                             "function": {"variable": "hydra.typed.TypedTerm"}}},
                         "parameter": "outs"}},
@@ -9955,10 +10324,11 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [
-                              {
-                                "key": "description",
-                                "value": {"literal": {"string": "An adjacency list of edges in which the focus vertex is the head (in-vertex) of the edge"}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {"literal": {"string": "An adjacency list of edges in which the focus vertex is the head (in-vertex) of the edge"}}}]},
                             "body": {"list": {"application": {"argument": {"variable": "v"}, "function": {"variable": "hydra.pg.model.AdjacentEdge"}}}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "ins"}},
@@ -9966,7 +10336,7 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The focus vertex"}}}],
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The focus vertex"}}}]},
                         "body": {"application": {"argument": {"variable": "v"}, "function": {"variable": "hydra.pg.model.Vertex"}}}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "vertex"}}}},
@@ -9980,7 +10350,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The focus vertex"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The focus vertex"}}}]},
                       "body": {"application": {"argument": {"variable": "v"}, "function": {"variable": "hydra.pg.model.Vertex"}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -9990,10 +10360,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "An adjacency list of edges in which the focus vertex is the head (in-vertex) of the edge"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "An adjacency list of edges in which the focus vertex is the head (in-vertex) of the edge"}}}]},
                       "body": {"list": {"application": {"argument": {"variable": "v"}, "function": {"variable": "hydra.pg.model.AdjacentEdge"}}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -10003,10 +10374,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "An adjacency list of edges in which the focus vertex is the tail (out-vertex) of the edge"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "An adjacency list of edges in which the focus vertex is the tail (out-vertex) of the edge"}}}]},
                       "body": {"list": {"application": {"argument": {"variable": "v"}, "function": {"variable": "hydra.pg.model.AdjacentEdge"}}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -10019,10 +10391,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the vertex field of hydra.pg.model.VertexWithAdjacentEdges"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the vertex field of hydra.pg.model.VertexWithAdjacentEdges"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -10075,7 +10448,7 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The focus vertex"}}}],
+                    "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The focus vertex"}}}]},
                     "body": {"application": {"argument": {"variable": "v"}, "function": {"variable": "hydra.pg.model.Vertex"}}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": [{"constraints": [], "name": "v"}]}}},
@@ -10083,10 +10456,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the ins field of hydra.pg.model.VertexWithAdjacentEdges"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the ins field of hydra.pg.model.VertexWithAdjacentEdges"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -10139,10 +10513,11 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {"literal": {"string": "An adjacency list of edges in which the focus vertex is the head (in-vertex) of the edge"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "An adjacency list of edges in which the focus vertex is the head (in-vertex) of the edge"}}}]},
                     "body": {"list": {"application": {"argument": {"variable": "v"}, "function": {"variable": "hydra.pg.model.AdjacentEdge"}}}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": [{"constraints": [], "name": "v"}]}}},
@@ -10150,10 +10525,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the outs field of hydra.pg.model.VertexWithAdjacentEdges"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the outs field of hydra.pg.model.VertexWithAdjacentEdges"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -10206,10 +10582,11 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {"literal": {"string": "An adjacency list of edges in which the focus vertex is the tail (out-vertex) of the edge"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "An adjacency list of edges in which the focus vertex is the tail (out-vertex) of the edge"}}}]},
                     "body": {"list": {"application": {"argument": {"variable": "v"}, "function": {"variable": "hydra.pg.model.AdjacentEdge"}}}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": [{"constraints": [], "name": "v"}]}}},
@@ -10217,10 +10594,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the vertex field of hydra.pg.model.VertexWithAdjacentEdges"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the vertex field of hydra.pg.model.VertexWithAdjacentEdges"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -10324,7 +10702,7 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "The focus vertex"}}}],
+                            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The focus vertex"}}}]},
                             "body": {"application": {"argument": {"variable": "v"}, "function": {"variable": "hydra.pg.model.Vertex"}}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -10350,7 +10728,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The focus vertex"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The focus vertex"}}}]},
                       "body": {"application": {"argument": {"variable": "v"}, "function": {"variable": "hydra.pg.model.Vertex"}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -10363,10 +10741,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the ins field of hydra.pg.model.VertexWithAdjacentEdges"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the ins field of hydra.pg.model.VertexWithAdjacentEdges"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -10470,10 +10849,11 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [
-                              {
-                                "key": "description",
-                                "value": {"literal": {"string": "An adjacency list of edges in which the focus vertex is the head (in-vertex) of the edge"}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {"literal": {"string": "An adjacency list of edges in which the focus vertex is the head (in-vertex) of the edge"}}}]},
                             "body": {"list": {"application": {"argument": {"variable": "v"}, "function": {"variable": "hydra.pg.model.AdjacentEdge"}}}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -10499,10 +10879,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "An adjacency list of edges in which the focus vertex is the head (in-vertex) of the edge"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "An adjacency list of edges in which the focus vertex is the head (in-vertex) of the edge"}}}]},
                       "body": {"list": {"application": {"argument": {"variable": "v"}, "function": {"variable": "hydra.pg.model.AdjacentEdge"}}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -10515,10 +10896,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the outs field of hydra.pg.model.VertexWithAdjacentEdges"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the outs field of hydra.pg.model.VertexWithAdjacentEdges"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -10622,10 +11004,11 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [
-                              {
-                                "key": "description",
-                                "value": {"literal": {"string": "An adjacency list of edges in which the focus vertex is the tail (out-vertex) of the edge"}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {"literal": {"string": "An adjacency list of edges in which the focus vertex is the tail (out-vertex) of the edge"}}}]},
                             "body": {"list": {"application": {"argument": {"variable": "v"}, "function": {"variable": "hydra.pg.model.AdjacentEdge"}}}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -10651,10 +11034,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "An adjacency list of edges in which the focus vertex is the tail (out-vertex) of the edge"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "An adjacency list of edges in which the focus vertex is the tail (out-vertex) of the edge"}}}]},
                       "body": {"list": {"application": {"argument": {"variable": "v"}, "function": {"variable": "hydra.pg.model.AdjacentEdge"}}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {

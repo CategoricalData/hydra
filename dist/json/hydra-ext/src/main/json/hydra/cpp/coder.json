@@ -679,10 +679,11 @@
                   "typeLambda": {
                     "body": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "Encode a name with a specified case convention, optionally qualified"}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "Encode a name with a specified case convention, optionally qualified"}}}]},
                         "body": {
                           "lambda": {
                             "body": {

@@ -4,10 +4,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Differentiate a binary primitive application given both arguments and their derivatives"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Differentiate a binary primitive application given both arguments and their derivatives"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1258,10 +1259,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Differentiate a function term (Float64 -> Float64) with respect to its parameter"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Differentiate a function term (Float64 -> Float64) with respect to its parameter"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1337,7 +1339,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Differentiate a term with respect to a named variable"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Differentiate a term with respect to a named variable"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2150,10 +2156,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Compute the gradient of a term as a record of partial derivatives"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Compute the gradient of a term as a record of partial derivatives"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2214,7 +2221,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Look up the derivative of a unary Float64 primitive"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Look up the derivative of a unary Float64 primitive"}}}]},
             "body": {
               "lambda": {
                 "body": {

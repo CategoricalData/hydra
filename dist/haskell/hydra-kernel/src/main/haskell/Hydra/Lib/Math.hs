@@ -435,10 +435,10 @@ even =
                     Core.applicationArgument = (Core.TermVariable (Core.Name "x"))})),
                   Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)))}))}))})),
             Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}))})),
-        Core.annotatedTermAnnotation = (M.fromList [
+        Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
           (
-            Core.Name "description",
-            (Core.TermLiteral (Core.LiteralString "Test whether an integer is even, defined via maybeMod and equality.")))])})))}
+            Core.TermVariable (Core.Name "description"),
+            (Core.TermLiteral (Core.LiteralString "Test whether an integer is even, defined via maybeMod and equality.")))]))})))}
 exp :: Packaging.PrimitiveDefinition
 exp =
     Packaging.PrimitiveDefinition {
@@ -896,10 +896,10 @@ odd =
             Core.applicationArgument = (Core.TermApplication (Core.Application {
               Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.math.even")),
               Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))})),
-        Core.annotatedTermAnnotation = (M.fromList [
+        Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
           (
-            Core.Name "description",
-            (Core.TermLiteral (Core.LiteralString "Test whether an integer is odd, defined as the negation of even.")))])})))}
+            Core.TermVariable (Core.Name "description"),
+            (Core.TermLiteral (Core.LiteralString "Test whether an integer is odd, defined as the negation of even.")))]))})))}
 pi :: Packaging.PrimitiveDefinition
 pi =
     Packaging.PrimitiveDefinition {

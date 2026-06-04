@@ -4,7 +4,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Encoder for hydra.error.core.ConstantConditionError"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Encoder for hydra.error.core.ConstantConditionError"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -71,7 +75,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Encoder for hydra.error.core.DuplicateBindingError"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Encoder for hydra.error.core.DuplicateBindingError"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -129,7 +137,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Encoder for hydra.error.core.DuplicateFieldError"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Encoder for hydra.error.core.DuplicateFieldError"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -187,10 +199,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Encoder for hydra.error.core.DuplicateRecordTypeFieldNamesError"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Encoder for hydra.error.core.DuplicateRecordTypeFieldNamesError"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -249,10 +262,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Encoder for hydra.error.core.DuplicateUnionTypeFieldNamesError"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Encoder for hydra.error.core.DuplicateUnionTypeFieldNamesError"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -311,7 +325,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Encoder for hydra.error.core.EmptyCaseStatementError"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Encoder for hydra.error.core.EmptyCaseStatementError"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -369,7 +387,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Encoder for hydra.error.core.EmptyLetBindingsError"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Encoder for hydra.error.core.EmptyLetBindingsError"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -413,7 +435,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Encoder for hydra.error.core.EmptyRecordTypeError"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Encoder for hydra.error.core.EmptyRecordTypeError"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -457,7 +483,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Encoder for hydra.error.core.EmptyTermAnnotationError"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Encoder for hydra.error.core.EmptyTermAnnotationError"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -501,7 +531,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Encoder for hydra.error.core.EmptyTypeAnnotationError"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Encoder for hydra.error.core.EmptyTypeAnnotationError"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -545,7 +579,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Encoder for hydra.error.core.EmptyTypeNameInTermError"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Encoder for hydra.error.core.EmptyTypeNameInTermError"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -589,7 +627,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Encoder for hydra.error.core.EmptyUnionTypeError"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Encoder for hydra.error.core.EmptyUnionTypeError"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -633,8 +675,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {"key": "description", "value": {"literal": {"string": "Encoder for hydra.error.core.InvalidForallParameterNameError"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Encoder for hydra.error.core.InvalidForallParameterNameError"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -693,8 +738,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {"key": "description", "value": {"literal": {"string": "Encoder for hydra.error.core.InvalidLambdaParameterNameError"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Encoder for hydra.error.core.InvalidLambdaParameterNameError"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -753,7 +801,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Encoder for hydra.error.core.InvalidLetBindingNameError"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Encoder for hydra.error.core.InvalidLetBindingNameError"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -812,7 +864,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Encoder for hydra.error.core.InvalidLiteralError"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Encoder for hydra.error.core.InvalidLiteralError"}}}]},
             "body": {
               "cases": {
                 "cases": [
@@ -855,7 +911,9 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Encoder for hydra.error.core.InvalidTermError"}}}],
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "Encoder for hydra.error.core.InvalidTermError"}}}]},
             "body": {
               "cases": {
                 "cases": [
@@ -1551,7 +1609,9 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Encoder for hydra.error.core.InvalidTypeError"}}}],
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "Encoder for hydra.error.core.InvalidTypeError"}}}]},
             "body": {
               "cases": {
                 "cases": [
@@ -1995,10 +2055,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Encoder for hydra.error.core.InvalidTypeLambdaParameterNameError"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Encoder for hydra.error.core.InvalidTypeLambdaParameterNameError"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2057,10 +2118,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Encoder for hydra.error.core.InvalidTypeSchemeVariableNameError"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Encoder for hydra.error.core.InvalidTypeSchemeVariableNameError"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2119,7 +2181,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Encoder for hydra.error.core.LiteralTypeMismatchError"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Encoder for hydra.error.core.LiteralTypeMismatchError"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2177,7 +2243,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Encoder for hydra.error.core.NestedTermAnnotationError"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Encoder for hydra.error.core.NestedTermAnnotationError"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2221,7 +2291,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Encoder for hydra.error.core.NestedTypeAnnotationError"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Encoder for hydra.error.core.NestedTypeAnnotationError"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2265,7 +2339,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Encoder for hydra.error.core.NonComparableMapKeyTypeError"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Encoder for hydra.error.core.NonComparableMapKeyTypeError"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2324,10 +2402,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Encoder for hydra.error.core.NonComparableSetElementTypeError"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Encoder for hydra.error.core.NonComparableSetElementTypeError"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2386,7 +2465,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Encoder for hydra.error.core.RedundantWrapUnwrapError"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Encoder for hydra.error.core.RedundantWrapUnwrapError"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2444,7 +2527,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Encoder for hydra.error.core.SelfApplicationError"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Encoder for hydra.error.core.SelfApplicationError"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2502,7 +2589,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Encoder for hydra.error.core.SingleVariantUnionError"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Encoder for hydra.error.core.SingleVariantUnionError"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2560,7 +2651,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Encoder for hydra.error.core.TermVariableShadowingError"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Encoder for hydra.error.core.TermVariableShadowingError"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2619,10 +2714,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Encoder for hydra.error.core.TypeVariableShadowingInForallError"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Encoder for hydra.error.core.TypeVariableShadowingInForallError"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2681,10 +2777,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Encoder for hydra.error.core.TypeVariableShadowingInTypeLambdaError"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Encoder for hydra.error.core.TypeVariableShadowingInTypeLambdaError"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2745,7 +2842,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Encoder for hydra.error.core.UndefinedFieldError"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Encoder for hydra.error.core.UndefinedFieldError"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2803,7 +2904,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Encoder for hydra.error.core.UndefinedTermVariableError"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Encoder for hydra.error.core.UndefinedTermVariableError"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2862,7 +2967,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Encoder for hydra.error.core.UndefinedTypeVariableError"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Encoder for hydra.error.core.UndefinedTypeVariableError"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2921,10 +3030,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Encoder for hydra.error.core.UndefinedTypeVariableInBindingTypeError"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Encoder for hydra.error.core.UndefinedTypeVariableInBindingTypeError"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2985,10 +3095,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Encoder for hydra.error.core.UndefinedTypeVariableInLambdaDomainError"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Encoder for hydra.error.core.UndefinedTypeVariableInLambdaDomainError"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3049,10 +3160,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Encoder for hydra.error.core.UndefinedTypeVariableInTypeApplicationError"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Encoder for hydra.error.core.UndefinedTypeVariableInTypeApplicationError"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3114,7 +3226,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Encoder for hydra.error.core.UnexpectedTermVariantError"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Encoder for hydra.error.core.UnexpectedTermVariantError"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3173,7 +3289,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Encoder for hydra.error.core.UnexpectedTypeVariantError"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Encoder for hydra.error.core.UnexpectedTypeVariantError"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3232,7 +3352,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Encoder for hydra.error.core.UnknownPrimitiveNameError"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Encoder for hydra.error.core.UnknownPrimitiveNameError"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3290,10 +3414,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Encoder for hydra.error.core.UnnecessaryIdentityApplicationError"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Encoder for hydra.error.core.UnnecessaryIdentityApplicationError"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3338,7 +3463,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Encoder for hydra.error.core.UntypedTermVariableError"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Encoder for hydra.error.core.UntypedTermVariableError"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3396,7 +3525,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Encoder for hydra.error.core.VoidInNonBottomPositionError"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Encoder for hydra.error.core.VoidInNonBottomPositionError"}}}]},
             "body": {
               "lambda": {
                 "body": {

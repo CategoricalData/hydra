@@ -226,29 +226,32 @@
                 "name": "explicit",
                 "type": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {"literal": {"string": "Terms surrounded by `( ) introduce their free variables as explicit arguments"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "Terms surrounded by `( ) introduce their free variables as explicit arguments"}}}]},
                     "body": {"variable": "hydra.coq.syntax.TypeclassConstraint"}}}},
               {
                 "name": "implicitMaximallyInserted",
                 "type": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {
-                          "literal": {"string": "Terms surrounded by `{ } introduce their free variables as maximally inserted implicit arguments"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {
+                            "literal": {"string": "Terms surrounded by `{ } introduce their free variables as maximally inserted implicit arguments"}}}]},
                     "body": {"variable": "hydra.coq.syntax.TypeclassConstraint"}}}},
               {
                 "name": "implicitNonMaximallyInserted",
                 "type": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {"literal": {"string": "Terms surrounded by `[ ] introduce them as non-maximally inserted implicit arguments"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "Terms surrounded by `[ ] introduce them as non-maximally inserted implicit arguments"}}}]},
                     "body": {"variable": "hydra.coq.syntax.TypeclassConstraint"}}}}]},
           "variables": []},
         "name": "hydra.coq.syntax.GeneralizingBinder"}},
@@ -268,7 +271,7 @@
         "body": {
           "body": {
             "annotated": {
-              "annotation": [{"key": "description", "value": {"literal": {"string": "Pattern match on boolean values"}}}],
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Pattern match on boolean values"}}}]},
               "body": {
                 "record": [
                   {"name": "condition", "type": {"variable": "hydra.coq.syntax.Term"}},
@@ -282,30 +285,33 @@
         "body": {
           "body": {
             "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {
-                    "literal": {"string": "In the context of a function definition, these forms specify that name is an implicit argument."}}}],
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {"string": "In the context of a function definition, these forms specify that name is an implicit argument."}}}]},
               "body": {
                 "union": [
                   {
                     "name": "maximallyInserted",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "The first form, with curly braces, makes name a maximally inserted implicit argument"}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The first form, with curly braces, makes name a maximally inserted implicit argument"}}}]},
                         "body": {"variable": "hydra.coq.syntax.TypeBinders"}}}},
                   {
                     "name": "nonMaximallyInserted",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "The second form, with square brackets, makes name a non-maximally inserted implicit argument."}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The second form, with square brackets, makes name a non-maximally inserted implicit argument."}}}]},
                         "body": {"variable": "hydra.coq.syntax.TypeBinders"}}}}]}}},
           "variables": []},
         "name": "hydra.coq.syntax.ImplicitBinders"}},
@@ -314,7 +320,7 @@
         "body": {
           "body": {
             "annotated": {
-              "annotation": [{"key": "description", "value": {"literal": {"string": "A let-in definition"}}}],
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A let-in definition"}}}]},
               "body": {
                 "record": [
                   {"name": "bindings", "type": {"variable": "hydra.coq.syntax.LetBindings"}},
@@ -326,10 +332,11 @@
         "body": {
           "body": {
             "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {"literal": {"string": "Some constructions allow the binding of a variable to value. This is called a 'let-binder'."}}}],
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "Some constructions allow the binding of a variable to value. This is called a 'let-binder'."}}}]},
               "body": {
                 "record": [
                   {"name": "name", "type": {"variable": "hydra.coq.syntax.Name"}},
@@ -416,7 +423,8 @@
         "body": {
           "body": {
             "annotated": {
-              "annotation": [{"key": "description", "value": {"literal": {"string": "A non-negative arbitrary-precision integer"}}}],
+              "annotation": {
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A non-negative arbitrary-precision integer"}}}]},
               "body": {"wrap": {"literal": {"integer": {"bigint": {}}}}}}},
           "variables": []},
         "name": "hydra.coq.syntax.Natural"}},
@@ -542,7 +550,7 @@
         "body": {
           "body": {
             "annotated": {
-              "annotation": [{"key": "description", "value": {"literal": {"string": "A qualified identifier"}}}],
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A qualified identifier"}}}]},
               "body": {
                 "record": [
                   {"name": "id", "type": {"variable": "hydra.coq.syntax.Ident"}},
@@ -585,34 +593,41 @@
         "body": {
           "body": {
             "annotated": {
-              "annotation": [{"key": "description", "value": {"literal": {"string": "The types of types are called sorts."}}}],
+              "annotation": {
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The types of types are called sorts."}}}]},
               "body": {
                 "union": [
                   {
                     "name": "set",
                     "type": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The sort 𝖲𝖾𝗍 intends to be the type of small sets."}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The sort 𝖲𝖾𝗍 intends to be the type of small sets."}}}]},
                         "body": {"unit": {}}}}},
                   {
                     "name": "prop",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "The sort 𝖯𝗋𝗈𝗉 intends to be the type of logical propositions."}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The sort 𝖯𝗋𝗈𝗉 intends to be the type of logical propositions."}}}]},
                         "body": {"unit": {}}}}},
                   {
                     "name": "sProp",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {
-                              "literal": {
-                                "string": "The sort 𝖲𝖯𝗋𝗈𝗉 is like 𝖯𝗋𝗈𝗉 but the propositions in 𝖲𝖯𝗋𝗈𝗉 are known to have irrelevant proofs (all proofs are equal)."}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {
+                                "literal": {
+                                  "string": "The sort 𝖲𝖯𝗋𝗈𝗉 is like 𝖯𝗋𝗈𝗉 but the propositions in 𝖲𝖯𝗋𝗈𝗉 are known to have irrelevant proofs (all proofs are equal)."}}}]},
                         "body": {"unit": {}}}}},
                   {"name": "type", "type": {"unit": {}}},
                   {"name": "typeWithAnyUniverse", "type": {"unit": {}}},
@@ -698,33 +713,36 @@
                 "name": "normal",
                 "type": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {
-                          "literal": {"string": "The expression term10 : type is a type cast expression. It enforces the type of term10 to be type."}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {
+                            "literal": {"string": "The expression term10 : type is a type cast expression. It enforces the type of term10 to be type."}}}]},
                     "body": {"unit": {}}}}},
               {
                 "name": "vmCompute",
                 "type": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {
-                          "literal": {
-                            "string": "term10 <: type specifies that the virtual machine will be used to type check that term10 has type type (see vm_compute)."}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {
+                            "literal": {
+                              "string": "term10 <: type specifies that the virtual machine will be used to type check that term10 has type type (see vm_compute)."}}}]},
                     "body": {"unit": {}}}}},
               {
                 "name": "nativeCompute",
                 "type": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {
-                          "literal": {
-                            "string": "term10 <<: type specifies that compilation to OCaml will be used to type check that term10 has type type (see native_compute)."}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {
+                            "literal": {
+                              "string": "term10 <<: type specifies that compilation to OCaml will be used to type check that term10 has type type (see native_compute)."}}}]},
                     "body": {"unit": {}}}}}]},
           "variables": []},
         "name": "hydra.coq.syntax.TypeCastOperator"}},
@@ -796,7 +814,9 @@
         "body": {
           "body": {
             "annotated": {
-              "annotation": [{"key": "description", "value": {"literal": {"string": "An Axiom declaration: `Axiom <name> : <type>.`"}}}],
+              "annotation": {
+                "map": [
+                  {"key": {"variable": "description"}, "value": {"literal": {"string": "An Axiom declaration: `Axiom <name> : <type>.`"}}}]},
               "body": {
                 "record": [
                   {"name": "name", "type": {"variable": "hydra.coq.syntax.Ident"}},
@@ -808,7 +828,7 @@
         "body": {
           "body": {
             "annotated": {
-              "annotation": [{"key": "description", "value": {"literal": {"string": "A Coq comment (* ... *)"}}}],
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A Coq comment (* ... *)"}}}]},
               "body": {"wrap": {"literal": {"string": {}}}}}},
           "variables": []},
         "name": "hydra.coq.syntax.Comment"}},
@@ -817,7 +837,8 @@
         "body": {
           "body": {
             "annotated": {
-              "annotation": [{"key": "description", "value": {"literal": {"string": "A constructor in an Inductive definition"}}}],
+              "annotation": {
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A constructor in an Inductive definition"}}}]},
               "body": {
                 "record": [
                   {"name": "name", "type": {"variable": "hydra.coq.syntax.Ident"}},
@@ -830,10 +851,11 @@
         "body": {
           "body": {
             "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {"literal": {"string": "A Definition or Let command: Definition name binders : type := term."}}}],
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A Definition or Let command: Definition name binders : type := term."}}}]},
               "body": {
                 "record": [
                   {"name": "locality", "type": {"maybe": {"variable": "hydra.coq.syntax.Locality"}}},
@@ -848,7 +870,7 @@
         "body": {
           "body": {
             "annotated": {
-              "annotation": [{"key": "description", "value": {"literal": {"string": "A complete Coq .v file"}}}],
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A complete Coq .v file"}}}]},
               "body": {"record": [{"name": "sentences", "type": {"list": {"variable": "hydra.coq.syntax.Sentence"}}}]}}},
           "variables": []},
         "name": "hydra.coq.syntax.Document"}},
@@ -857,7 +879,8 @@
         "body": {
           "body": {
             "annotated": {
-              "annotation": [{"key": "description", "value": {"literal": {"string": "A Fixpoint command for recursive definitions"}}}],
+              "annotation": {
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A Fixpoint command for recursive definitions"}}}]},
               "body": {
                 "record": [
                   {"name": "locality", "type": {"maybe": {"variable": "hydra.coq.syntax.Locality"}}},
@@ -874,7 +897,8 @@
         "body": {
           "body": {
             "annotated": {
-              "annotation": [{"key": "description", "value": {"literal": {"string": "Qualification for Require/Import commands"}}}],
+              "annotation": {
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Qualification for Require/Import commands"}}}]},
               "body": {"union": [{"name": "import", "type": {"unit": {}}}, {"name": "export", "type": {"unit": {}}}]}}},
           "variables": []},
         "name": "hydra.coq.syntax.ImportQualification"}},
@@ -883,10 +907,11 @@
         "body": {
           "body": {
             "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {"literal": {"string": "A single body in an Inductive definition (supports mutual induction via 'with')"}}}],
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A single body in an Inductive definition (supports mutual induction via 'with')"}}}]},
               "body": {
                 "record": [
                   {"name": "name", "type": {"variable": "hydra.coq.syntax.Ident"}},
@@ -900,10 +925,11 @@
         "body": {
           "body": {
             "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {"literal": {"string": "An Inductive or CoInductive definition with one or more mutually inductive bodies"}}}],
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "An Inductive or CoInductive definition with one or more mutually inductive bodies"}}}]},
               "body": {
                 "record": [
                   {"name": "locality", "type": {"maybe": {"variable": "hydra.coq.syntax.Locality"}}},
@@ -916,7 +942,8 @@
         "body": {
           "body": {
             "annotated": {
-              "annotation": [{"key": "description", "value": {"literal": {"string": "Local or Global qualifier for commands"}}}],
+              "annotation": {
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Local or Global qualifier for commands"}}}]},
               "body": {"union": [{"name": "local", "type": {"unit": {}}}, {"name": "global", "type": {"unit": {}}}]}}},
           "variables": []},
         "name": "hydra.coq.syntax.Locality"}},
@@ -925,7 +952,7 @@
         "body": {
           "body": {
             "annotated": {
-              "annotation": [{"key": "description", "value": {"literal": {"string": "A Module ... End block"}}}],
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A Module ... End block"}}}]},
               "body": {
                 "record": [
                   {"name": "name", "type": {"variable": "hydra.coq.syntax.Ident"}},
@@ -937,7 +964,7 @@
         "body": {
           "body": {
             "annotated": {
-              "annotation": [{"key": "description", "value": {"literal": {"string": "A Notation declaration"}}}],
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A Notation declaration"}}}]},
               "body": {
                 "record": [
                   {"name": "notation", "type": {"variable": "hydra.coq.syntax.String"}},
@@ -951,7 +978,7 @@
         "body": {
           "body": {
             "annotated": {
-              "annotation": [{"key": "description", "value": {"literal": {"string": "The body of a Record definition"}}}],
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The body of a Record definition"}}}]},
               "body": {
                 "record": [
                   {"name": "constructor", "type": {"maybe": {"variable": "hydra.coq.syntax.Ident"}}},
@@ -963,7 +990,7 @@
         "body": {
           "body": {
             "annotated": {
-              "annotation": [{"key": "description", "value": {"literal": {"string": "A Record or Structure definition"}}}],
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A Record or Structure definition"}}}]},
               "body": {
                 "record": [
                   {"name": "locality", "type": {"maybe": {"variable": "hydra.coq.syntax.Locality"}}},
@@ -978,7 +1005,7 @@
         "body": {
           "body": {
             "annotated": {
-              "annotation": [{"key": "description", "value": {"literal": {"string": "A field in a Record definition"}}}],
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A field in a Record definition"}}}]},
               "body": {
                 "record": [
                   {"name": "name", "type": {"variable": "hydra.coq.syntax.Ident"}},
@@ -990,7 +1017,7 @@
         "body": {
           "body": {
             "annotated": {
-              "annotation": [{"key": "description", "value": {"literal": {"string": "A Require Import/Export command"}}}],
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A Require Import/Export command"}}}]},
               "body": {
                 "record": [
                   {"name": "from", "type": {"maybe": {"variable": "hydra.coq.syntax.Qualid"}}},
@@ -1004,7 +1031,7 @@
         "body": {
           "body": {
             "annotated": {
-              "annotation": [{"key": "description", "value": {"literal": {"string": "A Section ... End block"}}}],
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A Section ... End block"}}}]},
               "body": {
                 "record": [
                   {"name": "name", "type": {"variable": "hydra.coq.syntax.Ident"}},
@@ -1016,10 +1043,11 @@
         "body": {
           "body": {
             "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {"literal": {"string": "A top-level sentence in a Coq document, optionally preceded by a comment"}}}],
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A top-level sentence in a Coq document, optionally preceded by a comment"}}}]},
               "body": {
                 "record": [
                   {"name": "comment", "type": {"maybe": {"variable": "hydra.coq.syntax.Comment"}}},
@@ -1031,7 +1059,7 @@
         "body": {
           "body": {
             "annotated": {
-              "annotation": [{"key": "description", "value": {"literal": {"string": "The content of a top-level sentence"}}}],
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The content of a top-level sentence"}}}]},
               "body": {
                 "union": [
                   {"name": "axiom", "type": {"variable": "hydra.coq.syntax.AxiomDeclaration"}},
@@ -1051,7 +1079,9 @@
         "body": {
           "body": {
             "annotated": {
-              "annotation": [{"key": "description", "value": {"literal": {"string": "A Theorem/Lemma/Proposition with a proof term"}}}],
+              "annotation": {
+                "map": [
+                  {"key": {"variable": "description"}, "value": {"literal": {"string": "A Theorem/Lemma/Proposition with a proof term"}}}]},
               "body": {
                 "record": [
                   {"name": "kind", "type": {"variable": "hydra.coq.syntax.TheoremKind"}},
@@ -1066,7 +1096,7 @@
         "body": {
           "body": {
             "annotated": {
-              "annotation": [{"key": "description", "value": {"literal": {"string": "The kind of theorem command"}}}],
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The kind of theorem command"}}}]},
               "body": {
                 "union": [
                   {"name": "theorem", "type": {"unit": {}}},

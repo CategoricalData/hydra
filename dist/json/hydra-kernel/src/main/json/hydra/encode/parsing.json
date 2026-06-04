@@ -4,7 +4,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Encoder for hydra.parsing.ParseError"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Encoder for hydra.parsing.ParseError"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -82,7 +83,8 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Encoder for hydra.parsing.ParseResult"}}}],
+                "annotation": {
+                  "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Encoder for hydra.parsing.ParseResult"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -176,7 +178,8 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Encoder for hydra.parsing.ParseSuccess"}}}],
+                "annotation": {
+                  "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Encoder for hydra.parsing.ParseSuccess"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
