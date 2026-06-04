@@ -496,12 +496,7 @@ public class Generation {
         final hydra.util.CaseConvention cc = caseConv;
         generateSources(
                 mod -> defs -> cx -> g -> {
-                    // TODO: lisp.Coder excluded from compile in packages/hydra-java/build.gradle:122
-                    // due to class-name/filename mismatches in generated output. Fix the lisp
-                    // coder generator and remove that exclude before re-enabling this path.
-                    hydra.util.Either result = new hydra.util.Either.Left(
-                        new hydra.errors.Error_.Other(
-                            new hydra.errors.OtherError("Lisp code generation temporarily disabled for dialect " + d)));
+                    hydra.util.Either result = hydra.lisp.Coder.moduleToLisp(d, mod, defs, cx, g);
                     if (result instanceof hydra.util.Either.Left) {
                         return result;
                     }
