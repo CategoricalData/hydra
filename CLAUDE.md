@@ -79,7 +79,16 @@ At the beginning of every new session, follow these steps **before doing any oth
 2. **Identify the current branch**: Run `git branch --show-current`.
    It should match the name of the worktree directory.
 
-3. **Tag every meaningful reply with the branch identifier.** Multiple
+3. **Probe the toolchain if this looks like a fresh checkout**: If the
+   parent `hydra/` directory is newly cloned or you have not run any
+   build commands in this environment before, run `bin/check-env.sh`
+   (default scope: `--triad`) and report any missing tools to the user
+   before drafting the plan. Skip this step if you already know the
+   environment is provisioned (e.g., a recent `/sync` succeeded).
+   See [docs/contributor-setup.md](docs/contributor-setup.md) for the
+   full prerequisite list.
+
+4. **Tag every meaningful reply with the branch identifier.** Multiple
    Claude sessions across parallel worktrees produce visually identical
    output; the tag tells the user which session a reply came from.
    Format: derive the tag from the branch name:
@@ -92,7 +101,7 @@ At the beginning of every new session, follow these steps **before doing any oth
    "done", tool-result acknowledgements) where it would add noise without
    aiding identification.
 
-4. **Load or create the branch plan document**: Look for a Markdown file at the
+5. **Load or create the branch plan document**: Look for a Markdown file at the
    worktree root named after the current branch
    (e.g., `staging-plan.md`, `feature_249_java_version-plan.md`).
    - If it exists, read it to understand the current state of work.
@@ -102,7 +111,7 @@ At the beginning of every new session, follow these steps **before doing any oth
      - **Other branches**: Create a minimal plan summarizing purpose and in-progress work.
    - These plan documents are not checked in to Git.
 
-5. **Check for sibling-worktree messages**: List
+6. **Check for sibling-worktree messages**: List
    `claude-hydra-messages/inbox/*.md` at the worktree root. If there are
    new messages, summarize them for the user and ask whether to act on
    them before doing anything else. Also list
@@ -110,9 +119,9 @@ At the beginning of every new session, follow these steps **before doing any oth
    send from a crashed prior session that needs to be retried. See
    [Cross-worktree communication](#cross-worktree-communication).
 
-6. **Discuss the plan with the user**: Present it, incorporate feedback, update the file.
+7. **Discuss the plan with the user**: Present it, incorporate feedback, update the file.
 
-7. **Consult task-specific references as needed** (see [Where to look up X](#where-to-look-up-x) below).
+8. **Consult task-specific references as needed** (see [Where to look up X](#where-to-look-up-x) below).
 
 ### During the session
 
@@ -241,6 +250,7 @@ Primary entry point — the doc most likely to answer the question by task:
 
 | Task | Start here |
 |------|------------|
+| Set up a contributor environment (fresh checkout) | [docs/contributor-setup.md](docs/contributor-setup.md) — toolchain prerequisites tiered by scope; `bin/check-env.sh` probes what is installed |
 | Understand the kernel API | [docs/hydra-lexicon.txt](docs/hydra-lexicon.txt) — **most important LLM reference**, all kernel types + ~180 primitive signatures |
 | Understand the build/sync/cache system | [docs/build-system.md](docs/build-system.md) — pipeline phases, cache layers, what invalidates what, gap to #347 |
 | Understand architecture | [docs/implementation.md](docs/implementation.md) |
@@ -309,8 +319,8 @@ Current commands:
 - `/sync-default` — the haskell/java/python triad
 - `/sync-haskell`, `/sync-java`, `/sync-python`, `/sync-scala`,
   `/sync-go` — per-language sync wrappers
-- `/sync-typescript` — transitional TypeScript sync (DSL → Haskell only,
-  until the TypeScript coder lands; #126)
+- `/sync-typescript` — TypeScript sync (DSL → Haskell + TypeScript, post-#126).
+  hydra-pg / hydra-rdf TypeScript runtime bindings are not yet wired through.
 - `/sync-clojure`, `/sync-common-lisp`, `/sync-emacs-lisp`,
   `/sync-scheme` — Lisp dialect sync wrappers
 - `/sync-bench` — regenerate hydra-bench (opt-in; not part of `/sync`)

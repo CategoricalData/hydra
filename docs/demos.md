@@ -37,7 +37,7 @@ target language.
 The default demo uses Haskell, Java, and Python as both hosts and targets,
 producing 9 bootstrapping paths.
 Scala and Lisp can also be included as hosts and targets;
-TypeScript is supported as a target (host support is deferred — see #126).
+TypeScript is supported as both host and target (#126 has landed).
 
 The pipeline works in four steps:
 
