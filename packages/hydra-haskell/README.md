@@ -268,7 +268,7 @@ Hydra provides multiple domain-specific languages for constructing types and ter
 
 **Untyped DSLs**
 ([Hydra/Dsl/Types.hs](https://github.com/CategoricalData/hydra/blob/main/heads/haskell/src/main/haskell/Hydra/Dsl/Types.hs),
-[Hydra/Dsl/Terms.hs](https://github.com/CategoricalData/hydra/blob/main/heads/haskell/src/main/haskell/Hydra/Dsl/Terms.hs)):
+[Hydra/Dsl/Terms.hs](https://github.com/CategoricalData/hydra/blob/main/overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Dsl/Terms.hs)):
 ```haskell
 import qualified Hydra.Dsl.Types as Types
 import qualified Hydra.Dsl.Terms as Terms
