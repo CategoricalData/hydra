@@ -112,10 +112,27 @@ export const maybeLast = (xs: any): Maybe<any> =>
 export const maybeTail = (xs: any): Maybe<readonly any[]> =>
   xs.length === 0 ? Nothing : Just(xs.slice(1));
 
+// Value-based dedup. Hydra's Haskell `nub` is defined via `Eq`, but the
+// kernel hands `nub` structurally-shaped records (e.g. mergeClassConstraints
+// dedups `TypeClassConstraint` values). JS Set uses SameValueZero (reference
+// identity for objects), which would keep distinct-but-equal entries.
+// Canonicalize each element to a JSON string for the seen-set, mirroring
+// how lib/sets.ts and lib/maps.ts key by value.
+const _nubCanon = (k: unknown): string => {
+  try {
+    return JSON.stringify(k, (_, v) =>
+      typeof v === "bigint" ? `__big__${v.toString()}` : v) ?? String(k);
+  } catch {
+    return String(k);
+  }
+};
 export const nub = (xs: any): readonly any[] => {
-  const seen = new Set<any>();
+  const seen = new Set<string>();
   const out: any[] = [];
-  for (const x of xs) if (!seen.has(x)) { seen.add(x); out.push(x); }
+  for (const x of xs) {
+    const key = _nubCanon(x);
+    if (!seen.has(key)) { seen.add(key); out.push(x); }
+  }
   return out;
 };
 
