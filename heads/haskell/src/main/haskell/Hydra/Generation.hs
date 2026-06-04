@@ -143,8 +143,8 @@ definitionAsBinding (DefinitionType td) = Binding {
     bindingName = typeDefinitionName td,
     bindingTerm = TermAnnotated $ AnnotatedTerm {
       annotatedTermBody = EncodeCore.type_ (typeSchemeBody (typeDefinitionBody td)),
-      annotatedTermAnnotation = M.fromList [
-        (Name "type", TermVariable (Name "hydra.core.Type"))]},
+      annotatedTermAnnotation = TermMap $ M.fromList [
+        (TermVariable (Name "type"), TermVariable (Name "hydra.core.Type"))]},
     bindingTypeScheme = Just (TypeScheme [] (TypeVariable (Name "hydra.core.Type")) Nothing)}
 -- TODO(#156): Implement DefinitionPrimitive handling once primitive modules land. For now, primitives don't appear in modules that go through this function.
 definitionAsBinding (DefinitionPrimitive pd) = Binding {

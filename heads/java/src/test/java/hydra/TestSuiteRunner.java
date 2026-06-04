@@ -170,6 +170,47 @@ public class TestSuiteRunner {
      * These are hand-written because the generated source modules exceed JVM method size limits.
      */
     private static void addAnnotationsBindings(List<Binding> bindings) {
+        // hydra.annotations.getAnnotationMap (#386):
+        //   getAnnotationMap :: Term -> Map<Name, Term>
+        //   Project the (Name, value) entries from a TermMap-with-TermVariable-keys
+        //   annotation; return Maps.empty for any other shape.
+        addConstantBinding(bindings, "hydra.annotations.getAnnotationMap",
+            lambda("t",
+                apply(
+                    match("hydra.core.Term", Maybe.just(apply(primitive("hydra.lib.maps.empty"), var("t"))),
+                        field("map", lambda("m",
+                            apply(primitive("hydra.lib.maps.fromList"),
+                                apply(apply(primitive("hydra.lib.lists.foldl"),
+                                    lambda("acc", "pair",
+                                        apply(
+                                            match("hydra.core.Term",
+                                                Maybe.just(var("acc")),
+                                                field("variable", lambda("n",
+                                                    apply(apply(primitive("hydra.lib.lists.cons"),
+                                                        apply(apply(primitive("hydra.lib.tuples.pair"),
+                                                            var("n")),
+                                                            apply(primitive("hydra.lib.tuples.snd"), var("pair")))),
+                                                        var("acc"))))),
+                                            apply(primitive("hydra.lib.tuples.fst"), var("pair")))),
+                                    list()),
+                                    apply(primitive("hydra.lib.maps.toList"), var("m"))))))),
+                    var("t"))));
+
+        // hydra.annotations.wrapAnnotationMap (#386):
+        //   wrapAnnotationMap :: Map<Name, Term> -> Term
+        //   Encode each Name key as a TermVariable, then wrap as a TermMap.
+        addConstantBinding(bindings, "hydra.annotations.wrapAnnotationMap",
+            lambda("m",
+                inject("hydra.core.Term", field("map",
+                    apply(primitive("hydra.lib.maps.fromList"),
+                        apply(apply(primitive("hydra.lib.lists.map"),
+                            lambda("pair",
+                                apply(apply(primitive("hydra.lib.tuples.pair"),
+                                    inject("hydra.core.Term", field("variable",
+                                        apply(primitive("hydra.lib.tuples.fst"), var("pair"))))),
+                                    apply(primitive("hydra.lib.tuples.snd"), var("pair"))))),
+                            apply(primitive("hydra.lib.maps.toList"), var("m"))))))));
+
         addConstantBinding(bindings, "hydra.rewriting.deannotateTerm",
             lambda("t",
                 apply(
@@ -179,6 +220,7 @@ public class TestSuiteRunner {
                                 apply(project("hydra.core.AnnotatedTerm", "body"), var("at")))))),
                     var("t"))));
 
+        // After #386: project the map payload out of the Term annotation via getAnnotationMap.
         addConstantBinding(bindings, "hydra.annotations.termAnnotationInternal",
             lambda("term",
                 let_("toPairs",
@@ -190,7 +232,8 @@ public class TestSuiteRunner {
                                     apply(apply(var("toPairs"),
                                         apply(apply(primitive("hydra.lib.lists.cons"),
                                             apply(primitive("hydra.lib.maps.toList"),
-                                                apply(project("hydra.core.AnnotatedTerm", "annotation"), var("at")))),
+                                                apply(var("hydra.annotations.getAnnotationMap"),
+                                                    apply(project("hydra.core.AnnotatedTerm", "annotation"), var("at"))))),
                                             var("rest"))),
                                         apply(project("hydra.core.AnnotatedTerm", "body"), var("at")))))),
                             var("t"))),
@@ -209,6 +252,7 @@ public class TestSuiteRunner {
                                     var("key")), var("v")), var("m")))),
                             var("val"))))));
 
+        // After #386: wrap the resulting map via wrapAnnotationMap before storing in AnnotatedTerm.annotation.
         addConstantBinding(bindings, "hydra.annotations.setTermAnnotation",
             lambda("key",
                 lambda("val",
@@ -223,7 +267,8 @@ public class TestSuiteRunner {
                                     inject("hydra.core.Term", "annotated",
                                         record("hydra.core.AnnotatedTerm",
                                             field("body", var("stripped")),
-                                            field("annotation", var("anns")))))))))));
+                                            field("annotation",
+                                                apply(var("hydra.annotations.wrapAnnotationMap"), var("anns"))))))))))));
 
         addConstantBinding(bindings, "hydra.annotations.setTermDescription",
             lambda("d",
