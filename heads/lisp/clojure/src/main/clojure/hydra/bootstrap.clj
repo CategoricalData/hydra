@@ -9,7 +9,7 @@
    Options:
      --output <dir>         Output base directory (default: /tmp/hydra-bootstrapping-demo)
      --include-tests        Also load and generate kernel test modules
-     --kernel-only          Only generate kernel modules (exclude hydra.*)
+     --kernel-only          Only generate kernel modules (those listed in the kernel JSON manifest)
      --types-only           Only generate type-defining modules"
   (:require [hydra.lib.preload :as preload])
   (:gen-class))
@@ -160,7 +160,7 @@
       (println "Options:")
       (println "  --output <dir>         Output base directory")
       (println "  --include-tests        Also load and generate kernel test modules")
-      (println "  --kernel-only          Only generate kernel modules (exclude hydra.*)")
+      (println "  --kernel-only          Only generate kernel modules (those listed in the kernel JSON manifest)")
       (println "  --types-only           Only generate type-defining modules")
       (System/exit 1))
 
@@ -198,6 +198,7 @@
               main-ns (read-manifest json-dir "mainModules")
               default-ns (read-manifest json-dir "defaultLibModules")
               all-kernel-ns (into (vec main-ns) default-ns)
+              kernel-ns-set (set all-kernel-ns)
               main-mods (load-mods json-dir all-kernel-ns)
               step-time (- (System/currentTimeMillis) step-start)
               total-bindings (reduce + 0 (map #(count (:definitions %)) main-mods))]
@@ -211,11 +212,13 @@
                 ;; Module name may be a bare string or a ModuleName record with :value
                 ns-str-of (fn [m] (let [ns (:name m)]
                                     (if (string? ns) ns (:value ns))))
+                ;; kernel-only keeps modules whose namespace is in the kernel
+                ;; manifest (mainModules ∪ defaultLibModules). When the source
+                ;; dir is already hydra-kernel/, this is an identity filter; it
+                ;; becomes useful when called against a mixed JSON source.
                 mods-to-generate (cond->> all-main-mods
                                    (:kernel-only opts) (filterv (fn [m]
-                                     (let [ns-str (ns-str-of m)]
-                                       (and (not (.startsWith ^String ns-str "hydra."))
-                                            (not (.startsWith ^String ns-str "hydra.json.yaml."))))))
+                                     (contains? kernel-ns-set (ns-str-of m))))
                                    (:types-only opts) (filterv (fn [m]
                                      (some (ns-resolve (find-ns 'hydra.annotations) 'hydra_annotations_is_native_type) (:definitions m)))))]
 
