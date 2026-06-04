@@ -224,10 +224,11 @@
       "primitive": {
         "defaultImplementation": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Test whether an integer is even, defined via maybeMod and equality."}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Test whether an integer is even, defined via maybeMod and equality."}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -512,10 +513,11 @@
       "primitive": {
         "defaultImplementation": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Test whether an integer is odd, defined as the negation of even."}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Test whether an integer is odd, defined as the negation of even."}}}]},
             "body": {
               "lambda": {
                 "body": {

@@ -4,10 +4,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the python310 variant of hydra.python.environment.PythonVersion"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the python310 variant of hydra.python.environment.PythonVersion"}}}]},
             "body": {
               "wrap": {
                 "body": {
@@ -42,10 +43,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the python312 variant of hydra.python.environment.PythonVersion"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the python312 variant of hydra.python.environment.PythonVersion"}}}]},
             "body": {
               "wrap": {
                 "body": {
@@ -80,10 +82,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL constructor for hydra.python.environment.PythonEnvironment"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL constructor for hydra.python.environment.PythonEnvironment"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -179,7 +182,11 @@
                                           "application": {
                                             "argument": {
                                               "annotated": {
-                                                "annotation": [{"key": "description", "value": {"literal": {"string": "Variables that are inline let bindings (walrus operators)"}}}],
+                                                "annotation": {
+                                                  "map": [
+                                                    {
+                                                      "key": {"variable": "description"},
+                                                      "value": {"literal": {"string": "Variables that are inline let bindings (walrus operators)"}}}]},
                                                 "body": {"set": {"variable": "hydra.core.Name"}}}},
                                             "function": {"variable": "hydra.typed.TypedTerm"}}},
                                         "parameter": "inlineVariables"}},
@@ -187,10 +194,11 @@
                                       "application": {
                                         "argument": {
                                           "annotated": {
-                                            "annotation": [
-                                              {
-                                                "key": "description",
-                                                "value": {"literal": {"string": "When True, skip generating cast() calls for reduced memory usage"}}}],
+                                            "annotation": {
+                                              "map": [
+                                                {
+                                                  "key": {"variable": "description"},
+                                                  "value": {"literal": {"string": "When True, skip generating cast() calls for reduced memory usage"}}}]},
                                             "body": {"literal": {"boolean": {}}}}},
                                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                                     "parameter": "skipCasts"}},
@@ -198,7 +206,7 @@
                                   "application": {
                                     "argument": {
                                       "annotated": {
-                                        "annotation": [{"key": "description", "value": {"literal": {"string": "Target Python version"}}}],
+                                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Target Python version"}}}]},
                                         "body": {"variable": "hydra.python.environment.PythonVersion"}}},
                                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                                 "parameter": "version"}},
@@ -206,7 +214,8 @@
                               "application": {
                                 "argument": {
                                   "annotated": {
-                                    "annotation": [{"key": "description", "value": {"literal": {"string": "Set of nullary bindings (need call syntax)"}}}],
+                                    "annotation": {
+                                      "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Set of nullary bindings (need call syntax)"}}}]},
                                     "body": {"set": {"variable": "hydra.core.Name"}}}},
                                 "function": {"variable": "hydra.typed.TypedTerm"}}},
                             "parameter": "nullaryBindings"}},
@@ -214,7 +223,7 @@
                           "application": {
                             "argument": {
                               "annotated": {
-                                "annotation": [{"key": "description", "value": {"literal": {"string": "Graph context for type inference"}}}],
+                                "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Graph context for type inference"}}}]},
                                 "body": {"variable": "hydra.graph.Graph"}}},
                             "function": {"variable": "hydra.typed.TypedTerm"}}},
                         "parameter": "graph"}},
@@ -222,7 +231,11 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "Type variables in scope, with their Python names"}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {"literal": {"string": "Type variables in scope, with their Python names"}}}]},
                             "body": {
                               "pair": {
                                 "first": {"list": {"variable": "hydra.core.Name"}},
@@ -233,7 +246,7 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "ModuleName mapping for imports"}}}],
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "ModuleName mapping for imports"}}}]},
                         "body": {
                           "application": {"argument": {"variable": "hydra.python.syntax.DottedName"}, "function": {"variable": "hydra.util.ModuleNames"}}}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
@@ -248,7 +261,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "ModuleName mapping for imports"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "ModuleName mapping for imports"}}}]},
                       "body": {
                         "application": {"argument": {"variable": "hydra.python.syntax.DottedName"}, "function": {"variable": "hydra.util.ModuleNames"}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
@@ -259,7 +272,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "Type variables in scope, with their Python names"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "Type variables in scope, with their Python names"}}}]},
                       "body": {
                         "pair": {
                           "first": {"list": {"variable": "hydra.core.Name"}},
@@ -272,7 +289,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "Graph context for type inference"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Graph context for type inference"}}}]},
                       "body": {"variable": "hydra.graph.Graph"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -282,7 +299,8 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "Set of nullary bindings (need call syntax)"}}}],
+                      "annotation": {
+                        "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Set of nullary bindings (need call syntax)"}}}]},
                       "body": {"set": {"variable": "hydra.core.Name"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -292,7 +310,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "Target Python version"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Target Python version"}}}]},
                       "body": {"variable": "hydra.python.environment.PythonVersion"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -302,10 +320,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "When True, skip generating cast() calls for reduced memory usage"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "When True, skip generating cast() calls for reduced memory usage"}}}]},
                       "body": {"literal": {"boolean": {}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -315,7 +334,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "Variables that are inline let bindings (walrus operators)"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "Variables that are inline let bindings (walrus operators)"}}}]},
                       "body": {"set": {"variable": "hydra.core.Name"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -328,10 +351,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the namespaces field of hydra.python.environment.PythonEnvironment"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the namespaces field of hydra.python.environment.PythonEnvironment"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -384,7 +408,7 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "ModuleName mapping for imports"}}}],
+                    "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "ModuleName mapping for imports"}}}]},
                     "body": {
                       "application": {"argument": {"variable": "hydra.python.syntax.DottedName"}, "function": {"variable": "hydra.util.ModuleNames"}}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
@@ -393,10 +417,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the boundTypeVariables field of hydra.python.environment.PythonEnvironment"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the boundTypeVariables field of hydra.python.environment.PythonEnvironment"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -451,7 +476,11 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "Type variables in scope, with their Python names"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "Type variables in scope, with their Python names"}}}]},
                     "body": {
                       "pair": {
                         "first": {"list": {"variable": "hydra.core.Name"}},
@@ -462,10 +491,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the graph field of hydra.python.environment.PythonEnvironment"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the graph field of hydra.python.environment.PythonEnvironment"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -518,7 +548,7 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "Graph context for type inference"}}}],
+                    "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Graph context for type inference"}}}]},
                     "body": {"variable": "hydra.graph.Graph"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -526,10 +556,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the nullaryBindings field of hydra.python.environment.PythonEnvironment"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the nullaryBindings field of hydra.python.environment.PythonEnvironment"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -584,7 +615,8 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "Set of nullary bindings (need call syntax)"}}}],
+                    "annotation": {
+                      "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Set of nullary bindings (need call syntax)"}}}]},
                     "body": {"set": {"variable": "hydra.core.Name"}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -592,10 +624,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the version field of hydra.python.environment.PythonEnvironment"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the version field of hydra.python.environment.PythonEnvironment"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -648,7 +681,7 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "Target Python version"}}}],
+                    "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Target Python version"}}}]},
                     "body": {"variable": "hydra.python.environment.PythonVersion"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -656,10 +689,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the skipCasts field of hydra.python.environment.PythonEnvironment"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the skipCasts field of hydra.python.environment.PythonEnvironment"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -712,10 +746,11 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {"literal": {"string": "When True, skip generating cast() calls for reduced memory usage"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "When True, skip generating cast() calls for reduced memory usage"}}}]},
                     "body": {"literal": {"boolean": {}}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -723,10 +758,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the inlineVariables field of hydra.python.environment.PythonEnvironment"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the inlineVariables field of hydra.python.environment.PythonEnvironment"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -781,7 +817,11 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "Variables that are inline let bindings (walrus operators)"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "Variables that are inline let bindings (walrus operators)"}}}]},
                     "body": {"set": {"variable": "hydra.core.Name"}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -789,10 +829,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the namespaces field of hydra.python.environment.PythonEnvironment"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the namespaces field of hydra.python.environment.PythonEnvironment"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1040,7 +1081,7 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "ModuleName mapping for imports"}}}],
+                            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "ModuleName mapping for imports"}}}]},
                             "body": {
                               "application": {"argument": {"variable": "hydra.python.syntax.DottedName"}, "function": {"variable": "hydra.util.ModuleNames"}}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
@@ -1067,7 +1108,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "ModuleName mapping for imports"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "ModuleName mapping for imports"}}}]},
                       "body": {
                         "application": {"argument": {"variable": "hydra.python.syntax.DottedName"}, "function": {"variable": "hydra.util.ModuleNames"}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
@@ -1081,10 +1122,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the boundTypeVariables field of hydra.python.environment.PythonEnvironment"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the boundTypeVariables field of hydra.python.environment.PythonEnvironment"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1330,7 +1372,11 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "Type variables in scope, with their Python names"}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {"literal": {"string": "Type variables in scope, with their Python names"}}}]},
                             "body": {
                               "pair": {
                                 "first": {"list": {"variable": "hydra.core.Name"}},
@@ -1359,7 +1405,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "Type variables in scope, with their Python names"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "Type variables in scope, with their Python names"}}}]},
                       "body": {
                         "pair": {
                           "first": {"list": {"variable": "hydra.core.Name"}},
@@ -1375,10 +1425,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the graph field of hydra.python.environment.PythonEnvironment"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the graph field of hydra.python.environment.PythonEnvironment"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1626,7 +1677,7 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "Graph context for type inference"}}}],
+                            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Graph context for type inference"}}}]},
                             "body": {"variable": "hydra.graph.Graph"}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -1652,7 +1703,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "Graph context for type inference"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Graph context for type inference"}}}]},
                       "body": {"variable": "hydra.graph.Graph"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -1665,10 +1716,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the nullaryBindings field of hydra.python.environment.PythonEnvironment"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the nullaryBindings field of hydra.python.environment.PythonEnvironment"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1914,7 +1966,8 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "Set of nullary bindings (need call syntax)"}}}],
+                            "annotation": {
+                              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Set of nullary bindings (need call syntax)"}}}]},
                             "body": {"set": {"variable": "hydra.core.Name"}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -1940,7 +1993,8 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "Set of nullary bindings (need call syntax)"}}}],
+                      "annotation": {
+                        "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Set of nullary bindings (need call syntax)"}}}]},
                       "body": {"set": {"variable": "hydra.core.Name"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -1953,10 +2007,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the version field of hydra.python.environment.PythonEnvironment"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the version field of hydra.python.environment.PythonEnvironment"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2204,7 +2259,7 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "Target Python version"}}}],
+                            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Target Python version"}}}]},
                             "body": {"variable": "hydra.python.environment.PythonVersion"}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -2230,7 +2285,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "Target Python version"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Target Python version"}}}]},
                       "body": {"variable": "hydra.python.environment.PythonVersion"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -2243,10 +2298,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the skipCasts field of hydra.python.environment.PythonEnvironment"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the skipCasts field of hydra.python.environment.PythonEnvironment"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2494,10 +2550,11 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [
-                              {
-                                "key": "description",
-                                "value": {"literal": {"string": "When True, skip generating cast() calls for reduced memory usage"}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {"literal": {"string": "When True, skip generating cast() calls for reduced memory usage"}}}]},
                             "body": {"literal": {"boolean": {}}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -2523,10 +2580,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "When True, skip generating cast() calls for reduced memory usage"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "When True, skip generating cast() calls for reduced memory usage"}}}]},
                       "body": {"literal": {"boolean": {}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -2539,10 +2597,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the inlineVariables field of hydra.python.environment.PythonEnvironment"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the inlineVariables field of hydra.python.environment.PythonEnvironment"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2788,7 +2847,11 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "Variables that are inline let bindings (walrus operators)"}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {"literal": {"string": "Variables that are inline let bindings (walrus operators)"}}}]},
                             "body": {"set": {"variable": "hydra.core.Name"}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -2814,7 +2877,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "Variables that are inline let bindings (walrus operators)"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "Variables that are inline let bindings (walrus operators)"}}}]},
                       "body": {"set": {"variable": "hydra.core.Name"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -2827,10 +2894,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL constructor for hydra.python.environment.PythonModuleMetadata"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL constructor for hydra.python.environment.PythonModuleMetadata"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3127,7 +3195,7 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "Type variables used in the module"}}}],
+                            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Type variables used in the module"}}}]},
                             "body": {"set": {"variable": "hydra.core.Name"}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "typeVariables"}},
@@ -3135,7 +3203,7 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "ModuleName mapping for imports"}}}],
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "ModuleName mapping for imports"}}}]},
                         "body": {
                           "application": {"argument": {"variable": "hydra.python.syntax.DottedName"}, "function": {"variable": "hydra.util.ModuleNames"}}}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
@@ -3150,7 +3218,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "ModuleName mapping for imports"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "ModuleName mapping for imports"}}}]},
                       "body": {
                         "application": {"argument": {"variable": "hydra.python.syntax.DottedName"}, "function": {"variable": "hydra.util.ModuleNames"}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
@@ -3161,7 +3229,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "Type variables used in the module"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Type variables used in the module"}}}]},
                       "body": {"set": {"variable": "hydra.core.Name"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -3258,10 +3326,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the namespaces field of hydra.python.environment.PythonModuleMetadata"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the namespaces field of hydra.python.environment.PythonModuleMetadata"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3315,7 +3384,7 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "ModuleName mapping for imports"}}}],
+                    "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "ModuleName mapping for imports"}}}]},
                     "body": {
                       "application": {"argument": {"variable": "hydra.python.syntax.DottedName"}, "function": {"variable": "hydra.util.ModuleNames"}}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
@@ -3324,10 +3393,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the typeVariables field of hydra.python.environment.PythonModuleMetadata"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the typeVariables field of hydra.python.environment.PythonModuleMetadata"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3383,7 +3453,7 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "Type variables used in the module"}}}],
+                    "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Type variables used in the module"}}}]},
                     "body": {"set": {"variable": "hydra.core.Name"}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -3391,10 +3461,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the usesAnnotated field of hydra.python.environment.PythonModuleMetadata"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the usesAnnotated field of hydra.python.environment.PythonModuleMetadata"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3451,10 +3522,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the usesCallable field of hydra.python.environment.PythonModuleMetadata"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the usesCallable field of hydra.python.environment.PythonModuleMetadata"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3511,10 +3583,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the usesCast field of hydra.python.environment.PythonModuleMetadata"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the usesCast field of hydra.python.environment.PythonModuleMetadata"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3569,10 +3642,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the usesLruCache field of hydra.python.environment.PythonModuleMetadata"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the usesLruCache field of hydra.python.environment.PythonModuleMetadata"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3629,10 +3703,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the usesTypeAlias field of hydra.python.environment.PythonModuleMetadata"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the usesTypeAlias field of hydra.python.environment.PythonModuleMetadata"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3689,10 +3764,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the usesDataclass field of hydra.python.environment.PythonModuleMetadata"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the usesDataclass field of hydra.python.environment.PythonModuleMetadata"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3749,10 +3825,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the usesDecimal field of hydra.python.environment.PythonModuleMetadata"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the usesDecimal field of hydra.python.environment.PythonModuleMetadata"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3807,10 +3884,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the usesEither field of hydra.python.environment.PythonModuleMetadata"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the usesEither field of hydra.python.environment.PythonModuleMetadata"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3865,10 +3943,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the usesEnum field of hydra.python.environment.PythonModuleMetadata"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the usesEnum field of hydra.python.environment.PythonModuleMetadata"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3923,10 +4002,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the usesFrozenDict field of hydra.python.environment.PythonModuleMetadata"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the usesFrozenDict field of hydra.python.environment.PythonModuleMetadata"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3983,10 +4063,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the usesFrozenList field of hydra.python.environment.PythonModuleMetadata"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the usesFrozenList field of hydra.python.environment.PythonModuleMetadata"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4043,10 +4124,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the usesFrozenSet field of hydra.python.environment.PythonModuleMetadata"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the usesFrozenSet field of hydra.python.environment.PythonModuleMetadata"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4103,10 +4185,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the usesGeneric field of hydra.python.environment.PythonModuleMetadata"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the usesGeneric field of hydra.python.environment.PythonModuleMetadata"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4161,10 +4244,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the usesJust field of hydra.python.environment.PythonModuleMetadata"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the usesJust field of hydra.python.environment.PythonModuleMetadata"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4219,10 +4303,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the usesLeft field of hydra.python.environment.PythonModuleMetadata"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the usesLeft field of hydra.python.environment.PythonModuleMetadata"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4277,10 +4362,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the usesMaybe field of hydra.python.environment.PythonModuleMetadata"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the usesMaybe field of hydra.python.environment.PythonModuleMetadata"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4335,10 +4421,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the usesName field of hydra.python.environment.PythonModuleMetadata"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the usesName field of hydra.python.environment.PythonModuleMetadata"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4393,10 +4480,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the usesNode field of hydra.python.environment.PythonModuleMetadata"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the usesNode field of hydra.python.environment.PythonModuleMetadata"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4451,10 +4539,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the usesNothing field of hydra.python.environment.PythonModuleMetadata"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the usesNothing field of hydra.python.environment.PythonModuleMetadata"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4509,10 +4598,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the usesRight field of hydra.python.environment.PythonModuleMetadata"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the usesRight field of hydra.python.environment.PythonModuleMetadata"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4567,10 +4657,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the usesTypeVar field of hydra.python.environment.PythonModuleMetadata"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the usesTypeVar field of hydra.python.environment.PythonModuleMetadata"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4625,10 +4716,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the namespaces field of hydra.python.environment.PythonModuleMetadata"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the namespaces field of hydra.python.environment.PythonModuleMetadata"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -5453,7 +5545,7 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "ModuleName mapping for imports"}}}],
+                            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "ModuleName mapping for imports"}}}]},
                             "body": {
                               "application": {"argument": {"variable": "hydra.python.syntax.DottedName"}, "function": {"variable": "hydra.util.ModuleNames"}}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
@@ -5480,7 +5572,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "ModuleName mapping for imports"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "ModuleName mapping for imports"}}}]},
                       "body": {
                         "application": {"argument": {"variable": "hydra.python.syntax.DottedName"}, "function": {"variable": "hydra.util.ModuleNames"}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
@@ -5494,10 +5586,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the typeVariables field of hydra.python.environment.PythonModuleMetadata"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the typeVariables field of hydra.python.environment.PythonModuleMetadata"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -6320,7 +6413,7 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "Type variables used in the module"}}}],
+                            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Type variables used in the module"}}}]},
                             "body": {"set": {"variable": "hydra.core.Name"}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -6346,7 +6439,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "Type variables used in the module"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Type variables used in the module"}}}]},
                       "body": {"set": {"variable": "hydra.core.Name"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -6359,10 +6452,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the usesAnnotated field of hydra.python.environment.PythonModuleMetadata"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the usesAnnotated field of hydra.python.environment.PythonModuleMetadata"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -7212,10 +7306,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the usesCallable field of hydra.python.environment.PythonModuleMetadata"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the usesCallable field of hydra.python.environment.PythonModuleMetadata"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -8065,10 +8160,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the usesCast field of hydra.python.environment.PythonModuleMetadata"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the usesCast field of hydra.python.environment.PythonModuleMetadata"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -8920,10 +9016,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the usesLruCache field of hydra.python.environment.PythonModuleMetadata"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the usesLruCache field of hydra.python.environment.PythonModuleMetadata"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -9773,10 +9870,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the usesTypeAlias field of hydra.python.environment.PythonModuleMetadata"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the usesTypeAlias field of hydra.python.environment.PythonModuleMetadata"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -10626,10 +10724,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the usesDataclass field of hydra.python.environment.PythonModuleMetadata"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the usesDataclass field of hydra.python.environment.PythonModuleMetadata"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -11479,10 +11578,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the usesDecimal field of hydra.python.environment.PythonModuleMetadata"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the usesDecimal field of hydra.python.environment.PythonModuleMetadata"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -12334,10 +12434,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the usesEither field of hydra.python.environment.PythonModuleMetadata"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the usesEither field of hydra.python.environment.PythonModuleMetadata"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -13189,10 +13290,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the usesEnum field of hydra.python.environment.PythonModuleMetadata"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the usesEnum field of hydra.python.environment.PythonModuleMetadata"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -14044,10 +14146,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the usesFrozenDict field of hydra.python.environment.PythonModuleMetadata"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the usesFrozenDict field of hydra.python.environment.PythonModuleMetadata"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -14897,10 +15000,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the usesFrozenList field of hydra.python.environment.PythonModuleMetadata"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the usesFrozenList field of hydra.python.environment.PythonModuleMetadata"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -15750,10 +15854,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the usesFrozenSet field of hydra.python.environment.PythonModuleMetadata"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the usesFrozenSet field of hydra.python.environment.PythonModuleMetadata"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -16603,10 +16708,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the usesGeneric field of hydra.python.environment.PythonModuleMetadata"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the usesGeneric field of hydra.python.environment.PythonModuleMetadata"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -17458,10 +17564,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the usesJust field of hydra.python.environment.PythonModuleMetadata"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the usesJust field of hydra.python.environment.PythonModuleMetadata"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -18313,10 +18420,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the usesLeft field of hydra.python.environment.PythonModuleMetadata"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the usesLeft field of hydra.python.environment.PythonModuleMetadata"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -19168,10 +19276,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the usesMaybe field of hydra.python.environment.PythonModuleMetadata"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the usesMaybe field of hydra.python.environment.PythonModuleMetadata"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -20023,10 +20132,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the usesName field of hydra.python.environment.PythonModuleMetadata"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the usesName field of hydra.python.environment.PythonModuleMetadata"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -20878,10 +20988,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the usesNode field of hydra.python.environment.PythonModuleMetadata"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the usesNode field of hydra.python.environment.PythonModuleMetadata"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -21733,10 +21844,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the usesNothing field of hydra.python.environment.PythonModuleMetadata"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the usesNothing field of hydra.python.environment.PythonModuleMetadata"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -22588,10 +22700,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the usesRight field of hydra.python.environment.PythonModuleMetadata"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the usesRight field of hydra.python.environment.PythonModuleMetadata"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -23443,10 +23556,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the usesTypeVar field of hydra.python.environment.PythonModuleMetadata"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the usesTypeVar field of hydra.python.environment.PythonModuleMetadata"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -24298,7 +24412,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for hydra.python.environment.PyGraph"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL constructor for hydra.python.environment.PyGraph"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -24342,7 +24460,7 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "Accumulated module metadata"}}}],
+                            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Accumulated module metadata"}}}]},
                             "body": {"variable": "hydra.python.environment.PythonModuleMetadata"}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "metadata"}},
@@ -24350,7 +24468,7 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The Hydra graph being processed"}}}],
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The Hydra graph being processed"}}}]},
                         "body": {"variable": "hydra.graph.Graph"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "graph"}}}},
@@ -24364,7 +24482,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The Hydra graph being processed"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The Hydra graph being processed"}}}]},
                       "body": {"variable": "hydra.graph.Graph"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -24374,7 +24492,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "Accumulated module metadata"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Accumulated module metadata"}}}]},
                       "body": {"variable": "hydra.python.environment.PythonModuleMetadata"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -24385,10 +24503,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the graph field of hydra.python.environment.PyGraph"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the graph field of hydra.python.environment.PyGraph"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -24437,7 +24556,7 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The Hydra graph being processed"}}}],
+                    "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The Hydra graph being processed"}}}]},
                     "body": {"variable": "hydra.graph.Graph"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -24445,10 +24564,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the metadata field of hydra.python.environment.PyGraph"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the metadata field of hydra.python.environment.PyGraph"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -24497,7 +24617,7 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "Accumulated module metadata"}}}],
+                    "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Accumulated module metadata"}}}]},
                     "body": {"variable": "hydra.python.environment.PythonModuleMetadata"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -24505,10 +24625,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the graph field of hydra.python.environment.PyGraph"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the graph field of hydra.python.environment.PyGraph"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -24578,7 +24699,7 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "The Hydra graph being processed"}}}],
+                            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The Hydra graph being processed"}}}]},
                             "body": {"variable": "hydra.graph.Graph"}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -24600,7 +24721,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The Hydra graph being processed"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The Hydra graph being processed"}}}]},
                       "body": {"variable": "hydra.graph.Graph"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -24611,10 +24732,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the metadata field of hydra.python.environment.PyGraph"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the metadata field of hydra.python.environment.PyGraph"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -24684,7 +24806,7 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "Accumulated module metadata"}}}],
+                            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Accumulated module metadata"}}}]},
                             "body": {"variable": "hydra.python.environment.PythonModuleMetadata"}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -24706,7 +24828,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "Accumulated module metadata"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Accumulated module metadata"}}}]},
                       "body": {"variable": "hydra.python.environment.PythonModuleMetadata"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {

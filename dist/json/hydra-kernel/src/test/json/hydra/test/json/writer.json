@@ -4,7 +4,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Test cases for JSON serialization (writer)"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Test cases for JSON serialization (writer)"}}}]},
             "body": {
               "record": {
                 "fields": [

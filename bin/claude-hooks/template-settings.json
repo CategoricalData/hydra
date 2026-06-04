@@ -1,0 +1,128 @@
+{
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "matcher": "",
+        "hooks": [
+          {"type": "command", "command": "bin/claude-hooks/inbox-hook.sh"}
+        ]
+      }
+    ],
+    "Notification": [
+      {
+        "matcher": "",
+        "hooks": [
+          {"type": "command", "command": "bin/claude-hooks/notification-hook.sh"}
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "matcher": "",
+        "hooks": [
+          {"type": "command", "command": "bin/claude-hooks/stop-hook.sh"}
+        ]
+      }
+    ]
+  },
+  "permissions": {
+    "allow": [
+      "Bash(bin/check-env.sh*)",
+      "Bash(bin/sync.sh*)",
+      "Bash(bin/sync-default.sh*)",
+      "Bash(bin/sync-haskell.sh*)",
+      "Bash(bin/sync-java.sh*)",
+      "Bash(bin/sync-python.sh*)",
+      "Bash(bin/sync-scala.sh*)",
+      "Bash(bin/sync-go.sh*)",
+      "Bash(bin/sync-typescript.sh*)",
+      "Bash(bin/sync-clojure.sh*)",
+      "Bash(bin/sync-common-lisp.sh*)",
+      "Bash(bin/sync-scheme.sh*)",
+      "Bash(bin/sync-emacs-lisp.sh*)",
+      "Bash(bin/sync-bench.sh*)",
+      "Bash(bin/test.sh*)",
+      "Bash(bin/run-bootstrapping-demo.sh*)",
+      "Bash(bin/run-inference-bench.sh*)",
+      "Bash(bin/regenerate-lexicon.sh*)",
+      "Bash(bin/bootstrapping-dashboard.py*)",
+      "Bash(bin/inference-bench-dashboard.py*)",
+      "Bash(bin/benchmark-dashboard.py*)",
+      "Bash(bin/generate-hydra-java-from-java.sh*)",
+      "Bash(bin/generate-hydra-python-from-python.sh*)",
+      "Bash(heads/haskell/bin/sync-haskell.sh*)",
+      "Bash(heads/haskell/bin/run-tests.sh*)",
+      "Bash(heads/haskell/bin/test-distribution.sh*)",
+      "Bash(heads/java/bin/assemble-distribution.sh*)",
+      "Bash(heads/java/bin/assemble-all.sh*)",
+      "Bash(heads/java/bin/test-distribution.sh*)",
+      "Bash(heads/python/bin/test-distribution.sh*)",
+      "Bash(heads/python/bin/run-tests.sh*)",
+      "Bash(heads/scala/bin/assemble-distribution.sh*)",
+      "Bash(heads/scala/bin/test-distribution.sh*)",
+      "Bash(heads/lisp/bin/assemble-distribution.sh*)",
+      "Bash(heads/lisp/clojure/run-tests.sh*)",
+      "Bash(heads/lisp/common-lisp/run-tests.sh*)",
+      "Bash(heads/lisp/scheme/run-tests.sh*)",
+      "Bash(heads/lisp/emacs-lisp/run-tests.sh*)",
+      "Bash(packages/hydra-lisp/bin/run-tests.sh*)",
+      "Bash(stack build*)",
+      "Bash(stack test*)",
+      "Bash(stack setup*)",
+      "Bash(stack ghci*)",
+      "Bash(stack exec*)",
+      "Bash(stack --version)",
+      "Bash(stack --numeric-version)",
+      "Bash(./gradlew*)",
+      "Bash(gradle --version)",
+      "Bash(sbt --version)",
+      "Bash(sbt --numeric-version)",
+      "Bash(clojure --version)",
+      "Bash(sbcl --version)",
+      "Bash(emacs --version)",
+      "Bash(guile --version)",
+      "Bash(go version)",
+      "Bash(gh --version)",
+      "Bash(java -version)",
+      "Bash(javac -version)",
+      "Bash(jq *)",
+      "Bash(jq)",
+      "Bash(find . *)",
+      "Bash(find /tmp *)",
+      "Bash(xargs *)",
+      "Bash(grep -H *)",
+      "Bash(grep -l *)",
+      "Bash(grep -c *)",
+      "Bash(grep -E *)",
+      "Bash(grep -rn *)",
+      "Bash(grep -nE *)",
+      "Bash(grep -hoE *)",
+      "Bash(grep -lE *)",
+      "Bash(wc -l *)",
+      "Bash(gh issue view *)",
+      "Bash(gh issue list *)",
+      "Bash(gh issue status *)",
+      "Bash(gh pr view *)",
+      "Bash(gh pr list *)",
+      "Bash(gh pr diff *)",
+      "Bash(gh pr checks *)",
+      "Bash(gh pr status *)",
+      "Bash(gh run view *)",
+      "Bash(gh run list *)",
+      "Bash(gh repo view *)",
+      "Bash(gh auth status*)",
+      "Bash(bash demos/bootstrapping/bin/*)",
+      "Bash(demos/bootstrapping/bin/*)",
+      "Bash(mkdir -p /tmp/*)",
+      "Bash(mkdir -p bootstrap/*)",
+      "Bash(cp -r ../feature_409_bootstrap_everything/dist/*)",
+      "Bash(cp -r ../feature_409_bootstrap_everything/dist *)",
+      "Bash(tmux capture-pane *)",
+      "Bash(tmux ls)",
+      "Bash(tmux ls *)",
+      "Bash(sed -n *)",
+      "Bash(diff -rq *)",
+      "Bash(diff -u *)"
+    ]
+  }
+}

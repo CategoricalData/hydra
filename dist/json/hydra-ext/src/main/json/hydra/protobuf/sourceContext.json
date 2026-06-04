@@ -5,24 +5,26 @@
         "body": {
           "body": {
             "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {
-                    "literal": {
-                      "string": "`SourceContext` represents information about the source of a protobuf element, like the file in which it is defined."}}}],
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {
+                        "string": "`SourceContext` represents information about the source of a protobuf element, like the file in which it is defined."}}}]},
               "body": {
                 "record": [
                   {
                     "name": "fileName",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {
-                              "literal": {
-                                "string": "The path-qualified name of the .proto file that contained the associated protobuf element.  For example: `\"google/protobuf/source_context.proto\"`."}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {
+                                "literal": {
+                                  "string": "The path-qualified name of the .proto file that contained the associated protobuf element.  For example: `\"google/protobuf/source_context.proto\"`."}}}]},
                         "body": {"literal": {"string": {}}}}}}]}}},
           "variables": []},
         "name": "hydra.protobuf.sourceContext.SourceContext"}}],

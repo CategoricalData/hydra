@@ -4,7 +4,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Language constraints for C Sharp (C#)"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Language constraints for C Sharp (C#)"}}}]},
             "body": {
               "let": {
                 "bindings": [
@@ -130,12 +131,13 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {
-                    "string": "A set of reserved words in C#. Both the \"keywords\" and \"contextual keywords\" are drawn from section 6.4.4 of the C# documentation:\nhttps://learn.microsoft.com/en-us/dotnet/csharp/language-reference/language-specification/lexical-structure#64-tokens"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {
+                      "string": "A set of reserved words in C#. Both the \"keywords\" and \"contextual keywords\" are drawn from section 6.4.4 of the C# documentation:\nhttps://learn.microsoft.com/en-us/dotnet/csharp/language-reference/language-specification/lexical-structure#64-tokens"}}}]},
             "body": {
               "let": {
                 "bindings": [

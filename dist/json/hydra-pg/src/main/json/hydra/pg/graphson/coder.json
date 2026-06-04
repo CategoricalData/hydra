@@ -4,11 +4,12 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {"string": "Convert a GraphSON AdjacentEdge to a JSON Value. The Bool indicates whether this is an outgoing edge."}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {"string": "Convert a GraphSON AdjacentEdge to a JSON Value. The Bool indicates whether this is an outgoing edge."}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -120,7 +121,9 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a GraphSON DoubleValue to a JSON Value"}}}],
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a GraphSON DoubleValue to a JSON Value"}}}]},
             "body": {
               "cases": {
                 "cases": [
@@ -169,7 +172,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a map of edges by label to an optional JSON Value"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Convert a map of edges by label to an optional JSON Value"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -299,7 +306,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a map of edge properties to an optional JSON Value"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Convert a map of edge properties to an optional JSON Value"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -407,7 +418,9 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a GraphSON FloatValue to a JSON Value"}}}],
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a GraphSON FloatValue to a JSON Value"}}}]},
             "body": {
               "cases": {
                 "cases": [
@@ -456,10 +469,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Convert a GraphSON Map to a JSON array of alternating keys and values"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Convert a GraphSON Map to a JSON array of alternating keys and values"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -511,10 +525,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Create a JSON object from a list of key-value pairs, filtering out Nothing values"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Create a JSON object from a list of key-value pairs, filtering out Nothing values"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -600,7 +615,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Create a typed JSON object with @type and @value fields"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Create a typed JSON object with @type and @value fields"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -643,7 +662,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a GraphSON Value to a JSON Value"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a GraphSON Value to a JSON Value"}}}]},
             "body": {
               "cases": {
                 "cases": [
@@ -1009,8 +1029,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {"key": "description", "value": {"literal": {"string": "Convert a map of vertex properties to an optional JSON Value"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Convert a map of vertex properties to an optional JSON Value"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1134,7 +1157,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a GraphSON VertexPropertyValue to a JSON Value"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Convert a GraphSON VertexPropertyValue to a JSON Value"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1193,7 +1220,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a GraphSON Vertex to a JSON Value"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a GraphSON Vertex to a JSON Value"}}}]},
             "body": {
               "lambda": {
                 "body": {

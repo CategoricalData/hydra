@@ -4,7 +4,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Language constraints for Rust"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Language constraints for Rust"}}}]},
             "body": {
               "let": {
                 "bindings": [
@@ -138,7 +138,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "A set of reserved words in Rust"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A set of reserved words in Rust"}}}]},
             "body": {
               "let": {
                 "bindings": [
@@ -146,12 +146,13 @@
                     "name": "strictKeywords",
                     "term": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {
-                              "literal": {
-                                "string": "Rust strict keywords (cannot be used as identifiers). See https://doc.rust-lang.org/reference/keywords.html"}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {
+                                "literal": {
+                                  "string": "Rust strict keywords (cannot be used as identifiers). See https://doc.rust-lang.org/reference/keywords.html"}}}]},
                         "body": {
                           "list": [
                             {"literal": {"string": "as"}},
@@ -197,11 +198,12 @@
                     "name": "reservedKeywords",
                     "term": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {
-                              "literal": {"string": "Rust reserved keywords (reserved for future use). See https://doc.rust-lang.org/reference/keywords.html"}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {
+                                "literal": {"string": "Rust reserved keywords (reserved for future use). See https://doc.rust-lang.org/reference/keywords.html"}}}]},
                         "body": {
                           "list": [
                             {"literal": {"string": "abstract"}},
@@ -222,20 +224,24 @@
                     "name": "weakKeywords",
                     "term": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {
-                              "literal": {
-                                "string": "Rust weak keywords (have special meaning in certain contexts). See https://doc.rust-lang.org/reference/keywords.html"}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {
+                                "literal": {
+                                  "string": "Rust weak keywords (have special meaning in certain contexts). See https://doc.rust-lang.org/reference/keywords.html"}}}]},
                         "body": {"list": [{"literal": {"string": "macro_rules"}}, {"literal": {"string": "union"}}, {"literal": {"string": "'static"}}]}}},
                     "typeScheme": {"body": {"list": {"literal": {"string": {}}}}, "variables": []}},
                   {
                     "name": "primitiveTypes",
                     "term": {
                       "annotated": {
-                        "annotation": [
-                          {"key": "description", "value": {"literal": {"string": "Rust primitive type names that we reserve to avoid confusion"}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "Rust primitive type names that we reserve to avoid confusion"}}}]},
                         "body": {
                           "list": [
                             {"literal": {"string": "bool"}},
@@ -260,10 +266,11 @@
                     "name": "stdPreludeTypes",
                     "term": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "Common types from std::prelude that we reserve to avoid shadowing"}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "Common types from std::prelude that we reserve to avoid shadowing"}}}]},
                         "body": {
                           "list": [
                             {"literal": {"string": "Option"}},
@@ -304,10 +311,11 @@
                     "name": "hydraRustKeywords",
                     "term": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "Reserved words which are specific to Hydra-Rust code generation"}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "Reserved words which are specific to Hydra-Rust code generation"}}}]},
                         "body": {"list": [{"literal": {"string": "Node"}}]}}},
                     "typeScheme": {"body": {"list": {"literal": {"string": {}}}}, "variables": []}}],
                 "body": {

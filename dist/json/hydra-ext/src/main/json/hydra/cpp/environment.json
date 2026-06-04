@@ -5,20 +5,23 @@
         "body": {
           "body": {
             "annotated": {
-              "annotation": [{"key": "description", "value": {"literal": {"string": "Environment for C++ code generation"}}}],
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Environment for C++ code generation"}}}]},
               "body": {
                 "record": [
                   {
                     "name": "namespaces",
                     "type": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "ModuleName mapping for code generation"}}}],
+                        "annotation": {
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "ModuleName mapping for code generation"}}}]},
                         "body": {"application": {"argument": {"literal": {"string": {}}}, "function": {"variable": "hydra.util.ModuleNames"}}}}}},
                   {
                     "name": "boundTypeVariables",
                     "type": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "Type variables in scope, with their C++ names"}}}],
+                        "annotation": {
+                          "map": [
+                            {"key": {"variable": "description"}, "value": {"literal": {"string": "Type variables in scope, with their C++ names"}}}]},
                         "body": {
                           "pair": {
                             "first": {"list": {"variable": "hydra.core.Name"}},
