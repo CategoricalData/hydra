@@ -28,7 +28,15 @@
 (defun hydra--t-project (type-name field-name)
   (list :project (make-hydra_core_projection :type_name type-name :field_name field-name)))
 (defun hydra--t-match (type-name default &rest case-fields)
-  (list :cases (make-hydra_core_case_statement :type_name type-name :default default :cases case-fields)))
+  ;; CaseStatement.cases is [CaseAlternative{name,handler}] (#369); callers build
+  ;; cases via hydra--t-field (Field{name,term}), so convert each to a CaseAlternative.
+  (list :cases (make-hydra_core_case_statement :type_name type-name :default default
+                 :cases (mapcar
+                          (lambda (f)
+                            (make-hydra_core_case_alternative
+                              :name (hydra_core_field-name f)
+                              :handler (hydra_core_field-term f)))
+                          case-fields))))
 (defun hydra--t-right (v) (list :either (list :right v)))
 (defun hydra--t-left (v) (list :either (list :left v)))
 (defun hydra--t-just (v) (list :maybe (hydra--t-inject "hydra.core.Term" "literal"

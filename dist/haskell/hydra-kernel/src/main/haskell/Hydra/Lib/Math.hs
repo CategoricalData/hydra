@@ -31,17 +31,6 @@ abs :: Packaging.PrimitiveDefinition
 abs =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.math.abs"),
-      Packaging.primitiveDefinitionSignature = Typing.TermSignature {
-        Typing.termSignatureTypeParameters = [],
-        Typing.termSignatureParameters = [
-          Typing.Parameter {
-            Typing.parameterName = (Core.Name "arg0"),
-            Typing.parameterDescription = Nothing,
-            Typing.parameterType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
-            Typing.parameterIsLazy = False}],
-        Typing.termSignatureResult = Typing.Result {
-          Typing.resultDescription = Nothing,
-          Typing.resultType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}},
       Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
         Packaging.entityMetadataDescription = (Just "The absolute value of an integer."),
         Packaging.entityMetadataComments = [
@@ -50,6 +39,17 @@ abs =
           "Corresponds to Haskell's abs :: Int32 -> Int32."],
         Packaging.entityMetadataSeeAlso = [],
         Packaging.entityMetadataLifecycle = Nothing})),
+      Packaging.primitiveDefinitionSignature = Typing.TermSignature {
+        Typing.termSignatureTypeParameters = [],
+        Typing.termSignatureParameters = [
+          Typing.Parameter {
+            Typing.parameterName = (Core.Name "arg0"),
+            Typing.parameterDescription = Nothing,
+            Typing.parameterType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
+            Typing.parameterIsLazy = False}],
+        Typing.termSignatureResult = Typing.Result {
+          Typing.resultDescription = Nothing,
+          Typing.resultType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}},
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
@@ -57,17 +57,6 @@ acos :: Packaging.PrimitiveDefinition
 acos =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.math.acos"),
-      Packaging.primitiveDefinitionSignature = Typing.TermSignature {
-        Typing.termSignatureTypeParameters = [],
-        Typing.termSignatureParameters = [
-          Typing.Parameter {
-            Typing.parameterName = (Core.Name "arg0"),
-            Typing.parameterDescription = Nothing,
-            Typing.parameterType = (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat64)),
-            Typing.parameterIsLazy = False}],
-        Typing.termSignatureResult = Typing.Result {
-          Typing.resultDescription = Nothing,
-          Typing.resultType = (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat64))}},
       Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
         Packaging.entityMetadataDescription = (Just "The arc cosine of a floating-point number."),
         Packaging.entityMetadataComments = [
@@ -76,13 +65,6 @@ acos =
           "Corresponds to the IEEE 754 \2681.2 acos operation and to Haskell's acos :: Double -> Double."],
         Packaging.entityMetadataSeeAlso = [],
         Packaging.entityMetadataLifecycle = Nothing})),
-      Packaging.primitiveDefinitionIsPure = True,
-      Packaging.primitiveDefinitionIsTotal = True,
-      Packaging.primitiveDefinitionDefaultImplementation = Nothing}
-acosh :: Packaging.PrimitiveDefinition
-acosh =
-    Packaging.PrimitiveDefinition {
-      Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.math.acosh"),
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [],
         Typing.termSignatureParameters = [
@@ -94,6 +76,13 @@ acosh =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat64))}},
+      Packaging.primitiveDefinitionIsPure = True,
+      Packaging.primitiveDefinitionIsTotal = True,
+      Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+acosh :: Packaging.PrimitiveDefinition
+acosh =
+    Packaging.PrimitiveDefinition {
+      Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.math.acosh"),
       Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
         Packaging.entityMetadataDescription = (Just "The hyperbolic arc cosine of a floating-point number."),
         Packaging.entityMetadataComments = [
@@ -102,6 +91,17 @@ acosh =
           "Corresponds to the IEEE 754 \2681.2 acosh operation and to Haskell's acosh :: Double -> Double."],
         Packaging.entityMetadataSeeAlso = [],
         Packaging.entityMetadataLifecycle = Nothing})),
+      Packaging.primitiveDefinitionSignature = Typing.TermSignature {
+        Typing.termSignatureTypeParameters = [],
+        Typing.termSignatureParameters = [
+          Typing.Parameter {
+            Typing.parameterName = (Core.Name "arg0"),
+            Typing.parameterDescription = Nothing,
+            Typing.parameterType = (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat64)),
+            Typing.parameterIsLazy = False}],
+        Typing.termSignatureResult = Typing.Result {
+          Typing.resultDescription = Nothing,
+          Typing.resultType = (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat64))}},
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
@@ -109,6 +109,13 @@ add :: Packaging.PrimitiveDefinition
 add =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.math.add"),
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "Integer addition."),
+        Packaging.entityMetadataComments = [
+          "Two's-complement 32-bit signed integer addition. The result is x + y reduced modulo 2^32 and reinterpreted as a signed int32 (i.e. arithmetic wraps silently on overflow, with no exception raised).",
+          "The operation is total. Corresponds to Haskell's (+) :: Int32 -> Int32 -> Int32."],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [],
         Typing.termSignatureParameters = [
@@ -125,13 +132,6 @@ add =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}},
-      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
-        Packaging.entityMetadataDescription = (Just "Integer addition."),
-        Packaging.entityMetadataComments = [
-          "Two's-complement 32-bit signed integer addition. The result is x + y reduced modulo 2^32 and reinterpreted as a signed int32 (i.e. arithmetic wraps silently on overflow, with no exception raised).",
-          "The operation is total. Corresponds to Haskell's (+) :: Int32 -> Int32 -> Int32."],
-        Packaging.entityMetadataSeeAlso = [],
-        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
@@ -139,22 +139,6 @@ addFloat64 :: Packaging.PrimitiveDefinition
 addFloat64 =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.math.addFloat64"),
-      Packaging.primitiveDefinitionSignature = Typing.TermSignature {
-        Typing.termSignatureTypeParameters = [],
-        Typing.termSignatureParameters = [
-          Typing.Parameter {
-            Typing.parameterName = (Core.Name "arg0"),
-            Typing.parameterDescription = Nothing,
-            Typing.parameterType = (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat64)),
-            Typing.parameterIsLazy = False},
-          Typing.Parameter {
-            Typing.parameterName = (Core.Name "arg1"),
-            Typing.parameterDescription = Nothing,
-            Typing.parameterType = (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat64)),
-            Typing.parameterIsLazy = False}],
-        Typing.termSignatureResult = Typing.Result {
-          Typing.resultDescription = Nothing,
-          Typing.resultType = (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat64))}},
       Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
         Packaging.entityMetadataDescription = (Just "Floating-point addition."),
         Packaging.entityMetadataComments = [
@@ -163,89 +147,6 @@ addFloat64 =
           "The operation is total: it never raises, but it may produce NaN. Corresponds to the IEEE 754 \2677.4.1 addition operation and to Haskell's (+) :: Double -> Double -> Double."],
         Packaging.entityMetadataSeeAlso = [],
         Packaging.entityMetadataLifecycle = Nothing})),
-      Packaging.primitiveDefinitionIsPure = True,
-      Packaging.primitiveDefinitionIsTotal = True,
-      Packaging.primitiveDefinitionDefaultImplementation = Nothing}
-asin :: Packaging.PrimitiveDefinition
-asin =
-    Packaging.PrimitiveDefinition {
-      Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.math.asin"),
-      Packaging.primitiveDefinitionSignature = Typing.TermSignature {
-        Typing.termSignatureTypeParameters = [],
-        Typing.termSignatureParameters = [
-          Typing.Parameter {
-            Typing.parameterName = (Core.Name "arg0"),
-            Typing.parameterDescription = Nothing,
-            Typing.parameterType = (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat64)),
-            Typing.parameterIsLazy = False}],
-        Typing.termSignatureResult = Typing.Result {
-          Typing.resultDescription = Nothing,
-          Typing.resultType = (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat64))}},
-      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
-        Packaging.entityMetadataDescription = (Just "The arc sine of a floating-point number."),
-        Packaging.entityMetadataComments = [
-          "Principal value of the inverse sine, in radians. The result is in [-\960/2, +\960/2].",
-          "For arguments outside the domain [-1, +1] (including \177\8734), the result is NaN; asin(\2832) = \2832; asin(NaN) is NaN.",
-          "Corresponds to the IEEE 754 \2681.2 asin operation and to Haskell's asin :: Double -> Double."],
-        Packaging.entityMetadataSeeAlso = [],
-        Packaging.entityMetadataLifecycle = Nothing})),
-      Packaging.primitiveDefinitionIsPure = True,
-      Packaging.primitiveDefinitionIsTotal = True,
-      Packaging.primitiveDefinitionDefaultImplementation = Nothing}
-asinh :: Packaging.PrimitiveDefinition
-asinh =
-    Packaging.PrimitiveDefinition {
-      Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.math.asinh"),
-      Packaging.primitiveDefinitionSignature = Typing.TermSignature {
-        Typing.termSignatureTypeParameters = [],
-        Typing.termSignatureParameters = [
-          Typing.Parameter {
-            Typing.parameterName = (Core.Name "arg0"),
-            Typing.parameterDescription = Nothing,
-            Typing.parameterType = (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat64)),
-            Typing.parameterIsLazy = False}],
-        Typing.termSignatureResult = Typing.Result {
-          Typing.resultDescription = Nothing,
-          Typing.resultType = (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat64))}},
-      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
-        Packaging.entityMetadataDescription = (Just "The hyperbolic arc sine of a floating-point number."),
-        Packaging.entityMetadataComments = [
-          "Principal value of the inverse hyperbolic sine. Defined for all finite reals; asinh(\2832) = \2832; asinh(\177\8734) = \177\8734; asinh(NaN) is NaN.",
-          "Corresponds to the IEEE 754 \2681.2 asinh operation and to Haskell's asinh :: Double -> Double."],
-        Packaging.entityMetadataSeeAlso = [],
-        Packaging.entityMetadataLifecycle = Nothing})),
-      Packaging.primitiveDefinitionIsPure = True,
-      Packaging.primitiveDefinitionIsTotal = True,
-      Packaging.primitiveDefinitionDefaultImplementation = Nothing}
-atan :: Packaging.PrimitiveDefinition
-atan =
-    Packaging.PrimitiveDefinition {
-      Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.math.atan"),
-      Packaging.primitiveDefinitionSignature = Typing.TermSignature {
-        Typing.termSignatureTypeParameters = [],
-        Typing.termSignatureParameters = [
-          Typing.Parameter {
-            Typing.parameterName = (Core.Name "arg0"),
-            Typing.parameterDescription = Nothing,
-            Typing.parameterType = (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat64)),
-            Typing.parameterIsLazy = False}],
-        Typing.termSignatureResult = Typing.Result {
-          Typing.resultDescription = Nothing,
-          Typing.resultType = (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat64))}},
-      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
-        Packaging.entityMetadataDescription = (Just "The arc tangent of a floating-point number."),
-        Packaging.entityMetadataComments = [
-          "Principal value of the inverse tangent, in radians. The result is in (-\960/2, +\960/2); atan(\2832) = \2832; atan(\177\8734) = \177\960/2; atan(NaN) is NaN.",
-          "Corresponds to the IEEE 754 \2681.2 atan operation and to Haskell's atan :: Double -> Double."],
-        Packaging.entityMetadataSeeAlso = [],
-        Packaging.entityMetadataLifecycle = Nothing})),
-      Packaging.primitiveDefinitionIsPure = True,
-      Packaging.primitiveDefinitionIsTotal = True,
-      Packaging.primitiveDefinitionDefaultImplementation = Nothing}
-atan2 :: Packaging.PrimitiveDefinition
-atan2 =
-    Packaging.PrimitiveDefinition {
-      Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.math.atan2"),
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [],
         Typing.termSignatureParameters = [
@@ -262,6 +163,89 @@ atan2 =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat64))}},
+      Packaging.primitiveDefinitionIsPure = True,
+      Packaging.primitiveDefinitionIsTotal = True,
+      Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+asin :: Packaging.PrimitiveDefinition
+asin =
+    Packaging.PrimitiveDefinition {
+      Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.math.asin"),
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "The arc sine of a floating-point number."),
+        Packaging.entityMetadataComments = [
+          "Principal value of the inverse sine, in radians. The result is in [-\960/2, +\960/2].",
+          "For arguments outside the domain [-1, +1] (including \177\8734), the result is NaN; asin(\2832) = \2832; asin(NaN) is NaN.",
+          "Corresponds to the IEEE 754 \2681.2 asin operation and to Haskell's asin :: Double -> Double."],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
+      Packaging.primitiveDefinitionSignature = Typing.TermSignature {
+        Typing.termSignatureTypeParameters = [],
+        Typing.termSignatureParameters = [
+          Typing.Parameter {
+            Typing.parameterName = (Core.Name "arg0"),
+            Typing.parameterDescription = Nothing,
+            Typing.parameterType = (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat64)),
+            Typing.parameterIsLazy = False}],
+        Typing.termSignatureResult = Typing.Result {
+          Typing.resultDescription = Nothing,
+          Typing.resultType = (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat64))}},
+      Packaging.primitiveDefinitionIsPure = True,
+      Packaging.primitiveDefinitionIsTotal = True,
+      Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+asinh :: Packaging.PrimitiveDefinition
+asinh =
+    Packaging.PrimitiveDefinition {
+      Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.math.asinh"),
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "The hyperbolic arc sine of a floating-point number."),
+        Packaging.entityMetadataComments = [
+          "Principal value of the inverse hyperbolic sine. Defined for all finite reals; asinh(\2832) = \2832; asinh(\177\8734) = \177\8734; asinh(NaN) is NaN.",
+          "Corresponds to the IEEE 754 \2681.2 asinh operation and to Haskell's asinh :: Double -> Double."],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
+      Packaging.primitiveDefinitionSignature = Typing.TermSignature {
+        Typing.termSignatureTypeParameters = [],
+        Typing.termSignatureParameters = [
+          Typing.Parameter {
+            Typing.parameterName = (Core.Name "arg0"),
+            Typing.parameterDescription = Nothing,
+            Typing.parameterType = (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat64)),
+            Typing.parameterIsLazy = False}],
+        Typing.termSignatureResult = Typing.Result {
+          Typing.resultDescription = Nothing,
+          Typing.resultType = (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat64))}},
+      Packaging.primitiveDefinitionIsPure = True,
+      Packaging.primitiveDefinitionIsTotal = True,
+      Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+atan :: Packaging.PrimitiveDefinition
+atan =
+    Packaging.PrimitiveDefinition {
+      Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.math.atan"),
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "The arc tangent of a floating-point number."),
+        Packaging.entityMetadataComments = [
+          "Principal value of the inverse tangent, in radians. The result is in (-\960/2, +\960/2); atan(\2832) = \2832; atan(\177\8734) = \177\960/2; atan(NaN) is NaN.",
+          "Corresponds to the IEEE 754 \2681.2 atan operation and to Haskell's atan :: Double -> Double."],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
+      Packaging.primitiveDefinitionSignature = Typing.TermSignature {
+        Typing.termSignatureTypeParameters = [],
+        Typing.termSignatureParameters = [
+          Typing.Parameter {
+            Typing.parameterName = (Core.Name "arg0"),
+            Typing.parameterDescription = Nothing,
+            Typing.parameterType = (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat64)),
+            Typing.parameterIsLazy = False}],
+        Typing.termSignatureResult = Typing.Result {
+          Typing.resultDescription = Nothing,
+          Typing.resultType = (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat64))}},
+      Packaging.primitiveDefinitionIsPure = True,
+      Packaging.primitiveDefinitionIsTotal = True,
+      Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+atan2 :: Packaging.PrimitiveDefinition
+atan2 =
+    Packaging.PrimitiveDefinition {
+      Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.math.atan2"),
       Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
         Packaging.entityMetadataDescription = (Just "The two-argument arc tangent (atan2)."),
         Packaging.entityMetadataComments = [
@@ -270,6 +254,22 @@ atan2 =
           "Corresponds to Haskell's atan2 :: Double -> Double -> Double."],
         Packaging.entityMetadataSeeAlso = [],
         Packaging.entityMetadataLifecycle = Nothing})),
+      Packaging.primitiveDefinitionSignature = Typing.TermSignature {
+        Typing.termSignatureTypeParameters = [],
+        Typing.termSignatureParameters = [
+          Typing.Parameter {
+            Typing.parameterName = (Core.Name "arg0"),
+            Typing.parameterDescription = Nothing,
+            Typing.parameterType = (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat64)),
+            Typing.parameterIsLazy = False},
+          Typing.Parameter {
+            Typing.parameterName = (Core.Name "arg1"),
+            Typing.parameterDescription = Nothing,
+            Typing.parameterType = (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat64)),
+            Typing.parameterIsLazy = False}],
+        Typing.termSignatureResult = Typing.Result {
+          Typing.resultDescription = Nothing,
+          Typing.resultType = (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat64))}},
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
@@ -277,17 +277,6 @@ atanh :: Packaging.PrimitiveDefinition
 atanh =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.math.atanh"),
-      Packaging.primitiveDefinitionSignature = Typing.TermSignature {
-        Typing.termSignatureTypeParameters = [],
-        Typing.termSignatureParameters = [
-          Typing.Parameter {
-            Typing.parameterName = (Core.Name "arg0"),
-            Typing.parameterDescription = Nothing,
-            Typing.parameterType = (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat64)),
-            Typing.parameterIsLazy = False}],
-        Typing.termSignatureResult = Typing.Result {
-          Typing.resultDescription = Nothing,
-          Typing.resultType = (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat64))}},
       Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
         Packaging.entityMetadataDescription = (Just "The hyperbolic arc tangent of a floating-point number."),
         Packaging.entityMetadataComments = [
@@ -295,13 +284,6 @@ atanh =
           "Corresponds to the IEEE 754 \2681.2 atanh operation and to Haskell's atanh :: Double -> Double."],
         Packaging.entityMetadataSeeAlso = [],
         Packaging.entityMetadataLifecycle = Nothing})),
-      Packaging.primitiveDefinitionIsPure = True,
-      Packaging.primitiveDefinitionIsTotal = True,
-      Packaging.primitiveDefinitionDefaultImplementation = Nothing}
-ceiling :: Packaging.PrimitiveDefinition
-ceiling =
-    Packaging.PrimitiveDefinition {
-      Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.math.ceiling"),
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [],
         Typing.termSignatureParameters = [
@@ -313,6 +295,13 @@ ceiling =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat64))}},
+      Packaging.primitiveDefinitionIsPure = True,
+      Packaging.primitiveDefinitionIsTotal = True,
+      Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+ceiling :: Packaging.PrimitiveDefinition
+ceiling =
+    Packaging.PrimitiveDefinition {
+      Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.math.ceiling"),
       Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
         Packaging.entityMetadataDescription = (Just "The smallest integer greater than or equal to the argument, as a float."),
         Packaging.entityMetadataComments = [
@@ -321,6 +310,17 @@ ceiling =
           "Corresponds to Haskell's fromIntegral . ceiling :: Double -> Double."],
         Packaging.entityMetadataSeeAlso = [],
         Packaging.entityMetadataLifecycle = Nothing})),
+      Packaging.primitiveDefinitionSignature = Typing.TermSignature {
+        Typing.termSignatureTypeParameters = [],
+        Typing.termSignatureParameters = [
+          Typing.Parameter {
+            Typing.parameterName = (Core.Name "arg0"),
+            Typing.parameterDescription = Nothing,
+            Typing.parameterType = (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat64)),
+            Typing.parameterIsLazy = False}],
+        Typing.termSignatureResult = Typing.Result {
+          Typing.resultDescription = Nothing,
+          Typing.resultType = (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat64))}},
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
@@ -328,17 +328,6 @@ cos :: Packaging.PrimitiveDefinition
 cos =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.math.cos"),
-      Packaging.primitiveDefinitionSignature = Typing.TermSignature {
-        Typing.termSignatureTypeParameters = [],
-        Typing.termSignatureParameters = [
-          Typing.Parameter {
-            Typing.parameterName = (Core.Name "arg0"),
-            Typing.parameterDescription = Nothing,
-            Typing.parameterType = (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat64)),
-            Typing.parameterIsLazy = False}],
-        Typing.termSignatureResult = Typing.Result {
-          Typing.resultDescription = Nothing,
-          Typing.resultType = (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat64))}},
       Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
         Packaging.entityMetadataDescription = (Just "The cosine of a floating-point number."),
         Packaging.entityMetadataComments = [
@@ -346,13 +335,6 @@ cos =
           "Corresponds to the IEEE 754 \2681.2 cos operation and to Haskell's cos :: Double -> Double."],
         Packaging.entityMetadataSeeAlso = [],
         Packaging.entityMetadataLifecycle = Nothing})),
-      Packaging.primitiveDefinitionIsPure = True,
-      Packaging.primitiveDefinitionIsTotal = True,
-      Packaging.primitiveDefinitionDefaultImplementation = Nothing}
-cosh :: Packaging.PrimitiveDefinition
-cosh =
-    Packaging.PrimitiveDefinition {
-      Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.math.cosh"),
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [],
         Typing.termSignatureParameters = [
@@ -364,6 +346,13 @@ cosh =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat64))}},
+      Packaging.primitiveDefinitionIsPure = True,
+      Packaging.primitiveDefinitionIsTotal = True,
+      Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+cosh :: Packaging.PrimitiveDefinition
+cosh =
+    Packaging.PrimitiveDefinition {
+      Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.math.cosh"),
       Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
         Packaging.entityMetadataDescription = (Just "The hyperbolic cosine of a floating-point number."),
         Packaging.entityMetadataComments = [
@@ -371,6 +360,17 @@ cosh =
           "Corresponds to the IEEE 754 \2681.2 cosh operation and to Haskell's cosh :: Double -> Double."],
         Packaging.entityMetadataSeeAlso = [],
         Packaging.entityMetadataLifecycle = Nothing})),
+      Packaging.primitiveDefinitionSignature = Typing.TermSignature {
+        Typing.termSignatureTypeParameters = [],
+        Typing.termSignatureParameters = [
+          Typing.Parameter {
+            Typing.parameterName = (Core.Name "arg0"),
+            Typing.parameterDescription = Nothing,
+            Typing.parameterType = (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat64)),
+            Typing.parameterIsLazy = False}],
+        Typing.termSignatureResult = Typing.Result {
+          Typing.resultDescription = Nothing,
+          Typing.resultType = (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat64))}},
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
@@ -378,12 +378,6 @@ e :: Packaging.PrimitiveDefinition
 e =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.math.e"),
-      Packaging.primitiveDefinitionSignature = Typing.TermSignature {
-        Typing.termSignatureTypeParameters = [],
-        Typing.termSignatureParameters = [],
-        Typing.termSignatureResult = Typing.Result {
-          Typing.resultDescription = Nothing,
-          Typing.resultType = (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat64))}},
       Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
         Packaging.entityMetadataDescription = (Just "Euler's constant (the base of the natural logarithm)."),
         Packaging.entityMetadataComments = [
@@ -391,6 +385,12 @@ e =
           "Corresponds to Haskell's exp 1 :: Double."],
         Packaging.entityMetadataSeeAlso = [],
         Packaging.entityMetadataLifecycle = Nothing})),
+      Packaging.primitiveDefinitionSignature = Typing.TermSignature {
+        Typing.termSignatureTypeParameters = [],
+        Typing.termSignatureParameters = [],
+        Typing.termSignatureResult = Typing.Result {
+          Typing.resultDescription = Nothing,
+          Typing.resultType = (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat64))}},
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
@@ -398,6 +398,13 @@ even :: Packaging.PrimitiveDefinition
 even =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.math.even"),
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "Test whether an integer is even."),
+        Packaging.entityMetadataComments = [
+          "True if the argument is divisible by 2 (i.e. x mod 2 = 0), false otherwise.",
+          "Total on all int32 inputs including negative numbers and minBound. Corresponds to Haskell's even :: Int32 -> Bool."],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [],
         Typing.termSignatureParameters = [
@@ -409,13 +416,6 @@ even =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeLiteral Core.LiteralTypeBoolean)}},
-      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
-        Packaging.entityMetadataDescription = (Just "Test whether an integer is even."),
-        Packaging.entityMetadataComments = [
-          "True if the argument is divisible by 2 (i.e. x mod 2 = 0), false otherwise.",
-          "Total on all int32 inputs including negative numbers and minBound. Corresponds to Haskell's even :: Int32 -> Bool."],
-        Packaging.entityMetadataSeeAlso = [],
-        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = (Just (Core.TermAnnotated (Core.AnnotatedTerm {
@@ -443,17 +443,6 @@ exp :: Packaging.PrimitiveDefinition
 exp =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.math.exp"),
-      Packaging.primitiveDefinitionSignature = Typing.TermSignature {
-        Typing.termSignatureTypeParameters = [],
-        Typing.termSignatureParameters = [
-          Typing.Parameter {
-            Typing.parameterName = (Core.Name "arg0"),
-            Typing.parameterDescription = Nothing,
-            Typing.parameterType = (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat64)),
-            Typing.parameterIsLazy = False}],
-        Typing.termSignatureResult = Typing.Result {
-          Typing.resultDescription = Nothing,
-          Typing.resultType = (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat64))}},
       Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
         Packaging.entityMetadataDescription = (Just "The exponential function."),
         Packaging.entityMetadataComments = [
@@ -461,13 +450,6 @@ exp =
           "Corresponds to the IEEE 754 \2681.2 exp operation and to Haskell's exp :: Double -> Double."],
         Packaging.entityMetadataSeeAlso = [],
         Packaging.entityMetadataLifecycle = Nothing})),
-      Packaging.primitiveDefinitionIsPure = True,
-      Packaging.primitiveDefinitionIsTotal = True,
-      Packaging.primitiveDefinitionDefaultImplementation = Nothing}
-floor :: Packaging.PrimitiveDefinition
-floor =
-    Packaging.PrimitiveDefinition {
-      Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.math.floor"),
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [],
         Typing.termSignatureParameters = [
@@ -479,6 +461,13 @@ floor =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat64))}},
+      Packaging.primitiveDefinitionIsPure = True,
+      Packaging.primitiveDefinitionIsTotal = True,
+      Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+floor :: Packaging.PrimitiveDefinition
+floor =
+    Packaging.PrimitiveDefinition {
+      Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.math.floor"),
       Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
         Packaging.entityMetadataDescription = (Just "The largest integer less than or equal to the argument, as a float."),
         Packaging.entityMetadataComments = [
@@ -487,13 +476,6 @@ floor =
           "Corresponds to Haskell's fromIntegral . floor :: Double -> Double."],
         Packaging.entityMetadataSeeAlso = [],
         Packaging.entityMetadataLifecycle = Nothing})),
-      Packaging.primitiveDefinitionIsPure = True,
-      Packaging.primitiveDefinitionIsTotal = True,
-      Packaging.primitiveDefinitionDefaultImplementation = Nothing}
-log :: Packaging.PrimitiveDefinition
-log =
-    Packaging.PrimitiveDefinition {
-      Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.math.log"),
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [],
         Typing.termSignatureParameters = [
@@ -505,6 +487,13 @@ log =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat64))}},
+      Packaging.primitiveDefinitionIsPure = True,
+      Packaging.primitiveDefinitionIsTotal = True,
+      Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+log :: Packaging.PrimitiveDefinition
+log =
+    Packaging.PrimitiveDefinition {
+      Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.math.log"),
       Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
         Packaging.entityMetadataDescription = (Just "The natural logarithm."),
         Packaging.entityMetadataComments = [
@@ -512,6 +501,17 @@ log =
           "Corresponds to the IEEE 754 \2681.2 log operation and to Haskell's log :: Double -> Double."],
         Packaging.entityMetadataSeeAlso = [],
         Packaging.entityMetadataLifecycle = Nothing})),
+      Packaging.primitiveDefinitionSignature = Typing.TermSignature {
+        Typing.termSignatureTypeParameters = [],
+        Typing.termSignatureParameters = [
+          Typing.Parameter {
+            Typing.parameterName = (Core.Name "arg0"),
+            Typing.parameterDescription = Nothing,
+            Typing.parameterType = (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat64)),
+            Typing.parameterIsLazy = False}],
+        Typing.termSignatureResult = Typing.Result {
+          Typing.resultDescription = Nothing,
+          Typing.resultType = (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat64))}},
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
@@ -519,6 +519,14 @@ logBase :: Packaging.PrimitiveDefinition
 logBase =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.math.logBase"),
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "Logarithm of the second argument in the base of the first."),
+        Packaging.entityMetadataComments = [
+          "logBase(b, x) computes the logarithm of x in base b, equivalent to log(x) / log(b).",
+          "Inherits the special-case behavior of log for each argument (NaN propagation, sign of zeros, division by zero on log of a zero, NaN on negative arguments).",
+          "Corresponds to Haskell's logBase :: Double -> Double -> Double."],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [],
         Typing.termSignatureParameters = [
@@ -535,14 +543,6 @@ logBase =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat64))}},
-      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
-        Packaging.entityMetadataDescription = (Just "Logarithm of the second argument in the base of the first."),
-        Packaging.entityMetadataComments = [
-          "logBase(b, x) computes the logarithm of x in base b, equivalent to log(x) / log(b).",
-          "Inherits the special-case behavior of log for each argument (NaN propagation, sign of zeros, division by zero on log of a zero, NaN on negative arguments).",
-          "Corresponds to Haskell's logBase :: Double -> Double -> Double."],
-        Packaging.entityMetadataSeeAlso = [],
-        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
@@ -550,6 +550,13 @@ max :: Packaging.PrimitiveDefinition
 max =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.math.max"),
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "The maximum of two integers."),
+        Packaging.entityMetadataComments = [
+          "Return the larger of two int32 values under the usual signed-integer total order.",
+          "Total on all inputs. Corresponds to Haskell's max :: Int32 -> Int32 -> Int32."],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [],
         Typing.termSignatureParameters = [
@@ -566,13 +573,6 @@ max =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}},
-      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
-        Packaging.entityMetadataDescription = (Just "The maximum of two integers."),
-        Packaging.entityMetadataComments = [
-          "Return the larger of two int32 values under the usual signed-integer total order.",
-          "Total on all inputs. Corresponds to Haskell's max :: Int32 -> Int32 -> Int32."],
-        Packaging.entityMetadataSeeAlso = [],
-        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
@@ -580,22 +580,6 @@ maybeDiv :: Packaging.PrimitiveDefinition
 maybeDiv =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.math.maybeDiv"),
-      Packaging.primitiveDefinitionSignature = Typing.TermSignature {
-        Typing.termSignatureTypeParameters = [],
-        Typing.termSignatureParameters = [
-          Typing.Parameter {
-            Typing.parameterName = (Core.Name "arg0"),
-            Typing.parameterDescription = Nothing,
-            Typing.parameterType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
-            Typing.parameterIsLazy = False},
-          Typing.Parameter {
-            Typing.parameterName = (Core.Name "arg1"),
-            Typing.parameterDescription = Nothing,
-            Typing.parameterType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
-            Typing.parameterIsLazy = False}],
-        Typing.termSignatureResult = Typing.Result {
-          Typing.resultDescription = Nothing,
-          Typing.resultType = (Core.TypeMaybe (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)))}},
       Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
         Packaging.entityMetadataDescription = (Just "Integer division, or Nothing if dividing by zero."),
         Packaging.entityMetadataComments = [
@@ -605,13 +589,6 @@ maybeDiv =
           "Corresponds to Haskell's div :: Int32 -> Int32 -> Int32, wrapped in maybe to make the zero-divisor case total."],
         Packaging.entityMetadataSeeAlso = [],
         Packaging.entityMetadataLifecycle = Nothing})),
-      Packaging.primitiveDefinitionIsPure = True,
-      Packaging.primitiveDefinitionIsTotal = True,
-      Packaging.primitiveDefinitionDefaultImplementation = Nothing}
-maybeMod :: Packaging.PrimitiveDefinition
-maybeMod =
-    Packaging.PrimitiveDefinition {
-      Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.math.maybeMod"),
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [],
         Typing.termSignatureParameters = [
@@ -628,6 +605,13 @@ maybeMod =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeMaybe (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)))}},
+      Packaging.primitiveDefinitionIsPure = True,
+      Packaging.primitiveDefinitionIsTotal = True,
+      Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+maybeMod :: Packaging.PrimitiveDefinition
+maybeMod =
+    Packaging.PrimitiveDefinition {
+      Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.math.maybeMod"),
       Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
         Packaging.entityMetadataDescription = (Just "Integer modulus, or Nothing if dividing by zero."),
         Packaging.entityMetadataComments = [
@@ -636,38 +620,6 @@ maybeMod =
           "Corresponds to Haskell's mod :: Int32 -> Int32 -> Int32, wrapped in maybe to make the zero-divisor case total."],
         Packaging.entityMetadataSeeAlso = [],
         Packaging.entityMetadataLifecycle = Nothing})),
-      Packaging.primitiveDefinitionIsPure = True,
-      Packaging.primitiveDefinitionIsTotal = True,
-      Packaging.primitiveDefinitionDefaultImplementation = Nothing}
-maybePred :: Packaging.PrimitiveDefinition
-maybePred =
-    Packaging.PrimitiveDefinition {
-      Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.math.maybePred"),
-      Packaging.primitiveDefinitionSignature = Typing.TermSignature {
-        Typing.termSignatureTypeParameters = [],
-        Typing.termSignatureParameters = [
-          Typing.Parameter {
-            Typing.parameterName = (Core.Name "arg0"),
-            Typing.parameterDescription = Nothing,
-            Typing.parameterType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
-            Typing.parameterIsLazy = False}],
-        Typing.termSignatureResult = Typing.Result {
-          Typing.resultDescription = Nothing,
-          Typing.resultType = (Core.TypeMaybe (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)))}},
-      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
-        Packaging.entityMetadataDescription = (Just "The predecessor of an integer, or Nothing on underflow."),
-        Packaging.entityMetadataComments = [
-          "maybePred(x) returns Just(x - 1) when x > minBound, and Nothing when x = minBound (i.e. -2147483648). The function is total and does not wrap.",
-          "Corresponds to Haskell's pred :: Int32 -> Int32, wrapped in maybe to make the boundary case total (Haskell's pred is a partial function that raises an error on minBound)."],
-        Packaging.entityMetadataSeeAlso = [],
-        Packaging.entityMetadataLifecycle = Nothing})),
-      Packaging.primitiveDefinitionIsPure = True,
-      Packaging.primitiveDefinitionIsTotal = True,
-      Packaging.primitiveDefinitionDefaultImplementation = Nothing}
-maybeRem :: Packaging.PrimitiveDefinition
-maybeRem =
-    Packaging.PrimitiveDefinition {
-      Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.math.maybeRem"),
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [],
         Typing.termSignatureParameters = [
@@ -684,6 +636,38 @@ maybeRem =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeMaybe (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)))}},
+      Packaging.primitiveDefinitionIsPure = True,
+      Packaging.primitiveDefinitionIsTotal = True,
+      Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+maybePred :: Packaging.PrimitiveDefinition
+maybePred =
+    Packaging.PrimitiveDefinition {
+      Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.math.maybePred"),
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "The predecessor of an integer, or Nothing on underflow."),
+        Packaging.entityMetadataComments = [
+          "maybePred(x) returns Just(x - 1) when x > minBound, and Nothing when x = minBound (i.e. -2147483648). The function is total and does not wrap.",
+          "Corresponds to Haskell's pred :: Int32 -> Int32, wrapped in maybe to make the boundary case total (Haskell's pred is a partial function that raises an error on minBound)."],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
+      Packaging.primitiveDefinitionSignature = Typing.TermSignature {
+        Typing.termSignatureTypeParameters = [],
+        Typing.termSignatureParameters = [
+          Typing.Parameter {
+            Typing.parameterName = (Core.Name "arg0"),
+            Typing.parameterDescription = Nothing,
+            Typing.parameterType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
+            Typing.parameterIsLazy = False}],
+        Typing.termSignatureResult = Typing.Result {
+          Typing.resultDescription = Nothing,
+          Typing.resultType = (Core.TypeMaybe (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)))}},
+      Packaging.primitiveDefinitionIsPure = True,
+      Packaging.primitiveDefinitionIsTotal = True,
+      Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+maybeRem :: Packaging.PrimitiveDefinition
+maybeRem =
+    Packaging.PrimitiveDefinition {
+      Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.math.maybeRem"),
       Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
         Packaging.entityMetadataDescription = (Just "Integer remainder, or Nothing if dividing by zero."),
         Packaging.entityMetadataComments = [
@@ -693,6 +677,22 @@ maybeRem =
           "Corresponds to Haskell's rem :: Int32 -> Int32 -> Int32, wrapped in maybe to make the zero-divisor case total."],
         Packaging.entityMetadataSeeAlso = [],
         Packaging.entityMetadataLifecycle = Nothing})),
+      Packaging.primitiveDefinitionSignature = Typing.TermSignature {
+        Typing.termSignatureTypeParameters = [],
+        Typing.termSignatureParameters = [
+          Typing.Parameter {
+            Typing.parameterName = (Core.Name "arg0"),
+            Typing.parameterDescription = Nothing,
+            Typing.parameterType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
+            Typing.parameterIsLazy = False},
+          Typing.Parameter {
+            Typing.parameterName = (Core.Name "arg1"),
+            Typing.parameterDescription = Nothing,
+            Typing.parameterType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
+            Typing.parameterIsLazy = False}],
+        Typing.termSignatureResult = Typing.Result {
+          Typing.resultDescription = Nothing,
+          Typing.resultType = (Core.TypeMaybe (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)))}},
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
@@ -700,6 +700,13 @@ maybeSucc :: Packaging.PrimitiveDefinition
 maybeSucc =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.math.maybeSucc"),
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "The successor of an integer, or Nothing on overflow."),
+        Packaging.entityMetadataComments = [
+          "maybeSucc(x) returns Just(x + 1) when x < maxBound, and Nothing when x = maxBound (i.e. 2147483647). The function is total and does not wrap.",
+          "Corresponds to Haskell's succ :: Int32 -> Int32, wrapped in maybe to make the boundary case total (Haskell's succ is a partial function that raises an error on maxBound)."],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [],
         Typing.termSignatureParameters = [
@@ -711,13 +718,6 @@ maybeSucc =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeMaybe (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)))}},
-      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
-        Packaging.entityMetadataDescription = (Just "The successor of an integer, or Nothing on overflow."),
-        Packaging.entityMetadataComments = [
-          "maybeSucc(x) returns Just(x + 1) when x < maxBound, and Nothing when x = maxBound (i.e. 2147483647). The function is total and does not wrap.",
-          "Corresponds to Haskell's succ :: Int32 -> Int32, wrapped in maybe to make the boundary case total (Haskell's succ is a partial function that raises an error on maxBound)."],
-        Packaging.entityMetadataSeeAlso = [],
-        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
@@ -725,22 +725,6 @@ min :: Packaging.PrimitiveDefinition
 min =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.math.min"),
-      Packaging.primitiveDefinitionSignature = Typing.TermSignature {
-        Typing.termSignatureTypeParameters = [],
-        Typing.termSignatureParameters = [
-          Typing.Parameter {
-            Typing.parameterName = (Core.Name "arg0"),
-            Typing.parameterDescription = Nothing,
-            Typing.parameterType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
-            Typing.parameterIsLazy = False},
-          Typing.Parameter {
-            Typing.parameterName = (Core.Name "arg1"),
-            Typing.parameterDescription = Nothing,
-            Typing.parameterType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
-            Typing.parameterIsLazy = False}],
-        Typing.termSignatureResult = Typing.Result {
-          Typing.resultDescription = Nothing,
-          Typing.resultType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}},
       Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
         Packaging.entityMetadataDescription = (Just "The minimum of two integers."),
         Packaging.entityMetadataComments = [
@@ -748,13 +732,6 @@ min =
           "Total on all inputs. Corresponds to Haskell's min :: Int32 -> Int32 -> Int32."],
         Packaging.entityMetadataSeeAlso = [],
         Packaging.entityMetadataLifecycle = Nothing})),
-      Packaging.primitiveDefinitionIsPure = True,
-      Packaging.primitiveDefinitionIsTotal = True,
-      Packaging.primitiveDefinitionDefaultImplementation = Nothing}
-mul :: Packaging.PrimitiveDefinition
-mul =
-    Packaging.PrimitiveDefinition {
-      Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.math.mul"),
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [],
         Typing.termSignatureParameters = [
@@ -771,6 +748,13 @@ mul =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}},
+      Packaging.primitiveDefinitionIsPure = True,
+      Packaging.primitiveDefinitionIsTotal = True,
+      Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+mul :: Packaging.PrimitiveDefinition
+mul =
+    Packaging.PrimitiveDefinition {
+      Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.math.mul"),
       Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
         Packaging.entityMetadataDescription = (Just "Integer multiplication."),
         Packaging.entityMetadataComments = [
@@ -778,6 +762,22 @@ mul =
           "The operation is total. Corresponds to Haskell's (*) :: Int32 -> Int32 -> Int32."],
         Packaging.entityMetadataSeeAlso = [],
         Packaging.entityMetadataLifecycle = Nothing})),
+      Packaging.primitiveDefinitionSignature = Typing.TermSignature {
+        Typing.termSignatureTypeParameters = [],
+        Typing.termSignatureParameters = [
+          Typing.Parameter {
+            Typing.parameterName = (Core.Name "arg0"),
+            Typing.parameterDescription = Nothing,
+            Typing.parameterType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
+            Typing.parameterIsLazy = False},
+          Typing.Parameter {
+            Typing.parameterName = (Core.Name "arg1"),
+            Typing.parameterDescription = Nothing,
+            Typing.parameterType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
+            Typing.parameterIsLazy = False}],
+        Typing.termSignatureResult = Typing.Result {
+          Typing.resultDescription = Nothing,
+          Typing.resultType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}},
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
@@ -785,22 +785,6 @@ mulFloat64 :: Packaging.PrimitiveDefinition
 mulFloat64 =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.math.mulFloat64"),
-      Packaging.primitiveDefinitionSignature = Typing.TermSignature {
-        Typing.termSignatureTypeParameters = [],
-        Typing.termSignatureParameters = [
-          Typing.Parameter {
-            Typing.parameterName = (Core.Name "arg0"),
-            Typing.parameterDescription = Nothing,
-            Typing.parameterType = (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat64)),
-            Typing.parameterIsLazy = False},
-          Typing.Parameter {
-            Typing.parameterName = (Core.Name "arg1"),
-            Typing.parameterDescription = Nothing,
-            Typing.parameterType = (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat64)),
-            Typing.parameterIsLazy = False}],
-        Typing.termSignatureResult = Typing.Result {
-          Typing.resultDescription = Nothing,
-          Typing.resultType = (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat64))}},
       Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
         Packaging.entityMetadataDescription = (Just "Floating-point multiplication."),
         Packaging.entityMetadataComments = [
@@ -809,6 +793,22 @@ mulFloat64 =
           "The operation is total: it never raises, but it may produce NaN or \177\8734. Corresponds to the IEEE 754 \2677.4.1 multiplication operation and to Haskell's (*) :: Double -> Double -> Double."],
         Packaging.entityMetadataSeeAlso = [],
         Packaging.entityMetadataLifecycle = Nothing})),
+      Packaging.primitiveDefinitionSignature = Typing.TermSignature {
+        Typing.termSignatureTypeParameters = [],
+        Typing.termSignatureParameters = [
+          Typing.Parameter {
+            Typing.parameterName = (Core.Name "arg0"),
+            Typing.parameterDescription = Nothing,
+            Typing.parameterType = (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat64)),
+            Typing.parameterIsLazy = False},
+          Typing.Parameter {
+            Typing.parameterName = (Core.Name "arg1"),
+            Typing.parameterDescription = Nothing,
+            Typing.parameterType = (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat64)),
+            Typing.parameterIsLazy = False}],
+        Typing.termSignatureResult = Typing.Result {
+          Typing.resultDescription = Nothing,
+          Typing.resultType = (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat64))}},
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
@@ -816,6 +816,14 @@ negate :: Packaging.PrimitiveDefinition
 negate =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.math.negate"),
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "Negate an integer."),
+        Packaging.entityMetadataComments = [
+          "Arithmetic negation of a 32-bit signed integer. The result is 0 - x reduced modulo 2^32 and reinterpreted as a signed int32.",
+          "The function is total but not injective at the boundary: negate(minBound) = minBound (i.e. negate(-2147483648) = -2147483648), because +2147483648 is not representable in int32.",
+          "Corresponds to Haskell's negate :: Int32 -> Int32."],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [],
         Typing.termSignatureParameters = [
@@ -827,14 +835,6 @@ negate =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}},
-      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
-        Packaging.entityMetadataDescription = (Just "Negate an integer."),
-        Packaging.entityMetadataComments = [
-          "Arithmetic negation of a 32-bit signed integer. The result is 0 - x reduced modulo 2^32 and reinterpreted as a signed int32.",
-          "The function is total but not injective at the boundary: negate(minBound) = minBound (i.e. negate(-2147483648) = -2147483648), because +2147483648 is not representable in int32.",
-          "Corresponds to Haskell's negate :: Int32 -> Int32."],
-        Packaging.entityMetadataSeeAlso = [],
-        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
@@ -842,6 +842,13 @@ negateFloat64 :: Packaging.PrimitiveDefinition
 negateFloat64 =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.math.negateFloat64"),
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "Negate a floating-point number."),
+        Packaging.entityMetadataComments = [
+          "Sign reversal of a float64. Equivalent to IEEE 754 \2677.5.1 negate: flips the sign bit, so negate(\2832) = \2832 (sign flips), negate(\177\8734) = \177\8734 (sign flips), and negate(NaN) is a NaN (sign may flip; payload preserved).",
+          "This is a bit-level operation that does not raise any floating-point exception. Corresponds to Haskell's negate :: Double -> Double."],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [],
         Typing.termSignatureParameters = [
@@ -853,13 +860,6 @@ negateFloat64 =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat64))}},
-      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
-        Packaging.entityMetadataDescription = (Just "Negate a floating-point number."),
-        Packaging.entityMetadataComments = [
-          "Sign reversal of a float64. Equivalent to IEEE 754 \2677.5.1 negate: flips the sign bit, so negate(\2832) = \2832 (sign flips), negate(\177\8734) = \177\8734 (sign flips), and negate(NaN) is a NaN (sign may flip; payload preserved).",
-          "This is a bit-level operation that does not raise any floating-point exception. Corresponds to Haskell's negate :: Double -> Double."],
-        Packaging.entityMetadataSeeAlso = [],
-        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
@@ -867,6 +867,13 @@ odd :: Packaging.PrimitiveDefinition
 odd =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.math.odd"),
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "Test whether an integer is odd."),
+        Packaging.entityMetadataComments = [
+          "True if the argument is not divisible by 2 (i.e. x mod 2 \8800 0), false otherwise.",
+          "Total on all int32 inputs including negative numbers and minBound. Corresponds to Haskell's odd :: Int32 -> Bool."],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [],
         Typing.termSignatureParameters = [
@@ -878,13 +885,6 @@ odd =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeLiteral Core.LiteralTypeBoolean)}},
-      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
-        Packaging.entityMetadataDescription = (Just "Test whether an integer is odd."),
-        Packaging.entityMetadataComments = [
-          "True if the argument is not divisible by 2 (i.e. x mod 2 \8800 0), false otherwise.",
-          "Total on all int32 inputs including negative numbers and minBound. Corresponds to Haskell's odd :: Int32 -> Bool."],
-        Packaging.entityMetadataSeeAlso = [],
-        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = (Just (Core.TermAnnotated (Core.AnnotatedTerm {
@@ -904,12 +904,6 @@ pi :: Packaging.PrimitiveDefinition
 pi =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.math.pi"),
-      Packaging.primitiveDefinitionSignature = Typing.TermSignature {
-        Typing.termSignatureTypeParameters = [],
-        Typing.termSignatureParameters = [],
-        Typing.termSignatureResult = Typing.Result {
-          Typing.resultDescription = Nothing,
-          Typing.resultType = (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat64))}},
       Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
         Packaging.entityMetadataDescription = (Just "The mathematical constant pi."),
         Packaging.entityMetadataComments = [
@@ -917,6 +911,12 @@ pi =
           "Corresponds to Haskell's pi :: Double."],
         Packaging.entityMetadataSeeAlso = [],
         Packaging.entityMetadataLifecycle = Nothing})),
+      Packaging.primitiveDefinitionSignature = Typing.TermSignature {
+        Typing.termSignatureTypeParameters = [],
+        Typing.termSignatureParameters = [],
+        Typing.termSignatureResult = Typing.Result {
+          Typing.resultDescription = Nothing,
+          Typing.resultType = (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat64))}},
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
@@ -924,6 +924,14 @@ pow :: Packaging.PrimitiveDefinition
 pow =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.math.pow"),
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "Raise the first argument to the power of the second."),
+        Packaging.entityMetadataComments = [
+          "pow(x, y) = x^y.",
+          "Follows the IEEE 754 \2681.2 pow operation: pow(\2832, y) for y < 0 is \177\8734 (with division-by-zero exception); pow(\2832, y) for y > 0 is \2832 if y is an odd integer, else +0; pow(1, y) = 1 for any y including NaN; pow(x, \2832) = 1 for any x including NaN; pow(x, y) for negative x and non-integer y is NaN (with invalid-operation exception); pow(\177\8734, y) follows the limits in the usual way. Otherwise the result is x^y rounded to the nearest representable float64.",
+          "Corresponds to Haskell's (**) :: Double -> Double -> Double."],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [],
         Typing.termSignatureParameters = [
@@ -940,14 +948,6 @@ pow =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat64))}},
-      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
-        Packaging.entityMetadataDescription = (Just "Raise the first argument to the power of the second."),
-        Packaging.entityMetadataComments = [
-          "pow(x, y) = x^y.",
-          "Follows the IEEE 754 \2681.2 pow operation: pow(\2832, y) for y < 0 is \177\8734 (with division-by-zero exception); pow(\2832, y) for y > 0 is \2832 if y is an odd integer, else +0; pow(1, y) = 1 for any y including NaN; pow(x, \2832) = 1 for any x including NaN; pow(x, y) for negative x and non-integer y is NaN (with invalid-operation exception); pow(\177\8734, y) follows the limits in the usual way. Otherwise the result is x^y rounded to the nearest representable float64.",
-          "Corresponds to Haskell's (**) :: Double -> Double -> Double."],
-        Packaging.entityMetadataSeeAlso = [],
-        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
@@ -955,6 +955,13 @@ range :: Packaging.PrimitiveDefinition
 range =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.math.range"),
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "Construct the inclusive integer range from the first to the second argument."),
+        Packaging.entityMetadataComments = [
+          "range(a, b) returns the list [a, a+1, ..., b]. The range is inclusive at both ends; if a > b the result is the empty list (i.e. the range does not count downward). For a = b the result is the singleton [a]. The length of the result is max(0, b - a + 1).",
+          "Corresponds to Haskell's enumFromTo :: Int32 -> Int32 -> [Int32], equivalent to the list-comprehension form [a..b]."],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [],
         Typing.termSignatureParameters = [
@@ -971,13 +978,6 @@ range =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeList (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)))}},
-      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
-        Packaging.entityMetadataDescription = (Just "Construct the inclusive integer range from the first to the second argument."),
-        Packaging.entityMetadataComments = [
-          "range(a, b) returns the list [a, a+1, ..., b]. The range is inclusive at both ends; if a > b the result is the empty list (i.e. the range does not count downward). For a = b the result is the singleton [a]. The length of the result is max(0, b - a + 1).",
-          "Corresponds to Haskell's enumFromTo :: Int32 -> Int32 -> [Int32], equivalent to the list-comprehension form [a..b]."],
-        Packaging.entityMetadataSeeAlso = [],
-        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
@@ -985,6 +985,14 @@ round :: Packaging.PrimitiveDefinition
 round =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.math.round"),
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "Round a floating-point number to the nearest integer-valued float."),
+        Packaging.entityMetadataComments = [
+          "Round to the nearest integer value, returned as a float64, with ties rounded to the nearest even integer (banker's rounding). Equivalent to IEEE 754 \2677.3.1 roundToIntegralTiesToEven: round(\2832) = \2832; round(\177\8734) = \177\8734; round(NaN) is NaN.",
+          "Note that the return type is float64, not an integer type, so the result can exceed the integer range.",
+          "Corresponds to Haskell's fromIntegral . round :: Double -> Double."],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [],
         Typing.termSignatureParameters = [
@@ -996,14 +1004,6 @@ round =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat64))}},
-      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
-        Packaging.entityMetadataDescription = (Just "Round a floating-point number to the nearest integer-valued float."),
-        Packaging.entityMetadataComments = [
-          "Round to the nearest integer value, returned as a float64, with ties rounded to the nearest even integer (banker's rounding). Equivalent to IEEE 754 \2677.3.1 roundToIntegralTiesToEven: round(\2832) = \2832; round(\177\8734) = \177\8734; round(NaN) is NaN.",
-          "Note that the return type is float64, not an integer type, so the result can exceed the integer range.",
-          "Corresponds to Haskell's fromIntegral . round :: Double -> Double."],
-        Packaging.entityMetadataSeeAlso = [],
-        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
@@ -1011,6 +1011,14 @@ roundFloat32 :: Packaging.PrimitiveDefinition
 roundFloat32 =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.math.roundFloat32"),
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "Round a float32 to the given number of decimal places."),
+        Packaging.entityMetadataComments = [
+          "roundFloat32(n, x) rounds the float32 value x to n decimal places using round-half-to-even. The result is the nearest float32 representation of x rounded to that decimal precision; if the exact decimal-rounded value is not representable in float32 (the usual case), the closest float32 is returned.",
+          "Special values pass through: roundFloat32(n, \2832) = \2832; roundFloat32(n, \177\8734) = \177\8734; roundFloat32(n, NaN) is NaN.",
+          "Negative n is supported in principle (rounding to powers of ten above 1); host implementations may differ on out-of-range n."],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [],
         Typing.termSignatureParameters = [
@@ -1027,14 +1035,6 @@ roundFloat32 =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat32))}},
-      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
-        Packaging.entityMetadataDescription = (Just "Round a float32 to the given number of decimal places."),
-        Packaging.entityMetadataComments = [
-          "roundFloat32(n, x) rounds the float32 value x to n decimal places using round-half-to-even. The result is the nearest float32 representation of x rounded to that decimal precision; if the exact decimal-rounded value is not representable in float32 (the usual case), the closest float32 is returned.",
-          "Special values pass through: roundFloat32(n, \2832) = \2832; roundFloat32(n, \177\8734) = \177\8734; roundFloat32(n, NaN) is NaN.",
-          "Negative n is supported in principle (rounding to powers of ten above 1); host implementations may differ on out-of-range n."],
-        Packaging.entityMetadataSeeAlso = [],
-        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
@@ -1042,22 +1042,6 @@ roundFloat64 :: Packaging.PrimitiveDefinition
 roundFloat64 =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.math.roundFloat64"),
-      Packaging.primitiveDefinitionSignature = Typing.TermSignature {
-        Typing.termSignatureTypeParameters = [],
-        Typing.termSignatureParameters = [
-          Typing.Parameter {
-            Typing.parameterName = (Core.Name "arg0"),
-            Typing.parameterDescription = Nothing,
-            Typing.parameterType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
-            Typing.parameterIsLazy = False},
-          Typing.Parameter {
-            Typing.parameterName = (Core.Name "arg1"),
-            Typing.parameterDescription = Nothing,
-            Typing.parameterType = (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat64)),
-            Typing.parameterIsLazy = False}],
-        Typing.termSignatureResult = Typing.Result {
-          Typing.resultDescription = Nothing,
-          Typing.resultType = (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat64))}},
       Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
         Packaging.entityMetadataDescription = (Just "Round a float64 to the given number of decimal places."),
         Packaging.entityMetadataComments = [
@@ -1066,13 +1050,6 @@ roundFloat64 =
           "Negative n is supported in principle (rounding to powers of ten above 1); host implementations may differ on out-of-range n."],
         Packaging.entityMetadataSeeAlso = [],
         Packaging.entityMetadataLifecycle = Nothing})),
-      Packaging.primitiveDefinitionIsPure = True,
-      Packaging.primitiveDefinitionIsTotal = True,
-      Packaging.primitiveDefinitionDefaultImplementation = Nothing}
-signum :: Packaging.PrimitiveDefinition
-signum =
-    Packaging.PrimitiveDefinition {
-      Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.math.signum"),
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [],
         Typing.termSignatureParameters = [
@@ -1080,10 +1057,22 @@ signum =
             Typing.parameterName = (Core.Name "arg0"),
             Typing.parameterDescription = Nothing,
             Typing.parameterType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
+            Typing.parameterIsLazy = False},
+          Typing.Parameter {
+            Typing.parameterName = (Core.Name "arg1"),
+            Typing.parameterDescription = Nothing,
+            Typing.parameterType = (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat64)),
             Typing.parameterIsLazy = False}],
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
-          Typing.resultType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}},
+          Typing.resultType = (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat64))}},
+      Packaging.primitiveDefinitionIsPure = True,
+      Packaging.primitiveDefinitionIsTotal = True,
+      Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+signum :: Packaging.PrimitiveDefinition
+signum =
+    Packaging.PrimitiveDefinition {
+      Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.math.signum"),
       Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
         Packaging.entityMetadataDescription = (Just "Return the sign of an integer as -1, 0, or 1."),
         Packaging.entityMetadataComments = [
@@ -1092,6 +1081,17 @@ signum =
           "Corresponds to Haskell's signum :: Int32 -> Int32."],
         Packaging.entityMetadataSeeAlso = [],
         Packaging.entityMetadataLifecycle = Nothing})),
+      Packaging.primitiveDefinitionSignature = Typing.TermSignature {
+        Typing.termSignatureTypeParameters = [],
+        Typing.termSignatureParameters = [
+          Typing.Parameter {
+            Typing.parameterName = (Core.Name "arg0"),
+            Typing.parameterDescription = Nothing,
+            Typing.parameterType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
+            Typing.parameterIsLazy = False}],
+        Typing.termSignatureResult = Typing.Result {
+          Typing.resultDescription = Nothing,
+          Typing.resultType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}},
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
@@ -1099,17 +1099,6 @@ sin :: Packaging.PrimitiveDefinition
 sin =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.math.sin"),
-      Packaging.primitiveDefinitionSignature = Typing.TermSignature {
-        Typing.termSignatureTypeParameters = [],
-        Typing.termSignatureParameters = [
-          Typing.Parameter {
-            Typing.parameterName = (Core.Name "arg0"),
-            Typing.parameterDescription = Nothing,
-            Typing.parameterType = (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat64)),
-            Typing.parameterIsLazy = False}],
-        Typing.termSignatureResult = Typing.Result {
-          Typing.resultDescription = Nothing,
-          Typing.resultType = (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat64))}},
       Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
         Packaging.entityMetadataDescription = (Just "The sine of a floating-point number."),
         Packaging.entityMetadataComments = [
@@ -1117,6 +1106,17 @@ sin =
           "Corresponds to the IEEE 754 \2681.2 sin operation and to Haskell's sin :: Double -> Double."],
         Packaging.entityMetadataSeeAlso = [],
         Packaging.entityMetadataLifecycle = Nothing})),
+      Packaging.primitiveDefinitionSignature = Typing.TermSignature {
+        Typing.termSignatureTypeParameters = [],
+        Typing.termSignatureParameters = [
+          Typing.Parameter {
+            Typing.parameterName = (Core.Name "arg0"),
+            Typing.parameterDescription = Nothing,
+            Typing.parameterType = (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat64)),
+            Typing.parameterIsLazy = False}],
+        Typing.termSignatureResult = Typing.Result {
+          Typing.resultDescription = Nothing,
+          Typing.resultType = (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat64))}},
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
@@ -1124,17 +1124,6 @@ sinh :: Packaging.PrimitiveDefinition
 sinh =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.math.sinh"),
-      Packaging.primitiveDefinitionSignature = Typing.TermSignature {
-        Typing.termSignatureTypeParameters = [],
-        Typing.termSignatureParameters = [
-          Typing.Parameter {
-            Typing.parameterName = (Core.Name "arg0"),
-            Typing.parameterDescription = Nothing,
-            Typing.parameterType = (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat64)),
-            Typing.parameterIsLazy = False}],
-        Typing.termSignatureResult = Typing.Result {
-          Typing.resultDescription = Nothing,
-          Typing.resultType = (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat64))}},
       Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
         Packaging.entityMetadataDescription = (Just "The hyperbolic sine of a floating-point number."),
         Packaging.entityMetadataComments = [
@@ -1142,13 +1131,6 @@ sinh =
           "Corresponds to the IEEE 754 \2681.2 sinh operation and to Haskell's sinh :: Double -> Double."],
         Packaging.entityMetadataSeeAlso = [],
         Packaging.entityMetadataLifecycle = Nothing})),
-      Packaging.primitiveDefinitionIsPure = True,
-      Packaging.primitiveDefinitionIsTotal = True,
-      Packaging.primitiveDefinitionDefaultImplementation = Nothing}
-sqrt :: Packaging.PrimitiveDefinition
-sqrt =
-    Packaging.PrimitiveDefinition {
-      Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.math.sqrt"),
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [],
         Typing.termSignatureParameters = [
@@ -1160,6 +1142,13 @@ sqrt =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat64))}},
+      Packaging.primitiveDefinitionIsPure = True,
+      Packaging.primitiveDefinitionIsTotal = True,
+      Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+sqrt :: Packaging.PrimitiveDefinition
+sqrt =
+    Packaging.PrimitiveDefinition {
+      Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.math.sqrt"),
       Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
         Packaging.entityMetadataDescription = (Just "The non-negative square root of a floating-point number."),
         Packaging.entityMetadataComments = [
@@ -1168,6 +1157,17 @@ sqrt =
           "Corresponds to the IEEE 754 \2677.4.1 squareRoot operation and to Haskell's sqrt :: Double -> Double."],
         Packaging.entityMetadataSeeAlso = [],
         Packaging.entityMetadataLifecycle = Nothing})),
+      Packaging.primitiveDefinitionSignature = Typing.TermSignature {
+        Typing.termSignatureTypeParameters = [],
+        Typing.termSignatureParameters = [
+          Typing.Parameter {
+            Typing.parameterName = (Core.Name "arg0"),
+            Typing.parameterDescription = Nothing,
+            Typing.parameterType = (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat64)),
+            Typing.parameterIsLazy = False}],
+        Typing.termSignatureResult = Typing.Result {
+          Typing.resultDescription = Nothing,
+          Typing.resultType = (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat64))}},
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
@@ -1175,6 +1175,13 @@ sub :: Packaging.PrimitiveDefinition
 sub =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.math.sub"),
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "Integer subtraction."),
+        Packaging.entityMetadataComments = [
+          "Two's-complement 32-bit signed integer subtraction. The result is x - y reduced modulo 2^32 and reinterpreted as a signed int32 (i.e. arithmetic wraps silently on overflow, with no exception raised).",
+          "The operation is total. Corresponds to Haskell's (-) :: Int32 -> Int32 -> Int32."],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [],
         Typing.termSignatureParameters = [
@@ -1191,13 +1198,6 @@ sub =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}},
-      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
-        Packaging.entityMetadataDescription = (Just "Integer subtraction."),
-        Packaging.entityMetadataComments = [
-          "Two's-complement 32-bit signed integer subtraction. The result is x - y reduced modulo 2^32 and reinterpreted as a signed int32 (i.e. arithmetic wraps silently on overflow, with no exception raised).",
-          "The operation is total. Corresponds to Haskell's (-) :: Int32 -> Int32 -> Int32."],
-        Packaging.entityMetadataSeeAlso = [],
-        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
@@ -1205,6 +1205,14 @@ subFloat64 :: Packaging.PrimitiveDefinition
 subFloat64 =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.math.subFloat64"),
+      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
+        Packaging.entityMetadataDescription = (Just "Floating-point subtraction."),
+        Packaging.entityMetadataComments = [
+          "IEEE 754 binary64 subtraction, defined as x + (-y). The result is correctly rounded to the nearest representable float64 under roundTiesToEven.",
+          "Subtracting infinities of the same sign (+\8734 - +\8734 or -\8734 - -\8734) produces a NaN; subtracting any value involving NaN produces a NaN. The difference of two equal finite values is +0 (or -0 under round-toward-negative, which is not the default).",
+          "The operation is total: it never raises, but it may produce NaN. Corresponds to the IEEE 754 \2677.4.1 subtraction operation and to Haskell's (-) :: Double -> Double -> Double."],
+        Packaging.entityMetadataSeeAlso = [],
+        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [],
         Typing.termSignatureParameters = [
@@ -1221,14 +1229,6 @@ subFloat64 =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat64))}},
-      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
-        Packaging.entityMetadataDescription = (Just "Floating-point subtraction."),
-        Packaging.entityMetadataComments = [
-          "IEEE 754 binary64 subtraction, defined as x + (-y). The result is correctly rounded to the nearest representable float64 under roundTiesToEven.",
-          "Subtracting infinities of the same sign (+\8734 - +\8734 or -\8734 - -\8734) produces a NaN; subtracting any value involving NaN produces a NaN. The difference of two equal finite values is +0 (or -0 under round-toward-negative, which is not the default).",
-          "The operation is total: it never raises, but it may produce NaN. Corresponds to the IEEE 754 \2677.4.1 subtraction operation and to Haskell's (-) :: Double -> Double -> Double."],
-        Packaging.entityMetadataSeeAlso = [],
-        Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
@@ -1236,17 +1236,6 @@ tan :: Packaging.PrimitiveDefinition
 tan =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.math.tan"),
-      Packaging.primitiveDefinitionSignature = Typing.TermSignature {
-        Typing.termSignatureTypeParameters = [],
-        Typing.termSignatureParameters = [
-          Typing.Parameter {
-            Typing.parameterName = (Core.Name "arg0"),
-            Typing.parameterDescription = Nothing,
-            Typing.parameterType = (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat64)),
-            Typing.parameterIsLazy = False}],
-        Typing.termSignatureResult = Typing.Result {
-          Typing.resultDescription = Nothing,
-          Typing.resultType = (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat64))}},
       Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
         Packaging.entityMetadataDescription = (Just "The tangent of a floating-point number."),
         Packaging.entityMetadataComments = [
@@ -1254,6 +1243,17 @@ tan =
           "Corresponds to the IEEE 754 \2681.2 tan operation and to Haskell's tan :: Double -> Double."],
         Packaging.entityMetadataSeeAlso = [],
         Packaging.entityMetadataLifecycle = Nothing})),
+      Packaging.primitiveDefinitionSignature = Typing.TermSignature {
+        Typing.termSignatureTypeParameters = [],
+        Typing.termSignatureParameters = [
+          Typing.Parameter {
+            Typing.parameterName = (Core.Name "arg0"),
+            Typing.parameterDescription = Nothing,
+            Typing.parameterType = (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat64)),
+            Typing.parameterIsLazy = False}],
+        Typing.termSignatureResult = Typing.Result {
+          Typing.resultDescription = Nothing,
+          Typing.resultType = (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat64))}},
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
@@ -1261,17 +1261,6 @@ tanh :: Packaging.PrimitiveDefinition
 tanh =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.math.tanh"),
-      Packaging.primitiveDefinitionSignature = Typing.TermSignature {
-        Typing.termSignatureTypeParameters = [],
-        Typing.termSignatureParameters = [
-          Typing.Parameter {
-            Typing.parameterName = (Core.Name "arg0"),
-            Typing.parameterDescription = Nothing,
-            Typing.parameterType = (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat64)),
-            Typing.parameterIsLazy = False}],
-        Typing.termSignatureResult = Typing.Result {
-          Typing.resultDescription = Nothing,
-          Typing.resultType = (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat64))}},
       Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
         Packaging.entityMetadataDescription = (Just "The hyperbolic tangent of a floating-point number."),
         Packaging.entityMetadataComments = [
@@ -1279,13 +1268,6 @@ tanh =
           "Corresponds to the IEEE 754 \2681.2 tanh operation and to Haskell's tanh :: Double -> Double."],
         Packaging.entityMetadataSeeAlso = [],
         Packaging.entityMetadataLifecycle = Nothing})),
-      Packaging.primitiveDefinitionIsPure = True,
-      Packaging.primitiveDefinitionIsTotal = True,
-      Packaging.primitiveDefinitionDefaultImplementation = Nothing}
-truncate :: Packaging.PrimitiveDefinition
-truncate =
-    Packaging.PrimitiveDefinition {
-      Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.math.truncate"),
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
         Typing.termSignatureTypeParameters = [],
         Typing.termSignatureParameters = [
@@ -1297,6 +1279,13 @@ truncate =
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat64))}},
+      Packaging.primitiveDefinitionIsPure = True,
+      Packaging.primitiveDefinitionIsTotal = True,
+      Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+truncate :: Packaging.PrimitiveDefinition
+truncate =
+    Packaging.PrimitiveDefinition {
+      Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.math.truncate"),
       Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
         Packaging.entityMetadataDescription = (Just "Truncate a floating-point number toward zero, as a float."),
         Packaging.entityMetadataComments = [
@@ -1305,6 +1294,17 @@ truncate =
           "Corresponds to Haskell's fromIntegral . truncate :: Double -> Double."],
         Packaging.entityMetadataSeeAlso = [],
         Packaging.entityMetadataLifecycle = Nothing})),
+      Packaging.primitiveDefinitionSignature = Typing.TermSignature {
+        Typing.termSignatureTypeParameters = [],
+        Typing.termSignatureParameters = [
+          Typing.Parameter {
+            Typing.parameterName = (Core.Name "arg0"),
+            Typing.parameterDescription = Nothing,
+            Typing.parameterType = (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat64)),
+            Typing.parameterIsLazy = False}],
+        Typing.termSignatureResult = Typing.Result {
+          Typing.resultDescription = Nothing,
+          Typing.resultType = (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat64))}},
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}

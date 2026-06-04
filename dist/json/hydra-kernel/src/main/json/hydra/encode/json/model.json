@@ -2,20 +2,14 @@
   "definitions": [
     {
       "term": {
-        "name": "hydra.encode.json.model.value",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.json.model.Value"}}],
-          "result": {"type": {"variable": "hydra.core.Term"}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Encoder for hydra.json.model.Value"}}}],
             "body": {
               "cases": {
                 "cases": [
                   {
-                    "name": "array",
-                    "term": {
+                    "handler": {
                       "lambda": {
                         "body": {
                           "inject": {
@@ -61,10 +55,10 @@
                                   "typeName": "hydra.core.Injection"}}},
                             "typeName": "hydra.core.Term"}},
                         "domain": {"list": {"variable": "hydra.json.model.Value"}},
-                        "parameter": "y"}}},
+                        "parameter": "y"}},
+                    "name": "array"},
                   {
-                    "name": "boolean",
-                    "term": {
+                    "handler": {
                       "lambda": {
                         "body": {
                           "inject": {
@@ -101,10 +95,10 @@
                                   "typeName": "hydra.core.Injection"}}},
                             "typeName": "hydra.core.Term"}},
                         "domain": {"literal": {"boolean": {}}},
-                        "parameter": "y"}}},
+                        "parameter": "y"}},
+                    "name": "boolean"},
                   {
-                    "name": "null",
-                    "term": {
+                    "handler": {
                       "lambda": {
                         "body": {
                           "inject": {
@@ -136,10 +130,10 @@
                                   "typeName": "hydra.core.Injection"}}},
                             "typeName": "hydra.core.Term"}},
                         "domain": {"unit": {}},
-                        "parameter": "y"}}},
+                        "parameter": "y"}},
+                    "name": "null"},
                   {
-                    "name": "number",
-                    "term": {
+                    "handler": {
                       "lambda": {
                         "body": {
                           "inject": {
@@ -176,10 +170,10 @@
                                   "typeName": "hydra.core.Injection"}}},
                             "typeName": "hydra.core.Term"}},
                         "domain": {"literal": {"decimal": {}}},
-                        "parameter": "y"}}},
+                        "parameter": "y"}},
+                    "name": "number"},
                   {
-                    "name": "object",
-                    "term": {
+                    "handler": {
                       "lambda": {
                         "body": {
                           "inject": {
@@ -243,10 +237,10 @@
                                   "typeName": "hydra.core.Injection"}}},
                             "typeName": "hydra.core.Term"}},
                         "domain": {"map": {"keys": {"literal": {"string": {}}}, "values": {"variable": "hydra.json.model.Value"}}},
-                        "parameter": "y"}}},
+                        "parameter": "y"}},
+                    "name": "object"},
                   {
-                    "name": "string",
-                    "term": {
+                    "handler": {
                       "lambda": {
                         "body": {
                           "inject": {
@@ -283,8 +277,14 @@
                                   "typeName": "hydra.core.Injection"}}},
                             "typeName": "hydra.core.Term"}},
                         "domain": {"literal": {"string": {}}},
-                        "parameter": "y"}}}],
-                "typeName": "hydra.json.model.Value"}}}}}}],
+                        "parameter": "y"}},
+                    "name": "string"}],
+                "typeName": "hydra.json.model.Value"}}}},
+        "name": "hydra.encode.json.model.value",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.json.model.Value"}}],
+          "result": {"type": {"variable": "hydra.core.Term"}},
+          "typeParameters": []}}}],
   "dependencies": [{"module": "hydra.encode.core"}, {"module": "hydra.json.model"}],
   "metadata": {"comments": [], "description": "Term encoders for hydra.json.model", "seeAlso": []},
   "name": "hydra.encode.json.model"}

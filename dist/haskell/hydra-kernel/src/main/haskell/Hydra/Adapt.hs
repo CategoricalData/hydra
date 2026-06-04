@@ -220,8 +220,8 @@ adaptPrimitive constraints litmap prim0 =
         let def1 =
                 Packaging.PrimitiveDefinition {
                   Packaging.primitiveDefinitionName = (Packaging.primitiveDefinitionName def0),
-                  Packaging.primitiveDefinitionSignature = sig1,
                   Packaging.primitiveDefinitionMetadata = (Packaging.primitiveDefinitionMetadata def0),
+                  Packaging.primitiveDefinitionSignature = sig1,
                   Packaging.primitiveDefinitionIsPure = (Packaging.primitiveDefinitionIsPure def0),
                   Packaging.primitiveDefinitionIsTotal = (Packaging.primitiveDefinitionIsTotal def0),
                   Packaging.primitiveDefinitionDefaultImplementation = (Packaging.primitiveDefinitionDefaultImplementation def0)}
@@ -356,14 +356,25 @@ dataGraphToDefinitions constraints doInfer doExpand doHoistCaseStatements doHois
                               Core.letBody = Core.TermUnit}
                         letAfter = Hoisting.hoistPolymorphicLetBindings isParentBinding letBefore
                     in (Core.letBindings letAfter)
+          qualifyUntyped =
+                  \b ->
+                    let nm = Core.unName (Core.bindingName b)
+                    in (Maybes.maybe (Strings.cat2 "(no module) " nm) (\ns -> Strings.cat [
+                      Packaging.unModuleName ns,
+                      " :: ",
+                      nm]) (Names.moduleNameOf (Core.bindingName b)))
           checkBindingsTyped =
                   \debugLabel -> \bindings ->
                     let untypedBindings =
-                            Lists.map (\b -> Core.unName (Core.bindingName b)) (Lists.filter (\b -> Logic.not (Maybes.isJust (Core.bindingTypeScheme b))) bindings)
+                            Lists.map qualifyUntyped (Lists.filter (\b -> Logic.not (Maybes.isJust (Core.bindingTypeScheme b))) bindings)
                     in (Logic.ifElse (Lists.null untypedBindings) (Right bindings) (Left (Errors.ErrorOther (Errors.OtherError (Strings.cat [
-                      "Found untyped bindings (",
+                      "Found ",
+                      (LibLiterals.showInt32 (Lists.length untypedBindings)),
+                      " untyped binding(s) (",
                       debugLabel,
-                      "): ",
+                      "); each must carry a type scheme at this stage. ",
+                      "This usually means stale dist/json field shapes after a kernel record rename ",
+                      "(regenerate the affected package's JSON). Offending bindings (module :: name): ",
                       (Strings.intercalate ", " untypedBindings)])))))
           normalizeBindings =
                   \bindings -> Lists.map (\b -> Core.Binding {
@@ -422,8 +433,8 @@ dataGraphToDefinitions constraints doInfer doExpand doHoistCaseStatements doHois
                       \el -> Maybes.map (\ts -> Packaging.TermDefinition {
                         Packaging.termDefinitionName = (Core.bindingName el),
                         Packaging.termDefinitionMetadata = Nothing,
-                        Packaging.termDefinitionTerm = (Core.bindingTerm el),
-                        Packaging.termDefinitionSignature = (Just (Scoping.typeSchemeToTermSignature ts))}) (Core.bindingTypeScheme el)
+                        Packaging.termDefinitionSignature = (Just (Scoping.typeSchemeToTermSignature ts)),
+                        Packaging.termDefinitionBody = (Core.bindingTerm el)}) (Core.bindingTypeScheme el)
               selectedElements =
                       Lists.filter (\el -> Maybes.maybe False (\ns -> Sets.member ns namespacesSet) (Names.moduleNameOf (Core.bindingName el))) bins5
               elementsByNamespace =
@@ -611,6 +622,10 @@ pushTypeAppsInward term =
                             \fld -> Core.Field {
                               Core.fieldName = (Core.fieldName fld),
                               Core.fieldTerm = (go (Core.fieldTerm fld))}
+                        forCaseAlternative =
+                                \alt -> Core.CaseAlternative {
+                                  Core.caseAlternativeName = (Core.caseAlternativeName alt),
+                                  Core.caseAlternativeHandler = (go (Core.caseAlternativeHandler alt))}
                         forLet =
                                 \lt ->
                                   let mapBinding =
@@ -635,7 +650,7 @@ pushTypeAppsInward term =
                       Core.TermCases v0 -> Core.TermCases (Core.CaseStatement {
                         Core.caseStatementTypeName = (Core.caseStatementTypeName v0),
                         Core.caseStatementDefault = (Maybes.map go (Core.caseStatementDefault v0)),
-                        Core.caseStatementCases = (Lists.map forField (Core.caseStatementCases v0))})
+                        Core.caseStatementCases = (Lists.map forCaseAlternative (Core.caseStatementCases v0))})
                       Core.TermEither v0 -> Core.TermEither (Eithers.either (\l -> Left (go l)) (\r -> Right (go r)) v0)
                       Core.TermLambda v0 -> Core.TermLambda (Core.Lambda {
                         Core.lambdaParameter = (Core.lambdaParameter v0),
@@ -678,7 +693,7 @@ schemaGraphToDefinitions constraints graph nameLists cx =
                 \pair -> Packaging.TypeDefinition {
                   Packaging.typeDefinitionName = (Pairs.first pair),
                   Packaging.typeDefinitionMetadata = Nothing,
-                  Packaging.typeDefinitionTypeScheme = Core.TypeScheme {
+                  Packaging.typeDefinitionBody = Core.TypeScheme {
                     Core.typeSchemeVariables = [],
                     Core.typeSchemeBody = (Pairs.second pair),
                     Core.typeSchemeConstraints = Nothing}}

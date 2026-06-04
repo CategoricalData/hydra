@@ -49,7 +49,7 @@ tarjanState cx raw =
           Topology.tarjanStateStack = field_stack,
           Topology.tarjanStateOnStack = field_onStack,
           Topology.tarjanStateSccs = field_sccs}))))))))
-      _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+      _ -> Left (Errors.DecodingError "expected a record of type hydra.topology.TarjanState")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.topology.Vertex
 vertex :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Int
 vertex cx raw =

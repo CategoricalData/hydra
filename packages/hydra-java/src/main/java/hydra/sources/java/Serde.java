@@ -197,7 +197,14 @@ import hydra.java.syntax.WildcardBounds;  // AUTO-IMPORT (hydra-java DSL)
  *
  * <p>Mirror of {@code packages/hydra-java/src/main/haskell/Hydra/Sources/Java/Serde.hs}.</p>
  *
- * <p>WIP: leaf STUB defs ported; complex transforms still pending.</p>
+ * <p>Partial port: ~33 defs for Java statement/expression constructs (e.g. {@code switch},
+ * {@code try}, {@code for}, {@code methodReference}, pre/post-increment) emit a
+ * {@code "STUB:..."} placeholder rather than real concrete syntax. These constructs lie
+ * <em>outside the kernel-codegen surface</em> — Hydra's generated Java never produces them —
+ * so the stubs are not reachable in practice (the Java self-host bootstrap is green, and no
+ * {@code STUB:} string appears in any generated kernel/test output). They remain for
+ * completeness of the Java serializer as a general tool. The cross-coder dependency the Scala
+ * coder relies on, {@code escapeJavaString}, IS fully implemented here (not a stub).</p>
  */
 public class Serde {
     public static final ModuleName NS = new ModuleName("hydra.java.serde");

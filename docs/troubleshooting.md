@@ -36,8 +36,8 @@ file.
 | Language | Registration file |
 |----------|-------------------|
 | Haskell | `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Libraries.hs` |
-| Java | `heads/java/src/main/java/hydra/lib/Libraries.java` |
-| Python | `heads/python/src/main/python/hydra/sources/libraries.py` |
+| Java | `overlay/java/hydra-kernel/src/main/java/hydra/lib/Libraries.java` (relocated by #418) |
+| Python | `overlay/python/hydra-kernel/src/main/python/hydra/sources/libraries.py` (relocated by #418) |
 | Scala | `heads/scala/src/main/scala/hydra/lib/Libraries.scala` |
 | Lisp (Clojure) | `heads/lisp/clojure/src/main/clojure/hydra/lib/libraries.clj` |
 
@@ -77,7 +77,7 @@ When a primitive test fails in Java, the call chain is:
 **If step 4 fails**: check the `implementation()` method of the primitive class.
 The `implementation()` method must construct a term-level result, not execute native code.
 A stub that throws `UnsupportedOperationException` will cause runtime failures.
-See `heads/java/src/main/java/hydra/lib/lists/Map.java` for a higher-order example
+See `overlay/java/hydra-kernel/src/main/java/hydra/lib/lists/Map.java` for a higher-order example
 using `hydra.dsl.Terms` helpers (`lambda`, `app`, `variable`, etc.).
 
 ### Higher-order primitives
@@ -94,10 +94,10 @@ native implementation must accept and apply its function arguments correctly.
 
 | Purpose | Path |
 |---------|------|
-| Primitive registration | `heads/java/src/main/java/hydra/lib/Libraries.java` |
-| Primitive classes | `heads/java/src/main/java/hydra/lib/<library>/` |
-| DSL term builders | `heads/java/src/main/java/hydra/dsl/Terms.java` |
-| Either utilities | `heads/java/src/main/java/hydra/util/Either.java` |
+| Primitive registration | `overlay/java/hydra-kernel/src/main/java/hydra/lib/Libraries.java` (#418) |
+| Primitive classes | `overlay/java/hydra-kernel/src/main/java/hydra/lib/<library>/` (#418) |
+| DSL term builders | `overlay/java/hydra-kernel/src/main/java/hydra/dsl/Terms.java` (#418) |
+| Either utilities | `overlay/java/hydra-kernel/src/main/java/hydra/util/Either.java` (#418) |
 | Test runner | `heads/java/src/test/java/hydra/TestSuiteRunner.java` |
 | Reducer | `dist/java/hydra-kernel/src/main/java/hydra/reduction/Reduction.java` |
 
@@ -145,6 +145,25 @@ enums.
 
 **Fix**: Update `TermVariant`/`TypeVariant` in the relevant `Meta.hs` source file, then
 rebuild and regenerate.
+
+### "Found N untyped binding(s) ..."
+
+**Symptom**: Phase 1 aborts with `Found N untyped binding(s) (after case hoisting); each must
+carry a type scheme at this stage. ... Offending bindings (module :: name): hydra.foo :: hydra.foo.bar, …`.
+
+**Cause**: A term definition reached the type-checking gate (post-inference, or on a no-infer
+path) without a type scheme. This is legitimate *only* for DSL-defined modules **before**
+inference — derived modules (`encode`/`decode`/`dsl`) and post-inference modules must carry a
+signature on every term definition. The usual real cause is **stale `dist/json/.../*.json`
+field shapes after a kernel record-field rename**: the old JSON decodes against the new schema
+with the renamed field unread, so the definition loses its signature and surfaces here rather
+than at the decode site. (Seen in #368: `"typeScheme"` JSON vs the renamed `"signature"` field.)
+
+**Fix**: Regenerate the affected package's JSON (the error names the module). For Java/Python
+packages, `update-json-main --include-java-python` after busting the input caches; for others,
+`assemble-distribution.sh <pkg>`. Don't patch bindings one at a time — a field rename hits every
+record in the package. Per #414 the message names the source module + the likely cause precisely;
+a record decoder also names the expected type ("expected a record of type T") on a shape mismatch.
 
 ## Python issues
 

@@ -2,9 +2,7 @@
   "definitions": [
     {
       "term": {
-        "name": "hydra.protobuf.language.protobufLanguage",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.coders.Language"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Language constraints for Protocol Buffers v3"}}}],
             "body": {
@@ -100,8 +98,7 @@
                               "cases": {
                                 "cases": [
                                   {
-                                    "name": "map",
-                                    "term": {
+                                    "handler": {
                                       "lambda": {
                                         "body": {
                                           "let": {
@@ -122,12 +119,13 @@
                                                   "cases": {
                                                     "cases": [
                                                       {
-                                                        "name": "maybe",
-                                                        "term": {"lambda": {"body": {"literal": {"boolean": false}}, "domain": {"variable": "hydra.core.Type"}, "parameter": "_"}}}],
+                                                        "handler": {"lambda": {"body": {"literal": {"boolean": false}}, "domain": {"variable": "hydra.core.Type"}, "parameter": "_"}},
+                                                        "name": "maybe"}],
                                                     "default": {"literal": {"boolean": true}},
                                                     "typeName": "hydra.core.Type"}}}}}},
                                         "domain": {"variable": "hydra.core.MapType"},
-                                        "parameter": "mt"}}}],
+                                        "parameter": "mt"}},
+                                    "name": "map"}],
                                 "default": {"literal": {"boolean": true}},
                                 "typeName": "hydra.core.Type"}}}},
                         "domain": {"variable": "hydra.core.Type"},
@@ -153,12 +151,12 @@
                               {"name": "typeVariants", "term": {"variable": "typeVariants"}},
                               {"name": "types", "term": {"variable": "typePredicate"}}],
                             "typeName": "hydra.coders.LanguageConstraints"}}}],
-                    "typeName": "hydra.coders.Language"}}}}}}}},
+                    "typeName": "hydra.coders.Language"}}}}}},
+        "name": "hydra.protobuf.language.protobufLanguage",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.coders.Language"}}, "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.protobuf.language.protobufReservedWords",
-        "signature": {"parameters": [], "result": {"type": {"set": {"literal": {"string": {}}}}}, "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "A set of reserved words in Protobuf"}}}],
             "body": {
@@ -205,7 +203,9 @@
                       "application": {
                         "argument": {"list": [{"variable": "fieldNames"}]},
                         "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.concat"}, "type": {"literal": {"string": {}}}}}}},
-                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.sets.fromList"}, "type": {"literal": {"string": {}}}}}}}}}}}}}],
+                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.sets.fromList"}, "type": {"literal": {"string": {}}}}}}}}}}},
+        "name": "hydra.protobuf.language.protobufReservedWords",
+        "signature": {"parameters": [], "result": {"type": {"set": {"literal": {"string": {}}}}}, "typeParameters": []}}}],
   "dependencies": [
     {"module": "hydra.lexical"},
     {"module": "hydra.strip"},

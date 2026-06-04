@@ -2,8 +2,7 @@
   "definitions": [
     {
       "type": {
-        "name": "hydra.avro.environment.AvroQualifiedName",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "An Avro qualified name with optional namespace"}}}],
@@ -21,11 +20,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The local name"}}}],
                         "body": {"literal": {"string": {}}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.avro.environment.AvroQualifiedName"}},
     {
       "type": {
-        "name": "hydra.avro.environment.AvroForeignKey",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [
@@ -47,11 +46,11 @@
                         "annotation": [
                           {"key": "description", "value": {"literal": {"string": "A function which constructs element names from string values"}}}],
                         "body": {"function": {"codomain": {"variable": "hydra.core.Name"}, "domain": {"literal": {"string": {}}}}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.avro.environment.AvroForeignKey"}},
     {
       "type": {
-        "name": "hydra.avro.environment.AvroPrimaryKey",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [
@@ -73,11 +72,11 @@
                         "annotation": [
                           {"key": "description", "value": {"literal": {"string": "A function which constructs element names from string values"}}}],
                         "body": {"function": {"codomain": {"variable": "hydra.core.Name"}, "domain": {"literal": {"string": {}}}}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.avro.environment.AvroPrimaryKey"}},
     {
       "type": {
-        "name": "hydra.avro.environment.AvroEnvironment",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "Environment for Avro-to-Hydra code generation"}}}],
@@ -114,11 +113,11 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "Generated Hydra elements"}}}],
                         "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Binding"}}}}}}]}}},
-          "variables": []}}},
+          "variables": []},
+        "name": "hydra.avro.environment.AvroEnvironment"}},
     {
       "type": {
-        "name": "hydra.avro.environment.EncodeEnvironment",
-        "typeScheme": {
+        "body": {
           "body": {
             "annotated": {
               "annotation": [
@@ -154,7 +153,8 @@
                                       "application": {
                                         "argument": {"variable": "hydra.avro.schema.Schema"},
                                         "function": {"application": {"argument": {"variable": "hydra.core.Type"}, "function": {"variable": "hydra.coders.Adapter"}}}}}}}}}}}}}}]}}},
-          "variables": []}}}],
+          "variables": []},
+        "name": "hydra.avro.environment.EncodeEnvironment"}}],
   "dependencies": [{"module": "hydra.core"}, {"module": "hydra.coders"}, {"module": "hydra.avro.schema"}, {"module": "hydra.json.model"}],
   "metadata": {"comments": [], "description": "Type definitions for the Avro code generation environment", "seeAlso": []},
   "name": "hydra.avro.environment"}

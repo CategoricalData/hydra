@@ -114,8 +114,8 @@ definitionDependencyModuleNames defs =
 
       let defNames =
               \def -> case def of
-                Packaging.DefinitionType v0 -> Dependencies.typeDependencyNames True (Core.typeSchemeBody (Packaging.typeDefinitionTypeScheme v0))
-                Packaging.DefinitionTerm v0 -> Dependencies.termDependencyNames True True True (Packaging.termDefinitionTerm v0)
+                Packaging.DefinitionType v0 -> Dependencies.typeDependencyNames True (Core.typeSchemeBody (Packaging.typeDefinitionBody v0))
+                Packaging.DefinitionTerm v0 -> Dependencies.termDependencyNames True True True (Packaging.termDefinitionBody v0)
                 Packaging.DefinitionPrimitive v0 -> Dependencies.typeDependencyNames True (Core.typeSchemeBody (Scoping.termSignatureToTypeScheme (Packaging.primitiveDefinitionSignature v0)))
           allNames = Sets.unions (Lists.map defNames defs)
       in (Sets.fromList (Maybes.cat (Lists.map Names.moduleNameOf (Sets.toList allNames))))
@@ -228,7 +228,7 @@ isTailRecursiveInTailPosition funcName term =
               let cases_ = Core.caseStatementCases v1
                   dflt = Core.caseStatementDefault v1
                   branchesOk =
-                          Lists.foldl (\ok -> \field -> Logic.and ok (isTailRecursiveInTailPosition funcName (Core.fieldTerm field))) True cases_
+                          Lists.foldl (\ok -> \field -> Logic.and ok (isTailRecursiveInTailPosition funcName (Core.caseAlternativeHandler field))) True cases_
                   dfltOk = Maybes.maybe True (\d -> isTailRecursiveInTailPosition funcName d) dflt
                   argsOk = Lists.foldl (\ok -> \arg -> Logic.and ok (Variables.isFreeVariableInTerm funcName arg)) True gatherArgs
               in (Logic.and (Logic.and branchesOk dfltOk) argsOk)
@@ -252,7 +252,7 @@ moduleContainsBinaryLiterals mod =
           termContainsBinary = \term -> Rewriting.foldOverTerm Coders.TraversalOrderPre checkTerm False term
           defTerms =
                   Maybes.cat (Lists.map (\d -> case d of
-                    Packaging.DefinitionTerm v0 -> Just (Packaging.termDefinitionTerm v0)
+                    Packaging.DefinitionTerm v0 -> Just (Packaging.termDefinitionBody v0)
                     _ -> Nothing) (Packaging.moduleDefinitions mod))
       in (Lists.foldl (\acc -> \t -> Logic.or acc (termContainsBinary t)) False defTerms)
 -- | Check whether a module contains any decimal literal values
@@ -268,7 +268,7 @@ moduleContainsDecimalLiterals mod =
           termContainsDecimal = \term -> Rewriting.foldOverTerm Coders.TraversalOrderPre checkTerm False term
           defTerms =
                   Maybes.cat (Lists.map (\d -> case d of
-                    Packaging.DefinitionTerm v0 -> Just (Packaging.termDefinitionTerm v0)
+                    Packaging.DefinitionTerm v0 -> Just (Packaging.termDefinitionBody v0)
                     _ -> Nothing) (Packaging.moduleDefinitions mod))
       in (Lists.foldl (\acc -> \t -> Logic.or acc (termContainsDecimal t)) False defTerms)
 -- | Find dependency module names in all elements of a module, excluding the module's own module name (Either version)
@@ -290,10 +290,10 @@ moduleDependencyModuleNames cx graph binds withPrims withNoms withSchema mod =
                     Core.bindingTypeScheme = (Just (Core.TypeScheme {
                       Core.typeSchemeVariables = [],
                       Core.typeSchemeBody = (Core.TypeVariable (Core.Name "hydra.core.Type")),
-                      Core.typeSchemeConstraints = Nothing}))}) (Packaging.typeDefinitionName v0) (Core.typeSchemeBody (Packaging.typeDefinitionTypeScheme v0)))
+                      Core.typeSchemeConstraints = Nothing}))}) (Packaging.typeDefinitionName v0) (Core.typeSchemeBody (Packaging.typeDefinitionBody v0)))
                 Packaging.DefinitionTerm v0 -> Just (Core.Binding {
                   Core.bindingName = (Packaging.termDefinitionName v0),
-                  Core.bindingTerm = (Packaging.termDefinitionTerm v0),
+                  Core.bindingTerm = (Packaging.termDefinitionBody v0),
                   Core.bindingTypeScheme = (Maybes.map Scoping.termSignatureToTypeScheme (Packaging.termDefinitionSignature v0))})
                 _ -> Nothing) (Packaging.moduleDefinitions mod))
       in (Eithers.map (\deps -> Sets.delete (Packaging.moduleName mod) deps) (dependencyModuleNames cx graph binds withPrims withNoms withSchema allBindings))

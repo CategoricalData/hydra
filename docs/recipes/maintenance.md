@@ -198,6 +198,27 @@ cd heads/python && uv run pytest
 # etc.
 ```
 
+### Removing a dead *definition* (not a whole file)
+
+To remove a standalone definition (an unused helper, a superseded heuristic), verify
+it's dead by the call graph, not by regenerating and diffing:
+
+```bash
+# A hit in another Source module is a live caller; hits in docs/comments are fine.
+git grep -n "mySymbol" -- ':!dist/'
+```
+
+If it's not in the module's `definitions` list, it can't be emitted or called as a
+module element — delete it and stop.
+Otherwise, the only remaining hits being explanatory comments means it's safe to delete.
+
+Do not trust a byte-identical regen as proof the symbol was dead: the JSON coder emits
+only elements reachable from a module's roots, so a registered-but-unreachable
+definition is pruned during emission and produces the same output whether or not you
+remove it.
+(Example: #411 removed a dead `needsThunking` helper from the legacy Java coder DSL;
+`coder.json` was byte-identical because the symbol had been unreachable all along.)
+
 ### Known patterns that produce stale files
 
 These refactoring patterns are especially prone to leaving orphans:
@@ -267,7 +288,7 @@ Stale binary cache shows up as:
 
 - A specific text pattern (an old module name, an old type name, a removed function name)
   appearing in `dist/json/` or in language-target outputs **after** sync-all completes.
-- The same pattern absent from all hand-written sources (`packages/`, `heads/`, `dist/haskell/`).
+- The same pattern absent from all hand-written sources (`packages/`, `heads/`, `overlay/`, `dist/haskell/`).
 - Mtimes on the offending dist files showing they were rewritten by the recent sync,
   even though the content is wrong.
 
@@ -338,8 +359,11 @@ The core principles (see CLAUDE.md and the
    The only exception is a deliberate bootstrap patch that will be overwritten
    by the next regeneration — document it as such.
 2. **No hand-written files under `dist/`.** If a file needs to live alongside
-   generated artifacts (because tests import it from that location), write it
-   under `heads/` and copy it in from a sync script.
+   generated artifacts (because a consumer imports it from that location), write
+   it under `overlay/<lang>/<pkg>/` (hand-written source destined for a published
+   distribution package — the kernel runtime, the Haskell `hydra` umbrella) or
+   `heads/` (head-only machinery), and overlay/copy it into `dist/` from a sync
+   script. See [build-system.md](../build-system.md#hand-written-runtime-in-hydra-kernel). (#418)
 3. **No host-specific code under `packages/`.** Packages hold DSL-based module
    definitions plus source-language helpers for writing them. The Hydra runtime
    (primitives, DSL helpers, generation drivers, test infrastructure) lives in
@@ -396,7 +420,8 @@ Every match is a potential violation. For each, ask:
   a missing keyword-escape in the Scala code generator.
   The generator should emit the backticks in the first place.
 - **Is this copying a hand-written file into `dist/`?**
-  That is principle 2; the canonical copy must live in `heads/`.
+  That is principle 2; the canonical copy must live in `overlay/<lang>/<pkg>/`
+  (distribution-package source) or `heads/` (head-only machinery).
   Copying *into* `dist/` is acceptable; hand-writing *in* `dist/` is not.
 - **Is this part of the generation pipeline, or a post-pass?**
   A `String -> String` transform applied between codegen output and
@@ -428,17 +453,23 @@ done
 ```
 
 Any output is a file that should either be generated (fix the generator to emit
-the header) or be moved to `heads/` and copied in by a sync script (principle 2).
+the header) or have its canonical copy under `overlay/` (or `heads/`) and be
+overlaid/copied in by a sync script (principle 2).
 
 **Known false positives:**
 
-- *Hand-written runtime files copied into `dist/<lang>/hydra-kernel/` for Java,
-  Python, and TypeScript.* These are deliberately copied from
-  `heads/<lang>/src/main/<lang>/` by `heads/<lang>/bin/copy-kernel-runtime.sh`
-  so the published `hydra-kernel` artifact is self-contained for foreign builds
-  (Gradle / pip / npm). They are not generated, so they don't carry the
-  generated-file header — that's correct. The canonical edit point is
-  `heads/<lang>/`. See
+- *Hand-written runtime files overlaid into `dist/<lang>/hydra-kernel/`.* For
+  Haskell, Java, and Python these are overlaid from the top-level
+  `overlay/<lang>/hydra-kernel/` tree (#418) so the published `hydra-kernel`
+  artifact is self-contained for foreign builds (Stack/cabal / Gradle / pip);
+  for Haskell by `sync-haskell.sh`, for Java/Python by
+  `heads/<lang>/bin/copy-kernel-runtime.sh`. TypeScript still copies from
+  `heads/typescript/src` pending migration. They are not generated, so they don't
+  carry the generated-file header — that's correct. The canonical edit point is
+  `overlay/<lang>/` (TypeScript: `heads/typescript/src`). Note: for Haskell,
+  `dist/haskell/` is tracked but these overlaid copies are gitignored (the scan
+  above won't see them in a clean tree); for Java/Python the whole `dist/<lang>/`
+  is gitignored. See
   [build-system.md §Hand-written runtime in hydra-kernel](../build-system.md#hand-written-runtime-in-hydra-kernel)
   for the catalog of paths.
 - *Lisp dialect generated files.* The Clojure, Common Lisp, Emacs Lisp, and
@@ -721,8 +752,8 @@ Each host pairs canonical primitive names with native implementations in a regis
 | Host | Binding registry |
 |------|------------------|
 | Haskell    | `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Libraries.hs` |
-| Java       | `heads/java/src/main/java/hydra/lib/Libraries.java` |
-| Python     | `heads/python/src/main/python/hydra/sources/libraries.py` |
+| Java       | `overlay/java/hydra-kernel/src/main/java/hydra/lib/Libraries.java` (#418) |
+| Python     | `overlay/python/hydra-kernel/src/main/python/hydra/sources/libraries.py` (#418) |
 | Scala      | `heads/scala/src/main/scala/hydra/lib/Libraries.scala` |
 | TypeScript | `heads/typescript/src/test/typescript/hydra/test/libraries.ts` |
 | Clojure    | `heads/lisp/clojure/src/main/clojure/hydra/lib/libraries.clj` |
@@ -1051,7 +1082,7 @@ If you're uncertain whether something is drift, flag it with a note — the user
 | Unused top-level definitions | Functions, types, or constants with no call sites (cross-check `packages/` and `heads/haskell/src/main/`; a Haskell function called only from those trees is not dead) |
 | One-call-site abstractions | Helpers with a single caller where inlining would be clearer |
 | Duplicate helpers | Near-identical functions in different files with cosmetic renames; shared ANSI constants, regexes, sort keys |
-| Error swallowing | `|| warn`, `|| true`, `|| echo` in sync scripts (violates "Never proceed with failures"); try/except that logs and continues |
+| Error swallowing | `|| warn`, `|| true`, `|| echo` in sync scripts (violates "Never proceed with failures"); try/except that logs and continues; `[ … ] && (side-effecting block)` in **statement position** under `set -e` — a false guard returns 1 and silently kills the script (use an explicit `if`; see #414 and the "Phase 2 silent exit" pitfall); failure-bearing non-final pipe stages without `set -o pipefail` (`stack build … | tee` masking the real exit code) |
 | Post-generation patches | `sed_inplace` or other edits against files under `dist/` (violates "No post-generation patches") |
 | Defensive code for impossible scenarios | `case _ of` branches that can't be reached; null checks for internal invariants |
 | Stale comments | Comments describing code that no longer exists; obsolete TODOs; "workaround for X" comments where X is fixed |

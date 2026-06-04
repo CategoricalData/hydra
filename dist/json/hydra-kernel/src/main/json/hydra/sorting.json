@@ -2,16 +2,7 @@
   "definitions": [
     {
       "term": {
-        "name": "hydra.sorting.adjacencyListToMap",
-        "signature": {
-          "parameters": [
-            {
-              "isLazy": false,
-              "name": "arg0",
-              "type": {"list": {"pair": {"first": {"variable": "t0"}, "second": {"list": {"variable": "t1"}}}}}}],
-          "result": {"type": {"map": {"keys": {"variable": "t0"}, "values": {"list": {"variable": "t1"}}}}},
-          "typeParameters": [{"constraints": [{"simple": "ordering"}], "name": "t0"}, {"constraints": [], "name": "t1"}]},
-        "term": {
+        "body": {
           "typeLambda": {
             "body": {
               "typeLambda": {
@@ -125,23 +116,19 @@
                         "domain": {"list": {"pair": {"first": {"variable": "t0"}, "second": {"list": {"variable": "t1"}}}}},
                         "parameter": "pairs"}}}},
                 "parameter": "t1"}},
-            "parameter": "t0"}}}},
-    {
-      "term": {
-        "name": "hydra.sorting.adjacencyListsToGraph",
+            "parameter": "t0"}},
+        "name": "hydra.sorting.adjacencyListToMap",
         "signature": {
           "parameters": [
             {
               "isLazy": false,
               "name": "arg0",
-              "type": {"list": {"pair": {"first": {"variable": "t0"}, "second": {"list": {"variable": "t0"}}}}}}],
-          "result": {
-            "type": {
-              "pair": {
-                "first": {"map": {"keys": {"literal": {"integer": {"int32": {}}}}, "values": {"list": {"literal": {"integer": {"int32": {}}}}}}},
-                "second": {"function": {"codomain": {"maybe": {"variable": "t0"}}, "domain": {"literal": {"integer": {"int32": {}}}}}}}}},
-          "typeParameters": [{"constraints": [{"simple": "ordering"}], "name": "t0"}]},
-        "term": {
+              "type": {"list": {"pair": {"first": {"variable": "t0"}, "second": {"list": {"variable": "t1"}}}}}}],
+          "result": {"type": {"map": {"keys": {"variable": "t0"}, "values": {"list": {"variable": "t1"}}}}},
+          "typeParameters": [{"constraints": [{"simple": "ordering"}], "name": "t0"}, {"constraints": [], "name": "t1"}]}}},
+    {
+      "term": {
+        "body": {
           "typeLambda": {
             "body": {
               "annotated": {
@@ -503,18 +490,23 @@
                                                 "type": {"function": {"codomain": {"maybe": {"variable": "t0"}}, "domain": {"literal": {"integer": {"int32": {}}}}}}}}}}}}}}}}}}}},
                     "domain": {"list": {"pair": {"first": {"variable": "t0"}, "second": {"list": {"variable": "t0"}}}}},
                     "parameter": "edges0"}}}},
-            "parameter": "t0"}}}},
-    {
-      "term": {
-        "name": "hydra.sorting.createOrderingIsomorphism",
+            "parameter": "t0"}},
+        "name": "hydra.sorting.adjacencyListsToGraph",
         "signature": {
           "parameters": [
-            {"isLazy": false, "name": "arg0", "type": {"list": {"variable": "t0"}}},
-            {"isLazy": false, "name": "arg1", "type": {"list": {"variable": "t0"}}}],
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {"list": {"pair": {"first": {"variable": "t0"}, "second": {"list": {"variable": "t0"}}}}}}],
           "result": {
-            "type": {"application": {"argument": {"variable": "t1"}, "function": {"variable": "hydra.topology.OrderingIsomorphism"}}}},
-          "typeParameters": [{"constraints": [{"simple": "ordering"}], "name": "t0"}, {"constraints": [], "name": "t1"}]},
-        "term": {
+            "type": {
+              "pair": {
+                "first": {"map": {"keys": {"literal": {"integer": {"int32": {}}}}, "values": {"list": {"literal": {"integer": {"int32": {}}}}}}},
+                "second": {"function": {"codomain": {"maybe": {"variable": "t0"}}, "domain": {"literal": {"integer": {"int32": {}}}}}}}}},
+          "typeParameters": [{"constraints": [{"simple": "ordering"}], "name": "t0"}]}}},
+    {
+      "term": {
+        "body": {
           "typeLambda": {
             "body": {
               "typeLambda": {
@@ -676,20 +668,18 @@
                         "domain": {"list": {"variable": "t0"}},
                         "parameter": "sourceOrd"}}}},
                 "parameter": "t1"}},
-            "parameter": "t0"}}}},
-    {
-      "term": {
-        "name": "hydra.sorting.findReachableNodes",
+            "parameter": "t0"}},
+        "name": "hydra.sorting.createOrderingIsomorphism",
         "signature": {
           "parameters": [
-            {
-              "isLazy": false,
-              "name": "arg0",
-              "type": {"function": {"codomain": {"set": {"variable": "t0"}}, "domain": {"variable": "t0"}}}},
-            {"isLazy": false, "name": "arg1", "type": {"variable": "t0"}}],
-          "result": {"type": {"set": {"variable": "t0"}}},
-          "typeParameters": [{"constraints": [{"simple": "ordering"}], "name": "t0"}]},
-        "term": {
+            {"isLazy": false, "name": "arg0", "type": {"list": {"variable": "t0"}}},
+            {"isLazy": false, "name": "arg1", "type": {"list": {"variable": "t0"}}}],
+          "result": {
+            "type": {"application": {"argument": {"variable": "t1"}, "function": {"variable": "hydra.topology.OrderingIsomorphism"}}}},
+          "typeParameters": [{"constraints": [{"simple": "ordering"}], "name": "t0"}, {"constraints": [], "name": "t1"}]}}},
+    {
+      "term": {
+        "body": {
           "typeLambda": {
             "body": {
               "annotated": {
@@ -797,12 +787,20 @@
                         "parameter": "root"}},
                     "domain": {"function": {"codomain": {"set": {"variable": "t0"}}, "domain": {"variable": "t0"}}},
                     "parameter": "adj"}}}},
-            "parameter": "t0"}}}},
+            "parameter": "t0"}},
+        "name": "hydra.sorting.findReachableNodes",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {"function": {"codomain": {"set": {"variable": "t0"}}, "domain": {"variable": "t0"}}}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "t0"}}],
+          "result": {"type": {"set": {"variable": "t0"}}},
+          "typeParameters": [{"constraints": [{"simple": "ordering"}], "name": "t0"}]}}},
     {
       "term": {
-        "name": "hydra.sorting.initialState",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.topology.TarjanState"}}, "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Initial state for Tarjan's algorithm"}}}],
             "body": {
@@ -828,19 +826,12 @@
                   {
                     "name": "sccs",
                     "term": {"typeApplication": {"body": {"list": []}, "type": {"list": {"literal": {"integer": {"int32": {}}}}}}}}],
-                "typeName": "hydra.topology.TarjanState"}}}}}},
+                "typeName": "hydra.topology.TarjanState"}}}},
+        "name": "hydra.sorting.initialState",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.topology.TarjanState"}}, "typeParameters": []}}},
     {
       "term": {
-        "name": "hydra.sorting.popStackUntil",
-        "signature": {
-          "parameters": [
-            {"isLazy": false, "name": "arg0", "type": {"literal": {"integer": {"int32": {}}}}},
-            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.topology.TarjanState"}}],
-          "result": {
-            "type": {
-              "pair": {"first": {"list": {"literal": {"integer": {"int32": {}}}}}, "second": {"variable": "hydra.topology.TarjanState"}}}},
-          "typeParameters": []},
-        "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -1092,23 +1083,19 @@
                     "domain": {"variable": "hydra.topology.TarjanState"},
                     "parameter": "st0"}},
                 "domain": {"literal": {"integer": {"int32": {}}}},
-                "parameter": "v"}}}}}},
-    {
-      "term": {
-        "name": "hydra.sorting.propagateTags",
+                "parameter": "v"}}}},
+        "name": "hydra.sorting.popStackUntil",
         "signature": {
           "parameters": [
-            {
-              "isLazy": false,
-              "name": "arg0",
-              "type": {"list": {"pair": {"first": {"variable": "t0"}, "second": {"list": {"variable": "t0"}}}}}},
-            {
-              "isLazy": false,
-              "name": "arg1",
-              "type": {"list": {"pair": {"first": {"variable": "t0"}, "second": {"list": {"variable": "t1"}}}}}}],
-          "result": {"type": {"list": {"pair": {"first": {"variable": "t0"}, "second": {"set": {"variable": "t1"}}}}}},
-          "typeParameters": [{"constraints": [{"simple": "ordering"}], "name": "t0"}, {"constraints": [{"simple": "ordering"}], "name": "t1"}]},
-        "term": {
+            {"isLazy": false, "name": "arg0", "type": {"literal": {"integer": {"int32": {}}}}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.topology.TarjanState"}}],
+          "result": {
+            "type": {
+              "pair": {"first": {"list": {"literal": {"integer": {"int32": {}}}}}, "second": {"variable": "hydra.topology.TarjanState"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "typeLambda": {
             "body": {
               "typeLambda": {
@@ -1331,21 +1318,23 @@
                         "domain": {"list": {"pair": {"first": {"variable": "t0"}, "second": {"list": {"variable": "t0"}}}}},
                         "parameter": "edges"}}}},
                 "parameter": "t1"}},
-            "parameter": "t0"}}}},
-    {
-      "term": {
-        "name": "hydra.sorting.strongConnect",
+            "parameter": "t0"}},
+        "name": "hydra.sorting.propagateTags",
         "signature": {
           "parameters": [
             {
               "isLazy": false,
               "name": "arg0",
-              "type": {"map": {"keys": {"literal": {"integer": {"int32": {}}}}, "values": {"list": {"literal": {"integer": {"int32": {}}}}}}}},
-            {"isLazy": false, "name": "arg1", "type": {"literal": {"integer": {"int32": {}}}}},
-            {"isLazy": false, "name": "arg2", "type": {"variable": "hydra.topology.TarjanState"}}],
-          "result": {"type": {"variable": "hydra.topology.TarjanState"}},
-          "typeParameters": []},
-        "term": {
+              "type": {"list": {"pair": {"first": {"variable": "t0"}, "second": {"list": {"variable": "t0"}}}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {"list": {"pair": {"first": {"variable": "t0"}, "second": {"list": {"variable": "t1"}}}}}}],
+          "result": {"type": {"list": {"pair": {"first": {"variable": "t0"}, "second": {"set": {"variable": "t1"}}}}}},
+          "typeParameters": [{"constraints": [{"simple": "ordering"}], "name": "t0"}, {"constraints": [{"simple": "ordering"}], "name": "t1"}]}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Visit a vertex and recursively explore its successors"}}}],
             "body": {
@@ -1938,19 +1927,21 @@
                     "domain": {"literal": {"integer": {"int32": {}}}},
                     "parameter": "v"}},
                 "domain": {"map": {"keys": {"literal": {"integer": {"int32": {}}}}, "values": {"list": {"literal": {"integer": {"int32": {}}}}}}},
-                "parameter": "graph"}}}}}},
-    {
-      "term": {
-        "name": "hydra.sorting.stronglyConnectedComponents",
+                "parameter": "graph"}}}},
+        "name": "hydra.sorting.strongConnect",
         "signature": {
           "parameters": [
             {
               "isLazy": false,
               "name": "arg0",
-              "type": {"map": {"keys": {"literal": {"integer": {"int32": {}}}}, "values": {"list": {"literal": {"integer": {"int32": {}}}}}}}}],
-          "result": {"type": {"list": {"list": {"literal": {"integer": {"int32": {}}}}}}},
-          "typeParameters": []},
-        "term": {
+              "type": {"map": {"keys": {"literal": {"integer": {"int32": {}}}}, "values": {"list": {"literal": {"integer": {"int32": {}}}}}}}},
+            {"isLazy": false, "name": "arg1", "type": {"literal": {"integer": {"int32": {}}}}},
+            {"isLazy": false, "name": "arg2", "type": {"variable": "hydra.topology.TarjanState"}}],
+          "result": {"type": {"variable": "hydra.topology.TarjanState"}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "annotated": {
             "annotation": [
               {
@@ -2047,19 +2038,19 @@
                             "function": {
                               "typeApplication": {"body": {"variable": "hydra.lib.lists.reverse"}, "type": {"list": {"literal": {"integer": {"int32": {}}}}}}}}}}}}},
                 "domain": {"map": {"keys": {"literal": {"integer": {"int32": {}}}}, "values": {"list": {"literal": {"integer": {"int32": {}}}}}}},
-                "parameter": "graph"}}}}}},
-    {
-      "term": {
-        "name": "hydra.sorting.topologicalSort",
+                "parameter": "graph"}}}},
+        "name": "hydra.sorting.stronglyConnectedComponents",
         "signature": {
           "parameters": [
             {
               "isLazy": false,
               "name": "arg0",
-              "type": {"list": {"pair": {"first": {"variable": "t0"}, "second": {"list": {"variable": "t0"}}}}}}],
-          "result": {"type": {"either": {"left": {"list": {"list": {"variable": "t0"}}}, "right": {"list": {"variable": "t0"}}}}},
-          "typeParameters": [{"constraints": [{"simple": "ordering"}], "name": "t0"}]},
-        "term": {
+              "type": {"map": {"keys": {"literal": {"integer": {"int32": {}}}}, "values": {"list": {"literal": {"integer": {"int32": {}}}}}}}}],
+          "result": {"type": {"list": {"list": {"literal": {"integer": {"int32": {}}}}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "typeLambda": {
             "body": {
               "annotated": {
@@ -2152,19 +2143,19 @@
                                                 "type": {"either": {"left": {"list": {"list": {"variable": "t0"}}}, "right": {"list": {"variable": "t0"}}}}}}}}}}}}}}}}}},
                     "domain": {"list": {"pair": {"first": {"variable": "t0"}, "second": {"list": {"variable": "t0"}}}}},
                     "parameter": "pairs"}}}},
-            "parameter": "t0"}}}},
-    {
-      "term": {
-        "name": "hydra.sorting.topologicalSortComponents",
+            "parameter": "t0"}},
+        "name": "hydra.sorting.topologicalSort",
         "signature": {
           "parameters": [
             {
               "isLazy": false,
               "name": "arg0",
               "type": {"list": {"pair": {"first": {"variable": "t0"}, "second": {"list": {"variable": "t0"}}}}}}],
-          "result": {"type": {"list": {"list": {"variable": "t0"}}}},
-          "typeParameters": [{"constraints": [{"simple": "ordering"}], "name": "t0"}]},
-        "term": {
+          "result": {"type": {"either": {"left": {"list": {"list": {"variable": "t0"}}}, "right": {"list": {"variable": "t0"}}}}},
+          "typeParameters": [{"constraints": [{"simple": "ordering"}], "name": "t0"}]}}},
+    {
+      "term": {
+        "body": {
           "typeLambda": {
             "body": {
               "annotated": {
@@ -2245,21 +2236,19 @@
                                         "type": {"list": {"variable": "t0"}}}}}}}}}}}},
                     "domain": {"list": {"pair": {"first": {"variable": "t0"}, "second": {"list": {"variable": "t0"}}}}},
                     "parameter": "pairs"}}}},
-            "parameter": "t0"}}}},
-    {
-      "term": {
-        "name": "hydra.sorting.topologicalSortNodes",
+            "parameter": "t0"}},
+        "name": "hydra.sorting.topologicalSortComponents",
         "signature": {
           "parameters": [
-            {"isLazy": false, "name": "arg0", "type": {"function": {"codomain": {"variable": "t1"}, "domain": {"variable": "t0"}}}},
             {
               "isLazy": false,
-              "name": "arg1",
-              "type": {"function": {"codomain": {"list": {"variable": "t1"}}, "domain": {"variable": "t0"}}}},
-            {"isLazy": false, "name": "arg2", "type": {"list": {"variable": "t0"}}}],
+              "name": "arg0",
+              "type": {"list": {"pair": {"first": {"variable": "t0"}, "second": {"list": {"variable": "t0"}}}}}}],
           "result": {"type": {"list": {"list": {"variable": "t0"}}}},
-          "typeParameters": [{"constraints": [], "name": "t0"}, {"constraints": [{"simple": "ordering"}], "name": "t1"}]},
-        "term": {
+          "typeParameters": [{"constraints": [{"simple": "ordering"}], "name": "t0"}]}}},
+    {
+      "term": {
+        "body": {
           "typeLambda": {
             "body": {
               "typeLambda": {
@@ -2397,7 +2386,18 @@
                         "domain": {"function": {"codomain": {"variable": "t1"}, "domain": {"variable": "t0"}}},
                         "parameter": "getKey"}}}},
                 "parameter": "t1"}},
-            "parameter": "t0"}}}}],
+            "parameter": "t0"}},
+        "name": "hydra.sorting.topologicalSortNodes",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"function": {"codomain": {"variable": "t1"}, "domain": {"variable": "t0"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {"function": {"codomain": {"list": {"variable": "t1"}}, "domain": {"variable": "t0"}}}},
+            {"isLazy": false, "name": "arg2", "type": {"list": {"variable": "t0"}}}],
+          "result": {"type": {"list": {"list": {"variable": "t0"}}}},
+          "typeParameters": [{"constraints": [], "name": "t0"}, {"constraints": [{"simple": "ordering"}], "name": "t1"}]}}}],
   "dependencies": [
     {"module": "hydra.constants"},
     {"module": "hydra.paths"},

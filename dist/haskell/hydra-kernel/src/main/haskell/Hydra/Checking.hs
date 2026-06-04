@@ -264,7 +264,7 @@ typeOfCaseStatement cx tx typeArgs cs =
       let tname = Core.caseStatementTypeName cs
           dflt = Core.caseStatementDefault cs
           cases = Core.caseStatementCases cs
-          cterms = Lists.map Core.fieldTerm cases
+          cterms = Lists.map Core.caseAlternativeHandler cases
       in (Eithers.bind (Eithers.mapMaybe (\e -> typeOf cx tx [] e) dflt) (\dfltResult ->
         let tdflt = Maybes.map Pairs.first dfltResult
             cx2 = Maybes.maybe cx Pairs.second dfltResult

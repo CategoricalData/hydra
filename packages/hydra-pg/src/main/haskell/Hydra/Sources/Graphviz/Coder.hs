@@ -171,7 +171,7 @@ nodeStyleVariable = define "nodeStyleVariable" $
 standardNamespaces :: TypedTermDefinition (M.Map ModuleName String)
 standardNamespaces = define "standardNamespaces" $
   doc "Construct a map from namespace to prefix for all standard libraries" $
-  Phantoms.map $ M.fromList [(wrap _ModuleName (string (unModuleName ns_)), string (libraryPrefix lib)) | lib <- standardLibraries, let ns_ = libraryNamespace lib]
+  Phantoms.map $ M.fromList [(wrap _ModuleName (string (unModuleName ns_)), string (libraryPrefix lib)) | lib <- standardLibraries, let ns_ = libraryName lib]
 
 -- | Compute the label and style for a term
 termLabel :: TypedTermDefinition (Bool -> M.Map ModuleName String -> Term -> (String, String))

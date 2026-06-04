@@ -155,7 +155,7 @@ import hydra.java.syntax.VariableDeclaratorId;  // AUTO-IMPORT (hydra-java DSL)
 import hydra.java.syntax.VariableInitializer;  // AUTO-IMPORT (hydra-java DSL)
 import hydra.java.syntax.VariableModifier;  // AUTO-IMPORT (hydra-java DSL)
 import hydra.java.syntax.Wildcard;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.packaging.QualifiedName;  // AUTO-IMPORT (hydra-java DSL)
+import hydra.util.QualifiedName;  // AUTO-IMPORT (hydra-java DSL)
 import hydra.sources.java.Names;  // AUTO-IMPORT (hydra-java DSL)
 
 /**
