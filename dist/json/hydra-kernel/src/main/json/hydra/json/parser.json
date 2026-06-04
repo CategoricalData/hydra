@@ -4,7 +4,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Parse a single digit (0-9)"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Parse a single digit (0-9)"}}}]},
             "body": {
               "application": {
                 "argument": {
@@ -41,7 +41,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Parse one or more digits as a string"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Parse one or more digits as a string"}}}]},
             "body": {
               "application": {
                 "argument": {
@@ -65,7 +66,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Parse a JSON array"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Parse a JSON array"}}}]},
             "body": {
               "application": {
                 "argument": {
@@ -127,7 +128,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Parse JSON boolean (true or false)"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Parse JSON boolean (true or false)"}}}]},
             "body": {
               "application": {
                 "argument": {
@@ -178,7 +179,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Parse a JSON escape sequence after the backslash"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Parse a JSON escape sequence after the backslash"}}}]},
             "body": {
               "application": {
                 "argument": {
@@ -282,7 +287,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Parse the optional exponent part of a JSON number"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Parse the optional exponent part of a JSON number"}}}]},
             "body": {
               "application": {
                 "argument": {
@@ -421,7 +430,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Parse the optional fractional part of a JSON number"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Parse the optional fractional part of a JSON number"}}}]},
             "body": {
               "application": {
                 "argument": {
@@ -465,10 +478,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Parse the integer part of a JSON number (optional minus, then digits)"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Parse the integer part of a JSON number (optional minus, then digits)"}}}]},
             "body": {
               "application": {
                 "argument": {
@@ -531,7 +545,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Parse a JSON object key-value pair"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Parse a JSON object key-value pair"}}}]},
             "body": {
               "application": {
                 "argument": {
@@ -644,7 +658,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Parse JSON null value"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Parse JSON null value"}}}]},
             "body": {
               "application": {
                 "argument": {
@@ -672,10 +686,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Parse a JSON number (integer, decimal, or scientific notation)"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Parse a JSON number (integer, decimal, or scientific notation)"}}}]},
             "body": {
               "application": {
                 "argument": {
@@ -789,7 +804,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Parse a JSON object"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Parse a JSON object"}}}]},
             "body": {
               "application": {
                 "argument": {
@@ -866,7 +881,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Parse a JSON string value"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Parse a JSON string value"}}}]},
             "body": {
               "application": {
                 "argument": {
@@ -932,8 +947,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {"key": "description", "value": {"literal": {"string": "Parse a single character in a JSON string (handling escapes)"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Parse a single character in a JSON string (handling escapes)"}}}]},
             "body": {
               "application": {
                 "argument": {
@@ -995,7 +1013,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Parse any JSON value"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Parse any JSON value"}}}]},
             "body": {
               "application": {
                 "argument": {
@@ -1017,7 +1035,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Parse a JSON document from a string"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Parse a JSON document from a string"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1097,7 +1115,9 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Parse a token followed by optional whitespace"}}}],
+                "annotation": {
+                  "map": [
+                    {"key": {"variable": "description"}, "value": {"literal": {"string": "Parse a token followed by optional whitespace"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -1146,10 +1166,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Parse zero or more JSON whitespace characters (space, tab, newline, carriage return)"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Parse zero or more JSON whitespace characters (space, tab, newline, carriage return)"}}}]},
             "body": {
               "application": {
                 "argument": {

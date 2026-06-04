@@ -469,8 +469,10 @@ module_ =
                                     Core.fieldTerm = (Core.TermApplication (Core.Application {
                                       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.error.checking.untypedTermVariableCheckingError")),
                                       Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}]}))}]}))}}))}))}]})),
-            Core.annotatedTermAnnotation = (M.fromList [
-              (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Encoder for hydra.error.checking.CheckingError")))])}))}),
+            Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
+              (
+                Core.TermVariable (Core.Name "description"),
+                (Core.TermLiteral (Core.LiteralString "Encoder for hydra.error.checking.CheckingError")))]))}))}),
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.encode.error.checking.incorrectUnificationError"),
           Packaging.termDefinitionMetadata = Nothing,
@@ -521,10 +523,10 @@ module_ =
                                       Core.projectionTypeName = (Core.Name "hydra.error.checking.IncorrectUnificationError"),
                                       Core.projectionFieldName = (Core.Name "substitution")})),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]})])}]}))}}))})),
-            Core.annotatedTermAnnotation = (M.fromList [
+            Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
               (
-                Core.Name "description",
-                (Core.TermLiteral (Core.LiteralString "Encoder for hydra.error.checking.IncorrectUnificationError")))])}))})),
+                Core.TermVariable (Core.Name "description"),
+                (Core.TermLiteral (Core.LiteralString "Encoder for hydra.error.checking.IncorrectUnificationError")))]))}))})),
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.encode.error.checking.notAForallTypeError"),
           Packaging.termDefinitionMetadata = Nothing,
@@ -603,8 +605,10 @@ module_ =
                                       Core.projectionTypeName = (Core.Name "hydra.error.checking.NotAForallTypeError"),
                                       Core.projectionFieldName = (Core.Name "typeArguments")})),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))})),
-            Core.annotatedTermAnnotation = (M.fromList [
-              (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Encoder for hydra.error.checking.NotAForallTypeError")))])}))})),
+            Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
+              (
+                Core.TermVariable (Core.Name "description"),
+                (Core.TermLiteral (Core.LiteralString "Encoder for hydra.error.checking.NotAForallTypeError")))]))}))})),
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.encode.error.checking.notAFunctionTypeError"),
           Packaging.termDefinitionMetadata = Nothing,
@@ -655,8 +659,10 @@ module_ =
                                       Core.projectionTypeName = (Core.Name "hydra.error.checking.NotAFunctionTypeError"),
                                       Core.projectionFieldName = (Core.Name "type")})),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]})])}]}))}}))})),
-            Core.annotatedTermAnnotation = (M.fromList [
-              (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Encoder for hydra.error.checking.NotAFunctionTypeError")))])}))})),
+            Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
+              (
+                Core.TermVariable (Core.Name "description"),
+                (Core.TermLiteral (Core.LiteralString "Encoder for hydra.error.checking.NotAFunctionTypeError")))]))}))})),
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.encode.error.checking.otherCheckingError"),
           Packaging.termDefinitionMetadata = Nothing,
@@ -735,8 +741,10 @@ module_ =
                                       Core.projectionTypeName = (Core.Name "hydra.error.checking.OtherCheckingError"),
                                       Core.projectionFieldName = (Core.Name "message")})),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))})),
-            Core.annotatedTermAnnotation = (M.fromList [
-              (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Encoder for hydra.error.checking.OtherCheckingError")))])}))})),
+            Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
+              (
+                Core.TermVariable (Core.Name "description"),
+                (Core.TermLiteral (Core.LiteralString "Encoder for hydra.error.checking.OtherCheckingError")))]))}))})),
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.encode.error.checking.typeArityMismatchError"),
           Packaging.termDefinitionMetadata = Nothing,
@@ -879,8 +887,10 @@ module_ =
                                       Core.projectionTypeName = (Core.Name "hydra.error.checking.TypeArityMismatchError"),
                                       Core.projectionFieldName = (Core.Name "typeArguments")})),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))})),
-            Core.annotatedTermAnnotation = (M.fromList [
-              (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Encoder for hydra.error.checking.TypeArityMismatchError")))])}))})),
+            Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
+              (
+                Core.TermVariable (Core.Name "description"),
+                (Core.TermLiteral (Core.LiteralString "Encoder for hydra.error.checking.TypeArityMismatchError")))]))}))})),
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.encode.error.checking.typeMismatchError"),
           Packaging.termDefinitionMetadata = Nothing,
@@ -948,8 +958,10 @@ module_ =
                                       Core.projectionTypeName = (Core.Name "hydra.error.checking.TypeMismatchError"),
                                       Core.projectionFieldName = (Core.Name "actualType")})),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))})),
-            Core.annotatedTermAnnotation = (M.fromList [
-              (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Encoder for hydra.error.checking.TypeMismatchError")))])}))})),
+            Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
+              (
+                Core.TermVariable (Core.Name "description"),
+                (Core.TermLiteral (Core.LiteralString "Encoder for hydra.error.checking.TypeMismatchError")))]))}))})),
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.encode.error.checking.unboundTypeVariablesError"),
           Packaging.termDefinitionMetadata = Nothing,
@@ -1028,10 +1040,10 @@ module_ =
                                       Core.projectionTypeName = (Core.Name "hydra.error.checking.UnboundTypeVariablesError"),
                                       Core.projectionFieldName = (Core.Name "type")})),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))})),
-            Core.annotatedTermAnnotation = (M.fromList [
+            Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
               (
-                Core.Name "description",
-                (Core.TermLiteral (Core.LiteralString "Encoder for hydra.error.checking.UnboundTypeVariablesError")))])}))})),
+                Core.TermVariable (Core.Name "description"),
+                (Core.TermLiteral (Core.LiteralString "Encoder for hydra.error.checking.UnboundTypeVariablesError")))]))}))})),
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.encode.error.checking.undefinedTermVariableCheckingError"),
           Packaging.termDefinitionMetadata = Nothing,
@@ -1099,10 +1111,10 @@ module_ =
                                       Core.projectionTypeName = (Core.Name "hydra.error.checking.UndefinedTermVariableCheckingError"),
                                       Core.projectionFieldName = (Core.Name "name")})),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))})),
-            Core.annotatedTermAnnotation = (M.fromList [
+            Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
               (
-                Core.Name "description",
-                (Core.TermLiteral (Core.LiteralString "Encoder for hydra.error.checking.UndefinedTermVariableCheckingError")))])}))})),
+                Core.TermVariable (Core.Name "description"),
+                (Core.TermLiteral (Core.LiteralString "Encoder for hydra.error.checking.UndefinedTermVariableCheckingError")))]))}))})),
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.encode.error.checking.unequalTypesError"),
           Packaging.termDefinitionMetadata = Nothing,
@@ -1192,8 +1204,10 @@ module_ =
                                       Core.projectionTypeName = (Core.Name "hydra.error.checking.UnequalTypesError"),
                                       Core.projectionFieldName = (Core.Name "description")})),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))})),
-            Core.annotatedTermAnnotation = (M.fromList [
-              (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Encoder for hydra.error.checking.UnequalTypesError")))])}))})),
+            Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
+              (
+                Core.TermVariable (Core.Name "description"),
+                (Core.TermLiteral (Core.LiteralString "Encoder for hydra.error.checking.UnequalTypesError")))]))}))})),
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.encode.error.checking.unsupportedTermVariantError"),
           Packaging.termDefinitionMetadata = Nothing,
@@ -1244,10 +1258,10 @@ module_ =
                                       Core.projectionTypeName = (Core.Name "hydra.error.checking.UnsupportedTermVariantError"),
                                       Core.projectionFieldName = (Core.Name "termVariant")})),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]})])}]}))}}))})),
-            Core.annotatedTermAnnotation = (M.fromList [
+            Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
               (
-                Core.Name "description",
-                (Core.TermLiteral (Core.LiteralString "Encoder for hydra.error.checking.UnsupportedTermVariantError")))])}))})),
+                Core.TermVariable (Core.Name "description"),
+                (Core.TermLiteral (Core.LiteralString "Encoder for hydra.error.checking.UnsupportedTermVariantError")))]))}))})),
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.encode.error.checking.untypedLambdaError"),
           Packaging.termDefinitionMetadata = Nothing,
@@ -1281,8 +1295,10 @@ module_ =
                       Core.Field {
                         Core.fieldName = (Core.Name "fields"),
                         Core.fieldTerm = (Core.TermList [])}]}))}}))})),
-            Core.annotatedTermAnnotation = (M.fromList [
-              (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Encoder for hydra.error.checking.UntypedLambdaError")))])}))})),
+            Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
+              (
+                Core.TermVariable (Core.Name "description"),
+                (Core.TermLiteral (Core.LiteralString "Encoder for hydra.error.checking.UntypedLambdaError")))]))}))})),
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.encode.error.checking.untypedLetBindingError"),
           Packaging.termDefinitionMetadata = Nothing,
@@ -1333,8 +1349,10 @@ module_ =
                                       Core.projectionTypeName = (Core.Name "hydra.error.checking.UntypedLetBindingError"),
                                       Core.projectionFieldName = (Core.Name "binding")})),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]})])}]}))}}))})),
-            Core.annotatedTermAnnotation = (M.fromList [
-              (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Encoder for hydra.error.checking.UntypedLetBindingError")))])}))})),
+            Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
+              (
+                Core.TermVariable (Core.Name "description"),
+                (Core.TermLiteral (Core.LiteralString "Encoder for hydra.error.checking.UntypedLetBindingError")))]))}))})),
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.encode.error.checking.untypedTermVariableCheckingError"),
           Packaging.termDefinitionMetadata = Nothing,
@@ -1402,7 +1420,7 @@ module_ =
                                       Core.projectionTypeName = (Core.Name "hydra.error.checking.UntypedTermVariableCheckingError"),
                                       Core.projectionFieldName = (Core.Name "name")})),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))})),
-            Core.annotatedTermAnnotation = (M.fromList [
+            Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
               (
-                Core.Name "description",
-                (Core.TermLiteral (Core.LiteralString "Encoder for hydra.error.checking.UntypedTermVariableCheckingError")))])}))}))]}
+                Core.TermVariable (Core.Name "description"),
+                (Core.TermLiteral (Core.LiteralString "Encoder for hydra.error.checking.UntypedTermVariableCheckingError")))]))}))}))]}

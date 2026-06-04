@@ -8,7 +8,9 @@
               "typeLambda": {
                 "body": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "Check a condition, returning an error if false"}}}],
+                    "annotation": {
+                      "map": [
+                        {"key": {"variable": "description"}, "value": {"literal": {"string": "Check a condition, returning an error if false"}}}]},
                     "body": {
                       "lambda": {
                         "body": {
@@ -53,7 +55,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Check that a record name matches the expected name"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Check that a record name matches the expected name"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -148,7 +154,8 @@
                   "typeLambda": {
                     "body": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "Construct an edge coder from components"}}}],
+                        "annotation": {
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Construct an edge coder from components"}}}]},
                         "body": {
                           "lambda": {
                             "body": {
@@ -1693,7 +1700,8 @@
                   "typeLambda": {
                     "body": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "Construct a vertex coder from components"}}}],
+                        "annotation": {
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Construct a vertex coder from components"}}}]},
                         "body": {
                           "lambda": {
                             "body": {
@@ -2281,7 +2289,8 @@
                                                               "typeLambda": {
                                                                 "body": {
                                                                   "annotated": {
-                                                                    "annotation": [{"key": "description", "value": {"literal": {"string": "Create an edge coder given all components"}}}],
+                                                                    "annotation": {
+                                                                      "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Create an edge coder given all components"}}}]},
                                                                     "body": {
                                                                       "lambda": {
                                                                         "body": {
@@ -3332,7 +3341,7 @@
                               "typeLambda": {
                                 "body": {
                                   "annotated": {
-                                    "annotation": [{"key": "description", "value": {"literal": {"string": "Create an edge id adapter"}}}],
+                                    "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Create an edge id adapter"}}}]},
                                     "body": {
                                       "lambda": {
                                         "body": {
@@ -3656,12 +3665,13 @@
                   "typeLambda": {
                     "body": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {
-                              "literal": {
-                                "string": "Construct an element adapter for a given type, interpreting it either as a vertex specification or an edge specification"}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {
+                                "literal": {
+                                  "string": "Construct an element adapter for a given type, interpreting it either as a vertex specification or an edge specification"}}}]},
                         "body": {
                           "lambda": {
                             "body": {
@@ -4364,7 +4374,7 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Create an element tree for an edge"}}}],
+                "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Create an element tree for an edge"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -4407,7 +4417,7 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Create an element tree for a vertex"}}}],
+                "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Create an element tree for a vertex"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -4450,7 +4460,8 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Create an element type tree for an edge type"}}}],
+                "annotation": {
+                  "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Create an element type tree for an edge type"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -4493,7 +4504,9 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Create an element type tree for a vertex type"}}}],
+                "annotation": {
+                  "map": [
+                    {"key": {"variable": "description"}, "value": {"literal": {"string": "Create an element type tree for a vertex type"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -4538,10 +4551,11 @@
               "typeLambda": {
                 "body": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {"literal": {"string": "Encode all properties from a field map using property adapters"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "Encode all properties from a field map using property adapters"}}}]},
                     "body": {
                       "lambda": {
                         "body": {
@@ -4722,10 +4736,11 @@
               "typeLambda": {
                 "body": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {"literal": {"string": "Encode a single property from a field map using a property adapter"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "Encode a single property from a field map using a property adapter"}}}]},
                     "body": {
                       "lambda": {
                         "body": {
@@ -5016,7 +5031,7 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Extract a string from a term"}}}],
+                "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Extract a string from a term"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -5052,7 +5067,11 @@
                   "typeLambda": {
                     "body": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "Find adjacent edge adapters for a given direction"}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "Find adjacent edge adapters for a given direction"}}}]},
                         "body": {
                           "lambda": {
                             "body": {
@@ -5656,7 +5675,8 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Find an id projection spec for a field"}}}],
+                "annotation": {
+                  "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Find an id projection spec for a field"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -5961,7 +5981,11 @@
                   "typeLambda": {
                     "body": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "Find an incident vertex adapter for a projection spec"}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "Find an incident vertex adapter for a projection spec"}}}]},
                         "body": {
                           "lambda": {
                             "body": {
@@ -6176,7 +6200,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Find a label string from annotations or the type name"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Find a label string from annotations or the type name"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -6245,7 +6273,7 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Find a projection spec for a field"}}}],
+                "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Find a projection spec for a field"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -6557,7 +6585,8 @@
                       "typeLambda": {
                         "body": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "Find property specs for element fields"}}}],
+                            "annotation": {
+                              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Find property specs for element fields"}}}]},
                             "body": {
                               "lambda": {
                                 "body": {
@@ -7022,7 +7051,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Find a single field with a given annotation key"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Find a single field with a given annotation key"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -7147,10 +7180,11 @@
               "typeLambda": {
                 "body": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {"literal": {"string": "Determine whether the spec has vertex adapters based on direction and out/in specs"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "Determine whether the spec has vertex adapters based on direction and out/in specs"}}}]},
                     "body": {
                       "lambda": {
                         "body": {
@@ -7235,7 +7269,11 @@
                               "typeLambda": {
                                 "body": {
                                   "annotated": {
-                                    "annotation": [{"key": "description", "value": {"literal": {"string": "Create a projection adapter from a projection spec"}}}],
+                                    "annotation": {
+                                      "map": [
+                                        {
+                                          "key": {"variable": "description"},
+                                          "value": {"literal": {"string": "Create a projection adapter from a projection spec"}}}]},
                                     "body": {
                                       "lambda": {
                                         "body": {
@@ -7589,7 +7627,9 @@
                       "typeLambda": {
                         "body": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "Create a property adapter from a property spec"}}}],
+                            "annotation": {
+                              "map": [
+                                {"key": {"variable": "description"}, "value": {"literal": {"string": "Create a property adapter from a property spec"}}}]},
                             "body": {
                               "lambda": {
                                 "body": {
@@ -8030,7 +8070,9 @@
                       "typeLambda": {
                         "body": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "Extract property types from property adapters"}}}],
+                            "annotation": {
+                              "map": [
+                                {"key": {"variable": "description"}, "value": {"literal": {"string": "Extract property types from property adapters"}}}]},
                             "body": {
                               "lambda": {
                                 "body": {
@@ -8167,7 +8209,11 @@
                       "typeLambda": {
                         "body": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "Select an edge id from record fields using an id adapter"}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {"literal": {"string": "Select an edge id from record fields using an id adapter"}}}]},
                             "body": {
                               "lambda": {
                                 "body": {
@@ -8370,7 +8416,11 @@
                       "typeLambda": {
                         "body": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "Select a vertex id from record fields using an id adapter"}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {"literal": {"string": "Select a vertex id from record fields using an id adapter"}}}]},
                             "body": {
                               "lambda": {
                                 "body": {
@@ -8571,10 +8621,11 @@
                   "typeLambda": {
                     "body": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "Traverse to a single term, failing if zero or multiple terms are found"}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "Traverse to a single term, failing if zero or multiple terms are found"}}}]},
                         "body": {
                           "lambda": {
                             "body": {
@@ -8771,7 +8822,8 @@
                                               "typeLambda": {
                                                 "body": {
                                                   "annotated": {
-                                                    "annotation": [{"key": "description", "value": {"literal": {"string": "Create a vertex coder given all components"}}}],
+                                                    "annotation": {
+                                                      "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Create a vertex coder given all components"}}}]},
                                                     "body": {
                                                       "lambda": {
                                                         "body": {
@@ -9975,7 +10027,7 @@
                               "typeLambda": {
                                 "body": {
                                   "annotated": {
-                                    "annotation": [{"key": "description", "value": {"literal": {"string": "Create a vertex id adapter"}}}],
+                                    "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Create a vertex id adapter"}}}]},
                                     "body": {
                                       "lambda": {
                                         "body": {

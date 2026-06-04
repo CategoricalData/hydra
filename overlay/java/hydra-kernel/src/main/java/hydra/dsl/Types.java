@@ -41,14 +41,25 @@ public interface Types {
     // ===== Type annotations =====
 
     /**
-     * Attach an annotation to a type.
+     * Attach an annotation map to a type, wrapping it as a TermMap per Hydra's
+     * map convention (#386 — annotation is now a Term, not Map<Name, Term>).
      * Example: annot(Map.of(name("min"), int32(0)), int32())
      * @param ann the annotation map
      * @param base the base type
      * @return the annotated type
      */
     static Type annot(Map<Name, Term> ann, Type base) {
-        return new Type.Annotated(new AnnotatedType(base, PersistentMap.<Name, Term>coerce(ann)));
+        return annot(Terms.annotationMapAsTerm(ann), base);
+    }
+
+    /**
+     * Attach an annotation Term to a type. The annotation may be of any shape.
+     * @param ann the annotation term
+     * @param base the base type
+     * @return the annotated type
+     */
+    static Type annot(Term ann, Type base) {
+        return new Type.Annotated(new AnnotatedType(base, ann));
     }
 
     /**

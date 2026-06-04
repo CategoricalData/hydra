@@ -4,10 +4,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the binary variant of hydra.variants.LiteralVariant"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the binary variant of hydra.variants.LiteralVariant"}}}]},
             "body": {
               "wrap": {
                 "body": {
@@ -42,10 +43,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the boolean variant of hydra.variants.LiteralVariant"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the boolean variant of hydra.variants.LiteralVariant"}}}]},
             "body": {
               "wrap": {
                 "body": {
@@ -80,10 +82,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the decimal variant of hydra.variants.LiteralVariant"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the decimal variant of hydra.variants.LiteralVariant"}}}]},
             "body": {
               "wrap": {
                 "body": {
@@ -118,10 +121,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the float variant of hydra.variants.LiteralVariant"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the float variant of hydra.variants.LiteralVariant"}}}]},
             "body": {
               "wrap": {
                 "body": {
@@ -156,10 +160,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the integer variant of hydra.variants.LiteralVariant"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the integer variant of hydra.variants.LiteralVariant"}}}]},
             "body": {
               "wrap": {
                 "body": {
@@ -194,10 +199,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the string variant of hydra.variants.LiteralVariant"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the string variant of hydra.variants.LiteralVariant"}}}]},
             "body": {
               "wrap": {
                 "body": {
@@ -232,10 +238,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the annotated variant of hydra.variants.TermVariant"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the annotated variant of hydra.variants.TermVariant"}}}]},
             "body": {
               "wrap": {
                 "body": {
@@ -270,10 +277,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the application variant of hydra.variants.TermVariant"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the application variant of hydra.variants.TermVariant"}}}]},
             "body": {
               "wrap": {
                 "body": {
@@ -308,10 +316,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the cases variant of hydra.variants.TermVariant"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the cases variant of hydra.variants.TermVariant"}}}]},
             "body": {
               "wrap": {
                 "body": {
@@ -346,10 +355,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the either variant of hydra.variants.TermVariant"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the either variant of hydra.variants.TermVariant"}}}]},
             "body": {
               "wrap": {
                 "body": {
@@ -384,10 +394,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the inject variant of hydra.variants.TermVariant"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the inject variant of hydra.variants.TermVariant"}}}]},
             "body": {
               "wrap": {
                 "body": {
@@ -422,10 +433,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the lambda variant of hydra.variants.TermVariant"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the lambda variant of hydra.variants.TermVariant"}}}]},
             "body": {
               "wrap": {
                 "body": {
@@ -460,10 +472,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the let variant of hydra.variants.TermVariant"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the let variant of hydra.variants.TermVariant"}}}]},
             "body": {
               "wrap": {
                 "body": {
@@ -498,10 +511,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the list variant of hydra.variants.TermVariant"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the list variant of hydra.variants.TermVariant"}}}]},
             "body": {
               "wrap": {
                 "body": {
@@ -536,10 +550,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the literal variant of hydra.variants.TermVariant"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the literal variant of hydra.variants.TermVariant"}}}]},
             "body": {
               "wrap": {
                 "body": {
@@ -574,10 +589,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the map variant of hydra.variants.TermVariant"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the map variant of hydra.variants.TermVariant"}}}]},
             "body": {
               "wrap": {
                 "body": {
@@ -612,10 +628,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the maybe variant of hydra.variants.TermVariant"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the maybe variant of hydra.variants.TermVariant"}}}]},
             "body": {
               "wrap": {
                 "body": {
@@ -650,10 +667,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the pair variant of hydra.variants.TermVariant"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the pair variant of hydra.variants.TermVariant"}}}]},
             "body": {
               "wrap": {
                 "body": {
@@ -688,10 +706,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the project variant of hydra.variants.TermVariant"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the project variant of hydra.variants.TermVariant"}}}]},
             "body": {
               "wrap": {
                 "body": {
@@ -726,10 +745,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the record variant of hydra.variants.TermVariant"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the record variant of hydra.variants.TermVariant"}}}]},
             "body": {
               "wrap": {
                 "body": {
@@ -764,10 +784,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the set variant of hydra.variants.TermVariant"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the set variant of hydra.variants.TermVariant"}}}]},
             "body": {
               "wrap": {
                 "body": {
@@ -802,10 +823,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the typeApplication variant of hydra.variants.TermVariant"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the typeApplication variant of hydra.variants.TermVariant"}}}]},
             "body": {
               "wrap": {
                 "body": {
@@ -840,10 +862,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the typeLambda variant of hydra.variants.TermVariant"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the typeLambda variant of hydra.variants.TermVariant"}}}]},
             "body": {
               "wrap": {
                 "body": {
@@ -878,10 +901,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the unit variant of hydra.variants.TermVariant"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the unit variant of hydra.variants.TermVariant"}}}]},
             "body": {
               "wrap": {
                 "body": {
@@ -916,10 +940,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the unwrap variant of hydra.variants.TermVariant"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the unwrap variant of hydra.variants.TermVariant"}}}]},
             "body": {
               "wrap": {
                 "body": {
@@ -954,10 +979,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the variable variant of hydra.variants.TermVariant"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the variable variant of hydra.variants.TermVariant"}}}]},
             "body": {
               "wrap": {
                 "body": {
@@ -992,10 +1018,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the wrap variant of hydra.variants.TermVariant"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the wrap variant of hydra.variants.TermVariant"}}}]},
             "body": {
               "wrap": {
                 "body": {
@@ -1030,10 +1057,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the annotated variant of hydra.variants.TypeVariant"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the annotated variant of hydra.variants.TypeVariant"}}}]},
             "body": {
               "wrap": {
                 "body": {
@@ -1068,10 +1096,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the application variant of hydra.variants.TypeVariant"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the application variant of hydra.variants.TypeVariant"}}}]},
             "body": {
               "wrap": {
                 "body": {
@@ -1106,10 +1135,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the either variant of hydra.variants.TypeVariant"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the either variant of hydra.variants.TypeVariant"}}}]},
             "body": {
               "wrap": {
                 "body": {
@@ -1144,10 +1174,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the forall variant of hydra.variants.TypeVariant"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the forall variant of hydra.variants.TypeVariant"}}}]},
             "body": {
               "wrap": {
                 "body": {
@@ -1182,10 +1213,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the function variant of hydra.variants.TypeVariant"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the function variant of hydra.variants.TypeVariant"}}}]},
             "body": {
               "wrap": {
                 "body": {
@@ -1220,10 +1252,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the list variant of hydra.variants.TypeVariant"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the list variant of hydra.variants.TypeVariant"}}}]},
             "body": {
               "wrap": {
                 "body": {
@@ -1258,10 +1291,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the literal variant of hydra.variants.TypeVariant"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the literal variant of hydra.variants.TypeVariant"}}}]},
             "body": {
               "wrap": {
                 "body": {
@@ -1296,10 +1330,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the map variant of hydra.variants.TypeVariant"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the map variant of hydra.variants.TypeVariant"}}}]},
             "body": {
               "wrap": {
                 "body": {
@@ -1334,10 +1369,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the maybe variant of hydra.variants.TypeVariant"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the maybe variant of hydra.variants.TypeVariant"}}}]},
             "body": {
               "wrap": {
                 "body": {
@@ -1372,10 +1408,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the pair variant of hydra.variants.TypeVariant"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the pair variant of hydra.variants.TypeVariant"}}}]},
             "body": {
               "wrap": {
                 "body": {
@@ -1410,10 +1447,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the record variant of hydra.variants.TypeVariant"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the record variant of hydra.variants.TypeVariant"}}}]},
             "body": {
               "wrap": {
                 "body": {
@@ -1448,10 +1486,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the set variant of hydra.variants.TypeVariant"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the set variant of hydra.variants.TypeVariant"}}}]},
             "body": {
               "wrap": {
                 "body": {
@@ -1486,10 +1525,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the union variant of hydra.variants.TypeVariant"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the union variant of hydra.variants.TypeVariant"}}}]},
             "body": {
               "wrap": {
                 "body": {
@@ -1524,10 +1564,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the unit variant of hydra.variants.TypeVariant"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the unit variant of hydra.variants.TypeVariant"}}}]},
             "body": {
               "wrap": {
                 "body": {
@@ -1562,10 +1603,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the variable variant of hydra.variants.TypeVariant"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the variable variant of hydra.variants.TypeVariant"}}}]},
             "body": {
               "wrap": {
                 "body": {
@@ -1600,10 +1642,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the void variant of hydra.variants.TypeVariant"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the void variant of hydra.variants.TypeVariant"}}}]},
             "body": {
               "wrap": {
                 "body": {
@@ -1638,10 +1681,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the wrap variant of hydra.variants.TypeVariant"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the wrap variant of hydra.variants.TypeVariant"}}}]},
             "body": {
               "wrap": {
                 "body": {

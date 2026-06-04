@@ -70,6 +70,13 @@ packages/<pkg>/src/main/<lang>/  → dist/json/<pkg>/src/<set>/json/  →  dist/
   `dist/haskell/` is tracked through 0.15 to bootstrap a fresh clone;
   all other `dist/<lang>/` trees are regenerated on demand and are not checked in.
 
+This factoring serves Hydra's core premise: there is a single language for
+representing data, schemas, and code, with encodings in many other languages.
+JSON provides a neutral encoding which every host can read. DSL sources
+express the same language in the host of their choice — Haskell today for
+`hydra-kernel`, Java for `hydra-java`, Python for `hydra-python`, with more
+diversification expected over time.
+
 A complete sync of the matrix walks these in five phases (see
 [Phases](#phases-of-bin-sync-sh) below).
 
@@ -254,6 +261,13 @@ A change that dirties most of the universe (e.g. a kernel-wide rename) thus stay
 within the per-package memory envelope on the incremental path too, instead of falling
 back to a single mega-inference over the full dirty set.
 
+The incremental path is what makes day-to-day development affordable: a typical
+edit dirties a handful of modules, and reusing the already-inferred type schemes
+for the rest skips both the inference work and the disk write for every clean
+package. The per-package iteration keeps the dirty-set work bounded; the
+warm-cache seed keeps the clean-set work near-zero. The result is that a
+single-package edit is a single-package re-inference, not a universe-wide one.
+
 ## The cache model
 
 Every layer of the pipeline caches its work. All caches are content-hash based
@@ -273,6 +287,26 @@ The caches form a hierarchy: a hit at a coarser layer skips a finer one.
 | Per-package output digest | `dist/<lang>/<pkg>/build/<set>/digest.json` | Per-module-name + per-target generator stamp | Compared against input digest to skip Layer 1 + Layer 2 for one package |
 | Step caches | `heads/haskell/.stack-work/{verify-json-kernel,bootstrap-from-json,haskell-test}-cache.txt` | Universe-wide hash of inputs + exec source | Skips `verify-json-kernel`, `bootstrap-from-json`, or `stack test` |
 | Per-target test cache | `dist/<lang>/test-cache.json` | Universe of generated sources + test infra + runner | Skips the target's `test-distribution.sh` |
+
+### Why `digest.json` is separate from `manifest.json`
+
+The two files serve different purposes — manifest describes the source
+package, digest describes generated artifacts:
+
+- `manifest.json` is a **source-side** description of a package. It lists
+  the modules the package owns, grouped by category and lexicographically
+  sorted. It is part of the authoritative source of truth, tracked in git,
+  and changes when modules are added, renamed, or moved between categories.
+- `digest.json` is a **build-side** freshness fingerprint, recording the
+  content hash of each module's DSL source as observed by the last
+  successful build of this package. It is gitignored, rebuilt on demand,
+  and changes whenever a source file's bytes change.
+
+Their invalidation domains also differ as a consequence: a manifest edit
+that only touches metadata (e.g. category re-grouping) would invalidate a
+combined file's freshness check even though no source changed, and every
+source edit would write back metadata it didn't touch. Keeping the
+artifacts separate keeps each one's lifecycle clean.
 
 ### Cache files are not tracked
 

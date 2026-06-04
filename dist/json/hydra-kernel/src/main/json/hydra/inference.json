@@ -6,11 +6,12 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [
-                  {
-                    "key": "description",
-                    "value": {
-                      "literal": {"string": "Return the element at the given index, or Left(Other) with the given description if out of range"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {
+                        "literal": {"string": "Return the element at the given index, or Left(Other) with the given description if out of range"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -84,7 +85,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Unify type constraints and check the substitution"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Unify type constraints and check the substitution"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -218,12 +223,13 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {
-                    "string": "Handle unbound type variables under a typed let binding. Variables appearing free in the binding's declared type (but not in schema types or the scheme's own quantified variables) are added to the scheme and the term is wrapped in matching TypeLambdas. Variables appearing only in the term body (at type-application or lambda-domain positions) are phantom — they have no external effect on the binding's type — and are substituted with hydra.core.Unit in the body rather than generalized. This keeps downstream stages from seeing vacuous foralls that target languages with non-polymorphic value bindings (e.g. Scala val) cannot express."}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {
+                      "string": "Handle unbound type variables under a typed let binding. Variables appearing free in the binding's declared type (but not in schema types or the scheme's own quantified variables) are added to the scheme and the term is wrapped in matching TypeLambdas. Variables appearing only in the term body (at type-application or lambda-domain positions) are phantom — they have no external effect on the binding's type — and are substituted with hydra.core.Unit in the body rather than generalized. This keeps downstream stages from seeing vacuous foralls that target languages with non-polymorphic value bindings (e.g. Scala val) cannot express."}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -583,10 +589,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Fold a list of type variables over a term to build a type application term"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Fold a list of type variables over a term to build a type application term"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -639,10 +646,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Add (term variable, type scheme) pairs to the graph's bound types"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Add (term variable, type scheme) pairs to the graph's bound types"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -724,11 +732,12 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [
-                  {
-                    "key": "description",
-                    "value": {
-                      "literal": {"string": "Finalize an inferred term by checking for unbound type variables, then normalizing type variables"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {
+                        "literal": {"string": "Finalize an inferred term by checking for unbound type variables, then normalizing type variables"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -801,7 +810,8 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Infer a term's type and map over the result"}}}],
+                "annotation": {
+                  "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Infer a term's type and map over the result"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -890,7 +900,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Get all free variables in a graph's bound types"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Get all free variables in a graph's bound types"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -933,7 +947,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Generate a fresh type variable"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Generate a fresh type variable"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -992,7 +1006,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Generalize a type to a type scheme"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Generalize a type to a type scheme"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1191,11 +1205,12 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [
-                  {
-                    "key": "description",
-                    "value": {
-                      "literal": {"string": "Return the first element of a list, or Left(Other) with the given description if the list is empty"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {
+                        "literal": {"string": "Return the first element of a list, or Left(Other) with the given description if the list is empty"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -1262,12 +1277,13 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {
-                    "string": "Infer types for all elements in a graph, using the provided ordered bindings. Returns both the inferred graph and the ordered inferred bindings."}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {
+                      "string": "Infer types for all elements in a graph, using the provided ordered bindings. Returns both the inferred graph and the ordered inferred bindings."}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1590,7 +1606,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Infer the type of a term in a given inference context"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Infer the type of a term in a given inference context"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1626,10 +1646,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Infer types for multiple terms, propagating class constraints from sub-expressions"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Infer types for multiple terms, propagating class constraints from sub-expressions"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2360,10 +2381,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Map a possibly untyped term to a fully typed term and its type"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Map a possibly untyped term to a fully typed term and its type"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2747,7 +2769,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Infer the type of an annotated term (Either version)"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Infer the type of an annotated term (Either version)"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2771,7 +2797,7 @@
                                       "application": {
                                         "argument": {"variable": "at"},
                                         "function": {"project": {"fieldName": "annotation", "typeName": "hydra.core.AnnotatedTerm"}}}},
-                                    "typeScheme": {"body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Term"}}}, "variables": []}}],
+                                    "typeScheme": {"body": {"variable": "hydra.core.Term"}, "variables": []}}],
                                 "body": {
                                   "let": {
                                     "bindings": [
@@ -2911,7 +2937,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Infer the type of a function application (Either version)"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Infer the type of a function application (Either version)"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3423,7 +3453,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Infer the type of a case statement (Either version)"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Infer the type of a case statement (Either version)"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4350,12 +4384,13 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {
-                    "string": "Infer the type of a collection. The classNames parameter specifies type classes (e.g. ordering) that the element type variable must satisfy."}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {
+                      "string": "Infer the type of a collection. The classNames parameter specifies type classes (e.g. ordering) that the element type variable must satisfy."}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4934,7 +4969,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Infer the type of an either value (Either version)"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Infer the type of an either value (Either version)"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -5341,7 +5380,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Infer the type of a union injection (Either version)"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Infer the type of a union injection (Either version)"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -5694,7 +5737,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Infer the type of a lambda function (Either version)"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Infer the type of a lambda function (Either version)"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -6002,10 +6049,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Normalize a let term before inferring its type (Either version)"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Normalize a let term before inferring its type (Either version)"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -6650,10 +6698,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Infer the type of a let (letrec) term which is already in a normal form (Either version)"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Infer the type of a let (letrec) term which is already in a normal form (Either version)"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -7867,7 +7916,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Infer the type of a list (Either version)"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Infer the type of a list (Either version)"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -7913,7 +7963,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Infer the type of a literal"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Infer the type of a literal"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -7956,7 +8006,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Infer the type of a map (Either version)"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Infer the type of a map (Either version)"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -8825,7 +8876,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Infer the type of a Maybe value"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Infer the type of a Maybe value"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -8907,7 +8958,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Infer the type of a pair (Either version)"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Infer the type of a pair (Either version)"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -9367,7 +9419,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Infer the type of a primitive function (Either version)"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Infer the type of a primitive function (Either version)"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -9557,7 +9613,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Infer the type of a record projection (Either version)"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Infer the type of a record projection (Either version)"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -9778,7 +9838,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Infer the type of a record (Either version)"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Infer the type of a record (Either version)"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -10322,7 +10383,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Infer the type of a set (Either version)"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Infer the type of a set (Either version)"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -10389,7 +10451,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Infer the type of a given term (Either version)"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Infer the type of a given term (Either version)"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -10717,7 +10783,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Infer the type of a type application (Either version)"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Infer the type of a type application (Either version)"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -10834,7 +10904,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Infer the type of a type abstraction (Either version)"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Infer the type of a type abstraction (Either version)"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -10949,7 +11023,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "The trivial inference rule for the unit term"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The trivial inference rule for the unit term"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -10977,7 +11052,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Infer the type of an unwrap operation (Either version)"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Infer the type of an unwrap operation (Either version)"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -11144,7 +11223,9 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Infer the type of a variable (Either version)"}}}],
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "Infer the type of a variable (Either version)"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -11454,7 +11535,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Infer the type of a wrapped term (Either version)"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Infer the type of a wrapped term (Either version)"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -11741,7 +11826,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Infer types for temporary let bindings (Either version)"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Infer types for temporary let bindings (Either version)"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -12685,7 +12774,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Check if a variable is unbound in context"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Check if a variable is unbound in context"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -12736,7 +12826,8 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Map over type constraints after unification"}}}],
+                "annotation": {
+                  "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Map over type constraints after unification"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -12884,12 +12975,13 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [
-                  {
-                    "key": "description",
-                    "value": {
-                      "literal": {
-                        "string": "Merge two maps of class constraints. When both maps have constraints for the same variable, union the class sets."}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {
+                        "literal": {
+                          "string": "Merge two maps of class constraints. When both maps have constraints for the same variable, union the class sets."}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -13054,7 +13146,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Show an inference result for debugging"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Show an inference result for debugging"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -13110,7 +13203,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Create an inference result with no class constraints"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Create an inference result with no class constraints"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -13164,7 +13261,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Create a checked inference result"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Create a checked inference result"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -13228,7 +13325,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Create a checked inference result with class constraints"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Create a checked inference result with class constraints"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -13308,7 +13409,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Create an inference result with class constraints"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Create an inference result with class constraints"}}}]},
             "body": {
               "lambda": {
                 "body": {

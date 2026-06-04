@@ -411,7 +411,7 @@ applyOvergenSubstToTermAnnotations_go = def "applyOvergenSubstToTermAnnotations_
       (Just $ var "term") [
       _Term_annotated>>: lambda "at" $
         "inner" <~ Core.annotatedTermBody (var "at") $
-        "ann" <~ Core.annotatedTermAnnotation (var "at") $
+        "ann" <~ (Annotations.getAnnotationMap @@ Core.annotatedTermAnnotation (var "at")) $
         "ann'" <~ Maybes.cases (Maps.lookup Constants.keyType (var "ann"))
           (var "ann")
           (lambda "typeTerm" $
@@ -423,7 +423,7 @@ applyOvergenSubstToTermAnnotations_go = def "applyOvergenSubstToTermAnnotations_
               (Phantoms.decoderFor _Type @@ var "cx" @@ var "typeTerm")) $
         Core.termAnnotated (Core.annotatedTerm
           (applyOvergenSubstToTermAnnotations_go @@ var "subst" @@ var "cx" @@ var "inner")
-          (var "ann'")),
+          (Annotations.wrapAnnotationMap @@ var "ann'")),
       _Term_application>>: lambda "app" $
         Core.termApplication (Core.application
           (applyOvergenSubstToTermAnnotations_go @@ var "subst" @@ var "cx" @@ Core.applicationFunction (var "app"))
@@ -780,7 +780,7 @@ buildSubstFromAnnotations_go = def "buildSubstFromAnnotations_go" $
       (Just Maps.empty) [
       _Term_annotated>>: lambda "at" $
         "body" <~ Core.annotatedTermBody (var "at") $
-        "anns" <~ Core.annotatedTermAnnotation (var "at") $
+        "anns" <~ (Annotations.getAnnotationMap @@ Core.annotatedTermAnnotation (var "at")) $
         "bodySubst" <~ (buildSubstFromAnnotations_go @@ var "schemeVarSet" @@ var "g" @@ var "body") $
         "annSubst" <~ Maybes.cases (Maps.lookup Constants.keyType (var "anns"))
           Maps.empty
@@ -2806,7 +2806,7 @@ encodeTermInternal = def "encodeTermInternal" $
       -- TermAnnotated: accumulate annotation, recurse
       _Term_annotated>>: lambda "at" $
         encodeTermInternal @@ var "env"
-          @@ Lists.cons (Core.annotatedTermAnnotation (var "at")) (var "anns")
+          @@ Lists.cons (Annotations.getAnnotationMap @@ Core.annotatedTermAnnotation (var "at")) (var "anns")
           @@ var "tyapps"
           @@ (Core.annotatedTermBody (var "at")) @@ var "cx" @@ var "g",
 
@@ -5130,7 +5130,7 @@ tryInferFunctionType = def "tryInferFunctionType" $
             (Just nothing) [
             _Term_annotated>>: lambda "at" $
               Maybes.bind
-                (Maps.lookup (Constants.keyType) (Core.annotatedTermAnnotation (var "at")))
+                (Maps.lookup (Constants.keyType) (Annotations.getAnnotationMap @@ Core.annotatedTermAnnotation (var "at")))
                 (lambda "typeTerm" $
                   decodeTypeFromTerm @@ var "typeTerm"),
             _Term_lambda>>: lambda "_innerLam" $

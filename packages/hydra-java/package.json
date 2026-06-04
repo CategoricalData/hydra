@@ -1,6 +1,6 @@
 {
   "name": "hydra-java",
-  "description": "Java coder for Hydra: generates idiomatic Java code from Hydra type and term modules",
+  "description": "Java support for Hydra",
   "sourceLanguage": "haskell",
   "dependencies": ["hydra-kernel"]
 }

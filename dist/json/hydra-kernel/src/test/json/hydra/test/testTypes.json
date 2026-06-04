@@ -4,7 +4,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "firstClassType", "value": {"literal": {"boolean": true}}}],
+            "annotation": {"map": [{"key": {"variable": "firstClassType"}, "value": {"literal": {"boolean": true}}}]},
             "body": {
               "inject": {
                 "field": {
@@ -79,7 +79,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "firstClassType", "value": {"literal": {"boolean": true}}}],
+            "annotation": {"map": [{"key": {"variable": "firstClassType"}, "value": {"literal": {"boolean": true}}}]},
             "body": {
               "inject": {
                 "field": {
@@ -154,7 +154,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "firstClassType", "value": {"literal": {"boolean": true}}}],
+            "annotation": {"map": [{"key": {"variable": "firstClassType"}, "value": {"literal": {"boolean": true}}}]},
             "body": {
               "inject": {
                 "field": {
@@ -191,7 +191,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "firstClassType", "value": {"literal": {"boolean": true}}}],
+            "annotation": {"map": [{"key": {"variable": "firstClassType"}, "value": {"literal": {"boolean": true}}}]},
             "body": {
               "inject": {
                 "field": {
@@ -256,7 +256,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "firstClassType", "value": {"literal": {"boolean": true}}}],
+            "annotation": {"map": [{"key": {"variable": "firstClassType"}, "value": {"literal": {"boolean": true}}}]},
             "body": {
               "inject": {
                 "field": {
@@ -301,7 +301,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "firstClassType", "value": {"literal": {"boolean": true}}}],
+            "annotation": {"map": [{"key": {"variable": "firstClassType"}, "value": {"literal": {"boolean": true}}}]},
             "body": {
               "inject": {
                 "field": {
@@ -342,7 +342,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "firstClassType", "value": {"literal": {"boolean": true}}}],
+            "annotation": {"map": [{"key": {"variable": "firstClassType"}, "value": {"literal": {"boolean": true}}}]},
             "body": {
               "inject": {
                 "field": {
@@ -395,7 +395,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "firstClassType", "value": {"literal": {"boolean": true}}}],
+            "annotation": {"map": [{"key": {"variable": "firstClassType"}, "value": {"literal": {"boolean": true}}}]},
             "body": {
               "inject": {
                 "field": {
@@ -450,7 +450,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "firstClassType", "value": {"literal": {"boolean": true}}}],
+            "annotation": {"map": [{"key": {"variable": "firstClassType"}, "value": {"literal": {"boolean": true}}}]},
             "body": {
               "inject": {
                 "field": {
@@ -503,7 +503,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "firstClassType", "value": {"literal": {"boolean": true}}}],
+            "annotation": {"map": [{"key": {"variable": "firstClassType"}, "value": {"literal": {"boolean": true}}}]},
             "body": {
               "inject": {
                 "field": {
@@ -578,7 +578,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "firstClassType", "value": {"literal": {"boolean": true}}}],
+            "annotation": {"map": [{"key": {"variable": "firstClassType"}, "value": {"literal": {"boolean": true}}}]},
             "body": {
               "inject": {
                 "field": {
@@ -633,7 +633,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "firstClassType", "value": {"literal": {"boolean": true}}}],
+            "annotation": {"map": [{"key": {"variable": "firstClassType"}, "value": {"literal": {"boolean": true}}}]},
             "body": {
               "inject": {
                 "field": {
@@ -696,7 +696,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "firstClassType", "value": {"literal": {"boolean": true}}}],
+            "annotation": {"map": [{"key": {"variable": "firstClassType"}, "value": {"literal": {"boolean": true}}}]},
             "body": {
               "inject": {
                 "field": {
@@ -749,7 +749,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "firstClassType", "value": {"literal": {"boolean": true}}}],
+            "annotation": {"map": [{"key": {"variable": "firstClassType"}, "value": {"literal": {"boolean": true}}}]},
             "body": {
               "inject": {
                 "field": {
@@ -787,7 +787,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "firstClassType", "value": {"literal": {"boolean": true}}}],
+            "annotation": {"map": [{"key": {"variable": "firstClassType"}, "value": {"literal": {"boolean": true}}}]},
             "body": {
               "inject": {
                 "field": {
@@ -842,7 +842,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "firstClassType", "value": {"literal": {"boolean": true}}}],
+            "annotation": {"map": [{"key": {"variable": "firstClassType"}, "value": {"literal": {"boolean": true}}}]},
             "body": {
               "inject": {
                 "field": {
@@ -865,7 +865,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "firstClassType", "value": {"literal": {"boolean": true}}}],
+            "annotation": {"map": [{"key": {"variable": "firstClassType"}, "value": {"literal": {"boolean": true}}}]},
             "body": {
               "inject": {
                 "field": {
@@ -961,7 +961,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "firstClassType", "value": {"literal": {"boolean": true}}}],
+            "annotation": {"map": [{"key": {"variable": "firstClassType"}, "value": {"literal": {"boolean": true}}}]},
             "body": {
               "inject": {
                 "field": {
@@ -1011,7 +1011,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "firstClassType", "value": {"literal": {"boolean": true}}}],
+            "annotation": {"map": [{"key": {"variable": "firstClassType"}, "value": {"literal": {"boolean": true}}}]},
             "body": {
               "inject": {
                 "field": {
@@ -1099,7 +1099,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "firstClassType", "value": {"literal": {"boolean": true}}}],
+            "annotation": {"map": [{"key": {"variable": "firstClassType"}, "value": {"literal": {"boolean": true}}}]},
             "body": {
               "inject": {
                 "field": {
@@ -1150,7 +1150,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "firstClassType", "value": {"literal": {"boolean": true}}}],
+            "annotation": {"map": [{"key": {"variable": "firstClassType"}, "value": {"literal": {"boolean": true}}}]},
             "body": {
               "inject": {
                 "field": {
@@ -1233,7 +1233,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "firstClassType", "value": {"literal": {"boolean": true}}}],
+            "annotation": {"map": [{"key": {"variable": "firstClassType"}, "value": {"literal": {"boolean": true}}}]},
             "body": {
               "inject": {
                 "field": {"name": "record", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.FieldType"}}}},
@@ -1249,7 +1249,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "firstClassType", "value": {"literal": {"boolean": true}}}],
+            "annotation": {"map": [{"key": {"variable": "firstClassType"}, "value": {"literal": {"boolean": true}}}]},
             "body": {
               "inject": {
                 "field": {
@@ -1300,7 +1300,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "firstClassType", "value": {"literal": {"boolean": true}}}],
+            "annotation": {"map": [{"key": {"variable": "firstClassType"}, "value": {"literal": {"boolean": true}}}]},
             "body": {
               "inject": {
                 "field": {
@@ -1337,7 +1337,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "firstClassType", "value": {"literal": {"boolean": true}}}],
+            "annotation": {"map": [{"key": {"variable": "firstClassType"}, "value": {"literal": {"boolean": true}}}]},
             "body": {
               "inject": {
                 "field": {
@@ -1382,7 +1382,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "firstClassType", "value": {"literal": {"boolean": true}}}],
+            "annotation": {"map": [{"key": {"variable": "firstClassType"}, "value": {"literal": {"boolean": true}}}]},
             "body": {
               "inject": {
                 "field": {
@@ -1412,7 +1412,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "firstClassType", "value": {"literal": {"boolean": true}}}],
+            "annotation": {"map": [{"key": {"variable": "firstClassType"}, "value": {"literal": {"boolean": true}}}]},
             "body": {
               "inject": {
                 "field": {
@@ -1435,7 +1435,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "firstClassType", "value": {"literal": {"boolean": true}}}],
+            "annotation": {"map": [{"key": {"variable": "firstClassType"}, "value": {"literal": {"boolean": true}}}]},
             "body": {
               "inject": {
                 "field": {
@@ -1458,7 +1458,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "firstClassType", "value": {"literal": {"boolean": true}}}],
+            "annotation": {"map": [{"key": {"variable": "firstClassType"}, "value": {"literal": {"boolean": true}}}]},
             "body": {
               "inject": {
                 "field": {
@@ -1481,7 +1481,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "firstClassType", "value": {"literal": {"boolean": true}}}],
+            "annotation": {"map": [{"key": {"variable": "firstClassType"}, "value": {"literal": {"boolean": true}}}]},
             "body": {
               "inject": {
                 "field": {
@@ -1504,7 +1504,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "firstClassType", "value": {"literal": {"boolean": true}}}],
+            "annotation": {"map": [{"key": {"variable": "firstClassType"}, "value": {"literal": {"boolean": true}}}]},
             "body": {
               "inject": {
                 "field": {
@@ -1522,7 +1522,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "firstClassType", "value": {"literal": {"boolean": true}}}],
+            "annotation": {"map": [{"key": {"variable": "firstClassType"}, "value": {"literal": {"boolean": true}}}]},
             "body": {
               "inject": {
                 "field": {
@@ -1559,7 +1559,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "firstClassType", "value": {"literal": {"boolean": true}}}],
+            "annotation": {"map": [{"key": {"variable": "firstClassType"}, "value": {"literal": {"boolean": true}}}]},
             "body": {
               "inject": {
                 "field": {
@@ -1582,7 +1582,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "firstClassType", "value": {"literal": {"boolean": true}}}],
+            "annotation": {"map": [{"key": {"variable": "firstClassType"}, "value": {"literal": {"boolean": true}}}]},
             "body": {
               "inject": {
                 "field": {
@@ -1605,7 +1605,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "firstClassType", "value": {"literal": {"boolean": true}}}],
+            "annotation": {"map": [{"key": {"variable": "firstClassType"}, "value": {"literal": {"boolean": true}}}]},
             "body": {
               "inject": {
                 "field": {
@@ -1623,7 +1623,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "firstClassType", "value": {"literal": {"boolean": true}}}],
+            "annotation": {"map": [{"key": {"variable": "firstClassType"}, "value": {"literal": {"boolean": true}}}]},
             "body": {
               "inject": {
                 "field": {
@@ -1646,7 +1646,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "firstClassType", "value": {"literal": {"boolean": true}}}],
+            "annotation": {"map": [{"key": {"variable": "firstClassType"}, "value": {"literal": {"boolean": true}}}]},
             "body": {
               "inject": {
                 "field": {
