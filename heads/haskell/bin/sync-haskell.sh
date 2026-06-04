@@ -234,23 +234,11 @@ echo "  (No post-processing needed — all patches eliminated, see #307.)"
 # to the head's source-dirs as well would double-compile them; package.yaml does
 # not.)
 echo ""
-echo "  Overlaying hand-written distribution-package source onto dist/haskell/..."
-
-# hydra-kernel runtime: MERGE onto the generated kernel dist (it shares the
-# Hydra.Dsl.* namespace with generated modules, so merge — never wipe — the dir).
-KERNEL_RUNTIME_SRC="$HYDRA_ROOT_DIR/overlay/haskell/hydra-kernel/src/main/haskell"
-KERNEL_DST="$HYDRA_ROOT_DIR/dist/haskell/hydra-kernel/src/main/haskell"
-mkdir -p "$KERNEL_DST"
-cp -R "$KERNEL_RUNTIME_SRC"/. "$KERNEL_DST/"
-echo "    hydra-kernel: overlaid $(find "$KERNEL_RUNTIME_SRC" -name '*.hs' | wc -l | tr -d ' ') hand-written runtime module(s)"
-
-# hydra umbrella: its own dedicated package dir (no generated content to merge).
-UMBRELLA_SRC="$HYDRA_ROOT_DIR/overlay/haskell/hydra/src/main/haskell"
-UMBRELLA_DST="$HYDRA_ROOT_DIR/dist/haskell/hydra/src/main/haskell"
-mkdir -p "$UMBRELLA_DST"
-rm -rf "$UMBRELLA_DST"/*
-cp -R "$UMBRELLA_SRC"/. "$UMBRELLA_DST/"
-echo "    hydra: copied $(find "$UMBRELLA_DST" -name '*.hs' | wc -l | tr -d ' ') module(s)"
+# Overlay hand-written runtime from overlay/haskell/ onto dist/haskell/. Extracted
+# into a standalone script (#418 fix) so bin/sync.sh can run the same overlay BEFORE
+# its Phase 0 stack build — sync-haskell.sh's own invocation here was too late for
+# that earlier build. Idempotent (cp -R), so calling it in both places is safe.
+"$SCRIPT_DIR/overlay-kernel-runtime.sh"
 
 # Rebuild so subsequent steps (test, lexicon) pick up the new Haskell dist.
 echo ""
