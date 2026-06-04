@@ -1,30 +1,34 @@
 #!/usr/bin/env bash
 # Pre-release preparation script for Hydra.
 #
-# Verifies that all implementations are consistent and passing, then
-# produces upload-ready release artifacts.
+# Verifies that the RELEASED SET is consistent and passing, then produces
+# upload-ready release artifacts.
+#
+# Release gate vs. quality check (the cohesive principle, #418): the script
+# HARD-FAILS (blocks the release) only on artifacts that 0.16.0 actually ships —
+# Haskell (Hackage: hydra-kernel/hydra-haskell/hydra), Java (Maven Central, via
+# the hydra-java rollup), Python (PyPI/conda) — plus version sync, the JSON
+# kernel, and lexicon freshness. Targets that are NOT released yet (Scala, the
+# Lisp dialects, and the Java bindings under bindings/java/) are run as
+# non-blocking QUALITY CHECKS: a failure there is a WARNING, not an ERROR. When
+# one of those becomes a released artifact, promote its step from WARNING to
+# ERROR (gate).
 #
 # Steps performed:
-#   1.  Version synchronization across all implementations
-#   2.  Haskell tests (the hydra-test Stack target covers hydra-kernel
-#       plus the hydra-ext content, since hydra-ext is a Hydra package
-#       shipped as part of the hydra Stack library after #290)
-#   3.  Java build and tests
-#   4.  Python tests and code quality
-#   5.  Scala build and tests
-#   6.  Lisp tests (Clojure, Common Lisp, Emacs Lisp, Scheme)
-#   7.  JSON kernel verification (round-trips correctly against the
-#       in-memory kernel)
-#   8.  Lexicon freshness (docs/hydra-lexicon.txt matches the current
-#       Haskell kernel; release must not ship a stale lexicon)
-#   9.  Hackage sdist case-sensitivity check (assembles cleanly on a
-#       case-sensitive filesystem — catches case-clashes that macOS
-#       HFS+/APFS hides locally — and passes `cabal v2-build --dry-run`)
-#   10. Haddock-for-Hackage docs build (produces
-#       hydra-<version>-docs.tar.gz ready for `cabal upload`)
+#   1.  Version synchronization across all implementations                 [gate]
+#   2.  Haskell tests (hydra-test Stack target: hydra-kernel + hydra-ext)  [gate]
+#   3.  Java: hydra-java rollup tests [gate]; bindings build [quality check]
+#   4.  Python tests [gate] + ruff code quality [quality check]
+#   5.  Scala build and tests                                    [quality check]
+#   6.  Lisp tests (Clojure, Common Lisp, Emacs Lisp, Scheme)    [quality check]
+#   7.  JSON kernel verification (round-trips vs the in-memory kernel)     [gate]
+#   8.  Lexicon freshness (docs/hydra-lexicon.txt matches the kernel)      [gate]
+#   9.  Per-package Hackage sdist case-sensitivity check (assembles cleanly
+#       on a case-sensitive filesystem + `cabal v2-build --dry-run`)       [gate]
+#   10. Per-package Haddock-for-Hackage docs build (ready for `cabal upload`)[gate]
 #
-# On success, the upload-ready artifacts (sdist + docs tarball) land in
-# release-artifacts/ at the repo root. Logs land in verify-logs/.
+# On success, the upload-ready per-package artifacts (sdists + docs tarballs)
+# land in release-artifacts/ at the repo root. Logs land in verify-logs/.
 #
 # Prerequisites:
 #   - Stack, Java 11+, Python 3.12+, uv, sbt, Clojure, SBCL, Emacs, Guile,
@@ -144,17 +148,36 @@ else
 fi
 
 # --- Step 3: Java build and tests ---
-step 3 $TOTAL_STEPS "Running Java build and tests"
+# RELEASE GATE: only the released Java artifacts are gated. The released set is
+# the hydra-java rollup (which covers hydra-kernel/hydra-java + the per-package
+# dist trees published to Maven Central). The bindings under bindings/java/
+# (hydra-rdf4j, hydra-neo4j, hydra-pg-dsl) are NOT released artifacts yet and have
+# no release solution, so building them is a non-blocking quality check, not a
+# gate. They are wired as subprojects of heads/java only for development; bare
+# `./gradlew test` would aggregate them. We gate on `:hydra-java:test`. When a
+# binding graduates to a released artifact, move it into the gate below. (#418)
+step 3 $TOTAL_STEPS "Running Java build and tests (released set)"
 echo ""
 
 cd "$HYDRA_ROOT/heads/java"
-if ./gradlew test 2>&1 | tee "$LOG_DIR/java.log"; then
+if ./gradlew :hydra-java:test 2>&1 | tee "$LOG_DIR/java.log"; then
     echo ""
-    echo "  OK: Java tests passed"
+    echo "  OK: Java (hydra-java rollup) tests passed"
 else
     echo ""
     echo "  FAIL: Java tests failed (see verify-logs/java.log)"
     ERRORS=$((ERRORS + 1))
+fi
+
+# Non-blocking quality check: the bindings (not yet released artifacts).
+if ./gradlew :hydra-rdf4j:test :hydra-neo4j:test :hydra-pg-dsl:test 2>&1 \
+     | tee "$LOG_DIR/java-bindings.log" >/dev/null; then
+    echo "  OK: Java bindings build/test passed (not a release gate)"
+else
+    echo "  WARNING: Java bindings build/test failed — not a release gate, but"
+    echo "           see verify-logs/java-bindings.log (bindings have no release"
+    echo "           solution yet; tracked separately)"
+    WARNINGS=$((WARNINGS + 1))
 fi
 
 # --- Step 4: Python tests and code quality ---
@@ -186,8 +209,12 @@ else
     WARNINGS=$((WARNINGS + 1))
 fi
 
-# --- Step 5: Scala build and tests ---
-step 5 $TOTAL_STEPS "Running Scala build and tests"
+# --- Step 5: Scala build and tests (quality check, NOT a release gate) ---
+# Scala is not a released artifact (nothing is published to Maven Central / any
+# registry for the Scala target), so a Scala failure is a non-blocking WARNING,
+# not a release gate. When Scala becomes a released target, promote this to a
+# gate (ERRORS). (#418)
+step 5 $TOTAL_STEPS "Running Scala build and tests (quality check)"
 echo ""
 
 cd "$HYDRA_ROOT/packages/hydra-scala"
@@ -196,14 +223,19 @@ if sbt test 2>&1 | tee "$LOG_DIR/scala.log"; then
     echo "  OK: Scala tests passed"
 else
     echo ""
-    echo "  FAIL: Scala tests failed (see verify-logs/scala.log)"
-    ERRORS=$((ERRORS + 1))
+    echo "  WARNING: Scala tests failed (not a release gate; see verify-logs/scala.log)"
+    WARNINGS=$((WARNINGS + 1))
 fi
 
-# --- Step 6: Lisp tests ---
-# Each dialect runs through the unified packages/hydra-lisp/bin/run-tests.sh
-# runner. Per-dialect run-tests.sh scripts no longer exist post-#290.
-step 6 $TOTAL_STEPS "Running Lisp tests"
+# --- Step 6: Lisp tests (quality check, NOT a release gate) ---
+# The Lisp dialects (Clojure, Common Lisp, Emacs Lisp, Scheme) are not released
+# artifacts (nothing published to Clojars / any registry), so failures here are
+# non-blocking WARNINGS, not release gates. Each dialect runs through the unified
+# packages/hydra-lisp/bin/run-tests.sh runner. (#418)
+# NOTE: the runner is known to under-report (it can exit 0 despite individual
+# test failures); since Lisp is non-gating that does not affect the release
+# decision, but it is tracked separately as a runner bug.
+step 6 $TOTAL_STEPS "Running Lisp tests (quality check)"
 echo ""
 
 cd "$HYDRA_ROOT"
@@ -214,8 +246,8 @@ for dialect in clojure common-lisp emacs-lisp scheme; do
     if bash "$LISP_RUNNER" "$dialect" 2>&1 | tee "$LOG_DIR/${dialect}.log" | tail -3; then
         echo "  OK: $dialect tests passed"
     else
-        echo "  FAIL: $dialect tests failed (see verify-logs/${dialect}.log)"
-        ERRORS=$((ERRORS + 1))
+        echo "  WARNING: $dialect tests failed (not a release gate; see verify-logs/${dialect}.log)"
+        WARNINGS=$((WARNINGS + 1))
     fi
     echo ""
 done
@@ -261,20 +293,24 @@ else
 fi
 rm -f "$LEXICON_BACKUP"
 
-# --- Step 9: Hackage sdist + case-sensitivity check ---
-# The Hackage build infrastructure runs on Linux (case-sensitive ext4).
-# macOS HFS+/APFS is case-insensitive by default, which masks duplicate
-# directories that differ only in case. We assemble the sdist on a
-# case-sensitive volume so any such clash surfaces, then run
-# cabal v2-build --dry-run to catch GHC-28623 ("file name does not match
-# module name") errors without the full compile cost.
-step 9 $TOTAL_STEPS "Verifying Hackage sdist on case-sensitive filesystem"
+# --- Step 9: Per-package Hackage sdists + case-sensitivity check ---
+# Hydra now ships per-package Hackage distributions (hydra-kernel, hydra-haskell,
+# and the hydra umbrella) rather than one monolithic `hydra` sdist (#418). We
+# assemble all three (leaves first) on a case-sensitive volume — the Hackage
+# build infra runs on Linux/ext4, and macOS HFS+/APFS is case-insensitive by
+# default, masking case-only directory clashes — then extract and run
+# `cabal v2-build --dry-run` per package to catch GHC-28623 module/path
+# case-mismatches without the full compile cost.
+step 9 $TOTAL_STEPS "Verifying per-package Hackage sdists on case-sensitive filesystem"
 echo ""
 
 cd "$HYDRA_ROOT"
 SDIST_LOG="$LOG_DIR/hackage-sdist.log"
 SDIST_OK=true
 SDIST_WORK=""
+
+# The 0.16.0 publish set (must match heads/haskell/bin/publish-hackage.sh).
+HACKAGE_PKGS=(hydra-kernel hydra-haskell hydra)
 
 case "$(uname -s)" in
     Darwin)
@@ -286,10 +322,9 @@ case "$(uname -s)" in
             rm -rf "$SDIST_MOUNT"
         }
         trap cleanup_sdist_dmg EXIT
-        # 1500m holds the assembled sdist, the extracted tree, the
-        # cabal dist-newstyle build directory, and the Haddock-for-Hackage
-        # output (the hyperlinked-source HTML alone is ~550 MB).
-        if ! hdiutil create -size 1500m -fs "Case-sensitive HFS+" \
+        # 2000m holds three assembled sdists, their extracted trees, the
+        # cabal dist-newstyle build dirs, and the per-package Haddock output.
+        if ! hdiutil create -size 2000m -fs "Case-sensitive HFS+" \
              -volname HydraSdist "$SDIST_DMG" -quiet >"$SDIST_LOG" 2>&1; then
             echo "  FAIL: Could not create case-sensitive disk image (see verify-logs/hackage-sdist.log)"
             ERRORS=$((ERRORS + 1))
@@ -308,77 +343,85 @@ case "$(uname -s)" in
         ;;
 esac
 
+# Assemble all three sdists (leaves first) + run the dependency-closure guard.
 if [ "$SDIST_OK" = true ]; then
-    if ! "$HYDRA_ROOT/heads/haskell/bin/assemble-hackage-sdist.sh" \
+    if ! "$HYDRA_ROOT/heads/haskell/bin/publish-hackage.sh" \
          --out "$SDIST_WORK" >>"$SDIST_LOG" 2>&1; then
-        echo "  FAIL: assemble-hackage-sdist.sh failed (see verify-logs/hackage-sdist.log)"
+        echo "  FAIL: publish-hackage.sh assemble failed (see verify-logs/hackage-sdist.log)"
         ERRORS=$((ERRORS + 1))
         SDIST_OK=false
     fi
 fi
 
-SDIST_TARBALL="$SDIST_WORK/hydra-${EXPECTED}.tar.gz"
-SDIST_EXTRACT="$SDIST_WORK/hydra-${EXPECTED}"
-
+# Per-package: extract + cabal dry-run. The dependents pin hydra-kernel ==
+# <version> which is not yet on Hackage, so point cabal at the locally extracted
+# sibling sdists via a cabal.project that lists all extracted package dirs.
 if [ "$SDIST_OK" = true ]; then
-    if ! ( cd "$SDIST_WORK" && tar -xzf "hydra-${EXPECTED}.tar.gz" ) \
-         >>"$SDIST_LOG" 2>&1; then
-        echo "  FAIL: Could not extract assembled sdist (see verify-logs/hackage-sdist.log)"
-        ERRORS=$((ERRORS + 1))
-        SDIST_OK=false
+    PROJECT_DIR="$SDIST_WORK/project"
+    mkdir -p "$PROJECT_DIR"
+    PROJECT_PKG_LINES=""
+    for pkg in "${HACKAGE_PKGS[@]}"; do
+        if ! ( cd "$SDIST_WORK" && tar -xzf "$pkg-${EXPECTED}.tar.gz" ) >>"$SDIST_LOG" 2>&1; then
+            echo "  FAIL: Could not extract $pkg sdist (see verify-logs/hackage-sdist.log)"
+            ERRORS=$((ERRORS + 1)); SDIST_OK=false; break
+        fi
+        PROJECT_PKG_LINES="$PROJECT_PKG_LINES  ../$pkg-${EXPECTED}/\n"
+    done
+    if [ "$SDIST_OK" = true ]; then
+        printf "packages:\n%b" "$PROJECT_PKG_LINES" > "$PROJECT_DIR/cabal.project"
+        if ( cd "$PROJECT_DIR" && cabal v2-build --dry-run all -w ghc-9.10.2 ) >>"$SDIST_LOG" 2>&1; then
+            echo "  OK: all ${#HACKAGE_PKGS[@]} per-package sdists resolve cleanly on case-sensitive filesystem"
+            for pkg in "${HACKAGE_PKGS[@]}"; do
+                cp "$SDIST_WORK/$pkg-${EXPECTED}.tar.gz" "$ARTIFACT_DIR/$pkg-${EXPECTED}.tar.gz"
+            done
+        else
+            echo "  FAIL: cabal v2-build --dry-run reported errors against the assembled"
+            echo "        per-package sdists (see verify-logs/hackage-sdist.log)"
+            ERRORS=$((ERRORS + 1)); SDIST_OK=false
+        fi
     fi
 fi
 
-if [ "$SDIST_OK" = true ]; then
-    if ( cd "$SDIST_EXTRACT" \
-         && cabal v2-build --dry-run all -w ghc-9.10.2 ) \
-         >>"$SDIST_LOG" 2>&1; then
-        echo "  OK: Hackage sdist resolves cleanly on case-sensitive filesystem"
-        # Stage the validated sdist for upload.
-        cp "$SDIST_TARBALL" "$ARTIFACT_DIR/hydra-${EXPECTED}.tar.gz"
-    else
-        echo "  FAIL: cabal v2-build --dry-run reported errors against the assembled"
-        echo "        sdist (likely module-name/path case-mismatch; see"
-        echo "        verify-logs/hackage-sdist.log)"
-        ERRORS=$((ERRORS + 1))
-        SDIST_OK=false
-    fi
-fi
-
-# --- Step 10: Haddock-for-Hackage docs build ---
-# Hackage's auto-doc-builder is best-effort and frequently fails on
-# packages with many transitive deps. We pre-build the docs from the
-# already-validated sdist so we can upload them via
-# `cabal upload --documentation --publish` after release.
-step 10 $TOTAL_STEPS "Building Haddock-for-Hackage docs"
+# --- Step 10: Per-package Haddock-for-Hackage docs build ---
+# Hackage's auto-doc-builder is best-effort; pre-build docs per package so they
+# can be uploaded via `cabal upload --documentation --publish` after release.
+step 10 $TOTAL_STEPS "Building per-package Haddock-for-Hackage docs"
 echo ""
 
 DOC_LOG="$LOG_DIR/haddock.log"
 DOC_OK=false
 
 if [ "$SDIST_OK" = true ]; then
-    if ( cd "$SDIST_EXTRACT" \
-         && cabal v2-haddock --haddock-for-hackage --enable-doc \
-            -w ghc-9.10.2 all ) >"$DOC_LOG" 2>&1; then
-        DOC_TARBALL="$(find "$SDIST_EXTRACT/dist-newstyle" \
-            -name "hydra-${EXPECTED}-docs.tar.gz" | head -n 1)"
-        if [ -n "$DOC_TARBALL" ] && [ -f "$DOC_TARBALL" ]; then
-            cp "$DOC_TARBALL" "$ARTIFACT_DIR/hydra-${EXPECTED}-docs.tar.gz"
-            DOC_SIZE_BYTES="$(stat -f%z "$ARTIFACT_DIR/hydra-${EXPECTED}-docs.tar.gz" 2>/dev/null \
-                || stat -c%s "$ARTIFACT_DIR/hydra-${EXPECTED}-docs.tar.gz")"
-            DOC_SIZE_MB=$(( DOC_SIZE_BYTES / 1024 / 1024 ))
-            echo "  OK: Haddock-for-Hackage docs built (${DOC_SIZE_MB} MB)"
-            DOC_OK=true
+    DOC_FAIL=false
+    DOC_BUILT=0
+    : > "$DOC_LOG"
+    for pkg in "${HACKAGE_PKGS[@]}"; do
+        PKG_EXTRACT="$SDIST_WORK/$pkg-${EXPECTED}"
+        if ( cd "$SDIST_WORK/project" \
+             && cabal v2-haddock --haddock-for-hackage --enable-doc \
+                -w ghc-9.10.2 "$pkg" ) >>"$DOC_LOG" 2>&1; then
+            DOC_TARBALL="$(find "$SDIST_WORK/project/dist-newstyle" \
+                -name "$pkg-${EXPECTED}-docs.tar.gz" | head -n 1)"
+            if [ -n "$DOC_TARBALL" ] && [ -f "$DOC_TARBALL" ]; then
+                cp "$DOC_TARBALL" "$ARTIFACT_DIR/$pkg-${EXPECTED}-docs.tar.gz"
+                echo "  OK: $pkg Haddock docs built"
+                DOC_BUILT=$((DOC_BUILT + 1))
+            else
+                echo "  FAIL: $pkg haddock succeeded but produced no docs tarball (see verify-logs/haddock.log)"
+                DOC_FAIL=true
+            fi
         else
-            echo "  FAIL: cabal v2-haddock succeeded but produced no docs tarball (see verify-logs/haddock.log)"
-            ERRORS=$((ERRORS + 1))
+            echo "  FAIL: $pkg cabal v2-haddock failed (see verify-logs/haddock.log)"
+            DOC_FAIL=true
         fi
-    else
-        echo "  FAIL: cabal v2-haddock failed (see verify-logs/haddock.log)"
+    done
+    if [ "$DOC_FAIL" = true ]; then
         ERRORS=$((ERRORS + 1))
+    elif [ "$DOC_BUILT" -eq "${#HACKAGE_PKGS[@]}" ]; then
+        DOC_OK=true
     fi
 else
-    echo "  SKIP: skipped because Step 9 failed; haddock build needs a buildable sdist"
+    echo "  SKIP: skipped because Step 9 failed; haddock build needs buildable sdists"
     ERRORS=$((ERRORS + 1))
 fi
 
@@ -395,20 +438,29 @@ if [ $ERRORS -eq 0 ]; then
     echo "All checks passed! Release artifacts are ready in:"
     echo "  $ARTIFACT_DIR"
     echo ""
-    echo "  - hydra-${EXPECTED}.tar.gz       (Hackage sdist)"
-    if [ "$DOC_OK" = true ]; then
-        echo "  - hydra-${EXPECTED}-docs.tar.gz  (Haddock-for-Hackage docs)"
-    fi
+    for pkg in "${HACKAGE_PKGS[@]}"; do
+        echo "  - $pkg-${EXPECTED}.tar.gz       (Hackage sdist)"
+        if [ "$DOC_OK" = true ]; then
+            echo "  - $pkg-${EXPECTED}-docs.tar.gz  (Haddock-for-Hackage docs)"
+        fi
+    done
     echo ""
     echo "Next steps:"
     echo "  1. Update CHANGELOG.md"
     echo "  2. Commit all changes"
     echo "  3. Tag: git tag $EXPECTED -m '$EXPECTED release' HEAD"
     echo "  4. Push: git push && git push --tags"
-    echo "  5. Publish:"
-    echo "       cabal upload --publish $ARTIFACT_DIR/hydra-${EXPECTED}.tar.gz"
-    echo "       cabal upload --documentation --publish \\"
-    echo "                    $ARTIFACT_DIR/hydra-${EXPECTED}-docs.tar.gz"
+    echo "  5. Publish (LEAVES FIRST — order matters; the umbrella pins its siblings):"
+    echo "       heads/haskell/bin/publish-hackage.sh --publish"
+    echo "     or manually, in this order:"
+    for pkg in "${HACKAGE_PKGS[@]}"; do
+        echo "       cabal upload --publish $ARTIFACT_DIR/$pkg-${EXPECTED}.tar.gz"
+    done
+    if [ "$DOC_OK" = true ]; then
+        for pkg in "${HACKAGE_PKGS[@]}"; do
+            echo "       cabal upload --documentation --publish $ARTIFACT_DIR/$pkg-${EXPECTED}-docs.tar.gz"
+        done
+    fi
     echo "       (then Maven Central and conda-forge per Release-process.md)"
 else
     echo "FAIL: $ERRORS check(s) failed. Please fix before releasing."

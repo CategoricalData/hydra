@@ -316,9 +316,14 @@ ordering or the upstream cache instead.
 Three categories of files coexist under `dist/<lang>/<pkg>/src/{main,test}/<lang>/`:
 
 1. Generator output from `bootstrap-from-json` (most files).
-2. Hand-written runtime support copied in by `copy-kernel-runtime.sh`
-   (Java + Python only): `hydra/Adapters.java`, `hydra/util/...`,
-   `hydra/dsl/...`, etc.
+2. Hand-written runtime support **overlaid in** from the top-level `overlay/<lang>/<pkg>/`
+   tree (#418): for Haskell by `sync-haskell.sh`, for Java/Python by `copy-kernel-runtime.sh`
+   (Step 0 of `assemble-distribution.sh hydra-kernel`). E.g. Java `hydra/Adapters.java`,
+   `hydra/util/...`, `hydra/dsl/...`; Haskell `Hydra/Settings.hs`, `Hydra/Haskell/Lib/*`.
+   Canonical edit point is `overlay/<lang>/`, NOT `dist/` (and no longer `heads/<lang>/src`
+   for the big three). TypeScript still copies from `heads/typescript/src` pending migration.
+   NOTE: for Haskell, `dist/haskell/` is tracked but the overlaid copies are GITIGNORED
+   (canonical lives in `overlay/haskell/`); for Java/Python the whole `dist/<lang>/` is gitignored.
 3. Hand-written skip-emit stubs whose namespace appears in
    `testSkipEmitModuleNames` (currently `hydra.test.testEnv`):
    `dist/haskell/.../Hydra/Test/TestEnv.hs` and per-Lisp-dialect
@@ -331,6 +336,30 @@ three categories alive. The mechanism for protecting (2) is the
 `--keep-paths-from` manifest emitted by `copy-kernel-runtime.sh --manifest`;
 the mechanism for (3) is to include skip-emit namespaces in the keep set
 (via the pre-filter `testModsForKeep` in bootstrap-from-json).
+
+### The head must NOT compile the overlay runtime directly (#418)
+
+The hand-written kernel runtime for the big three lives in `overlay/<lang>/hydra-kernel/`
+and is overlaid into `dist/<lang>/hydra-kernel/` by sync. **A head must compile that runtime
+from exactly one place — the `dist/` copy — never also from `overlay/`.** Two consequences if
+you forget:
+
+- **Double-compile now.** The Haskell head's `package.yaml` already lists
+  `../../dist/haskell/hydra-kernel/src/main/haskell`. Adding `overlay/haskell/hydra-kernel/...`
+  as a *second* source-dir makes GHC see every runtime module twice ("module appears in multiple
+  files"). hpack source-dirs are **directory-granular** (no per-file include/exclude), which is
+  exactly why the runtime had to be relocated into a dedicated `overlay/` tree rather than
+  excluded in place — the trick Java/Python use (Gradle/hatch file-level `include` lists in the
+  rollup) does not translate to hpack.
+- **Dependency conflict later.** When a head switches to a versioned `hydra-kernel-0.16.x`
+  package dependency (#370), that dependency *provides* `Hydra.Settings`, `Hydra.Haskell.Lib.*`,
+  etc. If the head also compiled a local copy, you get a multiple-provider clash. Compiling only
+  from the dist copy keeps the switchover conflict-free.
+
+Corollary for the **bootstrap** (`demos/bootstrapping/bin/setup-<lang>-target.sh`): these stitch
+a flat single-tree build, so they must overlay the runtime from `overlay/<lang>/hydra-kernel/`
+(not from `heads/<lang>/src`, which no longer holds it for the big three). Forgetting this is a
+silent "Could not find module Hydra.Settings / hydra.lib.* not found" at bootstrap compile time.
 
 ### `moduleFilePaths` is target-specific; Java is not 1-to-1
 
@@ -383,13 +412,16 @@ and sync passes Phase 1, expect a second wave of issues in:
   contains hand-written helpers like `generation.py:228` (filter on
   `m.namespace.value`) and `bootstrap.py` that all need the field
   rename — these are checked at *use* time, not import time, so they
-  pass Python import but break Phase 1.
+  pass Python import but break Phase 1. (Since #418 the hand-written
+  kernel *runtime* — `hydra/{lib,dsl,sources}`, `tools.py` — lives in
+  `overlay/python/hydra-kernel/`, not `heads/python/src`; grep both.)
 
 The full sync cycle for cross-host C3 took ~10 iterations before all
 runtime callsites were caught; each iteration was a 15-minute sync
 exposing the next callsite. After the schema-side sync passes Phase 1,
 proactively grep across `packages/hydra-{java,python,scala}/src/`,
-`heads/{java,python,scala}/`, and `bin/` for the OLD field/type name
+`heads/{java,python,scala}/`, `overlay/{java,python,haskell}/` (the relocated
+hand-written kernel runtime, #418), and `bin/` for the OLD field/type name
 before relying on sync to surface it.
 
 A separate chicken-and-egg surfaces on **warm trees** after the rename
@@ -635,7 +667,7 @@ unification. Built-in primitives like `hydra.lib.maps.lookup` carry
 {tag: "nothing"}`) and inference still *runs*, but emits the wrong scheme
 (no constraints) for downstream uses — tests like `(forall t0. (ordering t0)
 => ...)` fail because the actual scheme is missing the constraint clause. See
-`heads/java/src/main/java/hydra/dsl/Types.java` (`ORD`, `EQ`, `NONE`,
+`overlay/java/hydra-kernel/src/main/java/hydra/dsl/Types.java` (`ORD`, `EQ`, `NONE`,
 `constrained1..4`, `schemeOrd`, `schemeEq`) for the canonical per-primitive
 constraint assignments to mirror.
 
