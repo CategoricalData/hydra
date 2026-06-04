@@ -214,6 +214,14 @@ echo ""
 # and one-time cost on cold CI (amortized by actions/cache on ~/.stack).
 # Unconditional ensures correctness.
 
+# The head compiles dist/haskell/hydra-kernel/ (a package.yaml source-dir) which
+# includes hand-written runtime modules (Hydra.Haskell.Lib.*, the umbrella Hydra.hs)
+# that live in the top-level overlay/haskell/ tree (#418). The dist Lib/ location is
+# gitignored and empty on a cold tree, so they must be overlaid into dist/ BEFORE
+# this stack build — otherwise GHC can't find them. (sync-haskell.sh's own overlay
+# step runs in Phase 1, too late for Phase 0; this is the fix for that ordering.)
+"$HYDRA_HASKELL_DIR/bin/overlay-kernel-runtime.sh"
+
 (cd "$HYDRA_HASKELL_DIR" && stack build \
     hydra:exe:update-json-main \
     hydra:exe:update-json-test \
@@ -413,6 +421,13 @@ for H in $HOSTS; do
             ;;
         scala)
             STATIC_DEPS="hydra-haskell hydra-java hydra-python"
+            ;;
+        typescript)
+            # Generated dist/typescript/hydra-scala/.../serde.ts imports
+            # '../java/serde.js' — TS host's hydra-scala output depends on
+            # hydra-java in dist/typescript/. Without this pre-assembly,
+            # ts-to-scala fails immediately with "Cannot find module".
+            STATIC_DEPS="hydra-java"
             ;;
         *)
             STATIC_DEPS=""

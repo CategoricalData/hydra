@@ -55,7 +55,7 @@ TOOLS=(
     "triad,full|uv (Python tool; required when Python is host)|uv|uv --version|curl -LsSf https://astral.sh/uv/install.sh | sh"
     "full|Scala sbt|sbt|sbt --numeric-version|brew install sbt  |  see https://www.scala-sbt.org/download.html"
     "full|Clojure CLI|clojure|clojure --version|brew install clojure/tools/clojure  |  see https://clojure.org/guides/install_clojure"
-    "full|SBCL (Common Lisp)|sbcl|sbcl --version|brew install sbcl  |  apt install sbcl"
+    "full|SBCL + cl-ppcre|__sbcl_clppcre__|__sbcl_clppcre__|brew install sbcl  |  apt install sbcl; then install Quicklisp + cl-ppcre per docs/contributor-setup.md"
     "full|Emacs|emacs|emacs --version|brew install emacs  |  apt install emacs-nox"
     "full|Scheme (Guile or chibi-scheme)|__scheme__|__scheme__|brew install guile  |  apt install guile-3.0"
     "go|Go|go|go version|brew install go  |  see https://go.dev/doc/install"
@@ -76,6 +76,10 @@ scope_match() {
 
 # Resolve a tool's version. Returns "missing" if the binary is not on PATH.
 # Special-case Scheme: try guile first, then chibi-scheme.
+# Special-case SBCL+cl-ppcre: require sbcl on PATH AND (asdf:load-system :cl-ppcre)
+#   to succeed silently — the CL target tests load cl-ppcre via ASDF, and a bare
+#   sbcl without Quicklisp/cl-ppcre will crash mid-test with
+#   "Component :CL-PPCRE not found". See docs/contributor-setup.md Tier 3.
 resolve_tool() {
     local bin="$1" version_cmd="$2"
     if [ "$bin" = "__scheme__" ]; then
@@ -90,6 +94,21 @@ resolve_tool() {
             return 0
         fi
         REAL_BIN=""; REAL_VERSION=""
+        return 1
+    fi
+    if [ "$bin" = "__sbcl_clppcre__" ]; then
+        if ! command -v sbcl >/dev/null 2>&1; then
+            REAL_BIN=""; REAL_VERSION=""
+            return 1
+        fi
+        REAL_BIN="$(command -v sbcl)"
+        local sbcl_version
+        sbcl_version="$(sbcl --version 2>&1 | head -n1)"
+        if sbcl --non-interactive --eval '(asdf:load-system :cl-ppcre)' >/dev/null 2>&1; then
+            REAL_VERSION="$sbcl_version  (cl-ppcre loadable)"
+            return 0
+        fi
+        REAL_VERSION="$sbcl_version  (cl-ppcre NOT loadable — Quicklisp/cl-ppcre missing)"
         return 1
     fi
     if ! command -v "$bin" >/dev/null 2>&1; then
