@@ -294,7 +294,7 @@ See [extending tests](recipes/extending-tests.md#floating-point-test-portability
 ## Annotated `Core.Term` values in test fixtures
 
 When a Hydra-DSL test fixture builds a `Core.Term` value that needs to be a
-`TermAnnotated` -- e.g. to test a validator that inspects annotation maps --
+`TermAnnotated` -- e.g. to test a validator that inspects annotation Terms --
 do **not** use `Phantoms.doc` to attach the annotation.
 The Haskell coder's `encodeTerm` strips outer-layer annotations before its
 variant dispatch (the description, if any, has already been captured at the
@@ -302,17 +302,26 @@ enclosing binding via `getTermDescription` and emitted as a Haskell comment).
 That stripping silently drops the annotation when the annotated term is
 nested inside a record literal rather than at a definition's top level.
 
-Use the explicit data-constructor form instead:
+Use the explicit data-constructor form instead. Since #386 the
+`AnnotatedTerm.annotation` field is typed as `Term`, not `Map Name Term`,
+so the second argument to `Core.annotatedTerm` is a `Term`. Use
+`wrapAnnotationMap` to encode a host-side `Map Name Term`:
 
 ```haskell
 Core.termAnnotated $ Core.annotatedTerm
   someBody
-  (Maps.fromList $ list [Phantoms.pair (Core.name $ string "description")
-    (Core.termLiteral $ Core.literalString $ string "...")])
+  (wrapAnnotationMap @@ (Maps.fromList $ list [
+    Phantoms.pair (Core.name $ string "description")
+      (Core.termLiteral $ Core.literalString $ string "...")]))
 ```
 
-This produces a `TermInject _Term "annotated" ...` Hydra term, which the coder
-treats as data and emits as `Core.TermAnnotated (Core.AnnotatedTerm{...})`.
+Or build the annotation Term directly using the canonical
+`inject(Term){map: TermMap[(TermVariable key, value), …]}` shape (e.g. via
+the test-suite helpers in `Hydra.Sources.Test.Annotations` such as
+`annotatedExp` / `annotatedExp1`).
+
+Either form produces a `TermInject _Term "annotated" ...` Hydra term, which
+the coder treats as data and emits as `Core.TermAnnotated (Core.AnnotatedTerm{...})`.
 
 ## Related resources
 

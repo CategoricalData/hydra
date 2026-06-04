@@ -6,7 +6,7 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Extract a comparison from a term"}}}],
+                "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Extract a comparison from a term"}}}]},
                 "body": {
                   "lambda": {
                     "body": {

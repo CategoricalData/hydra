@@ -2,6 +2,7 @@
 -- | Simple, one-way adapters for types and terms
 
 module Hydra.Adapt where
+import qualified Hydra.Annotations as Annotations
 import qualified Hydra.Ast as Ast
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
@@ -423,7 +424,7 @@ dataGraphToDefinitions constraints doInfer doExpand doHoistCaseStatements doHois
                         Core.bindingTerm = case (Core.bindingTerm b) of
                           Core.TermAnnotated v0 -> Core.TermAnnotated (Core.AnnotatedTerm {
                             Core.annotatedTermBody = (Core.annotatedTermBody v0),
-                            Core.annotatedTermAnnotation = (Maps.union (Core.annotatedTermAnnotation v0) ann)})
+                            Core.annotatedTermAnnotation = (Annotations.wrapAnnotationMap (Maps.union (Annotations.getAnnotationMap (Core.annotatedTermAnnotation v0)) (Annotations.getAnnotationMap ann)))})
                           _ -> Core.TermAnnotated (Core.AnnotatedTerm {
                             Core.annotatedTermBody = (Core.bindingTerm b),
                             Core.annotatedTermAnnotation = ann}),

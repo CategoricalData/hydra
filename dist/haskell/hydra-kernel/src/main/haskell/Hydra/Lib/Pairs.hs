@@ -102,10 +102,10 @@ bimap =
                   Core.applicationArgument = (Core.TermApplication (Core.Application {
                     Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.pairs.second")),
                     Core.applicationArgument = (Core.TermVariable (Core.Name "p"))}))}))))}))}))})),
-        Core.annotatedTermAnnotation = (M.fromList [
+        Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
           (
-            Core.Name "description",
-            (Core.TermLiteral (Core.LiteralString "Map over both elements of a pair, defined in terms of first and second.")))])})))}
+            Core.TermVariable (Core.Name "description"),
+            (Core.TermLiteral (Core.LiteralString "Map over both elements of a pair, defined in terms of first and second.")))]))})))}
 first :: Packaging.PrimitiveDefinition
 first =
     Packaging.PrimitiveDefinition {

@@ -4,7 +4,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Language constraints for Scala"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Language constraints for Scala"}}}]},
             "body": {
               "let": {
                 "bindings": [
@@ -138,7 +138,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "A set of reserved words in Scala"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A set of reserved words in Scala"}}}]},
             "body": {
               "let": {
                 "bindings": [
@@ -146,7 +146,7 @@
                     "name": "keywords",
                     "term": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "Scala keywords"}}}],
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Scala keywords"}}}]},
                         "body": {
                           "list": [
                             {"literal": {"string": "abstract"}},
@@ -199,7 +199,8 @@
                     "name": "classNames",
                     "term": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "Classes in the Scala Standard Library 2.13.8"}}}],
+                        "annotation": {
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Classes in the Scala Standard Library 2.13.8"}}}]},
                         "body": {
                           "list": [
                             {"literal": {"string": "Any"}},
@@ -245,7 +246,8 @@
                       "typeLambda": {
                         "body": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "Reserved words which are specific to Hydra"}}}],
+                            "annotation": {
+                              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Reserved words which are specific to Hydra"}}}]},
                             "body": {"typeApplication": {"body": {"list": []}, "type": {"variable": "t0"}}}}},
                         "parameter": "t0"}},
                     "typeScheme": {"body": {"list": {"variable": "t0"}}, "variables": ["t0"]}}],

@@ -2,6 +2,7 @@
 -- | Validation functions for core terms and types
 
 module Hydra.Validate.Core where
+import qualified Hydra.Annotations as Annotations
 import qualified Hydra.Ast as Ast
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
@@ -110,7 +111,7 @@ checkTerm p typed path cx term =
     case term of
       Core.TermAnnotated v0 ->
         let body = Core.annotatedTermBody v0
-            annMap = Core.annotatedTermAnnotation v0
+            annMap = Annotations.getAnnotationMap (Core.annotatedTermAnnotation v0)
         in (firstFinding [
           Logic.ifElse (enabled p (Core.Name "hydra.error.core.InvalidTermError.emptyTermAnnotation")) (Maybes.map (\f -> (Core.Name "hydra.error.core.InvalidTermError.emptyTermAnnotation", f)) (Logic.ifElse (Maps.null annMap) (Just (ErrorCore.InvalidTermErrorEmptyTermAnnotation (ErrorCore.EmptyTermAnnotationError {
             ErrorCore.emptyTermAnnotationErrorLocation = path}))) Nothing)) Nothing,
@@ -378,7 +379,7 @@ validateTypeNode p boundVars typ =
     case typ of
       Core.TypeAnnotated v0 ->
         let body = Core.annotatedTypeBody v0
-            annMap = Core.annotatedTypeAnnotation v0
+            annMap = Annotations.getAnnotationMap (Core.annotatedTypeAnnotation v0)
         in (firstFindingType [
           Logic.ifElse (enabled p (Core.Name "hydra.error.core.InvalidTypeError.emptyTypeAnnotation")) (Maybes.map (\f -> (Core.Name "hydra.error.core.InvalidTypeError.emptyTypeAnnotation", f)) (Logic.ifElse (Maps.null annMap) (Just (ErrorCore.InvalidTypeErrorEmptyTypeAnnotation (ErrorCore.EmptyTypeAnnotationError {
             ErrorCore.emptyTypeAnnotationErrorLocation = (Paths.SubtermPath [])}))) Nothing)) Nothing,

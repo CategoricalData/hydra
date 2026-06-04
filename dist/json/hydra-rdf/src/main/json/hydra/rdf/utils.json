@@ -4,7 +4,9 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a list of descriptions to an RDF graph"}}}],
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a list of descriptions to an RDF graph"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -25,7 +27,9 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Create an empty description with a given node"}}}],
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "Create an empty description with a given node"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -45,7 +49,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "An empty LangStrings value"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An empty LangStrings value"}}}]},
             "body": {
               "wrap": {
                 "body": {
@@ -60,7 +64,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "An empty RDF graph"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An empty RDF graph"}}}]},
             "body": {
               "wrap": {
                 "body": {"typeApplication": {"body": {"variable": "hydra.lib.sets.empty"}, "type": {"variable": "hydra.rdf.syntax.Triple"}}},
@@ -71,7 +75,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Encode a Hydra literal as an RDF literal"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Encode a Hydra literal as an RDF literal"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -405,10 +410,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Create triples from a subject, predicate, and list of object nodes"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Create triples from a subject, predicate, and list of object nodes"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -453,7 +459,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Construct an IRI from a namespace and local name"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Construct an IRI from a namespace and local name"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -480,7 +490,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Construct a key IRI from a local name"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Construct a key IRI from a local name"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -498,7 +509,9 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Merge a list of RDF graphs into a single graph"}}}],
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "Merge a list of RDF graphs into a single graph"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -528,7 +541,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a Hydra name to an RDF IRI"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a Hydra name to an RDF IRI"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -549,7 +562,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Generate the next blank node and an incremented counter"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Generate the next blank node and an incremented counter"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -588,7 +605,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Construct a property IRI from a record name and field name"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Construct a property IRI from a record name and field name"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -657,7 +678,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Construct an RDF namespace IRI"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Construct an RDF namespace IRI"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -678,7 +699,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a resource to a node"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a resource to a node"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -713,7 +734,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Extract subjects from a list of descriptions"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Extract subjects from a list of descriptions"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -737,7 +759,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Extract all triples from a list of descriptions"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Extract all triples from a list of descriptions"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -777,7 +803,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Construct an XML Schema datatype IRI"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Construct an XML Schema datatype IRI"}}}]},
             "body": {
               "lambda": {
                 "body": {

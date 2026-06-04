@@ -244,7 +244,7 @@ findPrimaryKeyInType fieldTypes = Y.listToMaybe $ Y.mapMaybe checkField fieldTyp
   where
     checkField (FieldType fname ftyp) = case ftyp of
       TypeAnnotated (AnnotatedType _ anns) ->
-        case M.lookup (Name "@primaryKey") anns of
+        case M.lookup (Name "@primaryKey") (getAnnotationMap anns) of
           Just (TermLiteral (LiteralString pattern_)) -> Just (fname, patternToName pattern_)
           _ -> Nothing
       _ -> Nothing

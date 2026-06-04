@@ -132,8 +132,10 @@ difference =
               Core.applicationArgument = (Core.TermApplication (Core.Application {
                 Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.sets.toList")),
                 Core.applicationArgument = (Core.TermVariable (Core.Name "s1"))}))}))}))})),
-        Core.annotatedTermAnnotation = (M.fromList [
-          (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Set difference, defined in terms of member and insert.")))])})))}
+        Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
+          (
+            Core.TermVariable (Core.Name "description"),
+            (Core.TermLiteral (Core.LiteralString "Set difference, defined in terms of member and insert.")))]))})))}
 empty :: Packaging.PrimitiveDefinition
 empty =
     Packaging.PrimitiveDefinition {
@@ -294,10 +296,10 @@ intersection =
               Core.applicationArgument = (Core.TermApplication (Core.Application {
                 Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.sets.toList")),
                 Core.applicationArgument = (Core.TermVariable (Core.Name "s1"))}))}))}))})),
-        Core.annotatedTermAnnotation = (M.fromList [
+        Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
           (
-            Core.Name "description",
-            (Core.TermLiteral (Core.LiteralString "Set intersection, defined in terms of member and insert.")))])})))}
+            Core.TermVariable (Core.Name "description"),
+            (Core.TermLiteral (Core.LiteralString "Set intersection, defined in terms of member and insert.")))]))})))}
 map :: Packaging.PrimitiveDefinition
 map =
     Packaging.PrimitiveDefinition {
@@ -354,10 +356,10 @@ map =
                 Core.applicationArgument = (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.sets.toList")),
                   Core.applicationArgument = (Core.TermVariable (Core.Name "s"))}))}))}))}))})),
-        Core.annotatedTermAnnotation = (M.fromList [
+        Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
           (
-            Core.Name "description",
-            (Core.TermLiteral (Core.LiteralString "Map a function over a set, defined in terms of toList, lists.map and fromList.")))])})))}
+            Core.TermVariable (Core.Name "description"),
+            (Core.TermLiteral (Core.LiteralString "Map a function over a set, defined in terms of toList, lists.map and fromList.")))]))})))}
 member :: Packaging.PrimitiveDefinition
 member =
     Packaging.PrimitiveDefinition {
@@ -573,8 +575,10 @@ union =
               Core.applicationArgument = (Core.TermApplication (Core.Application {
                 Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.sets.toList")),
                 Core.applicationArgument = (Core.TermVariable (Core.Name "s1"))}))}))}))})),
-        Core.annotatedTermAnnotation = (M.fromList [
-          (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Set union, defined in terms of insert and toList.")))])})))}
+        Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
+          (
+            Core.TermVariable (Core.Name "description"),
+            (Core.TermLiteral (Core.LiteralString "Set union, defined in terms of insert and toList.")))]))})))}
 unions :: Packaging.PrimitiveDefinition
 unions =
     Packaging.PrimitiveDefinition {
@@ -625,7 +629,7 @@ unions =
                       Core.applicationArgument = (Core.TermVariable (Core.Name "s"))}))}))}))})),
               Core.applicationArgument = (Core.TermVariable (Core.Name "hydra.lib.sets.empty"))})),
             Core.applicationArgument = (Core.TermVariable (Core.Name "ss"))}))})),
-        Core.annotatedTermAnnotation = (M.fromList [
+        Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
           (
-            Core.Name "description",
-            (Core.TermLiteral (Core.LiteralString "Union of a list of sets, defined in terms of foldl and union.")))])})))}
+            Core.TermVariable (Core.Name "description"),
+            (Core.TermLiteral (Core.LiteralString "Union of a list of sets, defined in terms of foldl and union.")))]))})))}

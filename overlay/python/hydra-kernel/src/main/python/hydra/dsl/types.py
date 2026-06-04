@@ -84,14 +84,18 @@ def use(b: Binding) -> Type:
 # (>:) :: String -> Type -> FieldType  -- field definition operator
 
 
-def annot(ann: dict[str, Term], t: Type) -> Type:
+def annot(ann, t: Type) -> Type:
     """Attach an annotation to a type.
+
+    The ``ann`` argument may be either a ``Mapping[str, Term]`` (wrapped as a
+    TermMap per Hydra's map convention) or an arbitrary ``Term`` if the
+    application wants a non-map annotation shape.
 
     Example: annot({"min": int32_term(0), "max": int32_term(100)}, int32())
     """
-    return TypeAnnotated(
-        AnnotatedType(t, FrozenDict({Name(k): v for k, v in ann.items()}))
-    )
+    from hydra.dsl.terms import annotation_map_as_term
+    ann_term = ann if isinstance(ann, Term) else annotation_map_as_term(ann)
+    return TypeAnnotated(AnnotatedType(t, ann_term))
 
 
 def apply(lhs: Type, rhs: Type) -> Type:
