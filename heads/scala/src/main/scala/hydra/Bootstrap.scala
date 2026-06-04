@@ -103,7 +103,11 @@ import _root_.java.io.File
   println(s"  Time: ${Generation.formatTime(stepTime)}")
   println()
 
-  val kernelNsSet = kernelMods.map(_.name).toSet
+  // Both hydra-kernel and hydra-haskell are part of the bootstrap baseline:
+  // hydra-haskell provides the runtime AST modules (Hydra.Haskell.Syntax etc.)
+  // that the hand-written DSL Source files copied into the target tree by
+  // setup-haskell-target.sh import, so it must pass --kernel-only filtering.
+  val kernelNsSet = baselineMods.map(_.name).toSet
 
   // Step 3: Optionally load coder packages.
   var coderMods: Seq[hydra.packaging.Module] = Seq.empty
