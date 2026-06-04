@@ -309,11 +309,11 @@ Definitions in the kernel are referenced from at least:
 - Cross-implementation manifests like `heads/wasm/m1-manifest.json`
 
 ```bash
-# Haskell-level identifier
-grep -rn 'myOldName' packages/ heads/
+# Haskell-level identifier (overlay/ holds the relocated big-three kernel runtime; #418)
+grep -rn 'myOldName' packages/ heads/ overlay/
 # Hydra-level fully-qualified name (appears in JSON, lisp test fixtures,
 # Java/Scala TestSuiteRunners, wasm manifest, etc.)
-grep -rn 'hydra.mymodule.myOldName' packages/ heads/
+grep -rn 'hydra.mymodule.myOldName' packages/ heads/ overlay/
 ```
 
 ### Step 4: Build and Regenerate

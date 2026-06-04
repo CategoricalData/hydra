@@ -37,21 +37,22 @@ cp -r "$HYDRA_JAVA_DIR/gradle" "$OUTPUT_DIR/"
 # Hand-written source files
 echo "  Copying hand-written source files..."
 JAVA_SRC="$HYDRA_JAVA_DIR/src/main/java/hydra"
+JAVA_OVERLAY="$HYDRA_ROOT/overlay/java/hydra-kernel/src/main/java/hydra"
 JAVA_DST="$OUTPUT_DIR/src/main/java/hydra"
 mkdir -p "$JAVA_DST"
 
-for f in Adapters.java Bootstrap.java Coders.java Generation.java HydraTestBase.java; do
+# Head-only driver classes (NOT part of the kernel runtime overlay; #418): they
+# stay in heads/java/src and are copied directly.
+for f in Bootstrap.java Generation.java HydraTestBase.java; do
     cp "$JAVA_SRC/$f" "$JAVA_DST/"
 done
 
-for d in lib dsl util; do
-    cp -r "$JAVA_SRC/$d" "$JAVA_DST/"
-done
-
-mkdir -p "$JAVA_DST/tools"
-for f in Function3.java Function4.java LList.java MapperBase.java PrettyPrinter.java PrimitiveFunction.java; do
-    cp "$JAVA_SRC/tools/$f" "$JAVA_DST/tools/"
-done
+# Kernel runtime: a single overlay copy from overlay/java/hydra-kernel/ (#418).
+# This brings in Adapters.java, Coders.java, the full lib/dsl/util/tools trees, and
+# json/{JsonEncoding,JsonDecoding}.java — everything the relocated runtime contains.
+# Bootstrap output is one flat tree, so it must be stitched in here, just as
+# copy-kernel-runtime.sh overlays it onto dist/java/hydra-kernel/.
+cp -r "$JAVA_OVERLAY/." "$JAVA_DST/"
 
 # Hand-written test files
 echo "  Copying test infrastructure..."

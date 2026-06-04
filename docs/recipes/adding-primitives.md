@@ -138,10 +138,10 @@ primitives exist, their signatures, and their default implementations.
 | Interpreter-friendly term-level reference impls (for higher-order primitives) | `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Lib/Defaults/<Sub>.hs` |
 | Primitive-name `Name` constants (`charsIsAlphaNum`, `logicAnd`, ...) | `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Lib/Names.hs` |
 | Legacy `_<namespace>_<localName>` aliases (`_chars_isAlphaNum`, `_logic_and`, ...) used by host registrations | `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Libraries.hs` |
-| Native Haskell implementation | `heads/haskell/src/main/haskell/Hydra/Haskell/Lib/<Sub>.hs` |
-| Native Java implementation | `heads/java/src/main/java/hydra/lib/<sub>/<FunctionName>.java` |
-| Native Python implementation | `heads/python/src/main/python/hydra/lib/<sub>.py` |
-| Host-side primitive registry (binds names to native impls) | `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Libraries.hs` (Haskell) and `heads/<lang>/.../lib/Libraries.<ext>` per host |
+| Native Haskell implementation | `overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Haskell/Lib/<Sub>.hs` (#418) |
+| Native Java implementation | `overlay/java/hydra-kernel/src/main/java/hydra/lib/<sub>/<FunctionName>.java` (#418) |
+| Native Python implementation | `overlay/python/hydra-kernel/src/main/python/hydra/lib/<sub>.py` (#418) |
+| Host-side primitive registry (binds names to native impls) | `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Libraries.hs` (Haskell) and, per host, the registry in that host's runtime: `overlay/{java,python}/hydra-kernel/.../lib/Libraries.<ext>` for Java/Python (#418), `heads/<lang>/.../lib/Libraries.<ext>` for others |
 | Phantom-typed DSL wrappers (for writing Hydra source modules) | `heads/haskell/src/main/haskell/Hydra/Dsl/Meta/Lib/<Sub>.hs` |
 | Common test cases | `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Test/Lib/<Sub>.hs` |
 
@@ -262,7 +262,7 @@ bimapSig = sig $ TypeScheme [Name "a", Name "b", Name "c", Name "d"]
 The `TypeScheme`'s variable list must be in **declaration order** — the order
 the variables first appear in the body — **not alphabetical**. Hosts that
 re-register primitives by hand (e.g. `heads/typescript/.../lib/libraries.ts`,
-`heads/java/.../lib/Libraries.java`) must follow the same order: kernel
+`overlay/java/hydra-kernel/.../lib/Libraries.java`) must follow the same order: kernel
 typeApps bind positionally to that list, and mis-ordering silently swaps
 domain and codomain in inferred lambda types. For example, `maybes.maybe :
 b → (a → b) → maybe<a> → b` lists vars as `[b, a]`, not `[a, b]`.
@@ -297,7 +297,7 @@ validator enforces this.
 
 #### Haskell
 
-Add the implementation in `heads/haskell/src/main/haskell/Hydra/Haskell/Lib/<Library>.hs`:
+Add the implementation in `overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Haskell/Lib/<Library>.hs` (#418):
 
 ```haskell
 -- Hydra/Haskell/Lib/Chars.hs
@@ -399,7 +399,7 @@ default is used: each primitive is bound with `prim1` / `prim2` /
 #### Java
 
 Create the per-primitive class
-`heads/java/src/main/java/hydra/lib/<library>/<FunctionName>.java`:
+`overlay/java/hydra-kernel/src/main/java/hydra/lib/<library>/<FunctionName>.java` (#418):
 
 ```java
 package hydra.lib.chars;
@@ -460,7 +460,7 @@ to evaluate function applications. See `hydra/lib/lists/Foldr.java` for an examp
 that iterates in reverse and reduces on each step.
 
 Then register the new primitive in
-`heads/java/src/main/java/hydra/lib/Libraries.java` by adding it to its
+`overlay/java/hydra-kernel/src/main/java/hydra/lib/Libraries.java` (#418) by adding it to its
 category's list (`charsPrimitives()` in this case). The category will already
 be enumerated in `standardPrimitives()`.
 
@@ -482,7 +482,7 @@ expansion for you.
 
 #### Python
 
-Add the implementation in `heads/python/src/main/python/hydra/lib/<library>.py`:
+Add the implementation in `overlay/python/hydra-kernel/src/main/python/hydra/lib/<library>.py` (#418):
 
 ```python
 def is_alpha_num(value: int) -> bool:
@@ -491,7 +491,7 @@ def is_alpha_num(value: int) -> bool:
 ```
 
 Then register it in the Python source registry at
-`heads/python/src/main/python/hydra/sources/libraries.py`. Each module name has
+`overlay/python/hydra-kernel/src/main/python/hydra/sources/libraries.py` (#418). Each module name has
 its own `register_<sub>_primitives()` function that returns a
 `dict[Name, Primitive]`; add an entry there using `prims.prim1` /
 `prims.prim2` / `prims.prim3` to match the kernel signature:
@@ -659,8 +659,8 @@ implementation notes:
 - **In native impls**, the function argument arrives as a Hydra `Term`. To
   apply it, the host uses its term-reduction machinery (Haskell:
   `Reduction.reduceTerm`; Java: `Reduction.reduceTerm()`). See
-  `heads/haskell/src/main/haskell/Hydra/Haskell/Lib/Lists.hs` for the Haskell pattern
-  and `heads/java/src/main/java/hydra/lib/lists/Foldr.java` for the Java
+  `overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Haskell/Lib/Lists.hs` for the Haskell pattern
+  and `overlay/java/hydra-kernel/src/main/java/hydra/lib/lists/Foldr.java` for the Java
   pattern.
 
 - **In default implementations**, the function argument is just a TypedTerm —
@@ -680,9 +680,9 @@ The `hydra.lib.maybes` module name is a good case study: 13 primitives, 11 of
 which have default implementations in terms of `maybe`. See:
 
 - Metadata: [Hydra/Sources/Kernel/Lib/Maybes.hs](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Lib/Maybes.hs)
-- Haskell native impl: [Hydra/Haskell/Lib/Maybes.hs](https://github.com/CategoricalData/hydra/blob/main/heads/haskell/src/main/haskell/Hydra/Haskell/Lib/Maybes.hs)
+- Haskell native impl: [Hydra/Haskell/Lib/Maybes.hs](https://github.com/CategoricalData/hydra/blob/main/overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Haskell/Lib/Maybes.hs)
 - Haskell DSL wrapper: [Hydra/Dsl/Meta/Lib/Maybes.hs](https://github.com/CategoricalData/hydra/blob/main/heads/haskell/src/main/haskell/Hydra/Dsl/Meta/Lib/Maybes.hs)
-- Java native impls: [hydra/lib/maybes/](https://github.com/CategoricalData/hydra/tree/main/heads/java/src/main/java/hydra/lib/maybes)
+- Java native impls: [hydra/lib/maybes/](https://github.com/CategoricalData/hydra/tree/main/overlay/java/hydra-kernel/src/main/java/hydra/lib/maybes)
 
 ## Further reading
 

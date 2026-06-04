@@ -37,6 +37,12 @@ graphs with deep support for polymorphism.
 
 - **`packages/`** holds each package's DSL-based module definitions, plus source-language helpers used to write them.
 - **`heads/`** holds per-host runtimes that run those modules after translation to a target language.
+- **`overlay/`** holds hand-written, language-specific source that is *overlaid onto* the generated
+  distribution packages to make them complete (the source-package → complete-distribution model).
+  Structure: `overlay/<lang>/<package>/src/...`. Today it holds each big-three language's `hydra-kernel`
+  runtime (e.g. `overlay/haskell/hydra-kernel/`, `overlay/java/hydra-kernel/`,
+  `overlay/python/hydra-kernel/`) plus the Haskell `hydra` umbrella module. The sync copies these onto
+  `dist/<lang>/<pkg>/`; they are authored, not generated, and are never compiled in place. (#418)
 - **`dist/`** holds generated and copied artifacts. **Never manually edit**
   (unless doing a bootstrap patch, which must be overwritten by regeneration afterward).
 - **`bindings/`** holds host-specific third-party integrations — adapters that wire Hydra
@@ -48,7 +54,9 @@ graphs with deep support for polymorphism.
 The test for `packages/` vs `heads/`: does this code describe (or help describe) Hydra modules,
 or does it run them after translation?
 Description goes in `packages/`; running goes in `heads/`.
-Bindings sit outside both: hand-written adapters between Hydra and an external system.
+Hand-written source destined for a published distribution package (but not part of the head's own
+compile) goes in `overlay/`. Bindings sit outside all of these: hand-written adapters between Hydra and
+an external system.
 
 Generated files have a header: "Note: this is an automatically generated file. Do not edit."
 

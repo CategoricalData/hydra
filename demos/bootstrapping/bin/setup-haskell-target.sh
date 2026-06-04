@@ -50,6 +50,7 @@ source "$HYDRA_ROOT/bin/lib/common.sh"
 PREP_HASH=$(
     {
         find "$HYDRA_HASKELL_HEAD_DIR/src/main/haskell/Hydra" \
+             "$HYDRA_ROOT/overlay/haskell/hydra-kernel/src/main/haskell/Hydra" \
              "$HYDRA_KERNEL_DIR/src/main/haskell/Hydra" \
              "$HYDRA_HASKELL_DIR/src/main/haskell/Hydra" \
              "$HYDRA_ROOT/dist/haskell/hydra-kernel/src/main/haskell/Hydra/Sources/Decode" \
@@ -92,9 +93,15 @@ cp "$HASKELL_RESOURCES/README.md" "$OUTPUT_DIR/"
 # but everything must land in a single src/main/haskell tree in the bootstrap output.
 echo "  Copying hand-written source files..."
 mkdir -p "$OUTPUT_DIR/src/main/haskell"
-# Base: the Haskell head's hand-written runtime (Hydra.Generation, Hydra.Kernel,
-# Hydra.Lib.*, Hydra.Dsl.*, Hydra.Haskell.Generation, Hydra.Module.*, Hydra.Tools.*, ...)
+# Base: the Haskell head's hand-written runtime (Hydra.Generation,
+# Hydra.Haskell.Generation, Hydra.Module.*, Hydra.Tools.*, the exec drivers, ...)
 cp -r "$HYDRA_HASKELL_HEAD_DIR/src/main/haskell/Hydra" "$OUTPUT_DIR/src/main/haskell/"
+# Overlay the hand-written kernel runtime that was relocated out of the head into
+# the top-level overlay/ tree (#418): Hydra.Settings, Hydra.Kernel,
+# Hydra.Haskell.Lib.*, Hydra.Dsl.{Terms,Literals,Meta.Common}. The bootstrap
+# output is a single flat tree, so these must be stitched in here just as
+# sync-haskell.sh overlays them onto dist/haskell/hydra-kernel/.
+cp -r "$HYDRA_ROOT/overlay/haskell/hydra-kernel/src/main/haskell/Hydra/." "$OUTPUT_DIR/src/main/haskell/Hydra/"
 # Remove ext-related sources not needed for the bootstrap target
 rm -f "$OUTPUT_DIR/src/main/haskell/Hydra/ExtGeneration.hs"
 rm -f "$OUTPUT_DIR/src/main/haskell/Hydra/Sources/Ext.hs"

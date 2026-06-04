@@ -219,6 +219,27 @@ echo ""
 # files reference test_env.* directly with no rewriting needed.
 echo "  (No post-processing needed — all patches eliminated, see #307.)"
 
+# Overlay hand-written distribution-package source onto the dist tree (#418) so
+# each dist/haskell/<pkg>/ is a COMPLETE, self-contained distribution package (the
+# source-package -> complete-target-distribution model; see docs/build-system.md).
+# This is the Haskell analog of Java/Python's copy-kernel-runtime.sh. The overlay
+# trees are copies, not patches: they add package source under dist/, they do not
+# edit any generated file. Canonical homes are the uncompiled trees under the
+# top-level overlay/haskell/ directory (a sibling of dist/, packages/, heads/).
+#
+# IMPORTANT: the head compiles dist/haskell/hydra-kernel/ (a source-dir in
+# package.yaml) but does NOT compile overlay/haskell/hydra-kernel/. So overlaying
+# the runtime onto dist/haskell/hydra-kernel/ here is what puts those modules on
+# the head's compile path — exactly once, from the dist copy. (Adding the overlay
+# to the head's source-dirs as well would double-compile them; package.yaml does
+# not.)
+echo ""
+# Overlay hand-written runtime from overlay/haskell/ onto dist/haskell/. Extracted
+# into a standalone script (#418 fix) so bin/sync.sh can run the same overlay BEFORE
+# its Phase 0 stack build — sync-haskell.sh's own invocation here was too late for
+# that earlier build. Idempotent (cp -R), so calling it in both places is safe.
+"$SCRIPT_DIR/overlay-kernel-runtime.sh"
+
 # Rebuild so subsequent steps (test, lexicon) pick up the new Haskell dist.
 echo ""
 echo "  Rebuilding..."

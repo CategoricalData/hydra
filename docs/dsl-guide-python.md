@@ -819,15 +819,17 @@ d2 = FrozenDict({**d, "key3": "value3"})
 
 ## Examples in the codebase
 
+(The Python `hydra/dsl/` runtime was relocated to `overlay/python/hydra-kernel/` by #418.)
+
 | File | Description |
 |------|-------------|
-| `heads/python/src/main/python/hydra/dsl/meta/phantoms.py` | Phantom-typed DSL (all operations) |
-| `heads/python/src/main/python/hydra/dsl/meta/core.py` | Core domain DSL (field accessors) |
-| `heads/python/src/main/python/hydra/dsl/meta/graph.py` | Graph domain DSL |
-| `heads/python/src/main/python/hydra/dsl/meta/lib/sets.py` | Sets library wrapper |
-| `heads/python/src/main/python/hydra/dsl/meta/lib/lists.py` | Lists library wrapper |
-| `heads/python/src/main/python/hydra/dsl/types.py` | Direct Types DSL |
-| `heads/python/src/main/python/hydra/dsl/terms.py` | Direct Terms DSL |
+| `overlay/python/hydra-kernel/src/main/python/hydra/dsl/meta/phantoms.py` | Phantom-typed DSL (all operations) |
+| `overlay/python/hydra-kernel/src/main/python/hydra/dsl/meta/core.py` | Core domain DSL (field accessors) |
+| `overlay/python/hydra-kernel/src/main/python/hydra/dsl/meta/graph.py` | Graph domain DSL |
+| `overlay/python/hydra-kernel/src/main/python/hydra/dsl/meta/lib/sets.py` | Sets library wrapper |
+| `overlay/python/hydra-kernel/src/main/python/hydra/dsl/meta/lib/lists.py` | Lists library wrapper |
+| `overlay/python/hydra-kernel/src/main/python/hydra/dsl/types.py` | Direct Types DSL |
+| `overlay/python/hydra-kernel/src/main/python/hydra/dsl/terms.py` | Direct Terms DSL |
 
 ## Related Documentation
 

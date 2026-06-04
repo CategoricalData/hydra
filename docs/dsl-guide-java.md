@@ -776,8 +776,8 @@ if (result.isRight()) {
 | `packages/hydra-java/src/main/java/hydra/dsl/meta/Defs.java` | Module-definition helpers for the Java coder DSL |
 | `packages/hydra-java/src/main/java/hydra/dsl/meta/lib/Lists.java`, `Maps.java`, `Sets.java`, `Logic.java`, `Maths.java`, `Maybes.java`, `Strings.java`, `Literals.java` | Library wrappers |
 | `packages/hydra-java/src/main/java/hydra/sources/` | Live host-native Java coder DSL sources (reference for current Phantoms idiom) |
-| `heads/java/src/main/java/hydra/dsl/Types.java` | Direct Types DSL (runtime) |
-| `heads/java/src/main/java/hydra/dsl/Terms.java` | Direct Terms DSL (runtime) |
+| `overlay/java/hydra-kernel/src/main/java/hydra/dsl/Types.java` | Direct Types DSL (runtime; relocated to overlay/ by #418) |
+| `overlay/java/hydra-kernel/src/main/java/hydra/dsl/Terms.java` | Direct Terms DSL (runtime; relocated to overlay/ by #418) |
 
 ## Related Documentation
 

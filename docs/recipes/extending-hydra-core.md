@@ -1498,7 +1498,7 @@ The deltas worth knowing:
    while you're there.
 
 For a tight WIP cadence: land the change in three commits — source side first
-(everything in `packages/`, `heads/`, `demos/src/`), regenerated `dist/` next,
+(everything in `packages/`, `heads/`, `overlay/`, `demos/src/`), regenerated `dist/` next,
 then docs/lexicon last. The split makes the diff readable for reviewers and
 keeps `git bisect` tractable: a regression in source vs. a regression in regen
 output points at very different layers of the system.

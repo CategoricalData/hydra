@@ -662,8 +662,9 @@ signature, description, and default implementation.
 
 Per host, two things are needed beyond the kernel metadata:
 
-1. **Native implementations** — in `heads/<host>/`, e.g.
-   `heads/haskell/src/main/haskell/Hydra/Lib/Math.hs`:
+1. **Native implementations** — for the big three, in the `overlay/<lang>/hydra-kernel/`
+   tree (#418); e.g. Haskell at
+   `overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Haskell/Lib/Math.hs`:
 
    ```haskell
    add :: Int -> Int -> Int
@@ -754,15 +755,18 @@ Each TermCoder contains:
 Primitive *signatures* are defined once in Haskell (in
 `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Libraries.hs`) and become
 part of the generated kernel in every target language. The *implementations*
-shown below are hand-written in each host language under `heads/<host>/`, then
-copied into the published `dist/<host>/hydra-kernel/` artifact by
-`heads/<host>/bin/copy-kernel-runtime.sh` — see
+shown below are hand-written per host language. For the big three (Haskell, Java,
+Python) they live in the top-level `overlay/<lang>/hydra-kernel/` tree (#418) and
+are overlaid into the published `dist/<host>/hydra-kernel/` artifact during sync
+(for Haskell by `sync-haskell.sh`, for Java/Python by
+`heads/<host>/bin/copy-kernel-runtime.sh`); other hosts keep their implementations
+under `heads/<host>/`. See
 [build-system.md §Hand-written runtime in hydra-kernel](build-system.md#hand-written-runtime-in-hydra-kernel)
-for the full mechanism and the catalog of which subtrees are copied per language.
+for the full mechanism and the catalog of which subtrees are overlaid per language.
 
 #### Java Generation
 
-Location: `heads/java/src/main/java/hydra/lib/`
+Location: `overlay/java/hydra-kernel/src/main/java/hydra/lib/` (#418; was `heads/java/src/main/java/hydra/lib/`)
 
 Each primitive becomes a class extending `PrimitiveFunction`:
 
@@ -793,7 +797,7 @@ public class Add extends PrimitiveFunction {
 
 #### Python Generation
 
-Location: `heads/python/src/main/python/hydra/lib/`
+Location: `overlay/python/hydra-kernel/src/main/python/hydra/lib/` (#418; was `heads/python/src/main/python/hydra/lib/`)
 
 Pure Python implementations:
 
@@ -1606,11 +1610,16 @@ implementing native functions in `Lib/`, registering primitives, and creating DS
     └── ...
 ```
 
+(#418: three of these DSL-support modules — `Dsl/Terms.hs`, `Dsl/Literals.hs`, and
+`Dsl/Meta/Common.hs` — are part of the `hydra-kernel` distribution runtime and have
+moved to `overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Dsl/`. The rest of
+`Hydra/Dsl/` remains head-only.)
+
 ### Primitive functions
 
 [`packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Lib/`](https://github.com/CategoricalData/hydra/tree/main/packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Lib) — Canonical primitive registry (one `PrimitiveDefinition`-emitting module per `hydra.lib.<sub>` module name)
 
-[`heads/haskell/src/main/haskell/Hydra/Lib/`](https://github.com/CategoricalData/hydra/tree/main/heads/haskell/src/main/haskell/Hydra/Lib) — Native Haskell implementations
+[`overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Haskell/Lib/`](https://github.com/CategoricalData/hydra/tree/main/overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Haskell/Lib) — Native Haskell implementations (relocated here from the head by #418)
 
 [`packages/hydra-kernel/src/main/haskell/Hydra/Sources/Libraries.hs`](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-kernel/src/main/haskell/Hydra/Sources/Libraries.hs) — Host-side bindings (pairs each name with its native impl via `prim1`/`prim2`/`prim3`)
 ```
@@ -1619,7 +1628,7 @@ Sources/Kernel/Lib/
 ├── Lists.hs
 └── ...
 
-heads/haskell/.../Hydra/Lib/
+overlay/haskell/hydra-kernel/.../Hydra/Haskell/Lib/
 ├── Math.hs
 ├── Lists.hs
 └── ...

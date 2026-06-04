@@ -1,9 +1,18 @@
+// The root project is a pure AGGREGATOR: it wires the per-package subprojects
+// (the hydra-java rollup + bindings) plus the nexus publish plugin, but does NOT
+// itself compile or publish a `hydra` artifact. The java-library / checkstyle
+// behavior lives in `subprojects {}` below.
+//
+// #418: the root used to apply `java-library` and compile heads/java/src/main/java
+// as its own `main` source set, publishing it as `net.fortytwo.hydra:hydra`. That
+// only ever worked because the kernel runtime lived in that dir; the runtime has
+// moved to overlay/java/, leaving just the driver files there (which the rollup's
+// `headsExtras` source set compiles, with the kernel on the classpath). The bare
+// `hydra` artifact was never in the documented Maven release set
+// (hydra-kernel / hydra-java / hydra-pg / hydra-rdf are published per-package from
+// dist/java/<pkg>/), so the root compile + publication are removed here.
 plugins {
     id 'io.github.gradle-nexus.publish-plugin' version '2.0.0'
-    id 'java-library'
-    id 'signing'
-    id 'maven-publish'
-    id 'checkstyle'
 }
 
 allprojects {
@@ -77,42 +86,10 @@ subprojects {
     }
 }
 
-publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            from(components.java)
-
-            pom {
-                name = 'hydra'
-                description = 'The Hydra language for type-safe transformations'
-                url = 'https://github.com/CategoricalData/hydra'
-                licenses {
-                    license {
-                        name = 'The Apache License, Version 2.0'
-                        url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-                    }
-                }
-                developers {
-                    developer {
-                        id = 'joshsh'
-                        name = 'Joshua Shinavier'
-                        email = 'josh@fortytwo.net'
-                    }
-                }
-                scm {
-                    url = 'https://github.com/CategoricalData/hydra'
-                    connection = 'scm:git://github.com/CategoricalData/hydra.git'
-                    developerConnection = 'scm:git://github.com/CategoricalData/hydra.git'
-                }
-            }
-        }
-    }
-
-    // Uncomment the below to enable local publishing
-    // repositories {
-    //     mavenLocal()
-    // }
-}
+// (#418) The root project no longer publishes a `hydra` artifact — see the note on
+// the plugins block above. Per-package artifacts are published from dist/java/<pkg>/
+// (hydra-kernel / hydra-java / hydra-pg / hydra-rdf); the rollup is published as the
+// hydra-java subproject. There is no root `from(components.java)` publication.
 
 nexusPublishing {
     repositories {

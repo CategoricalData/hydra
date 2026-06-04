@@ -8,8 +8,8 @@ Hydra currently has five complete implementations:
 [Hydra-Lisp](https://github.com/CategoricalData/hydra/tree/main/packages/hydra-lisp).
 Hydra-Lisp has four dialects (Clojure, Scheme, Common Lisp, and Emacs Lisp) sharing a coder and serializer
 but with distinct bootstrapping heads.
-All five implement the entire [Hydra Kernel](https://github.com/CategoricalData/hydra/blob/main/heads/haskell/src/main/haskell/Hydra/Kernel.hs),
-support the full [Hydra standard library](https://github.com/CategoricalData/hydra/tree/main/heads/haskell/src/main/haskell/Hydra/Haskell/Lib),
+All five implement the entire [Hydra Kernel](https://github.com/CategoricalData/hydra/blob/main/overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Kernel.hs),
+support the full [Hydra standard library](https://github.com/CategoricalData/hydra/tree/main/overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Haskell/Lib),
 and pass the [common test suite](https://github.com/CategoricalData/hydra/wiki/Testing).
 The five implementations are mutually self-hosting: each can load Hydra modules from a
 language-independent JSON representation and regenerate code for any of the target languages
@@ -327,7 +327,7 @@ trace the issue back to the inferred type annotations on the Hydra IR before ass
 ## Step 7: Implement standard primitives
 
 As noted above, Hydra has a
-[standard library](https://github.com/CategoricalData/hydra/tree/main/heads/haskell/src/main/haskell/Hydra/Haskell/Lib)
+[standard library](https://github.com/CategoricalData/hydra/tree/main/overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Haskell/Lib)
 of primitive, or built-in functions.
 There are many calls to these functions (though not all of them)
 in the Hydra kernel code which will be mapped into your new implementation,
@@ -344,16 +344,16 @@ though their behavior must be the same across implementations.
 - Metadata:
   [Hydra/Sources/Libraries.hs](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-kernel/src/main/haskell/Hydra/Sources/Libraries.hs) (DSL)
 - Implementations:
-  [Hydra/Haskell/Lib](https://github.com/CategoricalData/hydra/tree/main/heads/haskell/src/main/haskell/Hydra/Haskell/Lib) (native Haskell)
+  [Hydra/Haskell/Lib](https://github.com/CategoricalData/hydra/tree/main/overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Haskell/Lib) (native Haskell)
 
 **Java**:
 - Metadata + implementations:
-  [hydra/lib](https://github.com/CategoricalData/hydra/tree/main/heads/java/src/main/java/hydra/lib) (bundled together)
-- Registry: [hydra/lib/Libraries.java](https://github.com/CategoricalData/hydra/blob/main/heads/java/src/main/java/hydra/lib/Libraries.java)
+  [hydra/lib](https://github.com/CategoricalData/hydra/tree/main/overlay/java/hydra-kernel/src/main/java/hydra/lib) (bundled together)
+- Registry: [hydra/lib/Libraries.java](https://github.com/CategoricalData/hydra/blob/main/overlay/java/hydra-kernel/src/main/java/hydra/lib/Libraries.java)
 
 **Python**:
 - Implementations:
-  [hydra/lib](https://github.com/CategoricalData/hydra/tree/main/heads/python/src/main/python/hydra/lib) (hand-written)
+  [hydra/lib](https://github.com/CategoricalData/hydra/tree/main/overlay/python/hydra-kernel/src/main/python/hydra/lib) (hand-written)
 
 ### Requirements for primitives
 
@@ -514,8 +514,8 @@ In addition to the implementations themselves, you need supporting infrastructur
 
 | Language | Key files |
 |----------|-----------|
-| Java | [PrimitiveFunction.java](https://github.com/CategoricalData/hydra/blob/main/heads/java/src/main/java/hydra/tools/PrimitiveFunction.java), [Libraries.java](https://github.com/CategoricalData/hydra/blob/main/heads/java/src/main/java/hydra/lib/Libraries.java) |
-| Python | [hydra/dsl/prims.py](https://github.com/CategoricalData/hydra/blob/main/heads/python/src/main/python/hydra/dsl/prims.py), [hydra/sources/libraries.py](https://github.com/CategoricalData/hydra/blob/main/heads/python/src/main/python/hydra/sources/libraries.py) |
+| Java | [PrimitiveFunction.java](https://github.com/CategoricalData/hydra/blob/main/overlay/java/hydra-kernel/src/main/java/hydra/tools/PrimitiveFunction.java), [Libraries.java](https://github.com/CategoricalData/hydra/blob/main/overlay/java/hydra-kernel/src/main/java/hydra/lib/Libraries.java) |
+| Python | [hydra/dsl/prims.py](https://github.com/CategoricalData/hydra/blob/main/overlay/python/hydra-kernel/src/main/python/hydra/dsl/prims.py), [hydra/sources/libraries.py](https://github.com/CategoricalData/hydra/blob/main/overlay/python/hydra-kernel/src/main/python/hydra/sources/libraries.py) |
 
 ## Step 8: Implement runtime foundation types
 
@@ -530,7 +530,7 @@ These are language-specific representations of Hydra's core algebraic types:
 
 | Language | Module |
 |----------|--------|
-| Java | [hydra/util/](https://github.com/CategoricalData/hydra/tree/main/heads/java/src/main/java/hydra/util) (`Maybe`, `Either`, `Lazy`, `Unit`, `Pair`, `Tuple`) |
+| Java | [hydra/util/](https://github.com/CategoricalData/hydra/tree/main/overlay/java/hydra-kernel/src/main/java/hydra/util) (`Maybe`, `Either`, `Lazy`, `Unit`, `Pair`, `Tuple`) |
 | Python | [hydra/dsl/python.py](https://github.com/CategoricalData/hydra/blob/main/heads/python/src/main/python/hydra/dsl/python.py) (`Just`/`Nothing`, `Left`/`Right`, `FrozenDict`, `frozenlist`, `Node`) |
 
 ## Step 9: Create test runners
@@ -617,11 +617,11 @@ You should start with these three DSLs, and then add others as desired:
 
 1. **Type construction DSL**: Allows developers to build type-level expressions
    - [Haskell Types.hs](https://github.com/CategoricalData/hydra/blob/main/heads/haskell/src/main/haskell/Hydra/Dsl/Types.hs)
-   - [Java Types.java](https://github.com/CategoricalData/hydra/blob/main/heads/java/src/main/java/hydra/dsl/Types.java)
+   - [Java Types.java](https://github.com/CategoricalData/hydra/blob/main/overlay/java/hydra-kernel/src/main/java/hydra/dsl/Types.java)
 
 2. **Term construction DSL**: Allows developers to build term-level expressions
-   - [Haskell Terms.hs](https://github.com/CategoricalData/hydra/blob/main/heads/haskell/src/main/haskell/Hydra/Dsl/Terms.hs)
-   - [Java Terms.java](https://github.com/CategoricalData/hydra/blob/main/heads/java/src/main/java/hydra/dsl/Terms.java)
+   - [Haskell Terms.hs](https://github.com/CategoricalData/hydra/blob/main/overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Dsl/Terms.hs)
+   - [Java Terms.java](https://github.com/CategoricalData/hydra/blob/main/overlay/java/hydra-kernel/src/main/java/hydra/dsl/Terms.java)
 
 3. **Term decoding DSL ("expect")**: Allows developers to decode Hydra terms to native programming constructs
    - [Haskell Expect.hs](https://github.com/CategoricalData/hydra/blob/main/heads/haskell/src/main/haskell/Hydra/Dsl/Expect.hs)

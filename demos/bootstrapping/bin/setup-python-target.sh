@@ -34,19 +34,26 @@ cp "$PYTHON_RESOURCES/README.md" "$OUTPUT_DIR/"
 # Hand-written source files
 echo "  Copying hand-written source files..."
 PY_SRC="$HYDRA_PYTHON_DIR/src/main/python/hydra"
+PY_OVERLAY="$HYDRA_ROOT/overlay/python/hydra-kernel/src/main/python/hydra"
 PY_DST="$OUTPUT_DIR/src/main/python/hydra"
 mkdir -p "$PY_DST"
 
-for f in __init__.py tools.py py.typed generation.py bootstrap.py; do
+# Head-only files (NOT part of the kernel runtime overlay; #418): __init__.py,
+# the multi-coder drivers, and the python/ coder subdir stay in heads/python/src.
+for f in __init__.py generation.py bootstrap.py; do
     cp "$PY_SRC/$f" "$PY_DST/" 2>/dev/null || true
 done
+if [ -d "$PY_SRC/python" ]; then
+    cp -r "$PY_SRC/python" "$PY_DST/"
+    find "$PY_DST/python" -name "__pycache__" -type d -exec rm -rf {} + 2>/dev/null || true
+fi
 
-for d in lib dsl sources python; do
-    if [ -d "$PY_SRC/$d" ]; then
-        cp -r "$PY_SRC/$d" "$PY_DST/"
-        find "$PY_DST/$d" -name "__pycache__" -type d -exec rm -rf {} + 2>/dev/null || true
-    fi
-done
+# Kernel runtime: a single overlay copy from overlay/python/hydra-kernel/ (#418).
+# Brings in tools.py, py.typed, and the lib/dsl/sources trees. Bootstrap output is
+# one flat tree, so it must be stitched in here, just as copy-kernel-runtime.sh
+# overlays it onto dist/python/hydra-kernel/.
+cp -r "$PY_OVERLAY/." "$PY_DST/"
+find "$PY_DST" -name "__pycache__" -type d -exec rm -rf {} + 2>/dev/null || true
 
 # Copy generated kernel modules from baseline.
 # Test infrastructure imports generated modules like hydra.annotations, hydra.core, etc.
