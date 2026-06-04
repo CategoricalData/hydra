@@ -4,7 +4,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for hydra.typing.FunctionStructure"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL constructor for hydra.typing.FunctionStructure"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -98,7 +102,11 @@
                                           "application": {
                                             "argument": {
                                               "annotated": {
-                                                "annotation": [{"key": "description", "value": {"literal": {"string": "Updated environment after processing all bindings"}}}],
+                                                "annotation": {
+                                                  "map": [
+                                                    {
+                                                      "key": {"variable": "description"},
+                                                      "value": {"literal": {"string": "Updated environment after processing all bindings"}}}]},
                                                 "body": {"variable": "env"}}},
                                             "function": {"variable": "hydra.typed.TypedTerm"}}},
                                         "parameter": "environment"}},
@@ -106,10 +114,11 @@
                                       "application": {
                                         "argument": {
                                           "annotated": {
-                                            "annotation": [
-                                              {
-                                                "key": "description",
-                                                "value": {"literal": {"string": "The return type of the function (if type inference succeeded)"}}}],
+                                            "annotation": {
+                                              "map": [
+                                                {
+                                                  "key": {"variable": "description"},
+                                                  "value": {"literal": {"string": "The return type of the function (if type inference succeeded)"}}}]},
                                             "body": {"maybe": {"variable": "hydra.core.Type"}}}},
                                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                                     "parameter": "codomain"}},
@@ -117,7 +126,8 @@
                                   "application": {
                                     "argument": {
                                       "annotated": {
-                                        "annotation": [{"key": "description", "value": {"literal": {"string": "Domain types of the value parameters"}}}],
+                                        "annotation": {
+                                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Domain types of the value parameters"}}}]},
                                         "body": {"list": {"variable": "hydra.core.Type"}}}},
                                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                                 "parameter": "domains"}},
@@ -125,7 +135,11 @@
                               "application": {
                                 "argument": {
                                   "annotated": {
-                                    "annotation": [{"key": "description", "value": {"literal": {"string": "The body term after removing all lambdas, lets, etc."}}}],
+                                    "annotation": {
+                                      "map": [
+                                        {
+                                          "key": {"variable": "description"},
+                                          "value": {"literal": {"string": "The body term after removing all lambdas, lets, etc."}}}]},
                                     "body": {"variable": "hydra.core.Term"}}},
                                 "function": {"variable": "hydra.typed.TypedTerm"}}},
                             "parameter": "body"}},
@@ -133,7 +147,8 @@
                           "application": {
                             "argument": {
                               "annotated": {
-                                "annotation": [{"key": "description", "value": {"literal": {"string": "Let bindings accumulated from the term"}}}],
+                                "annotation": {
+                                  "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Let bindings accumulated from the term"}}}]},
                                 "body": {"list": {"variable": "hydra.core.Binding"}}}},
                             "function": {"variable": "hydra.typed.TypedTerm"}}},
                         "parameter": "bindings"}},
@@ -141,7 +156,7 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "Value parameters (from lambdas)"}}}],
+                            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Value parameters (from lambdas)"}}}]},
                             "body": {"list": {"variable": "hydra.core.Name"}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "params"}},
@@ -149,7 +164,7 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "Type parameters (from type lambdas)"}}}],
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Type parameters (from type lambdas)"}}}]},
                         "body": {"list": {"variable": "hydra.core.Name"}}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "typeParams"}}}},
@@ -163,7 +178,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "Type parameters (from type lambdas)"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Type parameters (from type lambdas)"}}}]},
                       "body": {"list": {"variable": "hydra.core.Name"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -173,7 +188,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "Value parameters (from lambdas)"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Value parameters (from lambdas)"}}}]},
                       "body": {"list": {"variable": "hydra.core.Name"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -183,7 +198,8 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "Let bindings accumulated from the term"}}}],
+                      "annotation": {
+                        "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Let bindings accumulated from the term"}}}]},
                       "body": {"list": {"variable": "hydra.core.Binding"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -193,7 +209,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The body term after removing all lambdas, lets, etc."}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "The body term after removing all lambdas, lets, etc."}}}]},
                       "body": {"variable": "hydra.core.Term"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -203,7 +223,8 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "Domain types of the value parameters"}}}],
+                      "annotation": {
+                        "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Domain types of the value parameters"}}}]},
                       "body": {"list": {"variable": "hydra.core.Type"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -213,10 +234,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "The return type of the function (if type inference succeeded)"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "The return type of the function (if type inference succeeded)"}}}]},
                       "body": {"maybe": {"variable": "hydra.core.Type"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -226,7 +248,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "Updated environment after processing all bindings"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "Updated environment after processing all bindings"}}}]},
                       "body": {"variable": "env"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -239,10 +265,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the typeParams field of hydra.typing.FunctionStructure"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the typeParams field of hydra.typing.FunctionStructure"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -295,7 +322,7 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "Type parameters (from type lambdas)"}}}],
+                    "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Type parameters (from type lambdas)"}}}]},
                     "body": {"list": {"variable": "hydra.core.Name"}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": [{"constraints": [], "name": "env"}]}}},
@@ -303,10 +330,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the params field of hydra.typing.FunctionStructure"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the params field of hydra.typing.FunctionStructure"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -359,7 +387,7 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "Value parameters (from lambdas)"}}}],
+                    "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Value parameters (from lambdas)"}}}]},
                     "body": {"list": {"variable": "hydra.core.Name"}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": [{"constraints": [], "name": "env"}]}}},
@@ -367,10 +395,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the bindings field of hydra.typing.FunctionStructure"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the bindings field of hydra.typing.FunctionStructure"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -423,7 +452,8 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "Let bindings accumulated from the term"}}}],
+                    "annotation": {
+                      "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Let bindings accumulated from the term"}}}]},
                     "body": {"list": {"variable": "hydra.core.Binding"}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": [{"constraints": [], "name": "env"}]}}},
@@ -431,10 +461,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the body field of hydra.typing.FunctionStructure"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the body field of hydra.typing.FunctionStructure"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -487,7 +518,11 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The body term after removing all lambdas, lets, etc."}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "The body term after removing all lambdas, lets, etc."}}}]},
                     "body": {"variable": "hydra.core.Term"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": [{"constraints": [], "name": "env"}]}}},
@@ -495,10 +530,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the domains field of hydra.typing.FunctionStructure"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the domains field of hydra.typing.FunctionStructure"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -551,7 +587,8 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "Domain types of the value parameters"}}}],
+                    "annotation": {
+                      "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Domain types of the value parameters"}}}]},
                     "body": {"list": {"variable": "hydra.core.Type"}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": [{"constraints": [], "name": "env"}]}}},
@@ -559,10 +596,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the codomain field of hydra.typing.FunctionStructure"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the codomain field of hydra.typing.FunctionStructure"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -615,10 +653,11 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {"literal": {"string": "The return type of the function (if type inference succeeded)"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "The return type of the function (if type inference succeeded)"}}}]},
                     "body": {"maybe": {"variable": "hydra.core.Type"}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": [{"constraints": [], "name": "env"}]}}},
@@ -626,10 +665,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the environment field of hydra.typing.FunctionStructure"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the environment field of hydra.typing.FunctionStructure"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -682,7 +722,11 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "Updated environment after processing all bindings"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "Updated environment after processing all bindings"}}}]},
                     "body": {"variable": "env"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": [{"constraints": [], "name": "env"}]}}},
@@ -690,10 +734,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the typeParams field of hydra.typing.FunctionStructure"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the typeParams field of hydra.typing.FunctionStructure"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -933,7 +978,7 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "Type parameters (from type lambdas)"}}}],
+                            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Type parameters (from type lambdas)"}}}]},
                             "body": {"list": {"variable": "hydra.core.Name"}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -959,7 +1004,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "Type parameters (from type lambdas)"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Type parameters (from type lambdas)"}}}]},
                       "body": {"list": {"variable": "hydra.core.Name"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -972,10 +1017,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the params field of hydra.typing.FunctionStructure"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the params field of hydra.typing.FunctionStructure"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1215,7 +1261,7 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "Value parameters (from lambdas)"}}}],
+                            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Value parameters (from lambdas)"}}}]},
                             "body": {"list": {"variable": "hydra.core.Name"}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -1241,7 +1287,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "Value parameters (from lambdas)"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Value parameters (from lambdas)"}}}]},
                       "body": {"list": {"variable": "hydra.core.Name"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -1254,10 +1300,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the bindings field of hydra.typing.FunctionStructure"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the bindings field of hydra.typing.FunctionStructure"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1497,7 +1544,8 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "Let bindings accumulated from the term"}}}],
+                            "annotation": {
+                              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Let bindings accumulated from the term"}}}]},
                             "body": {"list": {"variable": "hydra.core.Binding"}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -1523,7 +1571,8 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "Let bindings accumulated from the term"}}}],
+                      "annotation": {
+                        "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Let bindings accumulated from the term"}}}]},
                       "body": {"list": {"variable": "hydra.core.Binding"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -1536,10 +1585,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the body field of hydra.typing.FunctionStructure"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the body field of hydra.typing.FunctionStructure"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1779,7 +1829,11 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "The body term after removing all lambdas, lets, etc."}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {"literal": {"string": "The body term after removing all lambdas, lets, etc."}}}]},
                             "body": {"variable": "hydra.core.Term"}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -1805,7 +1859,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The body term after removing all lambdas, lets, etc."}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "The body term after removing all lambdas, lets, etc."}}}]},
                       "body": {"variable": "hydra.core.Term"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -1818,10 +1876,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the domains field of hydra.typing.FunctionStructure"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the domains field of hydra.typing.FunctionStructure"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2061,7 +2120,8 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "Domain types of the value parameters"}}}],
+                            "annotation": {
+                              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Domain types of the value parameters"}}}]},
                             "body": {"list": {"variable": "hydra.core.Type"}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -2087,7 +2147,8 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "Domain types of the value parameters"}}}],
+                      "annotation": {
+                        "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Domain types of the value parameters"}}}]},
                       "body": {"list": {"variable": "hydra.core.Type"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -2100,10 +2161,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the codomain field of hydra.typing.FunctionStructure"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the codomain field of hydra.typing.FunctionStructure"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2343,10 +2405,11 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [
-                              {
-                                "key": "description",
-                                "value": {"literal": {"string": "The return type of the function (if type inference succeeded)"}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {"literal": {"string": "The return type of the function (if type inference succeeded)"}}}]},
                             "body": {"maybe": {"variable": "hydra.core.Type"}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -2372,10 +2435,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "The return type of the function (if type inference succeeded)"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "The return type of the function (if type inference succeeded)"}}}]},
                       "body": {"maybe": {"variable": "hydra.core.Type"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -2388,10 +2452,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the environment field of hydra.typing.FunctionStructure"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the environment field of hydra.typing.FunctionStructure"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2631,7 +2696,11 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "Updated environment after processing all bindings"}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {"literal": {"string": "Updated environment after processing all bindings"}}}]},
                             "body": {"variable": "env"}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -2657,7 +2726,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "Updated environment after processing all bindings"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "Updated environment after processing all bindings"}}}]},
                       "body": {"variable": "env"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -2670,7 +2743,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for hydra.typing.InferenceContext"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL constructor for hydra.typing.InferenceContext"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2716,12 +2793,13 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [
-                              {
-                                "key": "description",
-                                "value": {
-                                  "literal": {
-                                    "string": "The current subterm-path trace, accumulated backwards (head = most-recently-pushed step, corresponding to the deepest point in the descent). At the moment an inference error is constructed, the list is reversed and wrapped into a SubtermPath (root-to-leaf order) and stamped onto the error."}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {
+                                    "literal": {
+                                      "string": "The current subterm-path trace, accumulated backwards (head = most-recently-pushed step, corresponding to the deepest point in the descent). At the moment an inference error is constructed, the list is reversed and wrapped into a SubtermPath (root-to-leaf order) and stamped onto the error."}}}]},
                             "body": {"list": {"variable": "hydra.paths.SubtermStep"}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "trace"}},
@@ -2729,10 +2807,11 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "Counter used to generate distinct fresh type variables during inference"}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "Counter used to generate distinct fresh type variables during inference"}}}]},
                         "body": {"literal": {"integer": {"int32": {}}}}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "freshTypeVariableCount"}}}},
@@ -2746,10 +2825,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "Counter used to generate distinct fresh type variables during inference"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "Counter used to generate distinct fresh type variables during inference"}}}]},
                       "body": {"literal": {"integer": {"int32": {}}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -2759,12 +2839,13 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {
-                            "literal": {
-                              "string": "The current subterm-path trace, accumulated backwards (head = most-recently-pushed step, corresponding to the deepest point in the descent). At the moment an inference error is constructed, the list is reversed and wrapped into a SubtermPath (root-to-leaf order) and stamped onto the error."}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {
+                              "literal": {
+                                "string": "The current subterm-path trace, accumulated backwards (head = most-recently-pushed step, corresponding to the deepest point in the descent). At the moment an inference error is constructed, the list is reversed and wrapped into a SubtermPath (root-to-leaf order) and stamped onto the error."}}}]},
                       "body": {"list": {"variable": "hydra.paths.SubtermStep"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -2775,10 +2856,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the freshTypeVariableCount field of hydra.typing.InferenceContext"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the freshTypeVariableCount field of hydra.typing.InferenceContext"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2829,10 +2911,11 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {"literal": {"string": "Counter used to generate distinct fresh type variables during inference"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "Counter used to generate distinct fresh type variables during inference"}}}]},
                     "body": {"literal": {"integer": {"int32": {}}}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -2840,10 +2923,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the trace field of hydra.typing.InferenceContext"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the trace field of hydra.typing.InferenceContext"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2892,12 +2976,13 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {
-                          "literal": {
-                            "string": "The current subterm-path trace, accumulated backwards (head = most-recently-pushed step, corresponding to the deepest point in the descent). At the moment an inference error is constructed, the list is reversed and wrapped into a SubtermPath (root-to-leaf order) and stamped onto the error."}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {
+                            "literal": {
+                              "string": "The current subterm-path trace, accumulated backwards (head = most-recently-pushed step, corresponding to the deepest point in the descent). At the moment an inference error is constructed, the list is reversed and wrapped into a SubtermPath (root-to-leaf order) and stamped onto the error."}}}]},
                     "body": {"list": {"variable": "hydra.paths.SubtermStep"}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -2905,10 +2990,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the freshTypeVariableCount field of hydra.typing.InferenceContext"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the freshTypeVariableCount field of hydra.typing.InferenceContext"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2980,10 +3066,11 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [
-                              {
-                                "key": "description",
-                                "value": {"literal": {"string": "Counter used to generate distinct fresh type variables during inference"}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {"literal": {"string": "Counter used to generate distinct fresh type variables during inference"}}}]},
                             "body": {"literal": {"integer": {"int32": {}}}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -3005,10 +3092,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "Counter used to generate distinct fresh type variables during inference"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "Counter used to generate distinct fresh type variables during inference"}}}]},
                       "body": {"literal": {"integer": {"int32": {}}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -3019,10 +3107,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the trace field of hydra.typing.InferenceContext"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the trace field of hydra.typing.InferenceContext"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3096,12 +3185,13 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [
-                              {
-                                "key": "description",
-                                "value": {
-                                  "literal": {
-                                    "string": "The current subterm-path trace, accumulated backwards (head = most-recently-pushed step, corresponding to the deepest point in the descent). At the moment an inference error is constructed, the list is reversed and wrapped into a SubtermPath (root-to-leaf order) and stamped onto the error."}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {
+                                    "literal": {
+                                      "string": "The current subterm-path trace, accumulated backwards (head = most-recently-pushed step, corresponding to the deepest point in the descent). At the moment an inference error is constructed, the list is reversed and wrapped into a SubtermPath (root-to-leaf order) and stamped onto the error."}}}]},
                             "body": {"list": {"variable": "hydra.paths.SubtermStep"}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -3123,12 +3213,13 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {
-                            "literal": {
-                              "string": "The current subterm-path trace, accumulated backwards (head = most-recently-pushed step, corresponding to the deepest point in the descent). At the moment an inference error is constructed, the list is reversed and wrapped into a SubtermPath (root-to-leaf order) and stamped onto the error."}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {
+                              "literal": {
+                                "string": "The current subterm-path trace, accumulated backwards (head = most-recently-pushed step, corresponding to the deepest point in the descent). At the moment an inference error is constructed, the list is reversed and wrapped into a SubtermPath (root-to-leaf order) and stamped onto the error."}}}]},
                       "body": {"list": {"variable": "hydra.paths.SubtermStep"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -3139,7 +3230,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for hydra.typing.InferenceResult"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL constructor for hydra.typing.InferenceResult"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3213,10 +3308,11 @@
                                   "application": {
                                     "argument": {
                                       "annotated": {
-                                        "annotation": [
-                                          {
-                                            "key": "description",
-                                            "value": {"literal": {"string": "The updated InferenceContext after inference (carries fresh-variable counter and trace)"}}}],
+                                        "annotation": {
+                                          "map": [
+                                            {
+                                              "key": {"variable": "description"},
+                                              "value": {"literal": {"string": "The updated InferenceContext after inference (carries fresh-variable counter and trace)"}}}]},
                                         "body": {"variable": "hydra.typing.InferenceContext"}}},
                                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                                 "parameter": "context"}},
@@ -3224,10 +3320,11 @@
                               "application": {
                                 "argument": {
                                   "annotated": {
-                                    "annotation": [
-                                      {
-                                        "key": "description",
-                                        "value": {"literal": {"string": "Class constraints discovered during inference (e.g., Ord constraints from Map.lookup)"}}}],
+                                    "annotation": {
+                                      "map": [
+                                        {
+                                          "key": {"variable": "description"},
+                                          "value": {"literal": {"string": "Class constraints discovered during inference (e.g., Ord constraints from Map.lookup)"}}}]},
                                     "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}},
                                 "function": {"variable": "hydra.typed.TypedTerm"}}},
                             "parameter": "classConstraints"}},
@@ -3235,7 +3332,11 @@
                           "application": {
                             "argument": {
                               "annotated": {
-                                "annotation": [{"key": "description", "value": {"literal": {"string": "The type substitution resulting from unification"}}}],
+                                "annotation": {
+                                  "map": [
+                                    {
+                                      "key": {"variable": "description"},
+                                      "value": {"literal": {"string": "The type substitution resulting from unification"}}}]},
                                 "body": {"variable": "hydra.typing.TypeSubst"}}},
                             "function": {"variable": "hydra.typed.TypedTerm"}}},
                         "parameter": "subst"}},
@@ -3243,7 +3344,7 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "The inferred type of the term"}}}],
+                            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The inferred type of the term"}}}]},
                             "body": {"variable": "hydra.core.Type"}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "type"}},
@@ -3251,7 +3352,7 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The term which was inferred"}}}],
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The term which was inferred"}}}]},
                         "body": {"variable": "hydra.core.Term"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "term"}}}},
@@ -3265,7 +3366,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The term which was inferred"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The term which was inferred"}}}]},
                       "body": {"variable": "hydra.core.Term"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -3275,7 +3376,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The inferred type of the term"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The inferred type of the term"}}}]},
                       "body": {"variable": "hydra.core.Type"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -3285,7 +3386,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The type substitution resulting from unification"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "The type substitution resulting from unification"}}}]},
                       "body": {"variable": "hydra.typing.TypeSubst"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -3295,10 +3400,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "Class constraints discovered during inference (e.g., Ord constraints from Map.lookup)"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "Class constraints discovered during inference (e.g., Ord constraints from Map.lookup)"}}}]},
                       "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -3308,10 +3414,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "The updated InferenceContext after inference (carries fresh-variable counter and trace)"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "The updated InferenceContext after inference (carries fresh-variable counter and trace)"}}}]},
                       "body": {"variable": "hydra.typing.InferenceContext"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -3322,10 +3429,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the term field of hydra.typing.InferenceResult"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the term field of hydra.typing.InferenceResult"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3374,7 +3482,7 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The term which was inferred"}}}],
+                    "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The term which was inferred"}}}]},
                     "body": {"variable": "hydra.core.Term"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -3382,10 +3490,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the type field of hydra.typing.InferenceResult"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the type field of hydra.typing.InferenceResult"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3434,7 +3543,7 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The inferred type of the term"}}}],
+                    "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The inferred type of the term"}}}]},
                     "body": {"variable": "hydra.core.Type"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -3442,10 +3551,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the subst field of hydra.typing.InferenceResult"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the subst field of hydra.typing.InferenceResult"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3494,7 +3604,11 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The type substitution resulting from unification"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "The type substitution resulting from unification"}}}]},
                     "body": {"variable": "hydra.typing.TypeSubst"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -3502,10 +3616,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the classConstraints field of hydra.typing.InferenceResult"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the classConstraints field of hydra.typing.InferenceResult"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3556,10 +3671,11 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {"literal": {"string": "Class constraints discovered during inference (e.g., Ord constraints from Map.lookup)"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "Class constraints discovered during inference (e.g., Ord constraints from Map.lookup)"}}}]},
                     "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -3567,10 +3683,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the context field of hydra.typing.InferenceResult"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the context field of hydra.typing.InferenceResult"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3619,10 +3736,11 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {"literal": {"string": "The updated InferenceContext after inference (carries fresh-variable counter and trace)"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "The updated InferenceContext after inference (carries fresh-variable counter and trace)"}}}]},
                     "body": {"variable": "hydra.typing.InferenceContext"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -3630,10 +3748,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the term field of hydra.typing.InferenceResult"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the term field of hydra.typing.InferenceResult"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3807,7 +3926,7 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "The term which was inferred"}}}],
+                            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The term which was inferred"}}}]},
                             "body": {"variable": "hydra.core.Term"}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -3829,7 +3948,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The term which was inferred"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The term which was inferred"}}}]},
                       "body": {"variable": "hydra.core.Term"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -3840,10 +3959,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the type field of hydra.typing.InferenceResult"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the type field of hydra.typing.InferenceResult"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4017,7 +4137,7 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "The inferred type of the term"}}}],
+                            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The inferred type of the term"}}}]},
                             "body": {"variable": "hydra.core.Type"}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -4039,7 +4159,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The inferred type of the term"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The inferred type of the term"}}}]},
                       "body": {"variable": "hydra.core.Type"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -4050,10 +4170,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the subst field of hydra.typing.InferenceResult"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the subst field of hydra.typing.InferenceResult"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4227,7 +4348,11 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "The type substitution resulting from unification"}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {"literal": {"string": "The type substitution resulting from unification"}}}]},
                             "body": {"variable": "hydra.typing.TypeSubst"}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -4249,7 +4374,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The type substitution resulting from unification"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "The type substitution resulting from unification"}}}]},
                       "body": {"variable": "hydra.typing.TypeSubst"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -4260,10 +4389,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the classConstraints field of hydra.typing.InferenceResult"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the classConstraints field of hydra.typing.InferenceResult"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4435,10 +4565,11 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [
-                              {
-                                "key": "description",
-                                "value": {"literal": {"string": "Class constraints discovered during inference (e.g., Ord constraints from Map.lookup)"}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {"literal": {"string": "Class constraints discovered during inference (e.g., Ord constraints from Map.lookup)"}}}]},
                             "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -4460,10 +4591,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "Class constraints discovered during inference (e.g., Ord constraints from Map.lookup)"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "Class constraints discovered during inference (e.g., Ord constraints from Map.lookup)"}}}]},
                       "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -4474,10 +4606,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the context field of hydra.typing.InferenceResult"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the context field of hydra.typing.InferenceResult"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4651,10 +4784,11 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [
-                              {
-                                "key": "description",
-                                "value": {"literal": {"string": "The updated InferenceContext after inference (carries fresh-variable counter and trace)"}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {"literal": {"string": "The updated InferenceContext after inference (carries fresh-variable counter and trace)"}}}]},
                             "body": {"variable": "hydra.typing.InferenceContext"}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -4676,10 +4810,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "The updated InferenceContext after inference (carries fresh-variable counter and trace)"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "The updated InferenceContext after inference (carries fresh-variable counter and trace)"}}}]},
                       "body": {"variable": "hydra.typing.InferenceContext"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -4690,7 +4825,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for hydra.typing.Parameter"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL constructor for hydra.typing.Parameter"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4754,12 +4890,13 @@
                               "application": {
                                 "argument": {
                                   "annotated": {
-                                    "annotation": [
-                                      {
-                                        "key": "description",
-                                        "value": {
-                                          "literal": {
-                                            "string": "Whether the parameter must be passed lazily (thunked) at call sites in hosts that distinguish strict from lazy evaluation"}}}],
+                                    "annotation": {
+                                      "map": [
+                                        {
+                                          "key": {"variable": "description"},
+                                          "value": {
+                                            "literal": {
+                                              "string": "Whether the parameter must be passed lazily (thunked) at call sites in hosts that distinguish strict from lazy evaluation"}}}]},
                                     "body": {"literal": {"boolean": {}}}}},
                                 "function": {"variable": "hydra.typed.TypedTerm"}}},
                             "parameter": "isLazy"}},
@@ -4767,7 +4904,7 @@
                           "application": {
                             "argument": {
                               "annotated": {
-                                "annotation": [{"key": "description", "value": {"literal": {"string": "The type of the parameter"}}}],
+                                "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The type of the parameter"}}}]},
                                 "body": {"variable": "hydra.core.Type"}}},
                             "function": {"variable": "hydra.typed.TypedTerm"}}},
                         "parameter": "type"}},
@@ -4775,7 +4912,11 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "An optional human-readable description of the parameter"}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {"literal": {"string": "An optional human-readable description of the parameter"}}}]},
                             "body": {"maybe": {"literal": {"string": {}}}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "description"}},
@@ -4783,7 +4924,7 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the parameter"}}}],
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The name of the parameter"}}}]},
                         "body": {"variable": "hydra.core.Name"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "name"}}}},
@@ -4797,7 +4938,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the parameter"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The name of the parameter"}}}]},
                       "body": {"variable": "hydra.core.Name"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -4807,7 +4948,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "An optional human-readable description of the parameter"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "An optional human-readable description of the parameter"}}}]},
                       "body": {"maybe": {"literal": {"string": {}}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -4817,7 +4962,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The type of the parameter"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The type of the parameter"}}}]},
                       "body": {"variable": "hydra.core.Type"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -4827,12 +4972,13 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {
-                            "literal": {
-                              "string": "Whether the parameter must be passed lazily (thunked) at call sites in hosts that distinguish strict from lazy evaluation"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {
+                              "literal": {
+                                "string": "Whether the parameter must be passed lazily (thunked) at call sites in hosts that distinguish strict from lazy evaluation"}}}]},
                       "body": {"literal": {"boolean": {}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -4842,7 +4988,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL accessor for the name field of hydra.typing.Parameter"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the name field of hydra.typing.Parameter"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4889,7 +5039,7 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the parameter"}}}],
+                    "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The name of the parameter"}}}]},
                     "body": {"variable": "hydra.core.Name"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -4897,10 +5047,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the description field of hydra.typing.Parameter"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the description field of hydra.typing.Parameter"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4947,7 +5098,11 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "An optional human-readable description of the parameter"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "An optional human-readable description of the parameter"}}}]},
                     "body": {"maybe": {"literal": {"string": {}}}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -4955,7 +5110,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL accessor for the type field of hydra.typing.Parameter"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the type field of hydra.typing.Parameter"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -5002,7 +5161,7 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The type of the parameter"}}}],
+                    "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The type of the parameter"}}}]},
                     "body": {"variable": "hydra.core.Type"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -5010,8 +5169,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {"key": "description", "value": {"literal": {"string": "DSL accessor for the isLazy field of hydra.typing.Parameter"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the isLazy field of hydra.typing.Parameter"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -5058,12 +5220,13 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {
-                          "literal": {
-                            "string": "Whether the parameter must be passed lazily (thunked) at call sites in hosts that distinguish strict from lazy evaluation"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {
+                            "literal": {
+                              "string": "Whether the parameter must be passed lazily (thunked) at call sites in hosts that distinguish strict from lazy evaluation"}}}]},
                     "body": {"literal": {"boolean": {}}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -5071,7 +5234,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL updater for the name field of hydra.typing.Parameter"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the name field of hydra.typing.Parameter"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -5209,7 +5376,7 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the parameter"}}}],
+                            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The name of the parameter"}}}]},
                             "body": {"variable": "hydra.core.Name"}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -5229,7 +5396,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the parameter"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The name of the parameter"}}}]},
                       "body": {"variable": "hydra.core.Name"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -5239,10 +5406,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the description field of hydra.typing.Parameter"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the description field of hydra.typing.Parameter"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -5380,7 +5548,11 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "An optional human-readable description of the parameter"}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {"literal": {"string": "An optional human-readable description of the parameter"}}}]},
                             "body": {"maybe": {"literal": {"string": {}}}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -5400,7 +5572,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "An optional human-readable description of the parameter"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "An optional human-readable description of the parameter"}}}]},
                       "body": {"maybe": {"literal": {"string": {}}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -5410,7 +5586,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL updater for the type field of hydra.typing.Parameter"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the type field of hydra.typing.Parameter"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -5548,7 +5728,7 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "The type of the parameter"}}}],
+                            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The type of the parameter"}}}]},
                             "body": {"variable": "hydra.core.Type"}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -5568,7 +5748,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The type of the parameter"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The type of the parameter"}}}]},
                       "body": {"variable": "hydra.core.Type"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -5578,7 +5758,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL updater for the isLazy field of hydra.typing.Parameter"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the isLazy field of hydra.typing.Parameter"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -5716,12 +5900,13 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [
-                              {
-                                "key": "description",
-                                "value": {
-                                  "literal": {
-                                    "string": "Whether the parameter must be passed lazily (thunked) at call sites in hosts that distinguish strict from lazy evaluation"}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {
+                                    "literal": {
+                                      "string": "Whether the parameter must be passed lazily (thunked) at call sites in hosts that distinguish strict from lazy evaluation"}}}]},
                             "body": {"literal": {"boolean": {}}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -5741,12 +5926,13 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {
-                            "literal": {
-                              "string": "Whether the parameter must be passed lazily (thunked) at call sites in hosts that distinguish strict from lazy evaluation"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {
+                              "literal": {
+                                "string": "Whether the parameter must be passed lazily (thunked) at call sites in hosts that distinguish strict from lazy evaluation"}}}]},
                       "body": {"literal": {"boolean": {}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -5756,7 +5942,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for hydra.typing.Result"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL constructor for hydra.typing.Result"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -5800,7 +5987,7 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "The type of the result"}}}],
+                            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The type of the result"}}}]},
                             "body": {"variable": "hydra.core.Type"}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "type"}},
@@ -5808,7 +5995,11 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "An optional human-readable description of the result"}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "An optional human-readable description of the result"}}}]},
                         "body": {"maybe": {"literal": {"string": {}}}}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "description"}}}},
@@ -5822,7 +6013,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "An optional human-readable description of the result"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "An optional human-readable description of the result"}}}]},
                       "body": {"maybe": {"literal": {"string": {}}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -5832,7 +6027,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The type of the result"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The type of the result"}}}]},
                       "body": {"variable": "hydra.core.Type"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -5842,10 +6037,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the description field of hydra.typing.Result"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the description field of hydra.typing.Result"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -5892,7 +6088,11 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "An optional human-readable description of the result"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "An optional human-readable description of the result"}}}]},
                     "body": {"maybe": {"literal": {"string": {}}}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -5900,7 +6100,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL accessor for the type field of hydra.typing.Result"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the type field of hydra.typing.Result"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -5947,7 +6151,7 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The type of the result"}}}],
+                    "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The type of the result"}}}]},
                     "body": {"variable": "hydra.core.Type"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -5955,8 +6159,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {"key": "description", "value": {"literal": {"string": "DSL updater for the description field of hydra.typing.Result"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the description field of hydra.typing.Result"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -6026,7 +6233,11 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "An optional human-readable description of the result"}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {"literal": {"string": "An optional human-readable description of the result"}}}]},
                             "body": {"maybe": {"literal": {"string": {}}}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -6046,7 +6257,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "An optional human-readable description of the result"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "An optional human-readable description of the result"}}}]},
                       "body": {"maybe": {"literal": {"string": {}}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -6056,7 +6271,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL updater for the type field of hydra.typing.Result"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the type field of hydra.typing.Result"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -6126,7 +6345,7 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "The type of the result"}}}],
+                            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The type of the result"}}}]},
                             "body": {"variable": "hydra.core.Type"}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -6146,7 +6365,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The type of the result"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The type of the result"}}}]},
                       "body": {"variable": "hydra.core.Type"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -6156,7 +6375,9 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for hydra.typing.TermSignature"}}}],
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "DSL constructor for hydra.typing.TermSignature"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -6210,7 +6431,7 @@
                           "application": {
                             "argument": {
                               "annotated": {
-                                "annotation": [{"key": "description", "value": {"literal": {"string": "The result of the term"}}}],
+                                "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The result of the term"}}}]},
                                 "body": {"variable": "hydra.typing.Result"}}},
                             "function": {"variable": "hydra.typed.TypedTerm"}}},
                         "parameter": "result"}},
@@ -6218,7 +6439,8 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "The value parameters of the term, in order"}}}],
+                            "annotation": {
+                              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The value parameters of the term, in order"}}}]},
                             "body": {"list": {"variable": "hydra.typing.Parameter"}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "parameters"}},
@@ -6226,7 +6448,8 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The type parameters of the term, in order"}}}],
+                        "annotation": {
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The type parameters of the term, in order"}}}]},
                         "body": {"list": {"variable": "hydra.typing.TypeParameter"}}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "typeParameters"}}}},
@@ -6240,7 +6463,8 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The type parameters of the term, in order"}}}],
+                      "annotation": {
+                        "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The type parameters of the term, in order"}}}]},
                       "body": {"list": {"variable": "hydra.typing.TypeParameter"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -6250,7 +6474,8 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The value parameters of the term, in order"}}}],
+                      "annotation": {
+                        "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The value parameters of the term, in order"}}}]},
                       "body": {"list": {"variable": "hydra.typing.Parameter"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -6260,7 +6485,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The result of the term"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The result of the term"}}}]},
                       "body": {"variable": "hydra.typing.Result"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -6271,10 +6496,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the typeParameters field of hydra.typing.TermSignature"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the typeParameters field of hydra.typing.TermSignature"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -6325,7 +6551,8 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The type parameters of the term, in order"}}}],
+                    "annotation": {
+                      "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The type parameters of the term, in order"}}}]},
                     "body": {"list": {"variable": "hydra.typing.TypeParameter"}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -6333,10 +6560,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the parameters field of hydra.typing.TermSignature"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the parameters field of hydra.typing.TermSignature"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -6385,7 +6613,8 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The value parameters of the term, in order"}}}],
+                    "annotation": {
+                      "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The value parameters of the term, in order"}}}]},
                     "body": {"list": {"variable": "hydra.typing.Parameter"}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -6393,10 +6622,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the result field of hydra.typing.TermSignature"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the result field of hydra.typing.TermSignature"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -6445,7 +6675,7 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The result of the term"}}}],
+                    "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The result of the term"}}}]},
                     "body": {"variable": "hydra.typing.Result"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -6453,10 +6683,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the typeParameters field of hydra.typing.TermSignature"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the typeParameters field of hydra.typing.TermSignature"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -6560,7 +6791,8 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "The type parameters of the term, in order"}}}],
+                            "annotation": {
+                              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The type parameters of the term, in order"}}}]},
                             "body": {"list": {"variable": "hydra.typing.TypeParameter"}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -6582,7 +6814,8 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The type parameters of the term, in order"}}}],
+                      "annotation": {
+                        "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The type parameters of the term, in order"}}}]},
                       "body": {"list": {"variable": "hydra.typing.TypeParameter"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -6593,10 +6826,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the parameters field of hydra.typing.TermSignature"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the parameters field of hydra.typing.TermSignature"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -6702,7 +6936,8 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "The value parameters of the term, in order"}}}],
+                            "annotation": {
+                              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The value parameters of the term, in order"}}}]},
                             "body": {"list": {"variable": "hydra.typing.Parameter"}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -6724,7 +6959,8 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The value parameters of the term, in order"}}}],
+                      "annotation": {
+                        "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The value parameters of the term, in order"}}}]},
                       "body": {"list": {"variable": "hydra.typing.Parameter"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -6735,10 +6971,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the result field of hydra.typing.TermSignature"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the result field of hydra.typing.TermSignature"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -6844,7 +7081,7 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "The result of the term"}}}],
+                            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The result of the term"}}}]},
                             "body": {"variable": "hydra.typing.Result"}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -6866,7 +7103,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The result of the term"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The result of the term"}}}]},
                       "body": {"variable": "hydra.typing.Result"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -6877,7 +7114,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for the hydra.typing.TermSubst wrapper"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL constructor for the hydra.typing.TermSubst wrapper"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -6920,7 +7161,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL accessor for the body of hydra.typing.TermSubst"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the body of hydra.typing.TermSubst"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -6965,7 +7210,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for hydra.typing.TypeClass"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL constructor for hydra.typing.TypeClass"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -6999,7 +7245,9 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "A human-readable description of the type class"}}}],
+                        "annotation": {
+                          "map": [
+                            {"key": {"variable": "description"}, "value": {"literal": {"string": "A human-readable description of the type class"}}}]},
                         "body": {"literal": {"string": {}}}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "description"}}}},
@@ -7013,7 +7261,9 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "A human-readable description of the type class"}}}],
+                      "annotation": {
+                        "map": [
+                          {"key": {"variable": "description"}, "value": {"literal": {"string": "A human-readable description of the type class"}}}]},
                       "body": {"literal": {"string": {}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -7023,10 +7273,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the description field of hydra.typing.TypeClass"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the description field of hydra.typing.TypeClass"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -7073,7 +7324,9 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "A human-readable description of the type class"}}}],
+                    "annotation": {
+                      "map": [
+                        {"key": {"variable": "description"}, "value": {"literal": {"string": "A human-readable description of the type class"}}}]},
                     "body": {"literal": {"string": {}}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -7081,10 +7334,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the description field of hydra.typing.TypeClass"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the description field of hydra.typing.TypeClass"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -7120,7 +7374,9 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "A human-readable description of the type class"}}}],
+                            "annotation": {
+                              "map": [
+                                {"key": {"variable": "description"}, "value": {"literal": {"string": "A human-readable description of the type class"}}}]},
                             "body": {"literal": {"string": {}}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -7140,7 +7396,9 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "A human-readable description of the type class"}}}],
+                      "annotation": {
+                        "map": [
+                          {"key": {"variable": "description"}, "value": {"literal": {"string": "A human-readable description of the type class"}}}]},
                       "body": {"literal": {"string": {}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -7150,7 +7408,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for hydra.typing.TypeConstraint"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL constructor for hydra.typing.TypeConstraint"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -7204,10 +7466,11 @@
                           "application": {
                             "argument": {
                               "annotated": {
-                                "annotation": [
-                                  {
-                                    "key": "description",
-                                    "value": {"literal": {"string": "A description of the type constraint which may be used for tracing or debugging"}}}],
+                                "annotation": {
+                                  "map": [
+                                    {
+                                      "key": {"variable": "description"},
+                                      "value": {"literal": {"string": "A description of the type constraint which may be used for tracing or debugging"}}}]},
                                 "body": {"literal": {"string": {}}}}},
                             "function": {"variable": "hydra.typed.TypedTerm"}}},
                         "parameter": "comment"}},
@@ -7215,7 +7478,8 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "The right-hand side of the constraint"}}}],
+                            "annotation": {
+                              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The right-hand side of the constraint"}}}]},
                             "body": {"variable": "hydra.core.Type"}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "right"}},
@@ -7223,7 +7487,8 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The left-hand side of the constraint"}}}],
+                        "annotation": {
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The left-hand side of the constraint"}}}]},
                         "body": {"variable": "hydra.core.Type"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "left"}}}},
@@ -7237,7 +7502,8 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The left-hand side of the constraint"}}}],
+                      "annotation": {
+                        "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The left-hand side of the constraint"}}}]},
                       "body": {"variable": "hydra.core.Type"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -7247,7 +7513,8 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The right-hand side of the constraint"}}}],
+                      "annotation": {
+                        "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The right-hand side of the constraint"}}}]},
                       "body": {"variable": "hydra.core.Type"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -7257,10 +7524,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "A description of the type constraint which may be used for tracing or debugging"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "A description of the type constraint which may be used for tracing or debugging"}}}]},
                       "body": {"literal": {"string": {}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -7271,10 +7539,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the left field of hydra.typing.TypeConstraint"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the left field of hydra.typing.TypeConstraint"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -7323,7 +7592,8 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The left-hand side of the constraint"}}}],
+                    "annotation": {
+                      "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The left-hand side of the constraint"}}}]},
                     "body": {"variable": "hydra.core.Type"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -7331,10 +7601,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the right field of hydra.typing.TypeConstraint"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the right field of hydra.typing.TypeConstraint"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -7383,7 +7654,8 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The right-hand side of the constraint"}}}],
+                    "annotation": {
+                      "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The right-hand side of the constraint"}}}]},
                     "body": {"variable": "hydra.core.Type"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -7391,10 +7663,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the comment field of hydra.typing.TypeConstraint"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the comment field of hydra.typing.TypeConstraint"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -7443,10 +7716,11 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {"literal": {"string": "A description of the type constraint which may be used for tracing or debugging"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "A description of the type constraint which may be used for tracing or debugging"}}}]},
                     "body": {"literal": {"string": {}}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -7454,10 +7728,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the left field of hydra.typing.TypeConstraint"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the left field of hydra.typing.TypeConstraint"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -7561,7 +7836,8 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "The left-hand side of the constraint"}}}],
+                            "annotation": {
+                              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The left-hand side of the constraint"}}}]},
                             "body": {"variable": "hydra.core.Type"}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -7583,7 +7859,8 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The left-hand side of the constraint"}}}],
+                      "annotation": {
+                        "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The left-hand side of the constraint"}}}]},
                       "body": {"variable": "hydra.core.Type"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -7594,10 +7871,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the right field of hydra.typing.TypeConstraint"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the right field of hydra.typing.TypeConstraint"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -7701,7 +7979,8 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "The right-hand side of the constraint"}}}],
+                            "annotation": {
+                              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The right-hand side of the constraint"}}}]},
                             "body": {"variable": "hydra.core.Type"}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -7723,7 +8002,8 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The right-hand side of the constraint"}}}],
+                      "annotation": {
+                        "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The right-hand side of the constraint"}}}]},
                       "body": {"variable": "hydra.core.Type"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -7734,10 +8014,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the comment field of hydra.typing.TypeConstraint"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the comment field of hydra.typing.TypeConstraint"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -7841,10 +8122,11 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [
-                              {
-                                "key": "description",
-                                "value": {"literal": {"string": "A description of the type constraint which may be used for tracing or debugging"}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {"literal": {"string": "A description of the type constraint which may be used for tracing or debugging"}}}]},
                             "body": {"literal": {"string": {}}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -7866,10 +8148,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "A description of the type constraint which may be used for tracing or debugging"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "A description of the type constraint which may be used for tracing or debugging"}}}]},
                       "body": {"literal": {"string": {}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -7880,7 +8163,9 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for hydra.typing.TypeParameter"}}}],
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "DSL constructor for hydra.typing.TypeParameter"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -7924,7 +8209,11 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "Any type class constraints on the type parameter"}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {"literal": {"string": "Any type class constraints on the type parameter"}}}]},
                             "body": {"list": {"variable": "hydra.core.TypeClassConstraint"}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "constraints"}},
@@ -7932,7 +8221,7 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the type parameter"}}}],
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The name of the type parameter"}}}]},
                         "body": {"variable": "hydra.core.Name"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "name"}}}},
@@ -7946,7 +8235,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the type parameter"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The name of the type parameter"}}}]},
                       "body": {"variable": "hydra.core.Name"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -7956,7 +8245,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "Any type class constraints on the type parameter"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "Any type class constraints on the type parameter"}}}]},
                       "body": {"list": {"variable": "hydra.core.TypeClassConstraint"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -7967,10 +8260,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the name field of hydra.typing.TypeParameter"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the name field of hydra.typing.TypeParameter"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -8019,7 +8313,7 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the type parameter"}}}],
+                    "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The name of the type parameter"}}}]},
                     "body": {"variable": "hydra.core.Name"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -8027,10 +8321,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the constraints field of hydra.typing.TypeParameter"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the constraints field of hydra.typing.TypeParameter"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -8079,7 +8374,11 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "Any type class constraints on the type parameter"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "Any type class constraints on the type parameter"}}}]},
                     "body": {"list": {"variable": "hydra.core.TypeClassConstraint"}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -8087,8 +8386,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {"key": "description", "value": {"literal": {"string": "DSL updater for the name field of hydra.typing.TypeParameter"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the name field of hydra.typing.TypeParameter"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -8158,7 +8460,7 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the type parameter"}}}],
+                            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The name of the type parameter"}}}]},
                             "body": {"variable": "hydra.core.Name"}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -8180,7 +8482,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the type parameter"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The name of the type parameter"}}}]},
                       "body": {"variable": "hydra.core.Name"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -8191,10 +8493,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the constraints field of hydra.typing.TypeParameter"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the constraints field of hydra.typing.TypeParameter"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -8264,7 +8567,11 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "Any type class constraints on the type parameter"}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {"literal": {"string": "Any type class constraints on the type parameter"}}}]},
                             "body": {"list": {"variable": "hydra.core.TypeClassConstraint"}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -8286,7 +8593,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "Any type class constraints on the type parameter"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "Any type class constraints on the type parameter"}}}]},
                       "body": {"list": {"variable": "hydra.core.TypeClassConstraint"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -8297,7 +8608,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for the hydra.typing.TypeSubst wrapper"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL constructor for the hydra.typing.TypeSubst wrapper"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -8340,7 +8655,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL accessor for the body of hydra.typing.TypeSubst"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the body of hydra.typing.TypeSubst"}}}]},
             "body": {
               "lambda": {
                 "body": {

@@ -8,7 +8,7 @@
               "typeLambda": {
                 "body": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "Concatenate two pairs of lists"}}}],
+                    "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Concatenate two pairs of lists"}}}]},
                     "body": {
                       "lambda": {
                         "body": {
@@ -82,7 +82,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Decode a single cell value based on its column type"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Decode a single cell value based on its column type"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -527,7 +531,9 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Decode a single data row based on column types"}}}],
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "Decode a single data row based on column types"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -643,10 +649,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Decode a table of strings into a table of terms based on column type specifications"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Decode a table of strings into a table of terms based on column type specifications"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -760,7 +767,7 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Check if an element is an edge"}}}],
+                "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Check if an element is an edge"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -799,7 +806,7 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Check if an element is a vertex"}}}],
+                "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Check if an element is a vertex"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -836,7 +843,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Group element specifications by their source table"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Group element specifications by their source table"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1468,10 +1479,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Evaluate an edge specification against a record term to produce an optional edge"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Evaluate an edge specification against a record term to produce an optional edge"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1817,7 +1829,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Evaluate property specifications against a record term"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Evaluate property specifications against a record term"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -2050,10 +2066,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Evaluate a vertex specification against a record term to produce an optional vertex"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Evaluate a vertex specification against a record term to produce an optional vertex"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2260,10 +2277,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Find table names referenced in a term by looking for record projections"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Find table names referenced in a term by looking for record projections"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2325,7 +2343,9 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Find table names referenced in multiple terms"}}}],
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "Find table names referenced in multiple terms"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2354,7 +2374,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Check if any element in a list satisfies a predicate"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Check if any element in a list satisfies a predicate"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -2393,7 +2417,9 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Construct a LazyGraph from vertices and edges"}}}],
+                "annotation": {
+                  "map": [
+                    {"key": {"variable": "description"}, "value": {"literal": {"string": "Construct a LazyGraph from vertices and edges"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -2427,7 +2453,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Normalize a CSV field value - empty becomes Nothing"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Normalize a CSV field value - empty becomes Nothing"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2451,7 +2481,9 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Process a single character during CSV parsing"}}}],
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "Process a single character during CSV parsing"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2722,7 +2754,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Parse a CSV line into fields. Empty fields become Nothing."}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Parse a CSV line into fields. Empty fields become Nothing."}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2903,7 +2939,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Parse a single CSV line, returning Nothing for empty lines"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Parse a single CSV line, returning Nothing for empty lines"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2961,7 +3001,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Parse raw CSV lines into a Table of strings"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Parse raw CSV lines into a Table of strings"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3222,7 +3263,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Strip leading and trailing whitespace from a string"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Strip leading and trailing whitespace from a string"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3291,11 +3336,12 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {"string": "Get the table name for an edge specification. Returns an error if not exactly one table is referenced."}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {"string": "Get the table name for an edge specification. Returns an error if not exactly one table is referenced."}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3467,11 +3513,12 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {"string": "Get the table name for a vertex specification. Returns an error if not exactly one table is referenced."}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {"string": "Get the table name for a vertex specification. Returns an error if not exactly one table is referenced."}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3621,7 +3668,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Build a map from table name to table type"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Build a map from table name to table type"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3667,7 +3715,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a data row to a record term given a table type"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Convert a data row to a record term given a table type"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3779,10 +3831,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Transform a record through vertex and edge specifications to produce vertices and edges"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Transform a record through vertex and edge specifications to produce vertices and edges"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3982,10 +4035,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Transform all rows from a table through vertex/edge specifications"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Transform all rows from a table through vertex/edge specifications"}}}]},
             "body": {
               "lambda": {
                 "body": {

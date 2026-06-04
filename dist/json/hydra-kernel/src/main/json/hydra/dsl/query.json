@@ -4,10 +4,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the equal variant of hydra.query.ComparisonConstraint"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the equal variant of hydra.query.ComparisonConstraint"}}}]},
             "body": {
               "wrap": {
                 "body": {
@@ -42,10 +43,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the notEqual variant of hydra.query.ComparisonConstraint"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the notEqual variant of hydra.query.ComparisonConstraint"}}}]},
             "body": {
               "wrap": {
                 "body": {
@@ -80,10 +82,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the lessThan variant of hydra.query.ComparisonConstraint"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the lessThan variant of hydra.query.ComparisonConstraint"}}}]},
             "body": {
               "wrap": {
                 "body": {
@@ -118,10 +121,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the greaterThan variant of hydra.query.ComparisonConstraint"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the greaterThan variant of hydra.query.ComparisonConstraint"}}}]},
             "body": {
               "wrap": {
                 "body": {
@@ -156,10 +160,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the lessThanOrEqual variant of hydra.query.ComparisonConstraint"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the lessThanOrEqual variant of hydra.query.ComparisonConstraint"}}}]},
             "body": {
               "wrap": {
                 "body": {
@@ -194,10 +199,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the greaterThanOrEqual variant of hydra.query.ComparisonConstraint"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the greaterThanOrEqual variant of hydra.query.ComparisonConstraint"}}}]},
             "body": {
               "wrap": {
                 "body": {
@@ -234,7 +240,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for hydra.query.Edge"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL constructor for hydra.query.Edge"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -288,10 +295,11 @@
                           "application": {
                             "argument": {
                               "annotated": {
-                                "annotation": [
-                                  {
-                                    "key": "description",
-                                    "value": {"literal": {"string": "The field representing the in-projection of the edge. Defaults to 'in'."}}}],
+                                "annotation": {
+                                  "map": [
+                                    {
+                                      "key": {"variable": "description"},
+                                      "value": {"literal": {"string": "The field representing the in-projection of the edge. Defaults to 'in'."}}}]},
                                 "body": {"maybe": {"variable": "hydra.core.Name"}}}},
                             "function": {"variable": "hydra.typed.TypedTerm"}}},
                         "parameter": "in"}},
@@ -299,10 +307,11 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [
-                              {
-                                "key": "description",
-                                "value": {"literal": {"string": "The field representing the out-projection of the edge. Defaults to 'out'."}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {"literal": {"string": "The field representing the out-projection of the edge. Defaults to 'out'."}}}]},
                             "body": {"maybe": {"variable": "hydra.core.Name"}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "out"}},
@@ -310,10 +319,11 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "The name of a record type, for which the edge also specifies an out- and an in- projection"}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The name of a record type, for which the edge also specifies an out- and an in- projection"}}}]},
                         "body": {"variable": "hydra.core.Name"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "type"}}}},
@@ -327,10 +337,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "The name of a record type, for which the edge also specifies an out- and an in- projection"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "The name of a record type, for which the edge also specifies an out- and an in- projection"}}}]},
                       "body": {"variable": "hydra.core.Name"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -340,10 +351,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "The field representing the out-projection of the edge. Defaults to 'out'."}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "The field representing the out-projection of the edge. Defaults to 'out'."}}}]},
                       "body": {"maybe": {"variable": "hydra.core.Name"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -353,10 +365,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "The field representing the in-projection of the edge. Defaults to 'in'."}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "The field representing the in-projection of the edge. Defaults to 'in'."}}}]},
                       "body": {"maybe": {"variable": "hydra.core.Name"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -366,7 +379,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL accessor for the type field of hydra.query.Edge"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the type field of hydra.query.Edge"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -413,10 +430,11 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {"literal": {"string": "The name of a record type, for which the edge also specifies an out- and an in- projection"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "The name of a record type, for which the edge also specifies an out- and an in- projection"}}}]},
                     "body": {"variable": "hydra.core.Name"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -424,7 +442,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL accessor for the out field of hydra.query.Edge"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the out field of hydra.query.Edge"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -471,10 +493,11 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {"literal": {"string": "The field representing the out-projection of the edge. Defaults to 'out'."}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "The field representing the out-projection of the edge. Defaults to 'out'."}}}]},
                     "body": {"maybe": {"variable": "hydra.core.Name"}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -482,7 +505,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL accessor for the in field of hydra.query.Edge"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the in field of hydra.query.Edge"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -529,10 +556,11 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {"literal": {"string": "The field representing the in-projection of the edge. Defaults to 'in'."}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "The field representing the in-projection of the edge. Defaults to 'in'."}}}]},
                     "body": {"maybe": {"variable": "hydra.core.Name"}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -540,7 +568,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL updater for the type field of hydra.query.Edge"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the type field of hydra.query.Edge"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -644,10 +676,11 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [
-                              {
-                                "key": "description",
-                                "value": {"literal": {"string": "The name of a record type, for which the edge also specifies an out- and an in- projection"}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {"literal": {"string": "The name of a record type, for which the edge also specifies an out- and an in- projection"}}}]},
                             "body": {"variable": "hydra.core.Name"}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -667,10 +700,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "The name of a record type, for which the edge also specifies an out- and an in- projection"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "The name of a record type, for which the edge also specifies an out- and an in- projection"}}}]},
                       "body": {"variable": "hydra.core.Name"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -680,7 +714,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL updater for the out field of hydra.query.Edge"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the out field of hydra.query.Edge"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -784,10 +822,11 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [
-                              {
-                                "key": "description",
-                                "value": {"literal": {"string": "The field representing the out-projection of the edge. Defaults to 'out'."}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {"literal": {"string": "The field representing the out-projection of the edge. Defaults to 'out'."}}}]},
                             "body": {"maybe": {"variable": "hydra.core.Name"}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -807,10 +846,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "The field representing the out-projection of the edge. Defaults to 'out'."}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "The field representing the out-projection of the edge. Defaults to 'out'."}}}]},
                       "body": {"maybe": {"variable": "hydra.core.Name"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -820,7 +860,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL updater for the in field of hydra.query.Edge"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the in field of hydra.query.Edge"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -924,10 +968,11 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [
-                              {
-                                "key": "description",
-                                "value": {"literal": {"string": "The field representing the in-projection of the edge. Defaults to 'in'."}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {"literal": {"string": "The field representing the in-projection of the edge. Defaults to 'in'."}}}]},
                             "body": {"maybe": {"variable": "hydra.core.Name"}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -947,10 +992,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "The field representing the in-projection of the edge. Defaults to 'in'."}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "The field representing the in-projection of the edge. Defaults to 'in'."}}}]},
                       "body": {"maybe": {"variable": "hydra.core.Name"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -960,7 +1006,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for hydra.query.GraphPattern"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL constructor for hydra.query.GraphPattern"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1004,7 +1051,8 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "The patterns to match within the subgraph"}}}],
+                            "annotation": {
+                              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The patterns to match within the subgraph"}}}]},
                             "body": {"list": {"variable": "hydra.query.Pattern"}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "patterns"}},
@@ -1012,7 +1060,7 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the component graph"}}}],
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The name of the component graph"}}}]},
                         "body": {"variable": "hydra.core.Name"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "graph"}}}},
@@ -1026,7 +1074,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the component graph"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The name of the component graph"}}}]},
                       "body": {"variable": "hydra.core.Name"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -1036,7 +1084,8 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The patterns to match within the subgraph"}}}],
+                      "annotation": {
+                        "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The patterns to match within the subgraph"}}}]},
                       "body": {"list": {"variable": "hydra.query.Pattern"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -1047,8 +1096,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {"key": "description", "value": {"literal": {"string": "DSL accessor for the graph field of hydra.query.GraphPattern"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the graph field of hydra.query.GraphPattern"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1097,7 +1149,7 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the component graph"}}}],
+                    "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The name of the component graph"}}}]},
                     "body": {"variable": "hydra.core.Name"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -1105,10 +1157,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the patterns field of hydra.query.GraphPattern"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the patterns field of hydra.query.GraphPattern"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1157,7 +1210,8 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The patterns to match within the subgraph"}}}],
+                    "annotation": {
+                      "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The patterns to match within the subgraph"}}}]},
                     "body": {"list": {"variable": "hydra.query.Pattern"}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -1165,8 +1219,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {"key": "description", "value": {"literal": {"string": "DSL updater for the graph field of hydra.query.GraphPattern"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the graph field of hydra.query.GraphPattern"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1236,7 +1293,7 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the component graph"}}}],
+                            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The name of the component graph"}}}]},
                             "body": {"variable": "hydra.core.Name"}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -1258,7 +1315,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the component graph"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The name of the component graph"}}}]},
                       "body": {"variable": "hydra.core.Name"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -1269,10 +1326,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the patterns field of hydra.query.GraphPattern"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the patterns field of hydra.query.GraphPattern"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1342,7 +1400,8 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "The patterns to match within the subgraph"}}}],
+                            "annotation": {
+                              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The patterns to match within the subgraph"}}}]},
                             "body": {"list": {"variable": "hydra.query.Pattern"}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -1364,7 +1423,8 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The patterns to match within the subgraph"}}}],
+                      "annotation": {
+                        "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The patterns to match within the subgraph"}}}]},
                       "body": {"list": {"variable": "hydra.query.Pattern"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -1375,7 +1435,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL injection for the term variant of hydra.query.Node"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the term variant of hydra.query.Node"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1407,10 +1471,11 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "A graph term; an expression which is valid in the graph being matched"}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "A graph term; an expression which is valid in the graph being matched"}}}]},
                         "body": {"variable": "hydra.core.Term"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}},
@@ -1424,10 +1489,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "A graph term; an expression which is valid in the graph being matched"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "A graph term; an expression which is valid in the graph being matched"}}}]},
                       "body": {"variable": "hydra.core.Term"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -1437,7 +1503,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL injection for the variable variant of hydra.query.Node"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the variable variant of hydra.query.Node"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1469,7 +1539,11 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "A query variable, not to be confused with a variable term"}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "A query variable, not to be confused with a variable term"}}}]},
                         "body": {"variable": "hydra.query.Variable"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}},
@@ -1483,7 +1557,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "A query variable, not to be confused with a variable term"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "A query variable, not to be confused with a variable term"}}}]},
                       "body": {"variable": "hydra.query.Variable"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -1493,7 +1571,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL injection for the wildcard variant of hydra.query.Node"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the wildcard variant of hydra.query.Node"}}}]},
             "body": {
               "wrap": {
                 "body": {
@@ -1527,7 +1609,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL injection for the step variant of hydra.query.Path"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the step variant of hydra.query.Path"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1559,7 +1645,7 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "A path given by a single step"}}}],
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A path given by a single step"}}}]},
                         "body": {"variable": "hydra.query.Step"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}},
@@ -1573,7 +1659,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "A path given by a single step"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A path given by a single step"}}}]},
                       "body": {"variable": "hydra.query.Step"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -1583,7 +1669,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL injection for the regex variant of hydra.query.Path"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the regex variant of hydra.query.Path"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1615,10 +1705,11 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "A path given by a regular expression quantifier applied to another path"}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "A path given by a regular expression quantifier applied to another path"}}}]},
                         "body": {"variable": "hydra.query.RegexSequence"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}},
@@ -1632,10 +1723,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "A path given by a regular expression quantifier applied to another path"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "A path given by a regular expression quantifier applied to another path"}}}]},
                       "body": {"variable": "hydra.query.RegexSequence"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -1645,7 +1737,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL injection for the inverse variant of hydra.query.Path"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the inverse variant of hydra.query.Path"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1677,7 +1773,8 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "A path given by the inverse of another path"}}}],
+                        "annotation": {
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A path given by the inverse of another path"}}}]},
                         "body": {"variable": "hydra.query.Path"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}},
@@ -1691,7 +1788,8 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "A path given by the inverse of another path"}}}],
+                      "annotation": {
+                        "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A path given by the inverse of another path"}}}]},
                       "body": {"variable": "hydra.query.Path"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -1701,7 +1799,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for hydra.query.PathEquation"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL constructor for hydra.query.PathEquation"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1745,7 +1844,7 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "The right-hand side of the equation"}}}],
+                            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The right-hand side of the equation"}}}]},
                             "body": {"variable": "hydra.query.Path"}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "right"}},
@@ -1753,7 +1852,7 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The left-hand side of the equation"}}}],
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The left-hand side of the equation"}}}]},
                         "body": {"variable": "hydra.query.Path"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "left"}}}},
@@ -1767,7 +1866,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The left-hand side of the equation"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The left-hand side of the equation"}}}]},
                       "body": {"variable": "hydra.query.Path"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -1777,7 +1876,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The right-hand side of the equation"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The right-hand side of the equation"}}}]},
                       "body": {"variable": "hydra.query.Path"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -1788,8 +1887,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {"key": "description", "value": {"literal": {"string": "DSL accessor for the left field of hydra.query.PathEquation"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the left field of hydra.query.PathEquation"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1838,7 +1940,7 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The left-hand side of the equation"}}}],
+                    "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The left-hand side of the equation"}}}]},
                     "body": {"variable": "hydra.query.Path"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -1846,8 +1948,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {"key": "description", "value": {"literal": {"string": "DSL accessor for the right field of hydra.query.PathEquation"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the right field of hydra.query.PathEquation"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1896,7 +2001,7 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The right-hand side of the equation"}}}],
+                    "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The right-hand side of the equation"}}}]},
                     "body": {"variable": "hydra.query.Path"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -1904,7 +2009,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL updater for the left field of hydra.query.PathEquation"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the left field of hydra.query.PathEquation"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1974,7 +2083,7 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "The left-hand side of the equation"}}}],
+                            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The left-hand side of the equation"}}}]},
                             "body": {"variable": "hydra.query.Path"}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -1996,7 +2105,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The left-hand side of the equation"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The left-hand side of the equation"}}}]},
                       "body": {"variable": "hydra.query.Path"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -2007,8 +2116,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {"key": "description", "value": {"literal": {"string": "DSL updater for the right field of hydra.query.PathEquation"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the right field of hydra.query.PathEquation"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2078,7 +2190,7 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "The right-hand side of the equation"}}}],
+                            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The right-hand side of the equation"}}}]},
                             "body": {"variable": "hydra.query.Path"}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -2100,7 +2212,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The right-hand side of the equation"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The right-hand side of the equation"}}}]},
                       "body": {"variable": "hydra.query.Path"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -2111,8 +2223,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {"key": "description", "value": {"literal": {"string": "DSL injection for the triple variant of hydra.query.Pattern"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the triple variant of hydra.query.Pattern"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2144,7 +2259,7 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "A subject/predicate/object pattern"}}}],
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A subject/predicate/object pattern"}}}]},
                         "body": {"variable": "hydra.query.TriplePattern"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}},
@@ -2158,7 +2273,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "A subject/predicate/object pattern"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A subject/predicate/object pattern"}}}]},
                       "body": {"variable": "hydra.query.TriplePattern"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -2168,10 +2283,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the negation variant of hydra.query.Pattern"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the negation variant of hydra.query.Pattern"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2203,7 +2319,7 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The negation of another pattern"}}}],
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The negation of another pattern"}}}]},
                         "body": {"variable": "hydra.query.Pattern"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}},
@@ -2217,7 +2333,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The negation of another pattern"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The negation of another pattern"}}}]},
                       "body": {"variable": "hydra.query.Pattern"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -2227,10 +2343,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the conjunction variant of hydra.query.Pattern"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the conjunction variant of hydra.query.Pattern"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2262,7 +2379,11 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The conjunction ('and') of several other patterns"}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The conjunction ('and') of several other patterns"}}}]},
                         "body": {"list": {"variable": "hydra.query.Pattern"}}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}},
@@ -2276,7 +2397,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The conjunction ('and') of several other patterns"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "The conjunction ('and') of several other patterns"}}}]},
                       "body": {"list": {"variable": "hydra.query.Pattern"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -2286,10 +2411,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the disjunction variant of hydra.query.Pattern"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the disjunction variant of hydra.query.Pattern"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2321,7 +2447,11 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The disjunction (inclusive 'or') of several other patterns"}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The disjunction (inclusive 'or') of several other patterns"}}}]},
                         "body": {"list": {"variable": "hydra.query.Pattern"}}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}},
@@ -2335,7 +2465,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The disjunction (inclusive 'or') of several other patterns"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "The disjunction (inclusive 'or') of several other patterns"}}}]},
                       "body": {"list": {"variable": "hydra.query.Pattern"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -2345,7 +2479,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL injection for the graph variant of hydra.query.Pattern"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the graph variant of hydra.query.Pattern"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2377,7 +2515,11 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "A pattern which matches within a named subgraph"}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "A pattern which matches within a named subgraph"}}}]},
                         "body": {"variable": "hydra.query.GraphPattern"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}},
@@ -2391,7 +2533,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "A pattern which matches within a named subgraph"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "A pattern which matches within a named subgraph"}}}]},
                       "body": {"variable": "hydra.query.GraphPattern"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -2401,7 +2547,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for hydra.query.PatternImplication"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL constructor for hydra.query.PatternImplication"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2445,10 +2595,11 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [
-                              {
-                                "key": "description",
-                                "value": {"literal": {"string": "The pattern which must also match when the antecedent matches"}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {"literal": {"string": "The pattern which must also match when the antecedent matches"}}}]},
                             "body": {"variable": "hydra.query.Pattern"}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "consequent"}},
@@ -2456,7 +2607,11 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The pattern which, if it matches, triggers the constraint"}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The pattern which, if it matches, triggers the constraint"}}}]},
                         "body": {"variable": "hydra.query.Pattern"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "antecedent"}}}},
@@ -2470,7 +2625,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The pattern which, if it matches, triggers the constraint"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "The pattern which, if it matches, triggers the constraint"}}}]},
                       "body": {"variable": "hydra.query.Pattern"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -2480,10 +2639,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "The pattern which must also match when the antecedent matches"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "The pattern which must also match when the antecedent matches"}}}]},
                       "body": {"variable": "hydra.query.Pattern"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -2494,10 +2654,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the antecedent field of hydra.query.PatternImplication"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the antecedent field of hydra.query.PatternImplication"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2546,7 +2707,11 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The pattern which, if it matches, triggers the constraint"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "The pattern which, if it matches, triggers the constraint"}}}]},
                     "body": {"variable": "hydra.query.Pattern"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -2554,10 +2719,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the consequent field of hydra.query.PatternImplication"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the consequent field of hydra.query.PatternImplication"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2606,10 +2772,11 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {"literal": {"string": "The pattern which must also match when the antecedent matches"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "The pattern which must also match when the antecedent matches"}}}]},
                     "body": {"variable": "hydra.query.Pattern"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -2617,10 +2784,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the antecedent field of hydra.query.PatternImplication"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the antecedent field of hydra.query.PatternImplication"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2690,7 +2858,11 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "The pattern which, if it matches, triggers the constraint"}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {"literal": {"string": "The pattern which, if it matches, triggers the constraint"}}}]},
                             "body": {"variable": "hydra.query.Pattern"}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -2712,7 +2884,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The pattern which, if it matches, triggers the constraint"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "The pattern which, if it matches, triggers the constraint"}}}]},
                       "body": {"variable": "hydra.query.Pattern"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -2723,10 +2899,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the consequent field of hydra.query.PatternImplication"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the consequent field of hydra.query.PatternImplication"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2796,10 +2973,11 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [
-                              {
-                                "key": "description",
-                                "value": {"literal": {"string": "The pattern which must also match when the antecedent matches"}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {"literal": {"string": "The pattern which must also match when the antecedent matches"}}}]},
                             "body": {"variable": "hydra.query.Pattern"}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -2821,10 +2999,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "The pattern which must also match when the antecedent matches"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "The pattern which must also match when the antecedent matches"}}}]},
                       "body": {"variable": "hydra.query.Pattern"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -2835,7 +3014,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for hydra.query.Query"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL constructor for hydra.query.Query"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2879,7 +3059,7 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "The patterns to be matched"}}}],
+                            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The patterns to be matched"}}}]},
                             "body": {"list": {"variable": "hydra.query.Pattern"}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "patterns"}},
@@ -2887,7 +3067,7 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The variables selected by the query"}}}],
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The variables selected by the query"}}}]},
                         "body": {"list": {"variable": "hydra.query.Variable"}}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "variables"}}}},
@@ -2901,7 +3081,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The variables selected by the query"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The variables selected by the query"}}}]},
                       "body": {"list": {"variable": "hydra.query.Variable"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -2911,7 +3091,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The patterns to be matched"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The patterns to be matched"}}}]},
                       "body": {"list": {"variable": "hydra.query.Pattern"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -2921,7 +3101,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL accessor for the variables field of hydra.query.Query"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the variables field of hydra.query.Query"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2968,7 +3152,7 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The variables selected by the query"}}}],
+                    "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The variables selected by the query"}}}]},
                     "body": {"list": {"variable": "hydra.query.Variable"}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -2976,7 +3160,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL accessor for the patterns field of hydra.query.Query"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the patterns field of hydra.query.Query"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3023,7 +3211,7 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The patterns to be matched"}}}],
+                    "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The patterns to be matched"}}}]},
                     "body": {"list": {"variable": "hydra.query.Pattern"}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -3031,7 +3219,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL updater for the variables field of hydra.query.Query"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the variables field of hydra.query.Query"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3101,7 +3293,7 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "The variables selected by the query"}}}],
+                            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The variables selected by the query"}}}]},
                             "body": {"list": {"variable": "hydra.query.Variable"}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -3121,7 +3313,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The variables selected by the query"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The variables selected by the query"}}}]},
                       "body": {"list": {"variable": "hydra.query.Variable"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -3131,7 +3323,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL updater for the patterns field of hydra.query.Query"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the patterns field of hydra.query.Query"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3201,7 +3397,7 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "The patterns to be matched"}}}],
+                            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The patterns to be matched"}}}]},
                             "body": {"list": {"variable": "hydra.query.Pattern"}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -3221,7 +3417,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The patterns to be matched"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The patterns to be matched"}}}]},
                       "body": {"list": {"variable": "hydra.query.Pattern"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -3231,7 +3427,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for hydra.query.Range"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL constructor for hydra.query.Range"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3275,7 +3472,7 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "The maximum value (inclusive)"}}}],
+                            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The maximum value (inclusive)"}}}]},
                             "body": {"literal": {"integer": {"int32": {}}}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "max"}},
@@ -3283,7 +3480,7 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The minimum value (inclusive)"}}}],
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The minimum value (inclusive)"}}}]},
                         "body": {"literal": {"integer": {"int32": {}}}}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "min"}}}},
@@ -3297,7 +3494,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The minimum value (inclusive)"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The minimum value (inclusive)"}}}]},
                       "body": {"literal": {"integer": {"int32": {}}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -3307,7 +3504,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The maximum value (inclusive)"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The maximum value (inclusive)"}}}]},
                       "body": {"literal": {"integer": {"int32": {}}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -3317,7 +3514,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL accessor for the min field of hydra.query.Range"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the min field of hydra.query.Range"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3364,7 +3565,7 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The minimum value (inclusive)"}}}],
+                    "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The minimum value (inclusive)"}}}]},
                     "body": {"literal": {"integer": {"int32": {}}}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -3372,7 +3573,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL accessor for the max field of hydra.query.Range"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the max field of hydra.query.Range"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3419,7 +3624,7 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The maximum value (inclusive)"}}}],
+                    "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The maximum value (inclusive)"}}}]},
                     "body": {"literal": {"integer": {"int32": {}}}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -3427,7 +3632,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL updater for the min field of hydra.query.Range"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the min field of hydra.query.Range"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3497,7 +3706,7 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "The minimum value (inclusive)"}}}],
+                            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The minimum value (inclusive)"}}}]},
                             "body": {"literal": {"integer": {"int32": {}}}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -3517,7 +3726,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The minimum value (inclusive)"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The minimum value (inclusive)"}}}]},
                       "body": {"literal": {"integer": {"int32": {}}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -3527,7 +3736,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL updater for the max field of hydra.query.Range"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the max field of hydra.query.Range"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3597,7 +3810,7 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "The maximum value (inclusive)"}}}],
+                            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The maximum value (inclusive)"}}}]},
                             "body": {"literal": {"integer": {"int32": {}}}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -3617,7 +3830,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The maximum value (inclusive)"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The maximum value (inclusive)"}}}]},
                       "body": {"literal": {"integer": {"int32": {}}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -3627,10 +3840,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the one variant of hydra.query.RegexQuantifier"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the one variant of hydra.query.RegexQuantifier"}}}]},
             "body": {
               "wrap": {
                 "body": {
@@ -3665,10 +3879,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the zeroOrOne variant of hydra.query.RegexQuantifier"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the zeroOrOne variant of hydra.query.RegexQuantifier"}}}]},
             "body": {
               "wrap": {
                 "body": {
@@ -3703,10 +3918,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the zeroOrMore variant of hydra.query.RegexQuantifier"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the zeroOrMore variant of hydra.query.RegexQuantifier"}}}]},
             "body": {
               "wrap": {
                 "body": {
@@ -3741,10 +3957,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the oneOrMore variant of hydra.query.RegexQuantifier"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the oneOrMore variant of hydra.query.RegexQuantifier"}}}]},
             "body": {
               "wrap": {
                 "body": {
@@ -3779,10 +3996,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the exactly variant of hydra.query.RegexQuantifier"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the exactly variant of hydra.query.RegexQuantifier"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3814,7 +4032,11 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The {n} quantifier; matches exactly n occurrences"}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The {n} quantifier; matches exactly n occurrences"}}}]},
                         "body": {"literal": {"integer": {"int32": {}}}}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}},
@@ -3828,7 +4050,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The {n} quantifier; matches exactly n occurrences"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "The {n} quantifier; matches exactly n occurrences"}}}]},
                       "body": {"literal": {"integer": {"int32": {}}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -3839,10 +4065,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the atLeast variant of hydra.query.RegexQuantifier"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the atLeast variant of hydra.query.RegexQuantifier"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3874,7 +4101,11 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The {n,} quantifier; matches at least n occurrences"}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The {n,} quantifier; matches at least n occurrences"}}}]},
                         "body": {"literal": {"integer": {"int32": {}}}}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}},
@@ -3888,7 +4119,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The {n,} quantifier; matches at least n occurrences"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "The {n,} quantifier; matches at least n occurrences"}}}]},
                       "body": {"literal": {"integer": {"int32": {}}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -3899,10 +4134,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the range variant of hydra.query.RegexQuantifier"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the range variant of hydra.query.RegexQuantifier"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3934,10 +4170,11 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "The {n, m} quantifier; matches between n and m (inclusive) occurrences"}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The {n, m} quantifier; matches between n and m (inclusive) occurrences"}}}]},
                         "body": {"variable": "hydra.query.Range"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}},
@@ -3951,10 +4188,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "The {n, m} quantifier; matches between n and m (inclusive) occurrences"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "The {n, m} quantifier; matches between n and m (inclusive) occurrences"}}}]},
                       "body": {"variable": "hydra.query.Range"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -3965,7 +4203,9 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for hydra.query.RegexSequence"}}}],
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "DSL constructor for hydra.query.RegexSequence"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4009,7 +4249,7 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "The quantifier"}}}],
+                            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The quantifier"}}}]},
                             "body": {"variable": "hydra.query.RegexQuantifier"}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "quantifier"}},
@@ -4017,7 +4257,8 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The path to which the quantifier applies"}}}],
+                        "annotation": {
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The path to which the quantifier applies"}}}]},
                         "body": {"variable": "hydra.query.Path"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "path"}}}},
@@ -4031,7 +4272,8 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The path to which the quantifier applies"}}}],
+                      "annotation": {
+                        "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The path to which the quantifier applies"}}}]},
                       "body": {"variable": "hydra.query.Path"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -4041,7 +4283,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The quantifier"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The quantifier"}}}]},
                       "body": {"variable": "hydra.query.RegexQuantifier"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -4052,8 +4294,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {"key": "description", "value": {"literal": {"string": "DSL accessor for the path field of hydra.query.RegexSequence"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the path field of hydra.query.RegexSequence"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4102,7 +4347,8 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The path to which the quantifier applies"}}}],
+                    "annotation": {
+                      "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The path to which the quantifier applies"}}}]},
                     "body": {"variable": "hydra.query.Path"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -4110,10 +4356,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the quantifier field of hydra.query.RegexSequence"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the quantifier field of hydra.query.RegexSequence"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4162,7 +4409,7 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The quantifier"}}}],
+                    "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The quantifier"}}}]},
                     "body": {"variable": "hydra.query.RegexQuantifier"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -4170,8 +4417,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {"key": "description", "value": {"literal": {"string": "DSL updater for the path field of hydra.query.RegexSequence"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the path field of hydra.query.RegexSequence"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4241,7 +4491,8 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "The path to which the quantifier applies"}}}],
+                            "annotation": {
+                              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The path to which the quantifier applies"}}}]},
                             "body": {"variable": "hydra.query.Path"}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -4263,7 +4514,8 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The path to which the quantifier applies"}}}],
+                      "annotation": {
+                        "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The path to which the quantifier applies"}}}]},
                       "body": {"variable": "hydra.query.Path"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -4274,10 +4526,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the quantifier field of hydra.query.RegexSequence"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the quantifier field of hydra.query.RegexSequence"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4347,7 +4600,7 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "The quantifier"}}}],
+                            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The quantifier"}}}]},
                             "body": {"variable": "hydra.query.RegexQuantifier"}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -4369,7 +4622,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The quantifier"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The quantifier"}}}]},
                       "body": {"variable": "hydra.query.RegexQuantifier"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -4380,7 +4633,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL injection for the edge variant of hydra.query.Step"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the edge variant of hydra.query.Step"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4412,7 +4669,8 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "An out-to-in traversal of an abstract edge"}}}],
+                        "annotation": {
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An out-to-in traversal of an abstract edge"}}}]},
                         "body": {"variable": "hydra.query.Edge"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}},
@@ -4426,7 +4684,8 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "An out-to-in traversal of an abstract edge"}}}],
+                      "annotation": {
+                        "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An out-to-in traversal of an abstract edge"}}}]},
                       "body": {"variable": "hydra.query.Edge"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -4436,7 +4695,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL injection for the project variant of hydra.query.Step"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the project variant of hydra.query.Step"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4468,7 +4731,11 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "A projection from a record through one of its fields"}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "A projection from a record through one of its fields"}}}]},
                         "body": {"variable": "hydra.core.Projection"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}},
@@ -4482,7 +4749,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "A projection from a record through one of its fields"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "A projection from a record through one of its fields"}}}]},
                       "body": {"variable": "hydra.core.Projection"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -4492,7 +4763,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL injection for the compare variant of hydra.query.Step"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the compare variant of hydra.query.Step"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4524,7 +4799,7 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "A comparison of two terms"}}}],
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A comparison of two terms"}}}]},
                         "body": {"variable": "hydra.query.ComparisonConstraint"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}},
@@ -4538,7 +4813,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "A comparison of two terms"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A comparison of two terms"}}}]},
                       "body": {"variable": "hydra.query.ComparisonConstraint"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -4548,7 +4823,9 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for hydra.query.TriplePattern"}}}],
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "DSL constructor for hydra.query.TriplePattern"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4602,7 +4879,7 @@
                           "application": {
                             "argument": {
                               "annotated": {
-                                "annotation": [{"key": "description", "value": {"literal": {"string": "The object of the pattern"}}}],
+                                "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The object of the pattern"}}}]},
                                 "body": {"variable": "hydra.query.Node"}}},
                             "function": {"variable": "hydra.typed.TypedTerm"}}},
                         "parameter": "object"}},
@@ -4610,7 +4887,8 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "The predicate (property) of the pattern"}}}],
+                            "annotation": {
+                              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The predicate (property) of the pattern"}}}]},
                             "body": {"variable": "hydra.query.Path"}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "predicate"}},
@@ -4618,7 +4896,7 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The subject of the pattern"}}}],
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The subject of the pattern"}}}]},
                         "body": {"variable": "hydra.query.Node"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "subject"}}}},
@@ -4632,7 +4910,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The subject of the pattern"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The subject of the pattern"}}}]},
                       "body": {"variable": "hydra.query.Node"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -4642,7 +4920,8 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The predicate (property) of the pattern"}}}],
+                      "annotation": {
+                        "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The predicate (property) of the pattern"}}}]},
                       "body": {"variable": "hydra.query.Path"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -4652,7 +4931,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The object of the pattern"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The object of the pattern"}}}]},
                       "body": {"variable": "hydra.query.Node"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -4663,10 +4942,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the subject field of hydra.query.TriplePattern"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the subject field of hydra.query.TriplePattern"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4715,7 +4995,7 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The subject of the pattern"}}}],
+                    "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The subject of the pattern"}}}]},
                     "body": {"variable": "hydra.query.Node"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -4723,10 +5003,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the predicate field of hydra.query.TriplePattern"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the predicate field of hydra.query.TriplePattern"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4775,7 +5056,8 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The predicate (property) of the pattern"}}}],
+                    "annotation": {
+                      "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The predicate (property) of the pattern"}}}]},
                     "body": {"variable": "hydra.query.Path"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -4783,10 +5065,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the object field of hydra.query.TriplePattern"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the object field of hydra.query.TriplePattern"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4835,7 +5118,7 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The object of the pattern"}}}],
+                    "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The object of the pattern"}}}]},
                     "body": {"variable": "hydra.query.Node"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -4843,10 +5126,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the subject field of hydra.query.TriplePattern"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the subject field of hydra.query.TriplePattern"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4950,7 +5234,7 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "The subject of the pattern"}}}],
+                            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The subject of the pattern"}}}]},
                             "body": {"variable": "hydra.query.Node"}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -4972,7 +5256,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The subject of the pattern"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The subject of the pattern"}}}]},
                       "body": {"variable": "hydra.query.Node"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -4983,10 +5267,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the predicate field of hydra.query.TriplePattern"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the predicate field of hydra.query.TriplePattern"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -5090,7 +5375,8 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "The predicate (property) of the pattern"}}}],
+                            "annotation": {
+                              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The predicate (property) of the pattern"}}}]},
                             "body": {"variable": "hydra.query.Path"}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -5112,7 +5398,8 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The predicate (property) of the pattern"}}}],
+                      "annotation": {
+                        "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The predicate (property) of the pattern"}}}]},
                       "body": {"variable": "hydra.query.Path"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -5123,10 +5410,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the object field of hydra.query.TriplePattern"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the object field of hydra.query.TriplePattern"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -5230,7 +5518,7 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "The object of the pattern"}}}],
+                            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The object of the pattern"}}}]},
                             "body": {"variable": "hydra.query.Node"}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -5252,7 +5540,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The object of the pattern"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The object of the pattern"}}}]},
                       "body": {"variable": "hydra.query.Node"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -5263,7 +5551,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for the hydra.query.Variable wrapper"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL constructor for the hydra.query.Variable wrapper"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -5300,7 +5592,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL accessor for the body of hydra.query.Variable"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the body of hydra.query.Variable"}}}]},
             "body": {
               "lambda": {
                 "body": {

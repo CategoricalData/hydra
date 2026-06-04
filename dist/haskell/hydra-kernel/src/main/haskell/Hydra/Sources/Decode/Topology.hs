@@ -68,8 +68,8 @@ module_ =
               Core.applicationArgument = (Core.TermApplication (Core.Application {
                 Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.core.decodeList")),
                 Core.applicationArgument = (Core.TermVariable (Core.Name "hydra.decode.topology.vertex"))}))})),
-            Core.annotatedTermAnnotation = (M.fromList [
-              (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Decoder for hydra.topology.Graph")))])}))}),
+            Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
+              (Core.TermVariable (Core.Name "description"), (Core.TermLiteral (Core.LiteralString "Decoder for hydra.topology.Graph")))]))}))}),
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.decode.topology.tarjanState"),
           Packaging.termDefinitionMetadata = Nothing,
@@ -430,8 +430,10 @@ module_ =
                       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.core.stripWithDecodingError")),
                       Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
                     Core.applicationArgument = (Core.TermVariable (Core.Name "raw"))}))}))}))})),
-            Core.annotatedTermAnnotation = (M.fromList [
-              (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Decoder for hydra.topology.TarjanState")))])}))})),
+            Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
+              (
+                Core.TermVariable (Core.Name "description"),
+                (Core.TermLiteral (Core.LiteralString "Decoder for hydra.topology.TarjanState")))]))}))})),
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.decode.topology.vertex"),
           Packaging.termDefinitionMetadata = Nothing,
@@ -511,5 +513,5 @@ module_ =
                       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.core.stripWithDecodingError")),
                       Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
                     Core.applicationArgument = (Core.TermVariable (Core.Name "raw"))}))}))}))})),
-            Core.annotatedTermAnnotation = (M.fromList [
-              (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Decoder for hydra.topology.Vertex")))])}))}))]}
+            Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
+              (Core.TermVariable (Core.Name "description"), (Core.TermLiteral (Core.LiteralString "Decoder for hydra.topology.Vertex")))]))}))}))]}

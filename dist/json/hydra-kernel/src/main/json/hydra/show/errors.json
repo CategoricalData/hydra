@@ -4,7 +4,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Show a checking error as a string"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Show a checking error as a string"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -40,7 +40,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Show a decoding error as a string"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Show a decoding error as a string"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -59,7 +59,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Show an error as a string"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Show an error as a string"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -106,7 +106,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Show an incorrect unification error as a string"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Show an incorrect unification error as a string"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -135,7 +139,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Show a not-a-forall-type error as a string"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Show a not-a-forall-type error as a string"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -192,7 +197,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Show a not-a-function-type error as a string"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Show a not-a-function-type error as a string"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -221,7 +227,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Show an other error as a string"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Show an other error as a string"}}}]},
             "body": {
               "lambda": {
                 "body": {"application": {"argument": {"variable": "oe"}, "function": {"unwrap": "hydra.errors.OtherError"}}},
@@ -236,10 +242,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Show a resolution error as a string, including the offending name or shape"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Show a resolution error as a string, including the offending name or shape"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -343,7 +350,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Show a type arity mismatch error as a string"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Show a type arity mismatch error as a string"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -416,7 +424,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Show a type mismatch error as a string"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Show a type mismatch error as a string"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -459,7 +468,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Show an unbound type variables error as a string"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Show an unbound type variables error as a string"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -517,7 +530,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Show an unequal types error as a string"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Show an unequal types error as a string"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -566,7 +580,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Show a unification error as a string"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Show a unification error as a string"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -621,7 +636,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Show an unsupported term variant error as a string"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Show an unsupported term variant error as a string"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -648,7 +667,8 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Show an untyped lambda error as a string"}}}],
+                "annotation": {
+                  "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Show an untyped lambda error as a string"}}}]},
                 "body": {"lambda": {"body": {"literal": {"string": "untyped lambda"}}, "domain": {"variable": "t0"}, "parameter": "_"}}}},
             "parameter": "t0"}},
         "name": "hydra.show.errors.untypedLambdaError",
@@ -660,7 +680,9 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Show an untyped let binding error as a string"}}}],
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "Show an untyped let binding error as a string"}}}]},
             "body": {
               "lambda": {
                 "body": {

@@ -4,7 +4,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Decoder for hydra.ast.Associativity"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Decoder for hydra.ast.Associativity"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -373,7 +373,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Decoder for hydra.ast.BlockStyle"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Decoder for hydra.ast.BlockStyle"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -841,7 +841,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Decoder for hydra.ast.BracketExpr"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Decoder for hydra.ast.BracketExpr"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1048,7 +1048,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Decoder for hydra.ast.Brackets"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Decoder for hydra.ast.Brackets"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1215,7 +1215,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Decoder for hydra.ast.Expr"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Decoder for hydra.ast.Expr"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1564,7 +1564,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Decoder for hydra.ast.IndentStyle"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Decoder for hydra.ast.IndentStyle"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1983,7 +1983,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Decoder for hydra.ast.IndentedExpression"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Decoder for hydra.ast.IndentedExpression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2151,7 +2152,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Decoder for hydra.ast.Op"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Decoder for hydra.ast.Op"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2392,7 +2393,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Decoder for hydra.ast.OpExpr"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Decoder for hydra.ast.OpExpr"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2598,7 +2599,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Decoder for hydra.ast.Padding"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Decoder for hydra.ast.Padding"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2765,7 +2766,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Decoder for hydra.ast.Precedence"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Decoder for hydra.ast.Precedence"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2964,7 +2965,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Decoder for hydra.ast.SeqExpr"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Decoder for hydra.ast.SeqExpr"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3134,7 +3135,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Decoder for hydra.ast.Symbol"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Decoder for hydra.ast.Symbol"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3318,7 +3319,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Decoder for hydra.ast.Ws"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Decoder for hydra.ast.Ws"}}}]},
             "body": {
               "lambda": {
                 "body": {

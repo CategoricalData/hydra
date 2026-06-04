@@ -4,7 +4,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Encoder for hydra.topology.Graph"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Encoder for hydra.topology.Graph"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -64,7 +64,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Encoder for hydra.topology.TarjanState"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Encoder for hydra.topology.TarjanState"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -347,7 +348,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Encoder for hydra.topology.Vertex"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Encoder for hydra.topology.Vertex"}}}]},
             "body": {
               "lambda": {
                 "body": {

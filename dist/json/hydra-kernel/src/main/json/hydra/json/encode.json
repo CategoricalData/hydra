@@ -6,12 +6,13 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [
-                  {
-                    "key": "description",
-                    "value": {
-                      "literal": {
-                        "string": "Encode a float value to JSON. Finite values become JSON numbers (shortest round-trip); IEEE specials (NaN/Inf/-0.0) become JSON strings. Float32 and Float64 are symmetric; the schema disambiguates precision on decode."}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {
+                        "literal": {
+                          "string": "Encode a float value to JSON. Finite values become JSON numbers (shortest round-trip); IEEE specials (NaN/Inf/-0.0) become JSON strings. Float32 and Float64 are symmetric; the schema disambiguates precision on decode."}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -129,10 +130,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [
-                  {
-                    "key": "description",
-                    "value": {"literal": {"string": "Encode an integer value to JSON. Small ints use native numbers; large ints use strings."}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Encode an integer value to JSON. Small ints use native numbers; large ints use strings."}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -351,7 +353,8 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Encode a Hydra literal to a JSON value"}}}],
+                "annotation": {
+                  "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Encode a Hydra literal to a JSON value"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -455,10 +458,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "True for IEEE sentinel strings that JSON must escape as a string to preserve."}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "True for IEEE sentinel strings that JSON must escape as a string to preserve."}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -515,11 +519,12 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {"string": "Encode a Hydra term to a JSON value given a type and type name. Returns Left for unsupported constructs."}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {"string": "Encode a Hydra term to a JSON value given a type and type name. Returns Left for unsupported constructs."}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2165,11 +2170,12 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {"string": "Encode a Hydra term to a JSON value without type information. Falls back to array-wrapped Maybe encoding."}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {"string": "Encode a Hydra term to a JSON value without type information. Falls back to array-wrapped Maybe encoding."}}}]},
             "body": {
               "lambda": {
                 "body": {

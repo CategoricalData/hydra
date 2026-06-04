@@ -11,7 +11,7 @@ import qualified Data.Int as I
 import qualified Data.Map as M
 import qualified Data.Set as S
 -- | DSL constructor for hydra.core.AnnotatedTerm
-annotatedTerm :: Typed.TypedTerm Core.Term -> Typed.TypedTerm (M.Map Core.Name Core.Term) -> Typed.TypedTerm Core.AnnotatedTerm
+annotatedTerm :: Typed.TypedTerm Core.Term -> Typed.TypedTerm Core.Term -> Typed.TypedTerm Core.AnnotatedTerm
 annotatedTerm body annotation =
     Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.core.AnnotatedTerm"),
@@ -23,7 +23,7 @@ annotatedTerm body annotation =
           Core.fieldName = (Core.Name "annotation"),
           Core.fieldTerm = (Typed.unTypedTerm annotation)}]}))
 -- | DSL accessor for the annotation field of hydra.core.AnnotatedTerm
-annotatedTermAnnotation :: Typed.TypedTerm Core.AnnotatedTerm -> Typed.TypedTerm (M.Map Core.Name Core.Term)
+annotatedTermAnnotation :: Typed.TypedTerm Core.AnnotatedTerm -> Typed.TypedTerm Core.Term
 annotatedTermAnnotation x =
     Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -39,7 +39,7 @@ annotatedTermBody x =
         Core.projectionFieldName = (Core.Name "body")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL updater for the annotation field of hydra.core.AnnotatedTerm
-annotatedTermWithAnnotation :: Typed.TypedTerm Core.AnnotatedTerm -> Typed.TypedTerm (M.Map Core.Name Core.Term) -> Typed.TypedTerm Core.AnnotatedTerm
+annotatedTermWithAnnotation :: Typed.TypedTerm Core.AnnotatedTerm -> Typed.TypedTerm Core.Term -> Typed.TypedTerm Core.AnnotatedTerm
 annotatedTermWithAnnotation original newVal =
     Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.core.AnnotatedTerm"),
@@ -71,7 +71,7 @@ annotatedTermWithBody original newVal =
               Core.projectionFieldName = (Core.Name "annotation")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
 -- | DSL constructor for hydra.core.AnnotatedType
-annotatedType :: Typed.TypedTerm Core.Type -> Typed.TypedTerm (M.Map Core.Name Core.Term) -> Typed.TypedTerm Core.AnnotatedType
+annotatedType :: Typed.TypedTerm Core.Type -> Typed.TypedTerm Core.Term -> Typed.TypedTerm Core.AnnotatedType
 annotatedType body annotation =
     Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.core.AnnotatedType"),
@@ -83,7 +83,7 @@ annotatedType body annotation =
           Core.fieldName = (Core.Name "annotation"),
           Core.fieldTerm = (Typed.unTypedTerm annotation)}]}))
 -- | DSL accessor for the annotation field of hydra.core.AnnotatedType
-annotatedTypeAnnotation :: Typed.TypedTerm Core.AnnotatedType -> Typed.TypedTerm (M.Map Core.Name Core.Term)
+annotatedTypeAnnotation :: Typed.TypedTerm Core.AnnotatedType -> Typed.TypedTerm Core.Term
 annotatedTypeAnnotation x =
     Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -99,7 +99,7 @@ annotatedTypeBody x =
         Core.projectionFieldName = (Core.Name "body")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL updater for the annotation field of hydra.core.AnnotatedType
-annotatedTypeWithAnnotation :: Typed.TypedTerm Core.AnnotatedType -> Typed.TypedTerm (M.Map Core.Name Core.Term) -> Typed.TypedTerm Core.AnnotatedType
+annotatedTypeWithAnnotation :: Typed.TypedTerm Core.AnnotatedType -> Typed.TypedTerm Core.Term -> Typed.TypedTerm Core.AnnotatedType
 annotatedTypeWithAnnotation original newVal =
     Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.core.AnnotatedType"),

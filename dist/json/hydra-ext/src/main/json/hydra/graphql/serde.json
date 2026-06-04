@@ -4,7 +4,9 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a GraphQL definition to an expression"}}}],
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a GraphQL definition to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -43,7 +45,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a GraphQL description to a triple-quoted comment"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Convert a GraphQL description to a triple-quoted comment"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -79,7 +85,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a GraphQL document to an expression"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a GraphQL document to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -107,7 +114,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a GraphQL enum type definition to an expression"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Convert a GraphQL enum type definition to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -195,7 +206,9 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a GraphQL enum value to an expression"}}}],
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a GraphQL enum value to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -213,7 +226,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a GraphQL enum value definition to an expression"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Convert a GraphQL enum value definition to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -248,7 +265,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a GraphQL field definition to an expression"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Convert a GraphQL field definition to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -307,7 +328,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a GraphQL list type to an expression"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a GraphQL list type to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -332,7 +354,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a GraphQL name to an expression"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a GraphQL name to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -350,7 +373,9 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a GraphQL named type to an expression"}}}],
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a GraphQL named type to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -368,7 +393,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a GraphQL non-null type to an expression"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Convert a GraphQL non-null type to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -416,7 +445,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a GraphQL object type definition to an expression"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Convert a GraphQL object type definition to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -504,7 +537,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a GraphQL type to an expression"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a GraphQL type to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -546,7 +580,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a GraphQL type definition to an expression"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Convert a GraphQL type definition to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -623,7 +661,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a GraphQL type system definition to an expression"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Convert a GraphQL type system definition to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -671,10 +713,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Convert a GraphQL type system definition or extension to an expression"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Convert a GraphQL type system definition or extension to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -713,7 +756,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Prepend an optional description to an expression"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Prepend an optional description to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {

@@ -4,7 +4,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Create a const reference parameter"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Create a const reference parameter"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -62,7 +62,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Create a C++ class declaration"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Create a C++ class declaration"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -108,7 +108,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Create a C++ enum class declaration"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Create a C++ enum class declaration"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -151,7 +151,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Create a C++ enum class forward declaration"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Create a C++ enum class forward declaration"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -190,7 +191,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a PostfixExpression to an Expression"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a PostfixExpression to an Expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -208,7 +210,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a PrimaryExpression to an Expression"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a PrimaryExpression to an Expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -227,7 +230,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a UnaryExpression to an Expression"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a UnaryExpression to an Expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -258,7 +262,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a UnaryExpression to a LogicalOrExpression"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Convert a UnaryExpression to a LogicalOrExpression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -321,7 +329,7 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Create a cast expression"}}}],
+                "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Create a cast expression"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -355,7 +363,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Create a compound statement"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Create a compound statement"}}}]},
             "body": {
               "lambda": {
                 "body": {"wrap": {"body": {"variable": "stmts"}, "typeName": "hydra.cpp.syntax.CompoundStatement"}},
@@ -370,7 +378,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Create a const reference type"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Create a const reference type"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -388,7 +396,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Create a const-qualified type"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Create a const-qualified type"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -408,10 +416,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [
-                  {
-                    "key": "description",
-                    "value": {"literal": {"string": "Create a constructor body (default if no params, empty otherwise)"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Create a constructor body (default if no params, empty otherwise)"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -440,7 +449,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Create an enum access expression"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Create an enum access expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -482,7 +491,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Create a function call expression"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Create a function call expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -524,7 +533,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Create a header file with pragma once"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Create a header file with pragma once"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -563,7 +573,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Create an identifier expression"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Create an identifier expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -582,7 +592,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Create a lambda expression"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Create a lambda expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -638,7 +648,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Create a boolean literal expression"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Create a boolean literal expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -664,7 +674,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Create an integer literal expression"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Create an integer literal expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -692,7 +703,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Create a string literal expression"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Create a string literal expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -718,7 +729,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Create a member access expression"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Create a member access expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -755,7 +766,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Create a qualified type with a qualifier"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Create a qualified type with a qualifier"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -784,7 +796,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Create a reference type"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Create a reference type"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -802,7 +814,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Create a return statement with a value"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Create a return statement with a value"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -823,7 +836,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Create a void return statement"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Create a void return statement"}}}]},
             "body": {
               "inject": {
                 "field": {
@@ -836,7 +849,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Create a template type"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Create a template type"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -883,7 +896,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Create a *this expression"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Create a *this expression"}}}]},
             "body": {
               "application": {
                 "argument": {
@@ -902,7 +915,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Create a throw statement"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Create a throw statement"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -937,7 +950,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Create a typeid(...).name() call expression"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Create a typeid(...).name() call expression"}}}]},
             "body": {
               "application": {
                 "argument": {
@@ -1004,7 +1018,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Create a type name expression"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Create a type name expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1028,7 +1042,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Create a variant expression"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Create a variant expression"}}}]},
             "body": {
               "application": {
                 "argument": {
@@ -1047,7 +1061,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "An empty function body"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An empty function body"}}}]},
             "body": {
               "inject": {
                 "field": {
@@ -1063,10 +1077,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Extract the PostfixExpression from a fully-wrapped Expression"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Extract the PostfixExpression from a fully-wrapped Expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1386,7 +1401,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Protected access specifier member specification"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Protected access specifier member specification"}}}]},
             "body": {
               "inject": {
                 "field": {
@@ -1399,7 +1418,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Public access specifier member specification"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Public access specifier member specification"}}}]},
             "body": {
               "inject": {
                 "field": {
@@ -1412,7 +1432,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Create a string expression"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Create a string expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1438,7 +1458,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Add const qualifier to a type"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Add const qualifier to a type"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1465,7 +1485,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Create an unnamed parameter"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Create an unnamed parameter"}}}]},
             "body": {
               "lambda": {
                 "body": {

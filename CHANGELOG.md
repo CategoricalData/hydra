@@ -51,6 +51,17 @@ and primitive-metadata reification.
   and `TypeClassConstraint`; `Primitive` restructured to
   `{ definition, implementation }`; `TermDefinition.typeScheme` replaced
   by `TermDefinition.signature`. Resolves #156.
+- Schema flip: `AnnotatedTerm.annotation` and `AnnotatedType.annotation`
+  are now typed as `Term` and `Type` (respectively), rather than
+  `Map<Name, Term>` (#386). The canonical encoding for an annotation map
+  is `inject(Term){map: TermMap [(TermVariable key, value), …]}`. Two new
+  kernel helpers bridge the host-friendly Map view and the schema:
+  `wrapAnnotationMap :: Map<Name, Term> → Term` and
+  `getAnnotationMap :: Term → Map<Name, Term>`. The latter accepts both
+  `TermVariable` keys (the canonical shape) and transitional
+  `TermWrap`-of-Name keys so older fixtures load unchanged. Existing
+  host-level DSL helpers (`annots`, `annotated`) hide the schema change
+  from most call sites.
 - Host-independent specifications for every standard-library primitive (#319):
   populated the `PrimitiveDefinition.comments` field for all 240 primitives
   across 13 `hydra.lib.*` namespaces, citing authoritative external sources

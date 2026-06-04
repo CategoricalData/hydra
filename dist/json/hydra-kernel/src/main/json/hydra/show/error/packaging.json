@@ -4,7 +4,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Show a conflicting module namespace error as a string"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Show a conflicting module namespace error as a string"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -39,7 +43,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Show a conflicting variant name error as a string"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Show a conflicting variant name error as a string"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -91,8 +99,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {"key": "description", "value": {"literal": {"string": "Show a definition-not-in-module-namespace error as a string"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Show a definition-not-in-module-namespace error as a string"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -127,7 +138,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Show a definitions-out-of-order error as a string"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Show a definitions-out-of-order error as a string"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -170,7 +185,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Show a duplicate definition name error as a string"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Show a duplicate definition name error as a string"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -205,7 +224,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Show a duplicate module namespace error as a string"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Show a duplicate module namespace error as a string"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -232,7 +255,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Show an invalid definition name error as a string"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Show an invalid definition name error as a string"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -275,7 +302,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Show an invalid module error as a string"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Show an invalid module error as a string"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -311,7 +339,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Show an invalid namespace convention error as a string"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Show an invalid namespace convention error as a string"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -339,7 +371,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Show an invalid package error as a string"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Show an invalid package error as a string"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -368,7 +401,9 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Show an invalid package name error as a string"}}}],
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "Show an invalid package name error as a string"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -396,7 +431,9 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Show a missing documentation error as a string"}}}],
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "Show a missing documentation error as a string"}}}]},
             "body": {
               "lambda": {
                 "body": {

@@ -73,8 +73,10 @@ module_ =
                           Core.applicationArgument = (Core.TermApplication (Core.Application {
                             Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.relational.ColumnName")),
                             Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))}}))})),
-            Core.annotatedTermAnnotation = (M.fromList [
-              (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Encoder for hydra.relational.ColumnName")))])}))}),
+            Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
+              (
+                Core.TermVariable (Core.Name "description"),
+                (Core.TermLiteral (Core.LiteralString "Encoder for hydra.relational.ColumnName")))]))}))}),
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.encode.relational.columnSchema"),
           Packaging.termDefinitionMetadata = Nothing,
@@ -157,8 +159,10 @@ module_ =
                                         Core.projectionTypeName = (Core.Name "hydra.relational.ColumnSchema"),
                                         Core.projectionFieldName = (Core.Name "domain")})),
                                       Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))}))})),
-            Core.annotatedTermAnnotation = (M.fromList [
-              (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Encoder for hydra.relational.ColumnSchema")))])}))})),
+            Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
+              (
+                Core.TermVariable (Core.Name "description"),
+                (Core.TermLiteral (Core.LiteralString "Encoder for hydra.relational.ColumnSchema")))]))}))})),
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.encode.relational.foreignKey"),
           Packaging.termDefinitionMetadata = Nothing,
@@ -239,8 +243,10 @@ module_ =
                                       Core.projectionTypeName = (Core.Name "hydra.relational.ForeignKey"),
                                       Core.projectionFieldName = (Core.Name "keys")})),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))})),
-            Core.annotatedTermAnnotation = (M.fromList [
-              (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Encoder for hydra.relational.ForeignKey")))])}))})),
+            Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
+              (
+                Core.TermVariable (Core.Name "description"),
+                (Core.TermLiteral (Core.LiteralString "Encoder for hydra.relational.ForeignKey")))]))}))})),
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.encode.relational.primaryKey"),
           Packaging.termDefinitionMetadata = Nothing,
@@ -289,8 +295,10 @@ module_ =
                           Core.applicationArgument = (Core.TermApplication (Core.Application {
                             Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.relational.PrimaryKey")),
                             Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))}}))})),
-            Core.annotatedTermAnnotation = (M.fromList [
-              (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Encoder for hydra.relational.PrimaryKey")))])}))})),
+            Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
+              (
+                Core.TermVariable (Core.Name "description"),
+                (Core.TermLiteral (Core.LiteralString "Encoder for hydra.relational.PrimaryKey")))]))}))})),
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.encode.relational.relation"),
           Packaging.termDefinitionMetadata = Nothing,
@@ -356,8 +364,8 @@ module_ =
                             Core.applicationArgument = (Core.TermApplication (Core.Application {
                               Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.relational.Relation")),
                               Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))}}))}))})),
-            Core.annotatedTermAnnotation = (M.fromList [
-              (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Encoder for hydra.relational.Relation")))])}))})),
+            Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
+              (Core.TermVariable (Core.Name "description"), (Core.TermLiteral (Core.LiteralString "Encoder for hydra.relational.Relation")))]))}))})),
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.encode.relational.relationName"),
           Packaging.termDefinitionMetadata = Nothing,
@@ -406,8 +414,10 @@ module_ =
                           Core.applicationArgument = (Core.TermApplication (Core.Application {
                             Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.relational.RelationName")),
                             Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))}}))})),
-            Core.annotatedTermAnnotation = (M.fromList [
-              (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Encoder for hydra.relational.RelationName")))])}))})),
+            Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
+              (
+                Core.TermVariable (Core.Name "description"),
+                (Core.TermLiteral (Core.LiteralString "Encoder for hydra.relational.RelationName")))]))}))})),
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.encode.relational.relationSchema"),
           Packaging.termDefinitionMetadata = Nothing,
@@ -559,8 +569,10 @@ module_ =
                                         Core.projectionTypeName = (Core.Name "hydra.relational.RelationSchema"),
                                         Core.projectionFieldName = (Core.Name "foreignKeys")})),
                                       Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))}))})),
-            Core.annotatedTermAnnotation = (M.fromList [
-              (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Encoder for hydra.relational.RelationSchema")))])}))})),
+            Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
+              (
+                Core.TermVariable (Core.Name "description"),
+                (Core.TermLiteral (Core.LiteralString "Encoder for hydra.relational.RelationSchema")))]))}))})),
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.encode.relational.relationship"),
           Packaging.termDefinitionMetadata = Nothing,
@@ -638,8 +650,10 @@ module_ =
                             Core.applicationArgument = (Core.TermApplication (Core.Application {
                               Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.relational.Relationship")),
                               Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))}}))}))})),
-            Core.annotatedTermAnnotation = (M.fromList [
-              (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Encoder for hydra.relational.Relationship")))])}))})),
+            Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
+              (
+                Core.TermVariable (Core.Name "description"),
+                (Core.TermLiteral (Core.LiteralString "Encoder for hydra.relational.Relationship")))]))}))})),
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.encode.relational.row"),
           Packaging.termDefinitionMetadata = Nothing,
@@ -703,5 +717,5 @@ module_ =
                             Core.applicationArgument = (Core.TermApplication (Core.Application {
                               Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.relational.Row")),
                               Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))}}))}))})),
-            Core.annotatedTermAnnotation = (M.fromList [
-              (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Encoder for hydra.relational.Row")))])}))}))]}
+            Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
+              (Core.TermVariable (Core.Name "description"), (Core.TermLiteral (Core.LiteralString "Encoder for hydra.relational.Row")))]))}))}))]}

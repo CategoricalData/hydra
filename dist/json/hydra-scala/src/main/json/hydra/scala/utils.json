@@ -6,7 +6,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Extract the name from a type, if it is a named type"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Extract the name from a type, if it is a named type"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -52,10 +56,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Qualify a union field name, optionally prefixing with the Scala type name"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Qualify a union field name, optionally prefixing with the Scala type name"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -116,7 +121,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Apply a Scala data expression to a list of arguments"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Apply a Scala data expression to a list of arguments"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -145,10 +154,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Apply explicit type parameters to a Scala expression (e.g. f[A, B])"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Apply explicit type parameters to a Scala expression (e.g. f[A, B])"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -257,7 +267,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Create a Scala assignment expression"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Create a Scala assignment expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -286,10 +297,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Sanitize a name for Scala: escape reserved words, replace invalid characters"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Sanitize a name for Scala: escape reserved words, replace invalid characters"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -445,7 +457,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Reference to scalaReservedWords from the language module"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Reference to scalaReservedWords from the language module"}}}]},
             "body": {"variable": "hydra.scala.language.scalaReservedWords"}}},
         "name": "hydra.scala.utils.scalaReservedWords",
         "signature": {"parameters": [], "result": {"type": {"set": {"literal": {"string": {}}}}}, "typeParameters": []}}},
@@ -453,7 +469,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a Hydra name to a Scala type name"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a Hydra name to a Scala type name"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -492,7 +509,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Create a Scala lambda (function) expression"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Create a Scala lambda (function) expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -543,7 +561,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Create a Scala name reference"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Create a Scala name reference"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -571,7 +589,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Create a Scala primitive reference from a Hydra name"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Create a Scala primitive reference from a Hydra name"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -632,7 +654,9 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Apply a Scala type to a list of type arguments"}}}],
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "Apply a Scala type to a list of type arguments"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -661,7 +685,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Apply a Scala type to one type argument"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Apply a Scala type to one type argument"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -685,7 +710,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Apply a Scala type to two type arguments"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Apply a Scala type to two type arguments"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -714,11 +740,12 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {"string": "Create a Scala type parameter from a Hydra name, capitalizing to avoid collision with value params"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {"string": "Create a Scala type parameter from a Hydra name, capitalizing to avoid collision with value params"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -762,7 +789,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Create a Scala type reference by name"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Create a Scala type reference by name"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -787,7 +815,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Create a Scala pattern variable"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Create a Scala pattern variable"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -823,7 +851,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a Scala type to its string representation"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Convert a Scala type to its string representation"}}}]},
             "body": {
               "lambda": {
                 "body": {

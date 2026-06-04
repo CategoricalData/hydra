@@ -4,10 +4,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Test cases for Ord instance comparisons on complex Hydra types"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Test cases for Ord instance comparisons on complex Hydra types"}}}]},
             "body": {
               "record": {
                 "fields": [
