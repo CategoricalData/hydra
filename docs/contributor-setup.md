@@ -169,7 +169,10 @@ Required for `/sync` with `--hosts all --targets all`, `/bootstrap all`, and iss
   `ASDF/FIND-COMPONENT:MISSING-COMPONENT Component :CL-PPCRE not found`.
   - macOS: `brew install sbcl`
   - Linux: `sudo apt install -y sbcl` / `sudo dnf install -y sbcl`
-  - Then install Quicklisp once (per machine, not per worktree):
+  - Then install Quicklisp once (per machine, not per worktree).
+    Run interactively (the Quicklisp installer prints a banner and pauses
+    on `(ql:add-to-init-file)` waiting for you to press Enter; in
+    non-interactive contexts use the alternative below):
     ```bash
     curl -O https://beta.quicklisp.org/quicklisp.lisp
     sbcl --no-sysinit --no-userinit --load quicklisp.lisp \
@@ -178,7 +181,27 @@ Required for `/sync` with `--hosts all --targets all`, `/bootstrap all`, and iss
     sbcl --eval '(ql:quickload :cl-ppcre)' --quit
     rm quicklisp.lisp
     ```
+    Non-interactive equivalent — install Quicklisp, then write `~/.sbclrc`
+    yourself instead of letting `(ql:add-to-init-file)` prompt for Enter:
+    ```bash
+    curl -O https://beta.quicklisp.org/quicklisp.lisp
+    sbcl --no-sysinit --no-userinit --non-interactive \
+         --load quicklisp.lisp \
+         --eval '(quicklisp-quickstart:install)'
+    cat >> ~/.sbclrc <<'EOF'
+    #-quicklisp
+    (let ((quicklisp-init (merge-pathnames "quicklisp/setup.lisp"
+                                           (user-homedir-pathname))))
+      (when (probe-file quicklisp-init)
+        (load quicklisp-init)))
+    EOF
+    sbcl --non-interactive --eval '(ql:quickload :cl-ppcre)'
+    rm quicklisp.lisp
+    ```
   - Verify: `sbcl --version` and `sbcl --non-interactive --eval '(asdf:load-system :cl-ppcre)'` (silent success).
+    `bin/check-env.sh --full` also probes for cl-ppcre loadability as part of the
+    `SBCL + cl-ppcre` line and will report `cl-ppcre NOT loadable` if Quicklisp
+    is missing.
 - **`emacs`** for Emacs Lisp (used in `--batch` mode).
   Emacs Lisp is the least mature host — expect rough edges.
   - macOS: `brew install emacs`
