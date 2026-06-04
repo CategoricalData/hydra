@@ -4,7 +4,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Decoder for hydra.relational.ColumnName"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Decoder for hydra.relational.ColumnName"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -191,7 +192,8 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Decoder for hydra.relational.ColumnSchema"}}}],
+                "annotation": {
+                  "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Decoder for hydra.relational.ColumnSchema"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -389,7 +391,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Decoder for hydra.relational.ForeignKey"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Decoder for hydra.relational.ForeignKey"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -569,7 +572,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Decoder for hydra.relational.PrimaryKey"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Decoder for hydra.relational.PrimaryKey"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -675,7 +679,8 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Decoder for hydra.relational.Relation"}}}],
+                "annotation": {
+                  "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Decoder for hydra.relational.Relation"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -814,7 +819,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Decoder for hydra.relational.RelationName"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Decoder for hydra.relational.RelationName"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1001,7 +1007,8 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Decoder for hydra.relational.RelationSchema"}}}],
+                "annotation": {
+                  "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Decoder for hydra.relational.RelationSchema"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -1294,7 +1301,8 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Decoder for hydra.relational.Relationship"}}}],
+                "annotation": {
+                  "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Decoder for hydra.relational.Relationship"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -1442,7 +1450,7 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Decoder for hydra.relational.Row"}}}],
+                "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Decoder for hydra.relational.Row"}}}]},
                 "body": {
                   "lambda": {
                     "body": {

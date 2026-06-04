@@ -4,10 +4,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Build a Graph from element bindings, environment, and primitives"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Build a Graph from element bindings, environment, and primitives"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -348,12 +349,13 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {
-                    "string": "Pick a name that does not collide with a reserved set, by appending a numeric suffix to the requested name when necessary"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {
+                      "string": "Pick a name that does not collide with a reserved set, by appending a numeric suffix to the requested name when necessary"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -439,10 +441,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Resolve a schema type through a chain of zero or more typedefs"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Resolve a schema type through a chain of zero or more typedefs"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -638,10 +641,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Look up a binding by name in a graph, returning Either an error or the binding"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Look up a binding by name in a graph, returning Either an error or the binding"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -705,10 +709,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Create a graph from a parent graph, schema types, and list of element bindings"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Create a graph from a parent graph, schema types, and list of element bindings"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -803,7 +808,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "An empty graph; no elements, no primitives, no schema."}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "An empty graph; no elements, no primitives, no schema."}}}]},
             "body": {
               "record": {
                 "fields": [
@@ -856,10 +865,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "An empty inference context; fresh-variable counter at zero and empty trace."}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "An empty inference context; fresh-variable counter at zero and empty trace."}}}]},
             "body": {
               "record": {
                 "fields": [
@@ -872,7 +882,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Extract the fields of a record or union type"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Extract the fields of a record or union type"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -924,11 +935,12 @@
               "typeLambda": {
                 "body": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {
-                          "literal": {"string": "Look up a field by name in a record's field map and decode its value, failing if the field is missing"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {
+                            "literal": {"string": "Look up a field by name in a record's field map and decode its value, failing if the field is missing"}}}]},
                     "body": {
                       "lambda": {
                         "body": {
@@ -1011,10 +1023,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Reconstruct a list of Bindings from a Graph's boundTerms and boundTypes"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Reconstruct a list of Bindings from a Graph's boundTerms and boundTypes"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1096,12 +1109,13 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {
-                    "string": "Build a graph with primitives assembled from built-in and user-provided lists. User-provided primitives shadow built-in ones."}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {
+                      "string": "Build a graph with primitives assembled from built-in and user-provided lists. User-provided primitives shadow built-in ones."}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1202,7 +1216,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Look up a binding in a graph by name"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Look up a binding in a graph by name"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1268,7 +1283,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Look up a primitive function in a graph by name"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Look up a primitive function in a graph by name"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1301,7 +1320,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Look up a term by name in a graph"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Look up a term by name in a graph"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1336,11 +1355,12 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [
-                  {
-                    "key": "description",
-                    "value": {
-                      "literal": {"string": "Match a term against an enum type, dispatching on the variant name to a value from the supplied list"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {
+                        "literal": {"string": "Match a term against an enum type, dispatching on the variant name to a value from the supplied list"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -1433,10 +1453,11 @@
               "typeLambda": {
                 "body": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {"literal": {"string": "Match a term against a record type and decode its fields, failing if the term is not a record"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "Match a term against a record type and decode its fields, failing if the term is not a record"}}}]},
                     "body": {
                       "lambda": {
                         "body": {
@@ -1555,12 +1576,13 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [
-                  {
-                    "key": "description",
-                    "value": {
-                      "literal": {
-                        "string": "Match a term against a union type, dispatching on the injected variant to the appropriate decoder. Variable terms are dereferenced through the graph before matching."}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {
+                        "literal": {
+                          "string": "Match a term against a union type, dispatching on the injected variant to the appropriate decoder. Variable terms are dereferenced through the graph before matching."}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -1876,12 +1898,13 @@
                       "typeLambda": {
                         "body": {
                           "annotated": {
-                            "annotation": [
-                              {
-                                "key": "description",
-                                "value": {
-                                  "literal": {
-                                    "string": "Build a (fieldName, decoder) pair for a unit-valued union variant: the decoder ignores its argument and returns a fixed value"}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {
+                                    "literal": {
+                                      "string": "Build a (fieldName, decoder) pair for a unit-valued union variant: the decoder ignores its argument and returns a fixed value"}}}]},
                             "body": {
                               "lambda": {
                                 "body": {
@@ -1932,11 +1955,12 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {"string": "Look up a binding in a graph by name, failing with a list of available names if it is not found"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {"string": "Look up a binding in a graph by name, failing with a list of available names if it is not found"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2107,10 +2131,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Look up a primitive in a graph by name, failing if it is not registered"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Look up a primitive in a graph by name, failing if it is not registered"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2175,11 +2200,12 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {"string": "Look up a primitive's type scheme in a graph by name, failing if the primitive is not registered"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {"string": "Look up a primitive's type scheme in a graph by name, failing if the primitive is not registered"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2280,11 +2306,12 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {"string": "Resolve a name to a term in the graph, following variable references, and fail if the name is not bound"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {"string": "Resolve a name to a term in the graph, following variable references, and fail if the name is not bound"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2348,10 +2375,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "TODO: distinguish between lambda-bound and let-bound variables"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "TODO: distinguish between lambda-bound and let-bound variables"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2425,12 +2453,13 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {
-                    "string": "Strip annotations and type lambdas/applications from a term, then follow variable references through the graph until a non-variable term is reached"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {
+                      "string": "Strip annotations and type lambdas/applications from a term, then follow variable references through the graph until a non-variable term is reached"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2498,10 +2527,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Strip annotations and dereference variables, returning Either an error or the resolved term"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Strip annotations and dereference variables, returning Either an error or the resolved term"}}}]},
             "body": {
               "lambda": {
                 "body": {

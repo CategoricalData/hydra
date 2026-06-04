@@ -4,7 +4,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Decoder for hydra.paths.SubtermEdge"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Decoder for hydra.paths.SubtermEdge"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -211,7 +211,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Decoder for hydra.paths.SubtermGraph"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Decoder for hydra.paths.SubtermGraph"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -387,7 +388,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Decoder for hydra.paths.SubtermNode"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Decoder for hydra.paths.SubtermNode"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -766,7 +767,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Decoder for hydra.paths.SubtermPath"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Decoder for hydra.paths.SubtermPath"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -870,7 +871,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Decoder for hydra.paths.SubtermStep"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Decoder for hydra.paths.SubtermStep"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2442,7 +2443,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Decoder for hydra.paths.SubtypeEdge"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Decoder for hydra.paths.SubtypeEdge"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2649,7 +2650,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Decoder for hydra.paths.SubtypeGraph"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Decoder for hydra.paths.SubtypeGraph"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2825,7 +2827,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Decoder for hydra.paths.SubtypeNode"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Decoder for hydra.paths.SubtypeNode"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3204,7 +3206,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Decoder for hydra.paths.SubtypePath"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Decoder for hydra.paths.SubtypePath"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3308,7 +3310,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Decoder for hydra.paths.SubtypeStep"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Decoder for hydra.paths.SubtypeStep"}}}]},
             "body": {
               "lambda": {
                 "body": {

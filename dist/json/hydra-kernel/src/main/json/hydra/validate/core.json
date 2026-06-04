@@ -6,12 +6,13 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [
-                  {
-                    "key": "description",
-                    "value": {
-                      "literal": {
-                        "string": "Append a rule-tagged InvalidTermError finding to a ValidationResult, classifying as error or warning per the profile and respecting maxErrors/maxWarnings bounds."}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {
+                        "literal": {
+                          "string": "Append a rule-tagged InvalidTermError finding to a ValidationResult, classifying as error or warning per the profile and respecting maxErrors/maxWarnings bounds."}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -246,12 +247,13 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [
-                  {
-                    "key": "description",
-                    "value": {
-                      "literal": {
-                        "string": "Append a rule-tagged InvalidTypeError finding to a ValidationResult, classifying as error or warning per the profile and respecting maxErrors/maxWarnings bounds."}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {
+                        "literal": {
+                          "string": "Append a rule-tagged InvalidTypeError finding to a ValidationResult, classifying as error or warning per the profile and respecting maxErrors/maxWarnings bounds."}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -484,7 +486,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Check for duplicate binding names in a list of bindings"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Check for duplicate binding names in a list of bindings"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -555,7 +561,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Check for duplicate field names in a list of field types"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Check for duplicate field names in a list of field types"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -623,7 +633,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Check for duplicate field names in a list of fields"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Check for duplicate field names in a list of fields"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -676,10 +690,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Check that a literal value's type matches an expected literal type"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Check that a literal value's type matches an expected literal type"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -734,10 +749,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Check if any name in a list shadows a variable already in scope"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Check if any name in a list shadows a variable already in scope"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -851,11 +867,12 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {"string": "Check a single term node for validation errors. Rules disabled by the profile are not evaluated."}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {"string": "Check a single term node for validation errors. Rules disabled by the profile are not evaluated."}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -892,8 +909,11 @@
                                                             "name": "annMap",
                                                             "term": {
                                                               "application": {
-                                                                "argument": {"variable": "ann"},
-                                                                "function": {"project": {"fieldName": "annotation", "typeName": "hydra.core.AnnotatedTerm"}}}},
+                                                                "argument": {
+                                                                  "application": {
+                                                                    "argument": {"variable": "ann"},
+                                                                    "function": {"project": {"fieldName": "annotation", "typeName": "hydra.core.AnnotatedTerm"}}}},
+                                                                "function": {"variable": "hydra.annotations.getAnnotationMap"}}},
                                                             "typeScheme": {"body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Term"}}}, "variables": []}}],
                                                         "body": {
                                                           "application": {
@@ -3283,10 +3303,11 @@
               "typeLambda": {
                 "body": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {"literal": {"string": "Check a type for type variables not bound in the current scope"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "Check a type for type variables not bound in the current scope"}}}]},
                     "body": {
                       "lambda": {
                         "body": {
@@ -3371,10 +3392,11 @@
               "typeLambda": {
                 "body": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {"literal": {"string": "Check a type scheme for type variables not bound by the scheme or the current scope"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "Check a type scheme for type variables not bound by the scheme or the current scope"}}}]},
                     "body": {
                       "lambda": {
                         "body": {
@@ -3455,7 +3477,9 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Return an error if the given type is TypeVoid"}}}],
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "Return an error if the given type is TypeVoid"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3499,10 +3523,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "True iff the given rule name appears in the profile's errorRules or warningRules."}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "True iff the given rule name appears in the profile's errorRules or warningRules."}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3549,7 +3574,8 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Find the first duplicate name in a list"}}}],
+                "annotation": {
+                  "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Find the first duplicate name in a list"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -3689,10 +3715,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [
-                  {
-                    "key": "description",
-                    "value": {"literal": {"string": "Find the first duplicate name in a list (for field type validation)"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Find the first duplicate name in a list (for field type validation)"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -3832,10 +3859,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [
-                  {
-                    "key": "description",
-                    "value": {"literal": {"string": "Return the first error from a list of optional errors, or nothing if all are valid"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Return the first error from a list of optional errors, or nothing if all are valid"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -3885,10 +3913,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [
-                  {
-                    "key": "description",
-                    "value": {"literal": {"string": "Return the first rule-tagged finding from a list, or nothing if all are valid"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Return the first rule-tagged finding from a list, or nothing if all are valid"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -3938,10 +3967,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [
-                  {
-                    "key": "description",
-                    "value": {"literal": {"string": "Return the first rule-tagged type finding from a list, or nothing if all are valid"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Return the first rule-tagged type finding from a list, or nothing if all are valid"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -3991,10 +4021,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [
-                  {
-                    "key": "description",
-                    "value": {"literal": {"string": "Return the first type error from a list of optional errors, or nothing if all are valid"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Return the first type error from a list of optional errors, or nothing if all are valid"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -4042,10 +4073,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Check whether a name is valid at an introduction site. Currently rejects empty strings."}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Check whether a name is valid at an introduction site. Currently rejects empty strings."}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4069,12 +4101,13 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {
-                    "string": "The default validation profile for term and type validation, with every check classified as an error except InvalidTypeError.singleVariantUnion (warning); maxErrors=1, maxWarnings=20."}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {
+                      "string": "The default validation profile for term and type validation, with every check classified as an error except InvalidTypeError.singleVariantUnion (warning); maxErrors=1, maxWarnings=20."}}}]},
             "body": {
               "record": {
                 "fields": [
@@ -4227,12 +4260,13 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {
-                    "string": "Validate a term against the given ValidationProfile, returning a ValidationResult. Errors hard-stop traversal once maxErrors is reached; warnings are bounded by maxWarnings without causing termination."}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {
+                      "string": "Validate a term against the given ValidationProfile, returning a ValidationResult. Errors hard-stop traversal once maxErrors is reached; warnings are bounded by maxWarnings without causing termination."}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4437,12 +4471,13 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {
-                    "string": "Validate a type against the given ValidationProfile, threading a ValidationResult accumulator through subtypes. Errors hard-stop traversal once maxErrors is reached."}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {
+                      "string": "Validate a type against the given ValidationProfile, threading a ValidationResult accumulator through subtypes. Errors hard-stop traversal once maxErrors is reached."}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -5002,11 +5037,12 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {"string": "Check a single type node for validation errors. Rules disabled by the profile are not evaluated."}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {"string": "Check a single type node for validation errors. Rules disabled by the profile are not evaluated."}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -5039,8 +5075,11 @@
                                                     "name": "annMap",
                                                     "term": {
                                                       "application": {
-                                                        "argument": {"variable": "ann"},
-                                                        "function": {"project": {"fieldName": "annotation", "typeName": "hydra.core.AnnotatedType"}}}},
+                                                        "argument": {
+                                                          "application": {
+                                                            "argument": {"variable": "ann"},
+                                                            "function": {"project": {"fieldName": "annotation", "typeName": "hydra.core.AnnotatedType"}}}},
+                                                        "function": {"variable": "hydra.annotations.getAnnotationMap"}}},
                                                     "typeScheme": {"body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Term"}}}, "variables": []}}],
                                                 "body": {
                                                   "application": {

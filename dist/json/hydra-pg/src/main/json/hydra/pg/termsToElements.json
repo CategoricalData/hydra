@@ -6,7 +6,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Apply a parsed pattern to a term, producing string terms"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Apply a parsed pattern to a term, producing string terms"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -277,7 +281,7 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Decode an edge label from a term"}}}],
+                "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Decode an edge label from a term"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -325,7 +329,8 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Decode an edge specification from a term"}}}],
+                "annotation": {
+                  "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Decode an edge specification from a term"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -588,7 +593,8 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Decode an element specification from a term"}}}],
+                "annotation": {
+                  "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Decode an element specification from a term"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -719,7 +725,7 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Decode a property key from a term"}}}],
+                "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Decode a property key from a term"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -767,7 +773,8 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Decode a property specification from a term"}}}],
+                "annotation": {
+                  "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Decode a property specification from a term"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -899,7 +906,8 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Decode a value specification from a term"}}}],
+                "annotation": {
+                  "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Decode a value specification from a term"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -1116,7 +1124,7 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Decode a vertex label from a term"}}}],
+                "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Decode a vertex label from a term"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -1164,7 +1172,8 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Decode a vertex specification from a term"}}}],
+                "annotation": {
+                  "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Decode a vertex specification from a term"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -1345,10 +1354,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [
-                  {
-                    "key": "description",
-                    "value": {"literal": {"string": "Evaluate a path (list of steps) on a term, returning all resulting terms"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Evaluate a path (list of steps) on a term, returning all resulting terms"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -1478,7 +1488,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Evaluate a single step of a path traversal on a term"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Evaluate a single step of a path traversal on a term"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -1777,10 +1791,11 @@
               "typeLambda": {
                 "body": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {"literal": {"string": "Extract a list from a term and apply a decoder to each element"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "Extract a list from a term and apply a decoder to each element"}}}]},
                     "body": {
                       "lambda": {
                         "body": {
@@ -1880,7 +1895,11 @@
                               "typeLambda": {
                                 "body": {
                                   "annotated": {
-                                    "annotation": [{"key": "description", "value": {"literal": {"string": "Parse an edge id pattern from a value spec and schema"}}}],
+                                    "annotation": {
+                                      "map": [
+                                        {
+                                          "key": {"variable": "description"},
+                                          "value": {"literal": {"string": "Parse an edge id pattern from a value spec and schema"}}}]},
                                     "body": {
                                       "lambda": {
                                         "body": {
@@ -2087,10 +2106,11 @@
                               "typeLambda": {
                                 "body": {
                                   "annotated": {
-                                    "annotation": [
-                                      {
-                                        "key": "description",
-                                        "value": {"literal": {"string": "Parse an edge specification into a label and encoder function"}}}],
+                                    "annotation": {
+                                      "map": [
+                                        {
+                                          "key": {"variable": "description"},
+                                          "value": {"literal": {"string": "Parse an edge specification into a label and encoder function"}}}]},
                                     "body": {
                                       "lambda": {
                                         "body": {
@@ -2787,10 +2807,11 @@
                               "typeLambda": {
                                 "body": {
                                   "annotated": {
-                                    "annotation": [
-                                      {
-                                        "key": "description",
-                                        "value": {"literal": {"string": "Parse an element specification into a label and encoder function"}}}],
+                                    "annotation": {
+                                      "map": [
+                                        {
+                                          "key": {"variable": "description"},
+                                          "value": {"literal": {"string": "Parse an element specification into a label and encoder function"}}}]},
                                     "body": {
                                       "lambda": {
                                         "body": {
@@ -2946,8 +2967,11 @@
                       "typeLambda": {
                         "body": {
                           "annotated": {
-                            "annotation": [
-                              {"key": "description", "value": {"literal": {"string": "Parse a string pattern into a function that traverses terms"}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {"literal": {"string": "Parse a string pattern into a function that traverses terms"}}}]},
                             "body": {
                               "lambda": {
                                 "body": {
@@ -3138,7 +3162,11 @@
                               "typeLambda": {
                                 "body": {
                                   "annotated": {
-                                    "annotation": [{"key": "description", "value": {"literal": {"string": "Parse a property specification into an encoder function"}}}],
+                                    "annotation": {
+                                      "map": [
+                                        {
+                                          "key": {"variable": "description"},
+                                          "value": {"literal": {"string": "Parse a property specification into an encoder function"}}}]},
                                     "body": {
                                       "lambda": {
                                         "body": {
@@ -3412,10 +3440,11 @@
                       "typeLambda": {
                         "body": {
                           "annotated": {
-                            "annotation": [
-                              {
-                                "key": "description",
-                                "value": {"literal": {"string": "Parse a value specification into a function that processes terms"}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {"literal": {"string": "Parse a value specification into a function that processes terms"}}}]},
                             "body": {
                               "lambda": {
                                 "body": {
@@ -3535,7 +3564,11 @@
                               "typeLambda": {
                                 "body": {
                                   "annotated": {
-                                    "annotation": [{"key": "description", "value": {"literal": {"string": "Parse a vertex id pattern from a value spec and schema"}}}],
+                                    "annotation": {
+                                      "map": [
+                                        {
+                                          "key": {"variable": "description"},
+                                          "value": {"literal": {"string": "Parse a vertex id pattern from a value spec and schema"}}}]},
                                     "body": {
                                       "lambda": {
                                         "body": {
@@ -3742,10 +3775,11 @@
                               "typeLambda": {
                                 "body": {
                                   "annotated": {
-                                    "annotation": [
-                                      {
-                                        "key": "description",
-                                        "value": {"literal": {"string": "Parse a vertex specification into a label and encoder function"}}}],
+                                    "annotation": {
+                                      "map": [
+                                        {
+                                          "key": {"variable": "description"},
+                                          "value": {"literal": {"string": "Parse a vertex specification into a label and encoder function"}}}]},
                                     "body": {
                                       "lambda": {
                                         "body": {
@@ -4216,7 +4250,8 @@
                   "typeLambda": {
                     "body": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "Read a field from a map of fields by name"}}}],
+                        "annotation": {
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Read a field from a map of fields by name"}}}]},
                         "body": {
                           "lambda": {
                             "body": {
@@ -4310,7 +4345,8 @@
               "typeLambda": {
                 "body": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "Read an injection (union value) from a term"}}}],
+                    "annotation": {
+                      "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Read an injection (union value) from a term"}}}]},
                     "body": {
                       "lambda": {
                         "body": {
@@ -4629,8 +4665,11 @@
               "typeLambda": {
                 "body": {
                   "annotated": {
-                    "annotation": [
-                      {"key": "description", "value": {"literal": {"string": "Read a record from a term as a map of field names to values"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "Read a record from a term as a map of field names to values"}}}]},
                     "body": {
                       "lambda": {
                         "body": {
@@ -4735,7 +4774,11 @@
                   "typeLambda": {
                     "body": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "Require exactly one result from a list-producing function"}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "Require exactly one result from a list-producing function"}}}]},
                         "body": {
                           "lambda": {
                             "body": {
@@ -4923,10 +4966,11 @@
                       "typeLambda": {
                         "body": {
                           "annotated": {
-                            "annotation": [
-                              {
-                                "key": "description",
-                                "value": {"literal": {"string": "Create an adapter that maps terms to property graph elements using a mapping specification"}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {"literal": {"string": "Create an adapter that maps terms to property graph elements using a mapping specification"}}}]},
                             "body": {
                               "lambda": {
                                 "body": {
@@ -5563,7 +5607,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a term to its string representation"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a term to its string representation"}}}]},
             "body": {
               "lambda": {
                 "body": {

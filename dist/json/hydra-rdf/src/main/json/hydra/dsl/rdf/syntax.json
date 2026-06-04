@@ -4,7 +4,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for the hydra.rdf.syntax.BlankNode wrapper"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL constructor for the hydra.rdf.syntax.BlankNode wrapper"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -42,7 +46,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL accessor for the body of hydra.rdf.syntax.BlankNode"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the body of hydra.rdf.syntax.BlankNode"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -85,7 +93,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for the hydra.rdf.syntax.RdfsClass wrapper"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL constructor for the hydra.rdf.syntax.RdfsClass wrapper"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -123,7 +135,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL accessor for the body of hydra.rdf.syntax.RdfsClass"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the body of hydra.rdf.syntax.RdfsClass"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -166,7 +182,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for the hydra.rdf.syntax.Dataset wrapper"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL constructor for the hydra.rdf.syntax.Dataset wrapper"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -206,7 +226,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL accessor for the body of hydra.rdf.syntax.Dataset"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the body of hydra.rdf.syntax.Dataset"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -251,7 +275,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for hydra.rdf.syntax.Description"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL constructor for hydra.rdf.syntax.Description"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -314,10 +342,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the subject field of hydra.rdf.syntax.Description"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the subject field of hydra.rdf.syntax.Description"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -368,10 +397,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the graph field of hydra.rdf.syntax.Description"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the graph field of hydra.rdf.syntax.Description"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -422,10 +452,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the subject field of hydra.rdf.syntax.Description"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the subject field of hydra.rdf.syntax.Description"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -516,10 +547,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the graph field of hydra.rdf.syntax.Description"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the graph field of hydra.rdf.syntax.Description"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -610,7 +642,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for the hydra.rdf.syntax.Graph wrapper"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL constructor for the hydra.rdf.syntax.Graph wrapper"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -649,7 +685,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL accessor for the body of hydra.rdf.syntax.Graph"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the body of hydra.rdf.syntax.Graph"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -692,7 +732,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for the hydra.rdf.syntax.Iri wrapper"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL constructor for the hydra.rdf.syntax.Iri wrapper"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -729,7 +773,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL accessor for the body of hydra.rdf.syntax.Iri"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the body of hydra.rdf.syntax.Iri"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -770,10 +818,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the iri variant of hydra.rdf.syntax.IriOrLiteral"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the iri variant of hydra.rdf.syntax.IriOrLiteral"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -818,10 +867,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the literal variant of hydra.rdf.syntax.IriOrLiteral"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the literal variant of hydra.rdf.syntax.IriOrLiteral"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -868,8 +918,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {"key": "description", "value": {"literal": {"string": "DSL constructor for the hydra.rdf.syntax.LangStrings wrapper"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL constructor for the hydra.rdf.syntax.LangStrings wrapper"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -913,7 +966,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL accessor for the body of hydra.rdf.syntax.LangStrings"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the body of hydra.rdf.syntax.LangStrings"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -960,8 +1017,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {"key": "description", "value": {"literal": {"string": "DSL constructor for the hydra.rdf.syntax.LanguageTag wrapper"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL constructor for the hydra.rdf.syntax.LanguageTag wrapper"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -999,7 +1059,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL accessor for the body of hydra.rdf.syntax.LanguageTag"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the body of hydra.rdf.syntax.LanguageTag"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1042,7 +1106,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for hydra.rdf.syntax.Literal"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL constructor for hydra.rdf.syntax.Literal"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1096,12 +1161,13 @@
                           "application": {
                             "argument": {
                               "annotated": {
-                                "annotation": [
-                                  {
-                                    "key": "description",
-                                    "value": {
-                                      "literal": {
-                                        "string": "An optional language tag, present if and only if the datatype IRI is http://www.w3.org/1999/02/22-rdf-syntax-ns#langString"}}}],
+                                "annotation": {
+                                  "map": [
+                                    {
+                                      "key": {"variable": "description"},
+                                      "value": {
+                                        "literal": {
+                                          "string": "An optional language tag, present if and only if the datatype IRI is http://www.w3.org/1999/02/22-rdf-syntax-ns#langString"}}}]},
                                 "body": {"maybe": {"variable": "hydra.rdf.syntax.LanguageTag"}}}},
                             "function": {"variable": "hydra.typed.TypedTerm"}}},
                         "parameter": "languageTag"}},
@@ -1109,10 +1175,11 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [
-                              {
-                                "key": "description",
-                                "value": {"literal": {"string": "an IRI identifying a datatype that determines how the lexical form maps to a literal value"}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {"literal": {"string": "an IRI identifying a datatype that determines how the lexical form maps to a literal value"}}}]},
                             "body": {"variable": "hydra.rdf.syntax.Iri"}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "datatypeIri"}},
@@ -1120,7 +1187,11 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "a Unicode string, which should be in Normal Form C"}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "a Unicode string, which should be in Normal Form C"}}}]},
                         "body": {"literal": {"string": {}}}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "lexicalForm"}}}},
@@ -1134,7 +1205,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "a Unicode string, which should be in Normal Form C"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "a Unicode string, which should be in Normal Form C"}}}]},
                       "body": {"literal": {"string": {}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -1144,10 +1219,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "an IRI identifying a datatype that determines how the lexical form maps to a literal value"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "an IRI identifying a datatype that determines how the lexical form maps to a literal value"}}}]},
                       "body": {"variable": "hydra.rdf.syntax.Iri"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -1157,12 +1233,13 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {
-                            "literal": {
-                              "string": "An optional language tag, present if and only if the datatype IRI is http://www.w3.org/1999/02/22-rdf-syntax-ns#langString"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {
+                              "literal": {
+                                "string": "An optional language tag, present if and only if the datatype IRI is http://www.w3.org/1999/02/22-rdf-syntax-ns#langString"}}}]},
                       "body": {"maybe": {"variable": "hydra.rdf.syntax.LanguageTag"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -1173,10 +1250,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the lexicalForm field of hydra.rdf.syntax.Literal"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the lexicalForm field of hydra.rdf.syntax.Literal"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1225,7 +1303,11 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "a Unicode string, which should be in Normal Form C"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "a Unicode string, which should be in Normal Form C"}}}]},
                     "body": {"literal": {"string": {}}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -1233,10 +1315,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the datatypeIri field of hydra.rdf.syntax.Literal"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the datatypeIri field of hydra.rdf.syntax.Literal"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1285,10 +1368,11 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {"literal": {"string": "an IRI identifying a datatype that determines how the lexical form maps to a literal value"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "an IRI identifying a datatype that determines how the lexical form maps to a literal value"}}}]},
                     "body": {"variable": "hydra.rdf.syntax.Iri"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -1296,10 +1380,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the languageTag field of hydra.rdf.syntax.Literal"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the languageTag field of hydra.rdf.syntax.Literal"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1348,12 +1433,13 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {
-                          "literal": {
-                            "string": "An optional language tag, present if and only if the datatype IRI is http://www.w3.org/1999/02/22-rdf-syntax-ns#langString"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {
+                            "literal": {
+                              "string": "An optional language tag, present if and only if the datatype IRI is http://www.w3.org/1999/02/22-rdf-syntax-ns#langString"}}}]},
                     "body": {"maybe": {"variable": "hydra.rdf.syntax.LanguageTag"}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -1361,10 +1447,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the lexicalForm field of hydra.rdf.syntax.Literal"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the lexicalForm field of hydra.rdf.syntax.Literal"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1468,7 +1555,11 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "a Unicode string, which should be in Normal Form C"}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {"literal": {"string": "a Unicode string, which should be in Normal Form C"}}}]},
                             "body": {"literal": {"string": {}}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -1490,7 +1581,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "a Unicode string, which should be in Normal Form C"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "a Unicode string, which should be in Normal Form C"}}}]},
                       "body": {"literal": {"string": {}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -1501,10 +1596,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the datatypeIri field of hydra.rdf.syntax.Literal"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the datatypeIri field of hydra.rdf.syntax.Literal"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1608,10 +1704,11 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [
-                              {
-                                "key": "description",
-                                "value": {"literal": {"string": "an IRI identifying a datatype that determines how the lexical form maps to a literal value"}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {"literal": {"string": "an IRI identifying a datatype that determines how the lexical form maps to a literal value"}}}]},
                             "body": {"variable": "hydra.rdf.syntax.Iri"}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -1633,10 +1730,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "an IRI identifying a datatype that determines how the lexical form maps to a literal value"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "an IRI identifying a datatype that determines how the lexical form maps to a literal value"}}}]},
                       "body": {"variable": "hydra.rdf.syntax.Iri"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -1647,10 +1745,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the languageTag field of hydra.rdf.syntax.Literal"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the languageTag field of hydra.rdf.syntax.Literal"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1754,12 +1853,13 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [
-                              {
-                                "key": "description",
-                                "value": {
-                                  "literal": {
-                                    "string": "An optional language tag, present if and only if the datatype IRI is http://www.w3.org/1999/02/22-rdf-syntax-ns#langString"}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {
+                                    "literal": {
+                                      "string": "An optional language tag, present if and only if the datatype IRI is http://www.w3.org/1999/02/22-rdf-syntax-ns#langString"}}}]},
                             "body": {"maybe": {"variable": "hydra.rdf.syntax.LanguageTag"}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -1781,12 +1881,13 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {
-                            "literal": {
-                              "string": "An optional language tag, present if and only if the datatype IRI is http://www.w3.org/1999/02/22-rdf-syntax-ns#langString"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {
+                              "literal": {
+                                "string": "An optional language tag, present if and only if the datatype IRI is http://www.w3.org/1999/02/22-rdf-syntax-ns#langString"}}}]},
                       "body": {"maybe": {"variable": "hydra.rdf.syntax.LanguageTag"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -1797,7 +1898,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL injection for the iri variant of hydra.rdf.syntax.Node"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the iri variant of hydra.rdf.syntax.Node"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1841,8 +1946,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {"key": "description", "value": {"literal": {"string": "DSL injection for the bnode variant of hydra.rdf.syntax.Node"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the bnode variant of hydra.rdf.syntax.Node"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1888,10 +1996,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the literal variant of hydra.rdf.syntax.Node"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the literal variant of hydra.rdf.syntax.Node"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1937,7 +2046,9 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for hydra.rdf.syntax.Property"}}}],
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "DSL constructor for hydra.rdf.syntax.Property"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1994,10 +2105,11 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [
-                              {
-                                "key": "description",
-                                "value": {"literal": {"string": "States that the values of a property are instances of one or more classes"}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {"literal": {"string": "States that the values of a property are instances of one or more classes"}}}]},
                             "body": {"set": {"variable": "hydra.rdf.syntax.RdfsClass"}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "range"}},
@@ -2005,10 +2117,11 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "State that any resource that has a given property is an instance of one or more classes"}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "State that any resource that has a given property is an instance of one or more classes"}}}]},
                         "body": {"set": {"variable": "hydra.rdf.syntax.RdfsClass"}}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "domain"}}}},
@@ -2022,10 +2135,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "State that any resource that has a given property is an instance of one or more classes"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "State that any resource that has a given property is an instance of one or more classes"}}}]},
                       "body": {"set": {"variable": "hydra.rdf.syntax.RdfsClass"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -2035,10 +2149,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "States that the values of a property are instances of one or more classes"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "States that the values of a property are instances of one or more classes"}}}]},
                       "body": {"set": {"variable": "hydra.rdf.syntax.RdfsClass"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -2054,10 +2169,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the domain field of hydra.rdf.syntax.Property"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the domain field of hydra.rdf.syntax.Property"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2106,10 +2222,11 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {"literal": {"string": "State that any resource that has a given property is an instance of one or more classes"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "State that any resource that has a given property is an instance of one or more classes"}}}]},
                     "body": {"set": {"variable": "hydra.rdf.syntax.RdfsClass"}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -2117,10 +2234,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the range field of hydra.rdf.syntax.Property"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the range field of hydra.rdf.syntax.Property"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2169,10 +2287,11 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {"literal": {"string": "States that the values of a property are instances of one or more classes"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "States that the values of a property are instances of one or more classes"}}}]},
                     "body": {"set": {"variable": "hydra.rdf.syntax.RdfsClass"}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -2180,10 +2299,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the subPropertyOf field of hydra.rdf.syntax.Property"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the subPropertyOf field of hydra.rdf.syntax.Property"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2237,10 +2357,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the domain field of hydra.rdf.syntax.Property"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the domain field of hydra.rdf.syntax.Property"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2346,10 +2467,11 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [
-                              {
-                                "key": "description",
-                                "value": {"literal": {"string": "State that any resource that has a given property is an instance of one or more classes"}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {"literal": {"string": "State that any resource that has a given property is an instance of one or more classes"}}}]},
                             "body": {"set": {"variable": "hydra.rdf.syntax.RdfsClass"}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -2371,10 +2493,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "State that any resource that has a given property is an instance of one or more classes"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "State that any resource that has a given property is an instance of one or more classes"}}}]},
                       "body": {"set": {"variable": "hydra.rdf.syntax.RdfsClass"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -2385,8 +2508,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {"key": "description", "value": {"literal": {"string": "DSL updater for the range field of hydra.rdf.syntax.Property"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the range field of hydra.rdf.syntax.Property"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2492,10 +2618,11 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [
-                              {
-                                "key": "description",
-                                "value": {"literal": {"string": "States that the values of a property are instances of one or more classes"}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {"literal": {"string": "States that the values of a property are instances of one or more classes"}}}]},
                             "body": {"set": {"variable": "hydra.rdf.syntax.RdfsClass"}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -2517,10 +2644,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "States that the values of a property are instances of one or more classes"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "States that the values of a property are instances of one or more classes"}}}]},
                       "body": {"set": {"variable": "hydra.rdf.syntax.RdfsClass"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -2531,10 +2659,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the subPropertyOf field of hydra.rdf.syntax.Property"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the subPropertyOf field of hydra.rdf.syntax.Property"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2661,7 +2790,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for hydra.rdf.syntax.Quad"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL constructor for hydra.rdf.syntax.Quad"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2759,8 +2889,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {"key": "description", "value": {"literal": {"string": "DSL accessor for the subject field of hydra.rdf.syntax.Quad"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the subject field of hydra.rdf.syntax.Quad"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2810,10 +2943,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the predicate field of hydra.rdf.syntax.Quad"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the predicate field of hydra.rdf.syntax.Quad"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2862,7 +2996,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL accessor for the object field of hydra.rdf.syntax.Quad"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the object field of hydra.rdf.syntax.Quad"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2911,7 +3049,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL accessor for the graph field of hydra.rdf.syntax.Quad"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the graph field of hydra.rdf.syntax.Quad"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2961,7 +3103,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL updater for the subject field of hydra.rdf.syntax.Quad"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the subject field of hydra.rdf.syntax.Quad"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3119,8 +3265,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {"key": "description", "value": {"literal": {"string": "DSL updater for the predicate field of hydra.rdf.syntax.Quad"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the predicate field of hydra.rdf.syntax.Quad"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3276,7 +3425,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL updater for the object field of hydra.rdf.syntax.Quad"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the object field of hydra.rdf.syntax.Quad"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3432,7 +3585,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL updater for the graph field of hydra.rdf.syntax.Quad"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the graph field of hydra.rdf.syntax.Quad"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3590,10 +3747,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the iri variant of hydra.rdf.syntax.Resource"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the iri variant of hydra.rdf.syntax.Resource"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3638,10 +3796,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the bnode variant of hydra.rdf.syntax.Resource"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the bnode variant of hydra.rdf.syntax.Resource"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3688,7 +3847,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for hydra.rdf.syntax.Triple"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL constructor for hydra.rdf.syntax.Triple"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3769,10 +3929,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the subject field of hydra.rdf.syntax.Triple"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the subject field of hydra.rdf.syntax.Triple"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3824,10 +3985,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the predicate field of hydra.rdf.syntax.Triple"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the predicate field of hydra.rdf.syntax.Triple"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3878,8 +4040,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {"key": "description", "value": {"literal": {"string": "DSL accessor for the object field of hydra.rdf.syntax.Triple"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the object field of hydra.rdf.syntax.Triple"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3930,8 +4095,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {"key": "description", "value": {"literal": {"string": "DSL updater for the subject field of hydra.rdf.syntax.Triple"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the subject field of hydra.rdf.syntax.Triple"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4058,10 +4226,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the predicate field of hydra.rdf.syntax.Triple"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the predicate field of hydra.rdf.syntax.Triple"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4186,8 +4355,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {"key": "description", "value": {"literal": {"string": "DSL updater for the object field of hydra.rdf.syntax.Triple"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the object field of hydra.rdf.syntax.Triple"}}}]},
             "body": {
               "lambda": {
                 "body": {

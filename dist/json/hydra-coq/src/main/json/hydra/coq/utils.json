@@ -6,10 +6,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [
-                  {
-                    "key": "description",
-                    "value": {"literal": {"string": "Build a map from each union-type definition's name to its constructor count"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Build a map from each union-type definition's name to its constructor count"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -127,11 +128,12 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {"string": "Build a map keyed by (qualifiedTypeName, rawFieldName) producing the prefixed Coq accessor name"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {"string": "Build a map keyed by (qualifiedTypeName, rawFieldName) producing the prefixed Coq accessor name"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -357,11 +359,12 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {"string": "Collect the set of free type-variable-like names (t0, t1, ...) referenced anywhere inside a Term"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {"string": "Collect the set of free type-variable-like names (t0, t1, ...) referenced anywhere inside a Term"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -840,10 +843,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Collect names of type-variable-like references (t0, t1, ...) inside a Type"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Collect names of type-variable-like references (t0, t1, ...) inside a Type"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1087,10 +1091,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Collect type-variable-like names declared or referenced by a TypeScheme"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Collect type-variable-like names declared or referenced by a TypeScheme"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1154,10 +1159,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Flatten consecutive TermLet wrappers into (bindings, innermostBody)"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Flatten consecutive TermLet wrappers into (bindings, innermostBody)"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1238,10 +1244,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Collect the set of qualified (hydra.*) Name strings that a Hydra Term references"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Collect the set of qualified (hydra.*) Name strings that a Hydra Term references"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1671,10 +1678,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Collect the set of qualified (hydra.*) Name strings that a Hydra Type references"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Collect the set of qualified (hydra.*) Name strings that a Hydra Type references"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1924,11 +1932,12 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {"string": "Collect qualified (hydra.*) Name strings from a TypeScheme's body, after stripping forall binders"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {"string": "Collect qualified (hydra.*) Name strings from a TypeScheme's body, after stripping forall binders"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1969,12 +1978,13 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [
-                  {
-                    "key": "description",
-                    "value": {
-                      "literal": {
-                        "string": "Return the set of decapitalized, sanitized accessor names whose fields were replaced with unit due to positivity issues"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {
+                        "literal": {
+                          "string": "Return the set of decapitalized, sanitized accessor names whose fields were replaced with unit due to positivity issues"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -2209,11 +2219,12 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {"string": "Wrap a mutually recursive binding group in a hydra_fix nested-pair bundle with per-name projection lets"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {"string": "Wrap a mutually recursive binding group in a hydra_fix nested-pair bundle with per-name projection lets"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2739,11 +2750,12 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {"string": "Erase lambda domain annotations referencing unbound type variables; recurse under new type binders"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {"string": "Erase lambda domain annotations referencing unbound type variables; recurse under new type binders"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2990,11 +3002,12 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {"string": "Extract the namespace (everything except the last dot-separated component) from a qualified Hydra name"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {"string": "Extract the namespace (everything except the last dot-separated component) from a qualified Hydra name"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3049,11 +3062,12 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {"string": "Peel off leading forall binders, returning the list of parameter names and the inner body type"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {"string": "Peel off leading forall binders, returning the list of parameter names and the inner body type"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3152,10 +3166,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Return True if the field type contains a function whose domain mentions a group member"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Return True if the field type contains a function whose domain mentions a group member"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3247,12 +3262,13 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [
-                  {
-                    "key": "description",
-                    "value": {
-                      "literal": {
-                        "string": "Return True if any definition in the group has a record/union field whose type causes a positivity violation"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {
+                        "literal": {
+                          "string": "Return True if any definition in the group has a record/union field whose type causes a positivity violation"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -3406,10 +3422,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Return True if the type mentions a t<digits> variable not present in the given set"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Return True if the type mentions a t<digits> variable not present in the given set"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3599,10 +3616,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Return True if a Term (possibly under TermAnnotated wrappers) is a TermTypeLambda"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Return True if a Term (possibly under TermAnnotated wrappers) is a TermTypeLambda"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3638,10 +3656,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Return True if the string is of the form `t<digits>` with at least one digit"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Return True if the string is of the form `t<digits>` with at least one digit"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3784,10 +3803,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Return the last dot-separated segment of a qualified Hydra name, sanitised via `sanitize`"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Return the last dot-separated segment of a qualified Hydra name, sanitised via `sanitize`"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3825,10 +3845,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Return the last dot-separated segment of a qualified Hydra name, unsanitized"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Return the last dot-separated segment of a qualified Hydra name, unsanitized"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3862,11 +3883,12 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {"string": "Return the deduplicated list of dependency namespace strings for a Module, excluding its own namespace"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {"string": "Return the deduplicated list of dependency namespace strings for a Module, excluding its own namespace"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3945,12 +3967,13 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {
-                    "string": "Rewrite inner TermTypeLambda nodes and type applications so that polymorphic helpers work under Coq's erasure-based encoding"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {
+                      "string": "Rewrite inner TermTypeLambda nodes and type applications so that polymorphic helpers work under Coq's erasure-based encoding"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4439,10 +4462,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Sort bindings into SCC groups using free-var analysis and local-name matching"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Sort bindings into SCC groups using free-var analysis and local-name matching"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4618,11 +4642,12 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {"string": "Wrap a Hydra Name as a singleton set of its raw string, iff it is a qualified (hydra.*) reference"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {"string": "Wrap a Hydra Name as a singleton set of its raw string, iff it is a qualified (hydra.*) reference"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4693,10 +4718,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Build a chain of single-binding TermLet wrappers around the given body"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Build a chain of single-binding TermLet wrappers around the given body"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4745,10 +4771,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Rebuild a chain of TermLet/hydra_fix wrappers from SCC-sorted binding groups"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Rebuild a chain of TermLet/hydra_fix wrappers from SCC-sorted binding groups"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4819,10 +4846,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Topologically reorder let bindings and pair-encode mutually recursive groups"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Topologically reorder let bindings and pair-encode mutually recursive groups"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4972,11 +5000,12 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {"string": "Replace field names in TermProject nodes using the given (typeName, rawFieldName) -> prefixedName map"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {"string": "Replace field names in TermProject nodes using the given (typeName, rawFieldName) -> prefixedName map"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -5128,10 +5157,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Escape a stripped local name against Coq's stripped reserved-words set"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Escape a stripped local name against Coq's stripped reserved-words set"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -5152,11 +5182,12 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {"string": "Rewrite a Type, replacing offending record/union fields with TypeUnit and restoring forall binders"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {"string": "Rewrite a Type, replacing offending record/union fields with TypeUnit and restoring forall binders"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -5321,10 +5352,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Group term definitions into SCC components with a cyclic/acyclic flag"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Group term definitions into SCC components with a cyclic/acyclic flag"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -5575,10 +5607,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Group type definitions into SCC components with a cyclic/acyclic flag"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Group type definitions into SCC components with a cyclic/acyclic flag"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -5829,11 +5862,12 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {"string": "Strip an outer hydra_fix lambda wrapper, substituting the inner self-reference for the binding name"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {"string": "Strip an outer hydra_fix lambda wrapper, substituting the inner self-reference for the binding name"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -5939,11 +5973,12 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {"string": "Return True if the innermost target of a (possibly nested) type application is a poly-converted local name"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {"string": "Return True if the innermost target of a (possibly nested) type application is a poly-converted local name"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -6008,11 +6043,12 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {"string": "Walk a Term and collect the local names it references, intersected with the given locally-defined names"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {"string": "Walk a Term and collect the local names it references, intersected with the given locally-defined names"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -6416,10 +6452,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Return True if the Type mentions any type variable whose local name is in the given set"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Return True if the Type mentions any type variable whose local name is in the given set"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -6654,11 +6691,12 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {"string": "Walk a Type and collect the local names it references, intersected with the given locally-defined names"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {"string": "Walk a Type and collect the local names it references, intersected with the given locally-defined names"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -6950,12 +6988,13 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {
-                    "string": "Convert a Hydra Type to a placeholder Term for use as an explicit Coq type argument. Coq-builtin type constructors are marked with a `Coq.` prefix so the encoder can emit them raw without going through sanitizeVar, which would clash with user-level lambda parameters of the same name (e.g. `list` -> `list_`)."}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {
+                      "string": "Convert a Hydra Type to a placeholder Term for use as an explicit Coq type argument. Coq-builtin type constructors are marked with a `Coq.` prefix so the encoder can emit them raw without going through sanitizeVar, which would clash with user-level lambda parameters of the same name (e.g. `list` -> `list_`)."}}}]},
             "body": {
               "lambda": {
                 "body": {

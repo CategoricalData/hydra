@@ -4,7 +4,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Capitalize the first letter of a string"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Capitalize the first letter of a string"}}}]},
             "body": {
               "application": {"argument": {"variable": "hydra.lib.strings.toUpper"}, "function": {"variable": "hydra.formatting.mapFirstLetter"}}}}},
         "name": "hydra.formatting.capitalize",
@@ -16,7 +17,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a string from one case convention to another"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Convert a string from one case convention to another"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -307,12 +312,13 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {
-                    "string": "Convert a string from camel case (possibly with underscores) to lower snake case. Splits on underscores first, then converts each part from camel case."}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {
+                      "string": "Convert a string from camel case (possibly with underscores) to lower snake case. Splits on underscores first, then converts each part from camel case."}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -361,7 +367,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a string from camel case to lower snake case"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Convert a string from camel case to lower snake case"}}}]},
             "body": {
               "application": {
                 "argument": {"inject": {"field": {"name": "lowerSnake", "term": {"unit": {}}}, "typeName": "hydra.util.CaseConvention"}},
@@ -378,7 +388,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a string from camel case to upper snake case"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Convert a string from camel case to upper snake case"}}}]},
             "body": {
               "application": {
                 "argument": {"inject": {"field": {"name": "upperSnake", "term": {"unit": {}}}, "typeName": "hydra.util.CaseConvention"}},
@@ -395,7 +409,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a string from pascal case to upper snake case"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Convert a string from pascal case to upper snake case"}}}]},
             "body": {
               "application": {
                 "argument": {"inject": {"field": {"name": "upperSnake", "term": {"unit": {}}}, "typeName": "hydra.util.CaseConvention"}},
@@ -412,7 +430,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Decapitalize the first letter of a string"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Decapitalize the first letter of a string"}}}]},
             "body": {
               "application": {"argument": {"variable": "hydra.lib.strings.toLower"}, "function": {"variable": "hydra.formatting.mapFirstLetter"}}}}},
         "name": "hydra.formatting.decapitalize",
@@ -424,7 +443,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Escape reserved words by appending an underscore"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Escape reserved words by appending an underscore"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -463,7 +486,9 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Indent each line of a string with four spaces"}}}],
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "Indent each line of a string with four spaces"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -506,7 +531,9 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Format a string as a Java-style block comment"}}}],
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "Format a string as a Java-style block comment"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -536,10 +563,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "A helper which maps the first letter of a string to another string"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "A helper which maps the first letter of a string to another string"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -640,10 +668,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Replace sequences of non-alphanumeric characters with single underscores"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Replace sequences of non-alphanumeric characters with single underscores"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -894,10 +923,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Normalize a comment string for consistent output across coders"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Normalize a comment string for consistent output across coders"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -986,10 +1016,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Sanitize a string by replacing non-alphanumeric characters and escaping reserved words"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Sanitize a string by replacing non-alphanumeric characters and escaping reserved words"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1016,10 +1047,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [
-                  {
-                    "key": "description",
-                    "value": {"literal": {"string": "Format a list of elements as a bracketed, comma-separated string"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Format a list of elements as a bracketed, comma-separated string"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -1063,7 +1095,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Remove leading and trailing whitespace from a string"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Remove leading and trailing whitespace from a string"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1101,7 +1137,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Replace special characters with their alphanumeric aliases"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Replace special characters with their alphanumeric aliases"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1423,8 +1463,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {"key": "description", "value": {"literal": {"string": "A simple soft line wrap which is suitable for code comments"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "A simple soft line wrap which is suitable for code comments"}}}]},
             "body": {
               "lambda": {
                 "body": {

@@ -4,7 +4,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Language constraints for Lisp"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Language constraints for Lisp"}}}]},
             "body": {
               "let": {
                 "bindings": [
@@ -126,7 +126,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "A set of reserved words across all four Lisp dialects"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "A set of reserved words across all four Lisp dialects"}}}]},
             "body": {
               "let": {
                 "bindings": [
@@ -134,7 +138,8 @@
                     "name": "clojureKeywords",
                     "term": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "Clojure special forms and reserved symbols"}}}],
+                        "annotation": {
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Clojure special forms and reserved symbols"}}}]},
                         "body": {
                           "list": [
                             {"literal": {"string": "def"}},
@@ -185,7 +190,9 @@
                     "name": "emacsLispKeywords",
                     "term": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "Emacs Lisp special forms and reserved symbols"}}}],
+                        "annotation": {
+                          "map": [
+                            {"key": {"variable": "description"}, "value": {"literal": {"string": "Emacs Lisp special forms and reserved symbols"}}}]},
                         "body": {
                           "list": [
                             {"literal": {"string": "defun"}},
@@ -238,8 +245,11 @@
                     "name": "commonLispKeywords",
                     "term": {
                       "annotated": {
-                        "annotation": [
-                          {"key": "description", "value": {"literal": {"string": "Common Lisp special operators, macros, and reserved symbols"}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "Common Lisp special operators, macros, and reserved symbols"}}}]},
                         "body": {
                           "list": [
                             {"literal": {"string": "defun"}},
@@ -317,7 +327,8 @@
                     "name": "schemeKeywords",
                     "term": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "Scheme R7RS keywords and special forms"}}}],
+                        "annotation": {
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Scheme R7RS keywords and special forms"}}}]},
                         "body": {
                           "list": [
                             {"literal": {"string": "define"}},
@@ -367,7 +378,11 @@
                     "name": "hydraLispKeywords",
                     "term": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "Reserved words specific to Hydra-Lisp code generation"}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "Reserved words specific to Hydra-Lisp code generation"}}}]},
                         "body": {"list": [{"literal": {"string": "Node"}}]}}},
                     "typeScheme": {"body": {"list": {"literal": {"string": {}}}}, "variables": []}}],
                 "body": {
