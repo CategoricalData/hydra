@@ -1,21 +1,30 @@
 #!/usr/bin/env bash
-# Copy the hand-written Java runtime support from heads/java/src/main/java/
-# into dist/java/hydra-kernel/src/main/java/ so the published hydra-kernel
-# Maven artifact is self-contained.
+# Overlay the hand-written Java kernel runtime onto dist/java/hydra-kernel/ so the
+# published hydra-kernel Maven artifact is self-contained.
 #
-# Per the 0.15 layout, hydra-kernel is special: it ships with not only the
-# generated kernel source but also the runtime classes (hydra/{util,lib,
-# dsl,json,tools}/, plus the top-level Adapters/Bootstrap/Coders/Generation/
-# HydraTestBase) that every Hydra Java program needs.
+# The runtime's canonical home is the top-level overlay tree
+# overlay/java/hydra-kernel/src/main/java/ (a sibling of dist/, packages/, heads/,
+# bindings/ — see docs/build-system.md). It holds exactly the hand-written classes
+# the kernel needs at runtime (hydra/{util,lib,dsl,tools}/, hydra/json/{JsonEncoding,
+# JsonDecoding}.java, and the top-level Adapters/Coders) — nothing else. Because the
+# overlay tree contains ONLY runtime, this is a dumb full-tree merge: no selective
+# file lists, no exclusions (#418). Compare the Haskell analog in sync-haskell.sh.
 #
-# Cypher, GQL, and the RDF native binding belong in bindings/ once that
-# subtree exists; they are explicitly NOT copied here.
+# Files that are NOT kernel runtime stay in heads/java/src/main/java/ and are
+# compiled by the developer rollup's `headsExtras` source set, not copied here:
+#   - multi-coder drivers: Bootstrap, Generation, BenchInference, ProfileJavaCoder,
+#     UpdateJavaJson (import every coder; live above the kernel layer)
+#   - HydraTestBase (pulls in JUnit; belongs in a test-utility artifact)
+#   - json/JsonIoCoder, json/JsonSerde (need com.cedarsoftware json-io; a future
+#     bindings/java/hydra-jsonio package)
+#
+# The merge (cp -R contents) leaves generated siblings under hydra/<sub>/ untouched.
 #
 # Usage:
 #   copy-kernel-runtime.sh [--dist-root <dir>] [--manifest <file>]
 #
 # --manifest <file> appends '<OUT_DIR>\t<relPath>' lines (tab-separated) for
-# every file copied. Consumed by bootstrap-from-json --keep-paths-from to
+# every file under OUT_DIR. Consumed by bootstrap-from-json --keep-paths-from to
 # protect hand-copied runtime files from --prune-stale (#357).
 
 set -euo pipefail
@@ -35,75 +44,25 @@ while [ $# -gt 0 ]; do
     esac
 done
 
-SRC_DIR="$HYDRA_JAVA_HEAD/src/main/java"
+OVERLAY_DIR="$HYDRA_ROOT_DIR/overlay/java/hydra-kernel/src/main/java"
 OUT_DIR="$DIST_ROOT/hydra-kernel/src/main/java"
 
-if [ ! -d "$SRC_DIR" ]; then
-    echo "error: missing source dir $SRC_DIR" >&2
+if [ ! -d "$OVERLAY_DIR" ]; then
+    echo "error: missing overlay dir $OVERLAY_DIR" >&2
     exit 1
 fi
 
-mkdir -p "$OUT_DIR/hydra"
+mkdir -p "$OUT_DIR"
 
-# Top-level kernel utility classes that the kernel itself needs at runtime.
-#
-# Adapters and Coders are pure kernel helpers (no cross-coder references).
-#
-# Bootstrap.java, Generation.java, and HydraTestBase.java are intentionally
-# OMITTED from the published kernel artifact:
-#   - Bootstrap.java and Generation.java are multi-coder driver classes that
-#     import hydra.java.*, hydra.python.*, hydra.lisp.* — they depend on
-#     every coder, so they live above the kernel layer (developer tooling,
-#     not a kernel concern).
-#   - HydraTestBase.java pulls in JUnit; it belongs in a separate test-utility
-#     artifact, not a runtime artifact whose main jar would bring JUnit along.
-# All three remain available under heads/java/src/main/java/ for the
-# developer rollup and demos.
-for f in Adapters.java Coders.java; do
-    if [ -f "$SRC_DIR/hydra/$f" ]; then
-        cp "$SRC_DIR/hydra/$f" "$OUT_DIR/hydra/$f"
-    fi
-done
-
-# Kernel subpackages: util (Maybe/Either/etc.), lib (primitive impls),
-# dsl (Java-side DSL helpers), json (parser/writer), tools (Function3/4 etc.).
-#
-# We MERGE the hand-written tree into the generated tree per file rather than
-# removing-and-replacing each subdirectory wholesale. Several of these
-# subdirectories overlap with generated content (e.g. hydra/json/model/Value.java
-# is generated; hydra/json/JsonDecoding.java is hand-written), and
-# `rm -rf <sub> && cp -R` would clobber the generated children.
-for sub in util lib dsl json tools; do
-    if [ -d "$SRC_DIR/hydra/$sub" ]; then
-        mkdir -p "$OUT_DIR/hydra/$sub"
-        # cp -R from inside the source dir copies CONTENTS into the dest,
-        # leaving generated siblings under hydra/<sub>/ untouched.
-        # Trailing /. on the source is portable across BSD and GNU cp.
-        cp -R "$SRC_DIR/hydra/$sub/." "$OUT_DIR/hydra/$sub/"
-    fi
-done
-
-# Excluded files that depend on third-party Maven artifacts the kernel
-# does not (and shouldn't) bring along:
-#   - tools/AntlrReaderBase.java       — needs ANTLR runtime
-#   - json/JsonIoCoder.java            — needs com.cedarsoftware.util.io (json-io)
-#   - json/JsonSerde.java              — needs json-io
-# The JsonIoCoder/JsonSerde layer belongs in a future bindings/java/hydra-jsonio
-# package; cypher/gql/RDF native bindings similarly live elsewhere.
-rm -f "$OUT_DIR/hydra/tools/AntlrReaderBase.java"
-rm -f "$OUT_DIR/hydra/json/JsonIoCoder.java"
-rm -f "$OUT_DIR/hydra/json/JsonSerde.java"
+# Merge the entire overlay tree onto the generated kernel dist. Trailing /. on the
+# source copies CONTENTS into the dest, leaving generated siblings untouched.
+cp -R "$OVERLAY_DIR/." "$OUT_DIR/"
 
 if [ -n "$MANIFEST_FILE" ]; then
-    # Emit '<OUT_DIR>\t<relPath>' for every regular file currently under
-    # OUT_DIR. Includes generated files too — harmless, since pruning only
-    # deletes files NOT in the merged keep-set, and the generated files are
-    # already in the bootstrap-from-json just-written set. Emitting them
-    # here makes the manifest self-contained in case copy-kernel-runtime is
-    # ever run independently of generation.
+    # Emit '<OUT_DIR>\t<relPath>' for every regular file currently under OUT_DIR.
     ( cd "$OUT_DIR" && find . -type f -print | sed 's|^\./||' \
         | awk -v dir="$OUT_DIR" '{ printf "%s\t%s\n", dir, $0 }' \
         >> "$MANIFEST_FILE" )
 fi
 
-echo "  Copied hand-written Java runtime into $OUT_DIR/hydra/"
+echo "  Overlaid hand-written Java kernel runtime from overlay/java/ into $OUT_DIR/hydra/"

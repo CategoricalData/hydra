@@ -219,6 +219,39 @@ echo ""
 # files reference test_env.* directly with no rewriting needed.
 echo "  (No post-processing needed — all patches eliminated, see #307.)"
 
+# Overlay hand-written distribution-package source onto the dist tree (#418) so
+# each dist/haskell/<pkg>/ is a COMPLETE, self-contained distribution package (the
+# source-package -> complete-target-distribution model; see docs/build-system.md).
+# This is the Haskell analog of Java/Python's copy-kernel-runtime.sh. The overlay
+# trees are copies, not patches: they add package source under dist/, they do not
+# edit any generated file. Canonical homes are the uncompiled trees under the
+# top-level overlay/haskell/ directory (a sibling of dist/, packages/, heads/).
+#
+# IMPORTANT: the head compiles dist/haskell/hydra-kernel/ (a source-dir in
+# package.yaml) but does NOT compile overlay/haskell/hydra-kernel/. So overlaying
+# the runtime onto dist/haskell/hydra-kernel/ here is what puts those modules on
+# the head's compile path — exactly once, from the dist copy. (Adding the overlay
+# to the head's source-dirs as well would double-compile them; package.yaml does
+# not.)
+echo ""
+echo "  Overlaying hand-written distribution-package source onto dist/haskell/..."
+
+# hydra-kernel runtime: MERGE onto the generated kernel dist (it shares the
+# Hydra.Dsl.* namespace with generated modules, so merge — never wipe — the dir).
+KERNEL_RUNTIME_SRC="$HYDRA_ROOT_DIR/overlay/haskell/hydra-kernel/src/main/haskell"
+KERNEL_DST="$HYDRA_ROOT_DIR/dist/haskell/hydra-kernel/src/main/haskell"
+mkdir -p "$KERNEL_DST"
+cp -R "$KERNEL_RUNTIME_SRC"/. "$KERNEL_DST/"
+echo "    hydra-kernel: overlaid $(find "$KERNEL_RUNTIME_SRC" -name '*.hs' | wc -l | tr -d ' ') hand-written runtime module(s)"
+
+# hydra umbrella: its own dedicated package dir (no generated content to merge).
+UMBRELLA_SRC="$HYDRA_ROOT_DIR/overlay/haskell/hydra/src/main/haskell"
+UMBRELLA_DST="$HYDRA_ROOT_DIR/dist/haskell/hydra/src/main/haskell"
+mkdir -p "$UMBRELLA_DST"
+rm -rf "$UMBRELLA_DST"/*
+cp -R "$UMBRELLA_SRC"/. "$UMBRELLA_DST/"
+echo "    hydra: copied $(find "$UMBRELLA_DST" -name '*.hs' | wc -l | tr -d ' ') module(s)"
+
 # Rebuild so subsequent steps (test, lexicon) pick up the new Haskell dist.
 echo ""
 echo "  Rebuilding..."
