@@ -233,10 +233,10 @@ encodeProjectionElim dialect cx g proj marg =
       let fname = Formatting.convertCaseCamelToLowerSnake (Core.unName (Core.projectionFieldName proj))
           tname = qualifiedSnakeName (Core.projectionTypeName proj)
       in (Maybes.cases marg (Right (lispLambdaExpr [
-        "v"] (Syntax.ExpressionFieldAccess (Syntax.FieldAccess {
+        "__rec"] (Syntax.ExpressionFieldAccess (Syntax.FieldAccess {
         Syntax.fieldAccessRecordType = (Syntax.Symbol tname),
         Syntax.fieldAccessField = (Syntax.Symbol fname),
-        Syntax.fieldAccessTarget = (lispVar "v")})))) (\arg -> Eithers.bind (encodeTerm dialect cx g arg) (\sarg -> Right (Syntax.ExpressionFieldAccess (Syntax.FieldAccess {
+        Syntax.fieldAccessTarget = (lispVar "__rec")})))) (\arg -> Eithers.bind (encodeTerm dialect cx g arg) (\sarg -> Right (Syntax.ExpressionFieldAccess (Syntax.FieldAccess {
         Syntax.fieldAccessRecordType = (Syntax.Symbol tname),
         Syntax.fieldAccessField = (Syntax.Symbol fname),
         Syntax.fieldAccessTarget = sarg})))))
@@ -422,7 +422,7 @@ encodeUnionElim dialect cx g cs marg =
 encodeUnwrapElim :: Syntax.Dialect -> t0 -> Graph.Graph -> Core.Name -> Maybe Core.Term -> Either t1 Syntax.Expression
 encodeUnwrapElim dialect cx g name marg =
     Maybes.cases marg (Right (lispLambdaExpr [
-      "v"] (lispVar "v"))) (\arg -> encodeTerm dialect cx g arg)
+      "__rec"] (lispVar "__rec"))) (\arg -> encodeTerm dialect cx g arg)
 isPrimitiveRef :: String -> Core.Term -> Bool
 isPrimitiveRef primName term =
     case term of
