@@ -4,7 +4,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Language constraints for WebAssembly"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Language constraints for WebAssembly"}}}]},
             "body": {
               "let": {
                 "bindings": [
@@ -137,7 +138,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "A set of reserved words in WebAssembly text format"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "A set of reserved words in WebAssembly text format"}}}]},
             "body": {
               "let": {
                 "bindings": [
@@ -145,7 +150,11 @@
                     "name": "keywords",
                     "term": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "WAT keywords (section and instruction keywords)"}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "WAT keywords (section and instruction keywords)"}}}]},
                         "body": {
                           "list": [
                             {"literal": {"string": "module"}},
@@ -186,7 +195,7 @@
                     "name": "valueTypes",
                     "term": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "WAT value type keywords"}}}],
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "WAT value type keywords"}}}]},
                         "body": {
                           "list": [
                             {"literal": {"string": "i32"}},
@@ -201,7 +210,7 @@
                     "name": "instructionPrefixes",
                     "term": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "Common WAT instruction prefixes"}}}],
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Common WAT instruction prefixes"}}}]},
                         "body": {
                           "list": [
                             {"literal": {"string": "i32"}},

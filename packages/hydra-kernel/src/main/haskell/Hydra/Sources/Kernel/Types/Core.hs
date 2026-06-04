@@ -69,8 +69,8 @@ hydraCoreGraph = elementsToGraph bootstrapGraph M.empty
         bindingName = typeDefinitionName td,
         bindingTerm = TermAnnotated $ AnnotatedTerm {
           annotatedTermBody = EncodeCore.type_ (typeSchemeBody (typeDefinitionBody td)),
-          annotatedTermAnnotation = M.fromList [
-            (Name "type", TermVariable (Name "hydra.core.Type"))]},
+          annotatedTermAnnotation = TermMap $ M.fromList [
+            (TermVariable (Name "type"), TermVariable (Name "hydra.core.Type"))]},
         bindingTypeScheme = Just (TypeScheme [] (TypeVariable (Name "hydra.core.Type")) Nothing)}
 
 annotatedTerm :: TypeDefinition
@@ -81,8 +81,11 @@ annotatedTerm = define "AnnotatedTerm" $
       doc "The term being annotated"
       term,
     "annotation">:
-      doc "The annotation as a map from keys to values" $
-      T.map name term]
+      doc ("The annotation as a single term."
+        <> " By convention this is a map term (Name -> Term) so that multiple"
+        <> " independent annotations can coexist, but applications are free to"
+        <> " use any term shape.")
+      term]
 
 annotatedType :: TypeDefinition
 annotatedType = define "AnnotatedType" $
@@ -92,8 +95,11 @@ annotatedType = define "AnnotatedType" $
       doc "The type being annotated"
       type_,
     "annotation">:
-      doc "The annotation as a map from keys to values" $
-      T.map name term]
+      doc ("The annotation as a single term."
+        <> " By convention this is a map term (Name -> Term) so that multiple"
+        <> " independent annotations can coexist, but applications are free to"
+        <> " use any term shape.")
+      term]
 
 application :: TypeDefinition
 application = define "Application" $

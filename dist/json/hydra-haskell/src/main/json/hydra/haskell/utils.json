@@ -4,10 +4,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Create an application pattern from a name and argument patterns"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Create an application pattern from a name and argument patterns"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -36,7 +37,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Generate a Haskell name reference for a Hydra element"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Generate a Haskell name reference for a Hydra element"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -217,7 +222,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Create a Haskell function application expression"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Create a Haskell function application expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -246,7 +255,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Create a Haskell lambda expression"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Create a Haskell lambda expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -280,7 +289,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Create a Haskell literal expression"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Create a Haskell literal expression"}}}]},
             "body": {
               "lambda": {
                 "body": {"inject": {"field": {"name": "literal", "term": {"variable": "lit"}}, "typeName": "hydra.haskell.syntax.Expression"}},
@@ -295,7 +304,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Create a Haskell variable expression from a string"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Create a Haskell variable expression from a string"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -317,7 +330,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Compute the Haskell module namespaces for a Hydra module"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Compute the Haskell module namespaces for a Hydra module"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -1752,10 +1769,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Generate an accessor name for a newtype wrapper (e.g., 'unFoo' for Foo)"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Generate an accessor name for a newtype wrapper (e.g., 'unFoo' for Foo)"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1773,8 +1791,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {"key": "description", "value": {"literal": {"string": "Create a raw Haskell name from a string without sanitization"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Create a raw Haskell name from a string without sanitization"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1801,7 +1822,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Generate a Haskell name for a record field accessor"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Generate a Haskell name for a record field accessor"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1884,10 +1909,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Sanitize a string to be a valid Haskell identifier, escaping reserved words"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Sanitize a string to be a valid Haskell identifier, escaping reserved words"}}}]},
             "body": {
               "application": {
                 "argument": {"variable": "hydra.haskell.language.reservedWords"},
@@ -1901,7 +1927,9 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Create a sanitized Haskell name from a string"}}}],
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "Create a sanitized Haskell name from a string"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1919,10 +1947,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Create a simple value binding (e.g., 'foo = expr' or 'foo = expr where ...')"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Create a simple value binding (e.g., 'foo = expr' or 'foo = expr where ...')"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1983,7 +2012,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a list of types into a nested type application"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Convert a list of types into a nested type application"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2123,10 +2156,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Extract the local type name from a fully qualified record type name"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Extract the local type name from a fully qualified record type name"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2164,10 +2198,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Generate a Haskell name for a union variant constructor, with disambiguation"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Generate a Haskell name for a union variant constructor, with disambiguation"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2302,10 +2337,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Unpack nested forall types into a list of type variables and the inner type"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Unpack nested forall types into a list of type variables and the inner type"}}}]},
             "body": {
               "lambda": {
                 "body": {

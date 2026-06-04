@@ -6,7 +6,8 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Interpreter-friendly set difference."}}}],
+                "annotation": {
+                  "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Interpreter-friendly set difference."}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -201,7 +202,8 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Interpreter-friendly set intersection."}}}],
+                "annotation": {
+                  "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Interpreter-friendly set intersection."}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -396,7 +398,8 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Interpreter-friendly map for Set terms."}}}],
+                "annotation": {
+                  "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Interpreter-friendly map for Set terms."}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -505,7 +508,7 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Interpreter-friendly set union."}}}],
+                "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Interpreter-friendly set union."}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -618,7 +621,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Interpreter-friendly unions for list of Set terms."}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Interpreter-friendly unions for list of Set terms."}}}]},
                 "body": {
                   "lambda": {
                     "body": {

@@ -4,7 +4,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Decode a YAML value to a record term"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Decode a YAML value to a record term"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -298,7 +299,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Encode a record term to YAML"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Encode a record term to YAML"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -750,7 +751,8 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Create a YAML coder for literal types"}}}],
+                "annotation": {
+                  "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Create a YAML coder for literal types"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -1549,7 +1551,8 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Create a YAML coder for record types"}}}],
+                "annotation": {
+                  "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Create a YAML coder for record types"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -1785,10 +1788,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "True for IEEE sentinel strings that Hydra YAML cannot represent as a float scalar."}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "True for IEEE sentinel strings that Hydra YAML cannot represent as a float scalar."}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1847,7 +1851,7 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Create a YAML coder for term types"}}}],
+                "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Create a YAML coder for term types"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -3463,7 +3467,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "YAML coder for unit values"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "YAML coder for unit values"}}}]},
             "body": {
               "let": {
                 "bindings": [
@@ -3656,7 +3660,8 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Create a YAML coder for a given type"}}}],
+                "annotation": {
+                  "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Create a YAML coder for a given type"}}}]},
                 "body": {
                   "lambda": {
                     "body": {

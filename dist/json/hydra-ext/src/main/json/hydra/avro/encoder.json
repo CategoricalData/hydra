@@ -10,7 +10,8 @@
                   "typeLambda": {
                     "body": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "Build an Avro field from a name-adapter pair"}}}],
+                        "annotation": {
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Build an Avro field from a name-adapter pair"}}}]},
                         "body": {
                           "lambda": {
                             "body": {
@@ -146,7 +147,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Create an empty encode environment with the given type map"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Create an empty encode environment with the given type map"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -186,10 +191,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [
-                  {
-                    "key": "description",
-                    "value": {"literal": {"string": "Encode a Hydra type to an Avro schema adapter, given the type map and a root name"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Encode a Hydra type to an Avro schema adapter, given the type map and a root name"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -314,10 +320,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [
-                  {
-                    "key": "description",
-                    "value": {"literal": {"string": "Core encoding logic: recursively encode a Hydra type to an Avro schema"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Core encoding logic: recursively encode a Hydra type to an Avro schema"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -2753,10 +2760,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [
-                  {
-                    "key": "description",
-                    "value": {"literal": {"string": "Encode with full environment threading. Returns the adapter and updated environment"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Encode with full environment threading. Returns the adapter and updated environment"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -2891,7 +2899,8 @@
               "typeLambda": {
                 "body": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "Adapter for all-unit union types (enums)"}}}],
+                    "annotation": {
+                      "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Adapter for all-unit union types (enums)"}}}]},
                     "body": {
                       "lambda": {
                         "body": {
@@ -3263,7 +3272,11 @@
               "typeLambda": {
                 "body": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "Construct an error result with a message in context"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "Construct an error result with a message in context"}}}]},
                     "body": {
                       "lambda": {
                         "body": {
@@ -3297,7 +3310,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Extract annotations from a potentially annotated type"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Extract annotations from a potentially annotated type"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3321,8 +3338,11 @@
                                         "name": "anns",
                                         "term": {
                                           "application": {
-                                            "argument": {"variable": "at"},
-                                            "function": {"project": {"fieldName": "annotation", "typeName": "hydra.core.AnnotatedType"}}}},
+                                            "argument": {
+                                              "application": {
+                                                "argument": {"variable": "at"},
+                                                "function": {"project": {"fieldName": "annotation", "typeName": "hydra.core.AnnotatedType"}}}},
+                                            "function": {"variable": "hydra.annotations.getAnnotationMap"}}},
                                         "typeScheme": {"body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Term"}}}, "variables": []}},
                                       {
                                         "name": "innerResult",
@@ -3416,7 +3436,7 @@
                   "typeLambda": {
                     "body": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "Create an adapter for float types"}}}],
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Create an adapter for float types"}}}]},
                         "body": {
                           "lambda": {
                             "body": {
@@ -4028,7 +4048,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert any float value to a JSON decimal number"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Convert any float value to a JSON decimal number"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4065,10 +4089,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [
-                  {
-                    "key": "description",
-                    "value": {"literal": {"string": "Fold over field types, building adapters and threading the environment"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Fold over field types, building adapters and threading the environment"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -4591,7 +4616,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert Hydra annotations to Avro annotation map"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Convert Hydra annotations to Avro annotation map"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4672,10 +4701,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [
-                  {
-                    "key": "description",
-                    "value": {"literal": {"string": "Encode a single type without a type map (for simple/anonymous types)"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Encode a single type without a type map (for simple/anonymous types)"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -4801,10 +4831,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Convert a Hydra Name to an Avro qualified name (local name, optional namespace)"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Convert a Hydra Name to an Avro qualified name (local name, optional namespace)"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4834,7 +4865,7 @@
                   "typeLambda": {
                     "body": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "Create an adapter for integer types"}}}],
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Create an adapter for integer types"}}}]},
                         "body": {
                           "lambda": {
                             "body": {
@@ -5461,7 +5492,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert any integer value to a JSON decimal number"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Convert any integer value to a JSON decimal number"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -5575,7 +5610,7 @@
                   "typeLambda": {
                     "body": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "Create an adapter for literal types"}}}],
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Create an adapter for literal types"}}}]},
                         "body": {
                           "lambda": {
                             "body": {
@@ -6134,7 +6169,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Extract the local part of a qualified name"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Extract the local part of a qualified name"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -6172,7 +6208,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Extract the namespace from a qualified name, if any"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Extract the namespace from a qualified name, if any"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -6240,10 +6280,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [
-                  {
-                    "key": "description",
-                    "value": {"literal": {"string": "Build a named type adapter (shared between record and union-as-record)"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Build a named type adapter (shared between record and union-as-record)"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -7024,7 +7065,9 @@
                   "typeLambda": {
                     "body": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "Build a record term coder from field adapters"}}}],
+                        "annotation": {
+                          "map": [
+                            {"key": {"variable": "description"}, "value": {"literal": {"string": "Build a record term coder from field adapters"}}}]},
                         "body": {
                           "lambda": {
                             "body": {
@@ -7702,8 +7745,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {"key": "description", "value": {"literal": {"string": "Convert a Hydra term to a JSON value (for annotation values)"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Convert a Hydra term to a JSON value (for annotation values)"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -7927,7 +7973,9 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Generate a default name for an anonymous type"}}}],
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "Generate a default name for an anonymous type"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -7965,10 +8013,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [
-                  {
-                    "key": "description",
-                    "value": {"literal": {"string": "Adapter for general unions (encoded as records with optional fields)"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Adapter for general unions (encoded as records with optional fields)"}}}]},
                 "body": {
                   "lambda": {
                     "body": {

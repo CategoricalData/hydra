@@ -13,8 +13,8 @@ data AnnotatedTerm =
   AnnotatedTerm {
     -- | The term being annotated
     annotatedTermBody :: Term,
-    -- | The annotation as a map from keys to values
-    annotatedTermAnnotation :: (M.Map Name Term)}
+    -- | The annotation as a single term. By convention this is a map term (Name -> Term) so that multiple independent annotations can coexist, but applications are free to use any term shape.
+    annotatedTermAnnotation :: Term}
   deriving (Eq, Ord, Read, Show)
 _AnnotatedTerm = Name "hydra.core.AnnotatedTerm"
 _AnnotatedTerm_body = Name "body"
@@ -24,8 +24,8 @@ data AnnotatedType =
   AnnotatedType {
     -- | The type being annotated
     annotatedTypeBody :: Type,
-    -- | The annotation as a map from keys to values
-    annotatedTypeAnnotation :: (M.Map Name Term)}
+    -- | The annotation as a single term. By convention this is a map term (Name -> Term) so that multiple independent annotations can coexist, but applications are free to use any term shape.
+    annotatedTypeAnnotation :: Term}
   deriving (Eq, Ord, Read, Show)
 _AnnotatedType = Name "hydra.core.AnnotatedType"
 _AnnotatedType_body = Name "body"

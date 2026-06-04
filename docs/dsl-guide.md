@@ -1349,19 +1349,46 @@ idScheme = T.poly ["a"] $ T.function (T.var "a") (T.var "a")
 
 ### Annotations
 
-Add metadata to terms:
+Add metadata to terms. The host-side API accepts a `Map Name Term` of
+annotations; on the wire (and in `AnnotatedTerm.annotation`) those are
+encoded as a `TermMap` whose keys are `TermVariable`s — see #386 below.
 
 ```haskell
 import qualified Data.Map as M
 
 -- Attach an annotation to a term (annotations first, then term)
--- annot :: M.Map Name Term -> Term -> Term
-annot (M.fromList [(Name "comment", string "A User ID")]) (var "userId")
+-- annots :: TypedTerm (Map Name Term) -> TypedTerm Term -> TypedTerm Term
+annots (Phantoms.map (M.fromList [(Name "comment", string "A User ID")]))
+       (var "userId")
 
 -- Alternative: term first, then annotations
--- annotated :: Term -> M.Map Name Term -> Term
-annotated (var "userId") (M.fromList [(Name "comment", string "A User ID")])
+-- annotated :: TypedTerm Term -> TypedTerm (Map Name Term) -> TypedTerm Term
+annotated (var "userId")
+          (Phantoms.map (M.fromList [(Name "comment", string "A User ID")]))
 ```
+
+#### Annotation shape (#386)
+
+`AnnotatedTerm.annotation` and `AnnotatedType.annotation` are typed as
+`Term` and `Type` (respectively), not `Map<Name, Term>`. The canonical
+encoding for an annotation map at the schema level is:
+
+```
+inject(Term){map: TermMap [(inject(Term){variable: wrap(Name){"k"}}, value), …]}
+```
+
+Two kernel helpers bridge the host-friendly Map view and the schema:
+
+- `wrapAnnotationMap :: M.Map Name Term -> Term` — produces the encoded
+  Term form above.
+- `getAnnotationMap :: Term -> M.Map Name Term` — projects the Map back
+  out (accepts both `TermVariable` and the transitional `TermWrap`-of-Name
+  key shapes).
+
+DSL helpers like `annots` / `annotated` call `wrapAnnotationMap` for you,
+so most callers never see the encoded shape directly. Test cases that
+inspect annotation Terms via `cases _Term ...` do need to know the
+encoded form — see `Hydra.Sources.Test.Annotations` for examples.
 
 ### Module definitions
 
