@@ -58,6 +58,27 @@ A separate `dist/json/<pkg>/build/<set>/digest.json` artifact carries content ha
 for incremental builds; it lives in the gitignored `build/` subtree and is regenerated
 on every sync. See [Format versioning](#format-versioning).
 
+### Why one file per module
+
+Almost every programming language has a notion of file-level modules.
+Per-module JSON preserves the 1:1 mapping between source modules and
+emitted files across every stage of transformation: a Hydra source
+module is one file, its JSON encoding is one file, and each target
+emission (Haskell, Java, Python, Scala, Lisp, TypeScript, Go, ...) is
+one file. The invariant survives translation rather than being
+something targets have to reconstruct.
+
+Two other useful properties follow from that choice:
+
+- **Granular caching.** Freshness, digest, and dirty-set propagation
+  all operate at the module level. A monolithic per-package or per-
+  universe file would make the smallest unit of cache invalidation
+  the entire blob, defeating incremental sync.
+- **Diff and merge cleanliness.** A one-module change touches one
+  file. Branches that edit disjoint modules merge without conflict;
+  reviewers see only the relevant module's diff. A monolithic file
+  would surface every unrelated change in every branch.
+
 ## Tagged unions
 
 Hydra's sum types (`Term`, `Type`, `Literal`, `LiteralType`, `Json.Value`, etc.) encode as

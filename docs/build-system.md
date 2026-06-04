@@ -288,6 +288,26 @@ The caches form a hierarchy: a hit at a coarser layer skips a finer one.
 | Step caches | `heads/haskell/.stack-work/{verify-json-kernel,bootstrap-from-json,haskell-test}-cache.txt` | Universe-wide hash of inputs + exec source | Skips `verify-json-kernel`, `bootstrap-from-json`, or `stack test` |
 | Per-target test cache | `dist/<lang>/test-cache.json` | Universe of generated sources + test infra + runner | Skips the target's `test-distribution.sh` |
 
+### Why `digest.json` is separate from `manifest.json`
+
+The two files serve different purposes — manifest describes the source
+package, digest describes generated artifacts:
+
+- `manifest.json` is a **source-side** description of a package. It lists
+  the modules the package owns, grouped by category and lexicographically
+  sorted. It is part of the authoritative source of truth, tracked in git,
+  and changes when modules are added, renamed, or moved between categories.
+- `digest.json` is a **build-side** freshness fingerprint, recording the
+  content hash of each module's DSL source as observed by the last
+  successful build of this package. It is gitignored, rebuilt on demand,
+  and changes whenever a source file's bytes change.
+
+Their invalidation domains also differ as a consequence: a manifest edit
+that only touches metadata (e.g. category re-grouping) would invalidate a
+combined file's freshness check even though no source changed, and every
+source edit would write back metadata it didn't touch. Keeping the
+artifacts separate keeps each one's lifecycle clean.
+
 ### Cache files are not tracked
 
 Every `dist/<lang>/<pkg>/build/` directory holds derived freshness state: input digests,
