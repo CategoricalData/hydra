@@ -86,6 +86,8 @@ dist/haskell/hydra-kernel/src/main/haskell/Hydra/Haskell/Lib/
 dist/haskell/hydra-kernel/src/main/haskell/Hydra/Dsl/Terms.hs
 dist/haskell/hydra-kernel/src/main/haskell/Hydra/Dsl/Literals.hs
 dist/haskell/hydra-kernel/src/main/haskell/Hydra/Dsl/Meta/Common.hs
+#   - hydra-kernel hand-written test bridge (overlaid from overlay/haskell/.../src/test/)
+dist/haskell/hydra-kernel/src/test/haskell/Hydra/Test/TestEnv.hs
 
 dist/clojure/
 dist/common-lisp/
