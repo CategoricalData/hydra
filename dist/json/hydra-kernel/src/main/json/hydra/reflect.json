@@ -4,7 +4,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Find the precision of a given floating-point type"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Find the precision of a given floating-point type"}}}]},
             "body": {
               "cases": {
                 "cases": [
@@ -34,7 +38,9 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "All floating-point types in a canonical order"}}}],
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "All floating-point types in a canonical order"}}}]},
             "body": {
               "list": [
                 {"inject": {"field": {"name": "float32", "term": {"unit": {}}}, "typeName": "hydra.core.FloatType"}},
@@ -45,7 +51,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Find the float type for a given floating-point value"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Find the float type for a given floating-point value"}}}]},
             "body": {
               "cases": {
                 "cases": [
@@ -73,10 +83,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Find whether a given integer type is signed (true) or unsigned (false)"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Find whether a given integer type is signed (true) or unsigned (false)"}}}]},
             "body": {
               "cases": {
                 "cases": [
@@ -117,7 +128,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Find the precision of a given integer type"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Find the precision of a given integer type"}}}]},
             "body": {
               "cases": {
                 "cases": [
@@ -202,7 +214,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "All integer types, in a canonical order"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "All integer types, in a canonical order"}}}]},
             "body": {
               "list": [
                 {"inject": {"field": {"name": "bigint", "term": {"unit": {}}}, "typeName": "hydra.core.IntegerType"}},
@@ -220,7 +233,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Find the integer type for a given integer value"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Find the integer type for a given integer value"}}}]},
             "body": {
               "cases": {
                 "cases": [
@@ -297,7 +314,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Find the literal type for a given literal value"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Find the literal type for a given literal value"}}}]},
             "body": {
               "cases": {
                 "cases": [
@@ -367,10 +388,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Find the literal type inject (constructor) for a given literal value"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Find the literal type inject (constructor) for a given literal value"}}}]},
             "body": {
               "cases": {
                 "cases": [
@@ -426,7 +448,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "All literal types, in a canonical order"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "All literal types, in a canonical order"}}}]},
             "body": {
               "application": {
                 "argument": {
@@ -472,10 +495,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Find the literal inject (constructor) for a given literal value"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Find the literal inject (constructor) for a given literal value"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -493,7 +517,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "All literal variants, in a canonical order"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "All literal variants, in a canonical order"}}}]},
             "body": {
               "list": [
                 {"inject": {"field": {"name": "binary", "term": {"unit": {}}}, "typeName": "hydra.variants.LiteralVariant"}},
@@ -508,7 +533,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Find the term inject (constructor) for a given term"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Find the term inject (constructor) for a given term"}}}]},
             "body": {
               "cases": {
                 "cases": [
@@ -669,7 +698,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "All term (expression) variants, in a canonical order"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "All term (expression) variants, in a canonical order"}}}]},
             "body": {
               "list": [
                 {"inject": {"field": {"name": "annotated", "term": {"unit": {}}}, "typeName": "hydra.variants.TermVariant"}},
@@ -699,7 +732,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Find the type inject (constructor) for a given type"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Find the type inject (constructor) for a given type"}}}]},
             "body": {
               "cases": {
                 "cases": [
@@ -832,7 +869,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "All type variants, in a canonical order"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "All type variants, in a canonical order"}}}]},
             "body": {
               "list": [
                 {"inject": {"field": {"name": "annotated", "term": {"unit": {}}}, "typeName": "hydra.variants.TypeVariant"}},

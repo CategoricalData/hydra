@@ -201,8 +201,8 @@ identity =
           Core.lambdaParameter = (Core.Name "x"),
           Core.lambdaDomain = Nothing,
           Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})),
-        Core.annotatedTermAnnotation = (M.fromList [
-          (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Return a value unchanged.")))])})))}
+        Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
+          (Core.TermVariable (Core.Name "description"), (Core.TermLiteral (Core.LiteralString "Return a value unchanged.")))]))})))}
 lt :: Packaging.PrimitiveDefinition
 lt =
     Packaging.PrimitiveDefinition {
@@ -325,10 +325,10 @@ max =
                     Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))})),
                 Core.applicationArgument = (Core.TermVariable (Core.Name "x"))})),
               Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}))})),
-        Core.annotatedTermAnnotation = (M.fromList [
+        Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
           (
-            Core.Name "description",
-            (Core.TermLiteral (Core.LiteralString "Return the maximum of two values, defined in terms of gte and ifElse.")))])})))}
+            Core.TermVariable (Core.Name "description"),
+            (Core.TermLiteral (Core.LiteralString "Return the maximum of two values, defined in terms of gte and ifElse.")))]))})))}
 min :: Packaging.PrimitiveDefinition
 min =
     Packaging.PrimitiveDefinition {
@@ -381,7 +381,7 @@ min =
                     Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))})),
                 Core.applicationArgument = (Core.TermVariable (Core.Name "x"))})),
               Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}))})),
-        Core.annotatedTermAnnotation = (M.fromList [
+        Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
           (
-            Core.Name "description",
-            (Core.TermLiteral (Core.LiteralString "Return the minimum of two values, defined in terms of lte and ifElse.")))])})))}
+            Core.TermVariable (Core.Name "description"),
+            (Core.TermLiteral (Core.LiteralString "Return the minimum of two values, defined in terms of lte and ifElse.")))]))})))}

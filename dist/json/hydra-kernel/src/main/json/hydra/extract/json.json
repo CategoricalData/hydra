@@ -4,10 +4,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Extract an array from a JSON value, failing if the value is not an array"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Extract an array from a JSON value, failing if the value is not an array"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -64,10 +65,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Extract a number from a JSON value, failing if the value is not a number"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Extract a number from a JSON value, failing if the value is not a number"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -124,10 +126,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Extract an object from a JSON value, failing if the value is not an object"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Extract an object from a JSON value, failing if the value is not an object"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -188,10 +191,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Extract a string from a JSON value, failing if the value is not a string"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Extract a string from a JSON value, failing if the value is not a string"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -252,7 +256,8 @@
               "typeLambda": {
                 "body": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "Look up an optional field in a JSON object"}}}],
+                    "annotation": {
+                      "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Look up an optional field in a JSON object"}}}]},
                     "body": {
                       "lambda": {
                         "body": {
@@ -286,7 +291,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Look up an optional array field in a JSON object"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Look up an optional array field in a JSON object"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -363,7 +372,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Look up an optional string field in a JSON object"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Look up an optional string field in a JSON object"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -438,10 +451,11 @@
               "typeLambda": {
                 "body": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {"literal": {"string": "Look up a required field in a JSON object, failing if not found"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "Look up a required field in a JSON object, failing if not found"}}}]},
                     "body": {
                       "lambda": {
                         "body": {
@@ -515,7 +529,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Look up a required array field in a JSON object"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Look up a required array field in a JSON object"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -563,7 +581,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Look up a required number field in a JSON object"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Look up a required number field in a JSON object"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -611,7 +633,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Look up a required string field in a JSON object"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Look up a required string field in a JSON object"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -659,7 +685,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Show a JSON value as a string (placeholder implementation)"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Show a JSON value as a string (placeholder implementation)"}}}]},
                 "body": {
                   "lambda": {"body": {"literal": {"string": "TODO: implement showValue"}}, "domain": {"variable": "t0"}, "parameter": "value"}}}},
             "parameter": "t0"}},

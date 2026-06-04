@@ -4,11 +4,12 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {"string": "Reorder definitions: types first (with hydra.core.Name first among types), then topologically sorted terms"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {"string": "Reorder definitions: types first (with hydra.core.Name first among types), then topologically sorted terms"}}}]},
             "body": {
               "lambda": {
                 "body": {

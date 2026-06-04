@@ -13,6 +13,7 @@ import qualified Hydra.Graph as Graph
 import qualified Hydra.Inference as Inference
 import qualified Hydra.Json.Model as Model
 import qualified Hydra.Haskell.Lib.Eithers as Eithers
+import qualified Hydra.Haskell.Lib.Maps as Maps
 import qualified Hydra.Haskell.Lib.Pairs as Pairs
 import qualified Hydra.Packaging as Packaging
 import qualified Hydra.Parsing as Parsing
@@ -70,17 +71,17 @@ annotationsInComplexContextsTests =
                   Core.bindingName = (Core.Name "x"),
                   Core.bindingTerm = (Core.TermAnnotated (Core.AnnotatedTerm {
                     Core.annotatedTermBody = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 5))),
-                    Core.annotatedTermAnnotation = M.empty})),
+                    Core.annotatedTermAnnotation = (Core.TermMap (Maps.mapKeys (\n -> Core.TermVariable n) M.empty))})),
                   Core.bindingTypeScheme = Nothing},
                 Core.Binding {
                   Core.bindingName = (Core.Name "y"),
                   Core.bindingTerm = (Core.TermAnnotated (Core.AnnotatedTerm {
                     Core.annotatedTermBody = (Core.TermLiteral (Core.LiteralString "world")),
-                    Core.annotatedTermAnnotation = M.empty})),
+                    Core.annotatedTermAnnotation = (Core.TermMap (Maps.mapKeys (\n -> Core.TermVariable n) M.empty))})),
                   Core.bindingTypeScheme = Nothing}],
               Core.letBody = (Core.TermAnnotated (Core.AnnotatedTerm {
                 Core.annotatedTermBody = (Core.TermPair (Core.TermVariable (Core.Name "x"), (Core.TermVariable (Core.Name "y")))),
-                Core.annotatedTermAnnotation = M.empty}))})))),
+                Core.annotatedTermAnnotation = (Core.TermMap (Maps.mapKeys (\n -> Core.TermVariable n) M.empty))}))})))),
             Testing.universalTestCaseExpected = (\_ -> ShowCore.type_ (Core.TypePair (Core.PairType {
               Core.pairTypeFirst = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
               Core.pairTypeSecond = (Core.TypeLiteral Core.LiteralTypeString)})))})),
@@ -96,17 +97,17 @@ annotationsInComplexContextsTests =
                   Core.fieldName = (Core.Name "firstName"),
                   Core.fieldTerm = (Core.TermAnnotated (Core.AnnotatedTerm {
                     Core.annotatedTermBody = (Core.TermLiteral (Core.LiteralString "Alice")),
-                    Core.annotatedTermAnnotation = M.empty}))},
+                    Core.annotatedTermAnnotation = (Core.TermMap (Maps.mapKeys (\n -> Core.TermVariable n) M.empty))}))},
                 Core.Field {
                   Core.fieldName = (Core.Name "lastName"),
                   Core.fieldTerm = (Core.TermAnnotated (Core.AnnotatedTerm {
                     Core.annotatedTermBody = (Core.TermLiteral (Core.LiteralString "Smith")),
-                    Core.annotatedTermAnnotation = M.empty}))},
+                    Core.annotatedTermAnnotation = (Core.TermMap (Maps.mapKeys (\n -> Core.TermVariable n) M.empty))}))},
                 Core.Field {
                   Core.fieldName = (Core.Name "age"),
                   Core.fieldTerm = (Core.TermAnnotated (Core.AnnotatedTerm {
                     Core.annotatedTermBody = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 30))),
-                    Core.annotatedTermAnnotation = M.empty}))}]})))),
+                    Core.annotatedTermAnnotation = (Core.TermMap (Maps.mapKeys (\n -> Core.TermVariable n) M.empty))}))}]})))),
             Testing.universalTestCaseExpected = (\_ -> ShowCore.type_ (Core.TypeVariable TestTypes.testTypePersonName))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
@@ -119,17 +120,17 @@ annotationsInComplexContextsTests =
                   Core.bindingName = (Core.Name "add"),
                   Core.bindingTerm = (Core.TermAnnotated (Core.AnnotatedTerm {
                     Core.annotatedTermBody = (Core.TermVariable (Core.Name "hydra.lib.math.add")),
-                    Core.annotatedTermAnnotation = M.empty})),
+                    Core.annotatedTermAnnotation = (Core.TermMap (Maps.mapKeys (\n -> Core.TermVariable n) M.empty))})),
                   Core.bindingTypeScheme = Nothing}],
               Core.letBody = (Core.TermApplication (Core.Application {
                 Core.applicationFunction = (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermVariable (Core.Name "add")),
                   Core.applicationArgument = (Core.TermAnnotated (Core.AnnotatedTerm {
                     Core.annotatedTermBody = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 10))),
-                    Core.annotatedTermAnnotation = M.empty}))})),
+                    Core.annotatedTermAnnotation = (Core.TermMap (Maps.mapKeys (\n -> Core.TermVariable n) M.empty))}))})),
                 Core.applicationArgument = (Core.TermAnnotated (Core.AnnotatedTerm {
                   Core.annotatedTermBody = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 20))),
-                  Core.annotatedTermAnnotation = M.empty}))}))})))),
+                  Core.annotatedTermAnnotation = (Core.TermMap (Maps.mapKeys (\n -> Core.TermVariable n) M.empty))}))}))})))),
             Testing.universalTestCaseExpected = (\_ -> ShowCore.type_ (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]}
@@ -146,8 +147,8 @@ nestedAnnotationsTests =
             Testing.universalTestCaseActual = (\_ -> Eithers.either (\e -> "<<inference error>>") (\result -> ShowCore.type_ (Scoping.typeSchemeToFType (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermAnnotated (Core.AnnotatedTerm {
               Core.annotatedTermBody = (Core.TermAnnotated (Core.AnnotatedTerm {
                 Core.annotatedTermBody = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 100))),
-                Core.annotatedTermAnnotation = M.empty})),
-              Core.annotatedTermAnnotation = M.empty})))),
+                Core.annotatedTermAnnotation = (Core.TermMap (Maps.mapKeys (\n -> Core.TermVariable n) M.empty))})),
+              Core.annotatedTermAnnotation = (Core.TermMap (Maps.mapKeys (\n -> Core.TermVariable n) M.empty))})))),
             Testing.universalTestCaseExpected = (\_ -> ShowCore.type_ (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
@@ -157,10 +158,10 @@ nestedAnnotationsTests =
             Testing.universalTestCaseActual = (\_ -> Eithers.either (\e -> "<<inference error>>") (\result -> ShowCore.type_ (Scoping.typeSchemeToFType (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermPair (
               Core.TermAnnotated (Core.AnnotatedTerm {
                 Core.annotatedTermBody = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1))),
-                Core.annotatedTermAnnotation = M.empty}),
+                Core.annotatedTermAnnotation = (Core.TermMap (Maps.mapKeys (\n -> Core.TermVariable n) M.empty))}),
               (Core.TermAnnotated (Core.AnnotatedTerm {
                 Core.annotatedTermBody = (Core.TermLiteral (Core.LiteralString "hello")),
-                Core.annotatedTermAnnotation = M.empty})))))),
+                Core.annotatedTermAnnotation = (Core.TermMap (Maps.mapKeys (\n -> Core.TermVariable n) M.empty))})))))),
             Testing.universalTestCaseExpected = (\_ -> ShowCore.type_ (Core.TypePair (Core.PairType {
               Core.pairTypeFirst = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
               Core.pairTypeSecond = (Core.TypeLiteral Core.LiteralTypeString)})))})),
@@ -175,10 +176,10 @@ nestedAnnotationsTests =
                   Core.lambdaParameter = (Core.Name "x"),
                   Core.lambdaDomain = Nothing,
                   Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})),
-                Core.annotatedTermAnnotation = M.empty})),
+                Core.annotatedTermAnnotation = (Core.TermMap (Maps.mapKeys (\n -> Core.TermVariable n) M.empty))})),
               Core.applicationArgument = (Core.TermAnnotated (Core.AnnotatedTerm {
                 Core.annotatedTermBody = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))),
-                Core.annotatedTermAnnotation = M.empty}))})))),
+                Core.annotatedTermAnnotation = (Core.TermMap (Maps.mapKeys (\n -> Core.TermVariable n) M.empty))}))})))),
             Testing.universalTestCaseExpected = (\_ -> ShowCore.type_ (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]}
@@ -194,7 +195,7 @@ topLevelAnnotationsTests =
           Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
             Testing.universalTestCaseActual = (\_ -> Eithers.either (\e -> "<<inference error>>") (\result -> ShowCore.type_ (Scoping.typeSchemeToFType (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermAnnotated (Core.AnnotatedTerm {
               Core.annotatedTermBody = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))),
-              Core.annotatedTermAnnotation = M.empty})))),
+              Core.annotatedTermAnnotation = (Core.TermMap (Maps.mapKeys (\n -> Core.TermVariable n) M.empty))})))),
             Testing.universalTestCaseExpected = (\_ -> ShowCore.type_ (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
@@ -205,7 +206,7 @@ topLevelAnnotationsTests =
               Core.annotatedTermBody = (Core.TermList [
                 Core.TermLiteral (Core.LiteralString "a"),
                 (Core.TermLiteral (Core.LiteralString "b"))]),
-              Core.annotatedTermAnnotation = M.empty})))),
+              Core.annotatedTermAnnotation = (Core.TermMap (Maps.mapKeys (\n -> Core.TermVariable n) M.empty))})))),
             Testing.universalTestCaseExpected = (\_ -> ShowCore.type_ (Core.TypeList (Core.TypeLiteral Core.LiteralTypeString)))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
@@ -225,7 +226,7 @@ topLevelAnnotationsTests =
                   Core.Field {
                     Core.fieldName = (Core.Name "age"),
                     Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 25)))}]})),
-              Core.annotatedTermAnnotation = M.empty})))),
+              Core.annotatedTermAnnotation = (Core.TermMap (Maps.mapKeys (\n -> Core.TermVariable n) M.empty))})))),
             Testing.universalTestCaseExpected = (\_ -> ShowCore.type_ (Core.TypeVariable TestTypes.testTypePersonName))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
@@ -237,7 +238,7 @@ topLevelAnnotationsTests =
                 Core.lambdaParameter = (Core.Name "x"),
                 Core.lambdaDomain = Nothing,
                 Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})),
-              Core.annotatedTermAnnotation = M.empty})))),
+              Core.annotatedTermAnnotation = (Core.TermMap (Maps.mapKeys (\n -> Core.TermVariable n) M.empty))})))),
             Testing.universalTestCaseExpected = (\_ -> ShowCore.type_ (Core.TypeForall (Core.ForallType {
               Core.forallTypeParameter = (Core.Name "t0"),
               Core.forallTypeBody = (Core.TypeFunction (Core.FunctionType {

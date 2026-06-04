@@ -123,14 +123,14 @@ applyOvergenSubstToTermAnnotations_go subst cx term =
     case term of
       Core.TermAnnotated v0 ->
         let inner = Core.annotatedTermBody v0
-            ann = Core.annotatedTermAnnotation v0
+            ann = Annotations.getAnnotationMap (Core.annotatedTermAnnotation v0)
             ann_ =
                     Maybes.cases (Maps.lookup Constants.keyType ann) ann (\typeTerm -> Eithers.either (\_ -> ann) (\t ->
                       let t_ = substituteTypeVarsWithTypes subst t
                       in (Maps.insert Constants.keyType (EncodeCore.type_ t_) ann)) (DecodeCore.type_ cx typeTerm))
         in (Core.TermAnnotated (Core.AnnotatedTerm {
           Core.annotatedTermBody = (applyOvergenSubstToTermAnnotations_go subst cx inner),
-          Core.annotatedTermAnnotation = ann_}))
+          Core.annotatedTermAnnotation = Annotations.wrapAnnotationMap ann_}))
       Core.TermApplication v0 -> Core.TermApplication (Core.Application {
         Core.applicationFunction = (applyOvergenSubstToTermAnnotations_go subst cx (Core.applicationFunction v0)),
         Core.applicationArgument = (applyOvergenSubstToTermAnnotations_go subst cx (Core.applicationArgument v0))})
@@ -347,7 +347,7 @@ buildSubstFromAnnotations_go schemeVarSet g term =
     case term of
       Core.TermAnnotated v0 ->
         let body = Core.annotatedTermBody v0
-            anns = Core.annotatedTermAnnotation v0
+            anns = Annotations.getAnnotationMap (Core.annotatedTermAnnotation v0)
             bodySubst = buildSubstFromAnnotations_go schemeVarSet g body
             annSubst =
                     Maybes.cases (Maps.lookup Constants.keyType anns) Maps.empty (\typeTerm -> Eithers.either (\_ -> Maps.empty) (\annType -> case (Strip.deannotateTerm body) of
@@ -1459,7 +1459,7 @@ encodeTermInternal env anns tyapps term cx g0 =
           g = JavaEnvironment.javaEnvironmentGraph env
           encode = \t -> encodeTerm env t cx g
       in case term of
-        Core.TermAnnotated v0 -> encodeTermInternal env (Lists.cons (Core.annotatedTermAnnotation v0) anns) tyapps (Core.annotatedTermBody v0) cx g
+        Core.TermAnnotated v0 -> encodeTermInternal env (Lists.cons (Annotations.getAnnotationMap (Core.annotatedTermAnnotation v0)) anns) tyapps (Core.annotatedTermBody v0) cx g
         Core.TermApplication v0 -> encodeApplication env v0 cx g
         Core.TermEither v0 -> Eithers.bind (Logic.ifElse (Lists.null tyapps) (Right Nothing) (Eithers.bind (takeTypeArgs "either" 2 tyapps cx g) (\ta -> Right (Just ta)))) (\mtargs ->
           let combinedAnns = Lists.foldl (\acc -> \m -> Maps.union acc m) Maps.empty anns
@@ -2753,7 +2753,7 @@ tryInferFunctionType funTerm =
       Core.TermLambda v0 -> Maybes.bind (Core.lambdaDomain v0) (\dom ->
         let mCod =
                 case (Core.lambdaBody v0) of
-                  Core.TermAnnotated v1 -> Maybes.bind (Maps.lookup Constants.keyType (Core.annotatedTermAnnotation v1)) (\typeTerm -> decodeTypeFromTerm typeTerm)
+                  Core.TermAnnotated v1 -> Maybes.bind (Maps.lookup Constants.keyType (Annotations.getAnnotationMap (Core.annotatedTermAnnotation v1))) (\typeTerm -> decodeTypeFromTerm typeTerm)
                   Core.TermLambda _ -> tryInferFunctionType (Core.lambdaBody v0)
                   _ -> Nothing
         in (Maybes.map (\cod -> Core.TypeFunction (Core.FunctionType {

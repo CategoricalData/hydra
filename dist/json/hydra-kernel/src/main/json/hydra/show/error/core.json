@@ -4,7 +4,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Show a constant condition error as a string"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Show a constant condition error as a string"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -31,7 +32,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Show a duplicate binding error as a string"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Show a duplicate binding error as a string"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -58,7 +60,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Show a duplicate field error as a string"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Show a duplicate field error as a string"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -85,7 +88,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Show a duplicate record type field names error as a string"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Show a duplicate record type field names error as a string"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -112,7 +119,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Show a duplicate union type field names error as a string"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Show a duplicate union type field names error as a string"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -139,7 +150,9 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Show an empty case statement error as a string"}}}],
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "Show an empty case statement error as a string"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -168,7 +181,8 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Show an empty let bindings error as a string"}}}],
+                "annotation": {
+                  "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Show an empty let bindings error as a string"}}}]},
                 "body": {
                   "lambda": {"body": {"literal": {"string": "let expression with no bindings"}}, "domain": {"variable": "t0"}, "parameter": "e"}}}},
             "parameter": "t0"}},
@@ -183,7 +197,8 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Show an empty record type error as a string"}}}],
+                "annotation": {
+                  "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Show an empty record type error as a string"}}}]},
                 "body": {
                   "lambda": {
                     "body": {"literal": {"string": "record type with no fields (use TypeUnit instead)"}},
@@ -201,7 +216,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Show an empty term annotation error as a string"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Show an empty term annotation error as a string"}}}]},
                 "body": {
                   "lambda": {
                     "body": {"literal": {"string": "term annotation with empty annotation map"}},
@@ -219,7 +238,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Show an empty type annotation error as a string"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Show an empty type annotation error as a string"}}}]},
                 "body": {
                   "lambda": {
                     "body": {"literal": {"string": "type annotation with empty annotation map"}},
@@ -237,7 +260,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Show an empty type name in term error as a string"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Show an empty type name in term error as a string"}}}]},
                 "body": {
                   "lambda": {"body": {"literal": {"string": "term with empty type name"}}, "domain": {"variable": "t0"}, "parameter": "e"}}}},
             "parameter": "t0"}},
@@ -252,7 +279,8 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Show an empty union type error as a string"}}}],
+                "annotation": {
+                  "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Show an empty union type error as a string"}}}]},
                 "body": {
                   "lambda": {
                     "body": {"literal": {"string": "union type with no alternatives (use TypeVoid instead)"}},
@@ -268,7 +296,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Show an invalid forall parameter name error as a string"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Show an invalid forall parameter name error as a string"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -295,7 +327,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Show an invalid lambda parameter name error as a string"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Show an invalid lambda parameter name error as a string"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -322,7 +358,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Show an invalid let binding name error as a string"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Show an invalid let binding name error as a string"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -349,7 +389,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Show an invalid term error as a string"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Show an invalid term error as a string"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -431,7 +472,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Show an invalid type error as a string"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Show an invalid type error as a string"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -505,8 +547,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {"key": "description", "value": {"literal": {"string": "Show an invalid type lambda parameter name error as a string"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Show an invalid type lambda parameter name error as a string"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -533,8 +578,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {"key": "description", "value": {"literal": {"string": "Show an invalid type scheme variable name error as a string"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Show an invalid type scheme variable name error as a string"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -563,7 +611,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Show a nested term annotation error as a string"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Show a nested term annotation error as a string"}}}]},
                 "body": {
                   "lambda": {
                     "body": {"literal": {"string": "nested term annotations should be merged"}},
@@ -581,7 +633,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Show a nested type annotation error as a string"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Show a nested type annotation error as a string"}}}]},
                 "body": {
                   "lambda": {
                     "body": {"literal": {"string": "nested type annotations should be merged"}},
@@ -597,7 +653,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Show a non-comparable map key type error as a string"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Show a non-comparable map key type error as a string"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -624,7 +684,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Show a non-comparable set element type error as a string"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Show a non-comparable set element type error as a string"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -651,7 +715,9 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Show a redundant wrap/unwrap error as a string"}}}],
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "Show a redundant wrap/unwrap error as a string"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -678,7 +744,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Show a self-application error as a string"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Show a self-application error as a string"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -705,7 +772,9 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Show a single variant union error as a string"}}}],
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "Show a single variant union error as a string"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -732,7 +801,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Show a term variable shadowing error as a string"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Show a term variable shadowing error as a string"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -759,7 +832,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Show a type variable shadowing in forall error as a string"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Show a type variable shadowing in forall error as a string"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -786,10 +863,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Show a type variable shadowing in type lambda error as a string"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Show a type variable shadowing in type lambda error as a string"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -816,7 +894,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Show an undefined field error as a string"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Show an undefined field error as a string"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -860,7 +939,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Show an undefined term variable error as a string"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Show an undefined term variable error as a string"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -887,7 +970,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Show an undefined type variable error as a string"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Show an undefined type variable error as a string"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -914,10 +1001,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Show an undefined type variable in binding type error as a string"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Show an undefined type variable in binding type error as a string"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -944,10 +1032,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Show an undefined type variable in lambda domain error as a string"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Show an undefined type variable in lambda domain error as a string"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -974,10 +1063,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Show an undefined type variable in type application error as a string"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Show an undefined type variable in type application error as a string"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1005,7 +1095,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Show an unexpected term variant error as a string"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Show an unexpected term variant error as a string"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1048,7 +1142,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Show an unexpected type variant error as a string"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Show an unexpected type variant error as a string"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1091,7 +1189,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Show an unknown primitive name error as a string"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Show an unknown primitive name error as a string"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1120,7 +1222,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Show an unnecessary identity application error as a string"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Show an unnecessary identity application error as a string"}}}]},
                 "body": {
                   "lambda": {
                     "body": {"literal": {"string": "unnecessary application of identity lambda"}},
@@ -1136,7 +1242,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Show an untyped term variable error as a string"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Show an untyped term variable error as a string"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1165,7 +1275,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Show a void in non-bottom position error as a string"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Show a void in non-bottom position error as a string"}}}]},
                 "body": {
                   "lambda": {
                     "body": {"literal": {"string": "TypeVoid in a position where no value can be constructed"}},

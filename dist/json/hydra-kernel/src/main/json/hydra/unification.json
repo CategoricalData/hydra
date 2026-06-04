@@ -6,12 +6,13 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [
-                  {
-                    "key": "description",
-                    "value": {
-                      "literal": {
-                        "string": "Join two types, producing a list of type constraints.The comment is used to provide context for the constraints."}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {
+                        "literal": {
+                          "string": "Join two types, producing a list of type constraints.The comment is used to provide context for the constraints."}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -923,12 +924,13 @@
               "typeLambda": {
                 "body": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {
-                          "literal": {
-                            "string": "Robinson's algorithm, following https://www.cs.cornell.edu/courses/cs6110/2017sp/lectures/lec23.pdf\nSpecifically this is an implementation of the following rules:\n  * Unify({(x, t)} ∪ E) = {t/x} Unify(E{t/x}) if x ∉ FV(t)\n  * Unify(∅) = I (the identity substitution x ↦ x)\n  * Unify({(x, x)} ∪ E) = Unify(E)\n  * Unify({(f(s1, ..., sn), f(t1, ..., tn))} ∪ E) = Unify({(s1, t1), ..., (sn, tn)} ∪ E))"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {
+                            "literal": {
+                              "string": "Robinson's algorithm, following https://www.cs.cornell.edu/courses/cs6110/2017sp/lectures/lec23.pdf\nSpecifically this is an implementation of the following rules:\n  * Unify({(x, t)} ∪ E) = {t/x} Unify(E{t/x}) if x ∉ FV(t)\n  * Unify(∅) = I (the identity substitution x ↦ x)\n  * Unify({(x, x)} ∪ E) = Unify(E)\n  * Unify({(f(s1, ..., sn), f(t1, ..., tn))} ∪ E) = Unify({(s1, t1), ..., (sn, tn)} ∪ E))"}}}]},
                     "body": {
                       "lambda": {
                         "body": {
@@ -1503,12 +1505,13 @@
               "typeLambda": {
                 "body": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {
-                          "literal": {
-                            "string": "Unify two lists of types pairwise, producing a single substitution that satisfies every pair. The lists must have the same length; the comment is attached to each generated constraint for diagnostics."}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {
+                            "literal": {
+                              "string": "Unify two lists of types pairwise, producing a single substitution that satisfies every pair. The lists must have the same length; the comment is attached to each generated constraint for diagnostics."}}}]},
                     "body": {
                       "lambda": {
                         "body": {
@@ -1607,12 +1610,13 @@
               "typeLambda": {
                 "body": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {
-                          "literal": {
-                            "string": "Unify two types, producing a substitution that makes them equal (or an error). The comment is attached to the generated constraint for diagnostics."}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {
+                            "literal": {
+                              "string": "Unify two types, producing a substitution that makes them equal (or an error). The comment is attached to the generated constraint for diagnostics."}}}]},
                     "body": {
                       "lambda": {
                         "body": {
@@ -1674,12 +1678,13 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {
-                    "string": "Determine whether a type variable appears within a type expression.No distinction is made between free and bound type variables."}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {
+                      "string": "Determine whether a type variable appears within a type expression.No distinction is made between free and bound type variables."}}}]},
             "body": {
               "lambda": {
                 "body": {

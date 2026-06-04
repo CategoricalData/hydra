@@ -4,7 +4,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Round-trip test cases for JSON encoding and decoding"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Round-trip test cases for JSON encoding and decoding"}}}]},
             "body": {
               "record": {
                 "fields": [

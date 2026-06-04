@@ -4,10 +4,11 @@
       "primitive": {
         "defaultImplementation": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Applicative apply for optionals, defined in terms of bind and map."}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Applicative apply for optionals, defined in terms of bind and map."}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -50,7 +51,11 @@
       "primitive": {
         "defaultImplementation": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Monadic bind for optionals, defined in terms of maybe."}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Monadic bind for optionals, defined in terms of maybe."}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -106,10 +111,11 @@
       "primitive": {
         "defaultImplementation": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Catenate a list of optionals, keeping only the present values."}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Catenate a list of optionals, keeping only the present values."}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -158,8 +164,11 @@
       "primitive": {
         "defaultImplementation": {
           "annotated": {
-            "annotation": [
-              {"key": "description", "value": {"literal": {"string": "Kleisli composition for optionals, defined in terms of bind."}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Kleisli composition for optionals, defined in terms of bind."}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -203,10 +212,11 @@
       "primitive": {
         "defaultImplementation": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Return the contained value or a default, defined in terms of maybe."}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Return the contained value or a default, defined in terms of maybe."}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -239,7 +249,9 @@
       "primitive": {
         "defaultImplementation": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Test for presence, defined in terms of maybe."}}}],
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "Test for presence, defined in terms of maybe."}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -267,7 +279,8 @@
       "primitive": {
         "defaultImplementation": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Test for absence, defined in terms of maybe."}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Test for absence, defined in terms of maybe."}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -295,8 +308,11 @@
       "primitive": {
         "defaultImplementation": {
           "annotated": {
-            "annotation": [
-              {"key": "description", "value": {"literal": {"string": "Map a function over an optional, defined in terms of maybe."}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Map a function over an optional, defined in terms of maybe."}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -331,11 +347,12 @@
       "primitive": {
         "defaultImplementation": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {"string": "Map a partial function and keep only the present results, defined in terms of lists.map and cat."}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {"string": "Map a partial function and keep only the present results, defined in terms of lists.map and cat."}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -390,7 +407,7 @@
       "primitive": {
         "defaultImplementation": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Wrap a value in Just."}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Wrap a value in Just."}}}]},
             "body": {"lambda": {"body": {"maybe": {"variable": "x"}}, "parameter": "x"}}}},
         "isPure": true,
         "isTotal": true,
@@ -407,7 +424,11 @@
       "primitive": {
         "defaultImplementation": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert an optional to a list, defined in terms of maybe."}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Convert an optional to a list, defined in terms of maybe."}}}]},
             "body": {
               "lambda": {
                 "body": {

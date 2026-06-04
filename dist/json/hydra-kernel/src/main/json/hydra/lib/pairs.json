@@ -4,10 +4,11 @@
       "primitive": {
         "defaultImplementation": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Map over both elements of a pair, defined in terms of first and second."}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Map over both elements of a pair, defined in terms of first and second."}}}]},
             "body": {
               "lambda": {
                 "body": {

@@ -96,7 +96,11 @@
         "body": {
           "body": {
             "annotated": {
-              "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/xmlschema-2/#non-fundamental"}}}],
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "See https://www.w3.org/TR/xmlschema-2/#non-fundamental"}}}]},
               "body": {"wrap": {"unit": {}}}}},
           "variables": []},
         "name": "hydra.xml.schema.ConstrainingFacet"}},
