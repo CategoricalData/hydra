@@ -130,10 +130,10 @@
               (when (.exists f) f)))
           dirs)))
 
-(defn- read-ns-requires
-  "Read the (ns ...) form of a namespace's source file and return its in-scope
-   :require dependencies (as ns-name strings), restricted to the given universe
-   set so out-of-universe references are ignored."
+(defn read-ns-requires
+  "Read the (ns ...) form of a namespace's source file and return its
+   :require dependencies (as ns-name strings). If `universe` is non-nil, only
+   deps in that set are returned; if nil, all `:require`d nses are returned."
   [ns-name universe]
   (when-let [file (find-ns-file ns-name)]
     (let [first-form (with-open [rdr (java.io.PushbackReader. (java.io.FileReader. file))]
@@ -150,7 +150,7 @@
                                  :else nil))
                              specs)
               dep-strs (map str dep-syms)]
-          (vec (filter universe dep-strs)))))))
+          (vec (if universe (filter universe dep-strs) dep-strs)))))))
 
 (defn- topo-sort
   "Kahn's algorithm: return ns-names in dependency order such that every ns's
@@ -179,6 +179,27 @@
                  (count (remove (set @sorted) nses)) "ns(es).")))
     (let [done (set @sorted)]
       (vec (concat @sorted (remove done nses))))))
+
+(defn coder-load-order
+  "Walk the :require closure of `root-ns-names` and return the transitive
+   dependency set in topological order, omitting hydra.lib.* and hydra.eval.*
+   (which the runtime preload globalizes ahead of time) and any ns whose
+   source file is not on the classpath (e.g. clojure.string)."
+  [root-ns-names]
+  (let [skip? (fn [^String n]
+                (or (.startsWith n "hydra.lib.")
+                    (.startsWith n "hydra.eval.")
+                    (not (.startsWith n "hydra."))))
+        reach (loop [stack (vec root-ns-names) seen #{}]
+                (if (empty? stack)
+                  seen
+                  (let [n (peek stack) rest (pop stack)]
+                    (if (or (contains? seen n) (skip? n) (nil? (find-ns-file n)))
+                      (recur rest seen)
+                      (let [deps (or (read-ns-requires n nil) [])
+                            new-deps (remove (some-fn seen skip?) deps)]
+                        (recur (into rest new-deps) (conj seen n)))))))]
+    (topo-sort (vec reach))))
 
 (def ^:private gen-main-load-order
   "Generated main namespaces in topological dependency order, computed at load
