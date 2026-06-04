@@ -173,13 +173,30 @@ inside the `wrap` payload.
 
 ```json
 {"annotated": {
-  "annotation": [{"key": "<name>", "value": <encoded value>}, ...],
-  "body": <encoded inner>}}
+  "body": <encoded inner>,
+  "annotation": <encoded annotation Term>}}
 ```
 
-The annotation is a `Map Name Term`, which serializes per the [Maps](#maps) rule.
-Because `Name` is just a string at the wire level, this list-of-pairs shape is a plain
-key/value list — duplicate keys would parse but should not be produced.
+The `annotation` field is a `Term` (post-#386 schema flip; previously a
+`Map<Name, Term>`). The canonical shape for an annotation Term is a
+`TermMap` keyed by `TermVariable`s, so a one-entry annotation
+`{"k1": <v>}` serializes as:
+
+```json
+{"annotated": {
+  "body": <encoded inner>,
+  "annotation": {"map": [
+    {"key":   {"variable": "k1"},
+     "value": <encoded v>}]}}}
+```
+
+Producers should use the `wrapAnnotationMap` kernel helper (or the
+language-specific `annots` / `annotated` DSL functions) so the encoded
+key shape is `{"variable": "k1"}` consistently across hosts.
+Consumers should call `getAnnotationMap` to project back to
+`Map Name Term`; that function also accepts the transitional
+`{"wrap": {"typeName": "hydra.core.Name", "body": …}}` key shape so
+older fixtures continue to load.
 
 ## Literals
 
