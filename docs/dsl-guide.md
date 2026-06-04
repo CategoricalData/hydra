@@ -63,6 +63,19 @@ Different use cases require different trade-offs:
 - **Building terms or types programmatically**: Use the meta DSLs to write programs that construct Hydra objects
 - **Runtime manipulation**: Use the generated code directly (rare)
 
+### Why phantom-typed DSLs
+
+Phantom types let DSL builders encode the intended type of each
+constructed term or type into the host's standard type system. In
+statically typed hosts (Haskell, Java) the host's checker catches DSL
+mistakes at compile time. In Python, the same annotations are read by
+external static checkers (mypy, pyright) and by IDEs/readers, and a small
+set of runtime checks at DSL-construction time backs them up.
+
+Alternatives all forfeit one of the load-bearing properties: pure runtime
+checks defer errors past authoring time, and a separately-checked external
+DSL would require its own parser and checker in every host.
+
 ## Quick start
 
 Here are examples showing the basics. Note that type and term modules are typically separate.
