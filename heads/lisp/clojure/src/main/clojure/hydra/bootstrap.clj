@@ -126,7 +126,7 @@
                                 code (@(rc 'hydra_serialization_print_expr)
                                        (@(rc 'hydra_serialization_parenthesize)
                                          (program-to-expr program)))
-                                ns-val (let [ns (:namespace mod)]
+                                ns-val (let [ns (:name mod)]
                                          (if (string? ns) ns (:value ns)))
                                 case-conv (if (= target "clojure")
                                            (list :camel nil)
@@ -208,8 +208,8 @@
 
           (let [;; Apply filters
                 all-main-mods main-mods
-                ;; Namespace may be a string or a record with :value
-                ns-str-of (fn [m] (let [ns (:namespace m)]
+                ;; Module name may be a bare string or a ModuleName record with :value
+                ns-str-of (fn [m] (let [ns (:name m)]
                                     (if (string? ns) ns (:value ns))))
                 mods-to-generate (cond->> all-main-mods
                                    (:kernel-only opts) (filterv (fn [m]
@@ -217,7 +217,7 @@
                                        (and (not (.startsWith ^String ns-str "hydra."))
                                             (not (.startsWith ^String ns-str "hydra.json.yaml."))))))
                                    (:types-only opts) (filterv (fn [m]
-                                     (some (ns-resolve (find-ns 'hydra.annotations) 'hydra_annotations_is_native_type) (:elements m)))))]
+                                     (some (ns-resolve (find-ns 'hydra.annotations) 'hydra_annotations_is_native_type) (:definitions m)))))]
 
             (when (:kernel-only opts)
               (println (str "Filtering to kernel modules: " (count mods-to-generate) " of " (count all-main-mods)))
@@ -258,7 +258,7 @@
                               ;; testSkipEmitModuleNames in
                               ;; Hydra.Sources.Test.All and the equivalent
                               ;; filter in heads/python/.../bootstrap.py.
-                              ns-of (fn [m] (let [n (:namespace m)] (if (string? n) n (:value n))))
+                              ns-of (fn [m] (let [n (:name m)] (if (string? n) n (:value n))))
                               test-skip-emit #{"hydra.test.testEnv"}
                               test-mods-to-emit (filterv (fn [m] (not (contains? test-skip-emit (ns-of m)))) test-mods)
                               out-test (str out-dir "/src/test/" (:subdir coder-info))]
