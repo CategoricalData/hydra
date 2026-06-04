@@ -76,7 +76,7 @@ The latest Hydra release is **0.16.0**. Published artifacts:
 
 | Channel | Packages |
 |---|---|
-| Hackage (Haskell) | [`hydra`](https://hackage.haskell.org/package/hydra) |
+| Hackage (Haskell) | [`hydra`](https://hackage.haskell.org/package/hydra) (umbrella), [`hydra-kernel`](https://hackage.haskell.org/package/hydra-kernel), [`hydra-haskell`](https://hackage.haskell.org/package/hydra-haskell) |
 | Maven Central (Java) | [`hydra-kernel`](https://central.sonatype.com/artifact/net.fortytwo.hydra/hydra-kernel), [`hydra-java`](https://central.sonatype.com/artifact/net.fortytwo.hydra/hydra-java), [`hydra-pg`](https://central.sonatype.com/artifact/net.fortytwo.hydra/hydra-pg), [`hydra-rdf`](https://central.sonatype.com/artifact/net.fortytwo.hydra/hydra-rdf) |
 | PyPI (Python) | [`hydra-kernel`](https://pypi.org/project/hydra-kernel/), [`hydra-python`](https://pypi.org/project/hydra-python/), [`hydra-pg`](https://pypi.org/project/hydra-pg/), [`hydra-rdf`](https://pypi.org/project/hydra-rdf/) |
 | conda-forge (Python) | [`hydra-kernel`](https://prefix.dev/channels/conda-forge/packages/hydra-kernel), [`hydra-python`](https://prefix.dev/channels/conda-forge/packages/hydra-python), [`hydra-pg`](https://prefix.dev/channels/conda-forge/packages/hydra-pg), [`hydra-rdf`](https://prefix.dev/channels/conda-forge/packages/hydra-rdf) |
@@ -136,7 +136,7 @@ kernel.
 #### Bindings
 
 A **binding** is a hand-written, host-specific artifact that connects a Hydra
-package to an external system. Bindings sit outside the `packages/heads/dist`
+package to an external system. Bindings sit outside the `packages/heads/overlay/dist`
 pipeline; they have no DSL definition. See
 [Code organization § About `bindings/`](https://github.com/CategoricalData/hydra/wiki/Code-Organization#about-bindings)
 for the rules.
@@ -168,7 +168,7 @@ for the rules.
 
 - **[Contributor setup](docs/contributor-setup.md)** — toolchain prerequisites, tiered by scope (kernel only / triad / full matrix).
 - **[Implementation guide](docs/implementation.md)** — architectural deep dive into kernel modules, DSLs, primitives, and coders.
-- **[Code organization](https://github.com/CategoricalData/hydra/wiki/Code-Organization)** — the `packages/`, `heads/`, and `dist/` layout.
+- **[Code organization](https://github.com/CategoricalData/hydra/wiki/Code-Organization)** — the `packages/`, `heads/`, `overlay/`, and `dist/` layout.
 - **[Coding style](https://github.com/CategoricalData/hydra/wiki/Coding-style)** — guiding principles, ordering conventions, common mistakes.
 - **[Developer recipes](docs/recipes/index.md)** — step-by-step guides for adding primitives, extending core types, refactoring, and similar tasks.
 - **[Build system](docs/build-system.md)** — pipeline phases, caching layers, and what triggers regeneration.
