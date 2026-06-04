@@ -4,7 +4,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a subterm step to a string representation"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Convert a subterm step to a string representation"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -250,7 +254,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Build a subterm graph from a term"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Build a subterm graph from a term"}}}]},
             "body": {
               "lambda": {
                 "body": {

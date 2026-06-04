@@ -8,7 +8,11 @@
               "typeLambda": {
                 "body": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "Interpreter-friendly applicative apply for Maybe terms."}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "Interpreter-friendly applicative apply for Maybe terms."}}}]},
                     "body": {
                       "lambda": {
                         "body": {
@@ -170,7 +174,11 @@
               "typeLambda": {
                 "body": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "Interpreter-friendly monadic bind for Maybe terms."}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "Interpreter-friendly monadic bind for Maybe terms."}}}]},
                     "body": {
                       "lambda": {
                         "body": {
@@ -281,10 +289,11 @@
               "typeLambda": {
                 "body": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {"literal": {"string": "Interpreter-friendly case analysis for Maybe terms (cases argument order)."}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "Interpreter-friendly case analysis for Maybe terms (cases argument order)."}}}]},
                     "body": {
                       "lambda": {
                         "body": {
@@ -395,7 +404,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Interpreter-friendly cat for list of Maybe terms."}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Interpreter-friendly cat for list of Maybe terms."}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -514,7 +527,11 @@
                   "typeLambda": {
                     "body": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "Interpreter-friendly Kleisli composition for Maybe."}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "Interpreter-friendly Kleisli composition for Maybe."}}}]},
                         "body": {
                           "lambda": {
                             "body": {
@@ -604,7 +621,9 @@
               "typeLambda": {
                 "body": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "Interpreter-friendly fromJust for Maybe terms."}}}],
+                    "annotation": {
+                      "map": [
+                        {"key": {"variable": "description"}, "value": {"literal": {"string": "Interpreter-friendly fromJust for Maybe terms."}}}]},
                     "body": {
                       "lambda": {
                         "body": {
@@ -722,7 +741,11 @@
               "typeLambda": {
                 "body": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "Interpreter-friendly fromMaybe for Maybe terms."}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "Interpreter-friendly fromMaybe for Maybe terms."}}}]},
                     "body": {
                       "lambda": {
                         "body": {
@@ -818,7 +841,8 @@
               "typeLambda": {
                 "body": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "Interpreter-friendly isJust for Maybe terms."}}}],
+                    "annotation": {
+                      "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Interpreter-friendly isJust for Maybe terms."}}}]},
                     "body": {
                       "lambda": {
                         "body": {
@@ -923,7 +947,11 @@
               "typeLambda": {
                 "body": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "Interpreter-friendly isNothing for Maybe terms."}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "Interpreter-friendly isNothing for Maybe terms."}}}]},
                     "body": {
                       "lambda": {
                         "body": {
@@ -1028,7 +1056,8 @@
               "typeLambda": {
                 "body": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "Interpreter-friendly map for Maybe terms."}}}],
+                    "annotation": {
+                      "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Interpreter-friendly map for Maybe terms."}}}]},
                     "body": {
                       "lambda": {
                         "body": {
@@ -1136,7 +1165,9 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Interpreter-friendly mapMaybe for List terms."}}}],
+                "annotation": {
+                  "map": [
+                    {"key": {"variable": "description"}, "value": {"literal": {"string": "Interpreter-friendly mapMaybe for List terms."}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -1244,7 +1275,11 @@
               "typeLambda": {
                 "body": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "Interpreter-friendly case analysis for Maybe terms."}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "Interpreter-friendly case analysis for Maybe terms."}}}]},
                     "body": {
                       "lambda": {
                         "body": {
@@ -1359,7 +1394,8 @@
                   "typeLambda": {
                     "body": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "Interpreter-friendly pure for Maybe terms."}}}],
+                        "annotation": {
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Interpreter-friendly pure for Maybe terms."}}}]},
                         "body": {
                           "lambda": {
                             "body": {
@@ -1399,7 +1435,8 @@
               "typeLambda": {
                 "body": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "Interpreter-friendly toList for Maybe terms."}}}],
+                    "annotation": {
+                      "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Interpreter-friendly toList for Maybe terms."}}}]},
                     "body": {
                       "lambda": {
                         "body": {

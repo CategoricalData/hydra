@@ -4,7 +4,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Test cases for hydra.lib.maps primitives"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Test cases for hydra.lib.maps primitives"}}}]},
             "body": {
               "record": {
                 "fields": [

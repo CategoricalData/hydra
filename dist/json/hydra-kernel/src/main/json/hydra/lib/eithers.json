@@ -4,10 +4,11 @@
       "primitive": {
         "defaultImplementation": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Map over both sides of an Either, defined in terms of either."}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Map over both sides of an Either, defined in terms of either."}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -57,7 +58,11 @@
       "primitive": {
         "defaultImplementation": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Monadic bind for Either, defined in terms of either."}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Monadic bind for Either, defined in terms of either."}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -143,10 +148,11 @@
       "primitive": {
         "defaultImplementation": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Extract the Left value or return a default, defined in terms of either."}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Extract the Left value or return a default, defined in terms of either."}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -182,10 +188,11 @@
       "primitive": {
         "defaultImplementation": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Extract the Right value or return a default, defined in terms of either."}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Extract the Right value or return a default, defined in terms of either."}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -221,10 +228,11 @@
       "primitive": {
         "defaultImplementation": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Check whether an Either is a Left value, defined in terms of either."}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Check whether an Either is a Left value, defined in terms of either."}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -255,10 +263,11 @@
       "primitive": {
         "defaultImplementation": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Check whether an Either is a Right value, defined in terms of either."}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Check whether an Either is a Right value, defined in terms of either."}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -305,10 +314,11 @@
       "primitive": {
         "defaultImplementation": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Map a function over the Right side, defined in terms of either."}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Map a function over the Right side, defined in terms of either."}}}]},
             "body": {
               "lambda": {
                 "body": {

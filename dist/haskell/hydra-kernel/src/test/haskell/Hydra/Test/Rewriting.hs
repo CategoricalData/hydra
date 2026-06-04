@@ -14,6 +14,7 @@ import qualified Hydra.Json.Model as Model
 import qualified Hydra.Haskell.Lib.Equality as Equality
 import qualified Hydra.Haskell.Lib.Lists as Lists
 import qualified Hydra.Haskell.Lib.Logic as Logic
+import qualified Hydra.Haskell.Lib.Maps as Maps
 import qualified Hydra.Haskell.Lib.Math as Math
 import qualified Hydra.Haskell.Lib.Pairs as Pairs
 import qualified Hydra.Packaging as Packaging
@@ -630,10 +631,10 @@ allTests =
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
                 Testing.universalTestCaseActual = (\_ -> ShowCore.term (Rewriting.rewriteTerm (\recurse -> \term -> Logic.ifElse (Equality.equal term (Core.TermLiteral (Core.LiteralString "foo"))) (Core.TermLiteral (Core.LiteralString "bar")) (recurse term)) (Core.TermAnnotated (Core.AnnotatedTerm {
                   Core.annotatedTermBody = (Core.TermLiteral (Core.LiteralString "foo")),
-                  Core.annotatedTermAnnotation = M.empty})))),
+                  Core.annotatedTermAnnotation = (Core.TermMap (Maps.mapKeys (\n -> Core.TermVariable n) M.empty))})))),
                 Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermAnnotated (Core.AnnotatedTerm {
                   Core.annotatedTermBody = (Core.TermLiteral (Core.LiteralString "bar")),
-                  Core.annotatedTermAnnotation = M.empty})))})),
+                  Core.annotatedTermAnnotation = (Core.TermMap (Maps.mapKeys (\n -> Core.TermVariable n) M.empty))})))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
@@ -814,7 +815,7 @@ allTests =
                         Core.Field {
                           Core.fieldName = (Core.Name "name"),
                           Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "foo"))}]}))})),
-                  Core.annotatedTermAnnotation = M.empty})))),
+                  Core.annotatedTermAnnotation = (Core.TermMap (Maps.mapKeys (\n -> Core.TermVariable n) M.empty))})))),
                 Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermAnnotated (Core.AnnotatedTerm {
                   Core.annotatedTermBody = (Core.TermWrap (Core.WrappedTerm {
                     Core.wrappedTermTypeName = (Core.Name "User"),
@@ -824,7 +825,7 @@ allTests =
                         Core.Field {
                           Core.fieldName = (Core.Name "name"),
                           Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "bar"))}]}))})),
-                  Core.annotatedTermAnnotation = M.empty})))})),
+                  Core.annotatedTermAnnotation = (Core.TermMap (Maps.mapKeys (\n -> Core.TermVariable n) M.empty))})))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]},
         Testing.TestGroup {

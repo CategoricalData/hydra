@@ -10,8 +10,11 @@
                   "typeLambda": {
                     "body": {
                       "annotated": {
-                        "annotation": [
-                          {"key": "description", "value": {"literal": {"string": "Annotate an adapter's target type with optional annotations"}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "Annotate an adapter's target type with optional annotations"}}}]},
                         "body": {
                           "lambda": {
                             "body": {
@@ -91,7 +94,30 @@
                                                                                                   "type": {"variable": "hydra.core.Type"}}},
                                                                                               "type": {"variable": "t1"}}},
                                                                                           "type": {"variable": "t2"}}}}}},
-                                                                                {"name": "annotation", "term": {"variable": "n"}}],
+                                                                                {
+                                                                                  "name": "annotation",
+                                                                                  "term": {
+                                                                                    "inject": {
+                                                                                      "field": {
+                                                                                        "name": "map",
+                                                                                        "term": {
+                                                                                          "application": {
+                                                                                            "argument": {"variable": "n"},
+                                                                                            "function": {
+                                                                                              "application": {
+                                                                                                "argument": {
+                                                                                                  "lambda": {
+                                                                                                    "body": {"inject": {"field": {"name": "variable", "term": {"variable": "n"}}, "typeName": "hydra.core.Term"}},
+                                                                                                    "domain": {"variable": "hydra.core.Name"},
+                                                                                                    "parameter": "n"}},
+                                                                                                "function": {
+                                                                                                  "typeApplication": {
+                                                                                                    "body": {
+                                                                                                      "typeApplication": {
+                                                                                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.maps.mapKeys"}, "type": {"variable": "hydra.core.Name"}}},
+                                                                                                        "type": {"variable": "hydra.core.Term"}}},
+                                                                                                    "type": {"variable": "hydra.core.Term"}}}}}}}},
+                                                                                      "typeName": "hydra.core.Term"}}}],
                                                                               "typeName": "hydra.core.AnnotatedType"}}},
                                                                         "typeName": "hydra.core.Type"}}},
                                                                   {
@@ -190,8 +216,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [
-                  {"key": "description", "value": {"literal": {"string": "Create an adapter between Avro schemas and Hydra types/terms"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Create an adapter between Avro schemas and Hydra types/terms"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -5540,7 +5569,9 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert an Avro qualified name to a Hydra name"}}}],
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "Convert an Avro qualified name to a Hydra name"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -5605,10 +5636,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "An empty Avro environment with no named adapters, no namespace, and no elements"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "An empty Avro environment with no named adapters, no namespace, and no elements"}}}]},
             "body": {
               "record": {
                 "fields": [
@@ -5643,8 +5675,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {"key": "description", "value": {"literal": {"string": "Encode a JSON value as a Hydra term for annotation purposes"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Encode a JSON value as a Hydra term for annotation purposes"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -5810,7 +5845,11 @@
               "typeLambda": {
                 "body": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "Construct an error result with a message in context"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "Construct an error result with a message in context"}}}]},
                     "body": {
                       "lambda": {
                         "body": {
@@ -5848,7 +5887,8 @@
               "typeLambda": {
                 "body": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "Extract a JSON array or return an error"}}}],
+                    "annotation": {
+                      "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Extract a JSON array or return an error"}}}]},
                     "body": {
                       "lambda": {
                         "body": {
@@ -5891,7 +5931,8 @@
               "typeLambda": {
                 "body": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "Extract a JSON object or return an error"}}}],
+                    "annotation": {
+                      "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Extract a JSON object or return an error"}}}]},
                     "body": {
                       "lambda": {
                         "body": {
@@ -5938,7 +5979,8 @@
               "typeLambda": {
                 "body": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "Extract a JSON string or return an error"}}}],
+                    "annotation": {
+                      "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Extract a JSON string or return an error"}}}]},
                     "body": {
                       "lambda": {
                         "body": {
@@ -5977,10 +6019,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Extract field annotations and convert them to core Name/Term pairs"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Extract field annotations and convert them to core Name/Term pairs"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -6060,7 +6103,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Find the primary key field among a list of Avro fields"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Find the primary key field among a list of Avro fields"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -6195,7 +6242,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Extract a foreign key annotation from a field, if present"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Extract a foreign key annotation from a field, if present"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -6400,7 +6451,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Look up an adapter by qualified name in the environment"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Look up an adapter by qualified name in the environment"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -6458,10 +6513,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [
-                  {
-                    "key": "description",
-                    "value": {"literal": {"string": "Convert a JSON value to a string, supporting booleans, strings, and numbers"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Convert a JSON value to a string, supporting booleans, strings, and numbers"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -6550,10 +6606,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Extract named type annotations and convert them to core Name/Term pairs"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Extract named type annotations and convert them to core Name/Term pairs"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -6637,7 +6694,11 @@
                   "typeLambda": {
                     "body": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "Look up an optional string attribute in a JSON object map"}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "Look up an optional string attribute in a JSON object map"}}}]},
                         "body": {
                           "lambda": {
                             "body": {
@@ -6734,7 +6795,9 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Parse a dotted Avro name into a qualified name"}}}],
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "Parse a dotted Avro name into a qualified name"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -6826,7 +6889,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Create a name constructor from a pattern string"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Create a name constructor from a pattern string"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -6858,10 +6925,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [
-                  {
-                    "key": "description",
-                    "value": {"literal": {"string": "Prepare a single field, producing an adapter and updated environment"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Prepare a single field, producing an adapter and updated environment"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -8190,7 +8258,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Thread AvroEnvironment through preparing multiple fields"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Thread AvroEnvironment through preparing multiple fields"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -8828,7 +8900,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Extract a primary key annotation from a field, if present"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Extract a primary key annotation from a field, if present"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -8927,7 +9003,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Store an adapter in the environment by qualified name"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Store an adapter in the environment by qualified name"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -9022,7 +9102,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Look up a required string attribute in a JSON object map"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Look up a required string attribute in a JSON object map"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -9107,10 +9191,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [
-                  {
-                    "key": "description",
-                    "value": {"literal": {"string": "Recursively rewrite an Avro schema using a monadic transformation function"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Recursively rewrite an Avro schema using a monadic transformation function"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -9485,7 +9570,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert an Avro qualified name to a display string"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Convert an Avro qualified name to a display string"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -9544,7 +9633,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Parse a string into a term of the expected type"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Parse a string into a term of the expected type"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -9978,7 +10071,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a literal term to its string representation"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Convert a literal term to its string representation"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -10201,7 +10298,8 @@
               "typeLambda": {
                 "body": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "Construct an error for unexpected values"}}}],
+                    "annotation": {
+                      "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Construct an error for unexpected values"}}}]},
                     "body": {
                       "lambda": {
                         "body": {

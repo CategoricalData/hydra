@@ -6,11 +6,12 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [
-                  {
-                    "key": "description",
-                    "value": {
-                      "literal": {"string": "True if every element of the list is equal to every other element (vacuously true for the empty list)"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {
+                        "literal": {"string": "True if every element of the list is equal to every other element (vacuously true for the empty list)"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -102,10 +103,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [
-                  {
-                    "key": "description",
-                    "value": {"literal": {"string": "Apply type arguments to a type, substituting forall-bound variables"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Apply type arguments to a type, substituting forall-bound variables"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -320,10 +322,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [
-                  {
-                    "key": "description",
-                    "value": {"literal": {"string": "Check that a term has no unbound type variables (Either version)"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Check that a term has no unbound type variables (Either version)"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -837,10 +840,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Check that a nominal type is applied to the correct number of type arguments (Either version)"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Check that a nominal type is applied to the correct number of type arguments (Either version)"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1015,10 +1019,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [
-                  {
-                    "key": "description",
-                    "value": {"literal": {"string": "Ensure all types in a list are equal and return the common type"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Ensure all types in a list are equal and return the common type"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -1121,7 +1126,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Check that a term has the expected type"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Check that a term has the expected type"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1271,12 +1277,13 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [
-                  {
-                    "key": "description",
-                    "value": {
-                      "literal": {
-                        "string": "Sanity-check a type substitution arising from unification. Specifically, check that schema types have not been inappropriately unified with type variables inferred from terms."}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {
+                        "literal": {
+                          "string": "Sanity-check a type substitution arising from unification. Specifically, check that schema types have not been inappropriately unified with type variables inferred from terms."}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -1552,12 +1559,13 @@
               "typeLambda": {
                 "body": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {
-                          "literal": {
-                            "string": "Check that all type variables in a type are bound. NOTE: This check is currently disabled to allow phantom type variables from polymorphic instantiation to pass through. The proper fix is to ensure `typeOf` doesn't create fresh variables for post-inference code."}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {
+                            "literal": {
+                              "string": "Check that all type variables in a type are bound. NOTE: This check is currently disabled to allow phantom type variables from polymorphic instantiation to pass through. The proper fix is to ensure `typeOf` doesn't create fresh variables for post-inference code."}}}]},
                     "body": {
                       "lambda": {
                         "body": {"lambda": {"body": {"unit": {}}, "domain": {"variable": "t1"}, "parameter": "_typ"}},
@@ -1576,10 +1584,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Check if a type contains any type variable from the current scope"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Check if a type contains any type variable from the current scope"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1629,12 +1638,13 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {
-                    "string": "Normalize free type variables in a type to canonical names based on order of first occurrence. This allows comparing types that differ only in the naming of free type variables."}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {
+                      "string": "Normalize free type variables in a type to canonical names based on order of first occurrence. This allows comparing types that differ only in the naming of free type variables."}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1763,7 +1773,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Get the bound types from a graph as a type environment"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Get the bound types from a graph as a type environment"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1791,10 +1805,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Check whether two lists of types are effectively equal, disregarding type aliases"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Check whether two lists of types are effectively equal, disregarding type aliases"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1868,10 +1883,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Given a type context, reconstruct the type of a System F term"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Given a type context, reconstruct the type of a System F term"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2145,10 +2161,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Reconstruct the type of an annotated term (Either/InferenceContext version)"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Reconstruct the type of an annotated term (Either/InferenceContext version)"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2193,10 +2210,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Reconstruct the type of an application term (Either/InferenceContext version)"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Reconstruct the type of an application term (Either/InferenceContext version)"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2659,10 +2677,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Reconstruct the type of a case statement (Either/InferenceContext version)"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Reconstruct the type of a case statement (Either/InferenceContext version)"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3295,10 +3314,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Reconstruct the type of an either value (Either/InferenceContext version)"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Reconstruct the type of an either value (Either/InferenceContext version)"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3683,10 +3703,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Reconstruct the type of a union injection (Either/InferenceContext version)"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Reconstruct the type of a union injection (Either/InferenceContext version)"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3894,10 +3915,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Reconstruct the type of a lambda function (Either/InferenceContext version)"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Reconstruct the type of a lambda function (Either/InferenceContext version)"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4215,10 +4237,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Reconstruct the type of a let binding (Either/InferenceContext version)"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Reconstruct the type of a let binding (Either/InferenceContext version)"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4679,10 +4702,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Reconstruct the type of a list (Either/InferenceContext version)"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Reconstruct the type of a list (Either/InferenceContext version)"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -5119,10 +5143,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [
-                  {
-                    "key": "description",
-                    "value": {"literal": {"string": "Reconstruct the type of a literal (Either/InferenceContext version)"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Reconstruct the type of a literal (Either/InferenceContext version)"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -5212,10 +5237,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Reconstruct the type of a map (Either/InferenceContext version)"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Reconstruct the type of a map (Either/InferenceContext version)"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -6040,10 +6066,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Reconstruct the type of an optional value (Either/InferenceContext version)"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Reconstruct the type of an optional value (Either/InferenceContext version)"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -6347,10 +6374,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Reconstruct the type of a pair (Either/InferenceContext version)"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Reconstruct the type of a pair (Either/InferenceContext version)"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -6609,10 +6637,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Reconstruct the type of a primitive function (Either/InferenceContext version)"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Reconstruct the type of a primitive function (Either/InferenceContext version)"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -6819,10 +6848,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Reconstruct the type of a record projection (Either/InferenceContext version)"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Reconstruct the type of a record projection (Either/InferenceContext version)"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -7059,10 +7089,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Reconstruct the type of a record (Either/InferenceContext version)"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Reconstruct the type of a record (Either/InferenceContext version)"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -7350,10 +7381,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Reconstruct the type of a set (Either/InferenceContext version)"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Reconstruct the type of a set (Either/InferenceContext version)"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -7791,7 +7823,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Check the type of a term"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Check the type of a term"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -7844,10 +7876,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Reconstruct the type of a type application term (Either/InferenceContext version)"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Reconstruct the type of a type application term (Either/InferenceContext version)"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -7917,11 +7950,12 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {"string": "Reconstruct the type of a type lambda (type abstraction) term (Either/InferenceContext version)"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {"string": "Reconstruct the type of a type lambda (type abstraction) term (Either/InferenceContext version)"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -8139,10 +8173,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [
-                  {
-                    "key": "description",
-                    "value": {"literal": {"string": "Reconstruct the type of the unit term (Either/InferenceContext version)"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Reconstruct the type of the unit term (Either/InferenceContext version)"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -8215,10 +8250,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Reconstruct the type of an unwrap operation (Either/InferenceContext version)"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Reconstruct the type of an unwrap operation (Either/InferenceContext version)"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -8411,10 +8447,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Reconstruct the type of a variable (Either/InferenceContext version)"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Reconstruct the type of a variable (Either/InferenceContext version)"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -8681,10 +8718,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Reconstruct the type of a wrapped term (Either/InferenceContext version)"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Reconstruct the type of a wrapped term (Either/InferenceContext version)"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -8795,12 +8833,13 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {
-                    "string": "Check whether a list of types are effectively equal, disregarding type aliases and free type variable naming. Also treats free type variables (not in schema) as wildcards, since inference has already verified consistency."}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {
+                      "string": "Check whether a list of types are effectively equal, disregarding type aliases and free type variable naming. Also treats free type variables (not in schema) as wildcards, since inference has already verified consistency."}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -8968,12 +9007,13 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {
-                    "string": "Check whether two types are effectively equal, disregarding type aliases, forall quantifiers, and treating in-scope type variables as wildcards"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {
+                      "string": "Check whether two types are effectively equal, disregarding type aliases, forall quantifiers, and treating in-scope type variables as wildcards"}}}]},
             "body": {
               "lambda": {
                 "body": {

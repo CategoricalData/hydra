@@ -4,7 +4,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a WebAssembly module to a WAT expression"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Serialize a WebAssembly module to a WAT expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -111,7 +115,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a module field to a WAT expression"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Serialize a module field to a WAT expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -211,7 +216,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a value type to its WAT string representation"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Convert a value type to its WAT string representation"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -250,7 +259,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a function type to WAT"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Serialize a function type to WAT"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -375,7 +384,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a type use clause to WAT"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Serialize a type use clause to WAT"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -508,7 +517,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a type definition to WAT"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Serialize a type definition to WAT"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -576,7 +585,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a function parameter to WAT"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Serialize a function parameter to WAT"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -639,7 +649,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a function definition to WAT"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Serialize a function definition to WAT"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -805,7 +816,9 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a local variable declaration to WAT"}}}],
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "Serialize a local variable declaration to WAT"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -872,7 +885,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize an instruction to WAT"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Serialize an instruction to WAT"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1453,7 +1466,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a block or loop instruction to WAT"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Serialize a block or loop instruction to WAT"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1589,7 +1603,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a block type to WAT"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Serialize a block type to WAT"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1642,7 +1656,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize an if instruction to WAT"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Serialize an if instruction to WAT"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1860,7 +1874,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a memory definition to WAT"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Serialize a memory definition to WAT"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1928,7 +1943,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a data segment to WAT"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Serialize a data segment to WAT"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2067,7 +2082,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize limits to WAT"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Serialize limits to WAT"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2124,7 +2139,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a global definition to WAT"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Serialize a global definition to WAT"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2213,7 +2229,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a global type to WAT"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Serialize a global type to WAT"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2267,7 +2283,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a table definition to WAT"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Serialize a table definition to WAT"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2346,7 +2362,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize an import declaration to WAT"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Serialize an import declaration to WAT"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2406,7 +2423,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize an import descriptor to WAT"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Serialize an import descriptor to WAT"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2678,7 +2696,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize an export declaration to WAT"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Serialize an export declaration to WAT"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2724,7 +2743,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize an export descriptor to WAT"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Serialize an export descriptor to WAT"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2797,7 +2817,9 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a constant value instruction to WAT"}}}],
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "Serialize a constant value instruction to WAT"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2870,7 +2892,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a reference type to its WAT string"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a reference type to its WAT string"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2897,7 +2920,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a string to a WAT comment"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a string to a WAT comment"}}}]},
             "body": {
               "lambda": {
                 "body": {

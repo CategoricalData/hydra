@@ -282,8 +282,8 @@ moduleDependencyModuleNames cx graph binds withPrims withNoms withSchema mod =
                       dataTerm =
                               Annotations.normalizeTermAnnotations (Core.TermAnnotated (Core.AnnotatedTerm {
                                 Core.annotatedTermBody = (EncodeCore.type_ typ),
-                                Core.annotatedTermAnnotation = (Maps.fromList [
-                                  (Constants.keyType, schemaTerm)])}))
+                                Core.annotatedTermAnnotation = (Annotations.wrapAnnotationMap (Maps.fromList [
+                                  (Constants.keyType, schemaTerm)]))}))
                   in Core.Binding {
                     Core.bindingName = name,
                     Core.bindingTerm = dataTerm,

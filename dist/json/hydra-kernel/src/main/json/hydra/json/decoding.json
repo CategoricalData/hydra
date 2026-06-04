@@ -6,7 +6,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Decode a JSON array using a decoder for elements"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Decode a JSON array using a decoder for elements"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -60,7 +64,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Decode a JSON boolean value"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Decode a JSON boolean value"}}}]},
             "body": {
               "cases": {
                 "cases": [
@@ -93,7 +97,8 @@
               "typeLambda": {
                 "body": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "Decode a required field from a JSON object"}}}],
+                    "annotation": {
+                      "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Decode a required field from a JSON object"}}}]},
                     "body": {
                       "lambda": {
                         "body": {
@@ -191,7 +196,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Decode a JSON object value"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Decode a JSON object value"}}}]},
             "body": {
               "cases": {
                 "cases": [
@@ -232,7 +237,8 @@
                       "typeLambda": {
                         "body": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "Decode an optional field from a JSON object"}}}],
+                            "annotation": {
+                              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Decode an optional field from a JSON object"}}}]},
                             "body": {
                               "lambda": {
                                 "body": {
@@ -317,7 +323,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Decode a JSON string value"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Decode a JSON string value"}}}]},
             "body": {
               "cases": {
                 "cases": [

@@ -5,25 +5,30 @@
         "body": {
           "body": {
             "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {
-                    "literal": {
-                      "string": "A module name which, when mapped to a target language's directory or package structure, conflicts with another module's mapped name. For example, hydra.foo.bar and hydra.fooBar might both map to the same directory in a case-insensitive filesystem."}}}],
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {
+                        "string": "A module name which, when mapped to a target language's directory or package structure, conflicts with another module's mapped name. For example, hydra.foo.bar and hydra.fooBar might both map to the same directory in a case-insensitive filesystem."}}}]},
               "body": {
                 "record": [
                   {
                     "name": "first",
                     "type": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The first module name"}}}],
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The first module name"}}}]},
                         "body": {"variable": "hydra.packaging.ModuleName"}}}},
                   {
                     "name": "second",
                     "type": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The second module name that conflicts with the first"}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The second module name that conflicts with the first"}}}]},
                         "body": {"variable": "hydra.packaging.ModuleName"}}}}]}}},
           "variables": []},
         "name": "hydra.error.packaging.ConflictingModuleNameError"}},
@@ -32,40 +37,48 @@
         "body": {
           "body": {
             "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {
-                    "literal": {
-                      "string": "A union type variant name which, when capitalized and concatenated with its type name, conflicts with another type definition name. For example, a union type Foo with a variant bar produces FooBar, which conflicts with an existing type definition FooBar. This is currently a problem only for the Haskell target."}}}],
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {
+                        "string": "A union type variant name which, when capitalized and concatenated with its type name, conflicts with another type definition name. For example, a union type Foo with a variant bar produces FooBar, which conflicts with an existing type definition FooBar. This is currently a problem only for the Haskell target."}}}]},
               "body": {
                 "record": [
                   {
                     "name": "moduleName",
                     "type": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the module containing the conflict"}}}],
+                        "annotation": {
+                          "map": [
+                            {"key": {"variable": "description"}, "value": {"literal": {"string": "The name of the module containing the conflict"}}}]},
                         "body": {"variable": "hydra.packaging.ModuleName"}}}},
                   {
                     "name": "typeName",
                     "type": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the union type"}}}],
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The name of the union type"}}}]},
                         "body": {"variable": "hydra.core.Name"}}}},
                   {
                     "name": "variantName",
                     "type": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the variant field causing the conflict"}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The name of the variant field causing the conflict"}}}]},
                         "body": {"variable": "hydra.core.Name"}}}},
                   {
                     "name": "conflictingName",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "The name of the other type definition that conflicts with the generated constructor name"}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The name of the other type definition that conflicts with the generated constructor name"}}}]},
                         "body": {"variable": "hydra.core.Name"}}}}]}}},
           "variables": []},
         "name": "hydra.error.packaging.ConflictingVariantNameError"}},
@@ -74,25 +87,30 @@
         "body": {
           "body": {
             "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {
-                    "literal": {
-                      "string": "A definition whose name does not have the module's name as a prefix. If the module name is foo.bar, all definition names must have the form foo.bar.quux."}}}],
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {
+                        "string": "A definition whose name does not have the module's name as a prefix. If the module name is foo.bar, all definition names must have the form foo.bar.quux."}}}]},
               "body": {
                 "record": [
                   {
                     "name": "moduleName",
                     "type": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the module"}}}],
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The name of the module"}}}]},
                         "body": {"variable": "hydra.packaging.ModuleName"}}}},
                   {
                     "name": "name",
                     "type": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The definition name that does not match the module name"}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The definition name that does not match the module name"}}}]},
                         "body": {"variable": "hydra.core.Name"}}}}]}}},
           "variables": []},
         "name": "hydra.error.packaging.DefinitionNotInModuleNameError"}},
@@ -101,35 +119,42 @@
         "body": {
           "body": {
             "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {
-                    "literal": {
-                      "string": "Two consecutive definitions in a module's definitions list that are not in alphabetical order by local name. Hydra requires definitions to appear in lexicographic ASCII order of their local names."}}}],
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {
+                        "string": "Two consecutive definitions in a module's definitions list that are not in alphabetical order by local name. Hydra requires definitions to appear in lexicographic ASCII order of their local names."}}}]},
               "body": {
                 "record": [
                   {
                     "name": "moduleName",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {"key": "description", "value": {"literal": {"string": "The name of the module containing the misordered definitions"}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The name of the module containing the misordered definitions"}}}]},
                         "body": {"variable": "hydra.packaging.ModuleName"}}}},
                   {
                     "name": "precedingName",
                     "type": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The definition that appears first in the list"}}}],
+                        "annotation": {
+                          "map": [
+                            {"key": {"variable": "description"}, "value": {"literal": {"string": "The definition that appears first in the list"}}}]},
                         "body": {"variable": "hydra.core.Name"}}}},
                   {
                     "name": "followingName",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "The definition that appears next, but should sort earlier than precedingName"}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The definition that appears next, but should sort earlier than precedingName"}}}]},
                         "body": {"variable": "hydra.core.Name"}}}}]}}},
           "variables": []},
         "name": "hydra.error.packaging.DefinitionsOutOfOrderError"}},
@@ -138,23 +163,28 @@
         "body": {
           "body": {
             "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {"literal": {"string": "Two or more definitions in the same module share the same name"}}}],
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "Two or more definitions in the same module share the same name"}}}]},
               "body": {
                 "record": [
                   {
                     "name": "moduleName",
                     "type": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the module containing the duplicates"}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The name of the module containing the duplicates"}}}]},
                         "body": {"variable": "hydra.packaging.ModuleName"}}}},
                   {
                     "name": "name",
                     "type": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The duplicated definition name"}}}],
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The duplicated definition name"}}}]},
                         "body": {"variable": "hydra.core.Name"}}}}]}}},
           "variables": []},
         "name": "hydra.error.packaging.DuplicateDefinitionNameError"}},
@@ -163,15 +193,18 @@
         "body": {
           "body": {
             "annotated": {
-              "annotation": [
-                {"key": "description", "value": {"literal": {"string": "Two or more modules in the same package share the same name"}}}],
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "Two or more modules in the same package share the same name"}}}]},
               "body": {
                 "record": [
                   {
                     "name": "moduleName",
                     "type": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The duplicated module name"}}}],
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The duplicated module name"}}}]},
                         "body": {"variable": "hydra.packaging.ModuleName"}}}}]}}},
           "variables": []},
         "name": "hydra.error.packaging.DuplicateModuleNameError"}},
@@ -180,35 +213,45 @@
         "body": {
           "body": {
             "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {
-                    "literal": {
-                      "string": "A definition whose local name does not match the expected naming convention. Term-level definitions must be camelCase; type-level definitions must be PascalCase."}}}],
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {
+                        "string": "A definition whose local name does not match the expected naming convention. Term-level definitions must be camelCase; type-level definitions must be PascalCase."}}}]},
               "body": {
                 "record": [
                   {
                     "name": "moduleName",
                     "type": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the module containing the definition"}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The name of the module containing the definition"}}}]},
                         "body": {"variable": "hydra.packaging.ModuleName"}}}},
                   {
                     "name": "name",
                     "type": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The definition name that violates the naming convention"}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The definition name that violates the naming convention"}}}]},
                         "body": {"variable": "hydra.core.Name"}}}},
                   {
                     "name": "expectedConvention",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {
-                              "literal": {"string": "The case convention the name should have followed (camel for term-level, pascal for type-level)"}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {
+                                "literal": {"string": "The case convention the name should have followed (camel for term-level, pascal for type-level)"}}}]},
                         "body": {"variable": "hydra.util.CaseConvention"}}}}]}}},
           "variables": []},
         "name": "hydra.error.packaging.InvalidDefinitionNameError"}},
@@ -217,69 +260,80 @@
         "body": {
           "body": {
             "annotated": {
-              "annotation": [{"key": "description", "value": {"literal": {"string": "An error indicating that a module is invalid"}}}],
+              "annotation": {
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An error indicating that a module is invalid"}}}]},
               "body": {
                 "union": [
                   {
                     "name": "conflictingVariantName",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {
-                              "literal": {"string": "A union variant name that conflicts with another type definition when mapped to a target language"}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {
+                                "literal": {"string": "A union variant name that conflicts with another type definition when mapped to a target language"}}}]},
                         "body": {"variable": "hydra.error.packaging.ConflictingVariantNameError"}}}},
                   {
                     "name": "definitionNotInModuleName",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "A definition whose name does not have the module's name as a prefix"}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "A definition whose name does not have the module's name as a prefix"}}}]},
                         "body": {"variable": "hydra.error.packaging.DefinitionNotInModuleNameError"}}}},
                   {
                     "name": "definitionsOutOfOrder",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "Two consecutive definitions in the definitions list that are not in alphabetical order"}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "Two consecutive definitions in the definitions list that are not in alphabetical order"}}}]},
                         "body": {"variable": "hydra.error.packaging.DefinitionsOutOfOrderError"}}}},
                   {
                     "name": "duplicateDefinitionName",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "Two or more definitions in the same module share the same name"}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "Two or more definitions in the same module share the same name"}}}]},
                         "body": {"variable": "hydra.error.packaging.DuplicateDefinitionNameError"}}}},
                   {
                     "name": "invalidDefinitionName",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "A definition whose local name does not match the expected naming convention"}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "A definition whose local name does not match the expected naming convention"}}}]},
                         "body": {"variable": "hydra.error.packaging.InvalidDefinitionNameError"}}}},
                   {
                     "name": "invalidModuleNameConvention",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "A module whose name does not match the module-name naming convention"}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "A module whose name does not match the module-name naming convention"}}}]},
                         "body": {"variable": "hydra.error.packaging.InvalidModuleNameConventionError"}}}},
                   {
                     "name": "missingDocumentation",
                     "type": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "A top-level definition lacking a description annotation"}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "A top-level definition lacking a description annotation"}}}]},
                         "body": {"variable": "hydra.error.packaging.MissingDocumentationError"}}}}]}}},
           "variables": []},
         "name": "hydra.error.packaging.InvalidModuleError"}},
@@ -288,19 +342,21 @@
         "body": {
           "body": {
             "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {
-                    "literal": {
-                      "string": "A module whose name does not match the dotted-lowercase naming convention. Module names must be dot-separated lowercase segments, each starting with a letter, e.g. hydra.core or hydra.lib.lists."}}}],
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {
+                        "string": "A module whose name does not match the dotted-lowercase naming convention. Module names must be dot-separated lowercase segments, each starting with a letter, e.g. hydra.core or hydra.lib.lists."}}}]},
               "body": {
                 "record": [
                   {
                     "name": "moduleName",
                     "type": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The module name that violates the convention"}}}],
+                        "annotation": {
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The module name that violates the convention"}}}]},
                         "body": {"variable": "hydra.packaging.ModuleName"}}}}]}}},
           "variables": []},
         "name": "hydra.error.packaging.InvalidModuleNameConventionError"}},
@@ -309,39 +365,47 @@
         "body": {
           "body": {
             "annotated": {
-              "annotation": [{"key": "description", "value": {"literal": {"string": "An error indicating that a package is invalid"}}}],
+              "annotation": {
+                "map": [
+                  {"key": {"variable": "description"}, "value": {"literal": {"string": "An error indicating that a package is invalid"}}}]},
               "body": {
                 "union": [
                   {
                     "name": "conflictingModuleName",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "Two module names that conflict when mapped to a target language"}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "Two module names that conflict when mapped to a target language"}}}]},
                         "body": {"variable": "hydra.error.packaging.ConflictingModuleNameError"}}}},
                   {
                     "name": "duplicateModuleName",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {"key": "description", "value": {"literal": {"string": "Two or more modules in the same package share the same name"}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "Two or more modules in the same package share the same name"}}}]},
                         "body": {"variable": "hydra.error.packaging.DuplicateModuleNameError"}}}},
                   {
                     "name": "invalidModule",
                     "type": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "A module within the package is invalid"}}}],
+                        "annotation": {
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A module within the package is invalid"}}}]},
                         "body": {"variable": "hydra.error.packaging.InvalidModuleError"}}}},
                   {
                     "name": "invalidPackageName",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "A package whose name does not match the package-name naming convention"}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "A package whose name does not match the package-name naming convention"}}}]},
                         "body": {"variable": "hydra.error.packaging.InvalidPackageNameError"}}}}]}}},
           "variables": []},
         "name": "hydra.error.packaging.InvalidPackageError"}},
@@ -350,19 +414,22 @@
         "body": {
           "body": {
             "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {
-                    "literal": {
-                      "string": "A package whose name does not match the hyphen-separated lowercase naming convention. Package names must be hyphen-separated lowercase segments, each starting with a letter, e.g. hydra-kernel or hydra-python."}}}],
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {
+                        "string": "A package whose name does not match the hyphen-separated lowercase naming convention. Package names must be hyphen-separated lowercase segments, each starting with a letter, e.g. hydra-kernel or hydra-python."}}}]},
               "body": {
                 "record": [
                   {
                     "name": "packageName",
                     "type": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The package name that violates the convention"}}}],
+                        "annotation": {
+                          "map": [
+                            {"key": {"variable": "description"}, "value": {"literal": {"string": "The package name that violates the convention"}}}]},
                         "body": {"variable": "hydra.packaging.PackageName"}}}}]}}},
           "variables": []},
         "name": "hydra.error.packaging.InvalidPackageNameError"}},
@@ -371,28 +438,31 @@
         "body": {
           "body": {
             "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {
-                    "literal": {
-                      "string": "A top-level definition whose term (or type, for type definitions) lacks a description annotation. Every definition in a Hydra module is expected to be wrapped in a doc \"...\" annotation at its top level."}}}],
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {
+                        "string": "A top-level definition whose term (or type, for type definitions) lacks a description annotation. Every definition in a Hydra module is expected to be wrapped in a doc \"...\" annotation at its top level."}}}]},
               "body": {
                 "record": [
                   {
                     "name": "moduleName",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "The name of the module containing the undocumented definition"}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The name of the module containing the undocumented definition"}}}]},
                         "body": {"variable": "hydra.packaging.ModuleName"}}}},
                   {
                     "name": "name",
                     "type": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the undocumented definition"}}}],
+                        "annotation": {
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The name of the undocumented definition"}}}]},
                         "body": {"variable": "hydra.core.Name"}}}}]}}},
           "variables": []},
         "name": "hydra.error.packaging.MissingDocumentationError"}}],

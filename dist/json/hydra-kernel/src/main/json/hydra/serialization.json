@@ -4,7 +4,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Angle bracket pair `<` `>` for use with `brackets`"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Angle bracket pair `<` `>` for use with `brackets`"}}}]},
             "body": {
               "record": {
                 "fields": [
@@ -17,11 +21,12 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {"string": "Comma-separate the elements inside angle brackets in the given block style; renders as `<>` when empty"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {"string": "Comma-separate the elements inside angle brackets in the given block style; renders as `<>` when empty"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -64,12 +69,13 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {
-                    "string": "Produce a bracketed list which separates elements by spaces or newlines depending on the estimated width of the expression."}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {
+                      "string": "Produce a bracketed list which separates elements by spaces or newlines depending on the estimated width of the expression."}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -111,11 +117,12 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {"string": "Comma-separate the elements inside square brackets in the given block style; renders as `[]` when empty"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {"string": "Comma-separate the elements inside square brackets in the given block style; renders as `[]` when empty"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -160,12 +167,13 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {
-                    "string": "Produce a bracketed list which separates elements by spaces or newlines depending on the estimated width of the expression."}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {
+                      "string": "Produce a bracketed list which separates elements by spaces or newlines depending on the estimated width of the expression."}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -201,10 +209,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Wrap an expression in the given bracket pair using the given block style"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Wrap an expression in the given bracket pair using the given block style"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -241,12 +250,13 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {
-                    "string": "Pick between an inline and a multi-line layout for the same logical expression. Returns the inline form if its estimated width does not exceed the threshold, otherwise the block form. Note: the threshold is measured against the inline expression in isolation; surrounding indentation may push content beyond the threshold at print time. Callers that know they are nested can pass a smaller threshold to compensate."}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {
+                      "string": "Pick between an inline and a multi-line layout for the same logical expression. Returns the inline form if its estimated width does not exceed the threshold, otherwise the block form. Note: the threshold is measured against the inline expression in isolation; surrounding indentation may push content beyond the threshold at print time. Callers that know they are nested can pass a smaller threshold to compensate."}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -288,8 +298,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {"key": "description", "value": {"literal": {"string": "Separate elements with a comma, using the given block style"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Separate elements with a comma, using the given block style"}}}]},
             "body": {"application": {"argument": {"literal": {"string": ","}}, "function": {"variable": "hydra.serialization.symbolSep"}}}}},
         "name": "hydra.serialization.commaSep",
         "signature": {
@@ -302,10 +315,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Comma-separate elements inline if the joined width fits, otherwise break onto separate lines."}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Comma-separate elements inline if the joined width fits, otherwise break onto separate lines."}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -339,7 +353,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Construct a constant expression from a literal string"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Construct a constant expression from a literal string"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -359,10 +377,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Wrap a single expression in curly braces using the given block style"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Wrap a single expression in curly braces using the given block style"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -392,7 +411,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Curly brace pair `{` `}` for use with `brackets`"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Curly brace pair `{` `}` for use with `brackets`"}}}]},
             "body": {
               "record": {
                 "fields": [
@@ -405,12 +428,13 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {
-                    "string": "Separate the elements inside curly braces using the given symbol (default `,`) in the given block style; renders as `{}` when empty"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {
+                      "string": "Separate the elements inside curly braces using the given symbol (default `,`) in the given block style; renders as `{}` when empty"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -470,12 +494,13 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {
-                    "string": "Indent every non-empty line of `s` by `idt`. Empty lines stay empty (no trailing whitespace) so downstream byte-identity checks don't care about indent depth."}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {
+                      "string": "Indent every non-empty line of `s` by `idt`. Empty lines stay empty (no trailing whitespace) so downstream byte-identity checks don't care about indent depth."}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -536,12 +561,13 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {
-                    "string": "Render a list of expressions as a block whose first element starts where the surrounding context placed it and subsequent elements break onto fresh lines indented by the given prefix"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {
+                      "string": "Render a list of expressions as a block whose first element starts where the surrounding context placed it and subsequent elements break onto fresh lines indented by the given prefix"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -643,7 +669,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Separate elements with a dot and no surrounding whitespace"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Separate elements with a dot and no surrounding whitespace"}}}]},
             "body": {
               "application": {
                 "argument": {
@@ -677,7 +707,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Separate elements with a blank line between them"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Separate elements with a blank line between them"}}}]},
             "body": {
               "application": {
                 "argument": {
@@ -711,7 +745,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "The two-space string used as the canonical indent unit"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "The two-space string used as the canonical indent unit"}}}]},
             "body": {"literal": {"string": "  "}}}},
         "name": "hydra.serialization.doubleSpace",
         "signature": {"parameters": [], "result": {"type": {"literal": {"string": {}}}}, "typeParameters": []}}},
@@ -719,12 +757,13 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {
-                    "string": "Find the approximate length (number of characters, including spaces and newlines) of an expression without actually printing it."}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {
+                      "string": "Find the approximate length (number of characters, including spaces and newlines) of an expression without actually printing it."}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1250,10 +1289,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Block style with double-space indent and newlines both before and after the bracketed content"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Block style with double-space indent and newlines both before and after the bracketed content"}}}]},
             "body": {
               "record": {
                 "fields": [
@@ -1267,10 +1307,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Block style with double-space indent, a newline before the content but not after"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Block style with double-space indent, a newline before the content but not after"}}}]},
             "body": {
               "record": {
                 "fields": [
@@ -1284,10 +1325,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Build an infix expression with the given operator and two operands"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Build an infix expression with the given operator and two operands"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1324,7 +1366,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Indent every non-empty line of a string by `doubleSpace`"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Indent every non-empty line of a string by `doubleSpace`"}}}]},
             "body": {
               "application": {
                 "argument": {"variable": "hydra.serialization.doubleSpace"},
@@ -1338,10 +1384,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Like `customIndentBlock`, but using `doubleSpace` as the indent prefix"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Like `customIndentBlock`, but using `doubleSpace` as the indent prefix"}}}]},
             "body": {
               "application": {
                 "argument": {"variable": "hydra.serialization.doubleSpace"},
@@ -1355,10 +1402,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Indent every line of an expression except the first by the given prefix"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Indent every line of an expression except the first by the given prefix"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1391,10 +1439,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Space-separate three elements: left operand, operator string, right operand"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Space-separate three elements: left operand, operator string, right operand"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1427,10 +1476,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Space-separate operands interleaved with the given operator string"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Space-separate operands interleaved with the given operator string"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1520,10 +1570,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Block style with no indent and no surrounding newlines: contents stay on a single line"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Block style with no indent and no surrounding newlines: contents stay on a single line"}}}]},
             "body": {
               "record": {
                 "fields": [
@@ -1537,12 +1588,13 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {
-                    "string": "The canonical maximum line width used by Hydra writers. Adaptive helpers compare estimated expression widths against this threshold to decide whether to render inline or break across lines. Set to 120 to match the project-wide line-length convention."}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {
+                      "string": "The canonical maximum line width used by Hydra writers. Adaptive helpers compare estimated expression widths against this threshold to decide whether to render inline or break across lines. Set to 120 to match the project-wide line-length convention."}}}]},
             "body": {"literal": {"integer": {"int32": 120}}}}},
         "name": "hydra.serialization.maxLineWidth",
         "signature": {"parameters": [], "result": {"type": {"literal": {"integer": {"int32": {}}}}}, "typeParameters": []}}},
@@ -1550,7 +1602,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Separate elements by a newline (no leading whitespace)"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Separate elements by a newline (no leading whitespace)"}}}]},
             "body": {
               "application": {
                 "argument": {
@@ -1584,7 +1640,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Operator padding with no whitespace on either side"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Operator padding with no whitespace on either side"}}}]},
             "body": {
               "record": {
                 "fields": [
@@ -1597,7 +1657,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Concatenate elements with no separator and no whitespace"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Concatenate elements with no separator and no whitespace"}}}]},
             "body": {
               "application": {
                 "argument": {
@@ -1631,7 +1695,9 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Construct a constant expression from an int32"}}}],
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "Construct a constant expression from an int32"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1649,10 +1715,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Build an op with single-space padding from a symbol, precedence, and associativity"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Build an op with single-space padding from a symbol, precedence, and associativity"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1694,12 +1761,13 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {
-                    "string": "Build the `|` alternative-separator operator. The flag selects whether the right side breaks onto a new line."}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {
+                      "string": "Build the `|` alternative-separator operator. The flag selects whether the right side breaks onto a new line."}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1745,12 +1813,13 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {
-                    "string": "Separate alternatives with `|`, breaking onto separate lines when the block style requests a newline before content"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {
+                      "string": "Separate alternatives with `|`, breaking onto separate lines when the block style requests a newline before content"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1835,12 +1904,13 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {
-                    "string": "Comma-separate the elements inside parentheses; switches to a half-block style when newlines are requested and there is more than one element. Renders as `()` when empty."}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {
+                      "string": "Comma-separate the elements inside parentheses; switches to a half-block style when newlines are requested and there is more than one element. Renders as `()` when empty."}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1911,12 +1981,13 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {
-                    "string": "Produce a parenthesized list which separates elements by spaces or newlines depending on the estimated width of the expression."}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {
+                      "string": "Produce a parenthesized list which separates elements by spaces or newlines depending on the estimated width of the expression."}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1947,7 +2018,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Wrap an expression in inline parentheses"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Wrap an expression in inline parentheses"}}}]},
             "body": {
               "application": {
                 "argument": {"variable": "hydra.serialization.inlineStyle"},
@@ -1962,7 +2034,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Round parenthesis pair `(` `)` for use with `brackets`"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Round parenthesis pair `(` `)` for use with `brackets`"}}}]},
             "body": {
               "record": {
                 "fields": [
@@ -1975,12 +2051,13 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {
-                    "string": "Recursively insert parentheses around subexpressions where required by operator precedence and associativity. The traversal descends into bracket, indent, sequence, and operator expressions and parenthesizes left or right operands whose binding is weaker than the surrounding operator."}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {
+                      "string": "Recursively insert parentheses around subexpressions where required by operator precedence and associativity. The traversal descends into bracket, indent, sequence, and operator expressions and parenthesizes left or right operands whose binding is weaker than the surrounding operator."}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2421,10 +2498,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Prepend a prefix string to an expression with no surrounding whitespace"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Prepend a prefix string to an expression with no surrounding whitespace"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2478,11 +2556,12 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {"string": "Render an expression to a string, expanding bracket pairs, block styles, indents, and operator chains"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {"string": "Render an expression to a string, expanding bracket pairs, block styles, indents, and operator chains"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3465,7 +3544,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Separate elements with `;` inline"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Separate elements with `;` inline"}}}]},
             "body": {
               "application": {
                 "argument": {"variable": "hydra.serialization.inlineStyle"},
@@ -3479,12 +3558,13 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {
-                    "string": "Combine a list of expressions into a single OpExpr chain using the given operator. Returns the empty constant for an empty list."}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {
+                      "string": "Combine a list of expressions into a single OpExpr chain using the given operator. Returns the empty constant for an empty list."}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3556,7 +3636,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Space-separate elements (no break between them)"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Space-separate elements (no break between them)"}}}]},
             "body": {
               "application": {
                 "argument": {
@@ -3590,12 +3674,13 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {
-                    "string": "Space-separate elements inline if the joined width fits, otherwise newline-separate them. Useful for long signatures, type chains, and other space-joined sequences."}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {
+                      "string": "Space-separate elements inline if the joined width fits, otherwise newline-separate them. Useful for long signatures, type chains, and other space-joined sequences."}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3619,7 +3704,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Square bracket pair `[` `]` for use with `brackets`"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Square bracket pair `[` `]` for use with `brackets`"}}}]},
             "body": {
               "record": {
                 "fields": [
@@ -3632,12 +3721,13 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {
-                    "string": "Like sep, but produces a SeqExpr instead of an OpExpr chain. SeqExpr is treated as structural layout and is not subject to parenthesization."}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {
+                      "string": "Like sep, but produces a SeqExpr instead of an OpExpr chain. SeqExpr is treated as structural layout and is not subject to parenthesization."}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3705,12 +3795,13 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {
-                    "string": "Like spaceSep, but produces a SeqExpr. Use for structural layout that should not trigger parenthesization of children."}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {
+                      "string": "Like spaceSep, but produces a SeqExpr. Use for structural layout that should not trigger parenthesization of children."}}}]},
             "body": {
               "application": {
                 "argument": {
@@ -3744,7 +3835,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Append a suffix string to an expression"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Append a suffix string to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3798,7 +3890,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Construct a Symbol from a string"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Construct a Symbol from a string"}}}]},
             "body": {
               "lambda": {
                 "body": {"wrap": {"body": {"variable": "s"}, "typeName": "hydra.ast.Symbol"}},
@@ -3813,12 +3905,13 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {
-                    "string": "Separate elements with the given symbol; trailing whitespace per element is determined by the block style's newline-before/after flags (space, single break, or double break)"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {
+                      "string": "Separate elements with the given symbol; trailing whitespace per element is determined by the block style's newline-before/after flags (space, single break, or double break)"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3984,7 +4077,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Indent every line of an expression by four spaces"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Indent every line of an expression by four spaces"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4012,7 +4109,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Tab-indent a list of expressions, separated by blank lines"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Tab-indent a list of expressions, separated by blank lines"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4030,10 +4131,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Tab-indent a list of expressions, separated by single newlines"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Tab-indent a list of expressions, separated by single newlines"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4051,10 +4153,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Render a placeholder for a type the writer does not yet handle, e.g. `[bigint]`"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Render a placeholder for a type the writer does not yet handle, e.g. `[bigint]`"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4081,11 +4184,12 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {"string": "Render a placeholder for an unsupported variant, including a string representation of the offending value"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {"string": "Render a placeholder for an unsupported variant, including a string representation of the offending value"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4131,7 +4235,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Append a trailing comma to an expression"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Append a trailing comma to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4152,7 +4257,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Append a trailing semicolon to an expression"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Append a trailing semicolon to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
