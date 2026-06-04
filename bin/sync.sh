@@ -422,6 +422,13 @@ for H in $HOSTS; do
         scala)
             STATIC_DEPS="hydra-haskell hydra-java hydra-python"
             ;;
+        typescript)
+            # Generated dist/typescript/hydra-scala/.../serde.ts imports
+            # '../java/serde.js' — TS host's hydra-scala output depends on
+            # hydra-java in dist/typescript/. Without this pre-assembly,
+            # ts-to-scala fails immediately with "Cannot find module".
+            STATIC_DEPS="hydra-java"
+            ;;
         *)
             STATIC_DEPS=""
             ;;
