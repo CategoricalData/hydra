@@ -15,7 +15,7 @@ def bind(x: TypedTerm, f: TypedTerm) -> TypedTerm:
 
 
 def cases(m: TypedTerm, n: TypedTerm, j: TypedTerm) -> TypedTerm:
-    """Handle an optional value with different parameter order than maybe."""
+    """Case analysis on an optional value (scrutinee-first): cases(m, ifNothing, ifJust)."""
     return primitive3(m, n, j)
 
 
@@ -57,11 +57,6 @@ def map(f: TypedTerm, x: TypedTerm) -> TypedTerm:
 def map_maybe(f: TypedTerm, xs: TypedTerm) -> TypedTerm:
     """Map a function over a list and collect Just results."""
     return primitive2(f, xs)
-
-
-def maybe(default: TypedTerm, f: TypedTerm, x: TypedTerm) -> TypedTerm:
-    """Handle an optional value, with transformation."""
-    return primitive3(default, f, x)
 
 
 def pure(x: TypedTerm) -> TypedTerm:

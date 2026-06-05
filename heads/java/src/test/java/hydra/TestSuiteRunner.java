@@ -245,12 +245,12 @@ public class TestSuiteRunner {
             lambda("key",
                 lambda("val",
                     lambda("m",
-                        apply(apply(apply(primitive("hydra.lib.maybes.maybe"),
+                        apply(apply(apply(primitive("hydra.lib.maybes.cases"),
+                            var("val")),
                             apply(apply(primitive("hydra.lib.maps.delete"), var("key")), var("m"))),
                             lambda("v",
                                 apply(apply(apply(primitive("hydra.lib.maps.insert"),
-                                    var("key")), var("v")), var("m")))),
-                            var("val"))))));
+                                    var("key")), var("v")), var("m"))))))));
 
         // After #386: wrap the resulting map via wrapAnnotationMap before storing in AnnotatedTerm.annotation.
         addConstantBinding(bindings, "hydra.annotations.setTermAnnotation",
@@ -284,7 +284,10 @@ public class TestSuiteRunner {
             lambda("cx",
                 lambda("g",
                     lambda("anns",
-                        apply(apply(apply(primitive("hydra.lib.maybes.maybe"),
+                        apply(apply(apply(primitive("hydra.lib.maybes.cases"),
+                            apply(apply(primitive("hydra.lib.maps.lookup"),
+                                var("hydra.constants.keyDescription")),
+                                var("anns"))),
                             right(nothing())),
                             lambda("descTerm",
                                 apply(
@@ -296,10 +299,7 @@ public class TestSuiteRunner {
                                                     left(inject("hydra.errors.Error", field("other", wrap("hydra.errors.OtherError", string("Expected string literal")))))),
                                                     field("string", lambda("s", right(just(var("s")))))),
                                                 var("lit"))))),
-                                    var("descTerm")))),
-                            apply(apply(primitive("hydra.lib.maps.lookup"),
-                                var("hydra.constants.keyDescription")),
-                                var("anns")))))));
+                                    var("descTerm"))))))));
 
         addConstantBinding(bindings, "hydra.annotations.getTermDescription",
             lambda("cx",

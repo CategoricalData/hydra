@@ -114,12 +114,12 @@
           (t-lam "key"
             (t-lam "val"
               (t-lam "m"
-                (t-app (t-app (t-app (t-prim "hydra.lib.maybes.maybe")
+                (t-app (t-app (t-app (t-prim "hydra.lib.maybes.cases")
+                  (t-var "val"))
                   (t-app (t-app (t-prim "hydra.lib.maps.delete") (t-var "key")) (t-var "m")))
                   (t-lam "v"
                     (t-app (t-app (t-app (t-prim "hydra.lib.maps.insert")
-                      (t-var "key")) (t-var "v")) (t-var "m"))))
-                  (t-var "val"))))))
+                      (t-var "key")) (t-var "v")) (t-var "m"))))))))
 
     ;; hydra.annotations.setTermAnnotation = \key -> \val -> \term ->
     ;;   let stripped = deannotateTerm(term)
@@ -173,7 +173,11 @@
           (t-lam "cx"
             (t-lam "g"
               (t-lam "anns"
-                (t-app (t-app (t-app (t-prim "hydra.lib.maybes.maybe")
+                (t-app (t-app (t-app (t-prim "hydra.lib.maybes.cases")
+                  ;; scrutinee: maps.lookup(keyDescription, anns)
+                  (t-app (t-app (t-prim "hydra.lib.maps.lookup")
+                    (t-var "hydra.constants.keyDescription"))
+                    (t-var "anns")))
                   ;; default: right(nothing)
                   (t-right (list 'maybe (list 'nothing '()))))
                   ;; \descTerm -> case match to extract string
@@ -190,11 +194,7 @@
                                   (t-lam "s"
                                     (t-right (list 'maybe (t-var "s"))))))
                               (t-var "lit")))))
-                      (t-var "descTerm"))))
-                  ;; maps.lookup(keyDescription, anns)
-                  (t-app (t-app (t-prim "hydra.lib.maps.lookup")
-                    (t-var "hydra.constants.keyDescription"))
-                    (t-var "anns")))))))
+                      (t-var "descTerm"))))))))
 
     ;; hydra.annotations.getTermDescription = \cx -> \g -> \term ->
     ;;   let peel = \t -> case t of

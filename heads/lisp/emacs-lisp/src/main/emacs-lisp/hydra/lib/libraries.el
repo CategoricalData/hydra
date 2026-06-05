@@ -392,9 +392,6 @@
       (cons (qname ns_ "mapMaybe")  (prim2 (qname ns_ "mapMaybe")
                                             hydra_lib_maybes_map_maybe
                                             nil (fun a (tc-optional b)) (tc-list a) (tc-list b)))
-      (cons (qname ns_ "maybe")     (prim3 (qname ns_ "maybe")
-                                            hydra_lib_maybes_maybe
-                                            nil b (fun a b) (tc-optional a) b))
       (cons (qname ns_ "pure")      (prim1 (qname ns_ "pure")      hydra_lib_maybes_pure      nil a (tc-optional a)))
       (cons (qname ns_ "toList")    (prim1 (qname ns_ "toList")    hydra_lib_maybes_to_list   nil (tc-optional a) (tc-list a))))))
 

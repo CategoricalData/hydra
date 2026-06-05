@@ -71,14 +71,6 @@
             (recur (next rest_) (cons (maybe-value result) acc))
             (recur (next rest_) acc))))))))
 
-;; maybe :: b -> (a -> b) -> Maybe a -> b
-;; Thunk-aware: if def_ is a zero-arg fn, only called when Maybe is Nothing
-(def hydra_lib_maybes_maybe
-  (fn [def_] (fn [f] (fn [m]
-    (if (maybe-nothing? m)
-      (if (fn? def_) (def_) def_)
-      (f (maybe-value m)))))))
-
 ;; apply :: Maybe (a -> b) -> Maybe a -> Maybe b
 (def hydra_lib_maybes_apply
   (fn [mf] (fn [ma]

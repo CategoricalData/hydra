@@ -294,7 +294,6 @@ public class Libraries {
                 new hydra.lib.maybes.IsNothing(),
                 new hydra.lib.maybes.Map(),
                 new hydra.lib.maybes.MapMaybe(),
-                new hydra.lib.maybes.Maybe(),
                 new hydra.lib.maybes.Pure(),
                 new hydra.lib.maybes.ToList());
     }

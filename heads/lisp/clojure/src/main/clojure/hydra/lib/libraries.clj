@@ -378,9 +378,6 @@
      (qname ns_ "mapMaybe")  (p/prim2 (qname ns_ "mapMaybe")
                                        (fn [f xs] ((maybes/hydra_lib_maybes_map_maybe f) xs))
                                        [] (fun a (p/tc-optional b)) (p/tc-list a) (p/tc-list b))
-     (qname ns_ "maybe")     (p/prim3 (qname ns_ "maybe")
-                                       (fn [dflt f mx] (((maybes/hydra_lib_maybes_maybe dflt) f) mx))
-                                       [] b (fun a b) (p/tc-optional a) b)
      (qname ns_ "pure")      (p/prim1 (qname ns_ "pure")      maybes/hydra_lib_maybes_pure      [] a (p/tc-optional a))
      (qname ns_ "toList")    (p/prim1 (qname ns_ "toList")    maybes/hydra_lib_maybes_to_list   [] (p/tc-optional a) (p/tc-list a))}))
 

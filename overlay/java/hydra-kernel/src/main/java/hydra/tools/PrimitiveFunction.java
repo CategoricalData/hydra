@@ -45,7 +45,7 @@ public abstract class PrimitiveFunction {
     /**
      * The 0-based positions of value parameters that must be passed lazily (thunked) at call sites
      * in hosts that distinguish strict from lazy evaluation (issue #391). Defaults to none; lazy
-     * primitives (e.g. maybes.maybe, logic.ifElse) override this. Mirrors Hydra.Dsl.Prims.lazyArgs
+     * primitives (e.g. maybes.cases, logic.ifElse) override this. Mirrors Hydra.Dsl.Prims.lazyArgs
      * on the Haskell host, which is the source of truth for the laziness metadata.
      * @return the lazy parameter positions
      */
