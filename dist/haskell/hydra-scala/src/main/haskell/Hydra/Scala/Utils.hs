@@ -49,7 +49,7 @@ nameOfType cx t =
 -- | Qualify a union field name, optionally prefixing with the Scala type name
 qualifyUnionFieldName :: String -> Maybe Core.Name -> Core.Name -> String
 qualifyUnionFieldName dlft sname fname =
-    Strings.cat2 (Maybes.maybe dlft (\n -> Strings.cat2 (scalaTypeName True n) ".") sname) (scalaEscapeName (Core.unName fname))
+    Strings.cat2 (Maybes.cases sname dlft (\n -> Strings.cat2 (scalaTypeName True n) ".")) (scalaEscapeName (Core.unName fname))
 -- | Apply a Scala data expression to a list of arguments
 sapply :: Syntax.Data -> [Syntax.Data] -> Syntax.Data
 sapply fun args =

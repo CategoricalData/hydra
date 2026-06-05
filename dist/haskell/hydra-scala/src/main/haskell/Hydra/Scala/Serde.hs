@@ -150,9 +150,9 @@ defnToExpr def =
                                 Syntax.PatVar v1 -> Syntax.varPatName v1
                       in (Syntax.unPredefString (Syntax.nameDataValue patName))) (Lists.maybeHead pats))
             nameAndType =
-                    Maybes.maybe (Serialization.cst nameStr) (\t -> Serialization.spaceSep [
+                    Maybes.cases typ (Serialization.cst nameStr) (\t -> Serialization.spaceSep [
                       Serialization.cst (Strings.cat2 nameStr ":"),
-                      (typeToExpr t)]) typ
+                      (typeToExpr t)])
             valKeyword = Logic.ifElse (Lists.null mods) "val" "lazy val"
         in (Serialization.spaceSep [
           Serialization.cst valKeyword,
