@@ -427,9 +427,7 @@ encodeApplication = def "encodeApplication" $
          -- to match the callee's param count.
          ("mSig" <~ Maps.lookup (var "lname") (var "funcSigs") $
           "callerArgCount" <~ Lists.length (var "args") $
-          "calleeParamCount" <~ Maybes.maybe (var "callerArgCount")
-            (lambda "sig" $ Lists.length (Pairs.first (var "sig")))
-            (var "mSig") $
+          "calleeParamCount" <~ Maybes.cases (var "mSig") (var "callerArgCount") (lambda "sig" $ Lists.length (Pairs.first (var "sig"))) $
           "padCount" <~ Math.sub (var "calleeParamCount") (var "callerArgCount") $
           "padInstrs" <~ Lists.concat (Lists.replicate
             (Logic.ifElse (Equality.gt (var "padCount") (int32 0)) (var "padCount") (int32 0))
@@ -982,15 +980,15 @@ encodeTerm = def "encodeTerm" $
        cases _Literal (var "lit") (Just $
          right (list [encodeLiteral @@ var "lit"])) [
          _Literal_string>>: lambda "s" $
-           Maybes.maybe
+           Maybes.cases
+             (Maps.lookup (var "s") (var "stringOffsets"))
              -- Unknown string (shouldn't happen if collectStrings was run first):
              -- fall back to the placeholder.
              (right (list [inject W._Instruction W._Instruction_const $
                inject W._ConstValue W._ConstValue_i32 (int32 0)]))
              (lambda "off" $
                right (list [inject W._Instruction W._Instruction_const $
-                 inject W._ConstValue W._ConstValue_i32 (var "off")]))
-             (Maps.lookup (var "s") (var "stringOffsets"))],
+                 inject W._ConstValue W._ConstValue_i32 (var "off")]))],
      _Term_map>>: lambda "m" $
        -- Real map construction. Layout: `[length, k_0, v_0, ..., k_{N-1}, v_{N-1}]`,
        -- `(2N+1)*4` bytes. The length word is the number of entries (not the word
@@ -1263,10 +1261,7 @@ encodeTermDefinition = def "encodeTermDefinition" $
     "name" <~ Packaging.termDefinitionName (var "tdef") $
     "term" <~ Packaging.termDefinitionBody (var "tdef") $
     "lname" <~ (Formatting.convertCaseCamelToLowerSnake @@ Core.unName (var "name")) $
-    "typ" <~ Maybes.maybe
-      (Core.typeUnit)
-      (reify Core.typeSchemeBody)
-      (Maybes.map Scoping.termSignatureToTypeScheme $ Packaging.termDefinitionSignature (var "tdef")) $
+    "typ" <~ Maybes.cases (Maybes.map Scoping.termSignatureToTypeScheme $ Packaging.termDefinitionSignature (var "tdef")) (Core.typeUnit) (reify Core.typeSchemeBody) $
     -- Extract lambda parameters and inner body
     "extracted" <~ (extractLambdaParams @@ var "term") $
     "paramNames" <~ Pairs.first (var "extracted") $

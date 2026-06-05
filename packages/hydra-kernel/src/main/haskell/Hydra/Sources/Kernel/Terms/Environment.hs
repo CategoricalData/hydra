@@ -104,9 +104,7 @@ definitionAsTypeApplicationTerm :: TypedTermDefinition (Binding -> Either Error 
 definitionAsTypeApplicationTerm = define "definitionAsTypeApplicationTerm" $
   doc "Convert a definition to a typed term" $
   "el" ~>
-  Maybes.maybe (left (Error.errorExtraction $ Error.extractionErrorUnexpectedShape $ Error.unexpectedShapeError (string "typed binding") (string "untyped binding")))
-    ("ts" ~> right (Core.typeApplicationTerm (Core.bindingTerm (var "el")) (Core.typeSchemeBody (var "ts"))))
-    (Core.bindingTypeScheme (var "el"))
+  Maybes.cases (Core.bindingTypeScheme (var "el")) (left (Error.errorExtraction $ Error.extractionErrorUnexpectedShape $ Error.unexpectedShapeError (string "typed binding") (string "untyped binding"))) ("ts" ~> right (Core.typeApplicationTerm (Core.bindingTerm (var "el")) (Core.typeSchemeBody (var "ts"))))
 
 graphAsLet :: TypedTermDefinition ([Binding] -> Term -> Let)
 graphAsLet = define "graphAsLet" $

@@ -158,16 +158,12 @@ termToSubtermGraph = define "termToSubtermGraph" $
           $ var "helper" @@ var "ids1" @@ var "mroot" @@ var "nextPath" @@ var "stateAfterBindings" @@
             pair Paths.subtermStepLetBody (var "env"),
         _Term_variable>>: lambda "name" $
-          Maybes.maybe (var "state")
-            (lambda "root" $
-              Maybes.maybe (var "state")
-                (lambda "node" $ lets [
+          Maybes.cases (var "mroot") (var "state") (lambda "root" $
+              Maybes.cases (Maps.lookup (var "name") (var "ids")) (var "state") (lambda "node" $ lets [
                   "edge">: Paths.subtermEdge (var "root")
                     (Paths.subtermPath $ Lists.reverse $ var "nextPath") (var "node"),
                   "newEdges">: Lists.cons (var "edge") (var "edges")]
-                  $ pair (pair (var "nodes") (var "newEdges")) (var "visited"))
-                (Maps.lookup (var "name") (var "ids")))
-            (var "mroot")]
+                  $ pair (pair (var "nodes") (var "newEdges")) (var "visited")))]
       @@ var "currentTerm",
     "initialState">: pair (pair (list ([] :: [TypedTerm SubtermNode])) (list ([] :: [TypedTerm SubtermEdge]))) Sets.empty,
     "result">: var "helper" @@ Maps.empty @@ nothing @@ list ([] :: [TypedTerm SubtermStep]) @@ var "initialState" @@

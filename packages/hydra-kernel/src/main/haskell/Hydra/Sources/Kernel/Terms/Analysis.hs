@@ -200,7 +200,7 @@ analyzeFunctionTermWithGather = define "analyzeFunctionTermWithGather" $
     _Term_lambda>>: "lam" ~>
       Logic.ifElse (var "argMode")
         ("v" <~ Core.lambdaParameter (var "lam") $
-         "dom" <~ Maybes.maybe (Core.typeVariable (Core.name (string "_"))) identity (Core.lambdaDomain (var "lam")) $
+         "dom" <~ Maybes.cases (Core.lambdaDomain (var "lam")) (Core.typeVariable (Core.name (string "_"))) identity $
          "body" <~ Core.lambdaBody (var "lam") $
          "newEnv" <~ (var "setTC" @@ (Scoping.extendGraphForLambda @@ (var "getTC" @@ var "gEnv") @@ var "lam") @@ var "gEnv") $
          analyzeFunctionTermWithGather @@ var "cx" @@ var "forBinding" @@ var "getTC" @@ var "setTC"
@@ -272,9 +272,7 @@ dependencyModuleNames = define "dependencyModuleNames" $
     "deannotatedTerm" <~ Strip.deannotateTerm @@ var "term" $
     "dataNames" <~ Dependencies.termDependencyNames @@ var "binds" @@ var "withPrims" @@ var "withNoms" @@ var "term" $
     "schemaNames" <~ Logic.ifElse (var "withSchema")
-      (Maybes.maybe Sets.empty
-        ("ts" ~> Dependencies.typeDependencyNames @@ true @@ Core.typeSchemeBody (var "ts"))
-        (Core.bindingTypeScheme (var "el")))
+      (Maybes.cases (Core.bindingTypeScheme (var "el")) Sets.empty ("ts" ~> Dependencies.typeDependencyNames @@ true @@ Core.typeSchemeBody (var "ts")))
       Sets.empty $
     -- Handle encoded types: decode as Type and extract type dependency names
     Logic.ifElse (Predicates.isEncodedType @@ var "deannotatedTerm")
@@ -433,9 +431,7 @@ isTailRecursiveInTailPosition = define "isTailRecursiveInTailPosition" $
               true
               (var "cases_")) $
             -- Default branch (if present) must also be tail-recursive
-            "dfltOk" <~ (Maybes.maybe true
-              ("d" ~> isTailRecursiveInTailPosition @@ var "funcName" @@ var "d")
-              (var "dflt")) $
+            "dfltOk" <~ (Maybes.cases (var "dflt") true ("d" ~> isTailRecursiveInTailPosition @@ var "funcName" @@ var "d")) $
             -- Arguments to the case statement must NOT contain funcName
             "argsOk" <~ (Lists.foldl
               ("ok" ~> "arg" ~>

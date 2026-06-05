@@ -283,10 +283,10 @@ tableForEdge = define "tableForEdge" $
       (list [var "id", var "outId", var "inId"])
       (Maps.elems $ var "props")) $
     Logic.ifElse (Equality.equal (Sets.size $ var "tables") (int32 1))
-      (Maybes.maybe
+      (Maybes.cases
+        (Lists.maybeHead $ Sets.toList $ var "tables")
         (left $ string "unreachable: empty tables set")
-        (reify right)
-        (Lists.maybeHead $ Sets.toList $ var "tables"))
+        (reify right))
       (left $ Strings.cat $ list [
         string "Specification for ",
         unwrap PG._EdgeLabel @@ var "label",
@@ -302,10 +302,10 @@ tableForVertex = define "tableForVertex" $
     "props" <~ (project PG._Vertex PG._Vertex_properties @@ var "vertex") $
     "tables" <~ (findTablesInTerms @@ Lists.cons (var "id") (Maps.elems $ var "props")) $
     Logic.ifElse (Equality.equal (Sets.size $ var "tables") (int32 1))
-      (Maybes.maybe
+      (Maybes.cases
+        (Lists.maybeHead $ Sets.toList $ var "tables")
         (left $ string "unreachable: empty tables set")
-        (reify right)
-        (Lists.maybeHead $ Sets.toList $ var "tables"))
+        (reify right))
       (left $ Strings.cat $ list [
         string "Specification for ",
         unwrap PG._VertexLabel @@ var "label",
@@ -505,7 +505,8 @@ parseTableLines = define "parseTableLines" $
         -- Build the table based on hasHeader flag
         Logic.ifElse (var "hasHeader")
           (-- With header: first row is header, rest are data
-            Maybes.maybe
+            Maybes.cases
+              (Lists.uncons (var "rows"))
               (left $ string "empty rows: cannot parse header")
               (lambda "p" $ lets [
                 "headerRow">: Pairs.first (var "p"),
@@ -515,8 +516,7 @@ parseTableLines = define "parseTableLines" $
                   (left $ string "null header column(s)")
                   (right $ record Tab._Table [
                     Tab._Table_header>>: just (wrap Tab._HeaderRow $ Maybes.cat $ var "headerRow"),
-                    Tab._Table_data>>: Lists.map ("r" ~> wrap Tab._DataRow (var "r")) (var "dataRows")]))
-              (Lists.uncons (var "rows")))
+                    Tab._Table_data>>: Lists.map ("r" ~> wrap Tab._DataRow (var "r")) (var "dataRows")])))
           (-- No header: all rows are data
             right $ record Tab._Table [
               Tab._Table_header>>: nothing,
@@ -585,7 +585,7 @@ decodeCell = define "decodeCell" $
   "colType" ~> "mvalue" ~>
     "cname" <~ (unwrap Rel._ColumnName @@ (project Tab._ColumnType Tab._ColumnType_name @@ var "colType")) $
     "typ" <~ (project Tab._ColumnType Tab._ColumnType_type @@ var "colType") $
-    -- Lift the decoder function to a let binding before Maybes.maybe
+    -- Lift the decoder function to a let binding before Maybes.cases
     -- This avoids Python issues with match statements inside inline lambdas
     "decodeValue" <~ ("value" ~>
       "parseError" <~ (Strings.cat $ list [
@@ -601,45 +601,45 @@ decodeCell = define "decodeCell" $
             string "Unsupported literal type for column ",
             var "cname"]) [
             _LiteralType_boolean>>: constant $
-              Maybes.maybe
+              Maybes.cases
+                (Literals.readBoolean $ var "value")
                 (left $ var "parseError")
-                ("parsed" ~> right $ just $ Core.termLiteral $ Core.literalBoolean $ var "parsed")
-                (Literals.readBoolean $ var "value"),
+                ("parsed" ~> right $ just $ Core.termLiteral $ Core.literalBoolean $ var "parsed"),
             _LiteralType_float>>: "ft" ~>
               match _FloatType (Just $ left $ Strings.cat $ list [
                 string "Unsupported float type for column ",
                 var "cname"]) [
                 _FloatType_float32>>: constant $
-                  Maybes.maybe
+                  Maybes.cases
+                    (Literals.readFloat32 $ var "value")
                     (left $ var "parseError")
-                    ("parsed" ~> right $ just $ Core.termLiteral $ Core.literalFloat $ Core.floatValueFloat32 $ var "parsed")
-                    (Literals.readFloat32 $ var "value"),
+                    ("parsed" ~> right $ just $ Core.termLiteral $ Core.literalFloat $ Core.floatValueFloat32 $ var "parsed"),
                 _FloatType_float64>>: constant $
-                  Maybes.maybe
+                  Maybes.cases
+                    (Literals.readFloat64 $ var "value")
                     (left $ var "parseError")
-                    ("parsed" ~> right $ just $ Core.termLiteral $ Core.literalFloat $ Core.floatValueFloat64 $ var "parsed")
-                    (Literals.readFloat64 $ var "value")]
+                    ("parsed" ~> right $ just $ Core.termLiteral $ Core.literalFloat $ Core.floatValueFloat64 $ var "parsed")]
               @@ var "ft",
             _LiteralType_integer>>: "it" ~>
               match _IntegerType (Just $ left $ Strings.cat $ list [
                 string "Unsupported integer type for column ",
                 var "cname"]) [
                 _IntegerType_int32>>: constant $
-                  Maybes.maybe
+                  Maybes.cases
+                    (Literals.readInt32 $ var "value")
                     (left $ var "parseError")
-                    ("parsed" ~> right $ just $ Core.termLiteral $ Core.literalInteger $ Core.integerValueInt32 $ var "parsed")
-                    (Literals.readInt32 $ var "value"),
+                    ("parsed" ~> right $ just $ Core.termLiteral $ Core.literalInteger $ Core.integerValueInt32 $ var "parsed"),
                 _IntegerType_int64>>: constant $
-                  Maybes.maybe
+                  Maybes.cases
+                    (Literals.readInt64 $ var "value")
                     (left $ var "parseError")
-                    ("parsed" ~> right $ just $ Core.termLiteral $ Core.literalInteger $ Core.integerValueInt64 $ var "parsed")
-                    (Literals.readInt64 $ var "value")]
+                    ("parsed" ~> right $ just $ Core.termLiteral $ Core.literalInteger $ Core.integerValueInt64 $ var "parsed")]
               @@ var "it",
             _LiteralType_string>>: constant $
               right $ just $ Core.termLiteral $ Core.literalString $ var "value"]
           @@ var "lt"]
       @@ var "typ") $
-    Maybes.maybe
-      (right nothing)  -- No value - return Nothing
-      (var "decodeValue")  -- Has value - use the lifted decoder function
+    Maybes.cases
       (var "mvalue")
+      (right nothing)  -- No value - return Nothing
+      (var "decodeValue")

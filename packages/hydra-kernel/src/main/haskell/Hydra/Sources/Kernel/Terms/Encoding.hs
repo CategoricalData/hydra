@@ -157,10 +157,9 @@ encodeBindingName = define "encodeBindingName" $
   "localResult" <~ (Core.name (var "localPart")) $
   -- Extract namespace parts (all but the last); if the name has no namespace,
   -- fall back to the bare decapitalized local name.
-  Maybes.maybe
-    (var "localResult")
-    ("nsParts" ~>
-      Maybes.maybe
+  Maybes.cases (Lists.maybeInit $ var "parts") (var "localResult") ("nsParts" ~>
+      Maybes.cases
+        (Lists.uncons $ var "nsParts")
         (var "localResult")  -- unreachable: nsParts empty means no namespace
         ("nsUc" ~>
           "tail" <~ Pairs.second (var "nsUc") $
@@ -168,9 +167,7 @@ encodeBindingName = define "encodeBindingName" $
             (list [string "hydra", string "encode"])
             (Lists.concat2
               (var "tail")
-              (list [var "localPart"])))))
-        (Lists.uncons $ var "nsParts"))
-    (Lists.maybeInit $ var "parts")
+              (list [var "localPart"]))))))
 
 -- | Generate the encoder term for a field value
 -- Creates a lambda that encodes the field value and wraps in an encoded union/injection
@@ -390,14 +387,11 @@ encodeModuleName = define "encodeModuleName" $
   "parts" <~ Strings.splitOn (string ".") (Packaging.unModuleName (var "ns")) $
   "fallback" <~ Packaging.moduleName2 (Packaging.unModuleName (var "ns")) $
   -- Drop the first segment (e.g. "hydra") and prepend "hydra.encode".
-  Maybes.maybe
-    (var "fallback")
-    ("uc" ~>
+  Maybes.cases (Lists.uncons $ var "parts") (var "fallback") ("uc" ~>
       Packaging.moduleName2 (
         Strings.cat $ list [
           string "hydra.encode.",
           Strings.intercalate (string ".") (Pairs.second $ var "uc")]))
-    (Lists.uncons $ var "parts")
 
 -- | Generate an encoder for a record type
 -- For records, project each field, encode it, and build an encoded record

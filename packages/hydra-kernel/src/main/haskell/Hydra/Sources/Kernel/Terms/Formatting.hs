@@ -219,13 +219,10 @@ normalizeComment = define "normalizeComment" $
     -- by the null check above, so lastIdx is a valid index.
     ("lastIdx" <~ Math.sub (Strings.length (var "stripped")) (int32 1) $
      "appended" <~ Strings.cat2 (var "stripped") (string ".") $
-     Maybes.maybe
-       (var "appended")
-       ("lastChar" ~> Logic.ifElse
+     Maybes.cases (Strings.maybeCharAt (var "lastIdx") (var "stripped")) (var "appended") ("lastChar" ~> Logic.ifElse
          (Equality.equal (var "lastChar") (int32 46))
          (var "stripped")
-         (var "appended"))
-       (Strings.maybeCharAt (var "lastIdx") (var "stripped")))
+         (var "appended")))
 
 sanitizeWithUnderscores :: TypedTermDefinition (S.Set String -> String -> String)
 sanitizeWithUnderscores = define "sanitizeWithUnderscores" $

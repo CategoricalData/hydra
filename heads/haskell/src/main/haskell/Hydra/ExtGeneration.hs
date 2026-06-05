@@ -150,7 +150,7 @@ writeCoq basePath universeModules modulesToGenerate =
       -- Hydra primitive library functions are not Hydra modules — they are
       -- implemented host-side (in this case as Coq Definitions/Axioms in
       -- `hydra/lib/*.v`) and are therefore invisible to `globalAmbiguousNames`.
-      -- Collisions like `hydra.lib.maybes.maybe` vs `hydra.show.core.maybe`
+      -- Collisions like `hydra.lib.eithers.either` vs `hydra.show.core.either`
       -- only manifest at Coq's import level. Inject the lib primitive names
       -- into the ambiguous set so that cross-module references in the
       -- non-lib source (`hydra.show.core.maybe`) stay fully qualified.

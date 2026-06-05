@@ -527,16 +527,14 @@ def _deduplicate_case_variables():
             ("mdom", Core.lambda_domain(var("lam"))),
             ("body", Core.lambda_body(var("lam"))),
         ],
-        Maybes.maybe(
-            pair(
+        Maybes.cases(Maps.lookup(var("v"), var("countByName")), pair(
                 Maps.insert(
                     var("v"),
                     int32(1),
                     var("countByName"),
                 ),
                 Lists.cons(var("field"), var("done")),
-            ),
-            lam(
+            ), lam(
                 "count",
                 let_chain(
                     [
@@ -583,9 +581,7 @@ def _deduplicate_case_variables():
                         Lists.cons(var("newField"), var("done")),
                     ),
                 ),
-            ),
-            Maps.lookup(var("v"), var("countByName")),
-        ),
+            ),),
     )
     rewrite_case = lambdas(
         ["state", "field"],
@@ -1189,8 +1185,7 @@ def _encode_application_inner():
     )
     in_graph_branch = lam(
         "el",
-        Maybes.maybe(
-            Eithers.bind(
+        Maybes.cases(Core.binding_type_scheme(var("el")), Eithers.bind(
                 _local("encodeVariable")(var("cx"), var("env"), var("name"), var("hargs")),
                 lam(
                     "expr",
@@ -1200,16 +1195,9 @@ def _encode_application_inner():
                         )
                     ),
                 ),
-            ),
-            has_ts_branch,
-            Core.binding_type_scheme(var("el")),
-        ),
+            ), has_ts_branch,),
     )
-    not_primitive_branch = Maybes.maybe(
-        not_in_graph_branch,
-        in_graph_branch,
-        _kref.lexical_lookup_binding(var("g"), var("name")),
-    )
+    not_primitive_branch = Maybes.cases(_kref.lexical_lookup_binding(var("g"), var("name")), not_in_graph_branch, in_graph_branch,)
     is_primitive_branch = lam(
         "_prim",
         let_chain(
@@ -1549,8 +1537,7 @@ def _encode_binding_as():
         _local("encodeTermMultiline")(var("cx"), var("env"), var("term1")),
         lam(
             "stmts",
-            Maybes.maybe(
-                left(
+            Maybes.cases(Lists.maybe_head(var("stmts")), left(
                     Errors_dsl.error_other(
                         Errors_dsl.other_error(
                             string(
@@ -1558,10 +1545,7 @@ def _encode_binding_as():
                             )
                         )
                     )
-                ),
-                lam("x", right(var("x"))),
-                Lists.maybe_head(var("stmts")),
-            ),
+                ), lam("x", right(var("x"))),),
         ),
     )
 
@@ -1569,7 +1553,7 @@ def _encode_binding_as():
         [
             ("mcs", _local("extractCaseElimination")(var("term1"))),
         ],
-        Maybes.maybe(fallback, lam("cs", case_elim_fn("cs")), var("mcs")),
+        Maybes.cases(var("mcs"), fallback, lam("cs", case_elim_fn("cs"))),
     )
 
     # Hoisted binding branch: with lambda params, use captured + match params
@@ -1854,7 +1838,7 @@ def _encode_binding_as():
                 _local("isCaseStatementApplication")(var("innerBody")),
             ),
         ],
-        Maybes.maybe(no_ts_no_csa_branch, hoisted_branch, var("mcsa")),
+        Maybes.cases(var("mcsa"), no_ts_no_csa_branch, hoisted_branch),
     )
 
     has_ts_branch = lam(
@@ -1891,7 +1875,7 @@ def _encode_binding_as():
                     _kref.names_encode_name(true(), _kref.util_case_convention_lower_snake, var("env"), var("name1")),
                 ),
             ],
-            Maybes.maybe(no_ts_branch, has_ts_branch, var("mts")),
+            Maybes.cases(var("mts"), no_ts_branch, has_ts_branch),
         ),
     )
     return _def(
@@ -1940,15 +1924,13 @@ def _encode_binding_as_assignment():
                                 Logic.if_else(
                                     var("isTrivial"),
                                     boolean(False),
-                                    Maybes.maybe(
-                                        Logic.and_(
+                                    Maybes.cases(var("mts"), Logic.and_(
                                             var("allowThunking"),
                                             Logic.or_(
                                                 var("isComplexVar"),
                                                 var("termIsComplex"),
                                             ),
-                                        ),
-                                        lam(
+                                        ), lam(
                                             "ts",
                                             Logic.and_(
                                                 var("allowThunking"),
@@ -1963,9 +1945,7 @@ def _encode_binding_as_assignment():
                                                     ),
                                                 ),
                                             ),
-                                        ),
-                                        var("mts"),
-                                    ),
+                                        ),),
                                 ),
                             ),
                             # Always wrap walrus values in Lazy(...) so the
@@ -2014,8 +1994,7 @@ def _encode_default_case_block():
     body = lambdas(
         ["termToExpr", "isFull", "mdflt", "tname"],
         Eithers.bind(
-            Maybes.maybe(
-                right(
+            Maybes.cases(var("mdflt"), right(
                     Logic.if_else(
                         var("isFull"),
                         _kref.utils_raise_assertion_error(string("Unreachable: all variants handled")),
@@ -2024,8 +2003,7 @@ def _encode_default_case_block():
                                 _kref.names_local_name_of(var("tname")),
                             )),
                     )
-                ),
-                lam(
+                ), lam(
                     "d",
                     Eithers.bind(
                         var("termToExpr")(var("d")),
@@ -2036,9 +2014,7 @@ def _encode_default_case_block():
                             ),
                         ),
                     ),
-                ),
-                var("mdflt"),
-            ),
+                ),),
             lam(
                 "stmt",
                 let_chain(
@@ -2084,8 +2060,7 @@ def _encode_definition():
             ("term", _proj("hydra.packaging.TermDefinition", "body", "td")),
             (
                 "typ",
-                Maybes.maybe(
-                    Core.type_scheme(
+                Maybes.cases(_proj("hydra.packaging.TermDefinition", "signature", "td"), Core.type_scheme(
                         list_([]),
                         Core.type_variable(
                             wrap("hydra.core.Name",
@@ -2093,10 +2068,7 @@ def _encode_definition():
                             )
                         ),
                         nothing(),
-                    ),
-                    lam("sig", _kref.scoping_term_signature_to_type_scheme(var("sig"))),
-                    _proj("hydra.packaging.TermDefinition", "signature", "td"),
-                ),
+                    ), lam("sig", _kref.scoping_term_signature_to_type_scheme(var("sig"))),),
             ),
         ],
         Eithers.bind(
@@ -2211,9 +2183,7 @@ def _encode_enum_value_assignment():
                             ),
                         ],
                         right(
-                            Maybes.maybe(
-                                list_([var("assignStmt")]),
-                                lam(
+                            Maybes.cases(var("mcomment"), list_([var("assignStmt")]), lam(
                                     "c",
                                     list_(
                                         [
@@ -2221,9 +2191,7 @@ def _encode_enum_value_assignment():
                                             _kref.utils_py_expression_to_py_statement(_kref.utils_triple_quoted_string(var("c"))),
                                         ]
                                     ),
-                                ),
-                                var("mcomment"),
-                            )
+                                ),)
                         ),
                     ),
                 ),
@@ -2529,24 +2497,20 @@ def _encode_python_module():
             ),
             (
                 "commentStmts",
-                Maybes.maybe(
-                    list_([]),
-                    lam(
+                Maybes.cases(Maybes.map(
+                        _kref.formatting_normalize_comment,
+                        Maybes.bind(
+                            Pkg.module_metadata(var("mod")),
+                            lam("em", Pkg.entity_metadata_description(var("em"))),
+                        ),
+                    ), list_([]), lam(
                         "c",
                         list_(
                             [
                                 _kref.utils_comment_statement(var("c"))
                             ]
                         ),
-                    ),
-                    Maybes.map(
-                        _kref.formatting_normalize_comment,
-                        Maybes.bind(
-                            Pkg.module_metadata(var("mod")),
-                            lam("em", Pkg.entity_metadata_description(var("em"))),
-                        ),
-                    ),
-                ),
+                    ),),
             ),
             (
                 "importStmts",
@@ -2683,16 +2647,12 @@ def _encode_record_type():
                         ),
                         (
                             "args",
-                            Maybes.maybe(
-                                nothing(),
-                                lam(
+                            Maybes.cases(var("mGenericArg"), nothing(), lam(
                                     "a",
                                     just(
                                         _kref.utils_py_expressions_to_py_args(list_([var("a")]))
                                     ),
-                                ),
-                                var("mGenericArg"),
-                            ),
+                                ),),
                         ),
                         (
                             "decs",
@@ -3348,11 +3308,9 @@ def _encode_term_inline():
     )
     maybe_branch = lam(
         "mt",
-        Maybes.maybe(
-            right(
+        Maybes.cases(var("mt"), right(
                 _kref.utils_function_call(_kref.utils_py_name_to_py_primary(_py_name("Nothing")), list_([]))
-            ),
-            lam(
+            ), lam(
                 "t1",
                 Eithers.bind(
                     var("encode")(var("t1")),
@@ -3361,9 +3319,7 @@ def _encode_term_inline():
                         var("withCast")(_kref.utils_function_call(_kref.utils_py_name_to_py_primary(_py_name("Just")), list_([var("pyexp")]))),
                     ),
                 ),
-            ),
-            var("mt"),
-        ),
+            ),),
     )
     pair_branch = lam(
         "p",
@@ -3498,15 +3454,7 @@ def _encode_term_inline():
                                 ("fname", Core.field_name(var("field"))),
                                 (
                                     "isUnitVariant",
-                                    Maybes.maybe(
-                                        false(),
-                                        lam(
-                                            "ft",
-                                            _kref.predicates_is_unit_type(_kref.strip_deannotate_type(Core.field_type_type(
-                                                        var("ft")
-                                                    ))),
-                                        ),
-                                        Lists.find(
+                                    Maybes.cases(Lists.find(
                                             lam(
                                                 "ft",
                                                 MetaCore.equal_name(
@@ -3517,8 +3465,12 @@ def _encode_term_inline():
                                                 ),
                                             ),
                                             var("rt"),
-                                        ),
-                                    ),
+                                        ), false(), lam(
+                                            "ft",
+                                            _kref.predicates_is_unit_type(_kref.strip_deannotate_type(Core.field_type_type(
+                                                        var("ft")
+                                                    ))),
+                                        ),),
                                 ),
                             ],
                             Eithers.bind(
@@ -4559,18 +4511,14 @@ def _encode_union_elimination_inline():
                             ),
                         ],
                         Eithers.bind(
-                            Maybes.maybe(
-                                right(
+                            Maybes.cases(var("mdefault"), right(
                                     _local("unsupportedExpression")(string(
                                             "no matching case in inline union elimination"
                                         ))
-                                ),
-                                lam(
+                                ), lam(
                                     "dflt",
                                     _local("encodeTermInline")(var("cx"), var("env"), false(), var("dflt")),
-                                ),
-                                var("mdefault"),
-                            ),
+                                ),),
                             lam(
                                 "pyDefault",
                                 let_chain(
@@ -5386,8 +5334,7 @@ def _encode_variable():
                     _kref.predicates_is_trivial_term(Core.binding_term(var("el"))),
                 ),
             ],
-            Maybes.maybe(
-                Logic.if_else(
+            Maybes.cases(Core.binding_type_scheme(var("el")), Logic.if_else(
                     Logic.and_(
                         Equality.equal(
                             _kref.arity_type_arity(var("typ")),
@@ -5400,20 +5347,13 @@ def _encode_variable():
                         [("asFunctionRef", as_function_ref("typ"))],
                         right(var("asFunctionRef")),
                     ),
-                ),
-                el_typed_branch,
-                Core.binding_type_scheme(var("el")),
-            ),
+                ), el_typed_branch,),
         ),
     )
-    not_in_metadata_branch = Maybes.maybe(
-        let_chain(
+    not_in_metadata_branch = Maybes.cases(_kref.lexical_lookup_binding(var("g"), var("name")), let_chain(
             [("asFunctionRef", as_function_ref("typ"))],
             right(var("asFunctionRef")),
-        ),
-        el_branch,
-        _kref.lexical_lookup_binding(var("g"), var("name")),
-    )
+        ), el_branch,)
 
     has_typ_branch = lam(
         "typ",
@@ -5501,16 +5441,10 @@ def _encode_variable():
                     _kref.predicates_is_trivial_term(Core.binding_term(var("el"))),
                 ),
             ],
-            Maybes.maybe(
-                right(var("asVariable")),
-                el_branch_no_typ_inner,
-                Core.binding_type_scheme(var("el")),
-            ),
+            Maybes.cases(Core.binding_type_scheme(var("el")), right(var("asVariable")), el_branch_no_typ_inner,),
         ),
     )
-    not_in_graphBoundTypes_no_prim = Maybes.maybe(
-        Maybes.maybe(
-            left(
+    not_in_graphBoundTypes_no_prim = Maybes.cases(_kref.lexical_lookup_binding(var("g"), var("name")), Maybes.cases(Maps.lookup(var("name"), var("tcMetadata")), left(
                 Errors_dsl.error_other(
                     Errors_dsl.other_error(
                         Strings.cat2(
@@ -5519,13 +5453,7 @@ def _encode_variable():
                         )
                     )
                 )
-            ),
-            constant(right(var("asFunctionCall"))),
-            Maps.lookup(var("name"), var("tcMetadata")),
-        ),
-        no_prim_no_typ_el_branch,
-        _kref.lexical_lookup_binding(var("g"), var("name")),
-    )
+            ), constant(right(var("asFunctionCall"))),), no_prim_no_typ_el_branch,)
     is_prim_no_typ_branch = lam(
         "prim",
         let_chain(
@@ -5574,17 +5502,11 @@ def _encode_variable():
             right(
                 _local("lazyDotGet")(var("asVariable"))
             ),
-            Maybes.maybe(
-                not_in_graphBoundTypes_no_prim,
-                is_prim_no_typ_branch,
-                _kref.lexical_lookup_primitive(var("g"), var("name")),
-            ),
+            Maybes.cases(_kref.lexical_lookup_primitive(var("g"), var("name")), not_in_graphBoundTypes_no_prim, is_prim_no_typ_branch,),
         ),
     )
 
-    empty_args_branch = Maybes.maybe(
-        no_typ_branch, has_typ_branch, var("mTyp")
-    )
+    empty_args_branch = Maybes.cases(var("mTyp"), no_typ_branch, has_typ_branch)
 
     # Non-empty args branch: primitive lookup
     prim_branch = lam(
@@ -5655,11 +5577,7 @@ def _encode_variable():
             ),
         ),
     )
-    nonempty_args_branch = Maybes.maybe(
-        right(var("asFunctionCall")),
-        prim_branch,
-        _kref.lexical_lookup_primitive(var("g"), var("name")),
-    )
+    nonempty_args_branch = Maybes.cases(_kref.lexical_lookup_primitive(var("g"), var("name")), right(var("asFunctionCall")), prim_branch,)
 
     body = lambdas(
         ["cx", "env", "name", "args"],
@@ -5840,18 +5758,14 @@ def _extend_meta_for_term():
             field("lambda",
                     lam(
                         "lam",
-                        Maybes.maybe(
-                            var("meta"),
-                            lam(
+                        Maybes.cases(Core.lambda_domain(var("lam")), var("meta"), lam(
                                 "dom",
                                 Logic.if_else(
                                     var("topLevel"),
                                     _local("extendMetaForType")(true(), false(), var("dom"), var("meta")),
                                     var("meta"),
                                 ),
-                            ),
-                            Core.lambda_domain(var("lam")),
-                        ),
+                            ),),
                     ),
                 ),
             field("let",
@@ -5871,9 +5785,9 @@ def _extend_meta_for_term():
                                             "forBinding",
                                             lambdas(
                                                 ["m", "b"],
-                                                Maybes.maybe(
-                                                    var("m"),
-                                                    lam(
+                                                Maybes.cases(Core.binding_type_scheme(
+                                                        var("b")
+                                                    ), var("m"), lam(
                                                         "ts",
                                                         let_chain(
                                                             [
@@ -5892,11 +5806,7 @@ def _extend_meta_for_term():
                                                                     ), var("m")),
                                                             ),
                                                         ),
-                                                    ),
-                                                    Core.binding_type_scheme(
-                                                        var("b")
-                                                    ),
-                                                ),
+                                                    ),),
                                             ),
                                         ),
                                     ],
@@ -5937,13 +5847,9 @@ def _extend_meta_for_term():
             field("maybe",
                     lam(
                         "m",
-                        Maybes.maybe(
-                            _local("setMetaUsesNothing")(var("meta"), true()),
-                            constant(
+                        Maybes.cases(var("m"), _local("setMetaUsesNothing")(var("meta"), true()), constant(
                                 _local("setMetaUsesJust")(var("meta"), true())
-                            ),
-                            var("m"),
-                        ),
+                            ),),
                     ),
                 ),
             # Union injections require cast() for proper typing
@@ -6357,9 +6263,7 @@ def _function_definition_to_expr():
                         lam(
                             "block",
                             Eithers.bind(
-                                Maybes.maybe(
-                                    right(nothing()),
-                                    lam(
+                                Maybes.cases(var("mcod"), right(nothing()), lam(
                                         "cod",
                                         Eithers.bind(
                                             _local("encodeType")(var("env"), var("cod")),
@@ -6372,9 +6276,7 @@ def _function_definition_to_expr():
                                                 ),
                                             ),
                                         ),
-                                    ),
-                                    var("mcod"),
-                                ),
+                                    ),),
                                 lam(
                                     "mreturnType",
                                     let_chain(
@@ -6503,21 +6405,17 @@ def _gather_metadata():
                                 ),
                                 (
                                     "typ",
-                                    Maybes.maybe(
-                                        Core.type_variable(
+                                    Maybes.cases(Pkg.term_definition_signature(
+                                            var("termDef")
+                                        ), Core.type_variable(
                                             wrap("hydra.core.Name",
                                                 string("hydra.core.Unit"),
                                             )
-                                        ),
-                                        lam("sig",
+                                        ), lam("sig",
                                             Core.type_scheme_body(
                                                 _kref.scoping_term_signature_to_type_scheme(var("sig"))
                                             )
-                                        ),
-                                        Pkg.term_definition_signature(
-                                            var("termDef")
-                                        ),
-                                    ),
+                                        ),),
                                 ),
                                 (
                                     "meta2",
@@ -7565,21 +7463,13 @@ def _term_arity_with_primitives():
             field("variable",
                     lam(
                         "name",
-                        Maybes.maybe(
-                            int_(0),
-                            lam(
+                        Maybes.cases(_kref.lexical_lookup_binding(var("graph"), var("name")), int_(0), lam(
                                 "el",
-                                Maybes.maybe(
-                                    _kref.arity_term_arity(Core.binding_term(var("el"))),
-                                    lam(
+                                Maybes.cases(Core.binding_type_scheme(var("el")), _kref.arity_term_arity(Core.binding_term(var("el"))), lam(
                                         "ts",
                                         _kref.arity_type_scheme_arity(var("ts")),
-                                    ),
-                                    Core.binding_type_scheme(var("el")),
-                                ),
-                            ),
-                            _kref.lexical_lookup_binding(var("graph"), var("name")),
-                        ),
+                                    ),),
+                            ),),
                     ),
                 )),
     )

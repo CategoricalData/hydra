@@ -83,17 +83,13 @@ _pynames_encode_namespace = var("hydra.python.names.encodeNamespace")
 # ----------------------------------------------------------------------
 
 def _annotated_expression():
-    body = Maybes.maybe(
-        var("expr"),
-        lam(
+    body = Maybes.cases(var("mcomment"), var("expr"), lam(
             "c",
             _local("pyPrimaryToPyExpression")(_local("primaryWithExpressionSlices")(_local("pyNameToPyPrimary")(_py_name("Annotated")), list_([
                         var("expr"),
                         _local("doubleQuotedString")(var("c")),
                     ]))),
-        ),
-        var("mcomment"),
-    )
+        ),)
     return _def(
         "annotatedExpression",
         doc(
@@ -104,16 +100,12 @@ def _annotated_expression():
 
 
 def _annotated_statement():
-    body = Maybes.maybe(
-        var("stmt"),
-        lam(
+    body = Maybes.cases(var("mcomment"), var("stmt"), lam(
             "c",
             PySyn.statement_annotated(
                 PySyn.annotated_statement(var("c"), var("stmt")),
             ),
-        ),
-        var("mcomment"),
-    )
+        ),)
     return _def(
         "annotatedStatement",
         doc(
@@ -465,14 +457,10 @@ def _indented_block():
     body = lets(
         [
             field("commentGroup",
-                Maybes.maybe(
-                    list_([]),
-                    lam(
+                Maybes.cases(var("mcomment"), list_([]), lam(
                         "s",
                         list_([_local("commentStatement")(var("s"))]),
-                    ),
-                    var("mcomment"),
-                ),
+                    ),),
             ),
             field("groups",
                 Lists.filter(
@@ -529,13 +517,11 @@ def _newtype_statement():
 
 def _or_expression():
     # Inner recursive 'build' lambda
-    build_body = Maybes.maybe(
-        # Unreachable fallback
+    build_body = Maybes.cases(Lists.uncons(var("ps")), # Unreachable fallback
         PySyn.bitwise_or(
             var("prev"),
             _local("pyPrimaryToPyBitwiseXor")(PySyn.primary_simple(PySyn.atom_ellipsis)),
-        ),
-        lam(
+        ), lam(
             "p",
             Logic.if_else(
                 Lists.null(Pairs.second(var("p"))),
@@ -548,9 +534,7 @@ def _or_expression():
                         _local("pyPrimaryToPyBitwiseXor")(Pairs.first(var("p"))),
                     )), Pairs.second(var("p"))),
             ),
-        ),
-        Lists.uncons(var("ps")),
-    )
+        ),)
     body = lets(
         [
             field("build",
@@ -792,15 +776,11 @@ def _py_expression_to_py_annotated_rhs():
 
 
 def _py_expression_to_py_primary():
-    body = Maybes.maybe(
-        PySyn.primary_simple(
+    body = Maybes.cases(_local("decodePyExpressionToPyPrimary")(var("e")), PySyn.primary_simple(
             PySyn.atom_group(
                 PySyn.group_expression(PySyn.named_expression_simple(var("e"))),
             ),
-        ),
-        lam("prim", var("prim")),
-        _local("decodePyExpressionToPyPrimary")(var("e")),
-    )
+        ), lam("prim", var("prim")),)
     return _def(
         "pyExpressionToPyPrimary",
         doc(

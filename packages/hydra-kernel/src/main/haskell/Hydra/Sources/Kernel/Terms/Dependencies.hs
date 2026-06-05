@@ -186,10 +186,7 @@ inlineType = define "inlineType" $
     "afterRecurse" <~ ("tr" ~> cases _Type (var "tr")
       (Just $ right $ var "tr") [
       _Type_variable>>: "v" ~>
-        Maybes.maybe
-          (left $ Error.errorOther $ Error.otherError $ Strings.cat2 (string "No such type in schema: ") (unwrap _Name @@ var "v"))
-          (inlineType @@ var "schema")
-          (Maps.lookup (var "v") (var "schema"))]) $
+        Maybes.cases (Maps.lookup (var "v") (var "schema")) (left $ Error.errorOther $ Error.otherError $ Strings.cat2 (string "No such type in schema: ") (unwrap _Name @@ var "v")) (inlineType @@ var "schema")]) $
     "tr" <<~ var "recurse" @@ var "typ" $
     var "afterRecurse" @@ var "tr") $
   Rewriting.rewriteTypeM @@ var "f" @@ var "typ"

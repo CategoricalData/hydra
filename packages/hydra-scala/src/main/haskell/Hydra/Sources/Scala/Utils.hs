@@ -132,10 +132,7 @@ qualifyUnionFieldName :: TypedTermDefinition (String -> Y.Maybe Name -> Name -> 
 qualifyUnionFieldName = def "qualifyUnionFieldName" $
   doc "Qualify a union field name, optionally prefixing with the Scala type name" $
   lambda "dlft" $ lambda "sname" $ lambda "fname" $
-    Maybes.maybe
-      (var "dlft")
-      ("n" ~> (scalaTypeName @@ true @@ var "n") ++ string ".")
-      (var "sname")
+    Maybes.cases (var "sname") (var "dlft") ("n" ~> (scalaTypeName @@ true @@ var "n") ++ string ".")
     ++ (scalaEscapeName @@ (Core.unName $ var "fname"))
 
 sapply :: TypedTermDefinition (Scala.Data -> [Scala.Data] -> Scala.Data)

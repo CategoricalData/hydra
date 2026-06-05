@@ -152,10 +152,7 @@ aggregateMap = define "aggregateMap" $
         "v" <~ (Pairs.second $ var "p") $
         "existing" <~ (Maps.lookup (var "k") (var "m")) $
         Maps.insert (var "k")
-          (Maybes.maybe
-            (Lists.pure $ var "v")
-            ("vs" ~> Lists.cons (var "v") (var "vs"))
-            (var "existing"))
+          (Maybes.cases (var "existing") (Lists.pure $ var "v") ("vs" ~> Lists.cons (var "v") (var "vs")))
           (var "m"))
       Maps.empty
       (var "pairs")

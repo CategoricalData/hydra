@@ -487,15 +487,15 @@ universalTestCase actual expected = Phantoms.record _UniversalTestCase [
 -- 'validateCoreTermCaseWithProfile' instead.
 validateCoreTermCase :: String -> TypedTerm Bool -> TypedTerm Term -> TypedTerm (Maybe InvalidTermError) -> TypedTerm TestCaseWithMetadata
 validateCoreTermCase cname typed input expected = universalCase cname
-  (retype $ Maybes.maybe
-    (Phantoms.string "valid")
-    (Phantoms.lambda "e" (showInvalidTermErrorRef @@ Phantoms.var "e"))
+  (retype $ Maybes.cases
     (Lists.maybeHead $ Validation.validationResultErrors $
-      validateCoreTermProfiledRef @@ kernelDefaultCoreProfileRef @@ typed @@ testGraphRef @@ input))
-  (retype $ Maybes.maybe
+      validateCoreTermProfiledRef @@ kernelDefaultCoreProfileRef @@ typed @@ testGraphRef @@ input)
     (Phantoms.string "valid")
-    (Phantoms.lambda "e" (showInvalidTermErrorRef @@ Phantoms.var "e"))
-    expected)
+    (Phantoms.lambda "e" (showInvalidTermErrorRef @@ Phantoms.var "e")))
+  (retype $ Maybes.cases
+    expected
+    (Phantoms.string "valid")
+    (Phantoms.lambda "e" (showInvalidTermErrorRef @@ Phantoms.var "e")))
   where
     retype :: TypedTerm x -> TypedTerm String
     retype (TypedTerm t) = TypedTerm t
@@ -505,14 +505,14 @@ validateCoreTermCase cname typed input expected = universalCase cname
 -- the result against the expected Maybe InvalidModuleError.
 validatePackagingModuleCase :: String -> TypedTerm (Module -> Maybe InvalidModuleError) -> TypedTerm Module -> TypedTerm (Maybe InvalidModuleError) -> TypedTerm TestCaseWithMetadata
 validatePackagingModuleCase cname validator input expected = universalCase cname
-  (retype $ Maybes.maybe
+  (retype $ Maybes.cases
+    (validator @@ input)
     (Phantoms.string "valid")
-    (Phantoms.lambda "e" (showInvalidModuleErrorRef @@ Phantoms.var "e"))
-    (validator @@ input))
-  (retype $ Maybes.maybe
+    (Phantoms.lambda "e" (showInvalidModuleErrorRef @@ Phantoms.var "e")))
+  (retype $ Maybes.cases
+    expected
     (Phantoms.string "valid")
-    (Phantoms.lambda "e" (showInvalidModuleErrorRef @@ Phantoms.var "e"))
-    expected)
+    (Phantoms.lambda "e" (showInvalidModuleErrorRef @@ Phantoms.var "e")))
   where
     retype :: TypedTerm x -> TypedTerm String
     retype (TypedTerm t) = TypedTerm t
@@ -522,14 +522,14 @@ validatePackagingModuleCase cname validator input expected = universalCase cname
 -- the result against the expected Maybe InvalidPackageError.
 validatePackagingPackageCase :: String -> TypedTerm (Package -> Maybe InvalidPackageError) -> TypedTerm Package -> TypedTerm (Maybe InvalidPackageError) -> TypedTerm TestCaseWithMetadata
 validatePackagingPackageCase cname validator input expected = universalCase cname
-  (retype $ Maybes.maybe
+  (retype $ Maybes.cases
+    (validator @@ input)
     (Phantoms.string "valid")
-    (Phantoms.lambda "e" (showInvalidPackageErrorRef @@ Phantoms.var "e"))
-    (validator @@ input))
-  (retype $ Maybes.maybe
+    (Phantoms.lambda "e" (showInvalidPackageErrorRef @@ Phantoms.var "e")))
+  (retype $ Maybes.cases
+    expected
     (Phantoms.string "valid")
-    (Phantoms.lambda "e" (showInvalidPackageErrorRef @@ Phantoms.var "e"))
-    expected)
+    (Phantoms.lambda "e" (showInvalidPackageErrorRef @@ Phantoms.var "e")))
   where
     retype :: TypedTerm x -> TypedTerm String
     retype (TypedTerm t) = TypedTerm t

@@ -473,8 +473,6 @@ maybesMap                        :: Name
 maybesMap                        = qname maybes "map"
 maybesMapMaybe                   :: Name
 maybesMapMaybe                   = qname maybes "mapMaybe"
-maybesMaybe                      :: Name
-maybesMaybe                      = qname maybes "maybe"
 maybesPure                       :: Name
 maybesPure                       = qname maybes "pure"
 maybesToList                     :: Name

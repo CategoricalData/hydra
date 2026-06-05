@@ -554,10 +554,7 @@ checkUndefinedTypeVariablesInType = define "checkUndefinedTypeVariablesInType" $
   "path" ~> "cx" ~> "typ" ~> "mkError" ~>
   "freeVars" <~ Variables.freeVariablesInType @@ var "typ" $
   "undefined" <~ Sets.difference (var "freeVars") (Graph.graphTypeVariables $ var "cx") $
-  Maybes.maybe
-    noError
-    ("firstUndefined" ~> var "mkError" @@ var "firstUndefined")
-    (Lists.maybeHead $ Sets.toList $ var "undefined")
+  Maybes.cases (Lists.maybeHead $ Sets.toList $ var "undefined") noError ("firstUndefined" ~> var "mkError" @@ var "firstUndefined")
 
 -- | Check a type scheme for undefined type variables against the current graph scope.
 -- The scheme's own bound variables are excluded before checking.
@@ -569,10 +566,7 @@ checkUndefinedTypeVariablesInTypeScheme = define "checkUndefinedTypeVariablesInT
   "path" ~> "cx" ~> "ts" ~> "mkError" ~>
   "freeVars" <~ Variables.freeVariablesInTypeScheme @@ var "ts" $
   "undefined" <~ Sets.difference (var "freeVars") (Graph.graphTypeVariables $ var "cx") $
-  Maybes.maybe
-    noError
-    ("firstUndefined" ~> var "mkError" @@ var "firstUndefined")
-    (Lists.maybeHead $ Sets.toList $ var "undefined")
+  Maybes.cases (Lists.maybeHead $ Sets.toList $ var "undefined") noError ("firstUndefined" ~> var "mkError" @@ var "firstUndefined")
 
 -- ============================================================================
 -- Type validation
@@ -1094,14 +1088,11 @@ validateTypeNode = define "validateTypeNode" $
         -- adding a second variant is a non-breaking change).
         guardedTypeRule (var "p") _InvalidTypeError _InvalidTypeError_singleVariantUnion
           (Logic.ifElse (Equality.equal (Lists.length $ var "fields") (int32 1))
-            (Maybes.maybe
-              noTypeError
-              ("singleField" ~>
+            (Maybes.cases (Lists.maybeHead $ var "fields") noTypeError ("singleField" ~>
                 mkJustType $ inject _InvalidTypeError _InvalidTypeError_singleVariantUnion $
                   record _SingleVariantUnionError [
                     _SingleVariantUnionError_location>>: wrap _SubtermPath (list ([] :: [TypedTerm SubtermStep])),
-                    _SingleVariantUnionError_fieldName>>: Core.fieldTypeName (var "singleField")])
-              (Lists.maybeHead $ var "fields"))
+                    _SingleVariantUnionError_fieldName>>: Core.fieldTypeName (var "singleField")]))
             noTypeError),
         -- Y5. DuplicateUnionTypeFieldNamesError
         guardedTypeRule (var "p") _InvalidTypeError _InvalidTypeError_duplicateUnionTypeFieldNames

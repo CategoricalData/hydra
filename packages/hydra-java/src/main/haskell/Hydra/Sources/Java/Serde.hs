@@ -500,10 +500,7 @@ classInstanceCreationExpressionToExpr = def "classInstanceCreationExpressionToEx
   lambda "cice" $ lets [
     "mqual">: project Java._ClassInstanceCreationExpression Java._ClassInstanceCreationExpression_qualifier @@ var "cice",
     "e">: project Java._ClassInstanceCreationExpression Java._ClassInstanceCreationExpression_expression @@ var "cice"] $
-    Maybes.maybe
-      (unqualifiedClassInstanceCreationExpressionToExpr @@ var "e")
-      (lambda "q" $ Serialization.dotSep @@ list [classInstanceCreationExpressionQualifierToExpr @@ var "q", unqualifiedClassInstanceCreationExpressionToExpr @@ var "e"])
-      (var "mqual")
+    Maybes.cases (var "mqual") (unqualifiedClassInstanceCreationExpressionToExpr @@ var "e") (lambda "q" $ Serialization.dotSep @@ list [classInstanceCreationExpressionQualifierToExpr @@ var "q", unqualifiedClassInstanceCreationExpressionToExpr @@ var "e"])
 
 classLiteralToExpr :: TypedTermDefinition (Java.ClassLiteral -> Expr)
 classLiteralToExpr = def "classLiteralToExpr" $
@@ -1488,12 +1485,9 @@ singleElementAnnotationToExpr = def "singleElementAnnotationToExpr" $
   lambda "sea" $ lets [
     "tname">: project Java._SingleElementAnnotation Java._SingleElementAnnotation_name @@ var "sea",
     "mv">: project Java._SingleElementAnnotation Java._SingleElementAnnotation_value @@ var "sea"] $
-    Maybes.maybe
-      (markerAnnotationToExpr @@ (wrap Java._MarkerAnnotation (var "tname")))
-      (lambda "v" $ Serialization.prefix @@ string "@" @@ (Serialization.noSep @@ list [
+    Maybes.cases (var "mv") (markerAnnotationToExpr @@ (wrap Java._MarkerAnnotation (var "tname"))) (lambda "v" $ Serialization.prefix @@ string "@" @@ (Serialization.noSep @@ list [
         typeNameToExpr @@ var "tname",
         Serialization.parenList @@ false @@ list [elementValueToExpr @@ var "v"]]))
-      (var "mv")
 
 singleLineComment :: TypedTermDefinition (String -> Expr)
 singleLineComment = def "singleLineComment" $
@@ -1729,9 +1723,7 @@ variableDeclaratorToExpr = def "variableDeclaratorToExpr" $
     "id">: project Java._VariableDeclarator Java._VariableDeclarator_id @@ var "vd",
     "minit">: project Java._VariableDeclarator Java._VariableDeclarator_initializer @@ var "vd",
     "idSec">: variableDeclaratorIdToExpr @@ var "id"] $
-    Maybes.maybe (var "idSec")
-      (lambda "init" $ Serialization.infixWs @@ string "=" @@ var "idSec" @@ (variableInitializerToExpr @@ var "init"))
-      (var "minit")
+    Maybes.cases (var "minit") (var "idSec") (lambda "init" $ Serialization.infixWs @@ string "=" @@ var "idSec" @@ (variableInitializerToExpr @@ var "init"))
 
 variableInitializerToExpr :: TypedTermDefinition (Java.VariableInitializer -> Expr)
 variableInitializerToExpr = def "variableInitializerToExpr" $
@@ -1752,10 +1744,7 @@ whileStatementToExpr = def "whileStatementToExpr" $
   lambda "ws" $ lets [
     "mcond">: project Java._WhileStatement Java._WhileStatement_cond @@ var "ws",
     "body">: project Java._WhileStatement Java._WhileStatement_body @@ var "ws",
-    "condSer">: Maybes.maybe
-      (Serialization.cst @@ string "true")
-      (lambda "c" $ expressionToExpr @@ var "c")
-      (var "mcond")] $
+    "condSer">: Maybes.cases (var "mcond") (Serialization.cst @@ string "true") (lambda "c" $ expressionToExpr @@ var "c")] $
     Serialization.spaceSep @@ list [
       Serialization.cst @@ string "while",
       Serialization.parenList @@ false @@ list [var "condSer"],
@@ -1785,9 +1774,7 @@ withComments = def "withComments" $
   doc ("Wrap an expression with optional Javadoc comments. Blank lines"
     <> " inside the doc body emit ` *` (no trailing space) instead of ` * `.") $
   lambda "mc" $ lambda "expr" $
-    Maybes.maybe
-      (var "expr")
-      (lambda "c" $ Serialization.newlineSep @@ list [
+    Maybes.cases (var "mc") (var "expr") (lambda "c" $ Serialization.newlineSep @@ list [
         Serialization.cst @@ (Strings.cat2 (string "/**\n")
           (Strings.cat2
             (Strings.intercalate (string "\n")
@@ -1797,4 +1784,3 @@ withComments = def "withComments" $
                 (Strings.lines (sanitizeJavaComment @@ var "c"))))
             (string "\n */"))),
         var "expr"])
-      (var "mc")

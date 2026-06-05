@@ -224,13 +224,10 @@ encodeLambdaTerm = define "encodeLambdaTerm" $
   doc "Encode a Lambda into a Coq `fun` expression, sanitising the parameter name" $
   lambdas ["env", "lam"] $ lets [
     "paramName">: sanitizeVar @@ (unwrap _Name @@ (Core.lambdaParameter $ var "lam")),
-    "binder">: Maybes.maybe
-      (inject C._Binder C._Binder_name (coqName @@ var "paramName"))
-      (lambda "domTy" $ inject C._Binder C._Binder_type $
+    "binder">: Maybes.cases (Core.lambdaDomain $ var "lam") (inject C._Binder C._Binder_name (coqName @@ var "paramName")) (lambda "domTy" $ inject C._Binder C._Binder_type $
         record C._TypeBinders [
           C._TypeBinders_names>>: list [coqName @@ var "paramName"],
-          C._TypeBinders_type>>: coqTypeTerm @@ (encodeType @@ var "env" @@ var "domTy")])
-      (Core.lambdaDomain $ var "lam")] $
+          C._TypeBinders_type>>: coqTypeTerm @@ (encodeType @@ var "env" @@ var "domTy")])] $
     inject C._Term C._Term_forallOrFun $
       inject C._ForallOrFun C._ForallOrFun_fun $
         record C._Fun [
@@ -404,10 +401,7 @@ encodeTerm = define "encodeTerm" $
           var "acc"])
         (coqTermQualid @@ string "nil")
         (Maps.toList $ var "mt"),
-    _Term_maybe>>: "mt" ~> Maybes.maybe
-      (coqTermQualid @@ string "None")
-      (lambda "v" $ coqTermApp @@ (coqTermQualid @@ string "Some") @@ list [encodeTerm @@ var "env" @@ var "v"])
-      (var "mt"),
+    _Term_maybe>>: "mt" ~> Maybes.cases (var "mt") (coqTermQualid @@ string "None") (lambda "v" $ coqTermApp @@ (coqTermQualid @@ string "Some") @@ list [encodeTerm @@ var "env" @@ var "v"]),
     _Term_pair>>: "p" ~>
       coqTermApp @@ (coqTermQualid @@ string "pair") @@ list [
         encodeTerm @@ var "env" @@ Pairs.first (var "p"),
@@ -457,12 +451,9 @@ encodeTerm = define "encodeTerm" $
       -- `list (Name * Term)`), so a blind cast would produce the wrong type.
       cases _Term (var "body")
         (Just (var "encoded")) [
-        _Term_maybe>>: "mt" ~> Maybes.maybe
-          (coqTermCast @@ (coqTermQualid @@ string "None")
+        _Term_maybe>>: "mt" ~> Maybes.cases (var "mt") (coqTermCast @@ (coqTermQualid @@ string "None")
             @@ (coqTypeTerm @@ (coqTermApp @@ (coqTermQualid @@ string "option")
-              @@ list [encodeType @@ var "env" @@ var "tyArg"])))
-          (constant $ var "encoded")
-          (var "mt"),
+              @@ list [encodeType @@ var "env" @@ var "tyArg"]))) (constant $ var "encoded"),
         -- Empty list: annotate with `list <tyArg>` when the element type is
         -- compound (either, pair, map). This handles `lefts nil` / `rights nil`
         -- (tyArg = sum) and similar. Simple tyArgs like `Name` are skipped
@@ -692,26 +683,22 @@ encodeUnionElim = define "encodeUnionElim" $
               C._Pattern10_Qualid_qualid>>: coqQualid @@ string "_",
               C._Pattern10_Qualid_patterns>>: list ([] :: [TypedTerm C.Pattern1])]]],
       C._Equation_term>>: var "body"],
-    "defaultEqs">: Maybes.maybe
+    "defaultEqs">: Maybes.cases
+      (var "csDefault")
       -- No explicit default: if the match is non-exhaustive, synthesize one as
       -- `| _ => hydra_unreachable` (replacing the old addPartialMatchCatchAll pass).
       -- If the match is exhaustive (or we lack the count), emit no default.
       (Logic.ifElse
-        (Maybes.maybe (boolean False)
-          (lambda "n" $ Logic.not $ Equality.gte (var "caseCount") (var "n"))
-          (var "expectedCount"))
+        (Maybes.cases (var "expectedCount") (boolean False) (lambda "n" $ Logic.not $ Equality.gte (var "caseCount") (var "n")))
         (list [var "wildcardEq" @@ (coqTermQualid @@ string "hydra_unreachable")])
         (list ([] :: [TypedTerm C.Equation])))
       -- Kernel provided an explicit default: if the non-default cases already cover
       -- every constructor, drop it (replacing the old removeRedundantDefaults pass);
       -- otherwise keep it.
       (lambda "defT" $ Logic.ifElse
-        (Maybes.maybe (boolean False)
-          (lambda "n" $ Equality.gte (var "caseCount") (var "n"))
-          (var "expectedCount"))
+        (Maybes.cases (var "expectedCount") (boolean False) (lambda "n" $ Equality.gte (var "caseCount") (var "n")))
         (list ([] :: [TypedTerm C.Equation]))
-        (list [var "wildcardEq" @@ (encodeTerm @@ var "env" @@ var "defT")]))
-      (var "csDefault"),
+        (list [var "wildcardEq" @@ (encodeTerm @@ var "env" @@ var "defT")])),
     "allEqs">: Lists.concat2 (var "baseEqs") (var "defaultEqs")] $
     inject C._Term C._Term_forallOrFun $
       inject C._ForallOrFun C._ForallOrFun_fun $
@@ -769,26 +756,21 @@ extractLambdaBinders = define "extractLambdaBinders" $
     _Term_lambda>>: "lam" ~> lets [
       "param">: Core.lambdaParameter $ var "lam",
       "mDomain">: Core.lambdaDomain $ var "lam",
-      "binder">: Maybes.maybe
-        (inject C._Binder C._Binder_name (coqName @@ (unwrap _Name @@ var "param")))
-        (lambda "domTy" $ inject C._Binder C._Binder_type $
+      "binder">: Maybes.cases (var "mDomain") (inject C._Binder C._Binder_name (coqName @@ (unwrap _Name @@ var "param"))) (lambda "domTy" $ inject C._Binder C._Binder_type $
           record C._TypeBinders [
             C._TypeBinders_names>>: list [coqName @@ (unwrap _Name @@ var "param")],
-            C._TypeBinders_type>>: coqTypeTerm @@ (encodeType @@ var "env" @@ var "domTy")])
-        (var "mDomain")] $
+            C._TypeBinders_type>>: coqTypeTerm @@ (encodeType @@ var "env" @@ var "domTy")])] $
       Lists.cons (var "binder") (extractLambdaBinders @@ var "env" @@ (Core.lambdaBody $ var "lam"))]
 
 -- | Test whether a domain type is the unit type (possibly wrapped in annotations).
 isUnitDomain :: TypedTermDefinition (Maybe Type -> Bool)
 isUnitDomain = define "isUnitDomain" $
   doc "True if the Maybe Type is the unit type, looking through annotations" $
-  lambda "mty" $ Maybes.maybe (boolean False)
-    (lambda "ty" $ cases _Type (var "ty") (Just (boolean False)) [
+  lambda "mty" $ Maybes.cases (var "mty") (boolean False) (lambda "ty" $ cases _Type (var "ty") (Just (boolean False)) [
       _Type_unit>>: constant true,
       _Type_record>>: "fs" ~> Lists.null (var "fs"),
       _Type_annotated>>: "at" ~>
         isUnitDomain @@ just (Core.annotatedTypeBody $ var "at")])
-    (var "mty")
 
 -- | Test whether a Hydra term is a lambda that ignores its (unit-typed) parameter.
 isUnitLambda :: TypedTermDefinition (Term -> Bool)
@@ -984,9 +966,7 @@ termReferencesVar = define "termReferencesVar" $
       (listAny
         (lambda "f" $ termReferencesVar @@ var "name" @@ (Core.caseAlternativeHandler $ var "f"))
         (Core.caseStatementCases $ var "cs"))
-      (Maybes.maybe (boolean False)
-        (lambda "d" $ termReferencesVar @@ var "name" @@ var "d")
-        (Core.caseStatementDefault $ var "cs")),
+      (Maybes.cases (Core.caseStatementDefault $ var "cs") (boolean False) (lambda "d" $ termReferencesVar @@ var "name" @@ var "d")),
     _Term_let>>: "lt" ~> Logic.or
       (listAny
         (lambda "b" $ termReferencesVar @@ var "name" @@ (Core.bindingTerm $ var "b"))
@@ -994,9 +974,7 @@ termReferencesVar = define "termReferencesVar" $
       (termReferencesVar @@ var "name" @@ (Core.letBody $ var "lt")),
     _Term_list>>: "xs" ~>
       listAny (lambda "el" $ termReferencesVar @@ var "name" @@ var "el") (var "xs"),
-    _Term_maybe>>: "mt" ~> Maybes.maybe (boolean False)
-      (lambda "el" $ termReferencesVar @@ var "name" @@ var "el")
-      (var "mt"),
+    _Term_maybe>>: "mt" ~> Maybes.cases (var "mt") (boolean False) (lambda "el" $ termReferencesVar @@ var "name" @@ var "el"),
     _Term_pair>>: "p" ~> Logic.or
       (termReferencesVar @@ var "name" @@ Pairs.first (var "p"))
       (termReferencesVar @@ var "name" @@ Pairs.second (var "p")),

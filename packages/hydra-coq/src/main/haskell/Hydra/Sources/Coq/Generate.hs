@@ -117,9 +117,7 @@ buildAxiomOnlyContent = define "buildAxiomOnlyContent" $
       "name" <~ (Pairs.first $ var "td") $
       "tvars" <~ (Pairs.first $ Pairs.second $ Pairs.second $ var "td") $
       "mty" <~ (Pairs.second $ Pairs.second $ Pairs.second $ var "td") $
-      Maybes.maybe
-        (Phantoms.nothing :: TypedTerm (Maybe C.Sentence))
-        ("schemeTy" ~>
+      Maybes.cases (var "mty") (Phantoms.nothing :: TypedTerm (Maybe C.Sentence)) ("schemeTy" ~>
           -- Re-wrap the TypeScheme's forall binders around the body type so
           -- the emitted axiom has well-scoped type variables:
           -- `Axiom f : forall (t0 : Type) (t1 : Type), <body>`.
@@ -129,8 +127,7 @@ buildAxiomOnlyContent = define "buildAxiomOnlyContent" $
             (var "schemeTy")
             (var "tvars") $
           Phantoms.just $ CoqCoderSource.encodeAxiomDefinitionPair @@ var "env" @@
-            pair (var "name") (var "wrapped"))
-        (var "mty"))
+            pair (var "name") (var "wrapped")))
     (var "termDefs")) $
   "deps" <~ (CoqUtils.moduleDependencyNames @@ var "mod_") $
   "depSentences" <~ (dependencyImports @@ var "deps") $
@@ -344,16 +341,13 @@ encodeMutualGroupText = define "encodeMutualGroupText" $
       "coqBody" <~ (CoqCoderSource.encodeTerm @@ var "env" @@ var "body2") $
       "bodyText" <~ (Serialization.printExpr @@
         (Serialization.parenthesize @@ (CoqSerdeSource.termToExpr @@ var "coqBody"))) $
-      "typeText" <~ Maybes.maybe
-        (string "_")
-        ("ty" ~>
+      "typeText" <~ Maybes.cases (var "mType") (string "_") ("ty" ~>
           "ep" <~ (CoqUtils.extractTypeParams @@ var "ty") $
           "bodyTy" <~ Pairs.second (var "ep") $
           Serialization.printExpr @@
             (Serialization.parenthesize @@
               (CoqSerdeSource.typeToExpr @@
-                (CSyntax.type_ $ CoqCoderSource.encodeType @@ var "env" @@ var "bodyTy"))))
-        (var "mType") $
+                (CSyntax.type_ $ CoqCoderSource.encodeType @@ var "env" @@ var "bodyTy")))) $
       pair (var "name") (pair (var "typeText") (var "bodyText")))
     (var "group")) $
   -- Collect type variable binders across the whole group.
@@ -463,13 +457,10 @@ encodeTermGroupSingleton = define "encodeTermGroupSingleton" $
   "coqBody" <~ (CoqCoderSource.encodeTerm @@ var "env" @@ var "body2") $
   "binders" <~ (mkTypeBinders @@ var "body2" @@ var "typeVars") $
   "typeBinders" <~ Pairs.second (var "binders") $
-  "returnType" <~ Maybes.maybe
-    (Phantoms.nothing :: TypedTerm (Maybe C.Type))
-    ("ty" ~>
+  "returnType" <~ Maybes.cases (var "mType") (Phantoms.nothing :: TypedTerm (Maybe C.Type)) ("ty" ~>
       "ep" <~ (CoqUtils.extractTypeParams @@ var "ty") $
       "bodyTy" <~ Pairs.second (var "ep") $
-      Phantoms.just $ CSyntax.type_ $ CoqCoderSource.encodeType @@ var "env" @@ var "bodyTy")
-    (var "mType") $
+      Phantoms.just $ CSyntax.type_ $ CoqCoderSource.encodeType @@ var "env" @@ var "bodyTy") $
   list [CSyntax.sentence
     (Phantoms.nothing :: TypedTerm (Maybe C.Comment))
     (CSyntax.sentenceContentDefinition $ CSyntax.definition
@@ -1047,10 +1038,7 @@ moduleToCoq = define "moduleToCoq" $
   lambdas ["fieldMap", "constrCounts", "ambiguousNames", "globalSanitizedAcc", "mod_", "defs"] $
   "nsStr" <~ (Packaging.unModuleName (Packaging.moduleName $ var "mod_")) $
   "path" <~ (namespaceToPath @@ var "nsStr") $
-  "desc" <~ Maybes.maybe
-    (string "")
-    ("d" ~> Strings.cat (list [string "(* ", var "d", string " *)\n\n"]))
-    ((Maybes.bind (Packaging.moduleMetadata (var "mod_")) ("em" ~> Packaging.entityMetadataDescription (var "em")))) $
+  "desc" <~ Maybes.cases ((Maybes.bind (Packaging.moduleMetadata (var "mod_")) ("em" ~> Packaging.entityMetadataDescription (var "em")))) (string "") ("d" ~> Strings.cat (list [string "(* ", var "d", string " *)\n\n"])) $
   -- Modules known to blow up Coq's type-checker; emit axiom stubs instead.
   "axiomOnlyModules" <~ (list [string "hydra.hoisting", string "hydra.inference"]) $
   "isAxiomOnly" <~ ((Lists.elem :: TypedTerm String -> TypedTerm [String] -> TypedTerm Bool)
@@ -1068,10 +1056,7 @@ moduleToCoq = define "moduleToCoq" $
       _Definition_term>>: "td" ~>
         "msig" <~ (Packaging.termDefinitionSignature $ var "td") $
         "mts" <~ Maybes.map Scoping.termSignatureToTypeScheme (var "msig") $
-        "vs" <~ Maybes.maybe
-          (list ([] :: [TypedTerm Name]))
-          ("ts" ~> Core.typeSchemeVariables $ var "ts")
-          (var "mts") $
+        "vs" <~ Maybes.cases (var "mts") (list ([] :: [TypedTerm Name])) ("ts" ~> Core.typeSchemeVariables $ var "ts") $
         "mty" <~ Maybes.map ("ts" ~> Core.typeSchemeBody $ var "ts") (var "mts") $
         Phantoms.just $ pair
           (CoqUtils.localName @@ (unwrap _Name @@ (Packaging.termDefinitionName $ var "td")))

@@ -271,9 +271,11 @@ group_ = define "group" $
     -- Helper: term-level lambda
     lam s body = Core.termLambda $ Core.lambda (wrap _Name $ string s) nothing body
 
-    -- stepFn: \acc el -> maybe ([el], snd acc) (\h -> ifElse (equal el h) (extend) (flush)) (maybeHead (fst acc))
+    -- stepFn: \acc el -> cases (maybeHead (fst acc)) ([el], snd acc) (\h -> ifElse (equal el h) (extend) (flush))
     stepFn = lam "acc" $ lam "el" $
-      prim3 _maybes_maybe
+      prim3 _maybes_cases
+        -- maybeHead (fst acc)
+        (prim1 _lists_maybeHead (prim1 _pairs_first (tv "acc")))
         -- Nothing (empty group): start new with [el]
         (Core.termPair $ pair
           (Core.termList $ list [tv "el"])
@@ -292,8 +294,6 @@ group_ = define "group" $
               (prim2 _lists_concat2
                 (prim1 _pairs_second (tv "acc"))
                 (Core.termList $ list [prim1 _pairs_first (tv "acc")]))))
-        -- maybeHead (fst acc)
-        (prim1 _lists_maybeHead (prim1 _pairs_first (tv "acc")))
 
     initState = Core.termPair $ pair
       (Core.termList $ list ([] :: [TypedTerm Term]))
@@ -334,14 +334,11 @@ intersperse_ = define "intersperse" $
   "cx" ~> "g" ~>
   "sep" ~> "listTerm" ~>
   "elements" <<~ (ExtractCore.list @@ var "g" @@ var "listTerm") $
-  right $ Core.termList $ Maybes.maybe
-    (list ([] :: [TypedTerm Term]))
-    ("p" ~> Lists.cons
+  right $ Core.termList $ Maybes.cases (Lists.uncons (var "elements")) (list ([] :: [TypedTerm Term])) ("p" ~> Lists.cons
       (Pairs.first (var "p"))
       (Lists.concat $ Lists.map
         ("el" ~> list [var "sep", var "el"])
         (Pairs.second (var "p"))))
-    (Lists.uncons (var "elements"))
 
 -- | Interpreter-friendly map for List terms.
 -- Applies funTerm to each element of listTerm.
@@ -369,10 +366,7 @@ maybeHead_ = define "maybeHead" $
   "cx" ~> "g" ~>
   "listTerm" ~>
   "elements" <<~ (ExtractCore.list @@ var "g" @@ var "listTerm") $
-  right $ Core.termMaybe $ Maybes.maybe
-    nothing
-    ("p" ~> just (Pairs.first (var "p")))
-    (Lists.uncons (var "elements"))
+  right $ Core.termMaybe $ Maybes.cases (Lists.uncons (var "elements")) nothing ("p" ~> just (Pairs.first (var "p")))
 
 -- | Interpreter-friendly nub for List terms.
 -- Removes duplicates using equality. nub xs = foldl (\acc x -> ifElse (elem x acc) acc (concat2 acc [x])) [] xs
@@ -649,12 +643,9 @@ uncons_ = define "uncons" $
   "cx" ~> "g" ~>
   "listTerm" ~>
   "elements" <<~ (ExtractCore.list @@ var "g" @@ var "listTerm") $
-  right $ Core.termMaybe $ Maybes.maybe
-    nothing
-    ("h" ~> just $ Core.termPair $ pair
+  right $ Core.termMaybe $ Maybes.cases (Lists.maybeAt (int32 0) (var "elements")) nothing ("h" ~> just $ Core.termPair $ pair
       (var "h")
       (Core.termList $ Lists.drop (int32 1) (var "elements")))
-    (Lists.maybeAt (int32 0) (var "elements"))
 
 -- | Interpreter-friendly zipWith for List terms.
 -- Applies funTerm to corresponding pairs of elements.

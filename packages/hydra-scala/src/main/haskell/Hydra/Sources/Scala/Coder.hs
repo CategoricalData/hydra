@@ -176,14 +176,15 @@ encodeCase = def "encodeCase" $
     "fname">: project _CaseAlternative _CaseAlternative_name @@ var "f",
     "fterm">: project _CaseAlternative _CaseAlternative_handler @@ var "f",
     -- Determine if the field has unit type: check ftypes if available, otherwise check if term is a lambda
-    "isUnit">: Maybes.maybe
+    "isUnit">: Maybes.cases
+      (Maps.lookup (var "fname") (var "ftypes"))
       -- If ftypes doesn't have this field, check the term structure
       (cases _Term (Strip.deannotateAndDetypeTerm @@ var "fterm") (Just false) [
         -- Check lambda: unit if domain=Unit, or if lambda body doesn't use the parameter
         _Term_lambda>>: ("lam" ~> lets [
           "lamParam">: Core.lambdaParameter $ var "lam",
           "lamBody">: Core.lambdaBody $ var "lam",
-          "domIsUnit">: Maybes.maybe false ("dom" ~> Equality.equal (var "dom") (Core.typeUnit)) (Core.lambdaDomain $ var "lam"),
+          "domIsUnit">: Maybes.cases (Core.lambdaDomain $ var "lam") false ("dom" ~> Equality.equal (var "dom") (Core.typeUnit)),
           -- isFreeVariableInTerm returns True when the variable is NOT present
           "bodyIgnoresParam">: Variables.isFreeVariableInTerm @@ var "lamParam" @@ var "lamBody"] $
           Logic.or (var "domIsUnit") (var "bodyIgnoresParam")),
@@ -192,12 +193,11 @@ encodeCase = def "encodeCase" $
       ("dom" ~> cases _Type (Strip.deannotateType @@ var "dom")
         (Just false)
         [_Type_unit>>: constant true,
-         _Type_record>>: ("rt" ~> Equality.equal (Lists.length (var "rt")) (int32 0))])
-      (Maps.lookup (var "fname") (var "ftypes")),
+         _Type_record>>: ("rt" ~> Equality.equal (Lists.length (var "rt")) (int32 0))]),
     -- Use type name + field name + lambda param name for unique variable names.
     -- The lambda param suffix prevents shadowing in nested matches on the same union type
     -- (e.g., outer "sf" -> "v_ParseResult_success_sf", inner "sa" -> "v_ParseResult_success_sa").
-    "shortTypeName">: Maybes.fromMaybe (string "x") (Lists.maybeLast (Strings.splitOn (string ".") (Maybes.maybe (string "x") ("n" ~> Core.unName (var "n")) (var "sn")))),
+    "shortTypeName">: Maybes.fromMaybe (string "x") (Lists.maybeLast (Strings.splitOn (string ".") (Maybes.cases (var "sn") (string "x") ("n" ~> Core.unName (var "n"))))),
     -- Sanitize lambda param name for use as suffix: replace apostrophes with underscores
     "lamParamSuffix">: cases _Term (Strip.deannotateAndDetypeTerm @@ var "fterm") (Just $ string "") [
       _Term_lambda>>: ("lam" ~> lets [
@@ -208,7 +208,7 @@ encodeCase = def "encodeCase" $
     -- Check if variant is truly parameterless (domain is Unit) vs parameterized but unused
     "domainIsUnit">: cases _Term (Strip.deannotateAndDetypeTerm @@ var "fterm") (Just true) [
       _Term_lambda>>: ("lam" ~>
-        Maybes.maybe true ("dom" ~> Equality.equal (var "dom") (Core.typeUnit)) (Core.lambdaDomain $ var "lam"))],
+        Maybes.cases (Core.lambdaDomain $ var "lam") true ("dom" ~> Equality.equal (var "dom") (Core.typeUnit)))],
     "patArgs">: Logic.ifElse (var "isUnit")
       (Logic.ifElse (var "domainIsUnit")
         (emptyList)
@@ -313,25 +313,20 @@ encodeFunction = def "encodeFunction" $
           (asTerm encodeTerm @@ var "cx" @@ var "g" @@ var "body")
           ("sbody" ~>
             Eithers.bind
-              (Maybes.maybe
-                (asTerm findSdom @@ var "cx" @@ var "g" @@ var "meta")
-                ("dom" ~> Eithers.bind (asTerm encodeType @@ var "cx" @@ var "g" @@ var "dom")
-                  ("sdom" ~> right (just (var "sdom"))))
-                (var "mdom"))
+              (Maybes.cases (var "mdom") (asTerm findSdom @@ var "cx" @@ var "g" @@ var "meta") ("dom" ~> Eithers.bind (asTerm encodeType @@ var "cx" @@ var "g" @@ var "dom")
+                  ("sdom" ~> right (just (var "sdom")))))
               ("sdom" ~>
                 right (ScalaUtilsSource.slambda @@ var "v" @@ var "sbody" @@ var "sdom")))),
       _Term_unwrap>>: ("name" ~>
         -- Wrap elimination is identity in Scala (newtypes are erased)
-        Maybes.maybe
-          (Eithers.bind (asTerm findSdom @@ var "cx" @@ var "g" @@ var "meta")
-            ("sdom" ~> right (ScalaUtilsSource.slambda @@ string "x" @@ (ScalaUtilsSource.sname @@ string "x") @@ var "sdom")))
-          ("a" ~> asTerm encodeTerm @@ var "cx" @@ var "g" @@ var "a")
-          (var "arg")),
+        Maybes.cases (var "arg") (Eithers.bind (asTerm findSdom @@ var "cx" @@ var "g" @@ var "meta")
+            ("sdom" ~> right (ScalaUtilsSource.slambda @@ string "x" @@ (ScalaUtilsSource.sname @@ string "x") @@ var "sdom"))) ("a" ~> asTerm encodeTerm @@ var "cx" @@ var "g" @@ var "a")),
       _Term_project>>: ("proj" ~> lets [
         "fname">: ScalaUtilsSource.scalaEscapeName @@ (Core.unName (project _Projection _Projection_fieldName @@ var "proj")),
         "typeName">: project _Projection _Projection_typeName @@ var "proj",
         "pv">: string "x"] $
-        Maybes.maybe
+        Maybes.cases
+          (var "arg")
           -- Unapplied projection: generate lambda x => x.fieldName
           -- Try findSdom first (full type with type params), fall back to Projection.typeName
           (Eithers.bind
@@ -341,14 +336,14 @@ encodeFunction = def "encodeFunction" $
                 (asTerm encodeType @@ var "cx" @@ var "g" @@ (Core.typeVariable (var "typeName")))
                 ("st" ~> right (just (var "st"))))
               -- findSdom succeeded: check if result is Nothing, fall back to typeName
-              ("msdom" ~> Maybes.maybe
+              ("msdom" ~> Maybes.cases
+                (var "msdom")
                 -- findSdom returned Nothing: fall back to Projection.typeName
                 (Eithers.bind
                   (asTerm encodeType @@ var "cx" @@ var "g" @@ (Core.typeVariable (var "typeName")))
                   ("st" ~> right (just (var "st"))))
                 -- findSdom returned Just: use it
-                ("sdom" ~> right (just (var "sdom")))
-                (var "msdom"))
+                ("sdom" ~> right (just (var "sdom"))))
               (asTerm findSdom @@ var "cx" @@ var "g" @@ var "meta"))
             ("msdom" ~>
               right (ScalaUtilsSource.slambda @@ var "pv" @@
@@ -368,8 +363,7 @@ encodeFunction = def "encodeFunction" $
                   record _SelectData [
                     _SelectData_qual>>: var "sa",
                     _SelectData_name>>: record _NameData [
-                      _NameData_value>>: wrap _PredefString (var "fname")]])))))
-          (var "arg")),
+                      _NameData_value>>: wrap _PredefString (var "fname")]])))))),
       _Term_cases>>: ("cs" ~> lets [
         "v">: string "v",
         "tname">: project _CaseStatement _CaseStatement_typeName @@ var "cs",
@@ -387,9 +381,7 @@ encodeFunction = def "encodeFunction" $
               ("fieldCases" ~>
                 -- Add default case if present
                 Eithers.bind
-                  (Maybes.maybe
-                    (right (var "fieldCases"))
-                    ("dfltTerm" ~>
+                  (Maybes.cases (var "dflt") (right (var "fieldCases")) ("dfltTerm" ~>
                       Eithers.bind
                         (asTerm encodeTerm @@ var "cx" @@ var "g" @@ var "dfltTerm")
                         ("sdflt" ~>
@@ -397,24 +389,20 @@ encodeFunction = def "encodeFunction" $
                             record _Case [
                               _Case_pat>>: inject _Pat _Pat_wildcard unit,
                               _Case_cond>>: nothing,
-                              _Case_body>>: var "sdflt"]]))))
-                    (var "dflt"))
+                              _Case_body>>: var "sdflt"]])))))
                   ("scases" ~>
-                Maybes.maybe
-                  (Eithers.bind
+                Maybes.cases (var "arg") (Eithers.bind
                     (asTerm findSdom @@ var "cx" @@ var "g" @@ var "meta")
                     ("sdom" ~>
                       right (ScalaUtilsSource.slambda @@ var "v" @@ (inject _Data _Data_match (record _MatchData [
                         _MatchData_expr>>: ScalaUtilsSource.sname @@ var "v",
-                        _MatchData_cases>>: var "scases"])) @@ var "sdom")))
-                  ("a" ~>
+                        _MatchData_cases>>: var "scases"])) @@ var "sdom"))) ("a" ~>
                     Eithers.bind
                       (asTerm encodeTerm @@ var "cx" @@ var "g" @@ var "a")
                       ("sa" ~>
                         right (inject _Data _Data_match (record _MatchData [
                           _MatchData_expr>>: var "sa",
-                          _MatchData_cases>>: var "scases"]))))
-                  (var "arg"))))])
+                          _MatchData_cases>>: var "scases"])))))))])
 
 encodeLetBinding :: TypedTermDefinition (InferenceContext -> Graph -> S.Set Name -> Binding -> Either Error Scala.Stat)
 encodeLetBinding = def "encodeLetBinding" $
@@ -427,16 +415,15 @@ encodeLetBinding = def "encodeLetBinding" $
       (Maps.lookup (Core.bindingName $ var "b") (Graph.graphBoundTypes $ var "g"))
       ("ts" ~> just (var "ts")),
     -- Check if the binding has a function type
-    "isFn">: Maybes.maybe false
-      ("ts" ~> cases _Type (Strip.deannotateType @@ (Core.typeSchemeBody $ var "ts"))
+    "isFn">: Maybes.cases (var "mts") false ("ts" ~> cases _Type (Strip.deannotateType @@ (Core.typeSchemeBody $ var "ts"))
         (Just false)
         [_Type_function>>: constant true,
          _Type_forall>>: ("fa" ~> cases _Type (Strip.deannotateType @@ Core.forallTypeBody (var "fa"))
-           (Just false) [_Type_function>>: constant true])])
-      (var "mts")] $
+           (Just false) [_Type_function>>: constant true])])] $
     -- Route to encodeLocalDef when we have a type scheme AND either it's a function OR it has local type vars.
     -- This mirrors the Java coder which always uses typed declarations and hoists polymorphic bindings to methods.
-    Maybes.maybe
+    Maybes.cases
+      (var "mts")
       -- No type scheme at all: simple val
       (Eithers.bind (asTerm encodeTerm @@ var "cx" @@ var "g" @@ var "bterm")
         ("srhs" ~> right (mkLazyVal (var "bname") nothing (var "srhs"))))
@@ -451,7 +438,6 @@ encodeLetBinding = def "encodeLetBinding" $
           (Eithers.bind (asTerm encodeTerm @@ var "cx" @@ var "g" @@ var "bterm")
             ("srhs" ~> Eithers.bind (asTerm encodeType @@ var "cx" @@ var "g" @@ (Core.typeSchemeBody $ var "ts"))
               ("styp" ~> right (mkLazyVal (var "bname") (just (var "styp")) (var "srhs"))))))
-      (var "mts")
 
 encodeLiteral :: TypedTermDefinition (InferenceContext -> Graph -> Literal -> Either Error Scala.Lit)
 encodeLiteral = def "encodeLiteral" $
@@ -691,13 +677,10 @@ encodeTerm = def "encodeTerm" $
       _Term_wrap>>: ("wt" ~>
         asTerm encodeTerm @@ var "cx" @@ var "g" @@ (project _WrappedTerm _WrappedTerm_body @@ var "wt")),
       _Term_maybe>>: ("m" ~>
-        Maybes.maybe
-          (right (ScalaUtilsSource.sname @@ string "None"))
-          ("t" ~>
+        Maybes.cases (var "m") (right (ScalaUtilsSource.sname @@ string "None")) ("t" ~>
             Eithers.bind
               (asTerm encodeTerm @@ var "cx" @@ var "g" @@ var "t")
-              ("s" ~> right (ScalaUtilsSource.sapply @@ (ScalaUtilsSource.sname @@ string "Some") @@ list [var "s"])))
-          (var "m")),
+              ("s" ~> right (ScalaUtilsSource.sapply @@ (ScalaUtilsSource.sname @@ string "Some") @@ list [var "s"])))),
       _Term_record>>: ("rec" ~> lets [
         "rname">: project _Record _Record_typeName @@ var "rec",
         "fields">: project _Record _Record_fields @@ var "rec",
@@ -722,7 +705,8 @@ encodeTerm = def "encodeTerm" $
           identity
           (Resolution.fieldTypes @@ var "cx" @@ var "g" @@ Core.typeVariable (var "sn"))] $
         -- Check if the field is unit-typed using ftypes, then term structure
-        Logic.ifElse (Maybes.maybe
+        Logic.ifElse (Maybes.cases
+          (Maps.lookup (var "fn") (var "unionFtypes"))
           -- No ftypes: check term structure
           (cases _Term (Strip.deannotateAndDetypeTerm @@ var "ft") (Just false) [
             _Term_unit>>: constant true,
@@ -730,8 +714,7 @@ encodeTerm = def "encodeTerm" $
           -- Has ftypes: check if field type is unit or empty record
           ("dom" ~> cases _Type (Strip.deannotateType @@ var "dom") (Just false) [
             _Type_unit>>: constant true,
-            _Type_record>>: ("rt" ~> Equality.equal (Lists.length (var "rt")) (int32 0))])
-          (Maps.lookup (var "fn") (var "unionFtypes")))
+            _Type_record>>: ("rt" ~> Equality.equal (Lists.length (var "rt")) (int32 0))]))
           -- Unit-typed: bare constructor name (simple enum case in Scala 3)
           (right (var "lhs"))
           -- Non-unit: apply argument
@@ -798,10 +781,7 @@ encodeTermDefinition = def "encodeTermDefinition" $
     "name">: project _TermDefinition _TermDefinition_name @@ var "td",
     "term">: project _TermDefinition _TermDefinition_body @@ var "td",
     "lname">: ScalaUtilsSource.scalaEscapeName @@ (Names.localNameOf @@ var "name"),
-    "typ'">: Maybes.maybe
-      (Core.typeVariable (wrap _Name (string "hydra.core.Unit")))
-      (reify Core.typeSchemeBody)
-      (Maybes.map Scoping.termSignatureToTypeScheme (project _TermDefinition _TermDefinition_signature @@ var "td")),
+    "typ'">: Maybes.cases (Maybes.map Scoping.termSignatureToTypeScheme (project _TermDefinition _TermDefinition_signature @@ var "td")) (Core.typeVariable (wrap _Name (string "hydra.core.Unit"))) (reify Core.typeSchemeBody),
     -- Check if the type is a function type (needs def) by looking at the stripped type
     "isFunctionType">: cases _Type (Strip.deannotateType @@ var "typ'")
       (Just false)
@@ -1217,11 +1197,8 @@ findDomain = def "findDomain" $
   lambda "cx" $ lambda "g" $ lambda "meta" $
     Eithers.bind
       (getTypeE (var "cx") (var "g") (var "meta"))
-      ("r" ~> Maybes.maybe
-        (left (Error.errorOther $ Error.otherError (string "expected a typed term")))
-        ("t" ~> cases _Type (Strip.deannotateType @@ var "t") (Just $ left (Error.errorOther $ Error.otherError (string "expected a function type"))) [
-          _Type_function>>: ("ft" ~> right (project _FunctionType _FunctionType_domain @@ var "ft"))])
-        (var "r"))
+      ("r" ~> Maybes.cases (var "r") (left (Error.errorOther $ Error.otherError (string "expected a typed term"))) ("t" ~> cases _Type (Strip.deannotateType @@ var "t") (Just $ left (Error.errorOther $ Error.otherError (string "expected a function type"))) [
+          _Type_function>>: ("ft" ~> right (project _FunctionType _FunctionType_domain @@ var "ft"))]))
 
 findImports :: TypedTermDefinition (InferenceContext -> Graph -> Module -> Either Error [Scala.Stat])
 findImports = def "findImports" $
@@ -1243,7 +1220,8 @@ findSdom = def "findSdom" $
   lambda "cx" $ lambda "g" $ lambda "meta" $
     Eithers.bind
       (getTypeE (var "cx") (var "g") (var "meta"))
-      ("mtyp" ~> Maybes.maybe
+      ("mtyp" ~> Maybes.cases
+        (var "mtyp")
         -- No type annotation: return Nothing (shouldn't happen in well-typed terms)
         (right nothing)
         ("t" ~> cases _Type (Strip.deannotateType @@ var "t")
@@ -1263,8 +1241,7 @@ findSdom = def "findSdom" $
               "dom2">: project _FunctionType _FunctionType_domain @@ var "ft2"] $
               Eithers.bind
                 (asTerm encodeType @@ var "cx" @@ var "g" @@ var "dom2")
-                ("sdom2" ~> right (just (var "sdom2"))))])])
-        (var "mtyp"))
+                ("sdom2" ~> right (just (var "sdom2"))))])]))
 
 -- | Get a type annotation, converting DecodingError to Error.
 getTypeE :: TypedTerm InferenceContext -> TypedTerm Graph -> TypedTerm (M.Map Name Term) -> TypedTerm (Either Error (Maybe Type))

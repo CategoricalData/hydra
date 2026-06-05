@@ -574,7 +574,8 @@ bigintAsInt = coerce
 bindingIsFunctionType :: TypedTermDefinition (Binding -> Bool)
 bindingIsFunctionType = def "bindingIsFunctionType" $
   lambda "b" $
-    Maybes.maybe
+    Maybes.cases
+      (Core.bindingTypeScheme (var "b"))
       -- No type scheme: check term structure
       (cases _Term (Strip.deannotateTerm @@ Core.bindingTerm (var "b"))
         (Just $ boolean False) [
@@ -591,7 +592,6 @@ bindingIsFunctionType = def "bindingIsFunctionType" $
             cases _Type (Strip.deannotateType @@ Core.forallTypeBody (var "fa"))
               (Just $ boolean False) [
               _Type_function>>: lambda "_ft2" $ boolean True]])
-      (Core.bindingTypeScheme (var "b"))
 
 -- | Decode a Type from its term encoding (limited subset).
 
@@ -641,16 +641,13 @@ bindingsToStatements = def "bindingsToStatements" $
     "recursiveVars" <~ Sets.fromList (Lists.concat (Lists.map
       (lambda "names" $
         Logic.ifElse (Equality.equal (Lists.length (var "names")) (int32 1))
-          (Maybes.maybe
-            (list ([] :: [TypedTerm Name]))
-            (lambda "singleName" $
+          (Maybes.cases (Lists.maybeHead (var "names")) (list ([] :: [TypedTerm Name])) (lambda "singleName" $
               Maybes.cases (Maps.lookup (var "singleName") (var "allDeps"))
                 (list ([] :: [TypedTerm Name]))
                 (lambda "deps" $
                   Logic.ifElse (Sets.member (var "singleName") (var "deps"))
                     (list [var "singleName"])
-                    (list ([] :: [TypedTerm Name]))))
-            (Lists.maybeHead (var "names")))
+                    (list ([] :: [TypedTerm Name])))))
           (var "names"))
       (var "sorted"))) $
     -- Identify thunked vars. Mirror the Python coder's rule
@@ -1504,14 +1501,11 @@ declarationForRecordType' = def "declarationForRecordType'" $
     "paramLines" <<~ (Eithers.mapList (lambda "f" $
       "fname" <~ (unwrap _Name @@ Core.fieldTypeName (var "f")) $
       "mDoc" <<~ (Annotations.commentsFromFieldType @@ var "cx" @@ var "g" @@ var "f") $
-      right (Maybes.maybe
-        (string "")
-        (lambda "d" $ Strings.cat (list [
+      right (Maybes.cases (var "mDoc") (string "") (lambda "d" $ Strings.cat (list [
           string "@param ",
           var "fname",
           string " ",
-          var "d"]))
-        (var "mDoc")))
+          var "d"]))))
       (var "fields")) $
     "nonEmptyParamLines" <~ Lists.filter
       (lambda "l" $ Logic.not (Equality.equal (var "l") (string "")))
@@ -1832,33 +1826,21 @@ detectAccumulatorUnification = def "detectAccumulatorUnification" $
       (Just nothing) [
       _Type_variable>>: lambda "v" $ just (var "v")]) $
     "directRefSubst" <~ (directRefSubstitution @@ var "directInputVars" @@ var "codVar" @@ var "groupedDirect") $
-    "codSubst" <~ (Maybes.maybe
-      (Maps.empty)
-      (lambda "cv" $
+    "codSubst" <~ (Maybes.cases (findPairFirst @@ var "cod") (Maps.empty) (lambda "cv" $
         Logic.ifElse
           (Maps.member (var "cv") (var "selfRefSubst"))
           (Maps.empty)
-          (Maybes.maybe
-            (Maps.empty)
-            (lambda "refVar" $
+          (Maybes.cases (findSelfRefVar @@ var "groupedByInput") (Maps.empty) (lambda "refVar" $
               Logic.ifElse
                 (Equality.equal (var "cv") (var "refVar"))
                 (Maps.empty)
-                (Maps.singleton (var "cv") (var "refVar")))
-            (findSelfRefVar @@ var "groupedByInput")))
-      (findPairFirst @@ var "cod")) $
+                (Maps.singleton (var "cv") (var "refVar")))))) $
     "domVars" <~ Sets.fromList (Lists.bind (var "doms") (lambda "d" $ Sets.toList (collectTypeVars @@ var "d"))) $
-    "danglingSubst" <~ (Maybes.maybe
-      (Maps.empty)
-      (lambda "cv" $
+    "danglingSubst" <~ (Maybes.cases (findPairFirst @@ var "cod") (Maps.empty) (lambda "cv" $
         Logic.ifElse
           (Sets.member (var "cv") (var "domVars"))
           (Maps.empty)
-          (Maybes.maybe
-            (Maps.empty)
-            (lambda "refVar" $ Maps.singleton (var "cv") (Core.typeVariable (var "refVar")))
-            (findSelfRefVar @@ var "groupedByInput")))
-      (findPairFirst @@ var "cod")) $
+          (Maybes.cases (findSelfRefVar @@ var "groupedByInput") (Maps.empty) (lambda "refVar" $ Maps.singleton (var "cv") (Core.typeVariable (var "refVar")))))) $
     Maps.union (Maps.union (Maps.union
       (nameMapToTypeMap @@ var "selfRefSubst")
       (nameMapToTypeMap @@ var "codSubst"))
@@ -2637,10 +2619,7 @@ encodeTermDefinition = def "encodeTermDefinition" $
     "name" <~ (project _TermDefinition _TermDefinition_name @@ var "tdef") $
     "term0" <~ (project _TermDefinition _TermDefinition_body @@ var "tdef") $
     "mDoc" <<~ (Annotations.getTermDescription @@ var "cx" @@ var "g" @@ var "term0") $
-    "ts" <~ Maybes.maybe
-      (Core.typeScheme (list ([] :: [TypedTerm Name])) (Core.typeVariable (wrap _Name (string "hydra.core.Unit"))) nothing)
-      ("x" ~> var "x")
-      (Maybes.map Scoping.termSignatureToTypeScheme (project _TermDefinition _TermDefinition_signature @@ var "tdef")) $
+    "ts" <~ Maybes.cases (Maybes.map Scoping.termSignatureToTypeScheme (project _TermDefinition _TermDefinition_signature @@ var "tdef")) (Core.typeScheme (list ([] :: [TypedTerm Name])) (Core.typeVariable (wrap _Name (string "hydra.core.Unit"))) nothing) ("x" ~> var "x") $
     -- Unshadow variables
     ("term" <~ (Variables.unshadowVariables @@ var "term0") $
       "fs" <<~ (analyzeJavaFunction @@ var "env" @@ var "term" @@ var "cx" @@ var "g") $
@@ -2785,10 +2764,7 @@ encodeTermDefinition = def "encodeTermDefinition" $
       "imdMember" <~ (JavaUtilsSource.interfaceMethodDeclaration @@ var "mods" @@ var "jparams"
         @@ var "jname" @@ var "jformalParams" @@ var "result"
         @@ just (var "methodBody")) $
-      right (Maybes.maybe
-        (noInterfaceComment @@ var "imdMember")
-        (lambda "doc" $ withInterfaceCommentString @@ var "doc" @@ var "imdMember")
-        (var "mDoc")))
+      right (Maybes.cases (var "mDoc") (noInterfaceComment @@ var "imdMember") (lambda "doc" $ withInterfaceCommentString @@ var "doc" @@ var "imdMember")))
 
 -- | Internal term encoder with annotation and type-application accumulators.
 encodeTermInternal :: TypedTermDefinition (JavaHelpers.JavaEnvironment -> [M.Map Name Term] -> [Java.Type] -> Term -> InferenceContext -> Graph -> Either Error Java.Expression)
@@ -4069,10 +4045,7 @@ groupPairsByFirst = def "groupPairsByFirst" $
         "v" <~ Pairs.second (var "p") $
         Maps.alter
           (lambda "mv" $
-            Maybes.maybe
-              (just (list [var "v"]))
-              (lambda "vs" $ just (Lists.concat2 (var "vs") (list [var "v"])))
-              (var "mv"))
+            Maybes.cases (var "mv") (just (list [var "v"])) (lambda "vs" $ just (Lists.concat2 (var "vs") (list [var "v"]))))
           (var "k")
           (var "m"))
       (Maps.empty)

@@ -80,7 +80,6 @@ allTests = definitionInModule module_ "allTests" $
       maybesIsNothing,
       maybesMap,
       maybesMapMaybe,
-      maybesMaybe,
       maybesPure,
       maybesToList]
 
@@ -195,15 +194,6 @@ maybesMapMaybe = subgroup "mapMaybe" [
     test name xs expected = evalPair name showIntList
       (Maybes.mapMaybe filterFn (Phantoms.list $ Phantoms.int32 <$> xs))
       (Phantoms.list $ Phantoms.int32 <$> expected)
-
-maybesMaybe :: TypedTerm TestGroup
-maybesMaybe = subgroup "maybe" [
-  test "just value applies function" 0 (justInt 5) 10,
-  test "nothing returns default" 99 nothingInt 99]
-  where
-    test name def x result = evalPair name showInt32
-      (Maybes.maybe (Phantoms.int32 def) (Phantoms.lambda "x" $ Math.mul (Phantoms.var "x") (Phantoms.int32 2)) x)
-      (Phantoms.int32 result)
 
 maybesPure :: TypedTerm TestGroup
 maybesPure = subgroup "pure" [

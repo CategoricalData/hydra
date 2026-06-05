@@ -678,9 +678,7 @@ public class Serde {
                         proj(ClassInstanceCreationExpression.TYPE_, ClassInstanceCreationExpression.QUALIFIER, "cice")),
                     field("e",
                         proj(ClassInstanceCreationExpression.TYPE_, ClassInstanceCreationExpression.EXPRESSION, "cice")),
-                    Maybes.maybe(
-                        apply(ref(Serde.unqualifiedClassInstanceCreationExpressionToExpr), var("e")),
-                        lambda("q",
+                    Maybes.cases(var("mqual"), apply(ref(Serde.unqualifiedClassInstanceCreationExpressionToExpr), var("e")), lambda("q",
                             apply(
                                 var("hydra.serialization.dotSep"),
                                 list(
@@ -689,8 +687,7 @@ public class Serde {
                                         var("q")),
                                     apply(
                                         ref(Serde.unqualifiedClassInstanceCreationExpressionToExpr),
-                                        var("e"))))),
-                        var("mqual")))));
+                                        var("e")))))))));
 
     public static final Def classLiteralToExpr = def(
         "classLiteralToExpr",
@@ -2828,11 +2825,9 @@ public class Serde {
                         proj(SingleElementAnnotation.TYPE_, SingleElementAnnotation.NAME, "sea")),
                     field("mv",
                         proj(SingleElementAnnotation.TYPE_, SingleElementAnnotation.VALUE, "sea")),
-                    Maybes.maybe(
-                        apply(
+                    Maybes.cases(var("mv"), apply(
                             ref(Serde.markerAnnotationToExpr),
-                            wrap(MarkerAnnotation.TYPE_, var("tname"))),
-                        lambda("v",
+                            wrap(MarkerAnnotation.TYPE_, var("tname"))), lambda("v",
                             apply(
                                 var("hydra.serialization.prefix"),
                                 string("@"),
@@ -2843,8 +2838,7 @@ public class Serde {
                                         apply(
                                             var("hydra.serialization.parenList"),
                                             bool(false),
-                                            list(apply(ref(Serde.elementValueToExpr), var("v")))))))),
-                        var("mv")))));
+                                            list(apply(ref(Serde.elementValueToExpr), var("v"))))))))))));
 
     public static final Def singleLineComment = def(
         "singleLineComment",
@@ -3316,15 +3310,12 @@ public class Serde {
                         proj(VariableDeclarator.TYPE_, VariableDeclarator.INITIALIZER, "vd")),
                     field("idSec",
                         apply(ref(Serde.variableDeclaratorIdToExpr), var("id"))),
-                    Maybes.maybe(
-                        var("idSec"),
-                        lambda("init",
+                    Maybes.cases(var("minit"), var("idSec"), lambda("init",
                             apply(
                                 var("hydra.serialization.infixWs"),
                                 string("="),
                                 var("idSec"),
-                                apply(ref(Serde.variableInitializerToExpr), var("init")))),
-                        var("minit")))));
+                                apply(ref(Serde.variableInitializerToExpr), var("init"))))))));
 
     public static final Def variableInitializerToExpr = def(
         "variableInitializerToExpr",
@@ -3359,10 +3350,7 @@ public class Serde {
                     field("body",
                         proj(WhileStatement.TYPE_, WhileStatement.BODY, "ws")),
                     field("condSer",
-                        Maybes.maybe(
-                            apply(var("hydra.serialization.cst"), string("true")),
-                            lambda("c", apply(ref(Serde.expressionToExpr), var("c"))),
-                            var("mcond"))),
+                        Maybes.cases(var("mcond"), apply(var("hydra.serialization.cst"), string("true")), lambda("c", apply(ref(Serde.expressionToExpr), var("c"))))),
                     apply(
                         var("hydra.serialization.spaceSep"),
                         list(
@@ -3428,9 +3416,7 @@ public class Serde {
                 lambda(
                     "mc",
                     "expr",
-                    Maybes.maybe(
-                        var("expr"),
-                        lambda("c",
+                    Maybes.cases(var("mc"), var("expr"), lambda("c",
                             apply(
                                 var("hydra.serialization.newlineSep"),
                                 list(
@@ -3454,8 +3440,7 @@ public class Serde {
                                                                 ref(Serde.sanitizeJavaComment),
                                                                 var("c"))))),
                                                 string("\n */")))),
-                                    var("expr")))),
-                        var("mc")))));
+                                    var("expr"))))))));
 
 
 

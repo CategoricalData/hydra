@@ -669,13 +669,15 @@ encodeApplicationInner = def "encodeApplicationInner" $
         "inlineVars" <~ (project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_inlineVariables @@ var "env") $
         Maybes.cases (Maps.lookup (var "name") (Graph.graphPrimitives (var "g")))
           -- Not a primitive: use original logic
-          (Maybes.maybe
+          (Maybes.cases
+            (Lexical.lookupBinding @@ var "g" @@ var "name")
             -- Not in graph elements: use encodeVariable
             ("expr" <<~ (encodeVariable @@ var "cx" @@ var "env" @@ var "name" @@ var "hargs") $
               right $ pair (var "expr") (var "rargs"))
             -- In graph elements: check arity
             ("el" ~>
-              Maybes.maybe
+              Maybes.cases
+                (Core.bindingTypeScheme $ var "el")
                 -- No type: use encodeVariable
                 ("expr" <<~ (encodeVariable @@ var "cx" @@ var "env" @@ var "name" @@ var "hargs") $
                   right $ pair (var "expr") (var "rargs"))
@@ -698,9 +700,7 @@ encodeApplicationInner = def "encodeApplicationInner" $
                         (var "remainingArgs"))
                       (right $ pair
                         (PyUtils.functionCall @@ (PyUtils.pyNameToPyPrimary @@ (PyNames.encodeName @@ true @@ Util.caseConventionLowerSnake @@ var "env" @@ var "name")) @@ var "consumedArgs")
-                        (var "remainingArgs"))))
-                (Core.bindingTypeScheme $ var "el"))
-            (Lexical.lookupBinding @@ var "g" @@ var "name"))
+                        (var "remainingArgs"))))))
           -- Is a primitive: wrap lazy arguments and encode
           (lambda "_prim" $
             "wrappedArgs" <~ (wrapLazyArguments @@ var "g" @@ var "name" @@ var "hargs") $
@@ -760,7 +760,8 @@ encodeBindingAs = def "encodeBindingAs" $
     "mts" <~ Core.bindingTypeScheme (var "binding") $
     "fname" <~ (PyNames.encodeName @@ true @@ Util.caseConventionLowerSnake @@ var "env" @@ var "name1") $
     -- Check if binding has a type scheme - if so, use encodeTermAssignment
-    Maybes.maybe
+    Maybes.cases
+      (var "mts")
       -- No type scheme (e.g., lifted local functions) - check for special patterns
       ("gathered" <~ (gatherLambdas @@ var "term1") $
         "lambdaParams" <~ (Pairs.first $ var "gathered") $
@@ -768,16 +769,15 @@ encodeBindingAs = def "encodeBindingAs" $
         -- Check for hoisted binding pattern: lambdas wrapping a case statement application
         "mcsa" <~ (isCaseStatementApplication @@ var "innerBody") $
         -- Try hoisted binding pattern first
-        Maybes.maybe
+        Maybes.cases
+          (var "mcsa")
           -- Not a hoisted binding, try simple case elimination
           ("mcs" <~ (extractCaseElimination @@ var "term1") $
-            Maybes.maybe
+            Maybes.cases
+              (var "mcs")
               -- Default case: not a case elimination, encode term normally and take first statement
               (Eithers.bind (encodeTermMultiline @@ var "cx" @@ var "env" @@ var "term1")
-                ("stmts" ~> Maybes.maybe
-                  (left $ Error.errorOther $ Error.otherError $ string "encodeTermMultiline returned no statements")
-                  (reify right)
-                  (Lists.maybeHead (var "stmts"))))
+                ("stmts" ~> Maybes.cases (Lists.maybeHead (var "stmts")) (left $ Error.errorOther $ Error.otherError $ string "encodeTermMultiline returned no statements") (reify right)))
               -- Case elimination function - encode as function with match statement
           ("cs" ~>
             "tname" <~ (Core.caseStatementTypeName $ var "cs") $
@@ -810,21 +810,15 @@ encodeBindingAs = def "encodeBindingAs" $
               Phantoms.field Py._FunctionDefRaw_returnType nothing,
               Phantoms.field Py._FunctionDefRaw_funcTypeComment nothing,
               Phantoms.field Py._FunctionDefRaw_block (var "body")]) $
-            right $ PyDsl.statementCompound (PyDsl.compoundStatementFunction $ PyDsl.functionDefinition nothing (var "funcDefRaw")))
-          (var "mcs"))
+            right $ PyDsl.statementCompound (PyDsl.compoundStatementFunction $ PyDsl.functionDefinition nothing (var "funcDefRaw"))))
       -- Hoisted binding: lambdas wrapping a case statement application
       -- Only handle if there are actual lambda parameters
       ("csa" ~>
         Logic.ifElse (Lists.null $ var "lambdaParams")
           -- No lambda params, fall back to case elimination check
           ("mcs" <~ (extractCaseElimination @@ var "term1") $
-            Maybes.maybe
-              (Eithers.bind (encodeTermMultiline @@ var "cx" @@ var "env" @@ var "term1")
-                ("stmts" ~> Maybes.maybe
-                  (left $ Error.errorOther $ Error.otherError $ string "encodeTermMultiline returned no statements")
-                  (reify right)
-                  (Lists.maybeHead (var "stmts"))))
-              ("cs" ~>
+            Maybes.cases (var "mcs") (Eithers.bind (encodeTermMultiline @@ var "cx" @@ var "env" @@ var "term1")
+                ("stmts" ~> Maybes.cases (Lists.maybeHead (var "stmts")) (left $ Error.errorOther $ Error.otherError $ string "encodeTermMultiline returned no statements") (reify right))) ("cs" ~>
                 "tname" <~ (Core.caseStatementTypeName $ var "cs") $
                 "dflt" <~ (Core.caseStatementDefault $ var "cs") $
                 "cases_" <~ (Core.caseStatementCases $ var "cs") $
@@ -855,8 +849,7 @@ encodeBindingAs = def "encodeBindingAs" $
                   Phantoms.field Py._FunctionDefRaw_returnType nothing,
                   Phantoms.field Py._FunctionDefRaw_funcTypeComment nothing,
                   Phantoms.field Py._FunctionDefRaw_block (var "body")]) $
-                right $ PyDsl.statementCompound (PyDsl.compoundStatementFunction $ PyDsl.functionDefinition nothing (var "funcDefRaw")))
-              (var "mcs"))
+                right $ PyDsl.statementCompound (PyDsl.compoundStatementFunction $ PyDsl.functionDefinition nothing (var "funcDefRaw"))))
           -- Has lambda params: this is a hoisted binding
           -- The last lambda param is the case expression's own parameter (match subject).
           -- Any preceding lambda params are captured variables from outer scopes.
@@ -911,8 +904,7 @@ encodeBindingAs = def "encodeBindingAs" $
               Phantoms.field Py._FunctionDefRaw_returnType nothing,
               Phantoms.field Py._FunctionDefRaw_funcTypeComment nothing,
               Phantoms.field Py._FunctionDefRaw_block (var "body")]) $
-            right $ PyDsl.statementCompound (PyDsl.compoundStatementFunction $ PyDsl.functionDefinition nothing (var "funcDefRaw"))))
-          (var "mcsa"))
+            right $ PyDsl.statementCompound (PyDsl.compoundStatementFunction $ PyDsl.functionDefinition nothing (var "funcDefRaw")))))
       -- Binding with type scheme - use encodeTermAssignment with topLevel=false
       -- (inner binding; arity-0 complex thunks emit `name = Lazy(lambda: ...)`.
       -- Use-site `name()` dispatches via Lazy.__call__ to get()).
@@ -920,7 +912,6 @@ encodeBindingAs = def "encodeBindingAs" $
         "comment" <<~ (Annotations.getTermDescription @@ var "cx" @@ (pythonEnvironmentGetGraph @@ var "env") @@ var "term1") $
         "normComment" <~ (Maybes.map Formatting.normalizeComment (var "comment")) $
         encodeTermAssignment @@ var "cx" @@ var "env" @@ false @@ var "name1" @@ var "term1" @@ var "ts" @@ var "normComment")
-      (var "mts")
 
 -- | Encode a binding as a walrus operator assignment (for inline let expressions).
 --   Takes: allowThunking flag, environment, binding
@@ -955,7 +946,7 @@ encodeBindingAsAssignment = def "encodeBindingAsAssignment" $
     -- Always wrap walrus values in Lazy(...) so the evaluation is deferred
     -- until forced by .get() at use sites. This matches Java's hydra.util.Lazy<>
     -- and prevents exponential re-evaluation when bindings appear in conditional
-    -- positions (e.g. inside a maybes.maybe branch).
+    -- positions (e.g. inside a maybes.cases branch).
     "pterm" <~ (makeLazy @@ var "pbody") $
     right $ PyDsl.namedExpressionAssignment $ PyDsl.assignmentExpression (var "pyName") (var "pterm")
 
@@ -998,10 +989,7 @@ encodeDefinition = def "encodeDefinition" $
       _Definition_term>>: "td" ~>
         "name" <~ (project _TermDefinition _TermDefinition_name @@ var "td") $
         "term" <~ (project _TermDefinition _TermDefinition_body @@ var "td") $
-        "typ" <~ Maybes.maybe
-          (Core.typeScheme (list ([] :: [TypedTerm Name])) (Core.typeVariable (wrap _Name (string "hydra.core.Unit"))) nothing)
-          ("x" ~> var "x")
-          (Maybes.map Scoping.termSignatureToTypeScheme (project _TermDefinition _TermDefinition_signature @@ var "td")) $
+        "typ" <~ Maybes.cases (Maybes.map Scoping.termSignatureToTypeScheme (project _TermDefinition _TermDefinition_signature @@ var "td")) (Core.typeScheme (list ([] :: [TypedTerm Name])) (Core.typeVariable (wrap _Name (string "hydra.core.Unit"))) nothing) ("x" ~> var "x") $
         "comment" <<~ (Annotations.getTermDescription @@ var "cx" @@ (pythonEnvironmentGetGraph @@ var "env") @@ var "term") $
         "normComment" <~ (Maybes.map Formatting.normalizeComment (var "comment")) $
         -- topLevel=true: keep public API stable (`@lru_cache(1) def name():` form
@@ -1308,10 +1296,7 @@ encodePythonModule = def "encodePythonModule" $
         (var "meta2") $
       "namespaces" <~ (project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_namespaces @@ var "meta0") $
       -- Generate comment statements from module description
-      "commentStmts" <~ (Maybes.maybe
-        (list ([] :: [TypedTerm Py.Statement]))
-        ("c" ~> list [PyUtils.commentStatement @@ var "c"])
-        (Maybes.map Formatting.normalizeComment ((Maybes.bind (Packaging.moduleMetadata (var "mod")) ("em" ~> Packaging.entityMetadataDescription (var "em")))))) $
+      "commentStmts" <~ (Maybes.cases (Maybes.map Formatting.normalizeComment ((Maybes.bind (Packaging.moduleMetadata (var "mod")) ("em" ~> Packaging.entityMetadataDescription (var "em"))))) (list ([] :: [TypedTerm Py.Statement])) ("c" ~> list [PyUtils.commentStatement @@ var "c"])) $
       -- Generate import statements
       "importStmts" <~ (moduleImports @@ var "namespaces" @@ var "meta") $
       -- Generate type variable statements
@@ -1558,12 +1543,9 @@ encodeTermInline = def "encodeTermInline" $
 
       -- TermMaybe - encode as Nothing() or Just(value)
       _Term_maybe>>: "mt" ~>
-        Maybes.maybe
-          (right $ PyUtils.functionCall @@ (PyUtils.pyNameToPyPrimary @@ PyDsl.name (string "Nothing")) @@ list ([] :: [TypedTerm Py.Expression]))
-          ("t1" ~>
+        Maybes.cases (var "mt") (right $ PyUtils.functionCall @@ (PyUtils.pyNameToPyPrimary @@ PyDsl.name (string "Nothing")) @@ list ([] :: [TypedTerm Py.Expression])) ("t1" ~>
             "pyexp" <<~ (var "encode" @@ var "t1") $
-            var "withCast" @@ (PyUtils.functionCall @@ (PyUtils.pyNameToPyPrimary @@ PyDsl.name (string "Just")) @@ list [var "pyexp"]))
-          (var "mt"),
+            var "withCast" @@ (PyUtils.functionCall @@ (PyUtils.pyNameToPyPrimary @@ PyDsl.name (string "Just")) @@ list [var "pyexp"])),
 
       -- TermPair - encode as 2-tuple
       _Term_pair>>: "p" ~>
@@ -1617,10 +1599,7 @@ encodeTermInline = def "encodeTermInline" $
           -- Class variant
           ("fname" <~ Core.fieldName (var "field") $
             -- Check if this is a unit variant
-            "isUnitVariant" <~ (Maybes.maybe
-              false
-              ("ft" ~> Predicates.isUnitType @@ (Strip.deannotateType @@ Core.fieldTypeType (var "ft")))
-              (Lists.find ("ft" ~> Core.equalName_ (Core.fieldTypeName (var "ft")) (var "fname")) (var "rt"))) $
+            "isUnitVariant" <~ (Maybes.cases (Lists.find ("ft" ~> Core.equalName_ (Core.fieldTypeName (var "ft")) (var "fname")) (var "rt")) false ("ft" ~> Predicates.isUnitType @@ (Strip.deannotateType @@ Core.fieldTypeType (var "ft")))) $
             "args" <<~ (Logic.ifElse (Logic.or (Predicates.isUnitTerm @@ Core.fieldTerm (var "field")) (var "isUnitVariant"))
               (right (list ([] :: [TypedTerm Py.Expression])))
               ("parg" <<~ (var "encode" @@ Core.fieldTerm (var "field")) $
@@ -1897,13 +1876,13 @@ encodeUnionEliminationInline = def "encodeUnionEliminationInline" $
     -- Build the isinstance function reference
     "isinstancePrimary" <~ (PyUtils.pyNameToPyPrimary @@ (PyDsl.name $ string "isinstance")) $
     -- Encode the default expression (used as final else)
-    "pyDefault" <<~ (Maybes.maybe
+    "pyDefault" <<~ (Maybes.cases
+      (var "mdefault")
       -- No default: produce an unsupported expression as fallback
       (right $ unsupportedExpression @@ string "no matching case in inline union elimination")
       -- Has default: encode it inline (the default is a value, not a function to be applied)
       ("dflt" ~>
-        encodeTermInline @@ var "cx" @@ var "env" @@ false @@ var "dflt")
-      (var "mdefault")) $
+        encodeTermInline @@ var "cx" @@ var "env" @@ false @@ var "dflt")) $
     -- Encode each case branch into (isinstance_check_expression, result_expression) pairs
     -- Then fold them into a chain of Conditional expressions from right to left
     "encodeBranch" <~ (
@@ -2063,7 +2042,8 @@ encodeVariable = def "encodeVariable" $
       -- Non-empty args: inline-var calls need .get(); otherwise check primitives
       (Logic.ifElse (Sets.member (var "name") (var "inlineVars"))
         (right $ var "asLazyCall")
-        (Maybes.maybe
+        (Maybes.cases
+        (Lexical.lookupPrimitive @@ var "g" @@ var "name")
         -- No primitive found: use regular function call
         (right $ var "asFunctionCall")
         -- Primitive found: check if full or partial application
@@ -2078,10 +2058,10 @@ encodeVariable = def "encodeVariable" $
               "remainingExprs" <~ (Lists.map ("n" ~> PyDsl.pyNameToPyExpression (var "n")) (var "remainingParams")) $
               "allArgs" <~ (Lists.concat2 (var "args") (var "remainingExprs")) $
               "fullCall" <~ (PyUtils.functionCall @@ (PyUtils.pyNameToPyPrimary @@ (PyNames.encodeName @@ true @@ Util.caseConventionLowerSnake @@ var "env" @@ var "name")) @@ var "allArgs") $
-              right $ makeUncurriedLambda @@ var "remainingParams" @@ var "fullCall"))
-        (Lexical.lookupPrimitive @@ var "g" @@ var "name")))
+              right $ makeUncurriedLambda @@ var "remainingParams" @@ var "fullCall"))))
       -- Empty args: check various contexts
-      (Maybes.maybe
+      (Maybes.cases
+        (var "mTyp")
         -- Name not in graphBoundTypes
         (Logic.ifElse (Sets.member (var "name") (var "tcLambdaVars"))
           -- Untyped lambda variable
@@ -2091,20 +2071,20 @@ encodeVariable = def "encodeVariable" $
             -- Untyped inline variable (Lazy-wrapped at definition; force via .get())
             (right $ lazyDotGet @@ var "asVariable")
             -- Not inline - check primitives
-            (Maybes.maybe
+            (Maybes.cases
+              (Lexical.lookupPrimitive @@ var "g" @@ var "name")
               -- Not a primitive - check graph elements
-              (Maybes.maybe
+              (Maybes.cases
+                (Lexical.lookupBinding @@ var "g" @@ var "name")
                 -- Not in graph elements - check metadata
-                (Maybes.maybe
+                (Maybes.cases
+                  (Maps.lookup (var "name") (var "tcMetadata"))
                   (left $ Error.errorOther $ Error.otherError $ Strings.cat2 (string "Unknown variable: ") (Core.unName (var "name")))
-                  (constant $ right $ var "asFunctionCall")  -- Lifted case expression
-                  (Maps.lookup (var "name") (var "tcMetadata")))
+                  (constant $ right $ var "asFunctionCall"))
               -- In graph elements
               ("el" ~>
                 "elTrivial1" <~ (Predicates.isTrivialTerm @@ (Core.bindingTerm $ var "el")) $
-                Maybes.maybe
-                  (right $ var "asVariable")
-                  ("ts" ~>
+                Maybes.cases (Core.bindingTypeScheme $ var "el") (right $ var "asVariable") ("ts" ~>
                     Logic.ifElse (Logic.and (Logic.and (Equality.equal (Arity.typeSchemeArity @@ var "ts") (int32 0))
                                                        (Predicates.isComplexBinding @@ var "tc" @@ var "el"))
                                             (Logic.not (var "elTrivial1")))
@@ -2112,9 +2092,7 @@ encodeVariable = def "encodeVariable" $
                       ("asFunctionRef" <~ (Logic.ifElse (Logic.not $ Lists.null (Core.typeSchemeVariables $ var "ts"))
                           (makeSimpleLambda @@ (Arity.typeArity @@ (Core.typeSchemeBody $ var "ts")) @@ var "asVariable")
                           (var "asVariable")) $
-                        right $ var "asFunctionRef"))
-                  (Core.bindingTypeScheme $ var "el"))
-              (Lexical.lookupBinding @@ var "g" @@ var "name"))
+                        right $ var "asFunctionRef"))))
             -- Is a primitive with no args: check if nullary
             ("prim" ~>
               "primArity" <~ (Arity.primitiveArity @@ var "prim") $
@@ -2126,8 +2104,7 @@ encodeVariable = def "encodeVariable" $
                   "asFunctionRef" <~ (Logic.ifElse (Logic.not $ Lists.null (Core.typeSchemeVariables $ var "ts"))
                       (makeSimpleLambda @@ (Arity.typeArity @@ (Core.typeSchemeBody $ var "ts")) @@ var "asVariable")
                       (var "asVariable")) $
-                  right $ var "asFunctionRef"))
-            (Lexical.lookupPrimitive @@ var "g" @@ var "name"))))
+                  right $ var "asFunctionRef")))))
         -- Name is in graphBoundTypes
         ("typ" ~>
           Logic.ifElse (Sets.member (var "name") (var "tcLambdaVars"))
@@ -2144,7 +2121,8 @@ encodeVariable = def "encodeVariable" $
               -- Not inline variable
               (Logic.ifElse (Logic.not $ Maps.member (var "name") (var "tcMetadata"))
                 -- Not in metadata - check graph elements
-                (Maybes.maybe
+                (Maybes.cases
+                  (Lexical.lookupBinding @@ var "g" @@ var "name")
                   -- Not in graph elements: inline let binding
                   ("asFunctionRef" <~ (Logic.ifElse (Logic.not $ Sets.null (Variables.freeVariablesInType @@ var "typ"))
                       (makeSimpleLambda @@ (Arity.typeArity @@ var "typ") @@ var "asVariable")
@@ -2153,15 +2131,13 @@ encodeVariable = def "encodeVariable" $
                   -- In graph elements
                   ("el" ~>
                     "elTrivial" <~ (Predicates.isTrivialTerm @@ (Core.bindingTerm $ var "el")) $
-                    Maybes.maybe
-                      (Logic.ifElse (Logic.and (Equality.equal (Arity.typeArity @@ var "typ") (int32 0))
+                    Maybes.cases (Core.bindingTypeScheme $ var "el") (Logic.ifElse (Logic.and (Equality.equal (Arity.typeArity @@ var "typ") (int32 0))
                                                (Logic.not (var "elTrivial")))
                         (right $ var "asFunctionCall")
                         ("asFunctionRef" <~ (Logic.ifElse (Logic.not $ Sets.null (Variables.freeVariablesInType @@ var "typ"))
                             (makeSimpleLambda @@ (Arity.typeArity @@ var "typ") @@ var "asVariable")
                             (var "asVariable")) $
-                          right $ var "asFunctionRef"))
-                      ("ts" ~>
+                          right $ var "asFunctionRef")) ("ts" ~>
                         Logic.ifElse (Logic.and (Logic.and (Equality.equal (Arity.typeArity @@ var "typ") (int32 0))
                                                            (Predicates.isComplexBinding @@ var "tc" @@ var "el"))
                                                 (Logic.not (var "elTrivial")))
@@ -2169,9 +2145,7 @@ encodeVariable = def "encodeVariable" $
                           ("asFunctionRef" <~ (Logic.ifElse (Logic.not $ Sets.null (Variables.freeVariablesInType @@ var "typ"))
                               (makeSimpleLambda @@ (Arity.typeArity @@ var "typ") @@ var "asVariable")
                               (var "asVariable")) $
-                            right $ var "asFunctionRef"))
-                      (Core.bindingTypeScheme $ var "el"))
-                  (Lexical.lookupBinding @@ var "g" @@ var "name"))
+                            right $ var "asFunctionRef"))))
                 -- Is in metadata: regular let binding
                 (Logic.ifElse (Logic.and (Equality.equal (Arity.typeArity @@ var "typ") (int32 0))
                                           (Predicates.isComplexVariable @@ var "tc" @@ var "name"))
@@ -2179,8 +2153,7 @@ encodeVariable = def "encodeVariable" $
                   ("asFunctionRef" <~ (Logic.ifElse (Logic.not $ Sets.null (Variables.freeVariablesInType @@ var "typ"))
                       (makeSimpleLambda @@ (Arity.typeArity @@ var "typ") @@ var "asVariable")
                       (var "asVariable")) $
-                    right $ var "asFunctionRef")))))
-        (var "mTyp"))
+                    right $ var "asFunctionRef"))))))
 
 -- | Encode a wrapped type (newtype) to a Python class definition.
 --   Creates a class that extends Node[inner_type] with optional Generic[T] for polymorphic types.
@@ -2280,23 +2253,17 @@ extendMetaForTerm = def "extendMetaForTerm" $
             (constant $ setMetaUsesRight @@ var "metaWithCast" @@ true)
             (var "e"),
         _Term_lambda>>: "lam" ~>
-          Maybes.maybe
-            (var "meta")
-            ("dom" ~> Logic.ifElse (var "topLevel")
+          Maybes.cases (Core.lambdaDomain $ var "lam") (var "meta") ("dom" ~> Logic.ifElse (var "topLevel")
               (extendMetaForType @@ true @@ false @@ var "dom" @@ var "meta")
-              (var "meta"))
-            (Core.lambdaDomain $ var "lam"),
+              (var "meta")),
         _Term_let>>: "lt" ~>
           "bindings" <~ Core.letBindings (var "lt") $
           Lists.foldl ("forBinding" <~ ("m" ~> "b" ~>
-            Maybes.maybe
-              (var "m")
-              ("ts" ~>
+            Maybes.cases (Core.bindingTypeScheme $ var "b") (var "m") ("ts" ~>
                 "term1" <~ Core.bindingTerm (var "b") $
                 Logic.ifElse (Analysis.isSimpleAssignment @@ var "term1")
                   (var "m")
-                  (extendMetaForType @@ true @@ true @@ (Core.typeSchemeBody $ var "ts") @@ var "m"))
-              (Core.bindingTypeScheme $ var "b")) $
+                  (extendMetaForType @@ true @@ true @@ (Core.typeSchemeBody $ var "ts") @@ var "m"))) $
             var "forBinding") (var "meta") (var "bindings"),
         _Term_literal>>: "l" ~>
           cases _Literal (var "l") (Just $ var "meta") [
@@ -2309,10 +2276,7 @@ extendMetaForTerm = def "extendMetaForTerm" $
         _Term_set>>: constant $
           setMetaUsesFrozenSet @@ var "meta" @@ true,
         _Term_maybe>>: "m" ~>
-          Maybes.maybe
-            (setMetaUsesNothing @@ var "meta" @@ true)
-            (constant $ setMetaUsesJust @@ var "meta" @@ true)
-            (var "m"),
+          Maybes.cases (var "m") (setMetaUsesNothing @@ var "meta" @@ true) (constant $ setMetaUsesJust @@ var "meta" @@ true),
         -- Union injections require cast() for proper typing
         _Term_inject>>: constant $
           setMetaUsesCast @@ true @@ var "meta"]) $
@@ -2523,10 +2487,7 @@ gatherMetadata = def "gatherMetadata" $
       cases _Definition (var "def") Nothing [
         _Definition_term>>: "termDef" ~>
           "term" <~ Packaging.termDefinitionBody (var "termDef") $
-          "typ" <~ Maybes.maybe
-            (Core.typeVariable (wrap _Name (string "hydra.core.Unit")))
-            (reify Core.typeSchemeBody)
-            (Maybes.map Scoping.termSignatureToTypeScheme $ Packaging.termDefinitionSignature (var "termDef")) $
+          "typ" <~ Maybes.cases (Maybes.map Scoping.termSignatureToTypeScheme $ Packaging.termDefinitionSignature (var "termDef")) (Core.typeVariable (wrap _Name (string "hydra.core.Unit"))) (reify Core.typeSchemeBody) $
           -- First extend for the type annotation (isTypeDef=True, isTermAnnot=True)
           "meta2" <~ (extendMetaForType @@ true @@ true @@ var "typ" @@ var "meta") $
           -- Then extend for the term body (isTopLevel=True)

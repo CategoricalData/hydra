@@ -148,9 +148,7 @@ collectFreeTypeVars = define "collectFreeTypeVars" $
       (collectFreeTypeVars @@ (Core.applicationFunction $ var "app"))
       (collectFreeTypeVars @@ (Core.applicationArgument $ var "app")),
     _Term_cases>>: "cs" ~> Sets.union
-      (Maybes.maybe (Sets.empty :: TypedTerm (S.Set String))
-        (lambda "d" $ collectFreeTypeVars @@ var "d")
-        (Core.caseStatementDefault $ var "cs"))
+      (Maybes.cases (Core.caseStatementDefault $ var "cs") (Sets.empty :: TypedTerm (S.Set String)) (lambda "d" $ collectFreeTypeVars @@ var "d"))
       (Sets.unions $ Lists.map
         (lambda "f" $ collectFreeTypeVars @@ (Core.caseAlternativeHandler $ var "f"))
         (Core.caseStatementCases $ var "cs")),
@@ -162,9 +160,7 @@ collectFreeTypeVars = define "collectFreeTypeVars" $
       collectFreeTypeVars @@ (Core.fieldTerm $ Core.injectionField $ var "inj"),
     _Term_lambda>>: "lam" ~> lets [
       "paramName">: unwrap _Name @@ (Core.lambdaParameter $ var "lam"),
-      "domVars">: Maybes.maybe (Sets.empty :: TypedTerm (S.Set String))
-        (lambda "dty" $ collectFreeTypeVarsInType @@ var "dty")
-        (Core.lambdaDomain $ var "lam"),
+      "domVars">: Maybes.cases (Core.lambdaDomain $ var "lam") (Sets.empty :: TypedTerm (S.Set String)) (lambda "dty" $ collectFreeTypeVarsInType @@ var "dty"),
       "bodyVars">: collectFreeTypeVars @@ (Core.lambdaBody $ var "lam"),
       "allVars">: Sets.union (var "domVars") (var "bodyVars")] $
       Logic.ifElse (isTypeVarLike @@ var "paramName")
@@ -174,15 +170,12 @@ collectFreeTypeVars = define "collectFreeTypeVars" $
       "bindVars">: Sets.unions $ Lists.map
         (lambda "b" $ Sets.union
           (collectFreeTypeVars @@ (Core.bindingTerm $ var "b"))
-          (Maybes.maybe (Sets.empty :: TypedTerm (S.Set String))
-            (lambda "sch" $ collectFreeTypeVarsInTypeScheme @@ var "sch")
-            (Core.bindingTypeScheme $ var "b")))
+          (Maybes.cases (Core.bindingTypeScheme $ var "b") (Sets.empty :: TypedTerm (S.Set String)) (lambda "sch" $ collectFreeTypeVarsInTypeScheme @@ var "sch")))
         (Core.letBindings $ var "lt")] $
       Sets.union (var "bindVars") (collectFreeTypeVars @@ (Core.letBody $ var "lt")),
     _Term_list>>: "xs" ~> Sets.unions $
       Lists.map (lambda "el" $ collectFreeTypeVars @@ var "el") (var "xs"),
-    _Term_maybe>>: "mt" ~> Maybes.maybe (Sets.empty :: TypedTerm (S.Set String))
-      (lambda "el" $ collectFreeTypeVars @@ var "el") (var "mt"),
+    _Term_maybe>>: "mt" ~> Maybes.cases (var "mt") (Sets.empty :: TypedTerm (S.Set String)) (lambda "el" $ collectFreeTypeVars @@ var "el"),
     _Term_pair>>: "p" ~> Sets.union
       (collectFreeTypeVars @@ Pairs.first (var "p"))
       (collectFreeTypeVars @@ Pairs.second (var "p")),
@@ -282,9 +275,7 @@ collectQualifiedNamesInTerm = define "collectQualifiedNamesInTerm" $
         (Sets.unions $ Lists.map
           (lambda "f" $ collectQualifiedNamesInTerm @@ (Core.caseAlternativeHandler $ var "f"))
           (Core.caseStatementCases $ var "cs"))
-        (Maybes.maybe (Sets.empty :: TypedTerm (S.Set String))
-          (lambda "d" $ collectQualifiedNamesInTerm @@ var "d")
-          (Core.caseStatementDefault $ var "cs"))),
+        (Maybes.cases (Core.caseStatementDefault $ var "cs") (Sets.empty :: TypedTerm (S.Set String)) (lambda "d" $ collectQualifiedNamesInTerm @@ var "d"))),
     _Term_either>>: "e" ~> Eithers.either_
       (lambda "l" $ collectQualifiedNamesInTerm @@ var "l")
       (lambda "r" $ collectQualifiedNamesInTerm @@ var "r")
@@ -293,9 +284,7 @@ collectQualifiedNamesInTerm = define "collectQualifiedNamesInTerm" $
       (qualifiedFromName @@ (Core.injectionTypeName $ var "inj"))
       (collectQualifiedNamesInTerm @@ (Core.fieldTerm $ Core.injectionField $ var "inj")),
     _Term_lambda>>: "lam" ~> Sets.union
-      (Maybes.maybe (Sets.empty :: TypedTerm (S.Set String))
-        (lambda "domTy" $ collectQualifiedNamesInType @@ var "domTy")
-        (Core.lambdaDomain $ var "lam"))
+      (Maybes.cases (Core.lambdaDomain $ var "lam") (Sets.empty :: TypedTerm (S.Set String)) (lambda "domTy" $ collectQualifiedNamesInType @@ var "domTy"))
       (collectQualifiedNamesInTerm @@ (Core.lambdaBody $ var "lam")),
     _Term_let>>: "lt" ~> Sets.union
       (Sets.unions $ Lists.map
@@ -304,9 +293,7 @@ collectQualifiedNamesInTerm = define "collectQualifiedNamesInTerm" $
       (collectQualifiedNamesInTerm @@ (Core.letBody $ var "lt")),
     _Term_list>>: "xs" ~> Sets.unions $
       Lists.map (lambda "el" $ collectQualifiedNamesInTerm @@ var "el") (var "xs"),
-    _Term_maybe>>: "mt" ~> Maybes.maybe (Sets.empty :: TypedTerm (S.Set String))
-      (lambda "el" $ collectQualifiedNamesInTerm @@ var "el")
-      (var "mt"),
+    _Term_maybe>>: "mt" ~> Maybes.cases (var "mt") (Sets.empty :: TypedTerm (S.Set String)) (lambda "el" $ collectQualifiedNamesInTerm @@ var "el"),
     _Term_pair>>: "p" ~> Sets.union
       (collectQualifiedNamesInTerm @@ Pairs.first (var "p"))
       (collectQualifiedNamesInTerm @@ Pairs.second (var "p")),
@@ -486,21 +473,17 @@ eraseUnboundTypeVarDomains = define "eraseUnboundTypeVarDomains" $
   doc "Erase lambda domain annotations referencing unbound type variables; recurse under new type binders" $
   "initialBound" ~> "term0" ~>
   "eraseIfUnbound" <~ ("bound" ~> "mdom" ~>
-    Maybes.maybe (Phantoms.nothing :: TypedTerm (Maybe Type))
-      ("ty" ~> Logic.ifElse (hasUnboundTypeVar @@ var "bound" @@ var "ty")
+    Maybes.cases (var "mdom") (Phantoms.nothing :: TypedTerm (Maybe Type)) ("ty" ~> Logic.ifElse (hasUnboundTypeVar @@ var "bound" @@ var "ty")
         (Phantoms.nothing :: TypedTerm (Maybe Type))
-        (Phantoms.just $ var "ty"))
-      (var "mdom")) $
+        (Phantoms.just $ var "ty"))) $
   "f" <~ ("recurse" ~> "bound" ~> "term" ~>
     cases _Term (var "term") (Just $ var "recurse" @@ var "bound" @@ var "term") [
       _Term_lambda>>: "lam" ~>
         "paramName" <~ (unwrap _Name @@ (Core.lambdaParameter $ var "lam")) $
         "dom" <~ (Core.lambdaDomain $ var "lam") $
-        "isTypeParam" <~ Maybes.maybe (boolean False)
-          ("d" ~> cases _Type (var "d") (Just (boolean False)) [
+        "isTypeParam" <~ Maybes.cases (var "dom") (boolean False) ("d" ~> cases _Type (var "d") (Just (boolean False)) [
             _Type_variable>>: "v" ~>
-              Equality.equal (unwrap _Name @@ var "v") (string "Type")])
-          (var "dom") $
+              Equality.equal (unwrap _Name @@ var "v") (string "Type")]) $
         "bound2" <~ Logic.ifElse
           (Logic.and (var "isTypeParam") (isTypeVarLike @@ var "paramName"))
           (Sets.insert (var "paramName") (var "bound"))
@@ -1004,9 +987,7 @@ termRefs = define "termRefs" $
       (Sets.unions $ Lists.map
         (lambda "f" $ termRefs @@ var "locals" @@ (Core.caseAlternativeHandler $ var "f"))
         (Core.caseStatementCases $ var "cs"))
-      (Maybes.maybe (Sets.empty :: TypedTerm (S.Set String))
-        (lambda "d" $ termRefs @@ var "locals" @@ var "d")
-        (Core.caseStatementDefault $ var "cs")),
+      (Maybes.cases (Core.caseStatementDefault $ var "cs") (Sets.empty :: TypedTerm (S.Set String)) (lambda "d" $ termRefs @@ var "locals" @@ var "d")),
     _Term_either>>: "e" ~> Eithers.either_
       (lambda "l" $ termRefs @@ var "locals" @@ var "l")
       (lambda "r" $ termRefs @@ var "locals" @@ var "r")
@@ -1022,9 +1003,7 @@ termRefs = define "termRefs" $
       (termRefs @@ var "locals" @@ (Core.letBody $ var "lt")),
     _Term_list>>: "xs" ~> Sets.unions $
       Lists.map (lambda "el" $ termRefs @@ var "locals" @@ var "el") (var "xs"),
-    _Term_maybe>>: "mt" ~> Maybes.maybe (Sets.empty :: TypedTerm (S.Set String))
-      (lambda "el" $ termRefs @@ var "locals" @@ var "el")
-      (var "mt"),
+    _Term_maybe>>: "mt" ~> Maybes.cases (var "mt") (Sets.empty :: TypedTerm (S.Set String)) (lambda "el" $ termRefs @@ var "locals" @@ var "el"),
     _Term_pair>>: "p" ~> Sets.union
       (termRefs @@ var "locals" @@ Pairs.first (var "p"))
       (termRefs @@ var "locals" @@ Pairs.second (var "p")),

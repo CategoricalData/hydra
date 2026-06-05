@@ -165,27 +165,21 @@ elementsToVerticesWithAdjacentEdges = define "elementsToVerticesWithAdjacentEdge
           PG._AdjacentEdge_vertex>>: var "outV",
           PG._AdjacentEdge_properties>>: var "props"]) $
         -- Add to out-vertex's outs list
-        "vmap1" <~ (Maybes.maybe
-          (var "vmap")
-          ("vae" ~>
+        "vmap1" <~ (Maybes.cases (Maps.lookup (var "outV") (var "vmap")) (var "vmap") ("vae" ~>
             Maps.insert (var "outV")
               (record PG._VertexWithAdjacentEdges [
                 PG._VertexWithAdjacentEdges_vertex>>: project PG._VertexWithAdjacentEdges PG._VertexWithAdjacentEdges_vertex @@ var "vae",
                 PG._VertexWithAdjacentEdges_ins>>: project PG._VertexWithAdjacentEdges PG._VertexWithAdjacentEdges_ins @@ var "vae",
                 PG._VertexWithAdjacentEdges_outs>>: Lists.cons (var "adjEdgeOut") (project PG._VertexWithAdjacentEdges PG._VertexWithAdjacentEdges_outs @@ var "vae")])
-              (var "vmap"))
-          (Maps.lookup (var "outV") (var "vmap"))) $
+              (var "vmap"))) $
         -- Add to in-vertex's ins list
-        Maybes.maybe
-          (var "vmap1")
-          ("vae" ~>
+        Maybes.cases (Maps.lookup (var "inV") (var "vmap1")) (var "vmap1") ("vae" ~>
             Maps.insert (var "inV")
               (record PG._VertexWithAdjacentEdges [
                 PG._VertexWithAdjacentEdges_vertex>>: project PG._VertexWithAdjacentEdges PG._VertexWithAdjacentEdges_vertex @@ var "vae",
                 PG._VertexWithAdjacentEdges_ins>>: Lists.cons (var "adjEdgeIn") (project PG._VertexWithAdjacentEdges PG._VertexWithAdjacentEdges_ins @@ var "vae"),
                 PG._VertexWithAdjacentEdges_outs>>: project PG._VertexWithAdjacentEdges PG._VertexWithAdjacentEdges_outs @@ var "vae"])
-              (var "vmap1"))
-          (Maps.lookup (var "inV") (var "vmap1")))
+              (var "vmap1")))
       (var "vertexMap0")
       (var "edges")) $
     Maps.elems (var "vertexMap1")

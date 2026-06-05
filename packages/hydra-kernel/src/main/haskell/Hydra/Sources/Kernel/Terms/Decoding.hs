@@ -321,20 +321,14 @@ decodeBindingName = define "decodeBindingName" $
   "parts" <~ (Strings.splitOn (string ".") (Core.unName (var "n"))) $
   "localPart" <~ (Formatting.decapitalize @@ (Names.localNameOf @@ (var "n"))) $
   "localResult" <~ (Core.name (var "localPart")) $
-  Maybes.maybe
-    (var "localResult")
-    ("nsParts" ~>
-      Maybes.maybe
-        (var "localResult")
-        ("nsUc" ~>
+  Maybes.cases (Lists.maybeInit $ var "parts") (var "localResult") ("nsParts" ~>
+      Maybes.cases (Lists.uncons $ var "nsParts") (var "localResult") ("nsUc" ~>
           "tail" <~ Pairs.second (var "nsUc") $
           Core.name (Strings.intercalate (string ".") (Lists.concat2
             (list [string "hydra", string "decode"])
             (Lists.concat2
               (var "tail")
-              (list [var "localPart"])))))
-        (Lists.uncons $ var "nsParts"))
-    (Lists.maybeInit $ var "parts")
+              (list [var "localPart"]))))))
 
 -- | Generate a decoder for a literal type
 -- Match on the LiteralType to generate type-specific decoders
@@ -518,14 +512,11 @@ decodeModuleName = define "decodeModuleName" $
   "ns" ~>
   "parts" <~ Strings.splitOn (string ".") (Packaging.unModuleName (var "ns")) $
   "fallback" <~ Packaging.moduleName2 (Packaging.unModuleName (var "ns")) $
-  Maybes.maybe
-    (var "fallback")
-    ("uc" ~>
+  Maybes.cases (Lists.uncons $ var "parts") (var "fallback") ("uc" ~>
       Packaging.moduleName2 (
         Strings.cat $ list [
           string "hydra.decode.",
           Strings.intercalate (string ".") (Pairs.second $ var "uc")]))
-    (Lists.uncons $ var "parts")
 
 -- | Generate a decoder for a record type with element name
 -- | Generate a decoder for a pair type
@@ -690,16 +681,16 @@ decodeUnionTypeNamed = define "decodeUnionTypeNamed" $
       ("fterm", DeepCore.project _Field _Field_term @@@ DeepCore.var "field"),
       ("variantMap", DeepCore.primitive _maps_fromList
         @@@ (DeepCore.list $ Lists.map (var "toVariantPair") $ var "rt"))] $
-      DeepCore.primitive _maybes_maybe
+      DeepCore.primitive _maybes_cases
+        @@@ (DeepCore.primitive _maps_lookup
+          @@@ DeepCore.var "fname"
+          @@@ DeepCore.var "variantMap")
         @@@ (DeepCore.left $ DeepCore.wrap _DecodingError $ DeepCore.primitive _strings_cat
           @@@ (DeepCore.list $ list [
             DeepCore.string $ string "no such field ",
             DeepCore.unwrap _Name @@@ DeepCore.var "fname",
             DeepCore.string $ string " in union"]))
-        @@@ (DeepCore.lambda "f" $ DeepCore.var "f" @@@ DeepCore.var "fterm")
-        @@@ (DeepCore.primitive _maps_lookup
-          @@@ DeepCore.var "fname"
-          @@@ DeepCore.var "variantMap")]
+        @@@ (DeepCore.lambda "f" $ DeepCore.var "f" @@@ DeepCore.var "fterm")]
 
 -- | Generate a decoder for a union type (without element name)
 -- | Generate a decoder for the unit type

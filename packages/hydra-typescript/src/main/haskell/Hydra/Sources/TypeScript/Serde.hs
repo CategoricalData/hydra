@@ -235,7 +235,7 @@ arrayPatternToExpr = define "arrayPatternToExpr" $
   lambda "arr" $
     Serialization.bracketList @@ Serialization.inlineStyle @@
       (Lists.map
-        (lambda "maybeP" $ Maybes.maybe (Serialization.cst @@ string "") (patternToExpr) (var "maybeP"))
+        (lambda "maybeP" $ Maybes.cases (var "maybeP") (Serialization.cst @@ string "") (patternToExpr))
         (var "arr"))
 
 arrowFunctionExpressionToExpr :: TypedTermDefinition (TS.ArrowFunctionExpression -> Expr)
@@ -379,13 +379,10 @@ breakStatementToExpr :: TypedTermDefinition (TS.BreakStatement -> Expr)
 breakStatementToExpr = define "breakStatementToExpr" $
   doc "Convert a break statement to an AST expression" $
   lambda "b" $
-    Maybes.maybe
-      (Serialization.cst @@ string "break;")
-      (lambda "label" $ Serialization.suffix @@ string ";" @@
+    Maybes.cases (var "b") (Serialization.cst @@ string "break;") (lambda "label" $ Serialization.suffix @@ string ";" @@
         (Serialization.spaceSep @@ list [
           Serialization.cst @@ string "break",
           identifierToExpr @@ var "label"]))
-      (var "b")
 
 callExpressionToExpr :: TypedTermDefinition (TS.CallExpression -> Expr)
 callExpressionToExpr = define "callExpressionToExpr" $
@@ -419,12 +416,9 @@ catchClauseToExpr = define "catchClauseToExpr" $
   lambda "c" $ lets [
     "param">: project TS._CatchClause TS._CatchClause_param @@ var "c",
     "body">: project TS._CatchClause TS._CatchClause_body @@ var "c",
-    "catchKw">: Maybes.maybe
-      (Serialization.cst @@ string "catch")
-      (lambda "p" $ Serialization.spaceSep @@ list [
+    "catchKw">: Maybes.cases (var "param") (Serialization.cst @@ string "catch") (lambda "p" $ Serialization.spaceSep @@ list [
         Serialization.cst @@ string "catch",
-        Serialization.parens @@ (patternToExpr @@ var "p")])
-      (var "param")] $
+        Serialization.parens @@ (patternToExpr @@ var "p")])] $
     Serialization.spaceSep @@ list [var "catchKw", blockStatementToExpr @@ var "body"]
 
 classDeclarationToExpr :: TypedTermDefinition (TS.ClassDeclaration -> Expr)
@@ -434,10 +428,7 @@ classDeclarationToExpr = define "classDeclarationToExpr" $
     "id">: project TS._ClassDeclaration TS._ClassDeclaration_id @@ var "cls",
     "superClass">: project TS._ClassDeclaration TS._ClassDeclaration_superClass @@ var "cls",
     "body">: project TS._ClassDeclaration TS._ClassDeclaration_body @@ var "cls",
-    "extendsClause">: Maybes.maybe
-      (list ([] :: [TypedTerm Expr]))
-      (lambda "s" $ list [Serialization.cst @@ string "extends", expressionToExpr @@ var "s"])
-      (var "superClass"),
+    "extendsClause">: Maybes.cases (var "superClass") (list ([] :: [TypedTerm Expr])) (lambda "s" $ list [Serialization.cst @@ string "extends", expressionToExpr @@ var "s"]),
     "bodyExpr">: Serialization.curlyBlock @@ Serialization.fullBlockStyle @@
       (Serialization.newlineSep @@ (Lists.map (methodDefinitionToExpr) (var "body")))] $
     Serialization.spaceSep @@ (Lists.concat $ list [
@@ -451,12 +442,9 @@ classDeclarationWithCommentsToExpr = define "classDeclarationWithCommentsToExpr"
   lambda "cdwc" $ lets [
     "body">: project TS._ClassDeclarationWithComments TS._ClassDeclarationWithComments_body @@ var "cdwc",
     "mc">: project TS._ClassDeclarationWithComments TS._ClassDeclarationWithComments_comments @@ var "cdwc"] $
-    Maybes.maybe
-      (classDeclarationToExpr @@ var "body")
-      (lambda "c" $ Serialization.newlineSep @@ list [
+    Maybes.cases (var "mc") (classDeclarationToExpr @@ var "body") (lambda "c" $ Serialization.newlineSep @@ list [
         documentationCommentToExpr @@ var "c",
         classDeclarationToExpr @@ var "body"])
-      (var "mc")
 
 conditionalExpressionToExpr :: TypedTermDefinition (TS.ConditionalExpression -> Expr)
 conditionalExpressionToExpr = define "conditionalExpressionToExpr" $
@@ -488,13 +476,10 @@ continueStatementToExpr :: TypedTermDefinition (TS.ContinueStatement -> Expr)
 continueStatementToExpr = define "continueStatementToExpr" $
   doc "Convert a continue statement to an AST expression" $
   lambda "c" $
-    Maybes.maybe
-      (Serialization.cst @@ string "continue;")
-      (lambda "label" $ Serialization.suffix @@ string ";" @@
+    Maybes.cases (var "c") (Serialization.cst @@ string "continue;") (lambda "label" $ Serialization.suffix @@ string ";" @@
         (Serialization.spaceSep @@ list [
           Serialization.cst @@ string "continue",
           identifierToExpr @@ var "label"]))
-      (var "c")
 
 doWhileStatementToExpr :: TypedTermDefinition (TS.DoWhileStatement -> Expr)
 doWhileStatementToExpr = define "doWhileStatementToExpr" $
@@ -527,8 +512,8 @@ documentationTagToLine = define "documentationTagToLine" $
     "mtype">: project TS._DocumentationTag TS._DocumentationTag_type @@ var "tag",
     "mparamName">: project TS._DocumentationTag TS._DocumentationTag_paramName @@ var "tag",
     "description">: project TS._DocumentationTag TS._DocumentationTag_description @@ var "tag",
-    "typePart">: Maybes.maybe (string "") (lambda "t" $ Strings.cat $ list [string "{", typeExpressionToString @@ var "t", string "}"]) (var "mtype"),
-    "paramPart">: Maybes.maybe (string "") (lambda "p" $ unwrap TS._Identifier @@ var "p") (var "mparamName"),
+    "typePart">: Maybes.cases (var "mtype") (string "") (lambda "t" $ Strings.cat $ list [string "{", typeExpressionToString @@ var "t", string "}"]),
+    "paramPart">: Maybes.cases (var "mparamName") (string "") (lambda "p" $ unwrap TS._Identifier @@ var "p"),
     "parts">: list [
       Strings.cat2 (string "@") (var "name"),
       var "typePart",
@@ -557,13 +542,10 @@ exportAllToExpr = define "exportAllToExpr" $
   lambda "a" $ lets [
     "exported">: project TS._ExportAllDeclaration TS._ExportAllDeclaration_exported @@ var "a",
     "source">: project TS._ExportAllDeclaration TS._ExportAllDeclaration_source @@ var "a",
-    "exportedClause">: Maybes.maybe
-      (Serialization.cst @@ string "*")
-      (lambda "e" $ Serialization.spaceSep @@ list [
+    "exportedClause">: Maybes.cases (var "exported") (Serialization.cst @@ string "*") (lambda "e" $ Serialization.spaceSep @@ list [
         Serialization.cst @@ string "*",
         Serialization.cst @@ string "as",
-        identifierToExpr @@ var "e"])
-      (var "exported")] $
+        identifierToExpr @@ var "e"])] $
     Serialization.suffix @@ string ";" @@
       (Serialization.spaceSep @@ list [
         Serialization.cst @@ string "export",
@@ -632,12 +614,9 @@ expressionToExpr = define "expressionToExpr" $
           Serialization.cst @@ string "new",
           callExpressionToExpr @@ var "call"],
       TS._Expression_yield>>: lambda "maybeExpr" $
-        Maybes.maybe
-          (Serialization.cst @@ string "yield")
-          (lambda "e" $ Serialization.spaceSep @@ list [
+        Maybes.cases (var "maybeExpr") (Serialization.cst @@ string "yield") (lambda "e" $ Serialization.spaceSep @@ list [
             Serialization.cst @@ string "yield",
-            expressionToExpr @@ var "e"])
-          (var "maybeExpr"),
+            expressionToExpr @@ var "e"]),
       TS._Expression_await>>: lambda "e" $
         Serialization.spaceSep @@ list [
           Serialization.cst @@ string "await",
@@ -705,13 +684,11 @@ forStatementToExpr = define "forStatementToExpr" $
     "test">: project TS._ForStatement TS._ForStatement_test @@ var "f",
     "update">: project TS._ForStatement TS._ForStatement_update @@ var "f",
     "body">: project TS._ForStatement TS._ForStatement_body @@ var "f",
-    "initExpr">: Maybes.maybe (Serialization.cst @@ string "")
-      (lambda "i" $ cases TS._ForInit (var "i") Nothing [
+    "initExpr">: Maybes.cases (var "init") (Serialization.cst @@ string "") (lambda "i" $ cases TS._ForInit (var "i") Nothing [
         TS._ForInit_variable>>: lambda "v" $ variableDeclarationToExpr @@ var "v",
-        TS._ForInit_expression>>: lambda "e" $ expressionToExpr @@ var "e"])
-      (var "init"),
-    "testExpr">: Maybes.maybe (Serialization.cst @@ string "") (expressionToExpr) (var "test"),
-    "updateExpr">: Maybes.maybe (Serialization.cst @@ string "") (expressionToExpr) (var "update")] $
+        TS._ForInit_expression>>: lambda "e" $ expressionToExpr @@ var "e"]),
+    "testExpr">: Maybes.cases (var "test") (Serialization.cst @@ string "") (expressionToExpr),
+    "updateExpr">: Maybes.cases (var "update") (Serialization.cst @@ string "") (expressionToExpr)] $
     Serialization.spaceSep @@ list [
       Serialization.cst @@ string "for",
       Serialization.parenListAdaptive @@ list [var "initExpr", var "testExpr", var "updateExpr"],
@@ -753,12 +730,9 @@ functionDeclarationWithCommentsToExpr = define "functionDeclarationWithCommentsT
   lambda "fdwc" $ lets [
     "body">: project TS._FunctionDeclarationWithComments TS._FunctionDeclarationWithComments_body @@ var "fdwc",
     "mc">: project TS._FunctionDeclarationWithComments TS._FunctionDeclarationWithComments_comments @@ var "fdwc"] $
-    Maybes.maybe
-      (functionDeclarationToExpr @@ var "body")
-      (lambda "c" $ Serialization.newlineSep @@ list [
+    Maybes.cases (var "mc") (functionDeclarationToExpr @@ var "body") (lambda "c" $ Serialization.newlineSep @@ list [
         documentationCommentToExpr @@ var "c",
         functionDeclarationToExpr @@ var "body"])
-      (var "mc")
 
 functionExpressionToExpr :: TypedTermDefinition (TS.FunctionExpression -> Expr)
 functionExpressionToExpr = define "functionExpressionToExpr" $
@@ -773,10 +747,7 @@ functionExpressionToExpr = define "functionExpressionToExpr" $
     "funcKw">: Logic.ifElse (var "generator")
       (Serialization.cst @@ string "function*")
       (Serialization.cst @@ string "function"),
-    "nameExpr">: Maybes.maybe
-      (list ([] :: [TypedTerm Expr]))
-      (lambda "id" $ list [identifierToExpr @@ var "id"])
-      (var "mid"),
+    "nameExpr">: Maybes.cases (var "mid") (list ([] :: [TypedTerm Expr])) (lambda "id" $ list [identifierToExpr @@ var "id"]),
     "paramsExpr">: Serialization.parenListAdaptive @@ (Lists.map (patternToExpr) (var "params"))] $
     Serialization.spaceSep @@ (Lists.concat $ list [
       var "asyncKw",
@@ -800,13 +771,10 @@ ifStatementToExpr = define "ifStatementToExpr" $
       Serialization.cst @@ string "if",
       Serialization.parens @@ (expressionToExpr @@ var "test"),
       statementToExpr @@ var "consequent"]] $
-    Maybes.maybe
-      (var "ifPart")
-      (lambda "alt" $ Serialization.spaceSep @@ list [
+    Maybes.cases (var "alternate") (var "ifPart") (lambda "alt" $ Serialization.spaceSep @@ list [
         var "ifPart",
         Serialization.cst @@ string "else",
         statementToExpr @@ var "alt"])
-      (var "alternate")
 
 importDeclarationToExpr :: TypedTermDefinition (TS.ImportDeclaration -> Expr)
 importDeclarationToExpr = define "importDeclarationToExpr" $
@@ -978,12 +946,9 @@ moduleItemWithCommentsToExpr = define "moduleItemWithCommentsToExpr" $
   lambda "miwc" $ lets [
     "body">: project TS._ModuleItemWithComments TS._ModuleItemWithComments_body @@ var "miwc",
     "mc">: project TS._ModuleItemWithComments TS._ModuleItemWithComments_comments @@ var "miwc"] $
-    Maybes.maybe
-      (moduleItemToExpr @@ var "body")
-      (lambda "c" $ Serialization.newlineSep @@ list [
+    Maybes.cases (var "mc") (moduleItemToExpr @@ var "body") (lambda "c" $ Serialization.newlineSep @@ list [
         documentationCommentToExpr @@ var "c",
         moduleItemToExpr @@ var "body"])
-      (var "mc")
 
 namedExportToExpr :: TypedTermDefinition (TS.NamedExport -> Expr)
 namedExportToExpr = define "namedExportToExpr" $
@@ -992,10 +957,7 @@ namedExportToExpr = define "namedExportToExpr" $
     "specifiers">: project TS._NamedExport TS._NamedExport_specifiers @@ var "n",
     "source">: project TS._NamedExport TS._NamedExport_source @@ var "n",
     "specExprs">: Lists.map (exportSpecifierToExpr) (var "specifiers"),
-    "fromClause">: Maybes.maybe
-      (list ([] :: [TypedTerm Expr]))
-      (lambda "s" $ list [Serialization.cst @@ string "from", stringLiteralToExpr @@ var "s"])
-      (var "source")] $
+    "fromClause">: Maybes.cases (var "source") (list ([] :: [TypedTerm Expr])) (lambda "s" $ list [Serialization.cst @@ string "from", stringLiteralToExpr @@ var "s"])] $
     Serialization.suffix @@ string ";" @@
       (Serialization.spaceSep @@ (Lists.concat $ list [
         list [Serialization.cst @@ string "export"],
@@ -1100,13 +1062,10 @@ returnStatementToExpr :: TypedTermDefinition (TS.ReturnStatement -> Expr)
 returnStatementToExpr = define "returnStatementToExpr" $
   doc "Convert a return statement to an AST expression" $
   lambda "r" $
-    Maybes.maybe
-      (Serialization.cst @@ string "return;")
-      (lambda "e" $ Serialization.suffix @@ string ";" @@
+    Maybes.cases (var "r") (Serialization.cst @@ string "return;") (lambda "e" $ Serialization.suffix @@ string ";" @@
         (Serialization.spaceSep @@ list [
           Serialization.cst @@ string "return",
           expressionToExpr @@ var "e"]))
-      (var "r")
 
 statementToExpr :: TypedTermDefinition (TS.Statement -> Expr)
 statementToExpr = define "statementToExpr" $
@@ -1151,13 +1110,10 @@ switchCaseToExpr = define "switchCaseToExpr" $
   lambda "c" $ lets [
     "test">: project TS._SwitchCase TS._SwitchCase_test @@ var "c",
     "consequent">: project TS._SwitchCase TS._SwitchCase_consequent @@ var "c",
-    "caseLabel">: Maybes.maybe
-      (Serialization.cst @@ string "default:")
-      (lambda "t" $ Serialization.spaceSep @@ list [
+    "caseLabel">: Maybes.cases (var "test") (Serialization.cst @@ string "default:") (lambda "t" $ Serialization.spaceSep @@ list [
         Serialization.cst @@ string "case",
         expressionToExpr @@ var "t",
-        Serialization.cst @@ string ":"])
-      (var "test")] $
+        Serialization.cst @@ string ":"])] $
     Serialization.newlineSep @@ (Lists.cons (var "caseLabel") (Lists.map (statementToExpr) (var "consequent")))
 
 switchStatementToExpr :: TypedTermDefinition (TS.SwitchStatement -> Expr)
@@ -1241,16 +1197,10 @@ tryStatementToExpr = define "tryStatementToExpr" $
     "tryPart">: Serialization.spaceSep @@ list [
       Serialization.cst @@ string "try",
       blockStatementToExpr @@ var "block"],
-    "catchPart">: Maybes.maybe
-      (list ([] :: [TypedTerm Expr]))
-      (lambda "c" $ list [catchClauseToExpr @@ var "c"])
-      (var "handler"),
-    "finallyPart">: Maybes.maybe
-      (list ([] :: [TypedTerm Expr]))
-      (lambda "f" $ list [Serialization.spaceSep @@ list [
+    "catchPart">: Maybes.cases (var "handler") (list ([] :: [TypedTerm Expr])) (lambda "c" $ list [catchClauseToExpr @@ var "c"]),
+    "finallyPart">: Maybes.cases (var "finalizer") (list ([] :: [TypedTerm Expr])) (lambda "f" $ list [Serialization.spaceSep @@ list [
         Serialization.cst @@ string "finally",
-        blockStatementToExpr @@ var "f"]])
-      (var "finalizer")] $
+        blockStatementToExpr @@ var "f"]])] $
     Serialization.spaceSep @@ (Lists.concat $ list [list [var "tryPart"], var "catchPart", var "finallyPart"])
 
 -- | Render a TS.TypeExpression as a TypeScript type-syntax string. Used by
@@ -1426,12 +1376,9 @@ variableDeclaratorToExpr = define "variableDeclaratorToExpr" $
   lambda "decl" $ lets [
     "id">: project TS._VariableDeclarator TS._VariableDeclarator_id @@ var "decl",
     "init">: project TS._VariableDeclarator TS._VariableDeclarator_init @@ var "decl"] $
-    Maybes.maybe
-      (patternToExpr @@ var "id")
-      (lambda "e" $ Serialization.ifx @@ TypeScriptOperators.defineOp @@
+    Maybes.cases (var "init") (patternToExpr @@ var "id") (lambda "e" $ Serialization.ifx @@ TypeScriptOperators.defineOp @@
         (patternToExpr @@ var "id") @@
         (expressionToExpr @@ var "e"))
-      (var "init")
 
 variableKindToExpr :: TypedTermDefinition (TS.VariableKind -> Expr)
 variableKindToExpr = define "variableKindToExpr" $

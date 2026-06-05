@@ -71,19 +71,13 @@ fanWalkerBody k =
          _Term_application>>: "app" ~>
            "fun" <~ Core.applicationFunction (var "app") $
            "arg" <~ Core.applicationArgument (var "app") $
-           Maybes.maybe
-             (fanWalkerRef p1 @@ var "arg")
-             ("_" ~> fanWalkerRef p1 @@ var "fun")
-             (fanWalkerRef p1 @@ var "fun"),
+           Maybes.cases (fanWalkerRef p1 @@ var "fun") (fanWalkerRef p1 @@ var "arg") ("_" ~> fanWalkerRef p1 @@ var "fun"),
          _Term_lambda>>: "lam" ~>
            "body" <~ Core.lambdaBody (var "lam") $
            fanWalkerRef p2 @@ var "body",
          _Term_let>>: "le" ~>
            "body" <~ Core.letBody (var "le") $
-           Maybes.maybe
-             nothing
-             ("inner" ~> fanWalkerRef p3 @@ var "inner")
-             (fanWalkerRef p3 @@ var "body"),
+           Maybes.cases (fanWalkerRef p3 @@ var "body") nothing ("inner" ~> fanWalkerRef p3 @@ var "inner"),
          _Term_variable>>: constant $ just (var "stripped"),
          _Term_literal>>:  constant $ just (var "stripped")]
 

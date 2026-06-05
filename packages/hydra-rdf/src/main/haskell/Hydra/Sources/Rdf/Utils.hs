@@ -286,7 +286,7 @@ propertyIri = define "propertyIri" $
     wrap Rdf._Iri
       (Strings.cat $ list [
         string "urn:",
-        Maybes.maybe (string "") (unwrap _ModuleName) (var "gname"),
+        Maybes.cases (var "gname") (string "") (unwrap _ModuleName),
         string "#",
         Formatting.decapitalize @@ var "local_",
         Formatting.capitalize @@ (Core.unName $ var "fname")])

@@ -174,9 +174,7 @@ escapeControlCharsInJson = define "escapeControlCharsInJson" $
           var "hexDigit" @@ (Maybes.fromMaybe (int32 0) (Math.maybeMod (var "b") (int32 16)))]) $
   -- go :: Bool -> Bool -> [Int32] -> [Int32]
   "go" <~ ("inStr" ~> "esc" ~> "bytes" ~>
-    Maybes.maybe
-      (TypedTerm (Terms.list []) :: TypedTerm [Int])
-      ("uc" ~>
+    Maybes.cases (Lists.uncons $ var "bytes") (TypedTerm (Terms.list []) :: TypedTerm [Int]) ("uc" ~>
        "b" <~ Pairs.first (var "uc") $
        "bs" <~ Pairs.second (var "uc") $
        Logic.ifElse (var "esc")
@@ -192,8 +190,7 @@ escapeControlCharsInJson = define "escapeControlCharsInJson" $
                -- control char: replace with \uXXXX
                (Lists.concat2 (var "escapeToUnicode" @@ var "b") (var "go" @@ var "inStr" @@ boolean False @@ var "bs"))
                -- normal byte
-               (Lists.cons (var "b") (var "go" @@ var "inStr" @@ boolean False @@ var "bs"))))))
-      (Lists.uncons $ var "bytes")) $
+               (Lists.cons (var "b") (var "go" @@ var "inStr" @@ boolean False @@ var "bs"))))))) $
   var "go" @@ boolean False @@ boolean False @@ var "input"
 
 -- | Decode a single module from a JSON value.
