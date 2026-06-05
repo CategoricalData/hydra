@@ -101,78 +101,6 @@
    "hydra.test.inference.nominalTypes" "hydra.test.substitution"
    "hydra.test.unification" "hydra.test.validate.all" "hydra.test.validate.core"])
 
-(def ^:private gen-main-load-order
-  "Generated main namespaces in topological dependency order.
-   Computed by walking each module's :require clause and Kahn's-algorithm sorting.
-   A module is loaded only after all its in-scope dependencies have been
-   loaded and globalized."
-  ["hydra.ast" "hydra.classes" "hydra.core" "hydra.json.model" "hydra.parsing"
-   "hydra.relational" "hydra.testing" "hydra.topology" "hydra.util"
-   "hydra.variants" "hydra.yaml.model" "hydra.constants"   "hydra.differentiation" "hydra.encode.ast" "hydra.encode.classes"
-   "hydra.encode.core" "hydra.eval.lib.equality" "hydra.eval.lib.logic"
-   "hydra.eval.lib.math" "hydra.json.bootstrap" "hydra.literals" "hydra.paths"
-   "hydra.typed" "hydra.query" "hydra.show.core" "hydra.encode.json.model"
-   "hydra.extract.json" "hydra.json.decoding" "hydra.encode.parsing"
-   "hydra.parsers" "hydra.encode.relational" "hydra.tabular" "hydra.encode.testing"
-   "hydra.encode.topology" "hydra.encode.util" "hydra.formatting"
-   "hydra.serialization" "hydra.show.util" "hydra.encode.variants" "hydra.reflect"
-   "hydra.show.variants" "hydra.sorting" "hydra.typing"
-   "hydra.encode.paths" "hydra.error.core" "hydra.encode.typed"
-   "hydra.encode.query" "hydra.show.graph" "hydra.json.parser"
-   "hydra.encode.tabular" "hydra.json.writer" "hydra.error.checking"
-   "hydra.show.typing" "hydra.encode.typing" "hydra.encode.error.core"
-   "hydra.show.error.core" "hydra.errors" "hydra.encode.error.checking"
-   "hydra.eval.lib.maps" "hydra.eval.lib.pairs" "hydra.graph" "hydra.show.errors"
-   "hydra.encode.errors" "hydra.arity" "hydra.coders" "hydra.packaging"
-   "hydra.scoping" "hydra.encode.coders" "hydra.languages" "hydra.encode.packaging"
-   "hydra.error.packaging" "hydra.test.transform"
-   "hydra.rewriting" "hydra.strip" "hydra.variables" "hydra.json.decode"
-   "hydra.json.encode" "hydra.lexical" "hydra.substitution" "hydra.validate.core"
-   "hydra.json.yaml.decode" "hydra.json.yaml.encode" "hydra.extract.core"
-   "hydra.unification" "hydra.decode.ast" "hydra.decode.classes"
-   "hydra.decode.coders" "hydra.decode.core" "hydra.decode.json.model"
-   "hydra.decode.parsing" "hydra.decode.relational" "hydra.decode.testing"
-   "hydra.decode.topology" "hydra.decode.util" "hydra.decode.variants"
-   "hydra.eval.lib.eithers" "hydra.eval.lib.maybes" "hydra.eval.lib.sets"
-   "hydra.extract.util" "hydra.annotations"
-   "hydra.decode.packaging" "hydra.decode.paths" "hydra.decode.typed"
-   "hydra.decode.query" "hydra.environment" "hydra.templates"
-   "hydra.decode.tabular" "hydra.names" "hydra.decode.typing"
-   "hydra.decode.error.core" "hydra.dependencies" "hydra.dsls" "hydra.resolution"
-   "hydra.show.paths" "hydra.validate.packaging" "hydra.decode.error.checking"
-   "hydra.predicates" "hydra.checking" "hydra.hoisting" "hydra.decode.errors"
-   "hydra.decoding" "hydra.encoding" "hydra.analysis" "hydra.inference"
-   "hydra.reduction" "hydra.test.utils" "hydra.adapt" "hydra.eval.lib.lists"
-   "hydra.codegen"])
-
-(def ^:private gen-test-load-order
-  "Generated test namespaces in topological dependency order.
-   Computed by walking each test module's :require clause restricted to test
-   namespaces. (Inter-test deps shape this; main-module deps are resolved
-   earlier by load-gen-main!.)
-   Note: hydra.test.testEnv is in the manifest but not generated as a Clojure
-   file (it is an empty wrapper), so it is omitted here."
-  ["hydra.test.checking.failures" "hydra.test.dependencies"
-   "hydra.test.formatting" "hydra.test.hoisting.cases" "hydra.test.hoisting.let"
-   "hydra.test.json.roundtrip" "hydra.test.json.writer" "hydra.test.json.yaml"
-   "hydra.test.lib.eithers" "hydra.test.lib.maps" "hydra.test.lib.maybes"
-   "hydra.test.lib.pairs" "hydra.test.lib.sets" "hydra.test.rewriting"
-   "hydra.test.serialization" "hydra.test.sorting" "hydra.test.strip"
-   "hydra.test.substitution" "hydra.test.testTypes" "hydra.test.unification"
-   "hydra.test.variables" "hydra.test.hoisting.all" "hydra.test.testTerms"
-   "hydra.test.testGraph" "hydra.test.annotations" "hydra.test.checking.advanced"
-   "hydra.test.checking.algebraicTypes" "hydra.test.checking.collections"
-   "hydra.test.checking.fundamentals" "hydra.test.checking.nominalTypes"
-   "hydra.test.differentiation" "hydra.test.etaExpansion" "hydra.test.generation"
-   "hydra.test.inference.algebraicTypes" "hydra.test.inference.algorithmW"
-   "hydra.test.inference.classes" "hydra.test.inference.failures"
-   "hydra.test.inference.fundamentals" "hydra.test.inference.kernelExamples"
-   "hydra.test.inference.nominalTypes" "hydra.test.lib.chars"
-   "hydra.test.lib.equality" "hydra.test.lib.lists" "hydra.test.lib.literals"
-   "hydra.test.lib.logic" "hydra.test.lib.math" "hydra.test.lib.regex"
-   "hydra.test.lib.strings" "hydra.test.reduction" "hydra.test.validate.core"
-   "hydra.test.checking.all" "hydra.test.inference.all" "hydra.test.validate.all"
-   "hydra.test.testSuite"])
 
 (defn- extract-defs-from-file
   "Read a .clj file and return all top-level (def sym ...) symbol names."
@@ -201,6 +129,95 @@
             (let [f (java.io.File. dir path)]
               (when (.exists f) f)))
           dirs)))
+
+(defn read-ns-requires
+  "Read the (ns ...) form of a namespace's source file and return its
+   :require dependencies (as ns-name strings). If `universe` is non-nil, only
+   deps in that set are returned; if nil, all `:require`d nses are returned."
+  [ns-name universe]
+  (when-let [file (find-ns-file ns-name)]
+    (let [first-form (with-open [rdr (java.io.PushbackReader. (java.io.FileReader. file))]
+                       (binding [*read-eval* false]
+                         (try (read rdr false nil) (catch Exception _ nil))))]
+      (when (and (sequential? first-form) (= (first first-form) 'ns))
+        (let [require-form (some (fn [f] (when (and (sequential? f) (= (first f) :require)) f))
+                                 (drop 2 first-form))
+              specs (rest require-form)
+              dep-syms (keep (fn [spec]
+                               (cond
+                                 (symbol? spec) spec
+                                 (sequential? spec) (first spec)
+                                 :else nil))
+                             specs)
+              dep-strs (map str dep-syms)]
+          (vec (if universe (filter universe dep-strs) dep-strs)))))))
+
+(defn- topo-sort
+  "Kahn's algorithm: return ns-names in dependency order such that every ns's
+   :require dependencies (restricted to `nses`) appear before it. Stable for a
+   given input set; cycles are reported on stderr but not rejected."
+  [nses]
+  (let [universe (set nses)
+        deps (into {} (for [ns nses] [ns (read-ns-requires ns universe)]))
+        in-degree (atom (into {} (for [ns nses] [ns (count (deps ns))])))
+        dependents (reduce (fn [acc [ns ds]]
+                             (reduce (fn [a d] (update a d (fnil conj []) ns)) acc ds))
+                           {} deps)
+        ready (atom (vec (sort (filter #(zero? (@in-degree %)) nses))))
+        sorted (atom [])]
+    (while (seq @ready)
+      (let [n (first @ready)]
+        (swap! ready subvec 1)
+        (swap! sorted conj n)
+        (doseq [m (sort (get dependents n []))]
+          (swap! in-degree update m dec)
+          (when (zero? (@in-degree m))
+            (swap! ready conj m)))))
+    (when (not= (count @sorted) (count nses))
+      (binding [*out* *err*]
+        (println "Warning: ns dependency cycle detected; falling back to input order for"
+                 (count (remove (set @sorted) nses)) "ns(es).")))
+    (let [done (set @sorted)]
+      (vec (concat @sorted (remove done nses))))))
+
+(defn coder-load-order
+  "Walk the :require closure of `root-ns-names` and return the transitive
+   dependency set in topological order, omitting hydra.lib.* and hydra.eval.*
+   (which the runtime preload globalizes ahead of time) and any ns whose
+   source file is not on the classpath (e.g. clojure.string)."
+  [root-ns-names]
+  (let [skip? (fn [^String n]
+                (or (.startsWith n "hydra.lib.")
+                    (.startsWith n "hydra.eval.")
+                    (not (.startsWith n "hydra."))))
+        reach (loop [stack (vec root-ns-names) seen #{}]
+                (if (empty? stack)
+                  seen
+                  (let [n (peek stack) rest (pop stack)]
+                    (if (or (contains? seen n) (skip? n) (nil? (find-ns-file n)))
+                      (recur rest seen)
+                      (let [deps (or (read-ns-requires n nil) [])
+                            new-deps (remove (some-fn seen skip?) deps)]
+                        (recur (into rest new-deps) (conj seen n)))))))]
+    (topo-sort (vec reach))))
+
+(def ^:private gen-main-load-order
+  "Generated main namespaces in topological dependency order, computed at load
+   time from each namespace's :require clause. The set of in-scope namespaces
+   is the non-test entries of gen-ns-names."
+  (delay (topo-sort (vec (remove #(.startsWith ^String % "hydra.test.") gen-ns-names)))))
+
+(def ^:private gen-test-load-order
+  "Generated test namespaces in topological dependency order, computed at load
+   time. Inter-test deps shape this ordering; main-module deps were resolved
+   earlier by load-gen-main!. hydra.test.testEnv is in the manifest but not
+   generated as a Clojure file (empty wrapper), so it is filtered out."
+  (delay
+    (topo-sort
+      (vec (filter (fn [^String n]
+                     (and (.startsWith n "hydra.test.")
+                          (not= n "hydra.test.testEnv")))
+                   gen-ns-names)))))
 
 (defn pre-declare-ns-symbols!
   "Read the source file for a namespace and forward-declare all def symbols,
@@ -468,12 +485,12 @@
 (defn load-gen-main!
   "Load generated main modules in dependency order, globalizing after each."
   []
-  (doseq [ns-name gen-main-load-order]
+  (doseq [ns-name @gen-main-load-order]
     (require-and-globalize! ns-name))
   (install-performance-patches!))
 
 (defn load-gen-test!
   "Load generated test modules in dependency order, globalizing after each."
   []
-  (doseq [ns-name gen-test-load-order]
+  (doseq [ns-name @gen-test-load-order]
     (require-and-globalize! ns-name)))
