@@ -10,5 +10,6 @@
     "hydra.java.syntax",
     "hydra.java.testing",
     "hydra.java.utils"],
+  "manifestFormatVersion": 1,
   "package": "hydra-java",
   "testModules": []}

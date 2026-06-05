@@ -241,17 +241,18 @@ readDigest path = do
 
 
 -- | Write a digest file. Format: a minimal JSON object
--- { "formatVersion": 1, "version": 1, "hashes": { "<namespace>": "<hex>", ... } }
+-- { "digestFormatVersion": 1, "moduleFormatVersion": 1, "hashes": { "<namespace>": "<hex>", ... } }
 -- Keys are written in sorted order for deterministic output.
 --
--- The two version fields are deliberately distinct:
+-- The two version fields are deliberately distinct (both reset to 1 for 0.16.0):
 --
---   * "formatVersion" describes the JSON encoding of sibling module files
+--   * "moduleFormatVersion" describes the JSON encoding of sibling module files
 --     (dist/json/<package>/.../*.json). See docs/json-format.md.
 --     Bumped only when a parser for version N would mis-parse version N+1.
---   * "version" describes this digest file's own internal schema (v1 = simple
---     hash map, v2 = inputs/outputs/generator). It is not meant for consumers
---     gating on the module-JSON encoding.
+--   * "digestFormatVersion" describes this digest file's own internal schema
+--     (v1 = simple hash map, the inputs/outputs/generator layout = the v2
+--     serializer below). It is not meant for consumers gating on the
+--     module-JSON encoding.
 --
 -- Pre-#347 universe digests also carried a top-level "encoderId" field
 -- (a content hash of four JSON-coder DSL source files). That mechanism
@@ -269,7 +270,8 @@ writeDigest path digest = do
 -- in aeson's full machinery here because the format is trivial and we want
 -- tolerant parsing (a malformed digest silently becomes an empty map).
 -- The regex only matches `"key": "quoted_value"` pairs, so it naturally
--- skips the `"formatVersion"`, `"version"`, and `"hashes": { ... }` scaffolding.
+-- skips the integer `"digestFormatVersion"` / `"moduleFormatVersion"` fields
+-- and the `"hashes": { ... }` scaffolding.
 --
 -- Top-level non-namespace keys are filtered out:
 --   * "encoderId" — legacy from pre-#347 universe digests (retired).
@@ -291,12 +293,12 @@ parseDigest s =
 
 
 -- | Serialize a digest. Schema:
--- { "formatVersion": 1, "version": 1, "hashes": { "<ns>": "<hex>", ... } }
+-- { "digestFormatVersion": 1, "moduleFormatVersion": 1, "hashes": { "<ns>": "<hex>", ... } }
 serializeDigest :: DigestMap -> String
 serializeDigest digest = unlines $
     ["{"
-    ,"  \"formatVersion\": 1,"
-    ,"  \"version\": 1,"
+    ,"  \"digestFormatVersion\": 1,"
+    ,"  \"moduleFormatVersion\": 1,"
     ,"  \"hashes\": {"]
     ++ hashLines ++
     ["  }"
@@ -330,8 +332,8 @@ serializeDigest digest = unlines $
 -- entries, plus the existing hashes block):
 --
 --   {
---     "formatVersion": 1,
---     "version": 1,
+--     "digestFormatVersion": 1,
+--     "moduleFormatVersion": 1,
 --     "selfHash": "<hex>",
 --     "depHash:hydra-kernel": "<hex>",
 --     "depHash:hydra-rdf":    "<hex>",
@@ -402,8 +404,8 @@ writePerPackageDigest path ppd = do
 serializePerPackageDigest :: PerPackageDigest -> String
 serializePerPackageDigest (PerPackageDigest hashes selfH deps) = unlines $
     ["{"
-    ,"  \"formatVersion\": 1,"
-    ,"  \"version\": 1,"]
+    ,"  \"digestFormatVersion\": 1,"
+    ,"  \"moduleFormatVersion\": 1,"]
     ++ selfHashLines
     ++ depLines
     ++ ["  \"hashes\": {"]
@@ -564,7 +566,8 @@ verifyOutputsExist d = do
 -- File layout (deliberately readable + tolerant):
 --
 --   {
---     "version": 2,
+--     "digestFormatVersion": 1,
+--     "moduleFormatVersion": 1,
 --     "generator": "<stamp>",
 --     "inputs": {
 --       "<path>": { "kind": "DslSource", "hash": "<hex>" },
@@ -583,7 +586,8 @@ verifyOutputsExist d = do
 serializeDigestV2 :: Digest -> String
 serializeDigestV2 d = unlines $
     [ "{"
-    , "  \"version\": 2,"
+    , "  \"digestFormatVersion\": 1,"
+    , "  \"moduleFormatVersion\": 1,"
     , "  \"generator\": " ++ jsonString (digestGenerator d) ++ ","
     ]
     ++ selfHashLine
