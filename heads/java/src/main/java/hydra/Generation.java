@@ -438,6 +438,21 @@ public class Generation {
     }
 
     /**
+     * Generate Scala source files from modules.
+     *
+     * Flags mirror the Scala host's own writeScala in
+     * heads/scala/.../Generation.scala (doInfer=false, doExpand=true,
+     * doHoistCaseStatements=false, doHoistPolymorphicLetBindings=false).
+     */
+    public static void writeScala(String basePath, List<Module> universe, List<Module> mods) {
+        generateSources(
+                mod -> defs -> cx -> g -> hydra.scala.Coder.moduleToScala(mod, defs, cx, g),
+                hydra.scala.Language.scalaLanguage(),
+                false, true, false, false,
+                basePath, universe, mods);
+    }
+
+    /**
      * Generate TypeScript source files from modules.
      *
      * doHoistCaseStatements=true mirrors Python's TS-host setting and the
