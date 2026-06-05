@@ -14,6 +14,7 @@ import qualified Hydra.Dsl.Meta.Lib.Sets                   as Sets
 import qualified Hydra.Dsl.Meta.Variants                   as Variants
 import qualified Hydra.Dsl.Terms                           as Terms
 import qualified Hydra.Dsl.Types                           as Types
+import qualified Hydra.Dsl.Util                              as Util
 import qualified Hydra.Sources.Kernel.Terms.Strip          as Strip
 import qualified Hydra.Sources.Kernel.Types.All            as KernelTypes
 import           Prelude hiding ((++))
@@ -74,3 +75,13 @@ yamlLanguage = define "yamlLanguage" $
       (var "termVariants")
       (var "typeVariants")
       (var "typePredicate"))
+      (Sets.fromList $ list [
+        Coders.languageFeaturePartialApplication,
+        Coders.languageFeatureNestedCaseStatements,
+        Coders.languageFeatureNestedPolymorphicLetBindings])
+      (Coders.caseConventions
+        Util.caseConventionUpperSnake Util.caseConventionLowerSnake Util.caseConventionPascal
+        Util.caseConventionCamel Util.caseConventionLowerSnake Util.caseConventionLowerSnake
+        Util.caseConventionCamel Util.caseConventionCamel Util.caseConventionPascal
+        Util.caseConventionPascal)
+      (wrap _FileExtension (string "yaml"))

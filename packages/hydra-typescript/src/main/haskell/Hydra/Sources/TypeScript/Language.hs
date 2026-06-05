@@ -161,6 +161,14 @@ typeScriptLanguage = define "typeScriptLanguage" $
         (var "termVariants")
         (var "typeVariants")
         (var "typePredicate"))
+      (Sets.fromList $ list [
+        Coders.languageFeatureNestedPolymorphicLetBindings])
+      (Coders.caseConventions
+        Util.caseConventionUpperSnake Util.caseConventionLowerSnake Util.caseConventionPascal
+        Util.caseConventionCamel Util.caseConventionLowerSnake Util.caseConventionLowerSnake
+        Util.caseConventionCamel Util.caseConventionCamel Util.caseConventionPascal
+        Util.caseConventionPascal)
+      (wrap _FileExtension (string "ts"))
 
 typeScriptReservedWords :: TypedTermDefinition (S.Set String)
 typeScriptReservedWords = define "typeScriptReservedWords" $

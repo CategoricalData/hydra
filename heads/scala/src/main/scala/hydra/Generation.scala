@@ -130,22 +130,24 @@ object Generation:
   def filterKernelModules(mods: Seq[Module]): Seq[Module] =
     mods.filter(m => !m.name.startsWith("hydra.") && !m.name.startsWith("hydra.json.yaml."))
 
-  /** Generate source files and write them to disk. Returns number of files written. */
+  /** Generate source files and write them to disk. Returns number of files written.
+   *
+   *  Emission flags (eta-expansion, case-hoisting, polymorphic-let-hoisting) are now
+   *  read from `language.supportedFeatures` inside `generateSourceFiles`; the caller
+   *  only supplies `doInfer`.
+   */
   def generateSources(
       coder: Module => Seq[Definition] => hydra.typing.InferenceContext => Graph =>
         Either[hydra.errors.Error, Map[String, String]],
       language: hydra.coders.Language,
       doInfer: Boolean,
-      doExpand: Boolean,
-      doHoistCaseStatements: Boolean,
-      doHoistPolymorphicLetBindings: Boolean,
       basePath: String,
       universe: Seq[Module],
       modsToGenerate: Seq[Module]): Int =
     val cx = hydra.typing.InferenceContext(0, Seq.empty)
     val bsGraph = bootstrapGraph()
     hydra.codegen.generateSourceFiles(
-      coder)(language)(doInfer)(doExpand)(doHoistCaseStatements)(doHoistPolymorphicLetBindings)(
+      coder)(language)(doInfer)(
       bsGraph)(universe)(modsToGenerate)(cx) match
       case Left(err) =>
         throw new RuntimeException(s"Code generation failed: $err")
@@ -163,7 +165,7 @@ object Generation:
     generateSources(
       mod => defs => cx => g => hydra.java.coder.moduleToJava(mod)(defs)(cx)(g),
       hydra.java.language.javaLanguage,
-      doInfer = false, doExpand = true, doHoistCaseStatements = false, doHoistPolymorphicLetBindings = true,
+      doInfer = false,
       basePath, universe, mods)
 
   /** Generate Python source files from modules. */
@@ -171,7 +173,7 @@ object Generation:
     generateSources(
       mod => defs => cx => g => hydra.python.coder.moduleToPython(mod)(defs)(cx)(g),
       hydra.python.language.pythonLanguage,
-      doInfer = false, doExpand = true, doHoistCaseStatements = true, doHoistPolymorphicLetBindings = false,
+      doInfer = false,
       basePath, universe, mods)
 
   /** Generate Scala source files from modules. */
@@ -179,7 +181,7 @@ object Generation:
     generateSources(
       mod => defs => cx => g => hydra.scala.coder.moduleToScala(mod)(defs)(cx)(g),
       hydra.scala.language.scalaLanguage,
-      doInfer = false, doExpand = true, doHoistCaseStatements = false, doHoistPolymorphicLetBindings = false,
+      doInfer = false,
       basePath, universe, mods)
 
   /** Generate Haskell source files from modules. */
@@ -187,7 +189,7 @@ object Generation:
     generateSources(
       mod => defs => cx => g => hydra.haskell.coder.moduleToHaskell(mod)(defs)(cx)(g),
       hydra.haskell.language.haskellLanguage,
-      doInfer = false, doExpand = false, doHoistCaseStatements = false, doHoistPolymorphicLetBindings = false,
+      doInfer = false,
       basePath, universe, mods)
 
   // Scala→typescript dispatch is intentionally NOT wired here yet: the
@@ -225,7 +227,7 @@ object Generation:
             val filePath = hydra.names.moduleNameToFilePath(caseConv)(fileExt)(mod.name)
             Right(Map(filePath -> code)),
       hydra.lisp.language.lispLanguage,
-      doInfer = false, doExpand = false, doHoistCaseStatements = false, doHoistPolymorphicLetBindings = false,
+      doInfer = false,
       basePath, universe, mods)
 
   /** Format elapsed time for display. */

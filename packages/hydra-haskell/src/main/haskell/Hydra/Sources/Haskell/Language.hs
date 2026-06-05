@@ -157,6 +157,16 @@ haskellLanguage = haskellLanguageDefinition "haskellLanguage" $
       (var "termVariants")
       (var "typeVariants")
       (var "typePredicate"))
+    (Sets.fromList $ list [
+      Coders.languageFeaturePartialApplication,
+      Coders.languageFeatureNestedCaseStatements,
+      Coders.languageFeatureNestedPolymorphicLetBindings])
+    (Coders.caseConventions
+      Util.caseConventionUpperSnake Util.caseConventionPascal Util.caseConventionPascal
+      Util.caseConventionCamel Util.caseConventionPascal Util.caseConventionPascal
+      Util.caseConventionCamel Util.caseConventionCamel Util.caseConventionPascal
+      Util.caseConventionCamel)
+    (wrap _FileExtension (string "hs"))
 
 haskellLanguageDefinition :: String -> TypedTerm a -> TypedTermDefinition a
 haskellLanguageDefinition = definitionInModule module_

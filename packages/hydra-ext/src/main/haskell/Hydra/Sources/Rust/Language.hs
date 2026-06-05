@@ -165,6 +165,16 @@ rustLanguage = define "rustLanguage" $
         (var "termVariants")
         (var "typeVariants")
         (var "typePredicate"))
+      (Sets.fromList $ list [
+        Coders.languageFeaturePartialApplication,
+        Coders.languageFeatureNestedCaseStatements,
+        Coders.languageFeatureNestedPolymorphicLetBindings])
+      (Coders.caseConventions
+        Util.caseConventionUpperSnake Util.caseConventionLowerSnake Util.caseConventionPascal
+        Util.caseConventionCamel Util.caseConventionLowerSnake Util.caseConventionLowerSnake
+        Util.caseConventionCamel Util.caseConventionCamel Util.caseConventionPascal
+        Util.caseConventionPascal)
+      (wrap _FileExtension (string "rs"))
 
 rustReservedWords :: TypedTermDefinition (S.Set String)
 rustReservedWords = define "rustReservedWords" $

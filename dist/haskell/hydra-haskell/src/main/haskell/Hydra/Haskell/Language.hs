@@ -40,7 +40,23 @@ haskellLanguage =
         Coders.languageConstraintsIntegerTypes = integerTypes,
         Coders.languageConstraintsTermVariants = termVariants,
         Coders.languageConstraintsTypeVariants = typeVariants,
-        Coders.languageConstraintsTypes = typePredicate}}
+        Coders.languageConstraintsTypes = typePredicate},
+      Coders.languageSupportedFeatures = (Sets.fromList [
+        Coders.LanguageFeaturePartialApplication,
+        Coders.LanguageFeatureNestedCaseStatements,
+        Coders.LanguageFeatureNestedPolymorphicLetBindings]),
+      Coders.languageCaseConventions = Coders.CaseConventions {
+        Coders.caseConventionsConstant = Util.CaseConventionUpperSnake,
+        Coders.caseConventionsDirectory = Util.CaseConventionPascal,
+        Coders.caseConventionsEnumValue = Util.CaseConventionPascal,
+        Coders.caseConventionsField = Util.CaseConventionCamel,
+        Coders.caseConventionsFile = Util.CaseConventionPascal,
+        Coders.caseConventionsModule = Util.CaseConventionPascal,
+        Coders.caseConventionsTerm = Util.CaseConventionCamel,
+        Coders.caseConventionsTermVariable = Util.CaseConventionCamel,
+        Coders.caseConventionsType = Util.CaseConventionPascal,
+        Coders.caseConventionsTypeVariable = Util.CaseConventionCamel},
+      Coders.languageDefaultFileExtension = (Util.FileExtension "hs")}
   where
     literalVariants =
         Sets.fromList [

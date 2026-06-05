@@ -187,6 +187,100 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
+                    "value": {"literal": {"string": "Per-target case conventions for name forms that vary across emission targets"}}}]},
+              "body": {
+                "record": [
+                  {
+                    "name": "constant",
+                    "type": {
+                      "annotated": {
+                        "annotation": {
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convention for compile-time constant names"}}}]},
+                        "body": {"variable": "hydra.util.CaseConvention"}}}},
+                  {
+                    "name": "directory",
+                    "type": {
+                      "annotated": {
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "Convention for each directory level in the emitted source tree"}}}]},
+                        "body": {"variable": "hydra.util.CaseConvention"}}}},
+                  {
+                    "name": "enumValue",
+                    "type": {
+                      "annotated": {
+                        "annotation": {
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convention for enum-variant value names"}}}]},
+                        "body": {"variable": "hydra.util.CaseConvention"}}}},
+                  {
+                    "name": "field",
+                    "type": {
+                      "annotated": {
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convention for record field names"}}}]},
+                        "body": {"variable": "hydra.util.CaseConvention"}}}},
+                  {
+                    "name": "file",
+                    "type": {
+                      "annotated": {
+                        "annotation": {
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convention for the source-file basename"}}}]},
+                        "body": {"variable": "hydra.util.CaseConvention"}}}},
+                  {
+                    "name": "module",
+                    "type": {
+                      "annotated": {
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "Convention for a single segment of a module name"}}}]},
+                        "body": {"variable": "hydra.util.CaseConvention"}}}},
+                  {
+                    "name": "term",
+                    "type": {
+                      "annotated": {
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "Convention for top-level term definitions (functions, module-level values)"}}}]},
+                        "body": {"variable": "hydra.util.CaseConvention"}}}},
+                  {
+                    "name": "termVariable",
+                    "type": {
+                      "annotated": {
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "Convention for locally-bound term names (lambda parameters, let-bindings)"}}}]},
+                        "body": {"variable": "hydra.util.CaseConvention"}}}},
+                  {
+                    "name": "type",
+                    "type": {
+                      "annotated": {
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convention for type names"}}}]},
+                        "body": {"variable": "hydra.util.CaseConvention"}}}},
+                  {
+                    "name": "typeVariable",
+                    "type": {
+                      "annotated": {
+                        "annotation": {
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convention for type-level variable names"}}}]},
+                        "body": {"variable": "hydra.util.CaseConvention"}}}}]}}},
+          "variables": []},
+        "name": "hydra.coders.CaseConventions"}},
+    {
+      "type": {
+        "body": {
+          "body": {
+            "annotated": {
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
                     "value": {"literal": {"string": "An encoder and decoder; a bidirectional transformation between two types"}}}]},
               "body": {
                 "forall": {
@@ -256,7 +350,9 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A named language together with language-specific constraints"}}}]},
+                    "value": {
+                      "literal": {
+                        "string": "A named language together with its grammar constraints, capability profile, naming conventions, and conventional file extension"}}}]},
               "body": {
                 "record": [
                   {
@@ -273,8 +369,39 @@
                           "map": [
                             {
                               "key": {"variable": "description"},
-                              "value": {"literal": {"string": "The constraints which characterize the language"}}}]},
-                        "body": {"variable": "hydra.coders.LanguageConstraints"}}}}]}}},
+                              "value": {"literal": {"string": "Constraints which characterize the language's type and term grammars"}}}]},
+                        "body": {"variable": "hydra.coders.LanguageConstraints"}}}},
+                  {
+                    "name": "supportedFeatures",
+                    "type": {
+                      "annotated": {
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "Target-language or target-runtime capabilities the emitter may assume are available"}}}]},
+                        "body": {"set": {"variable": "hydra.coders.LanguageFeature"}}}}},
+                  {
+                    "name": "caseConventions",
+                    "type": {
+                      "annotated": {
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "Per-target case conventions for the various kinds of identifiers emitted by the coder"}}}]},
+                        "body": {"variable": "hydra.coders.CaseConventions"}}}},
+                  {
+                    "name": "defaultFileExtension",
+                    "type": {
+                      "annotated": {
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {
+                                "literal": {"string": "Conventional file extension for emitted source files, without the leading dot (e.g. \"scala\", \"py\")"}}}]},
+                        "body": {"variable": "hydra.util.FileExtension"}}}}]}}},
           "variables": []},
         "name": "hydra.coders.Language"}},
     {
@@ -331,6 +458,58 @@
                         "body": {"function": {"codomain": {"literal": {"boolean": {}}}, "domain": {"variable": "hydra.core.Type"}}}}}}]}}},
           "variables": []},
         "name": "hydra.coders.LanguageConstraints"}},
+    {
+      "type": {
+        "body": {
+          "body": {
+            "annotated": {
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {
+                        "string": "A target-language or target-runtime capability the coder may rely on. Absence from a Language's supportedFeatures set means the emitter must work around the missing capability."}}}]},
+              "body": {
+                "union": [
+                  {
+                    "name": "partialApplication",
+                    "type": {
+                      "annotated": {
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {
+                                "literal": {
+                                  "string": "The target runtime can invoke an n-ary function with fewer than n arguments without error. When absent, the emitter eta-expands partially-applied terms."}}}]},
+                        "body": {"unit": {}}}}},
+                  {
+                    "name": "nestedCaseStatements",
+                    "type": {
+                      "annotated": {
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {
+                                "literal": {
+                                  "string": "The target runtime can handle deeply nested case statements without stack issues. When absent, the emitter hoists cases out into top-level helpers."}}}]},
+                        "body": {"unit": {}}}}},
+                  {
+                    "name": "nestedPolymorphicLetBindings",
+                    "type": {
+                      "annotated": {
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {
+                                "literal": {
+                                  "string": "The target language permits polymorphic let-bindings in expression position. When absent, the emitter hoists polymorphic lets to top level."}}}]},
+                        "body": {"unit": {}}}}}]}}},
+          "variables": []},
+        "name": "hydra.coders.LanguageFeature"}},
     {
       "type": {
         "body": {
@@ -425,6 +604,7 @@
     {"module": "hydra.graph"},
     {"module": "hydra.variants"},
     {"module": "hydra.core"},
-    {"module": "hydra.typing"}],
+    {"module": "hydra.typing"},
+    {"module": "hydra.util"}],
   "metadata": {"comments": [], "description": "Abstractions for paired transformations between languages", "seeAlso": []},
   "name": "hydra.coders"}

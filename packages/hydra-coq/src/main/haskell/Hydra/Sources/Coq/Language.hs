@@ -15,6 +15,7 @@ import qualified Hydra.Dsl.Meta.Lib.Sets                   as Sets
 import qualified Hydra.Dsl.Coders                          as Coders
 import qualified Hydra.Dsl.Meta.Core                       as Core
 import qualified Hydra.Dsl.Meta.Variants                   as Variants
+import qualified Hydra.Dsl.Util                              as Util
 import qualified Hydra.Sources.Kernel.Terms.Constants       as Constants
 import qualified Hydra.Sources.Kernel.Terms.Formatting     as Formatting
 import qualified Hydra.Sources.Kernel.Types.All            as KernelTypes
@@ -114,6 +115,16 @@ coqLanguage = define "coqLanguage" $ lets [
         (var "termVariants")
         (var "typeVariants")
         (var "typePredicate"))
+      (Sets.fromList $ list [
+        Coders.languageFeaturePartialApplication,
+        Coders.languageFeatureNestedCaseStatements,
+        Coders.languageFeatureNestedPolymorphicLetBindings])
+      (Coders.caseConventions
+        Util.caseConventionUpperSnake Util.caseConventionPascal Util.caseConventionPascal
+        Util.caseConventionCamel Util.caseConventionPascal Util.caseConventionPascal
+        Util.caseConventionCamel Util.caseConventionCamel Util.caseConventionPascal
+        Util.caseConventionCamel)
+      (wrap _FileExtension (string "v"))
 
 -- | Reserved words that must be renamed when used as Coq variable or binding names.
 -- This set is kept narrower than the full Coq lexicon: it includes only the tokens
