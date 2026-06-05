@@ -39,8 +39,12 @@ if [ -e "$WT" ]; then
     exit 1
 fi
 
-echo "Creating worktree $WT (branch $BRANCH off origin/main)..."
-git worktree add -b "$BRANCH" "$WT" origin/main
+echo "Creating worktree $WT (branch $BRANCH off HEAD)..."
+# Branch off the coordinator's current HEAD so the new worktree inherits
+# bin/claude-hooks/ and any other tooling needed for the spawn to succeed.
+# (Branching off origin/main would miss the parallel-Claude framework if it
+# hasn't been pushed yet.)
+git worktree add -b "$BRANCH" "$WT" HEAD
 
 echo "Seeding .claude/settings.json (hooks + permissions)..."
 mkdir -p "$WT/.claude"
@@ -110,6 +114,25 @@ the coordinator about them.
 This branch is for issue #${NUM} **only**. Out-of-scope discoveries should
 go in the plan-doc's "Findings" section for future filing, not this PR.
 
+## When your work is complete
+
+Follow \`../../sub-claude-handoff.md\` — that file is authoritative. Summary:
+
+1. **Verify** the fix end-to-end (every relevant test suite green; cross-host
+   implications checked). Do not begin handoff with red tests.
+2. **Squash** WIP commits per CLAUDE.md "Commit workflow" + \`.claude/commands/squash.md\`.
+   Reset target: \`git merge-base HEAD feature_409_bootstrap_everything\`
+   (the fork point — NOT main, NOT the coordinator's current tip).
+3. **\`/save\`** to write final state into your \`bug_${NUM}_${SLUG}-plan.md\`.
+4. **Tint the tab blue** as the explicit "I am done" signal to the human:
+   \`~/projects/github/joshsh/egodev/common/bash/claude-tab-color.sh b\`
+
+Blue specifically means "verified + squashed + saved; ready for the human
+to terminate me, review my commits in this tmux session, and ask the
+coordinator to finalize." Do not tint blue prematurely. Green is the
+default auto-applied idle color and carries no completion semantic — only
+explicit blue stops the auto-hooks from overriding the tab.
+
 Good luck. Ping back when you've got a plan or hit a blocker.
 EOF
 
@@ -127,7 +150,21 @@ tmux rename-window   -t "bug_${NUM}_${SLUG}" "bug_${NUM}_${SLUG}"
 # respect pane-titles (iTerm2 with set -g set-titles on).
 tmux select-pane     -t "bug_${NUM}_${SLUG}" -T "bug_${NUM}_${SLUG}"
 
-tmux send-keys -t "bug_${NUM}_${SLUG}" 'claude-remote' Enter
+# --dangerously-skip-permissions: sub-Claudes work autonomously, no
+# prompting. Worktree-bounded blast radius (deploy keys, no PAT in the
+# sub-session). User reviews resulting PRs before merge.
+tmux send-keys -t "bug_${NUM}_${SLUG}" "CLAUDE_LABEL='bug_${NUM}_${SLUG}' claude --remote-control 'bug_${NUM}_${SLUG}' --dangerously-skip-permissions" Enter
+
+# --dangerously-skip-permissions shows a "Bypass Permissions" warning on
+# first launch (per machine/project) with options "1. No, exit" /
+# "2. Yes, I accept". Default-highlighted option is "1", so if we send
+# our trigger prompt without answering, it lands on "1" and Claude exits.
+sleep 4
+if tmux capture-pane -t "bug_${NUM}_${SLUG}:0" -p | grep -q 'Bypass Permissions'; then
+    echo "Accepting Bypass Permissions warning..."
+    tmux send-keys -t "bug_${NUM}_${SLUG}" '2' Enter
+    sleep 2
+fi
 
 # Give claude time to spin up its TUI before sending the trigger prompt;
 # 8s is comfortable headroom for Claude Code v2.1's startup.
