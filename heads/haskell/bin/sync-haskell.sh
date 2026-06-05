@@ -232,8 +232,17 @@ echo ""
 # files reference test_env.* directly with no rewriting needed.
 echo "  (No post-processing needed — all patches eliminated, see #307.)"
 
+# Re-apply the overlay: step 4's `bootstrap-from-json --prune-stale` deletes
+# files in each per-package output dir that are not part of its generated set,
+# which includes the hand-written Hydra.Haskell.Lib.* runtime modules overlaid
+# before step 1. Without this re-overlay, the rebuild below (and dependent
+# packages like hydra-ext, which import Hydra.Haskell.Lib.{Pairs,Strings,...})
+# fail with "Could not find module 'Hydra.Haskell.Lib.Pairs'". The overlay
+# script is idempotent. (#418)
+"$SCRIPT_DIR/overlay-kernel-runtime.sh"
+
 # Rebuild so subsequent steps (test, lexicon) pick up step 4's regenerated
-# Haskell dist. The overlay was applied before step 1 (see top of script).
+# Haskell dist.
 echo ""
 echo "  Rebuilding..."
 stack build
