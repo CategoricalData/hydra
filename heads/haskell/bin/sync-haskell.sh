@@ -232,8 +232,16 @@ echo ""
 # files reference test_env.* directly with no rewriting needed.
 echo "  (No post-processing needed — all patches eliminated, see #307.)"
 
+# Re-overlay before the rebuild. Step 4's bootstrap-from-json --prune-stale
+# treats overlay-derived files (the hand-written Hydra.Haskell.Lib.* runtime
+# + the Hydra.hs umbrella) as un-owned by the source DSL and removes them.
+# The "Rebuilding..." stack build below needs them present, so re-apply the
+# overlay here (idempotent cp -R).
+echo ""
+"$SCRIPT_DIR/overlay-kernel-runtime.sh"
+
 # Rebuild so subsequent steps (test, lexicon) pick up step 4's regenerated
-# Haskell dist. The overlay was applied before step 1 (see top of script).
+# Haskell dist plus the freshly-re-overlaid runtime.
 echo ""
 echo "  Rebuilding..."
 stack build
