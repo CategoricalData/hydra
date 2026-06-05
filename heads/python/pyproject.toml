@@ -1,7 +1,7 @@
 [project]
 name = "hydra"
 version = "0.16.0"
-description = "Hydra: a translingual data and computation framework based on the LambdaGraph data model. Python host runtime: typed schema construction, cross-language code generation, property-graph and RDF validation, and bidirectional coders for Avro / Protobuf / JSON Schema / GraphQL / PDL."
+description = "Python host for Hydra, a strongly typed intermediate language for data, schemas, and code"
 readme = "../../packages/hydra-python/README.md"
 license = { text = "Apache-2.0" }
 authors = [{ name = "Joshua Shinavier", email = "josh@fortytwo.net" }]

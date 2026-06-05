@@ -6,11 +6,12 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [
-                  {
-                    "key": "description",
-                    "value": {
-                      "literal": {"string": "Construct PDL schema files from type definitions, with topological sorting and cycle detection"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {
+                        "literal": {"string": "Construct PDL schema files from type definitions, with topological sorting and cycle detection"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -268,7 +269,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Create PDL annotations from an optional doc string"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Create PDL annotations from an optional doc string"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1430,10 +1435,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [
-                  {
-                    "key": "description",
-                    "value": {"literal": {"string": "Encode a Hydra type as either a PDL Schema (Left) or a PDL NamedSchemaType (Right)"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Encode a Hydra type as either a PDL Schema (Left) or a PDL NamedSchemaType (Right)"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -2851,7 +2857,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Compute import aliases for a module's dependencies"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Compute import aliases for a module's dependencies"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -2964,10 +2974,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [
-                  {
-                    "key": "description",
-                    "value": {"literal": {"string": "Convert a Hydra module to a map of file paths to PDL schema strings"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Convert a Hydra module to a map of file paths to PDL schema strings"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -3099,10 +3110,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [
-                  {
-                    "key": "description",
-                    "value": {"literal": {"string": "Convert a Hydra module and its definitions to PDL schema files"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Convert a Hydra module and its definitions to PDL schema files"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -3204,7 +3216,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Empty PDL annotations"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Empty PDL annotations"}}}]},
             "body": {
               "record": {
                 "fields": [
@@ -3217,7 +3229,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a Hydra element name to a PDL qualified name"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Convert a Hydra element name to a PDL qualified name"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3332,7 +3348,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a module's namespace to a PDL namespace"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Convert a module's namespace to a PDL namespace"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3357,7 +3377,9 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Create a simple union member without an alias"}}}],
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "Create a simple union member without an alias"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3380,7 +3402,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Replace all forward slashes with dots in a string"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Replace all forward slashes with dots in a string"}}}]},
             "body": {
               "lambda": {
                 "body": {

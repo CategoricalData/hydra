@@ -70,7 +70,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Test cases for AST serialization"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Test cases for AST serialization"}}}]},
             "body": {
               "record": {
                 "fields": [

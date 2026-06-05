@@ -58,6 +58,27 @@ A separate `dist/json/<pkg>/build/<set>/digest.json` artifact carries content ha
 for incremental builds; it lives in the gitignored `build/` subtree and is regenerated
 on every sync. See [Format versioning](#format-versioning).
 
+### Why one file per module
+
+Almost every programming language has a notion of file-level modules.
+Per-module JSON preserves the 1:1 mapping between source modules and
+emitted files across every stage of transformation: a Hydra source
+module is one file, its JSON encoding is one file, and each target
+emission (Haskell, Java, Python, Scala, Lisp, TypeScript, Go, ...) is
+one file. The invariant survives translation rather than being
+something targets have to reconstruct.
+
+Two other useful properties follow from that choice:
+
+- **Granular caching.** Freshness, digest, and dirty-set propagation
+  all operate at the module level. A monolithic per-package or per-
+  universe file would make the smallest unit of cache invalidation
+  the entire blob, defeating incremental sync.
+- **Diff and merge cleanliness.** A one-module change touches one
+  file. Branches that edit disjoint modules merge without conflict;
+  reviewers see only the relevant module's diff. A monolithic file
+  would surface every unrelated change in every branch.
+
 ## Tagged unions
 
 Hydra's sum types (`Term`, `Type`, `Literal`, `LiteralType`, `Json.Value`, etc.) encode as
@@ -173,13 +194,30 @@ inside the `wrap` payload.
 
 ```json
 {"annotated": {
-  "annotation": [{"key": "<name>", "value": <encoded value>}, ...],
-  "body": <encoded inner>}}
+  "body": <encoded inner>,
+  "annotation": <encoded annotation Term>}}
 ```
 
-The annotation is a `Map Name Term`, which serializes per the [Maps](#maps) rule.
-Because `Name` is just a string at the wire level, this list-of-pairs shape is a plain
-key/value list — duplicate keys would parse but should not be produced.
+The `annotation` field is a `Term` (post-#386 schema flip; previously a
+`Map<Name, Term>`). The canonical shape for an annotation Term is a
+`TermMap` keyed by `TermVariable`s, so a one-entry annotation
+`{"k1": <v>}` serializes as:
+
+```json
+{"annotated": {
+  "body": <encoded inner>,
+  "annotation": {"map": [
+    {"key":   {"variable": "k1"},
+     "value": <encoded v>}]}}}
+```
+
+Producers should use the `wrapAnnotationMap` kernel helper (or the
+language-specific `annots` / `annotated` DSL functions) so the encoded
+key shape is `{"variable": "k1"}` consistently across hosts.
+Consumers should call `getAnnotationMap` to project back to
+`Map Name Term`; that function also accepts the transitional
+`{"wrap": {"typeName": "hydra.core.Name", "body": …}}` key shape so
+older fixtures continue to load.
 
 ## Literals
 

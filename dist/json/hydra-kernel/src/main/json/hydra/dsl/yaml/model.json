@@ -4,10 +4,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the mapping variant of hydra.yaml.model.Node"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the mapping variant of hydra.yaml.model.Node"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -39,7 +40,7 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "A mapping from nodes to nodes"}}}],
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A mapping from nodes to nodes"}}}]},
                         "body": {"map": {"keys": {"variable": "hydra.yaml.model.Node"}, "values": {"variable": "hydra.yaml.model.Node"}}}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}},
@@ -53,7 +54,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "A mapping from nodes to nodes"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A mapping from nodes to nodes"}}}]},
                       "body": {"map": {"keys": {"variable": "hydra.yaml.model.Node"}, "values": {"variable": "hydra.yaml.model.Node"}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -63,10 +64,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the scalar variant of hydra.yaml.model.Node"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the scalar variant of hydra.yaml.model.Node"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -98,7 +100,7 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "A scalar value"}}}],
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A scalar value"}}}]},
                         "body": {"variable": "hydra.yaml.model.Scalar"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}},
@@ -112,7 +114,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "A scalar value"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A scalar value"}}}]},
                       "body": {"variable": "hydra.yaml.model.Scalar"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -122,10 +124,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the sequence variant of hydra.yaml.model.Node"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the sequence variant of hydra.yaml.model.Node"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -157,7 +160,7 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "A sequence of nodes"}}}],
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A sequence of nodes"}}}]},
                         "body": {"list": {"variable": "hydra.yaml.model.Node"}}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}},
@@ -171,7 +174,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "A sequence of nodes"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A sequence of nodes"}}}]},
                       "body": {"list": {"variable": "hydra.yaml.model.Node"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -181,10 +184,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the bool variant of hydra.yaml.model.Scalar"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the bool variant of hydra.yaml.model.Scalar"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -216,7 +220,7 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "Represents a true/false value"}}}],
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Represents a true/false value"}}}]},
                         "body": {"literal": {"boolean": {}}}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}},
@@ -230,7 +234,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "Represents a true/false value"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Represents a true/false value"}}}]},
                       "body": {"literal": {"boolean": {}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -241,10 +245,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the decimal variant of hydra.yaml.model.Scalar"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the decimal variant of hydra.yaml.model.Scalar"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -276,10 +281,11 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "An arbitrary-precision decimal number (lexically a valid JSON number)"}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "An arbitrary-precision decimal number (lexically a valid JSON number)"}}}]},
                         "body": {"literal": {"decimal": {}}}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}},
@@ -293,10 +299,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "An arbitrary-precision decimal number (lexically a valid JSON number)"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "An arbitrary-precision decimal number (lexically a valid JSON number)"}}}]},
                       "body": {"literal": {"decimal": {}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -307,10 +314,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the float variant of hydra.yaml.model.Scalar"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the float variant of hydra.yaml.model.Scalar"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -342,7 +350,8 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "Represents an approximation to real numbers"}}}],
+                        "annotation": {
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Represents an approximation to real numbers"}}}]},
                         "body": {"literal": {"float": {"float64": {}}}}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}},
@@ -356,7 +365,8 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "Represents an approximation to real numbers"}}}],
+                      "annotation": {
+                        "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Represents an approximation to real numbers"}}}]},
                       "body": {"literal": {"float": {"float64": {}}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -367,8 +377,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {"key": "description", "value": {"literal": {"string": "DSL injection for the int variant of hydra.yaml.model.Scalar"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the int variant of hydra.yaml.model.Scalar"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -400,7 +413,11 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "Represents arbitrary sized finite mathematical integers"}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "Represents arbitrary sized finite mathematical integers"}}}]},
                         "body": {"literal": {"integer": {"bigint": {}}}}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}},
@@ -414,7 +431,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "Represents arbitrary sized finite mathematical integers"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "Represents arbitrary sized finite mathematical integers"}}}]},
                       "body": {"literal": {"integer": {"bigint": {}}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -425,10 +446,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the null variant of hydra.yaml.model.Scalar"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the null variant of hydra.yaml.model.Scalar"}}}]},
             "body": {
               "wrap": {
                 "body": {
@@ -463,8 +485,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {"key": "description", "value": {"literal": {"string": "DSL injection for the str variant of hydra.yaml.model.Scalar"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the str variant of hydra.yaml.model.Scalar"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -496,7 +521,7 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "A string value"}}}],
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A string value"}}}]},
                         "body": {"literal": {"string": {}}}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}},
@@ -510,7 +535,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "A string value"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A string value"}}}]},
                       "body": {"literal": {"string": {}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {

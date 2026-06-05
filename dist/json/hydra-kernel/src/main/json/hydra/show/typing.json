@@ -4,7 +4,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Show a type constraint as a string"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Show a type constraint as a string"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -43,7 +43,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Show a type substitution as a string"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Show a type substitution as a string"}}}]},
             "body": {
               "lambda": {
                 "body": {

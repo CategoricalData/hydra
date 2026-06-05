@@ -4,7 +4,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Encoder for hydra.tabular.ColumnType"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Encoder for hydra.tabular.ColumnType"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -60,7 +61,7 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Encoder for hydra.tabular.DataRow"}}}],
+                "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Encoder for hydra.tabular.DataRow"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -144,7 +145,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Encoder for hydra.tabular.HeaderRow"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Encoder for hydra.tabular.HeaderRow"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -205,7 +206,7 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Encoder for hydra.tabular.Table"}}}],
+                "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Encoder for hydra.tabular.Table"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -320,7 +321,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Encoder for hydra.tabular.TableType"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Encoder for hydra.tabular.TableType"}}}]},
             "body": {
               "lambda": {
                 "body": {

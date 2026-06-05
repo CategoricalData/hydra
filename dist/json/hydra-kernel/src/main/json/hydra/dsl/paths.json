@@ -4,7 +4,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for hydra.paths.SubtermEdge"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL constructor for hydra.paths.SubtermEdge"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -58,7 +59,7 @@
                           "application": {
                             "argument": {
                               "annotated": {
-                                "annotation": [{"key": "description", "value": {"literal": {"string": "The target node of the edge"}}}],
+                                "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The target node of the edge"}}}]},
                                 "body": {"variable": "hydra.paths.SubtermNode"}}},
                             "function": {"variable": "hydra.typed.TypedTerm"}}},
                         "parameter": "target"}},
@@ -66,7 +67,8 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "The subterm path connecting source to target"}}}],
+                            "annotation": {
+                              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The subterm path connecting source to target"}}}]},
                             "body": {"variable": "hydra.paths.SubtermPath"}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "path"}},
@@ -74,7 +76,7 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The source node of the edge"}}}],
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The source node of the edge"}}}]},
                         "body": {"variable": "hydra.paths.SubtermNode"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "source"}}}},
@@ -88,7 +90,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The source node of the edge"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The source node of the edge"}}}]},
                       "body": {"variable": "hydra.paths.SubtermNode"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -98,7 +100,8 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The subterm path connecting source to target"}}}],
+                      "annotation": {
+                        "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The subterm path connecting source to target"}}}]},
                       "body": {"variable": "hydra.paths.SubtermPath"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -108,7 +111,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The target node of the edge"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The target node of the edge"}}}]},
                       "body": {"variable": "hydra.paths.SubtermNode"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -119,8 +122,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {"key": "description", "value": {"literal": {"string": "DSL accessor for the source field of hydra.paths.SubtermEdge"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the source field of hydra.paths.SubtermEdge"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -169,7 +175,7 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The source node of the edge"}}}],
+                    "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The source node of the edge"}}}]},
                     "body": {"variable": "hydra.paths.SubtermNode"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -177,7 +183,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL accessor for the path field of hydra.paths.SubtermEdge"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the path field of hydra.paths.SubtermEdge"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -226,7 +236,8 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The subterm path connecting source to target"}}}],
+                    "annotation": {
+                      "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The subterm path connecting source to target"}}}]},
                     "body": {"variable": "hydra.paths.SubtermPath"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -234,8 +245,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {"key": "description", "value": {"literal": {"string": "DSL accessor for the target field of hydra.paths.SubtermEdge"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the target field of hydra.paths.SubtermEdge"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -284,7 +298,7 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The target node of the edge"}}}],
+                    "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The target node of the edge"}}}]},
                     "body": {"variable": "hydra.paths.SubtermNode"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -292,8 +306,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {"key": "description", "value": {"literal": {"string": "DSL updater for the source field of hydra.paths.SubtermEdge"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the source field of hydra.paths.SubtermEdge"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -397,7 +414,7 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "The source node of the edge"}}}],
+                            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The source node of the edge"}}}]},
                             "body": {"variable": "hydra.paths.SubtermNode"}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -419,7 +436,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The source node of the edge"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The source node of the edge"}}}]},
                       "body": {"variable": "hydra.paths.SubtermNode"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -430,7 +447,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL updater for the path field of hydra.paths.SubtermEdge"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the path field of hydra.paths.SubtermEdge"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -534,7 +555,8 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "The subterm path connecting source to target"}}}],
+                            "annotation": {
+                              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The subterm path connecting source to target"}}}]},
                             "body": {"variable": "hydra.paths.SubtermPath"}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -556,7 +578,8 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The subterm path connecting source to target"}}}],
+                      "annotation": {
+                        "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The subterm path connecting source to target"}}}]},
                       "body": {"variable": "hydra.paths.SubtermPath"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -567,8 +590,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {"key": "description", "value": {"literal": {"string": "DSL updater for the target field of hydra.paths.SubtermEdge"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the target field of hydra.paths.SubtermEdge"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -672,7 +698,7 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "The target node of the edge"}}}],
+                            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The target node of the edge"}}}]},
                             "body": {"variable": "hydra.paths.SubtermNode"}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -694,7 +720,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The target node of the edge"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The target node of the edge"}}}]},
                       "body": {"variable": "hydra.paths.SubtermNode"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -705,7 +731,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for hydra.paths.SubtermGraph"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL constructor for hydra.paths.SubtermGraph"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -749,7 +776,7 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "All edges in the graph"}}}],
+                            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "All edges in the graph"}}}]},
                             "body": {"list": {"variable": "hydra.paths.SubtermEdge"}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "edges"}},
@@ -757,7 +784,7 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "All nodes in the graph"}}}],
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "All nodes in the graph"}}}]},
                         "body": {"list": {"variable": "hydra.paths.SubtermNode"}}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "nodes"}}}},
@@ -771,7 +798,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "All nodes in the graph"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "All nodes in the graph"}}}]},
                       "body": {"list": {"variable": "hydra.paths.SubtermNode"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -781,7 +808,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "All edges in the graph"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "All edges in the graph"}}}]},
                       "body": {"list": {"variable": "hydra.paths.SubtermEdge"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -792,8 +819,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {"key": "description", "value": {"literal": {"string": "DSL accessor for the nodes field of hydra.paths.SubtermGraph"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the nodes field of hydra.paths.SubtermGraph"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -842,7 +872,7 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "All nodes in the graph"}}}],
+                    "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "All nodes in the graph"}}}]},
                     "body": {"list": {"variable": "hydra.paths.SubtermNode"}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -850,8 +880,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {"key": "description", "value": {"literal": {"string": "DSL accessor for the edges field of hydra.paths.SubtermGraph"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the edges field of hydra.paths.SubtermGraph"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -900,7 +933,7 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "All edges in the graph"}}}],
+                    "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "All edges in the graph"}}}]},
                     "body": {"list": {"variable": "hydra.paths.SubtermEdge"}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -908,8 +941,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {"key": "description", "value": {"literal": {"string": "DSL updater for the nodes field of hydra.paths.SubtermGraph"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the nodes field of hydra.paths.SubtermGraph"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -979,7 +1015,7 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "All nodes in the graph"}}}],
+                            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "All nodes in the graph"}}}]},
                             "body": {"list": {"variable": "hydra.paths.SubtermNode"}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -1001,7 +1037,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "All nodes in the graph"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "All nodes in the graph"}}}]},
                       "body": {"list": {"variable": "hydra.paths.SubtermNode"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -1012,8 +1048,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {"key": "description", "value": {"literal": {"string": "DSL updater for the edges field of hydra.paths.SubtermGraph"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the edges field of hydra.paths.SubtermGraph"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1083,7 +1122,7 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "All edges in the graph"}}}],
+                            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "All edges in the graph"}}}]},
                             "body": {"list": {"variable": "hydra.paths.SubtermEdge"}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -1105,7 +1144,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "All edges in the graph"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "All edges in the graph"}}}]},
                       "body": {"list": {"variable": "hydra.paths.SubtermEdge"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -1116,7 +1155,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for hydra.paths.SubtermNode"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL constructor for hydra.paths.SubtermNode"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1170,7 +1210,7 @@
                           "application": {
                             "argument": {
                               "annotated": {
-                                "annotation": [{"key": "description", "value": {"literal": {"string": "A unique identifier for the node"}}}],
+                                "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A unique identifier for the node"}}}]},
                                 "body": {"literal": {"string": {}}}}},
                             "function": {"variable": "hydra.typed.TypedTerm"}}},
                         "parameter": "id"}},
@@ -1178,7 +1218,7 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "A human-readable label for the node"}}}],
+                            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A human-readable label for the node"}}}]},
                             "body": {"literal": {"string": {}}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "label"}},
@@ -1186,7 +1226,7 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The qualified name of the term"}}}],
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The qualified name of the term"}}}]},
                         "body": {"variable": "hydra.core.Name"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "name"}}}},
@@ -1200,7 +1240,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The qualified name of the term"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The qualified name of the term"}}}]},
                       "body": {"variable": "hydra.core.Name"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -1210,7 +1250,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "A human-readable label for the node"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A human-readable label for the node"}}}]},
                       "body": {"literal": {"string": {}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -1220,7 +1260,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "A unique identifier for the node"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A unique identifier for the node"}}}]},
                       "body": {"literal": {"string": {}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -1231,7 +1271,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL accessor for the name field of hydra.paths.SubtermNode"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the name field of hydra.paths.SubtermNode"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1280,7 +1324,7 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The qualified name of the term"}}}],
+                    "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The qualified name of the term"}}}]},
                     "body": {"variable": "hydra.core.Name"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -1288,8 +1332,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {"key": "description", "value": {"literal": {"string": "DSL accessor for the label field of hydra.paths.SubtermNode"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the label field of hydra.paths.SubtermNode"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1338,7 +1385,7 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "A human-readable label for the node"}}}],
+                    "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A human-readable label for the node"}}}]},
                     "body": {"literal": {"string": {}}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -1346,7 +1393,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL accessor for the id field of hydra.paths.SubtermNode"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the id field of hydra.paths.SubtermNode"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1395,7 +1446,7 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "A unique identifier for the node"}}}],
+                    "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A unique identifier for the node"}}}]},
                     "body": {"literal": {"string": {}}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -1403,7 +1454,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL updater for the name field of hydra.paths.SubtermNode"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the name field of hydra.paths.SubtermNode"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1507,7 +1562,7 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "The qualified name of the term"}}}],
+                            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The qualified name of the term"}}}]},
                             "body": {"variable": "hydra.core.Name"}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -1529,7 +1584,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The qualified name of the term"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The qualified name of the term"}}}]},
                       "body": {"variable": "hydra.core.Name"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -1540,7 +1595,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL updater for the label field of hydra.paths.SubtermNode"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the label field of hydra.paths.SubtermNode"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1644,7 +1703,7 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "A human-readable label for the node"}}}],
+                            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A human-readable label for the node"}}}]},
                             "body": {"literal": {"string": {}}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -1666,7 +1725,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "A human-readable label for the node"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A human-readable label for the node"}}}]},
                       "body": {"literal": {"string": {}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -1677,7 +1736,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL updater for the id field of hydra.paths.SubtermNode"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the id field of hydra.paths.SubtermNode"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1781,7 +1844,7 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "A unique identifier for the node"}}}],
+                            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A unique identifier for the node"}}}]},
                             "body": {"literal": {"string": {}}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -1803,7 +1866,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "A unique identifier for the node"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A unique identifier for the node"}}}]},
                       "body": {"literal": {"string": {}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -1814,7 +1877,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for the hydra.paths.SubtermPath wrapper"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL constructor for the hydra.paths.SubtermPath wrapper"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1854,7 +1921,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL accessor for the body of hydra.paths.SubtermPath"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the body of hydra.paths.SubtermPath"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1899,10 +1970,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the annotatedBody variant of hydra.paths.SubtermStep"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the annotatedBody variant of hydra.paths.SubtermStep"}}}]},
             "body": {
               "wrap": {
                 "body": {
@@ -1937,10 +2009,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the applicationFunction variant of hydra.paths.SubtermStep"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the applicationFunction variant of hydra.paths.SubtermStep"}}}]},
             "body": {
               "wrap": {
                 "body": {
@@ -1977,10 +2050,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the applicationArgument variant of hydra.paths.SubtermStep"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the applicationArgument variant of hydra.paths.SubtermStep"}}}]},
             "body": {
               "wrap": {
                 "body": {
@@ -2017,10 +2091,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the lambdaBody variant of hydra.paths.SubtermStep"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the lambdaBody variant of hydra.paths.SubtermStep"}}}]},
             "body": {
               "wrap": {
                 "body": {
@@ -2055,10 +2130,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the unionCasesDefault variant of hydra.paths.SubtermStep"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the unionCasesDefault variant of hydra.paths.SubtermStep"}}}]},
             "body": {
               "wrap": {
                 "body": {
@@ -2095,10 +2171,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the unionCasesBranch variant of hydra.paths.SubtermStep"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the unionCasesBranch variant of hydra.paths.SubtermStep"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2130,10 +2207,11 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "Access a specific branch of a union elimination by field name"}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "Access a specific branch of a union elimination by field name"}}}]},
                         "body": {"variable": "hydra.core.Name"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}},
@@ -2147,10 +2225,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "Access a specific branch of a union elimination by field name"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "Access a specific branch of a union elimination by field name"}}}]},
                       "body": {"variable": "hydra.core.Name"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -2161,10 +2240,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the letBody variant of hydra.paths.SubtermStep"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the letBody variant of hydra.paths.SubtermStep"}}}]},
             "body": {
               "wrap": {
                 "body": {
@@ -2199,10 +2279,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the letBinding variant of hydra.paths.SubtermStep"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the letBinding variant of hydra.paths.SubtermStep"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2234,7 +2315,11 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "Access a specific binding in a let term by variable name"}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "Access a specific binding in a let term by variable name"}}}]},
                         "body": {"variable": "hydra.core.Name"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}},
@@ -2248,7 +2333,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "Access a specific binding in a let term by variable name"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "Access a specific binding in a let term by variable name"}}}]},
                       "body": {"variable": "hydra.core.Name"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -2259,10 +2348,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the listElement variant of hydra.paths.SubtermStep"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the listElement variant of hydra.paths.SubtermStep"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2294,7 +2384,8 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "Access an element of a list by index"}}}],
+                        "annotation": {
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Access an element of a list by index"}}}]},
                         "body": {"literal": {"integer": {"int32": {}}}}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}},
@@ -2308,7 +2399,8 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "Access an element of a list by index"}}}],
+                      "annotation": {
+                        "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Access an element of a list by index"}}}]},
                       "body": {"literal": {"integer": {"int32": {}}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -2319,10 +2411,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the mapKey variant of hydra.paths.SubtermStep"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the mapKey variant of hydra.paths.SubtermStep"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2354,7 +2447,7 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "Access a key in a map by index"}}}],
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Access a key in a map by index"}}}]},
                         "body": {"literal": {"integer": {"int32": {}}}}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}},
@@ -2368,7 +2461,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "Access a key in a map by index"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Access a key in a map by index"}}}]},
                       "body": {"literal": {"integer": {"int32": {}}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -2379,10 +2472,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the mapValue variant of hydra.paths.SubtermStep"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the mapValue variant of hydra.paths.SubtermStep"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2414,7 +2508,7 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "Access a value in a map by index"}}}],
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Access a value in a map by index"}}}]},
                         "body": {"literal": {"integer": {"int32": {}}}}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}},
@@ -2428,7 +2522,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "Access a value in a map by index"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Access a value in a map by index"}}}]},
                       "body": {"literal": {"integer": {"int32": {}}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -2439,10 +2533,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the maybeTerm variant of hydra.paths.SubtermStep"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the maybeTerm variant of hydra.paths.SubtermStep"}}}]},
             "body": {
               "wrap": {
                 "body": {
@@ -2477,10 +2572,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the productTerm variant of hydra.paths.SubtermStep"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the productTerm variant of hydra.paths.SubtermStep"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2512,7 +2608,11 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "Access an element of a product (tuple) by index"}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "Access an element of a product (tuple) by index"}}}]},
                         "body": {"literal": {"integer": {"int32": {}}}}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}},
@@ -2526,7 +2626,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "Access an element of a product (tuple) by index"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "Access an element of a product (tuple) by index"}}}]},
                       "body": {"literal": {"integer": {"int32": {}}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -2537,10 +2641,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the recordField variant of hydra.paths.SubtermStep"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the recordField variant of hydra.paths.SubtermStep"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2572,7 +2677,8 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "Access a field of a record by field name"}}}],
+                        "annotation": {
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Access a field of a record by field name"}}}]},
                         "body": {"variable": "hydra.core.Name"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}},
@@ -2586,7 +2692,8 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "Access a field of a record by field name"}}}],
+                      "annotation": {
+                        "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Access a field of a record by field name"}}}]},
                       "body": {"variable": "hydra.core.Name"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -2597,10 +2704,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the setElement variant of hydra.paths.SubtermStep"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the setElement variant of hydra.paths.SubtermStep"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2632,7 +2740,7 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "Access an element of a set by index"}}}],
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Access an element of a set by index"}}}]},
                         "body": {"literal": {"integer": {"int32": {}}}}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}},
@@ -2646,7 +2754,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "Access an element of a set by index"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Access an element of a set by index"}}}]},
                       "body": {"literal": {"integer": {"int32": {}}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -2657,10 +2765,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the sumTerm variant of hydra.paths.SubtermStep"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the sumTerm variant of hydra.paths.SubtermStep"}}}]},
             "body": {
               "wrap": {
                 "body": {
@@ -2695,10 +2804,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the typeLambdaBody variant of hydra.paths.SubtermStep"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the typeLambdaBody variant of hydra.paths.SubtermStep"}}}]},
             "body": {
               "wrap": {
                 "body": {
@@ -2733,10 +2843,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the typeApplicationTerm variant of hydra.paths.SubtermStep"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the typeApplicationTerm variant of hydra.paths.SubtermStep"}}}]},
             "body": {
               "wrap": {
                 "body": {
@@ -2773,10 +2884,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the injectionTerm variant of hydra.paths.SubtermStep"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the injectionTerm variant of hydra.paths.SubtermStep"}}}]},
             "body": {
               "wrap": {
                 "body": {
@@ -2811,10 +2923,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the wrappedTerm variant of hydra.paths.SubtermStep"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the wrappedTerm variant of hydra.paths.SubtermStep"}}}]},
             "body": {
               "wrap": {
                 "body": {
@@ -2849,7 +2962,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for hydra.paths.SubtypeEdge"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL constructor for hydra.paths.SubtypeEdge"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2903,7 +3017,7 @@
                           "application": {
                             "argument": {
                               "annotated": {
-                                "annotation": [{"key": "description", "value": {"literal": {"string": "The target node of the edge"}}}],
+                                "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The target node of the edge"}}}]},
                                 "body": {"variable": "hydra.paths.SubtypeNode"}}},
                             "function": {"variable": "hydra.typed.TypedTerm"}}},
                         "parameter": "target"}},
@@ -2911,7 +3025,8 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "The subtype path connecting source to target"}}}],
+                            "annotation": {
+                              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The subtype path connecting source to target"}}}]},
                             "body": {"variable": "hydra.paths.SubtypePath"}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "path"}},
@@ -2919,7 +3034,7 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The source node of the edge"}}}],
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The source node of the edge"}}}]},
                         "body": {"variable": "hydra.paths.SubtypeNode"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "source"}}}},
@@ -2933,7 +3048,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The source node of the edge"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The source node of the edge"}}}]},
                       "body": {"variable": "hydra.paths.SubtypeNode"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -2943,7 +3058,8 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The subtype path connecting source to target"}}}],
+                      "annotation": {
+                        "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The subtype path connecting source to target"}}}]},
                       "body": {"variable": "hydra.paths.SubtypePath"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -2953,7 +3069,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The target node of the edge"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The target node of the edge"}}}]},
                       "body": {"variable": "hydra.paths.SubtypeNode"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -2964,8 +3080,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {"key": "description", "value": {"literal": {"string": "DSL accessor for the source field of hydra.paths.SubtypeEdge"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the source field of hydra.paths.SubtypeEdge"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3014,7 +3133,7 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The source node of the edge"}}}],
+                    "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The source node of the edge"}}}]},
                     "body": {"variable": "hydra.paths.SubtypeNode"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -3022,7 +3141,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL accessor for the path field of hydra.paths.SubtypeEdge"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the path field of hydra.paths.SubtypeEdge"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3071,7 +3194,8 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The subtype path connecting source to target"}}}],
+                    "annotation": {
+                      "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The subtype path connecting source to target"}}}]},
                     "body": {"variable": "hydra.paths.SubtypePath"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -3079,8 +3203,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {"key": "description", "value": {"literal": {"string": "DSL accessor for the target field of hydra.paths.SubtypeEdge"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the target field of hydra.paths.SubtypeEdge"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3129,7 +3256,7 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The target node of the edge"}}}],
+                    "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The target node of the edge"}}}]},
                     "body": {"variable": "hydra.paths.SubtypeNode"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -3137,8 +3264,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {"key": "description", "value": {"literal": {"string": "DSL updater for the source field of hydra.paths.SubtypeEdge"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the source field of hydra.paths.SubtypeEdge"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3242,7 +3372,7 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "The source node of the edge"}}}],
+                            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The source node of the edge"}}}]},
                             "body": {"variable": "hydra.paths.SubtypeNode"}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -3264,7 +3394,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The source node of the edge"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The source node of the edge"}}}]},
                       "body": {"variable": "hydra.paths.SubtypeNode"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -3275,7 +3405,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL updater for the path field of hydra.paths.SubtypeEdge"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the path field of hydra.paths.SubtypeEdge"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3379,7 +3513,8 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "The subtype path connecting source to target"}}}],
+                            "annotation": {
+                              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The subtype path connecting source to target"}}}]},
                             "body": {"variable": "hydra.paths.SubtypePath"}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -3401,7 +3536,8 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The subtype path connecting source to target"}}}],
+                      "annotation": {
+                        "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The subtype path connecting source to target"}}}]},
                       "body": {"variable": "hydra.paths.SubtypePath"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -3412,8 +3548,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {"key": "description", "value": {"literal": {"string": "DSL updater for the target field of hydra.paths.SubtypeEdge"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the target field of hydra.paths.SubtypeEdge"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3517,7 +3656,7 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "The target node of the edge"}}}],
+                            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The target node of the edge"}}}]},
                             "body": {"variable": "hydra.paths.SubtypeNode"}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -3539,7 +3678,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The target node of the edge"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The target node of the edge"}}}]},
                       "body": {"variable": "hydra.paths.SubtypeNode"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -3550,7 +3689,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for hydra.paths.SubtypeGraph"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL constructor for hydra.paths.SubtypeGraph"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3594,7 +3734,7 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "All edges in the graph"}}}],
+                            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "All edges in the graph"}}}]},
                             "body": {"list": {"variable": "hydra.paths.SubtypeEdge"}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "edges"}},
@@ -3602,7 +3742,7 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "All nodes in the graph"}}}],
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "All nodes in the graph"}}}]},
                         "body": {"list": {"variable": "hydra.paths.SubtypeNode"}}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "nodes"}}}},
@@ -3616,7 +3756,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "All nodes in the graph"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "All nodes in the graph"}}}]},
                       "body": {"list": {"variable": "hydra.paths.SubtypeNode"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -3626,7 +3766,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "All edges in the graph"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "All edges in the graph"}}}]},
                       "body": {"list": {"variable": "hydra.paths.SubtypeEdge"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -3637,8 +3777,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {"key": "description", "value": {"literal": {"string": "DSL accessor for the nodes field of hydra.paths.SubtypeGraph"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the nodes field of hydra.paths.SubtypeGraph"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3687,7 +3830,7 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "All nodes in the graph"}}}],
+                    "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "All nodes in the graph"}}}]},
                     "body": {"list": {"variable": "hydra.paths.SubtypeNode"}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -3695,8 +3838,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {"key": "description", "value": {"literal": {"string": "DSL accessor for the edges field of hydra.paths.SubtypeGraph"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the edges field of hydra.paths.SubtypeGraph"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3745,7 +3891,7 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "All edges in the graph"}}}],
+                    "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "All edges in the graph"}}}]},
                     "body": {"list": {"variable": "hydra.paths.SubtypeEdge"}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -3753,8 +3899,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {"key": "description", "value": {"literal": {"string": "DSL updater for the nodes field of hydra.paths.SubtypeGraph"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the nodes field of hydra.paths.SubtypeGraph"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3824,7 +3973,7 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "All nodes in the graph"}}}],
+                            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "All nodes in the graph"}}}]},
                             "body": {"list": {"variable": "hydra.paths.SubtypeNode"}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -3846,7 +3995,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "All nodes in the graph"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "All nodes in the graph"}}}]},
                       "body": {"list": {"variable": "hydra.paths.SubtypeNode"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -3857,8 +4006,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {"key": "description", "value": {"literal": {"string": "DSL updater for the edges field of hydra.paths.SubtypeGraph"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the edges field of hydra.paths.SubtypeGraph"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3928,7 +4080,7 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "All edges in the graph"}}}],
+                            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "All edges in the graph"}}}]},
                             "body": {"list": {"variable": "hydra.paths.SubtypeEdge"}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -3950,7 +4102,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "All edges in the graph"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "All edges in the graph"}}}]},
                       "body": {"list": {"variable": "hydra.paths.SubtypeEdge"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -3961,7 +4113,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for hydra.paths.SubtypeNode"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL constructor for hydra.paths.SubtypeNode"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4015,7 +4168,7 @@
                           "application": {
                             "argument": {
                               "annotated": {
-                                "annotation": [{"key": "description", "value": {"literal": {"string": "A unique identifier for the node"}}}],
+                                "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A unique identifier for the node"}}}]},
                                 "body": {"literal": {"string": {}}}}},
                             "function": {"variable": "hydra.typed.TypedTerm"}}},
                         "parameter": "id"}},
@@ -4023,7 +4176,7 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "A human-readable label for the node"}}}],
+                            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A human-readable label for the node"}}}]},
                             "body": {"literal": {"string": {}}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "label"}},
@@ -4031,7 +4184,7 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The qualified name of the type"}}}],
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The qualified name of the type"}}}]},
                         "body": {"variable": "hydra.core.Name"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "name"}}}},
@@ -4045,7 +4198,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The qualified name of the type"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The qualified name of the type"}}}]},
                       "body": {"variable": "hydra.core.Name"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -4055,7 +4208,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "A human-readable label for the node"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A human-readable label for the node"}}}]},
                       "body": {"literal": {"string": {}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -4065,7 +4218,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "A unique identifier for the node"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A unique identifier for the node"}}}]},
                       "body": {"literal": {"string": {}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -4076,7 +4229,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL accessor for the name field of hydra.paths.SubtypeNode"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the name field of hydra.paths.SubtypeNode"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4125,7 +4282,7 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The qualified name of the type"}}}],
+                    "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The qualified name of the type"}}}]},
                     "body": {"variable": "hydra.core.Name"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -4133,8 +4290,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {"key": "description", "value": {"literal": {"string": "DSL accessor for the label field of hydra.paths.SubtypeNode"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the label field of hydra.paths.SubtypeNode"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4183,7 +4343,7 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "A human-readable label for the node"}}}],
+                    "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A human-readable label for the node"}}}]},
                     "body": {"literal": {"string": {}}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -4191,7 +4351,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL accessor for the id field of hydra.paths.SubtypeNode"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the id field of hydra.paths.SubtypeNode"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4240,7 +4404,7 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "A unique identifier for the node"}}}],
+                    "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A unique identifier for the node"}}}]},
                     "body": {"literal": {"string": {}}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -4248,7 +4412,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL updater for the name field of hydra.paths.SubtypeNode"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the name field of hydra.paths.SubtypeNode"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4352,7 +4520,7 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "The qualified name of the type"}}}],
+                            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The qualified name of the type"}}}]},
                             "body": {"variable": "hydra.core.Name"}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -4374,7 +4542,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The qualified name of the type"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The qualified name of the type"}}}]},
                       "body": {"variable": "hydra.core.Name"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -4385,7 +4553,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL updater for the label field of hydra.paths.SubtypeNode"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the label field of hydra.paths.SubtypeNode"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4489,7 +4661,7 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "A human-readable label for the node"}}}],
+                            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A human-readable label for the node"}}}]},
                             "body": {"literal": {"string": {}}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -4511,7 +4683,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "A human-readable label for the node"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A human-readable label for the node"}}}]},
                       "body": {"literal": {"string": {}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -4522,7 +4694,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL updater for the id field of hydra.paths.SubtypeNode"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the id field of hydra.paths.SubtypeNode"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4626,7 +4802,7 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "A unique identifier for the node"}}}],
+                            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A unique identifier for the node"}}}]},
                             "body": {"literal": {"string": {}}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -4648,7 +4824,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "A unique identifier for the node"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A unique identifier for the node"}}}]},
                       "body": {"literal": {"string": {}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -4659,7 +4835,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for the hydra.paths.SubtypePath wrapper"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL constructor for the hydra.paths.SubtypePath wrapper"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4699,7 +4879,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL accessor for the body of hydra.paths.SubtypePath"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the body of hydra.paths.SubtypePath"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4744,10 +4928,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the annotatedBody variant of hydra.paths.SubtypeStep"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the annotatedBody variant of hydra.paths.SubtypeStep"}}}]},
             "body": {
               "wrap": {
                 "body": {
@@ -4782,10 +4967,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the applicationFunction variant of hydra.paths.SubtypeStep"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the applicationFunction variant of hydra.paths.SubtypeStep"}}}]},
             "body": {
               "wrap": {
                 "body": {
@@ -4822,10 +5008,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the applicationArgument variant of hydra.paths.SubtypeStep"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the applicationArgument variant of hydra.paths.SubtypeStep"}}}]},
             "body": {
               "wrap": {
                 "body": {
@@ -4862,10 +5049,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the eitherLeft variant of hydra.paths.SubtypeStep"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the eitherLeft variant of hydra.paths.SubtypeStep"}}}]},
             "body": {
               "wrap": {
                 "body": {
@@ -4900,10 +5088,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the eitherRight variant of hydra.paths.SubtypeStep"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the eitherRight variant of hydra.paths.SubtypeStep"}}}]},
             "body": {
               "wrap": {
                 "body": {
@@ -4938,10 +5127,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the forallBody variant of hydra.paths.SubtypeStep"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the forallBody variant of hydra.paths.SubtypeStep"}}}]},
             "body": {
               "wrap": {
                 "body": {
@@ -4976,10 +5166,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the functionDomain variant of hydra.paths.SubtypeStep"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the functionDomain variant of hydra.paths.SubtypeStep"}}}]},
             "body": {
               "wrap": {
                 "body": {
@@ -5014,10 +5205,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the functionCodomain variant of hydra.paths.SubtypeStep"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the functionCodomain variant of hydra.paths.SubtypeStep"}}}]},
             "body": {
               "wrap": {
                 "body": {
@@ -5052,10 +5244,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the listElement variant of hydra.paths.SubtypeStep"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the listElement variant of hydra.paths.SubtypeStep"}}}]},
             "body": {
               "wrap": {
                 "body": {
@@ -5090,10 +5283,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the mapKeys variant of hydra.paths.SubtypeStep"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the mapKeys variant of hydra.paths.SubtypeStep"}}}]},
             "body": {
               "wrap": {
                 "body": {
@@ -5128,10 +5322,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the mapValues variant of hydra.paths.SubtypeStep"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the mapValues variant of hydra.paths.SubtypeStep"}}}]},
             "body": {
               "wrap": {
                 "body": {
@@ -5166,10 +5361,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the maybeElement variant of hydra.paths.SubtypeStep"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the maybeElement variant of hydra.paths.SubtypeStep"}}}]},
             "body": {
               "wrap": {
                 "body": {
@@ -5204,10 +5400,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the pairFirst variant of hydra.paths.SubtypeStep"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the pairFirst variant of hydra.paths.SubtypeStep"}}}]},
             "body": {
               "wrap": {
                 "body": {
@@ -5242,10 +5439,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the pairSecond variant of hydra.paths.SubtypeStep"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the pairSecond variant of hydra.paths.SubtypeStep"}}}]},
             "body": {
               "wrap": {
                 "body": {
@@ -5280,10 +5478,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the recordField variant of hydra.paths.SubtypeStep"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the recordField variant of hydra.paths.SubtypeStep"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -5315,7 +5514,11 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "Access a field type of a record type by field name"}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "Access a field type of a record type by field name"}}}]},
                         "body": {"variable": "hydra.core.Name"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}},
@@ -5329,7 +5532,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "Access a field type of a record type by field name"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "Access a field type of a record type by field name"}}}]},
                       "body": {"variable": "hydra.core.Name"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -5340,10 +5547,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the setElement variant of hydra.paths.SubtypeStep"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the setElement variant of hydra.paths.SubtypeStep"}}}]},
             "body": {
               "wrap": {
                 "body": {
@@ -5378,10 +5586,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the unionField variant of hydra.paths.SubtypeStep"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the unionField variant of hydra.paths.SubtypeStep"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -5413,7 +5622,11 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "Access a field type of a union type by field name"}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "Access a field type of a union type by field name"}}}]},
                         "body": {"variable": "hydra.core.Name"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}},
@@ -5427,7 +5640,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "Access a field type of a union type by field name"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "Access a field type of a union type by field name"}}}]},
                       "body": {"variable": "hydra.core.Name"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -5438,10 +5655,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the wrappedType variant of hydra.paths.SubtypeStep"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the wrappedType variant of hydra.paths.SubtypeStep"}}}]},
             "body": {
               "wrap": {
                 "body": {

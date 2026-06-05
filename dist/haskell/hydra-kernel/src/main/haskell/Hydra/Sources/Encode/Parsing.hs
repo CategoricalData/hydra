@@ -114,8 +114,8 @@ module_ =
                                       Core.projectionTypeName = (Core.Name "hydra.parsing.ParseError"),
                                       Core.projectionFieldName = (Core.Name "remainder")})),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))})),
-            Core.annotatedTermAnnotation = (M.fromList [
-              (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Encoder for hydra.parsing.ParseError")))])}))}),
+            Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
+              (Core.TermVariable (Core.Name "description"), (Core.TermLiteral (Core.LiteralString "Encoder for hydra.parsing.ParseError")))]))}))}),
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.encode.parsing.parseResult"),
           Packaging.termDefinitionMetadata = Nothing,
@@ -216,8 +216,8 @@ module_ =
                                       Core.fieldTerm = (Core.TermApplication (Core.Application {
                                         Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.parsing.parseError")),
                                         Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}]}))}]}))}}))}))}]}))})),
-            Core.annotatedTermAnnotation = (M.fromList [
-              (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Encoder for hydra.parsing.ParseResult")))])}))})),
+            Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
+              (Core.TermVariable (Core.Name "description"), (Core.TermLiteral (Core.LiteralString "Encoder for hydra.parsing.ParseResult")))]))}))})),
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.encode.parsing.parseSuccess"),
           Packaging.termDefinitionMetadata = Nothing,
@@ -311,5 +311,7 @@ module_ =
                                         Core.projectionTypeName = (Core.Name "hydra.parsing.ParseSuccess"),
                                         Core.projectionFieldName = (Core.Name "remainder")})),
                                       Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))}))})),
-            Core.annotatedTermAnnotation = (M.fromList [
-              (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Encoder for hydra.parsing.ParseSuccess")))])}))}))]}
+            Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
+              (
+                Core.TermVariable (Core.Name "description"),
+                (Core.TermLiteral (Core.LiteralString "Encoder for hydra.parsing.ParseSuccess")))]))}))}))]}

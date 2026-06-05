@@ -6,7 +6,8 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Decoder for hydra.pg.model.AdjacentEdge"}}}],
+                "annotation": {
+                  "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Decoder for hydra.pg.model.AdjacentEdge"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -286,7 +287,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Decoder for hydra.pg.model.Direction"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Decoder for hydra.pg.model.Direction"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -657,7 +659,7 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Decoder for hydra.pg.model.Edge"}}}],
+                "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Decoder for hydra.pg.model.Edge"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -974,7 +976,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Decoder for hydra.pg.model.EdgeLabel"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Decoder for hydra.pg.model.EdgeLabel"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1161,7 +1164,7 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Decoder for hydra.pg.model.EdgeType"}}}],
+                "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Decoder for hydra.pg.model.EdgeType"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -1479,7 +1482,7 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Decoder for hydra.pg.model.Element"}}}],
+                "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Decoder for hydra.pg.model.Element"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -1795,7 +1798,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Decoder for hydra.pg.model.ElementKind"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Decoder for hydra.pg.model.ElementKind"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2066,7 +2070,8 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Decoder for hydra.pg.model.ElementTree"}}}],
+                "annotation": {
+                  "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Decoder for hydra.pg.model.ElementTree"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -2276,7 +2281,8 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Decoder for hydra.pg.model.ElementType"}}}],
+                "annotation": {
+                  "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Decoder for hydra.pg.model.ElementType"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -2594,7 +2600,8 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Decoder for hydra.pg.model.ElementTypeTree"}}}],
+                "annotation": {
+                  "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Decoder for hydra.pg.model.ElementTypeTree"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -2804,7 +2811,7 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Decoder for hydra.pg.model.Graph"}}}],
+                "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Decoder for hydra.pg.model.Graph"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -3042,7 +3049,8 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Decoder for hydra.pg.model.GraphSchema"}}}],
+                "annotation": {
+                  "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Decoder for hydra.pg.model.GraphSchema"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -3280,7 +3288,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Decoder for hydra.pg.model.Label"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Decoder for hydra.pg.model.Label"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3523,7 +3531,8 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Decoder for hydra.pg.model.LazyGraph"}}}],
+                "annotation": {
+                  "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Decoder for hydra.pg.model.LazyGraph"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -3737,7 +3746,7 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Decoder for hydra.pg.model.Property"}}}],
+                "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Decoder for hydra.pg.model.Property"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -3931,7 +3940,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Decoder for hydra.pg.model.PropertyKey"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Decoder for hydra.pg.model.PropertyKey"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4118,7 +4128,8 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Decoder for hydra.pg.model.PropertyType"}}}],
+                "annotation": {
+                  "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Decoder for hydra.pg.model.PropertyType"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -4439,7 +4450,7 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Decoder for hydra.pg.model.Vertex"}}}],
+                "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Decoder for hydra.pg.model.Vertex"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -4682,7 +4693,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Decoder for hydra.pg.model.VertexLabel"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Decoder for hydra.pg.model.VertexLabel"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4869,7 +4881,8 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Decoder for hydra.pg.model.VertexType"}}}],
+                "annotation": {
+                  "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Decoder for hydra.pg.model.VertexType"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -5113,7 +5126,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Decoder for hydra.pg.model.VertexWithAdjacentEdges"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Decoder for hydra.pg.model.VertexWithAdjacentEdges"}}}]},
                 "body": {
                   "lambda": {
                     "body": {

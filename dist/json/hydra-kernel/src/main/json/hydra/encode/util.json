@@ -4,7 +4,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Encoder for hydra.util.CaseConvention"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Encoder for hydra.util.CaseConvention"}}}]},
             "body": {
               "cases": {
                 "cases": [
@@ -158,7 +159,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Encoder for hydra.util.Comparison"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Encoder for hydra.util.Comparison"}}}]},
             "body": {
               "cases": {
                 "cases": [
@@ -277,7 +278,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Encoder for hydra.util.FileExtension"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Encoder for hydra.util.FileExtension"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -320,7 +322,7 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Encoder for hydra.util.ModuleNames"}}}],
+                "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Encoder for hydra.util.ModuleNames"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -447,7 +449,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Encoder for hydra.util.Precision"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Encoder for hydra.util.Precision"}}}]},
             "body": {
               "cases": {
                 "cases": [
@@ -541,7 +543,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Encoder for hydra.util.QualifiedName"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Encoder for hydra.util.QualifiedName"}}}]},
             "body": {
               "lambda": {
                 "body": {

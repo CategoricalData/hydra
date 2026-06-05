@@ -6,7 +6,8 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Get definitions with their dependencies"}}}],
+                "annotation": {
+                  "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Get definitions with their dependencies"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -117,7 +118,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Flatten nested let expressions"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Flatten nested let expressions"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -179,7 +180,7 @@
                                                                       "application": {
                                                                         "argument": {"variable": "at"},
                                                                         "function": {"project": {"fieldName": "annotation", "typeName": "hydra.core.AnnotatedTerm"}}}},
-                                                                    "typeScheme": {"body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Term"}}}, "variables": []}}],
+                                                                    "typeScheme": {"body": {"variable": "hydra.core.Term"}, "variables": []}}],
                                                                 "body": {
                                                                   "let": {
                                                                     "bindings": [
@@ -741,12 +742,13 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {
-                    "string": "Inline all type variables in a type using the provided schema (Either version). Note: this function is only appropriate for nonrecursive type definitions"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {
+                      "string": "Inline all type variables in a type using the provided schema (Either version). Note: this function is only appropriate for nonrecursive type definitions"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -901,10 +903,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Check whether a term is a lambda, possibly nested within let and/or annotation terms"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Check whether a term is a lambda, possibly nested within let and/or annotation terms"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -940,12 +943,13 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {
-                    "string": "Rewrite terms like `let foo = bar in λx.baz` to `λx.let foo = bar in baz`, lifting lambda-bound variables above let-bound variables, recursively. This is helpful for targets such as Python."}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {
+                      "string": "Rewrite terms like `let foo = bar in λx.baz` to `λx.let foo = bar in baz`, lifting lambda-bound variables above let-bound variables, recursively. This is helpful for targets such as Python."}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1226,12 +1230,13 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {
-                    "string": "Given a let expression, remove any unused bindings. The resulting expression is still a let, even if has no remaining bindings"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {
+                      "string": "Given a let expression, remove any unused bindings. The resulting expression is still a let, even if has no remaining bindings"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1399,10 +1404,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Replace all occurrences of simple typedefs (type aliases) with the aliased types, recursively"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Replace all occurrences of simple typedefs (type aliases) with the aliased types, recursively"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1593,7 +1599,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Simplify terms by applying beta reduction where possible"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Simplify terms by applying beta reduction where possible"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1818,10 +1828,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Note: does not distinguish between bound and free variables; use freeVariablesInTerm for that"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Note: does not distinguish between bound and free variables; use freeVariablesInTerm for that"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2055,7 +2066,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Generate short names from a list of fully qualified names"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Generate short names from a list of fully qualified names"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2360,11 +2375,12 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {"string": "Topological sort of connected components, in terms of dependencies between variable/term binding pairs"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {"string": "Topological sort of connected components, in terms of dependencies between variable/term binding pairs"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2604,7 +2620,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Topological sort of elements based on their dependencies"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Topological sort of elements based on their dependencies"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2673,7 +2693,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Topologically sort type definitions by dependencies"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Topologically sort type definitions by dependencies"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2830,12 +2854,13 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {
-                    "string": "Collect all type names referenced by a type. The boolean controls whether type-scheme references (free variables in type expressions) are included alongside structural references"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {
+                      "string": "Collect all type names referenced by a type. The boolean controls whether type-scheme references (free variables in type expressions) are included alongside structural references"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2877,10 +2902,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [
-                  {
-                    "key": "description",
-                    "value": {"literal": {"string": "Collect every type name that appears anywhere inside a type expression"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Collect every type name that appears anywhere inside a type expression"}}}]},
                 "body": {
                   "lambda": {
                     "body": {

@@ -8,7 +8,8 @@
               "typeLambda": {
                 "body": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "Decoder for hydra.typed.TypedBinding"}}}],
+                    "annotation": {
+                      "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Decoder for hydra.typed.TypedBinding"}}}]},
                     "body": {
                       "lambda": {
                         "body": {
@@ -202,7 +203,7 @@
               "typeLambda": {
                 "body": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "Decoder for hydra.typed.TypedTerm"}}}],
+                    "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Decoder for hydra.typed.TypedTerm"}}}]},
                     "body": {
                       "lambda": {
                         "body": {
@@ -316,7 +317,8 @@
               "typeLambda": {
                 "body": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "Decoder for hydra.typed.TypedTermDefinition"}}}],
+                    "annotation": {
+                      "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Decoder for hydra.typed.TypedTermDefinition"}}}]},
                     "body": {
                       "lambda": {
                         "body": {

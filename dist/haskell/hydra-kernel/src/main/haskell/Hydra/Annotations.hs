@@ -57,6 +57,27 @@ commentsFromBinding cx g b = getTermDescription cx g (Core.bindingTerm b)
 -- | Extract comments/description from a FieldType
 commentsFromFieldType :: t0 -> Graph.Graph -> Core.FieldType -> Either Errors.Error (Maybe String)
 commentsFromFieldType cx g ft = getTypeDescription cx g (Core.fieldTypeType ft)
+-- | Project a Map<Name, Term> out of an annotation Term. For a TermMap with TermVariable-shaped keys (or, transitionally, TermWrap-encoded Name keys), returns those (Name, value) entries; for any other shape, returns the empty map.
+getAnnotationMap :: Core.Term -> M.Map Core.Name Core.Term
+getAnnotationMap t =
+
+      let extractName =
+              \k -> case k of
+                Core.TermVariable v0 -> Just v0
+                Core.TermWrap v0 -> case (Core.wrappedTermBody v0) of
+                  Core.TermLiteral v1 -> case v1 of
+                    Core.LiteralString v2 -> Just (Core.Name v2)
+                    _ -> Nothing
+                  _ -> Nothing
+                _ -> Nothing
+          fromEntry =
+                  \p ->
+                    let k = Pairs.first p
+                        v = Pairs.second p
+                    in (Maybes.map (\n -> (n, v)) (extractName k))
+      in case t of
+        Core.TermMap v0 -> Maps.fromList (Maybes.cat (Lists.map fromEntry (Maps.toList v0)))
+        _ -> Maps.empty
 -- | Get description from annotations map (Either version)
 getDescription :: t0 -> Graph.Graph -> M.Map Core.Name Core.Term -> Either Errors.Error (Maybe String)
 getDescription cx graph anns =
@@ -114,7 +135,7 @@ normalizeTermAnnotations term =
           stripped = Strip.deannotateTerm term
       in (Logic.ifElse (Maps.null anns) stripped (Core.TermAnnotated (Core.AnnotatedTerm {
         Core.annotatedTermBody = stripped,
-        Core.annotatedTermAnnotation = anns})))
+        Core.annotatedTermAnnotation = (wrapAnnotationMap anns)})))
 -- | Normalize type annotations
 normalizeTypeAnnotations :: Core.Type -> Core.Type
 normalizeTypeAnnotations typ =
@@ -123,7 +144,7 @@ normalizeTypeAnnotations typ =
           stripped = Strip.deannotateType typ
       in (Logic.ifElse (Maps.null anns) stripped (Core.TypeAnnotated (Core.AnnotatedType {
         Core.annotatedTypeBody = stripped,
-        Core.annotatedTypeAnnotation = anns})))
+        Core.annotatedTypeAnnotation = (wrapAnnotationMap anns)})))
 -- | Set annotation in map
 setAnnotation :: Ord t0 => (t0 -> Maybe t1 -> M.Map t0 t1 -> M.Map t0 t1)
 setAnnotation key val m = Maps.alter (\_ -> val) key m
@@ -139,7 +160,7 @@ setTermAnnotation key val term =
           anns = setAnnotation key val (termAnnotationInternal term)
       in (Logic.ifElse (Maps.null anns) term_ (Core.TermAnnotated (Core.AnnotatedTerm {
         Core.annotatedTermBody = term_,
-        Core.annotatedTermAnnotation = anns})))
+        Core.annotatedTermAnnotation = (wrapAnnotationMap anns)})))
 -- | Set term description
 setTermDescription :: Maybe String -> Core.Term -> Core.Term
 setTermDescription d =
@@ -155,7 +176,7 @@ setTypeAnnotation key val typ =
           anns = setAnnotation key val (typeAnnotationInternal typ)
       in (Logic.ifElse (Maps.null anns) typ_ (Core.TypeAnnotated (Core.AnnotatedType {
         Core.annotatedTypeBody = typ_,
-        Core.annotatedTypeAnnotation = anns})))
+        Core.annotatedTypeAnnotation = (wrapAnnotationMap anns)})))
 -- | Set type classes on term. The Set Name carries bare class identifiers (#275).
 setTypeClasses :: M.Map Core.Name (S.Set Core.Name) -> Core.Term -> Core.Term
 setTypeClasses m term =
@@ -179,7 +200,7 @@ termAnnotationInternal term =
               \t -> case t of
                 Core.TermAnnotated v0 -> Just v0
                 _ -> Nothing
-      in (aggregateAnnotations getAnn (\at -> Core.annotatedTermBody at) (\at -> Core.annotatedTermAnnotation at) term)
+      in (aggregateAnnotations getAnn (\at -> Core.annotatedTermBody at) (\at -> getAnnotationMap (Core.annotatedTermAnnotation at)) term)
 -- | Get internal type annotations
 typeAnnotationInternal :: Core.Type -> M.Map Core.Name Core.Term
 typeAnnotationInternal typ =
@@ -188,4 +209,8 @@ typeAnnotationInternal typ =
               \t -> case t of
                 Core.TypeAnnotated v0 -> Just v0
                 _ -> Nothing
-      in (aggregateAnnotations getAnn (\at -> Core.annotatedTypeBody at) (\at -> Core.annotatedTypeAnnotation at) typ)
+      in (aggregateAnnotations getAnn (\at -> Core.annotatedTypeBody at) (\at -> getAnnotationMap (Core.annotatedTypeAnnotation at)) typ)
+-- | Wrap a Map<Name, Term> as a TermMap annotation. Each Name key becomes a TermVariable.
+wrapAnnotationMap :: M.Map Core.Name Core.Term -> Core.Term
+wrapAnnotationMap m =
+    Core.TermMap (Maps.fromList (Lists.map (\p -> (Core.TermVariable (Pairs.first p), (Pairs.second p))) (Maps.toList m)))
