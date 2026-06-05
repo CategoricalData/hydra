@@ -162,6 +162,14 @@ javaLanguage = define "javaLanguage" $
       (var "termVariants")
       (var "typeVariants")
       (var "typePredicate"))
+    (Sets.fromList $ list [
+      Coders.languageFeatureNestedCaseStatements])
+    (Coders.caseConventions
+      Util.caseConventionUpperSnake Util.caseConventionCamel Util.caseConventionUpperSnake
+      Util.caseConventionCamel Util.caseConventionPascal Util.caseConventionCamel
+      Util.caseConventionCamel Util.caseConventionCamel Util.caseConventionPascal
+      Util.caseConventionPascal)
+    (wrap _FileExtension (string "java"))
 
 javaMaxTupleLength :: TypedTermDefinition Int
 javaMaxTupleLength = define "javaMaxTupleLength" $
