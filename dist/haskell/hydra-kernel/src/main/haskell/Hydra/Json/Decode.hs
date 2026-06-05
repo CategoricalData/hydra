@@ -74,13 +74,6 @@ decodeInteger it value =
           in (Maybes.maybe (Left (Strings.cat [
             "invalid int64: ",
             s])) (\v -> Right (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt64 v)))) parsed)) strResult)
-      Core.IntegerTypeUint32 ->
-        let strResult = expectString value
-        in (Eithers.either (\err -> Left err) (\s ->
-          let parsed = LibLiterals.readUint32 s
-          in (Maybes.maybe (Left (Strings.cat [
-            "invalid uint32: ",
-            s])) (\v -> Right (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueUint32 v)))) parsed)) strResult)
       Core.IntegerTypeUint64 ->
         let strResult = expectString value
         in (Eithers.either (\err -> Left err) (\s ->
@@ -103,6 +96,14 @@ decodeInteger it value =
       Core.IntegerTypeUint16 ->
         let numResult = expectNumber value
         in (Eithers.map (\n -> Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueUint16 (LibLiterals.bigintToUint16 (LibLiterals.decimalToBigint n))))) numResult)
+      Core.IntegerTypeUint32 -> case value of
+        Model.ValueNumber v1 -> Right (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueUint32 (LibLiterals.bigintToUint32 (LibLiterals.decimalToBigint v1)))))
+        Model.ValueString v1 ->
+          let parsed = LibLiterals.readUint32 v1
+          in (Maybes.maybe (Left (Strings.cat [
+            "invalid uint32: ",
+            v1])) (\v -> Right (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueUint32 v)))) parsed)
+        _ -> Left "expected number or string for uint32"
 -- | Decode a JSON value to a literal term
 decodeLiteral :: Core.LiteralType -> Model.Value -> Either String Core.Term
 decodeLiteral lt value =
