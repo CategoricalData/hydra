@@ -287,25 +287,6 @@ allTests =
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]},
         Testing.TestGroup {
-          Testing.testGroupName = "maybe",
-          Testing.testGroupDescription = Nothing,
-          Testing.testGroupSubgroups = [],
-          Testing.testGroupCases = [
-            Testing.TestCaseWithMetadata {
-              Testing.testCaseWithMetadataName = "just value applies function",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (\_ -> (\n -> Literals.showInt32 n) (Maybes.maybe 0 (\x -> Math.mul x 2) (Just 5))),
-                Testing.universalTestCaseExpected = (\_ -> (\n -> Literals.showInt32 n) 10)})),
-              Testing.testCaseWithMetadataDescription = Nothing,
-              Testing.testCaseWithMetadataTags = []},
-            Testing.TestCaseWithMetadata {
-              Testing.testCaseWithMetadataName = "nothing returns default",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (\_ -> (\n -> Literals.showInt32 n) (Maybes.maybe 99 (\x -> Math.mul x 2) Nothing)),
-                Testing.universalTestCaseExpected = (\_ -> (\n -> Literals.showInt32 n) 99)})),
-              Testing.testCaseWithMetadataDescription = Nothing,
-              Testing.testCaseWithMetadataTags = []}]},
-        Testing.TestGroup {
           Testing.testGroupName = "pure",
           Testing.testGroupDescription = Nothing,
           Testing.testGroupSubgroups = [],

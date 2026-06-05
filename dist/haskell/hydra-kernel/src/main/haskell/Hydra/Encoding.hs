@@ -62,12 +62,12 @@ encodeBindingName n =
       let parts = Strings.splitOn "." (Core.unName n)
           localPart = Formatting.decapitalize (Names.localNameOf n)
           localResult = Core.Name localPart
-      in (Maybes.maybe localResult (\nsParts -> Maybes.maybe localResult (\nsUc ->
+      in (Maybes.cases (Lists.maybeInit parts) localResult (\nsParts -> Maybes.cases (Lists.uncons nsParts) localResult (\nsUc ->
         let tail = Pairs.second nsUc
         in (Core.Name (Strings.intercalate "." (Lists.concat2 [
           "hydra",
           "encode"] (Lists.concat2 tail [
-          localPart]))))) (Lists.uncons nsParts)) (Lists.maybeInit parts))
+          localPart])))))))
 -- | Generate an encoder for an Either type
 encodeEitherType :: Core.EitherType -> Core.Term
 encodeEitherType et =
@@ -306,9 +306,9 @@ encodeModuleName ns =
 
       let parts = Strings.splitOn "." (Packaging.unModuleName ns)
           fallback = Packaging.ModuleName (Packaging.unModuleName ns)
-      in (Maybes.maybe fallback (\uc -> Packaging.ModuleName (Strings.cat [
+      in (Maybes.cases (Lists.uncons parts) fallback (\uc -> Packaging.ModuleName (Strings.cat [
         "hydra.encode.",
-        (Strings.intercalate "." (Pairs.second uc))])) (Lists.uncons parts))
+        (Strings.intercalate "." (Pairs.second uc))])))
 -- | Encode a Name as a term
 encodeName :: Core.Name -> Core.Term
 encodeName n =

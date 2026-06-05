@@ -89,7 +89,7 @@ analyzeFunctionTermWithGather cx forBinding getTC setTC argMode gEnv tparams arg
     case (Strip.deannotateTerm t) of
       Core.TermLambda v0 -> Logic.ifElse argMode (
         let v = Core.lambdaParameter v0
-            dom = Maybes.maybe (Core.TypeVariable (Core.Name "_")) (\x_ -> x_) (Core.lambdaDomain v0)
+            dom = Maybes.cases (Core.lambdaDomain v0) (Core.TypeVariable (Core.Name "_")) (\x_ -> x_)
             body = Core.lambdaBody v0
             newEnv = setTC (Scoping.extendGraphForLambda (getTC gEnv) v0) gEnv
         in (analyzeFunctionTermWithGather cx forBinding getTC setTC argMode newEnv tparams (Lists.cons v args) bindings (Lists.cons dom doms) tapps body)) (analyzeFunctionTermWithFinish cx getTC gEnv tparams args bindings doms tapps t)
@@ -129,7 +129,7 @@ dependencyModuleNames cx graph binds withPrims withNoms withSchema els =
                     deannotatedTerm = Strip.deannotateTerm term
                     dataNames = Dependencies.termDependencyNames binds withPrims withNoms term
                     schemaNames =
-                            Logic.ifElse withSchema (Maybes.maybe Sets.empty (\ts -> Dependencies.typeDependencyNames True (Core.typeSchemeBody ts)) (Core.bindingTypeScheme el)) Sets.empty
+                            Logic.ifElse withSchema (Maybes.cases (Core.bindingTypeScheme el) Sets.empty (\ts -> Dependencies.typeDependencyNames True (Core.typeSchemeBody ts))) Sets.empty
                 in (Logic.ifElse (Predicates.isEncodedType deannotatedTerm) (Eithers.map (\typ -> Sets.unions [
                   dataNames,
                   schemaNames,
@@ -229,7 +229,7 @@ isTailRecursiveInTailPosition funcName term =
                   dflt = Core.caseStatementDefault v1
                   branchesOk =
                           Lists.foldl (\ok -> \field -> Logic.and ok (isTailRecursiveInTailPosition funcName (Core.caseAlternativeHandler field))) True cases_
-                  dfltOk = Maybes.maybe True (\d -> isTailRecursiveInTailPosition funcName d) dflt
+                  dfltOk = Maybes.cases dflt True (\d -> isTailRecursiveInTailPosition funcName d)
                   argsOk = Lists.foldl (\ok -> \arg -> Logic.and ok (Variables.isFreeVariableInTerm funcName arg)) True gatherArgs
               in (Logic.and (Logic.and branchesOk dfltOk) argsOk)
             _ -> Variables.isFreeVariableInTerm funcName term

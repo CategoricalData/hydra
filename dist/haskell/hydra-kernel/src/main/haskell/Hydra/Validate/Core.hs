@@ -235,14 +235,14 @@ checkUndefinedTypeVariablesInType path cx typ mkError =
 
       let freeVars = Variables.freeVariablesInType typ
           undefined = Sets.difference freeVars (Graph.graphTypeVariables cx)
-      in (Maybes.maybe Nothing (\firstUndefined -> mkError firstUndefined) (Lists.maybeHead (Sets.toList undefined)))
+      in (Maybes.cases (Lists.maybeHead (Sets.toList undefined)) Nothing (\firstUndefined -> mkError firstUndefined))
 -- | Check a type scheme for type variables not bound by the scheme or the current scope
 checkUndefinedTypeVariablesInTypeScheme :: t0 -> Graph.Graph -> Core.TypeScheme -> (Core.Name -> Maybe t1) -> Maybe t1
 checkUndefinedTypeVariablesInTypeScheme path cx ts mkError =
 
       let freeVars = Variables.freeVariablesInTypeScheme ts
           undefined = Sets.difference freeVars (Graph.graphTypeVariables cx)
-      in (Maybes.maybe Nothing (\firstUndefined -> mkError firstUndefined) (Lists.maybeHead (Sets.toList undefined)))
+      in (Maybes.cases (Lists.maybeHead (Sets.toList undefined)) Nothing (\firstUndefined -> mkError firstUndefined))
 -- | Return an error if the given type is TypeVoid
 checkVoid :: Core.Type -> Maybe ErrorCore.InvalidTypeError
 checkVoid typ =
@@ -431,9 +431,9 @@ validateTypeNode p boundVars typ =
       Core.TypeUnion v0 -> firstFindingType [
         Logic.ifElse (enabled p (Core.Name "hydra.error.core.InvalidTypeError.emptyUnionType")) (Maybes.map (\f -> (Core.Name "hydra.error.core.InvalidTypeError.emptyUnionType", f)) (Logic.ifElse (Lists.null v0) (Just (ErrorCore.InvalidTypeErrorEmptyUnionType (ErrorCore.EmptyUnionTypeError {
           ErrorCore.emptyUnionTypeErrorLocation = (Paths.SubtermPath [])}))) Nothing)) Nothing,
-        (Logic.ifElse (enabled p (Core.Name "hydra.error.core.InvalidTypeError.singleVariantUnion")) (Maybes.map (\f -> (Core.Name "hydra.error.core.InvalidTypeError.singleVariantUnion", f)) (Logic.ifElse (Equality.equal (Lists.length v0) 1) (Maybes.maybe Nothing (\singleField -> Just (ErrorCore.InvalidTypeErrorSingleVariantUnion (ErrorCore.SingleVariantUnionError {
+        (Logic.ifElse (enabled p (Core.Name "hydra.error.core.InvalidTypeError.singleVariantUnion")) (Maybes.map (\f -> (Core.Name "hydra.error.core.InvalidTypeError.singleVariantUnion", f)) (Logic.ifElse (Equality.equal (Lists.length v0) 1) (Maybes.cases (Lists.maybeHead v0) Nothing (\singleField -> Just (ErrorCore.InvalidTypeErrorSingleVariantUnion (ErrorCore.SingleVariantUnionError {
           ErrorCore.singleVariantUnionErrorLocation = (Paths.SubtermPath []),
-          ErrorCore.singleVariantUnionErrorFieldName = (Core.fieldTypeName singleField)}))) (Lists.maybeHead v0)) Nothing)) Nothing),
+          ErrorCore.singleVariantUnionErrorFieldName = (Core.fieldTypeName singleField)})))) Nothing)) Nothing),
         (Logic.ifElse (enabled p (Core.Name "hydra.error.core.InvalidTypeError.duplicateUnionTypeFieldNames")) (Maybes.map (\f -> (Core.Name "hydra.error.core.InvalidTypeError.duplicateUnionTypeFieldNames", f)) (checkDuplicateFieldTypes v0 (\dupName -> Just (ErrorCore.InvalidTypeErrorDuplicateUnionTypeFieldNames (ErrorCore.DuplicateUnionTypeFieldNamesError {
           ErrorCore.duplicateUnionTypeFieldNamesErrorLocation = (Paths.SubtermPath []),
           ErrorCore.duplicateUnionTypeFieldNamesErrorName = dupName}))))) Nothing),

@@ -60,17 +60,17 @@ opt :: Ord t0 => (t0 -> M.Map t0 t1 -> Maybe t1)
 opt fname m = Maps.lookup fname m
 -- | Look up an optional array field in a JSON object
 optArray :: Ord t0 => (t0 -> M.Map t0 Model.Value -> Either String (Maybe [Model.Value]))
-optArray fname m = Maybes.maybe (Right Nothing) (\a -> Eithers.map (\x -> Just x) (expectArray a)) (opt fname m)
+optArray fname m = Maybes.cases (opt fname m) (Right Nothing) (\a -> Eithers.map (\x -> Just x) (expectArray a))
 -- | Look up an optional string field in a JSON object
 optString :: Ord t0 => (t0 -> M.Map t0 Model.Value -> Either String (Maybe String))
-optString fname m = Maybes.maybe (Right Nothing) (\s -> Eithers.map (\x -> Just x) (expectString s)) (opt fname m)
+optString fname m = Maybes.cases (opt fname m) (Right Nothing) (\s -> Eithers.map (\x -> Just x) (expectString s))
 -- | Look up a required field in a JSON object, failing if not found
 require :: Ord t0 => (t0 -> M.Map t0 t1 -> Either String t1)
 require fname m =
-    Maybes.maybe (Left (Strings.cat [
+    Maybes.cases (Maps.lookup fname m) (Left (Strings.cat [
       "required attribute ",
       (showValue fname),
-      " not found"])) (\value -> Right value) (Maps.lookup fname m)
+      " not found"])) (\value -> Right value)
 -- | Look up a required array field in a JSON object
 requireArray :: Ord t0 => (t0 -> M.Map t0 Model.Value -> Either String [Model.Value])
 requireArray fname m = Eithers.bind (require fname m) expectArray

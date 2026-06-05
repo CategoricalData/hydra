@@ -45,11 +45,11 @@ import qualified Data.Map as M
 -- | Convert a definition to a typed term
 definitionAsTypeApplicationTerm :: Core.Binding -> Either Errors.Error Core.TypeApplicationTerm
 definitionAsTypeApplicationTerm el =
-    Maybes.maybe (Left (Errors.ErrorExtraction (Errors.ExtractionErrorUnexpectedShape (Errors.UnexpectedShapeError {
+    Maybes.cases (Core.bindingTypeScheme el) (Left (Errors.ErrorExtraction (Errors.ExtractionErrorUnexpectedShape (Errors.UnexpectedShapeError {
       Errors.unexpectedShapeErrorExpected = "typed binding",
       Errors.unexpectedShapeErrorActual = "untyped binding"})))) (\ts -> Right (Core.TypeApplicationTerm {
       Core.typeApplicationTermBody = (Core.bindingTerm el),
-      Core.typeApplicationTermType = (Core.typeSchemeBody ts)})) (Core.bindingTypeScheme el)
+      Core.typeApplicationTermType = (Core.typeSchemeBody ts)}))
 -- | Convert bindings and a body to a let expression
 graphAsLet :: [Core.Binding] -> Core.Term -> Core.Let
 graphAsLet bindings body =
@@ -123,13 +123,13 @@ schemaGraphToTypingEnvironment g =
                               Core.TermRecord v0 -> Logic.ifElse (Equality.equal (Core.recordTypeName v0) (Core.Name "hydra.core.TypeScheme")) (Eithers.map Maybes.pure (decodeTypeScheme (Core.bindingTerm el))) (Right Nothing)
                               Core.TermInject v0 -> Logic.ifElse (Equality.equal (Core.injectionTypeName v0) (Core.Name "hydra.core.Type")) (Eithers.map (\decoded -> Just (toTypeScheme [] decoded)) (decodeType (Core.bindingTerm el))) (Right Nothing)
                               _ -> Right Nothing
-                    in (Eithers.bind (Maybes.maybe (Eithers.map (\typ -> Just (Scoping.fTypeToTypeScheme typ)) (decodeType (Core.bindingTerm el))) (\ts -> Logic.ifElse (Equality.equal ts (Core.TypeScheme {
+                    in (Eithers.bind (Maybes.cases (Core.bindingTypeScheme el) (Eithers.map (\typ -> Just (Scoping.fTypeToTypeScheme typ)) (decodeType (Core.bindingTerm el))) (\ts -> Logic.ifElse (Equality.equal ts (Core.TypeScheme {
                       Core.typeSchemeVariables = [],
                       Core.typeSchemeBody = (Core.TypeVariable (Core.Name "hydra.core.TypeScheme")),
                       Core.typeSchemeConstraints = Nothing})) (Eithers.map Maybes.pure (decodeTypeScheme (Core.bindingTerm el))) (Logic.ifElse (Equality.equal ts (Core.TypeScheme {
                       Core.typeSchemeVariables = [],
                       Core.typeSchemeBody = (Core.TypeVariable (Core.Name "hydra.core.Type")),
-                      Core.typeSchemeConstraints = Nothing})) (Eithers.map (\decoded -> Just (toTypeScheme [] decoded)) (decodeType (Core.bindingTerm el))) (forTerm (Strip.deannotateTerm (Core.bindingTerm el))))) (Core.bindingTypeScheme el)) (\mts -> Right (Maybes.map (\ts -> (Core.bindingName el, ts)) mts)))
+                      Core.typeSchemeConstraints = Nothing})) (Eithers.map (\decoded -> Just (toTypeScheme [] decoded)) (decodeType (Core.bindingTerm el))) (forTerm (Strip.deannotateTerm (Core.bindingTerm el)))))) (\mts -> Right (Maybes.map (\ts -> (Core.bindingName el, ts)) mts)))
       in (Eithers.map (\mpairs -> Maps.fromList (Maybes.cat mpairs)) (Eithers.mapList toPair (Lexical.graphToBindings g)))
 -- | Extract the bindings from a let term, or return an empty list for other terms
 termAsBindings :: Core.Term -> [Core.Binding]

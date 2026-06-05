@@ -139,7 +139,7 @@ inlineType schema typ =
               \recurse -> \typ2 ->
                 let afterRecurse =
                         \tr -> case tr of
-                          Core.TypeVariable v0 -> Maybes.maybe (Left (Errors.ErrorOther (Errors.OtherError (Strings.cat2 "No such type in schema: " (Core.unName v0))))) (inlineType schema) (Maps.lookup v0 schema)
+                          Core.TypeVariable v0 -> Maybes.cases (Maps.lookup v0 schema) (Left (Errors.ErrorOther (Errors.OtherError (Strings.cat2 "No such type in schema: " (Core.unName v0))))) (inlineType schema)
                           _ -> Right tr
                 in (Eithers.bind (recurse typ2) (\tr -> afterRecurse tr))
       in (Rewriting.rewriteTypeM f typ)
@@ -216,7 +216,7 @@ replaceTypedefs types typ0 =
                               \ts ->
                                 let t = Core.typeSchemeBody ts
                                 in (Logic.ifElse (Lists.null (Core.typeSchemeVariables ts)) (forMono t) typ)
-                  in (Maybes.maybe typ (\ts -> forTypeScheme ts) (Maps.lookup v0 types))
+                  in (Maybes.cases (Maps.lookup v0 types) typ (\ts -> forTypeScheme ts))
                 Core.TypeWrap _ -> typ
                 _ -> recurse typ
       in (Rewriting.rewriteType rewrite typ0)

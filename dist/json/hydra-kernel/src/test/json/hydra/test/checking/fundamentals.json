@@ -15856,7 +15856,7 @@
                     {
                       "record": {
                         "fields": [
-                          {"name": "name", "term": {"literal": {"string": "optionals maybe"}}},
+                          {"name": "name", "term": {"literal": {"string": "optionals cases"}}},
                           {
                             "name": "case",
                             "term": {
@@ -15878,7 +15878,7 @@
                                                         "inject": {
                                                           "field": {
                                                             "name": "variable",
-                                                            "term": {"wrap": {"body": {"literal": {"string": "hydra.lib.maybes.maybe"}}, "typeName": "hydra.core.Name"}}},
+                                                            "term": {"wrap": {"body": {"literal": {"string": "hydra.lib.maybes.cases"}}, "typeName": "hydra.core.Name"}}},
                                                           "typeName": "hydra.core.Term"}},
                                                       "function": {
                                                         "application": {
@@ -15969,7 +15969,12 @@
                                                                                             "name": "domain",
                                                                                             "term": {
                                                                                               "inject": {
-                                                                                                "field": {"name": "variable", "term": {"wrap": {"body": {"literal": {"string": "t0"}}, "typeName": "hydra.core.Name"}}},
+                                                                                                "field": {
+                                                                                                  "name": "maybe",
+                                                                                                  "term": {
+                                                                                                    "inject": {
+                                                                                                      "field": {"name": "variable", "term": {"wrap": {"body": {"literal": {"string": "t0"}}, "typeName": "hydra.core.Name"}}},
+                                                                                                      "typeName": "hydra.core.Type"}}},
                                                                                                 "typeName": "hydra.core.Type"}}},
                                                                                           {
                                                                                             "name": "codomain",
@@ -15984,24 +15989,7 @@
                                                                                                           "name": "domain",
                                                                                                           "term": {
                                                                                                             "inject": {
-                                                                                                              "field": {
-                                                                                                                "name": "function",
-                                                                                                                "term": {
-                                                                                                                  "record": {
-                                                                                                                    "fields": [
-                                                                                                                      {
-                                                                                                                        "name": "domain",
-                                                                                                                        "term": {
-                                                                                                                          "inject": {
-                                                                                                                            "field": {"name": "variable", "term": {"wrap": {"body": {"literal": {"string": "t1"}}, "typeName": "hydra.core.Name"}}},
-                                                                                                                            "typeName": "hydra.core.Type"}}},
-                                                                                                                      {
-                                                                                                                        "name": "codomain",
-                                                                                                                        "term": {
-                                                                                                                          "inject": {
-                                                                                                                            "field": {"name": "variable", "term": {"wrap": {"body": {"literal": {"string": "t0"}}, "typeName": "hydra.core.Name"}}},
-                                                                                                                            "typeName": "hydra.core.Type"}}}],
-                                                                                                                    "typeName": "hydra.core.FunctionType"}}},
+                                                                                                              "field": {"name": "variable", "term": {"wrap": {"body": {"literal": {"string": "t1"}}, "typeName": "hydra.core.Name"}}},
                                                                                                               "typeName": "hydra.core.Type"}}},
                                                                                                         {
                                                                                                           "name": "codomain",
@@ -16017,17 +16005,29 @@
                                                                                                                         "term": {
                                                                                                                           "inject": {
                                                                                                                             "field": {
-                                                                                                                              "name": "maybe",
+                                                                                                                              "name": "function",
                                                                                                                               "term": {
-                                                                                                                                "inject": {
-                                                                                                                                  "field": {"name": "variable", "term": {"wrap": {"body": {"literal": {"string": "t1"}}, "typeName": "hydra.core.Name"}}},
-                                                                                                                                  "typeName": "hydra.core.Type"}}},
+                                                                                                                                "record": {
+                                                                                                                                  "fields": [
+                                                                                                                                    {
+                                                                                                                                      "name": "domain",
+                                                                                                                                      "term": {
+                                                                                                                                        "inject": {
+                                                                                                                                          "field": {"name": "variable", "term": {"wrap": {"body": {"literal": {"string": "t0"}}, "typeName": "hydra.core.Name"}}},
+                                                                                                                                          "typeName": "hydra.core.Type"}}},
+                                                                                                                                    {
+                                                                                                                                      "name": "codomain",
+                                                                                                                                      "term": {
+                                                                                                                                        "inject": {
+                                                                                                                                          "field": {"name": "variable", "term": {"wrap": {"body": {"literal": {"string": "t1"}}, "typeName": "hydra.core.Name"}}},
+                                                                                                                                          "typeName": "hydra.core.Type"}}}],
+                                                                                                                                  "typeName": "hydra.core.FunctionType"}}},
                                                                                                                             "typeName": "hydra.core.Type"}}},
                                                                                                                       {
                                                                                                                         "name": "codomain",
                                                                                                                         "term": {
                                                                                                                           "inject": {
-                                                                                                                            "field": {"name": "variable", "term": {"wrap": {"body": {"literal": {"string": "t0"}}, "typeName": "hydra.core.Name"}}},
+                                                                                                                            "field": {"name": "variable", "term": {"wrap": {"body": {"literal": {"string": "t1"}}, "typeName": "hydra.core.Name"}}},
                                                                                                                             "typeName": "hydra.core.Type"}}}],
                                                                                                                     "typeName": "hydra.core.FunctionType"}}},
                                                                                                               "typeName": "hydra.core.Type"}}}],

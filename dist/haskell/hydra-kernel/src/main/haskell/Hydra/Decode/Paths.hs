@@ -149,10 +149,10 @@ subtermStep cx raw =
                         Core.Name "injectionTerm",
                         (\input -> Eithers.map (\t -> Paths.SubtermStepInjectionTerm) (ExtractCore.decodeUnit cx input))),
                       (Core.Name "wrappedTerm", (\input -> Eithers.map (\t -> Paths.SubtermStepWrappedTerm) (ExtractCore.decodeUnit cx input)))]
-        in (Maybes.maybe (Left (Errors.DecodingError (Strings.cat [
+        in (Maybes.cases (Maps.lookup fname variantMap) (Left (Errors.DecodingError (Strings.cat [
           "no such field ",
           (Core.unName fname),
-          " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
+          " in union"]))) (\f -> f fterm))
       _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.paths.SubtypeEdge
 subtypeEdge :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Paths.SubtypeEdge
@@ -240,8 +240,8 @@ subtypeStep cx raw =
                       (Core.Name "setElement", (\input -> Eithers.map (\t -> Paths.SubtypeStepSetElement) (ExtractCore.decodeUnit cx input))),
                       (Core.Name "unionField", (\input -> Eithers.map (\t -> Paths.SubtypeStepUnionField t) (DecodeCore.name cx input))),
                       (Core.Name "wrappedType", (\input -> Eithers.map (\t -> Paths.SubtypeStepWrappedType) (ExtractCore.decodeUnit cx input)))]
-        in (Maybes.maybe (Left (Errors.DecodingError (Strings.cat [
+        in (Maybes.cases (Maps.lookup fname variantMap) (Left (Errors.DecodingError (Strings.cat [
           "no such field ",
           (Core.unName fname),
-          " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
+          " in union"]))) (\f -> f fterm))
       _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)

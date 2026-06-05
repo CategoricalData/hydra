@@ -85,9 +85,9 @@ caseField name n graph term =
       in (Eithers.bind (cases name graph term) (\cs ->
         let matching =
                 Lists.find (\f -> Equality.equal (Core.unName (Core.caseAlternativeName f)) (Core.unName fieldName)) (Core.caseStatementCases cs)
-        in (Maybes.maybe (Left (Errors.ErrorExtraction (Errors.ExtractionErrorUnexpectedShape (Errors.UnexpectedShapeError {
+        in (Maybes.cases matching (Left (Errors.ErrorExtraction (Errors.ExtractionErrorUnexpectedShape (Errors.UnexpectedShapeError {
           Errors.unexpectedShapeErrorExpected = "matching case",
-          Errors.unexpectedShapeErrorActual = "no matching case"})))) (\mf -> Right mf) matching)))
+          Errors.unexpectedShapeErrorActual = "no matching case"})))) (\mf -> Right mf))))
 -- | Extract case statement from a term
 cases :: Core.Name -> Graph.Graph -> Core.Term -> Either Errors.Error Core.CaseStatement
 cases name graph term0 =
@@ -184,7 +184,7 @@ field fname mapping graph fields =
                   Left (Errors.ErrorExtraction (Errors.ExtractionErrorUnexpectedShape (Errors.UnexpectedShapeError {
                     Errors.unexpectedShapeErrorExpected = (Strings.cat2 "field " (Core.unName fname)),
                     Errors.unexpectedShapeErrorActual = "no matching field"})))
-      in (Logic.ifElse (Lists.null matchingFields) noMatchErr (Logic.ifElse (Equality.equal (Lists.length matchingFields) 1) (Maybes.maybe noMatchErr (\mf -> Eithers.bind (Lexical.stripAndDereferenceTerm graph (Core.fieldTerm mf)) (\stripped -> mapping stripped)) (Lists.maybeHead matchingFields)) (Left (Errors.ErrorExtraction (Errors.ExtractionErrorUnexpectedShape (Errors.UnexpectedShapeError {
+      in (Logic.ifElse (Lists.null matchingFields) noMatchErr (Logic.ifElse (Equality.equal (Lists.length matchingFields) 1) (Maybes.cases (Lists.maybeHead matchingFields) noMatchErr (\mf -> Eithers.bind (Lexical.stripAndDereferenceTerm graph (Core.fieldTerm mf)) (\stripped -> mapping stripped))) (Left (Errors.ErrorExtraction (Errors.ExtractionErrorUnexpectedShape (Errors.UnexpectedShapeError {
         Errors.unexpectedShapeErrorExpected = "single field",
         Errors.unexpectedShapeErrorActual = (Strings.cat2 "multiple fields named " (Core.unName fname))}))))))
 -- | Extract a 32-bit floating-point value from a term
@@ -325,7 +325,7 @@ letBinding n graph term =
             noBindingErr =
                     Left (Errors.ErrorExtraction (Errors.ExtractionErrorNoSuchBinding (Errors.NoSuchBindingError {
                       Errors.noSuchBindingErrorName = name})))
-        in (Logic.ifElse (Lists.null matchingBindings) noBindingErr (Logic.ifElse (Equality.equal (Lists.length matchingBindings) 1) (Maybes.maybe noBindingErr (\b -> Right (Core.bindingTerm b)) (Lists.maybeHead matchingBindings)) (Left (Errors.ErrorExtraction (Errors.ExtractionErrorMultipleBindings (Errors.MultipleBindingsError {
+        in (Logic.ifElse (Lists.null matchingBindings) noBindingErr (Logic.ifElse (Equality.equal (Lists.length matchingBindings) 1) (Maybes.cases (Lists.maybeHead matchingBindings) noBindingErr (\b -> Right (Core.bindingTerm b))) (Left (Errors.ErrorExtraction (Errors.ExtractionErrorMultipleBindings (Errors.MultipleBindingsError {
           Errors.multipleBindingsErrorName = name}))))))))
 -- | Extract a list of terms from a term
 list :: Graph.Graph -> Core.Term -> Either Errors.Error [Core.Term]
@@ -338,9 +338,9 @@ list graph term =
 -- | Extract the first element of a list term
 listHead :: Graph.Graph -> Core.Term -> Either Errors.Error Core.Term
 listHead graph term =
-    Eithers.bind (list graph term) (\l -> Maybes.maybe (Left (Errors.ErrorExtraction (Errors.ExtractionErrorUnexpectedShape (Errors.UnexpectedShapeError {
+    Eithers.bind (list graph term) (\l -> Maybes.cases (Lists.maybeHead l) (Left (Errors.ErrorExtraction (Errors.ExtractionErrorUnexpectedShape (Errors.UnexpectedShapeError {
       Errors.unexpectedShapeErrorExpected = "non-empty list",
-      Errors.unexpectedShapeErrorActual = "empty list"})))) (\h -> Right h) (Lists.maybeHead l))
+      Errors.unexpectedShapeErrorActual = "empty list"})))) (\h -> Right h))
 -- | Extract a list of values from a term, mapping a function over each element
 listOf :: (Core.Term -> Either Errors.Error t0) -> Graph.Graph -> Core.Term -> Either Errors.Error [t0]
 listOf f graph term = Eithers.bind (list graph term) (\els -> Eithers.mapList f els)
@@ -390,7 +390,7 @@ mapType typ =
 maybeTerm :: (Core.Term -> Either Errors.Error t0) -> Graph.Graph -> Core.Term -> Either Errors.Error (Maybe t0)
 maybeTerm f graph term0 =
     Eithers.bind (Lexical.stripAndDereferenceTerm graph term0) (\term -> case term of
-      Core.TermMaybe v0 -> Maybes.maybe (Right Nothing) (\t -> Eithers.map Maybes.pure (f t)) v0
+      Core.TermMaybe v0 -> Maybes.cases v0 (Right Nothing) (\t -> Eithers.map Maybes.pure (f t))
       _ -> Left (Errors.ErrorExtraction (Errors.ExtractionErrorUnexpectedShape (Errors.UnexpectedShapeError {
         Errors.unexpectedShapeErrorExpected = "maybe value",
         Errors.unexpectedShapeErrorActual = (ShowCore.term term)}))))
@@ -440,10 +440,10 @@ recordType ename typ =
 -- | Require a field from a record's field map and decode it
 requireField :: String -> (t0 -> t1 -> Either Errors.DecodingError t2) -> M.Map Core.Name t1 -> t0 -> Either Errors.DecodingError t2
 requireField fieldName decoder fieldMap g =
-    Maybes.maybe (Left (Errors.DecodingError (Strings.cat [
+    Maybes.cases (Maps.lookup (Core.Name fieldName) fieldMap) (Left (Errors.DecodingError (Strings.cat [
       "missing field ",
       fieldName,
-      " in record"]))) (\fieldTerm -> decoder g fieldTerm) (Maps.lookup (Core.Name fieldName) fieldMap)
+      " in record"]))) (\fieldTerm -> decoder g fieldTerm)
 -- | Extract a set of terms from a term
 set :: Graph.Graph -> Core.Term -> Either Errors.Error (S.Set Core.Term)
 set graph term =

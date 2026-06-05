@@ -49,9 +49,9 @@ apply cx g funOptTerm argOptTerm =
 bind :: t0 -> t1 -> Core.Term -> Core.Term -> Either Errors.Error Core.Term
 bind cx g optTerm funTerm =
     case optTerm of
-      Core.TermMaybe v0 -> Right (Maybes.maybe (Core.TermMaybe Nothing) (\val -> Core.TermApplication (Core.Application {
+      Core.TermMaybe v0 -> Right (Maybes.cases v0 (Core.TermMaybe Nothing) (\val -> Core.TermApplication (Core.Application {
         Core.applicationFunction = funTerm,
-        Core.applicationArgument = val})) v0)
+        Core.applicationArgument = val})))
       _ -> Left (Errors.ErrorExtraction (Errors.ExtractionErrorUnexpectedShape (Errors.UnexpectedShapeError {
         Errors.unexpectedShapeErrorExpected = "optional value",
         Errors.unexpectedShapeErrorActual = (ShowCore.term optTerm)})))
@@ -59,9 +59,9 @@ bind cx g optTerm funTerm =
 cases :: t0 -> t1 -> Core.Term -> Core.Term -> Core.Term -> Either Errors.Error Core.Term
 cases cx g optTerm defaultTerm funTerm =
     case optTerm of
-      Core.TermMaybe v0 -> Right (Maybes.maybe defaultTerm (\val -> Core.TermApplication (Core.Application {
+      Core.TermMaybe v0 -> Right (Maybes.cases v0 defaultTerm (\val -> Core.TermApplication (Core.Application {
         Core.applicationFunction = funTerm,
-        Core.applicationArgument = val})) v0)
+        Core.applicationArgument = val})))
       _ -> Left (Errors.ErrorExtraction (Errors.ExtractionErrorUnexpectedShape (Errors.UnexpectedShapeError {
         Errors.unexpectedShapeErrorExpected = "optional value",
         Errors.unexpectedShapeErrorActual = (ShowCore.term optTerm)})))
@@ -69,7 +69,7 @@ cases cx g optTerm defaultTerm funTerm =
 cat :: t0 -> Graph.Graph -> Core.Term -> Either Errors.Error [Core.Term]
 cat cx g listTerm =
     Eithers.bind (ExtractCore.list g listTerm) (\elements -> Right (Lists.foldl (\acc -> \el -> case el of
-      Core.TermMaybe v0 -> Maybes.maybe acc (\v -> Lists.concat2 acc (Lists.pure v)) v0
+      Core.TermMaybe v0 -> Maybes.cases v0 acc (\v -> Lists.concat2 acc (Lists.pure v))
       _ -> acc) [] elements))
 -- | Interpreter-friendly Kleisli composition for Maybe.
 compose :: t0 -> t1 -> Core.Term -> Core.Term -> Core.Term -> Either t2 Core.Term
@@ -85,9 +85,9 @@ compose cx g funF funG xTerm =
 fromJust :: t0 -> t1 -> Core.Term -> Either Errors.Error Core.Term
 fromJust cx g optTerm =
     case optTerm of
-      Core.TermMaybe v0 -> Maybes.maybe (Left (Errors.ErrorExtraction (Errors.ExtractionErrorUnexpectedShape (Errors.UnexpectedShapeError {
+      Core.TermMaybe v0 -> Maybes.cases v0 (Left (Errors.ErrorExtraction (Errors.ExtractionErrorUnexpectedShape (Errors.UnexpectedShapeError {
         Errors.unexpectedShapeErrorExpected = "Just value",
-        Errors.unexpectedShapeErrorActual = (ShowCore.term optTerm)})))) (\val -> Right val) v0
+        Errors.unexpectedShapeErrorActual = (ShowCore.term optTerm)})))) (\val -> Right val)
       _ -> Left (Errors.ErrorExtraction (Errors.ExtractionErrorUnexpectedShape (Errors.UnexpectedShapeError {
         Errors.unexpectedShapeErrorExpected = "optional value",
         Errors.unexpectedShapeErrorActual = (ShowCore.term optTerm)})))
@@ -95,7 +95,7 @@ fromJust cx g optTerm =
 fromMaybe :: t0 -> t1 -> Core.Term -> Core.Term -> Either Errors.Error Core.Term
 fromMaybe cx g defaultTerm optTerm =
     case optTerm of
-      Core.TermMaybe v0 -> Right (Maybes.maybe defaultTerm (\val -> val) v0)
+      Core.TermMaybe v0 -> Right (Maybes.cases v0 defaultTerm (\val -> val))
       _ -> Left (Errors.ErrorExtraction (Errors.ExtractionErrorUnexpectedShape (Errors.UnexpectedShapeError {
         Errors.unexpectedShapeErrorExpected = "optional value",
         Errors.unexpectedShapeErrorActual = (ShowCore.term optTerm)})))
@@ -103,7 +103,7 @@ fromMaybe cx g defaultTerm optTerm =
 isJust :: t0 -> t1 -> Core.Term -> Either Errors.Error Core.Term
 isJust cx g optTerm =
     case optTerm of
-      Core.TermMaybe v0 -> Right (Maybes.maybe (Core.TermLiteral (Core.LiteralBoolean False)) (\_ -> Core.TermLiteral (Core.LiteralBoolean True)) v0)
+      Core.TermMaybe v0 -> Right (Maybes.cases v0 (Core.TermLiteral (Core.LiteralBoolean False)) (\_ -> Core.TermLiteral (Core.LiteralBoolean True)))
       _ -> Left (Errors.ErrorExtraction (Errors.ExtractionErrorUnexpectedShape (Errors.UnexpectedShapeError {
         Errors.unexpectedShapeErrorExpected = "optional value",
         Errors.unexpectedShapeErrorActual = (ShowCore.term optTerm)})))
@@ -111,7 +111,7 @@ isJust cx g optTerm =
 isNothing :: t0 -> t1 -> Core.Term -> Either Errors.Error Core.Term
 isNothing cx g optTerm =
     case optTerm of
-      Core.TermMaybe v0 -> Right (Maybes.maybe (Core.TermLiteral (Core.LiteralBoolean True)) (\_ -> Core.TermLiteral (Core.LiteralBoolean False)) v0)
+      Core.TermMaybe v0 -> Right (Maybes.cases v0 (Core.TermLiteral (Core.LiteralBoolean True)) (\_ -> Core.TermLiteral (Core.LiteralBoolean False)))
       _ -> Left (Errors.ErrorExtraction (Errors.ExtractionErrorUnexpectedShape (Errors.UnexpectedShapeError {
         Errors.unexpectedShapeErrorExpected = "optional value",
         Errors.unexpectedShapeErrorActual = (ShowCore.term optTerm)})))
@@ -133,16 +133,6 @@ mapMaybe cx g funTerm listTerm =
       Core.applicationArgument = (Core.TermList (Lists.map (\el -> Core.TermApplication (Core.Application {
         Core.applicationFunction = funTerm,
         Core.applicationArgument = el})) elements))})))
--- | Interpreter-friendly case analysis for Maybe terms.
-maybe :: t0 -> t1 -> Core.Term -> Core.Term -> Core.Term -> Either Errors.Error Core.Term
-maybe cx g defaultTerm funTerm optTerm =
-    case optTerm of
-      Core.TermMaybe v0 -> Right (Maybes.maybe defaultTerm (\val -> Core.TermApplication (Core.Application {
-        Core.applicationFunction = funTerm,
-        Core.applicationArgument = val})) v0)
-      _ -> Left (Errors.ErrorExtraction (Errors.ExtractionErrorUnexpectedShape (Errors.UnexpectedShapeError {
-        Errors.unexpectedShapeErrorExpected = "optional value",
-        Errors.unexpectedShapeErrorActual = (ShowCore.term optTerm)})))
 -- | Interpreter-friendly pure for Maybe terms.
 pure :: t0 -> t1 -> Core.Term -> Either t2 Core.Term
 pure cx g x = Right (Core.TermMaybe (Just x))
@@ -150,7 +140,7 @@ pure cx g x = Right (Core.TermMaybe (Just x))
 toList :: t0 -> t1 -> Core.Term -> Either Errors.Error Core.Term
 toList cx g optTerm =
     case optTerm of
-      Core.TermMaybe v0 -> Right (Core.TermList (Maybes.maybe [] (\val -> Lists.pure val) v0))
+      Core.TermMaybe v0 -> Right (Core.TermList (Maybes.cases v0 [] (\val -> Lists.pure val)))
       _ -> Left (Errors.ErrorExtraction (Errors.ExtractionErrorUnexpectedShape (Errors.UnexpectedShapeError {
         Errors.unexpectedShapeErrorExpected = "optional value",
         Errors.unexpectedShapeErrorActual = (ShowCore.term optTerm)})))

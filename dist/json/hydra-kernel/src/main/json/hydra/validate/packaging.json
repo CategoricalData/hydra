@@ -1122,41 +1122,42 @@
                                                                             "body": {
                                                                               "application": {
                                                                                 "argument": {
-                                                                                  "application": {
-                                                                                    "argument": {"variable": "pd"},
-                                                                                    "function": {"project": {"fieldName": "metadata", "typeName": "hydra.packaging.PrimitiveDefinition"}}}},
-                                                                                "function": {
-                                                                                  "application": {
-                                                                                    "argument": {
-                                                                                      "lambda": {
-                                                                                        "body": {
+                                                                                  "lambda": {
+                                                                                    "body": {
+                                                                                      "application": {
+                                                                                        "argument": {
                                                                                           "application": {
-                                                                                            "argument": {
+                                                                                            "argument": {"literal": {"string": ""}},
+                                                                                            "function": {
                                                                                               "application": {
-                                                                                                "argument": {"literal": {"string": ""}},
-                                                                                                "function": {
+                                                                                                "argument": {
                                                                                                   "application": {
                                                                                                     "argument": {
                                                                                                       "application": {
-                                                                                                        "argument": {
-                                                                                                          "application": {
-                                                                                                            "argument": {"variable": "em"},
-                                                                                                            "function": {"project": {"fieldName": "description", "typeName": "hydra.packaging.EntityMetadata"}}}},
-                                                                                                        "function": {
-                                                                                                          "application": {
-                                                                                                            "argument": {"literal": {"string": ""}},
-                                                                                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.fromMaybe"}, "type": {"literal": {"string": {}}}}}}}}},
-                                                                                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.equality.equal"}, "type": {"literal": {"string": {}}}}}}}}},
-                                                                                            "function": {"variable": "hydra.lib.logic.not"}}},
-                                                                                        "domain": {"variable": "hydra.packaging.EntityMetadata"},
-                                                                                        "parameter": "em"}},
+                                                                                                        "argument": {"variable": "em"},
+                                                                                                        "function": {"project": {"fieldName": "description", "typeName": "hydra.packaging.EntityMetadata"}}}},
+                                                                                                    "function": {
+                                                                                                      "application": {
+                                                                                                        "argument": {"literal": {"string": ""}},
+                                                                                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.fromMaybe"}, "type": {"literal": {"string": {}}}}}}}}},
+                                                                                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.equality.equal"}, "type": {"literal": {"string": {}}}}}}}}},
+                                                                                        "function": {"variable": "hydra.lib.logic.not"}}},
+                                                                                    "domain": {"variable": "hydra.packaging.EntityMetadata"},
+                                                                                    "parameter": "em"}},
+                                                                                "function": {
+                                                                                  "application": {
+                                                                                    "argument": {"literal": {"boolean": false}},
                                                                                     "function": {
                                                                                       "application": {
-                                                                                        "argument": {"literal": {"boolean": false}},
+                                                                                        "argument": {
+                                                                                          "application": {
+                                                                                            "argument": {"variable": "pd"},
+                                                                                            "function": {"project": {"fieldName": "metadata", "typeName": "hydra.packaging.PrimitiveDefinition"}}}},
                                                                                         "function": {
                                                                                           "typeApplication": {
-                                                                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.maybe"}, "type": {"literal": {"boolean": {}}}}},
-                                                                                            "type": {"variable": "hydra.packaging.EntityMetadata"}}}}}}}}},
+                                                                                            "body": {
+                                                                                              "typeApplication": {"body": {"variable": "hydra.lib.maybes.cases"}, "type": {"variable": "hydra.packaging.EntityMetadata"}}},
+                                                                                            "type": {"literal": {"boolean": {}}}}}}}}}}},
                                                                             "domain": {"variable": "hydra.packaging.PrimitiveDefinition"},
                                                                             "parameter": "pd"}},
                                                                         "name": "primitive"}],

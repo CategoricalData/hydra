@@ -149,31 +149,32 @@
                         "name": "valuesExpr",
                         "term": {
                           "application": {
-                            "argument": {"variable": "values"},
+                            "argument": {
+                              "lambda": {
+                                "body": {
+                                  "application": {
+                                    "argument": {"application": {"argument": {"variable": "vs"}, "function": {"unwrap": "hydra.graphql.syntax.EnumValuesDefinition"}}},
+                                    "function": {
+                                      "application": {
+                                        "argument": {"variable": "hydra.graphql.serde.enumValueDefinitionToExpr"},
+                                        "function": {
+                                          "typeApplication": {
+                                            "body": {
+                                              "typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.graphql.syntax.EnumValueDefinition"}}},
+                                            "type": {"variable": "hydra.ast.Expr"}}}}}}},
+                                "domain": {"variable": "hydra.graphql.syntax.EnumValuesDefinition"},
+                                "parameter": "vs"}},
                             "function": {
                               "application": {
-                                "argument": {
-                                  "lambda": {
-                                    "body": {
-                                      "application": {
-                                        "argument": {"application": {"argument": {"variable": "vs"}, "function": {"unwrap": "hydra.graphql.syntax.EnumValuesDefinition"}}},
-                                        "function": {
-                                          "application": {
-                                            "argument": {"variable": "hydra.graphql.serde.enumValueDefinitionToExpr"},
-                                            "function": {
-                                              "typeApplication": {
-                                                "body": {
-                                                  "typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.graphql.syntax.EnumValueDefinition"}}},
-                                                "type": {"variable": "hydra.ast.Expr"}}}}}}},
-                                    "domain": {"variable": "hydra.graphql.syntax.EnumValuesDefinition"},
-                                    "parameter": "vs"}},
+                                "argument": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.ast.Expr"}}},
                                 "function": {
                                   "application": {
-                                    "argument": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.ast.Expr"}}},
+                                    "argument": {"variable": "values"},
                                     "function": {
                                       "typeApplication": {
-                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.maybe"}, "type": {"list": {"variable": "hydra.ast.Expr"}}}},
-                                        "type": {"variable": "hydra.graphql.syntax.EnumValuesDefinition"}}}}}}}}},
+                                        "body": {
+                                          "typeApplication": {"body": {"variable": "hydra.lib.maybes.cases"}, "type": {"variable": "hydra.graphql.syntax.EnumValuesDefinition"}}},
+                                        "type": {"list": {"variable": "hydra.ast.Expr"}}}}}}}}}},
                         "typeScheme": {"body": {"list": {"variable": "hydra.ast.Expr"}}, "variables": []}}],
                     "body": {
                       "application": {
@@ -480,31 +481,32 @@
                         "name": "fieldsExpr",
                         "term": {
                           "application": {
-                            "argument": {"variable": "fields"},
+                            "argument": {
+                              "lambda": {
+                                "body": {
+                                  "application": {
+                                    "argument": {"application": {"argument": {"variable": "fs"}, "function": {"unwrap": "hydra.graphql.syntax.FieldsDefinition"}}},
+                                    "function": {
+                                      "application": {
+                                        "argument": {"variable": "hydra.graphql.serde.fieldDefinitionToExpr"},
+                                        "function": {
+                                          "typeApplication": {
+                                            "body": {
+                                              "typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.graphql.syntax.FieldDefinition"}}},
+                                            "type": {"variable": "hydra.ast.Expr"}}}}}}},
+                                "domain": {"variable": "hydra.graphql.syntax.FieldsDefinition"},
+                                "parameter": "fs"}},
                             "function": {
                               "application": {
-                                "argument": {
-                                  "lambda": {
-                                    "body": {
-                                      "application": {
-                                        "argument": {"application": {"argument": {"variable": "fs"}, "function": {"unwrap": "hydra.graphql.syntax.FieldsDefinition"}}},
-                                        "function": {
-                                          "application": {
-                                            "argument": {"variable": "hydra.graphql.serde.fieldDefinitionToExpr"},
-                                            "function": {
-                                              "typeApplication": {
-                                                "body": {
-                                                  "typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.graphql.syntax.FieldDefinition"}}},
-                                                "type": {"variable": "hydra.ast.Expr"}}}}}}},
-                                    "domain": {"variable": "hydra.graphql.syntax.FieldsDefinition"},
-                                    "parameter": "fs"}},
+                                "argument": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.ast.Expr"}}},
                                 "function": {
                                   "application": {
-                                    "argument": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.ast.Expr"}}},
+                                    "argument": {"variable": "fields"},
                                     "function": {
                                       "typeApplication": {
-                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.maybe"}, "type": {"list": {"variable": "hydra.ast.Expr"}}}},
-                                        "type": {"variable": "hydra.graphql.syntax.FieldsDefinition"}}}}}}}}},
+                                        "body": {
+                                          "typeApplication": {"body": {"variable": "hydra.lib.maybes.cases"}, "type": {"variable": "hydra.graphql.syntax.FieldsDefinition"}}},
+                                        "type": {"list": {"variable": "hydra.ast.Expr"}}}}}}}}}},
                         "typeScheme": {"body": {"list": {"variable": "hydra.ast.Expr"}}, "variables": []}}],
                     "body": {
                       "application": {

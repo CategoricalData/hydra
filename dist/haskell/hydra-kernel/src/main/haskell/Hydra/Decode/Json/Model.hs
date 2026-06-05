@@ -57,8 +57,8 @@ value cx raw =
                             Core.LiteralString v2 -> Right v2
                             _ -> Left (Errors.DecodingError "expected string literal")
                           _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx input))))]
-        in (Maybes.maybe (Left (Errors.DecodingError (Strings.cat [
+        in (Maybes.cases (Maps.lookup fname variantMap) (Left (Errors.DecodingError (Strings.cat [
           "no such field ",
           (Core.unName fname),
-          " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
+          " in union"]))) (\f -> f fterm))
       _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)

@@ -61,17 +61,17 @@ substInClassConstraints subst constraints =
 
       let substMap = Typing.unTypeSubst subst
           insertOrMerge =
-                  \varName -> \metadata -> \acc -> Maybes.maybe (Maps.insert varName metadata acc) (\existing ->
+                  \varName -> \metadata -> \acc -> Maybes.cases (Maps.lookup varName acc) (Maps.insert varName metadata acc) (\existing ->
                     let merged =
                             Core.TypeVariableConstraints {
                               Core.typeVariableConstraintsClasses = (Lists.nub (Lists.concat2 (Core.typeVariableConstraintsClasses existing) (Core.typeVariableConstraintsClasses metadata)))}
-                    in (Maps.insert varName merged acc)) (Maps.lookup varName acc)
+                    in (Maps.insert varName merged acc))
       in (Lists.foldl (\acc -> \pair ->
         let varName = Pairs.first pair
             metadata = Pairs.second pair
-        in (Maybes.maybe (insertOrMerge varName metadata acc) (\targetType ->
+        in (Maybes.cases (Maps.lookup varName substMap) (insertOrMerge varName metadata acc) (\targetType ->
           let freeVars = Sets.toList (Variables.freeVariablesInType targetType)
-          in (Lists.foldl (\acc2 -> \freeVar -> insertOrMerge freeVar metadata acc2) acc freeVars)) (Maps.lookup varName substMap))) Maps.empty (Maps.toList constraints))
+          in (Lists.foldl (\acc2 -> \freeVar -> insertOrMerge freeVar metadata acc2) acc freeVars)))) Maps.empty (Maps.toList constraints))
 -- | Apply a type substitution to a graph's bound types and class constraints
 substInContext :: Typing.TypeSubst -> Graph.Graph -> Graph.Graph
 substInContext subst cx =
@@ -106,10 +106,10 @@ substInTypeNonEmpty subst typ0 =
 
       let rewrite =
               \recurse -> \typ -> case typ of
-                Core.TypeForall v0 -> Maybes.maybe (recurse typ) (\styp -> Core.TypeForall (Core.ForallType {
+                Core.TypeForall v0 -> Maybes.cases (Maps.lookup (Core.forallTypeParameter v0) (Typing.unTypeSubst subst)) (recurse typ) (\styp -> Core.TypeForall (Core.ForallType {
                   Core.forallTypeParameter = (Core.forallTypeParameter v0),
-                  Core.forallTypeBody = (substInType (removeVar (Core.forallTypeParameter v0)) (Core.forallTypeBody v0))})) (Maps.lookup (Core.forallTypeParameter v0) (Typing.unTypeSubst subst))
-                Core.TypeVariable v0 -> Maybes.maybe typ (\styp -> styp) (Maps.lookup v0 (Typing.unTypeSubst subst))
+                  Core.forallTypeBody = (substInType (removeVar (Core.forallTypeParameter v0)) (Core.forallTypeBody v0))}))
+                Core.TypeVariable v0 -> Maybes.cases (Maps.lookup v0 (Typing.unTypeSubst subst)) typ (\styp -> styp)
                 _ -> recurse typ
           removeVar = \v -> Typing.TypeSubst (Maps.delete v (Typing.unTypeSubst subst))
       in (Rewriting.rewriteType rewrite typ0)
@@ -211,6 +211,6 @@ substituteInTerm subst term0 =
                     in case term of
                       Core.TermLambda v0 -> withLambda v0
                       Core.TermLet v0 -> withLet v0
-                      Core.TermVariable v0 -> Maybes.maybe (recurse term) (\sterm -> sterm) (Maps.lookup v0 s)
+                      Core.TermVariable v0 -> Maybes.cases (Maps.lookup v0 s) (recurse term) (\sterm -> sterm)
                       _ -> recurse term
       in (Rewriting.rewriteTerm rewrite term0)

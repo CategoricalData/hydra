@@ -32,10 +32,10 @@ coderDirection cx raw =
                     Maps.fromList [
                       (Core.Name "encode", (\input -> Eithers.map (\t -> Coders.CoderDirectionEncode) (ExtractCore.decodeUnit cx input))),
                       (Core.Name "decode", (\input -> Eithers.map (\t -> Coders.CoderDirectionDecode) (ExtractCore.decodeUnit cx input)))]
-        in (Maybes.maybe (Left (Errors.DecodingError (Strings.cat [
+        in (Maybes.cases (Maps.lookup fname variantMap) (Left (Errors.DecodingError (Strings.cat [
           "no such field ",
           (Core.unName fname),
-          " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
+          " in union"]))) (\f -> f fterm))
       _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.coders.LanguageName
 languageName :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Coders.LanguageName
@@ -59,8 +59,8 @@ traversalOrder cx raw =
                     Maps.fromList [
                       (Core.Name "pre", (\input -> Eithers.map (\t -> Coders.TraversalOrderPre) (ExtractCore.decodeUnit cx input))),
                       (Core.Name "post", (\input -> Eithers.map (\t -> Coders.TraversalOrderPost) (ExtractCore.decodeUnit cx input)))]
-        in (Maybes.maybe (Left (Errors.DecodingError (Strings.cat [
+        in (Maybes.cases (Maps.lookup fname variantMap) (Left (Errors.DecodingError (Strings.cat [
           "no such field ",
           (Core.unName fname),
-          " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
+          " in union"]))) (\f -> f fterm))
       _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)

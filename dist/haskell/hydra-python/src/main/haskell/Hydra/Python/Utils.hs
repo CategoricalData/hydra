@@ -4,7 +4,6 @@
 module Hydra.Python.Utils where
 import qualified Hydra.Analysis as Analysis
 import qualified Hydra.Ast as Ast
-import qualified Hydra.Classes as Classes
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
 import qualified Hydra.Error.Checking as Checking
@@ -43,15 +42,15 @@ import qualified Data.Scientific as Sci
 -- | Annotate an expression with an optional comment using Annotated[]
 annotatedExpression :: Maybe String -> Syntax.Expression -> Syntax.Expression
 annotatedExpression mcomment expr =
-    Maybes.maybe expr (\c -> pyPrimaryToPyExpression (primaryWithExpressionSlices (pyNameToPyPrimary (Syntax.Name "Annotated")) [
+    Maybes.cases mcomment expr (\c -> pyPrimaryToPyExpression (primaryWithExpressionSlices (pyNameToPyPrimary (Syntax.Name "Annotated")) [
       expr,
-      (doubleQuotedString c)])) mcomment
+      (doubleQuotedString c)]))
 -- | Annotate a statement with an optional comment
 annotatedStatement :: Maybe String -> Syntax.Statement -> Syntax.Statement
 annotatedStatement mcomment stmt =
-    Maybes.maybe stmt (\c -> Syntax.StatementAnnotated (Syntax.AnnotatedStatement {
+    Maybes.cases mcomment stmt (\c -> Syntax.StatementAnnotated (Syntax.AnnotatedStatement {
       Syntax.annotatedStatementComment = c,
-      Syntax.annotatedStatementStatement = stmt})) mcomment
+      Syntax.annotatedStatementStatement = stmt}))
 -- | Create an assignment statement from name and annotated rhs
 assignment :: Syntax.Name -> Syntax.AnnotatedRhs -> Syntax.Statement
 assignment name rhs =
@@ -169,8 +168,8 @@ getItemParams =
 indentedBlock :: Maybe String -> [[Syntax.Statement]] -> Syntax.Block
 indentedBlock mcomment stmts =
 
-      let commentGroup = Maybes.maybe [] (\s -> [
-            commentStatement s]) mcomment
+      let commentGroup = Maybes.cases mcomment [] (\s -> [
+            commentStatement s])
           groups = Lists.filter (\g -> Logic.not (Lists.null g)) (Lists.cons commentGroup stmts)
       in (Logic.ifElse (Lists.null groups) (Syntax.BlockIndented [
         [
@@ -190,13 +189,13 @@ orExpression :: [Syntax.Primary] -> Syntax.Expression
 orExpression prims =
 
       let build =
-              \prev -> \ps -> Maybes.maybe (Syntax.BitwiseOr {
+              \prev -> \ps -> Maybes.cases (Lists.uncons ps) (Syntax.BitwiseOr {
                 Syntax.bitwiseOrLhs = prev,
                 Syntax.bitwiseOrRhs = (pyPrimaryToPyBitwiseXor (Syntax.PrimarySimple Syntax.AtomEllipsis))}) (\p -> Logic.ifElse (Lists.null (Pairs.second p)) (Syntax.BitwiseOr {
                 Syntax.bitwiseOrLhs = prev,
                 Syntax.bitwiseOrRhs = (pyPrimaryToPyBitwiseXor (Pairs.first p))}) (build (Just (Syntax.BitwiseOr {
                 Syntax.bitwiseOrLhs = prev,
-                Syntax.bitwiseOrRhs = (pyPrimaryToPyBitwiseXor (Pairs.first p))})) (Pairs.second p))) (Lists.uncons ps)
+                Syntax.bitwiseOrRhs = (pyPrimaryToPyBitwiseXor (Pairs.first p))})) (Pairs.second p)))
       in (pyBitwiseOrToPyExpression (build Nothing prims))
 -- | Create a primary with parameters (subscript)
 primaryAndParams :: Syntax.Primary -> [Syntax.Expression] -> Syntax.Expression
@@ -286,7 +285,7 @@ pyExpressionToPyAnnotatedRhs expr = Syntax.AnnotatedRhsStar [
 -- | Extracts the primary from an expression, or wraps it in parentheses if the expression does not contain a primary
 pyExpressionToPyPrimary :: Syntax.Expression -> Syntax.Primary
 pyExpressionToPyPrimary e =
-    Maybes.maybe (Syntax.PrimarySimple (Syntax.AtomGroup (Syntax.GroupExpression (Syntax.NamedExpressionSimple e)))) (\prim -> prim) (decodePyExpressionToPyPrimary e)
+    Maybes.cases (decodePyExpressionToPyPrimary e) (Syntax.PrimarySimple (Syntax.AtomGroup (Syntax.GroupExpression (Syntax.NamedExpressionSimple e)))) (\prim -> prim)
 -- | Convert an Expression to a SimpleStatement (as star expressions)
 pyExpressionToPySimpleStatement :: Syntax.Expression -> Syntax.SimpleStatement
 pyExpressionToPySimpleStatement expr = Syntax.SimpleStatementStarExpressions [

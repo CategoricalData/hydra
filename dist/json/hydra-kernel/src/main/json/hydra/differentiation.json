@@ -1451,75 +1451,75 @@
                                                             "body": {
                                                               "application": {
                                                                 "argument": {
-                                                                  "application": {"argument": {"variable": "fname"}, "function": {"variable": "hydra.differentiation.primitiveDerivative"}}},
+                                                                  "lambda": {
+                                                                    "body": {
+                                                                      "inject": {
+                                                                        "field": {
+                                                                          "name": "application",
+                                                                          "term": {
+                                                                            "record": {
+                                                                              "fields": [
+                                                                                {
+                                                                                  "name": "function",
+                                                                                  "term": {
+                                                                                    "inject": {
+                                                                                      "field": {
+                                                                                        "name": "application",
+                                                                                        "term": {
+                                                                                          "record": {
+                                                                                            "fields": [
+                                                                                              {
+                                                                                                "name": "function",
+                                                                                                "term": {
+                                                                                                  "inject": {
+                                                                                                    "field": {
+                                                                                                      "name": "variable",
+                                                                                                      "term": {"wrap": {"body": {"literal": {"string": "hydra.lib.math.mulFloat64"}}, "typeName": "hydra.core.Name"}}},
+                                                                                                    "typeName": "hydra.core.Term"}}},
+                                                                                              {
+                                                                                                "name": "argument",
+                                                                                                "term": {
+                                                                                                  "inject": {
+                                                                                                    "field": {
+                                                                                                      "name": "application",
+                                                                                                      "term": {
+                                                                                                        "record": {
+                                                                                                          "fields": [{"name": "function", "term": {"variable": "derivTerm"}}, {"name": "argument", "term": {"variable": "arg"}}],
+                                                                                                          "typeName": "hydra.core.Application"}}},
+                                                                                                    "typeName": "hydra.core.Term"}}}],
+                                                                                            "typeName": "hydra.core.Application"}}},
+                                                                                      "typeName": "hydra.core.Term"}}},
+                                                                                {
+                                                                                  "name": "argument",
+                                                                                  "term": {
+                                                                                    "application": {
+                                                                                      "argument": {"variable": "arg"},
+                                                                                      "function": {"application": {"argument": {"variable": "dx"}, "function": {"variable": "hydra.differentiation.differentiateTerm"}}}}}}],
+                                                                              "typeName": "hydra.core.Application"}}},
+                                                                        "typeName": "hydra.core.Term"}},
+                                                                    "domain": {"variable": "hydra.core.Term"},
+                                                                    "parameter": "derivTerm"}},
                                                                 "function": {
                                                                   "application": {
                                                                     "argument": {
-                                                                      "lambda": {
-                                                                        "body": {
+                                                                      "application": {
+                                                                        "argument": {
                                                                           "inject": {
                                                                             "field": {
                                                                               "name": "application",
                                                                               "term": {
                                                                                 "record": {
-                                                                                  "fields": [
-                                                                                    {
-                                                                                      "name": "function",
-                                                                                      "term": {
-                                                                                        "inject": {
-                                                                                          "field": {
-                                                                                            "name": "application",
-                                                                                            "term": {
-                                                                                              "record": {
-                                                                                                "fields": [
-                                                                                                  {
-                                                                                                    "name": "function",
-                                                                                                    "term": {
-                                                                                                      "inject": {
-                                                                                                        "field": {
-                                                                                                          "name": "variable",
-                                                                                                          "term": {"wrap": {"body": {"literal": {"string": "hydra.lib.math.mulFloat64"}}, "typeName": "hydra.core.Name"}}},
-                                                                                                        "typeName": "hydra.core.Term"}}},
-                                                                                                  {
-                                                                                                    "name": "argument",
-                                                                                                    "term": {
-                                                                                                      "inject": {
-                                                                                                        "field": {
-                                                                                                          "name": "application",
-                                                                                                          "term": {
-                                                                                                            "record": {
-                                                                                                              "fields": [{"name": "function", "term": {"variable": "derivTerm"}}, {"name": "argument", "term": {"variable": "arg"}}],
-                                                                                                              "typeName": "hydra.core.Application"}}},
-                                                                                                        "typeName": "hydra.core.Term"}}}],
-                                                                                                "typeName": "hydra.core.Application"}}},
-                                                                                          "typeName": "hydra.core.Term"}}},
-                                                                                    {
-                                                                                      "name": "argument",
-                                                                                      "term": {
-                                                                                        "application": {
-                                                                                          "argument": {"variable": "arg"},
-                                                                                          "function": {"application": {"argument": {"variable": "dx"}, "function": {"variable": "hydra.differentiation.differentiateTerm"}}}}}}],
+                                                                                  "fields": [{"name": "function", "term": {"variable": "func"}}, {"name": "argument", "term": {"variable": "arg"}}],
                                                                                   "typeName": "hydra.core.Application"}}},
                                                                             "typeName": "hydra.core.Term"}},
-                                                                        "domain": {"variable": "hydra.core.Term"},
-                                                                        "parameter": "derivTerm"}},
+                                                                        "function": {"application": {"argument": {"variable": "dx"}, "function": {"variable": "hydra.differentiation.differentiateTerm"}}}}},
                                                                     "function": {
                                                                       "application": {
                                                                         "argument": {
-                                                                          "application": {
-                                                                            "argument": {
-                                                                              "inject": {
-                                                                                "field": {
-                                                                                  "name": "application",
-                                                                                  "term": {
-                                                                                    "record": {
-                                                                                      "fields": [{"name": "function", "term": {"variable": "func"}}, {"name": "argument", "term": {"variable": "arg"}}],
-                                                                                      "typeName": "hydra.core.Application"}}},
-                                                                                "typeName": "hydra.core.Term"}},
-                                                                            "function": {"application": {"argument": {"variable": "dx"}, "function": {"variable": "hydra.differentiation.differentiateTerm"}}}}},
+                                                                          "application": {"argument": {"variable": "fname"}, "function": {"variable": "hydra.differentiation.primitiveDerivative"}}},
                                                                         "function": {
                                                                           "typeApplication": {
-                                                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.maybe"}, "type": {"variable": "hydra.core.Term"}}},
+                                                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.cases"}, "type": {"variable": "hydra.core.Term"}}},
                                                                             "type": {"variable": "hydra.core.Term"}}}}}}}}},
                                                             "domain": {"variable": "hydra.core.Name"},
                                                             "parameter": "fname"}},

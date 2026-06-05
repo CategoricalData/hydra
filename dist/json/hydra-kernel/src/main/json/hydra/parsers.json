@@ -1038,97 +1038,94 @@
                                 "body": {
                                   "application": {
                                     "argument": {
-                                      "application": {
-                                        "argument": {"variable": "codes"},
-                                        "function": {
-                                          "typeApplication": {"body": {"variable": "hydra.lib.lists.maybeHead"}, "type": {"literal": {"integer": {"int32": {}}}}}}}},
-                                    "function": {
-                                      "application": {
-                                        "argument": {
-                                          "lambda": {
-                                            "body": {
-                                              "let": {
-                                                "bindings": [
-                                                  {
-                                                    "name": "rest",
-                                                    "term": {
+                                      "lambda": {
+                                        "body": {
+                                          "let": {
+                                            "bindings": [
+                                              {
+                                                "name": "rest",
+                                                "term": {
+                                                  "application": {
+                                                    "argument": {
                                                       "application": {
-                                                        "argument": {
+                                                        "argument": {"variable": "codes"},
+                                                        "function": {
                                                           "application": {
-                                                            "argument": {"variable": "codes"},
-                                                            "function": {
-                                                              "application": {
-                                                                "argument": {"literal": {"integer": {"int32": 1}}},
-                                                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.drop"}, "type": {"literal": {"integer": {"int32": {}}}}}}}}}},
-                                                        "function": {"variable": "hydra.lib.strings.fromList"}}},
-                                                    "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}}],
-                                                "body": {
+                                                            "argument": {"literal": {"integer": {"int32": 1}}},
+                                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.drop"}, "type": {"literal": {"integer": {"int32": {}}}}}}}}}},
+                                                    "function": {"variable": "hydra.lib.strings.fromList"}}},
+                                                "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}}],
+                                            "body": {
+                                              "application": {
+                                                "argument": {
+                                                  "typeApplication": {
+                                                    "body": {
+                                                      "inject": {
+                                                        "field": {
+                                                          "name": "failure",
+                                                          "term": {
+                                                            "record": {
+                                                              "fields": [
+                                                                {"name": "message", "term": {"literal": {"string": "character did not satisfy predicate"}}},
+                                                                {"name": "remainder", "term": {"variable": "input"}}],
+                                                              "typeName": "hydra.parsing.ParseError"}}},
+                                                        "typeName": "hydra.parsing.ParseResult"}},
+                                                    "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                "function": {
                                                   "application": {
                                                     "argument": {
                                                       "typeApplication": {
                                                         "body": {
                                                           "inject": {
                                                             "field": {
-                                                              "name": "failure",
+                                                              "name": "success",
                                                               "term": {
-                                                                "record": {
-                                                                  "fields": [
-                                                                    {"name": "message", "term": {"literal": {"string": "character did not satisfy predicate"}}},
-                                                                    {"name": "remainder", "term": {"variable": "input"}}],
-                                                                  "typeName": "hydra.parsing.ParseError"}}},
+                                                                "typeApplication": {
+                                                                  "body": {
+                                                                    "record": {
+                                                                      "fields": [{"name": "value", "term": {"variable": "c"}}, {"name": "remainder", "term": {"variable": "rest"}}],
+                                                                      "typeName": "hydra.parsing.ParseSuccess"}},
+                                                                  "type": {"literal": {"integer": {"int32": {}}}}}}},
                                                             "typeName": "hydra.parsing.ParseResult"}},
                                                         "type": {"literal": {"integer": {"int32": {}}}}}},
                                                     "function": {
                                                       "application": {
-                                                        "argument": {
-                                                          "typeApplication": {
-                                                            "body": {
-                                                              "inject": {
-                                                                "field": {
-                                                                  "name": "success",
-                                                                  "term": {
-                                                                    "typeApplication": {
-                                                                      "body": {
-                                                                        "record": {
-                                                                          "fields": [{"name": "value", "term": {"variable": "c"}}, {"name": "remainder", "term": {"variable": "rest"}}],
-                                                                          "typeName": "hydra.parsing.ParseSuccess"}},
-                                                                      "type": {"literal": {"integer": {"int32": {}}}}}}},
-                                                                "typeName": "hydra.parsing.ParseResult"}},
-                                                            "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                        "argument": {"application": {"argument": {"variable": "c"}, "function": {"variable": "pred"}}},
                                                         "function": {
-                                                          "application": {
-                                                            "argument": {"application": {"argument": {"variable": "c"}, "function": {"variable": "pred"}}},
-                                                            "function": {
-                                                              "typeApplication": {
-                                                                "body": {"variable": "hydra.lib.logic.ifElse"},
-                                                                "type": {
-                                                                  "application": {"argument": {"literal": {"integer": {"int32": {}}}}, "function": {"variable": "hydra.parsing.ParseResult"}}}}}}}}}}}}},
-                                            "domain": {"literal": {"integer": {"int32": {}}}},
-                                            "parameter": "c"}},
+                                                          "typeApplication": {
+                                                            "body": {"variable": "hydra.lib.logic.ifElse"},
+                                                            "type": {
+                                                              "application": {"argument": {"literal": {"integer": {"int32": {}}}}, "function": {"variable": "hydra.parsing.ParseResult"}}}}}}}}}}}}},
+                                        "domain": {"literal": {"integer": {"int32": {}}}},
+                                        "parameter": "c"}},
+                                    "function": {
+                                      "application": {
+                                        "argument": {
+                                          "typeApplication": {
+                                            "body": {
+                                              "inject": {
+                                                "field": {
+                                                  "name": "failure",
+                                                  "term": {
+                                                    "record": {
+                                                      "fields": [
+                                                        {"name": "message", "term": {"literal": {"string": "unexpected end of input"}}},
+                                                        {"name": "remainder", "term": {"variable": "input"}}],
+                                                      "typeName": "hydra.parsing.ParseError"}}},
+                                                "typeName": "hydra.parsing.ParseResult"}},
+                                            "type": {"literal": {"integer": {"int32": {}}}}}},
                                         "function": {
                                           "application": {
                                             "argument": {
-                                              "typeApplication": {
-                                                "body": {
-                                                  "inject": {
-                                                    "field": {
-                                                      "name": "failure",
-                                                      "term": {
-                                                        "record": {
-                                                          "fields": [
-                                                            {"name": "message", "term": {"literal": {"string": "unexpected end of input"}}},
-                                                            {"name": "remainder", "term": {"variable": "input"}}],
-                                                          "typeName": "hydra.parsing.ParseError"}}},
-                                                    "typeName": "hydra.parsing.ParseResult"}},
-                                                "type": {"literal": {"integer": {"int32": {}}}}}},
+                                              "application": {
+                                                "argument": {"variable": "codes"},
+                                                "function": {
+                                                  "typeApplication": {"body": {"variable": "hydra.lib.lists.maybeHead"}, "type": {"literal": {"integer": {"int32": {}}}}}}}},
                                             "function": {
                                               "typeApplication": {
-                                                "body": {
-                                                  "typeApplication": {
-                                                    "body": {"variable": "hydra.lib.maybes.maybe"},
-                                                    "type": {
-                                                      "application": {"argument": {"literal": {"integer": {"int32": {}}}}, "function": {"variable": "hydra.parsing.ParseResult"}}}}},
-                                                "type": {"literal": {"integer": {"int32": {}}}}}}}}}}}}}},
+                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.cases"}, "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                "type": {
+                                                  "application": {"argument": {"literal": {"integer": {"int32": {}}}}, "function": {"variable": "hydra.parsing.ParseResult"}}}}}}}}}}}}},
                             "domain": {"literal": {"string": {}}},
                             "parameter": "input"}},
                         "typeScheme": {

@@ -83,10 +83,10 @@ escapeControlCharsInJson input =
                     (hexDigit (Maybes.fromMaybe 0 (Math.maybeDiv b 16))),
                     (hexDigit (Maybes.fromMaybe 0 (Math.maybeMod b 16)))]
           go =
-                  \inStr -> \esc -> \bytes -> Maybes.maybe [] (\uc ->
+                  \inStr -> \esc -> \bytes -> Maybes.cases (Lists.uncons bytes) [] (\uc ->
                     let b = Pairs.first uc
                         bs = Pairs.second uc
-                    in (Logic.ifElse esc (Lists.cons b (go inStr False bs)) (Logic.ifElse (Logic.and (Equality.equal b 92) inStr) (Lists.cons b (go inStr True bs)) (Logic.ifElse (Equality.equal b 34) (Lists.cons b (go (Logic.not inStr) False bs)) (Logic.ifElse (Logic.and inStr (Equality.lt b 32)) (Lists.concat2 (escapeToUnicode b) (go inStr False bs)) (Lists.cons b (go inStr False bs))))))) (Lists.uncons bytes)
+                    in (Logic.ifElse esc (Lists.cons b (go inStr False bs)) (Logic.ifElse (Logic.and (Equality.equal b 92) inStr) (Lists.cons b (go inStr True bs)) (Logic.ifElse (Equality.equal b 34) (Lists.cons b (go (Logic.not inStr) False bs)) (Logic.ifElse (Logic.and inStr (Equality.lt b 32)) (Lists.concat2 (escapeToUnicode b) (go inStr False bs)) (Lists.cons b (go inStr False bs)))))))
       in (go False False input)
 -- | Format a primitive for the lexicon
 formatPrimitive :: Graph.Primitive -> String
@@ -101,7 +101,7 @@ formatTermBinding :: Core.Binding -> String
 formatTermBinding binding =
 
       let name = Core.unName (Core.bindingName binding)
-          typeStr = Maybes.maybe "?" (\scheme -> ShowCore.typeScheme scheme) (Core.bindingTypeScheme binding)
+          typeStr = Maybes.cases (Core.bindingTypeScheme binding) "?" (\scheme -> ShowCore.typeScheme scheme)
       in (Strings.cat2 (Strings.cat2 (Strings.cat2 "  " name) " : ") typeStr)
 -- | Format a type binding for the lexicon
 formatTypeBinding :: Graph.Graph -> Core.Binding -> Either Errors.Error String
@@ -513,7 +513,7 @@ transitiveDeps getDeps nsMap startMods =
                   \pending -> \visited -> Logic.ifElse (Sets.null pending) visited (
                     let newVisited = Sets.union visited pending
                         nextDeps =
-                                Sets.fromList (Lists.concat (Lists.map (\nsv -> Maybes.maybe [] (\depMod -> getDeps depMod) (Maps.lookup nsv nsMap)) (Sets.toList pending)))
+                                Sets.fromList (Lists.concat (Lists.map (\nsv -> Maybes.cases (Maps.lookup nsv nsMap) [] (\depMod -> getDeps depMod)) (Sets.toList pending)))
                         newPending = Sets.difference nextDeps newVisited
                     in (go newPending newVisited))
       in (go initialDeps Sets.empty)

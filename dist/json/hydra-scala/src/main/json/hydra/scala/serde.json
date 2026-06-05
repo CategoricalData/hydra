@@ -875,33 +875,33 @@
                                         "name": "nameAndType",
                                         "term": {
                                           "application": {
-                                            "argument": {"variable": "typ"},
+                                            "argument": {
+                                              "lambda": {
+                                                "body": {
+                                                  "application": {
+                                                    "argument": {
+                                                      "list": [
+                                                        {
+                                                          "application": {
+                                                            "argument": {
+                                                              "application": {
+                                                                "argument": {"literal": {"string": ":"}},
+                                                                "function": {"application": {"argument": {"variable": "nameStr"}, "function": {"variable": "hydra.lib.strings.cat2"}}}}},
+                                                            "function": {"variable": "hydra.serialization.cst"}}},
+                                                        {"application": {"argument": {"variable": "t"}, "function": {"variable": "hydra.scala.serde.typeToExpr"}}}]},
+                                                    "function": {"variable": "hydra.serialization.spaceSep"}}},
+                                                "domain": {"variable": "hydra.scala.syntax.Type"},
+                                                "parameter": "t"}},
                                             "function": {
                                               "application": {
-                                                "argument": {
-                                                  "lambda": {
-                                                    "body": {
-                                                      "application": {
-                                                        "argument": {
-                                                          "list": [
-                                                            {
-                                                              "application": {
-                                                                "argument": {
-                                                                  "application": {
-                                                                    "argument": {"literal": {"string": ":"}},
-                                                                    "function": {"application": {"argument": {"variable": "nameStr"}, "function": {"variable": "hydra.lib.strings.cat2"}}}}},
-                                                                "function": {"variable": "hydra.serialization.cst"}}},
-                                                            {"application": {"argument": {"variable": "t"}, "function": {"variable": "hydra.scala.serde.typeToExpr"}}}]},
-                                                        "function": {"variable": "hydra.serialization.spaceSep"}}},
-                                                    "domain": {"variable": "hydra.scala.syntax.Type"},
-                                                    "parameter": "t"}},
+                                                "argument": {"application": {"argument": {"variable": "nameStr"}, "function": {"variable": "hydra.serialization.cst"}}},
                                                 "function": {
                                                   "application": {
-                                                    "argument": {"application": {"argument": {"variable": "nameStr"}, "function": {"variable": "hydra.serialization.cst"}}},
+                                                    "argument": {"variable": "typ"},
                                                     "function": {
                                                       "typeApplication": {
-                                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.maybe"}, "type": {"variable": "hydra.ast.Expr"}}},
-                                                        "type": {"variable": "hydra.scala.syntax.Type"}}}}}}}}},
+                                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.cases"}, "type": {"variable": "hydra.scala.syntax.Type"}}},
+                                                        "type": {"variable": "hydra.ast.Expr"}}}}}}}}},
                                         "typeScheme": {"body": {"variable": "hydra.ast.Expr"}, "variables": []}},
                                       {
                                         "name": "valKeyword",

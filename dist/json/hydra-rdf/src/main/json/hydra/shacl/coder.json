@@ -562,288 +562,288 @@
                                 "argument": {
                                   "application": {
                                     "argument": {
-                                      "application": {
-                                        "argument": {"variable": "terms"},
-                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.uncons"}, "type": {"variable": "hydra.core.Term"}}}}},
-                                    "function": {
-                                      "application": {
-                                        "argument": {
-                                          "lambda": {
-                                            "body": {
-                                              "let": {
-                                                "bindings": [
-                                                  {
-                                                    "name": "pair1",
-                                                    "term": {"application": {"argument": {"variable": "cx0"}, "function": {"variable": "hydra.rdf.utils.nextBlankNode"}}},
-                                                    "typeScheme": {
-                                                      "body": {"pair": {"first": {"variable": "hydra.rdf.syntax.Resource"}, "second": {"literal": {"integer": {"int32": {}}}}}},
-                                                      "variables": []}},
-                                                  {
-                                                    "name": "node1",
-                                                    "term": {
-                                                      "application": {
-                                                        "argument": {"variable": "pair1"},
-                                                        "function": {
-                                                          "typeApplication": {
-                                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.pairs.first"}, "type": {"variable": "hydra.rdf.syntax.Resource"}}},
-                                                            "type": {"literal": {"integer": {"int32": {}}}}}}}},
-                                                    "typeScheme": {"body": {"variable": "hydra.rdf.syntax.Resource"}, "variables": []}},
-                                                  {
-                                                    "name": "cx1",
-                                                    "term": {
-                                                      "application": {
-                                                        "argument": {"variable": "pair1"},
-                                                        "function": {
-                                                          "typeApplication": {
-                                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.pairs.second"}, "type": {"variable": "hydra.rdf.syntax.Resource"}}},
-                                                            "type": {"literal": {"integer": {"int32": {}}}}}}}},
-                                                    "typeScheme": {"body": {"literal": {"integer": {"int32": {}}}}, "variables": []}}],
-                                                "body": {
+                                      "lambda": {
+                                        "body": {
+                                          "let": {
+                                            "bindings": [
+                                              {
+                                                "name": "pair1",
+                                                "term": {"application": {"argument": {"variable": "cx0"}, "function": {"variable": "hydra.rdf.utils.nextBlankNode"}}},
+                                                "typeScheme": {
+                                                  "body": {"pair": {"first": {"variable": "hydra.rdf.syntax.Resource"}, "second": {"literal": {"integer": {"int32": {}}}}}},
+                                                  "variables": []}},
+                                              {
+                                                "name": "node1",
+                                                "term": {
                                                   "application": {
-                                                    "argument": {
-                                                      "lambda": {
-                                                        "body": {
-                                                          "let": {
-                                                            "bindings": [
-                                                              {
-                                                                "name": "fdescs",
-                                                                "term": {
-                                                                  "application": {
-                                                                    "argument": {"variable": "__r1"},
-                                                                    "function": {
-                                                                      "typeApplication": {
-                                                                        "body": {
-                                                                          "typeApplication": {"body": {"variable": "hydra.lib.pairs.first"}, "type": {"list": {"variable": "hydra.rdf.syntax.Description"}}}},
-                                                                        "type": {"literal": {"integer": {"int32": {}}}}}}}},
-                                                                "typeScheme": {"body": {"list": {"variable": "hydra.rdf.syntax.Description"}}, "variables": []}},
-                                                              {
-                                                                "name": "cx2",
-                                                                "term": {
-                                                                  "application": {
-                                                                    "argument": {"variable": "__r1"},
-                                                                    "function": {
-                                                                      "typeApplication": {
-                                                                        "body": {
-                                                                          "typeApplication": {"body": {"variable": "hydra.lib.pairs.second"}, "type": {"list": {"variable": "hydra.rdf.syntax.Description"}}}},
-                                                                        "type": {"literal": {"integer": {"int32": {}}}}}}}},
-                                                                "typeScheme": {"body": {"literal": {"integer": {"int32": {}}}}, "variables": []}},
-                                                              {
-                                                                "name": "firstTriples",
-                                                                "term": {
-                                                                  "application": {
-                                                                    "argument": {
-                                                                      "application": {
-                                                                        "argument": {"application": {"argument": {"variable": "fdescs"}, "function": {"variable": "hydra.rdf.utils.subjectsOf"}}},
-                                                                        "function": {
-                                                                          "application": {
-                                                                            "argument": {"application": {"argument": {"literal": {"string": "first"}}, "function": {"variable": "hydra.rdf.utils.rdfIri"}}},
-                                                                            "function": {"application": {"argument": {"variable": "subj"}, "function": {"variable": "hydra.rdf.utils.forObjects"}}}}}}},
-                                                                    "function": {
-                                                                      "application": {
-                                                                        "argument": {"application": {"argument": {"variable": "fdescs"}, "function": {"variable": "hydra.rdf.utils.triplesOf"}}},
-                                                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.concat2"}, "type": {"variable": "hydra.rdf.syntax.Triple"}}}}}}},
-                                                                "typeScheme": {"body": {"list": {"variable": "hydra.rdf.syntax.Triple"}}, "variables": []}},
-                                                              {
-                                                                "name": "pair2",
-                                                                "term": {"application": {"argument": {"variable": "cx2"}, "function": {"variable": "hydra.rdf.utils.nextBlankNode"}}},
-                                                                "typeScheme": {
-                                                                  "body": {"pair": {"first": {"variable": "hydra.rdf.syntax.Resource"}, "second": {"literal": {"integer": {"int32": {}}}}}},
-                                                                  "variables": []}},
-                                                              {
-                                                                "name": "next",
-                                                                "term": {
-                                                                  "application": {
-                                                                    "argument": {"variable": "pair2"},
-                                                                    "function": {
-                                                                      "typeApplication": {
-                                                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.pairs.first"}, "type": {"variable": "hydra.rdf.syntax.Resource"}}},
-                                                                        "type": {"literal": {"integer": {"int32": {}}}}}}}},
-                                                                "typeScheme": {"body": {"variable": "hydra.rdf.syntax.Resource"}, "variables": []}},
-                                                              {
-                                                                "name": "cx3",
-                                                                "term": {
-                                                                  "application": {
-                                                                    "argument": {"variable": "pair2"},
-                                                                    "function": {
-                                                                      "typeApplication": {
-                                                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.pairs.second"}, "type": {"variable": "hydra.rdf.syntax.Resource"}}},
-                                                                        "type": {"literal": {"integer": {"int32": {}}}}}}}},
-                                                                "typeScheme": {"body": {"literal": {"integer": {"int32": {}}}}, "variables": []}}],
-                                                            "body": {
+                                                    "argument": {"variable": "pair1"},
+                                                    "function": {
+                                                      "typeApplication": {
+                                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.pairs.first"}, "type": {"variable": "hydra.rdf.syntax.Resource"}}},
+                                                        "type": {"literal": {"integer": {"int32": {}}}}}}}},
+                                                "typeScheme": {"body": {"variable": "hydra.rdf.syntax.Resource"}, "variables": []}},
+                                              {
+                                                "name": "cx1",
+                                                "term": {
+                                                  "application": {
+                                                    "argument": {"variable": "pair1"},
+                                                    "function": {
+                                                      "typeApplication": {
+                                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.pairs.second"}, "type": {"variable": "hydra.rdf.syntax.Resource"}}},
+                                                        "type": {"literal": {"integer": {"int32": {}}}}}}}},
+                                                "typeScheme": {"body": {"literal": {"integer": {"int32": {}}}}, "variables": []}}],
+                                            "body": {
+                                              "application": {
+                                                "argument": {
+                                                  "lambda": {
+                                                    "body": {
+                                                      "let": {
+                                                        "bindings": [
+                                                          {
+                                                            "name": "fdescs",
+                                                            "term": {
+                                                              "application": {
+                                                                "argument": {"variable": "__r1"},
+                                                                "function": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "typeApplication": {"body": {"variable": "hydra.lib.pairs.first"}, "type": {"list": {"variable": "hydra.rdf.syntax.Description"}}}},
+                                                                    "type": {"literal": {"integer": {"int32": {}}}}}}}},
+                                                            "typeScheme": {"body": {"list": {"variable": "hydra.rdf.syntax.Description"}}, "variables": []}},
+                                                          {
+                                                            "name": "cx2",
+                                                            "term": {
+                                                              "application": {
+                                                                "argument": {"variable": "__r1"},
+                                                                "function": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "typeApplication": {"body": {"variable": "hydra.lib.pairs.second"}, "type": {"list": {"variable": "hydra.rdf.syntax.Description"}}}},
+                                                                    "type": {"literal": {"integer": {"int32": {}}}}}}}},
+                                                            "typeScheme": {"body": {"literal": {"integer": {"int32": {}}}}, "variables": []}},
+                                                          {
+                                                            "name": "firstTriples",
+                                                            "term": {
                                                               "application": {
                                                                 "argument": {
                                                                   "application": {
-                                                                    "argument": {"variable": "g"},
+                                                                    "argument": {"application": {"argument": {"variable": "fdescs"}, "function": {"variable": "hydra.rdf.utils.subjectsOf"}}},
                                                                     "function": {
                                                                       "application": {
-                                                                        "argument": {"variable": "cx3"},
-                                                                        "function": {
-                                                                          "application": {
-                                                                            "argument": {
-                                                                              "application": {
-                                                                                "argument": {"variable": "p"},
-                                                                                "function": {
-                                                                                  "typeApplication": {
-                                                                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.pairs.second"}, "type": {"variable": "hydra.core.Term"}}},
-                                                                                    "type": {"list": {"variable": "hydra.core.Term"}}}}}},
-                                                                            "function": {"application": {"argument": {"variable": "next"}, "function": {"variable": "hydra.shacl.coder.encodeList"}}}}}}}}},
+                                                                        "argument": {"application": {"argument": {"literal": {"string": "first"}}, "function": {"variable": "hydra.rdf.utils.rdfIri"}}},
+                                                                        "function": {"application": {"argument": {"variable": "subj"}, "function": {"variable": "hydra.rdf.utils.forObjects"}}}}}}},
                                                                 "function": {
                                                                   "application": {
-                                                                    "argument": {
-                                                                      "lambda": {
+                                                                    "argument": {"application": {"argument": {"variable": "fdescs"}, "function": {"variable": "hydra.rdf.utils.triplesOf"}}},
+                                                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.concat2"}, "type": {"variable": "hydra.rdf.syntax.Triple"}}}}}}},
+                                                            "typeScheme": {"body": {"list": {"variable": "hydra.rdf.syntax.Triple"}}, "variables": []}},
+                                                          {
+                                                            "name": "pair2",
+                                                            "term": {"application": {"argument": {"variable": "cx2"}, "function": {"variable": "hydra.rdf.utils.nextBlankNode"}}},
+                                                            "typeScheme": {
+                                                              "body": {"pair": {"first": {"variable": "hydra.rdf.syntax.Resource"}, "second": {"literal": {"integer": {"int32": {}}}}}},
+                                                              "variables": []}},
+                                                          {
+                                                            "name": "next",
+                                                            "term": {
+                                                              "application": {
+                                                                "argument": {"variable": "pair2"},
+                                                                "function": {
+                                                                  "typeApplication": {
+                                                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.pairs.first"}, "type": {"variable": "hydra.rdf.syntax.Resource"}}},
+                                                                    "type": {"literal": {"integer": {"int32": {}}}}}}}},
+                                                            "typeScheme": {"body": {"variable": "hydra.rdf.syntax.Resource"}, "variables": []}},
+                                                          {
+                                                            "name": "cx3",
+                                                            "term": {
+                                                              "application": {
+                                                                "argument": {"variable": "pair2"},
+                                                                "function": {
+                                                                  "typeApplication": {
+                                                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.pairs.second"}, "type": {"variable": "hydra.rdf.syntax.Resource"}}},
+                                                                    "type": {"literal": {"integer": {"int32": {}}}}}}}},
+                                                            "typeScheme": {"body": {"literal": {"integer": {"int32": {}}}}, "variables": []}}],
+                                                        "body": {
+                                                          "application": {
+                                                            "argument": {
+                                                              "application": {
+                                                                "argument": {"variable": "g"},
+                                                                "function": {
+                                                                  "application": {
+                                                                    "argument": {"variable": "cx3"},
+                                                                    "function": {
+                                                                      "application": {
+                                                                        "argument": {
+                                                                          "application": {
+                                                                            "argument": {"variable": "p"},
+                                                                            "function": {
+                                                                              "typeApplication": {
+                                                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.pairs.second"}, "type": {"variable": "hydra.core.Term"}}},
+                                                                                "type": {"list": {"variable": "hydra.core.Term"}}}}}},
+                                                                        "function": {"application": {"argument": {"variable": "next"}, "function": {"variable": "hydra.shacl.coder.encodeList"}}}}}}}}},
+                                                            "function": {
+                                                              "application": {
+                                                                "argument": {
+                                                                  "lambda": {
+                                                                    "body": {
+                                                                      "let": {
+                                                                        "bindings": [
+                                                                          {
+                                                                            "name": "rdescs",
+                                                                            "term": {
+                                                                              "application": {
+                                                                                "argument": {"variable": "__r2"},
+                                                                                "function": {
+                                                                                  "typeApplication": {
+                                                                                    "body": {
+                                                                                      "typeApplication": {"body": {"variable": "hydra.lib.pairs.first"}, "type": {"list": {"variable": "hydra.rdf.syntax.Description"}}}},
+                                                                                    "type": {"literal": {"integer": {"int32": {}}}}}}}},
+                                                                            "typeScheme": {"body": {"list": {"variable": "hydra.rdf.syntax.Description"}}, "variables": []}},
+                                                                          {
+                                                                            "name": "cx4",
+                                                                            "term": {
+                                                                              "application": {
+                                                                                "argument": {"variable": "__r2"},
+                                                                                "function": {
+                                                                                  "typeApplication": {
+                                                                                    "body": {
+                                                                                      "typeApplication": {"body": {"variable": "hydra.lib.pairs.second"}, "type": {"list": {"variable": "hydra.rdf.syntax.Description"}}}},
+                                                                                    "type": {"literal": {"integer": {"int32": {}}}}}}}},
+                                                                            "typeScheme": {"body": {"literal": {"integer": {"int32": {}}}}, "variables": []}},
+                                                                          {
+                                                                            "name": "restTriples",
+                                                                            "term": {
+                                                                              "application": {
+                                                                                "argument": {
+                                                                                  "application": {
+                                                                                    "argument": {"application": {"argument": {"variable": "rdescs"}, "function": {"variable": "hydra.rdf.utils.subjectsOf"}}},
+                                                                                    "function": {
+                                                                                      "application": {
+                                                                                        "argument": {"application": {"argument": {"literal": {"string": "rest"}}, "function": {"variable": "hydra.rdf.utils.rdfIri"}}},
+                                                                                        "function": {"application": {"argument": {"variable": "subj"}, "function": {"variable": "hydra.rdf.utils.forObjects"}}}}}}},
+                                                                                "function": {
+                                                                                  "application": {
+                                                                                    "argument": {"application": {"argument": {"variable": "rdescs"}, "function": {"variable": "hydra.rdf.utils.triplesOf"}}},
+                                                                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.concat2"}, "type": {"variable": "hydra.rdf.syntax.Triple"}}}}}}},
+                                                                            "typeScheme": {"body": {"list": {"variable": "hydra.rdf.syntax.Triple"}}, "variables": []}}],
                                                                         "body": {
-                                                                          "let": {
-                                                                            "bindings": [
-                                                                              {
-                                                                                "name": "rdescs",
-                                                                                "term": {
-                                                                                  "application": {
-                                                                                    "argument": {"variable": "__r2"},
-                                                                                    "function": {
-                                                                                      "typeApplication": {
-                                                                                        "body": {
-                                                                                          "typeApplication": {"body": {"variable": "hydra.lib.pairs.first"}, "type": {"list": {"variable": "hydra.rdf.syntax.Description"}}}},
-                                                                                        "type": {"literal": {"integer": {"int32": {}}}}}}}},
-                                                                                "typeScheme": {"body": {"list": {"variable": "hydra.rdf.syntax.Description"}}, "variables": []}},
-                                                                              {
-                                                                                "name": "cx4",
-                                                                                "term": {
-                                                                                  "application": {
-                                                                                    "argument": {"variable": "__r2"},
-                                                                                    "function": {
-                                                                                      "typeApplication": {
-                                                                                        "body": {
-                                                                                          "typeApplication": {"body": {"variable": "hydra.lib.pairs.second"}, "type": {"list": {"variable": "hydra.rdf.syntax.Description"}}}},
-                                                                                        "type": {"literal": {"integer": {"int32": {}}}}}}}},
-                                                                                "typeScheme": {"body": {"literal": {"integer": {"int32": {}}}}, "variables": []}},
-                                                                              {
-                                                                                "name": "restTriples",
-                                                                                "term": {
-                                                                                  "application": {
-                                                                                    "argument": {
-                                                                                      "application": {
-                                                                                        "argument": {"application": {"argument": {"variable": "rdescs"}, "function": {"variable": "hydra.rdf.utils.subjectsOf"}}},
-                                                                                        "function": {
-                                                                                          "application": {
-                                                                                            "argument": {"application": {"argument": {"literal": {"string": "rest"}}, "function": {"variable": "hydra.rdf.utils.rdfIri"}}},
-                                                                                            "function": {"application": {"argument": {"variable": "subj"}, "function": {"variable": "hydra.rdf.utils.forObjects"}}}}}}},
-                                                                                    "function": {
-                                                                                      "application": {
-                                                                                        "argument": {"application": {"argument": {"variable": "rdescs"}, "function": {"variable": "hydra.rdf.utils.triplesOf"}}},
-                                                                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.concat2"}, "type": {"variable": "hydra.rdf.syntax.Triple"}}}}}}},
-                                                                                "typeScheme": {"body": {"list": {"variable": "hydra.rdf.syntax.Triple"}}, "variables": []}}],
+                                                                          "typeApplication": {
                                                                             "body": {
                                                                               "typeApplication": {
                                                                                 "body": {
-                                                                                  "typeApplication": {
-                                                                                    "body": {
-                                                                                      "pair": {
-                                                                                        "first": {
-                                                                                          "list": [
-                                                                                            {
-                                                                                              "record": {
-                                                                                                "fields": [
-                                                                                                  {
-                                                                                                    "name": "subject",
-                                                                                                    "term": {"application": {"argument": {"variable": "subj"}, "function": {"variable": "hydra.rdf.utils.resourceToNode"}}}},
-                                                                                                  {
-                                                                                                    "name": "graph",
-                                                                                                    "term": {
-                                                                                                      "wrap": {
-                                                                                                        "body": {
+                                                                                  "pair": {
+                                                                                    "first": {
+                                                                                      "list": [
+                                                                                        {
+                                                                                          "record": {
+                                                                                            "fields": [
+                                                                                              {
+                                                                                                "name": "subject",
+                                                                                                "term": {"application": {"argument": {"variable": "subj"}, "function": {"variable": "hydra.rdf.utils.resourceToNode"}}}},
+                                                                                              {
+                                                                                                "name": "graph",
+                                                                                                "term": {
+                                                                                                  "wrap": {
+                                                                                                    "body": {
+                                                                                                      "application": {
+                                                                                                        "argument": {
                                                                                                           "application": {
-                                                                                                            "argument": {
+                                                                                                            "argument": {"variable": "restTriples"},
+                                                                                                            "function": {
                                                                                                               "application": {
-                                                                                                                "argument": {"variable": "restTriples"},
-                                                                                                                "function": {
-                                                                                                                  "application": {
-                                                                                                                    "argument": {"variable": "firstTriples"},
-                                                                                                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.concat2"}, "type": {"variable": "hydra.rdf.syntax.Triple"}}}}}}},
-                                                                                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.sets.fromList"}, "type": {"variable": "hydra.rdf.syntax.Triple"}}}}},
-                                                                                                        "typeName": "hydra.rdf.syntax.Graph"}}}],
-                                                                                                "typeName": "hydra.rdf.syntax.Description"}}]},
-                                                                                        "second": {"variable": "cx4"}}},
-                                                                                    "type": {"list": {"variable": "hydra.rdf.syntax.Description"}}}},
-                                                                                "type": {"literal": {"integer": {"int32": {}}}}}}}},
-                                                                        "domain": {
-                                                                          "pair": {"first": {"list": {"variable": "hydra.rdf.syntax.Description"}}, "second": {"literal": {"integer": {"int32": {}}}}}},
-                                                                        "parameter": "__r2"}},
-                                                                    "function": {
+                                                                                                                "argument": {"variable": "firstTriples"},
+                                                                                                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.concat2"}, "type": {"variable": "hydra.rdf.syntax.Triple"}}}}}}},
+                                                                                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.sets.fromList"}, "type": {"variable": "hydra.rdf.syntax.Triple"}}}}},
+                                                                                                    "typeName": "hydra.rdf.syntax.Graph"}}}],
+                                                                                            "typeName": "hydra.rdf.syntax.Description"}}]},
+                                                                                    "second": {"variable": "cx4"}}},
+                                                                                "type": {"list": {"variable": "hydra.rdf.syntax.Description"}}}},
+                                                                            "type": {"literal": {"integer": {"int32": {}}}}}}}},
+                                                                    "domain": {
+                                                                      "pair": {"first": {"list": {"variable": "hydra.rdf.syntax.Description"}}, "second": {"literal": {"integer": {"int32": {}}}}}},
+                                                                    "parameter": "__r2"}},
+                                                                "function": {
+                                                                  "typeApplication": {
+                                                                    "body": {
                                                                       "typeApplication": {
                                                                         "body": {
                                                                           "typeApplication": {
-                                                                            "body": {
-                                                                              "typeApplication": {
-                                                                                "body": {"variable": "hydra.lib.eithers.map"},
-                                                                                "type": {
-                                                                                  "pair": {"first": {"list": {"variable": "hydra.rdf.syntax.Description"}}, "second": {"literal": {"integer": {"int32": {}}}}}}}},
+                                                                            "body": {"variable": "hydra.lib.eithers.map"},
                                                                             "type": {
                                                                               "pair": {"first": {"list": {"variable": "hydra.rdf.syntax.Description"}}, "second": {"literal": {"integer": {"int32": {}}}}}}}},
-                                                                        "type": {"variable": "hydra.errors.Error"}}}}}}}}},
-                                                        "domain": {
-                                                          "pair": {"first": {"list": {"variable": "hydra.rdf.syntax.Description"}}, "second": {"literal": {"integer": {"int32": {}}}}}},
-                                                        "parameter": "__r1"}},
-                                                    "function": {
+                                                                        "type": {
+                                                                          "pair": {"first": {"list": {"variable": "hydra.rdf.syntax.Description"}}, "second": {"literal": {"integer": {"int32": {}}}}}}}},
+                                                                    "type": {"variable": "hydra.errors.Error"}}}}}}}}},
+                                                    "domain": {
+                                                      "pair": {"first": {"list": {"variable": "hydra.rdf.syntax.Description"}}, "second": {"literal": {"integer": {"int32": {}}}}}},
+                                                    "parameter": "__r1"}},
+                                                "function": {
+                                                  "application": {
+                                                    "argument": {
                                                       "application": {
-                                                        "argument": {
+                                                        "argument": {"variable": "g"},
+                                                        "function": {
                                                           "application": {
-                                                            "argument": {"variable": "g"},
+                                                            "argument": {"variable": "cx1"},
                                                             "function": {
                                                               "application": {
-                                                                "argument": {"variable": "cx1"},
-                                                                "function": {
+                                                                "argument": {
                                                                   "application": {
-                                                                    "argument": {
-                                                                      "application": {
-                                                                        "argument": {"variable": "p"},
-                                                                        "function": {
-                                                                          "typeApplication": {
-                                                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.pairs.first"}, "type": {"variable": "hydra.core.Term"}}},
-                                                                            "type": {"list": {"variable": "hydra.core.Term"}}}}}},
-                                                                    "function": {"application": {"argument": {"variable": "node1"}, "function": {"variable": "hydra.shacl.coder.encodeTerm"}}}}}}}}},
-                                                        "function": {
+                                                                    "argument": {"variable": "p"},
+                                                                    "function": {
+                                                                      "typeApplication": {
+                                                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.pairs.first"}, "type": {"variable": "hydra.core.Term"}}},
+                                                                        "type": {"list": {"variable": "hydra.core.Term"}}}}}},
+                                                                "function": {"application": {"argument": {"variable": "node1"}, "function": {"variable": "hydra.shacl.coder.encodeTerm"}}}}}}}}},
+                                                    "function": {
+                                                      "typeApplication": {
+                                                        "body": {
+                                                          "typeApplication": {
+                                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.bind"}, "type": {"variable": "hydra.errors.Error"}}},
+                                                            "type": {
+                                                              "pair": {"first": {"list": {"variable": "hydra.rdf.syntax.Description"}}, "second": {"literal": {"integer": {"int32": {}}}}}}}},
+                                                        "type": {
+                                                          "pair": {"first": {"list": {"variable": "hydra.rdf.syntax.Description"}}, "second": {"literal": {"integer": {"int32": {}}}}}}}}}}}}}},
+                                        "domain": {"pair": {"first": {"variable": "hydra.core.Term"}, "second": {"list": {"variable": "hydra.core.Term"}}}},
+                                        "parameter": "p"}},
+                                    "function": {
+                                      "application": {
+                                        "argument": {
+                                          "typeApplication": {
+                                            "body": {
+                                              "typeApplication": {
+                                                "body": {
+                                                  "either": {
+                                                    "right": {
+                                                      "typeApplication": {
+                                                        "body": {
                                                           "typeApplication": {
                                                             "body": {
-                                                              "typeApplication": {
-                                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.bind"}, "type": {"variable": "hydra.errors.Error"}}},
-                                                                "type": {
-                                                                  "pair": {"first": {"list": {"variable": "hydra.rdf.syntax.Description"}}, "second": {"literal": {"integer": {"int32": {}}}}}}}},
-                                                            "type": {
-                                                              "pair": {"first": {"list": {"variable": "hydra.rdf.syntax.Description"}}, "second": {"literal": {"integer": {"int32": {}}}}}}}}}}}}}},
-                                            "domain": {"pair": {"first": {"variable": "hydra.core.Term"}, "second": {"list": {"variable": "hydra.core.Term"}}}},
-                                            "parameter": "p"}},
+                                                              "pair": {
+                                                                "first": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.rdf.syntax.Description"}}},
+                                                                "second": {"variable": "cx0"}}},
+                                                            "type": {"list": {"variable": "hydra.rdf.syntax.Description"}}}},
+                                                        "type": {"literal": {"integer": {"int32": {}}}}}}}},
+                                                "type": {"variable": "hydra.errors.Error"}}},
+                                            "type": {
+                                              "pair": {"first": {"list": {"variable": "hydra.rdf.syntax.Description"}}, "second": {"literal": {"integer": {"int32": {}}}}}}}},
                                         "function": {
                                           "application": {
                                             "argument": {
-                                              "typeApplication": {
-                                                "body": {
-                                                  "typeApplication": {
-                                                    "body": {
-                                                      "either": {
-                                                        "right": {
-                                                          "typeApplication": {
-                                                            "body": {
-                                                              "typeApplication": {
-                                                                "body": {
-                                                                  "pair": {
-                                                                    "first": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.rdf.syntax.Description"}}},
-                                                                    "second": {"variable": "cx0"}}},
-                                                                "type": {"list": {"variable": "hydra.rdf.syntax.Description"}}}},
-                                                            "type": {"literal": {"integer": {"int32": {}}}}}}}},
-                                                    "type": {"variable": "hydra.errors.Error"}}},
-                                                "type": {
-                                                  "pair": {"first": {"list": {"variable": "hydra.rdf.syntax.Description"}}, "second": {"literal": {"integer": {"int32": {}}}}}}}},
+                                              "application": {
+                                                "argument": {"variable": "terms"},
+                                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.uncons"}, "type": {"variable": "hydra.core.Term"}}}}},
                                             "function": {
                                               "typeApplication": {
                                                 "body": {
                                                   "typeApplication": {
-                                                    "body": {"variable": "hydra.lib.maybes.maybe"},
-                                                    "type": {
-                                                      "either": {
-                                                        "left": {"variable": "hydra.errors.Error"},
-                                                        "right": {
-                                                          "pair": {"first": {"list": {"variable": "hydra.rdf.syntax.Description"}}, "second": {"literal": {"integer": {"int32": {}}}}}}}}}},
-                                                "type": {"pair": {"first": {"variable": "hydra.core.Term"}, "second": {"list": {"variable": "hydra.core.Term"}}}}}}}}}}}},
+                                                    "body": {"variable": "hydra.lib.maybes.cases"},
+                                                    "type": {"pair": {"first": {"variable": "hydra.core.Term"}, "second": {"list": {"variable": "hydra.core.Term"}}}}}},
+                                                "type": {
+                                                  "either": {
+                                                    "left": {"variable": "hydra.errors.Error"},
+                                                    "right": {
+                                                      "pair": {"first": {"list": {"variable": "hydra.rdf.syntax.Description"}}, "second": {"literal": {"integer": {"int32": {}}}}}}}}}}}}}}}},
                                 "function": {
                                   "application": {
                                     "argument": {
@@ -1586,55 +1586,52 @@
                                           "lambda": {
                                             "body": {
                                               "application": {
-                                                "argument": {"variable": "mterm"},
+                                                "argument": {
+                                                  "lambda": {
+                                                    "body": {
+                                                      "application": {
+                                                        "argument": {"variable": "g"},
+                                                        "function": {
+                                                          "application": {
+                                                            "argument": {"variable": "cx"},
+                                                            "function": {
+                                                              "application": {
+                                                                "argument": {"variable": "__inner"},
+                                                                "function": {"application": {"argument": {"variable": "subject"}, "function": {"variable": "hydra.shacl.coder.encodeTerm"}}}}}}}}},
+                                                    "domain": {"variable": "hydra.core.Term"},
+                                                    "parameter": "__inner"}},
                                                 "function": {
                                                   "application": {
                                                     "argument": {
-                                                      "lambda": {
+                                                      "typeApplication": {
                                                         "body": {
-                                                          "application": {
-                                                            "argument": {"variable": "g"},
-                                                            "function": {
-                                                              "application": {
-                                                                "argument": {"variable": "cx"},
-                                                                "function": {
-                                                                  "application": {
-                                                                    "argument": {"variable": "__inner"},
-                                                                    "function": {"application": {"argument": {"variable": "subject"}, "function": {"variable": "hydra.shacl.coder.encodeTerm"}}}}}}}}},
-                                                        "domain": {"variable": "hydra.core.Term"},
-                                                        "parameter": "__inner"}},
-                                                    "function": {
-                                                      "application": {
-                                                        "argument": {
                                                           "typeApplication": {
                                                             "body": {
-                                                              "typeApplication": {
-                                                                "body": {
-                                                                  "either": {
-                                                                    "right": {
+                                                              "either": {
+                                                                "right": {
+                                                                  "typeApplication": {
+                                                                    "body": {
                                                                       "typeApplication": {
                                                                         "body": {
-                                                                          "typeApplication": {
-                                                                            "body": {
-                                                                              "pair": {
-                                                                                "first": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.rdf.syntax.Description"}}},
-                                                                                "second": {"variable": "cx"}}},
-                                                                            "type": {"list": {"variable": "hydra.rdf.syntax.Description"}}}},
-                                                                        "type": {"literal": {"integer": {"int32": {}}}}}}}},
-                                                                "type": {"variable": "hydra.errors.Error"}}},
-                                                            "type": {
-                                                              "pair": {"first": {"list": {"variable": "hydra.rdf.syntax.Description"}}, "second": {"literal": {"integer": {"int32": {}}}}}}}},
+                                                                          "pair": {
+                                                                            "first": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.rdf.syntax.Description"}}},
+                                                                            "second": {"variable": "cx"}}},
+                                                                        "type": {"list": {"variable": "hydra.rdf.syntax.Description"}}}},
+                                                                    "type": {"literal": {"integer": {"int32": {}}}}}}}},
+                                                            "type": {"variable": "hydra.errors.Error"}}},
+                                                        "type": {
+                                                          "pair": {"first": {"list": {"variable": "hydra.rdf.syntax.Description"}}, "second": {"literal": {"integer": {"int32": {}}}}}}}},
+                                                    "function": {
+                                                      "application": {
+                                                        "argument": {"variable": "mterm"},
                                                         "function": {
                                                           "typeApplication": {
-                                                            "body": {
-                                                              "typeApplication": {
-                                                                "body": {"variable": "hydra.lib.maybes.maybe"},
-                                                                "type": {
-                                                                  "either": {
-                                                                    "left": {"variable": "hydra.errors.Error"},
-                                                                    "right": {
-                                                                      "pair": {"first": {"list": {"variable": "hydra.rdf.syntax.Description"}}, "second": {"literal": {"integer": {"int32": {}}}}}}}}}},
-                                                            "type": {"variable": "hydra.core.Term"}}}}}}}}},
+                                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.cases"}, "type": {"variable": "hydra.core.Term"}}},
+                                                            "type": {
+                                                              "either": {
+                                                                "left": {"variable": "hydra.errors.Error"},
+                                                                "right": {
+                                                                  "pair": {"first": {"list": {"variable": "hydra.rdf.syntax.Description"}}, "second": {"literal": {"integer": {"int32": {}}}}}}}}}}}}}}}},
                                             "domain": {"maybe": {"variable": "hydra.core.Term"}},
                                             "parameter": "mterm"}},
                                         "name": "maybe"},
@@ -2535,103 +2532,12 @@
                                         "body": {
                                           "application": {
                                             "argument": {
-                                              "application": {
-                                                "argument": {"variable": "xs"},
-                                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.uncons"}, "type": {"variable": "t1"}}}}},
-                                            "function": {
-                                              "application": {
-                                                "argument": {
-                                                  "lambda": {
-                                                    "body": {
-                                                      "application": {
-                                                        "argument": {
-                                                          "lambda": {
-                                                            "body": {
-                                                              "application": {
-                                                                "argument": {
-                                                                  "application": {
-                                                                    "argument": {
-                                                                      "application": {
-                                                                        "argument": {"variable": "p"},
-                                                                        "function": {
-                                                                          "typeApplication": {
-                                                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.pairs.second"}, "type": {"variable": "t1"}}},
-                                                                            "type": {"list": {"variable": "t1"}}}}}},
-                                                                    "function": {
-                                                                      "application": {
-                                                                        "argument": {
-                                                                          "application": {
-                                                                            "argument": {"variable": "__r"},
-                                                                            "function": {
-                                                                              "typeApplication": {
-                                                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.pairs.second"}, "type": {"variable": "t3"}}},
-                                                                                "type": {"variable": "t0"}}}}},
-                                                                        "function": {
-                                                                          "application": {
-                                                                            "argument": {"variable": "f"},
-                                                                            "function": {
-                                                                              "typeApplication": {
-                                                                                "body": {
-                                                                                  "typeApplication": {
-                                                                                    "body": {
-                                                                                      "typeApplication": {
-                                                                                        "body": {"typeApplication": {"body": {"variable": "hydra.shacl.coder.foldAccumResult"}, "type": {"variable": "t0"}}},
-                                                                                        "type": {"variable": "t1"}}},
-                                                                                    "type": {"variable": "t2"}}},
-                                                                                "type": {"variable": "t3"}}}}}}}}},
-                                                                "function": {
-                                                                  "application": {
-                                                                    "argument": {
-                                                                      "lambda": {
-                                                                        "body": {
-                                                                          "typeApplication": {
-                                                                            "body": {
-                                                                              "typeApplication": {
-                                                                                "body": {
-                                                                                  "pair": {
-                                                                                    "first": {
-                                                                                      "application": {
-                                                                                        "argument": {
-                                                                                          "application": {
-                                                                                            "argument": {"variable": "__rest"},
-                                                                                            "function": {
-                                                                                              "typeApplication": {
-                                                                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.pairs.first"}, "type": {"list": {"variable": "t3"}}}},
-                                                                                                "type": {"variable": "t0"}}}}},
-                                                                                        "function": {
-                                                                                          "application": {
-                                                                                            "argument": {
-                                                                                              "application": {
-                                                                                                "argument": {"variable": "__r"},
-                                                                                                "function": {
-                                                                                                  "typeApplication": {
-                                                                                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.pairs.first"}, "type": {"variable": "t3"}}},
-                                                                                                    "type": {"variable": "t0"}}}}},
-                                                                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.cons"}, "type": {"variable": "t3"}}}}}}},
-                                                                                    "second": {
-                                                                                      "application": {
-                                                                                        "argument": {"variable": "__rest"},
-                                                                                        "function": {
-                                                                                          "typeApplication": {
-                                                                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.pairs.second"}, "type": {"list": {"variable": "t3"}}}},
-                                                                                            "type": {"variable": "t0"}}}}}}},
-                                                                                "type": {"list": {"variable": "t3"}}}},
-                                                                            "type": {"variable": "t0"}}},
-                                                                        "domain": {"pair": {"first": {"list": {"variable": "t3"}}, "second": {"variable": "t0"}}},
-                                                                        "parameter": "__rest"}},
-                                                                    "function": {
-                                                                      "typeApplication": {
-                                                                        "body": {
-                                                                          "typeApplication": {
-                                                                            "body": {
-                                                                              "typeApplication": {
-                                                                                "body": {"variable": "hydra.lib.eithers.map"},
-                                                                                "type": {"pair": {"first": {"list": {"variable": "t3"}}, "second": {"variable": "t0"}}}}},
-                                                                            "type": {"pair": {"first": {"list": {"variable": "t3"}}, "second": {"variable": "t0"}}}}},
-                                                                        "type": {"variable": "t2"}}}}}}},
-                                                            "domain": {"pair": {"first": {"variable": "t3"}, "second": {"variable": "t0"}}},
-                                                            "parameter": "__r"}},
-                                                        "function": {
+                                              "lambda": {
+                                                "body": {
+                                                  "application": {
+                                                    "argument": {
+                                                      "lambda": {
+                                                        "body": {
                                                           "application": {
                                                             "argument": {
                                                               "application": {
@@ -2640,44 +2546,135 @@
                                                                     "argument": {"variable": "p"},
                                                                     "function": {
                                                                       "typeApplication": {
-                                                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.pairs.first"}, "type": {"variable": "t1"}}},
+                                                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.pairs.second"}, "type": {"variable": "t1"}}},
                                                                         "type": {"list": {"variable": "t1"}}}}}},
-                                                                "function": {"application": {"argument": {"variable": "cx"}, "function": {"variable": "f"}}}}},
+                                                                "function": {
+                                                                  "application": {
+                                                                    "argument": {
+                                                                      "application": {
+                                                                        "argument": {"variable": "__r"},
+                                                                        "function": {
+                                                                          "typeApplication": {
+                                                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.pairs.second"}, "type": {"variable": "t3"}}},
+                                                                            "type": {"variable": "t0"}}}}},
+                                                                    "function": {
+                                                                      "application": {
+                                                                        "argument": {"variable": "f"},
+                                                                        "function": {
+                                                                          "typeApplication": {
+                                                                            "body": {
+                                                                              "typeApplication": {
+                                                                                "body": {
+                                                                                  "typeApplication": {
+                                                                                    "body": {"typeApplication": {"body": {"variable": "hydra.shacl.coder.foldAccumResult"}, "type": {"variable": "t0"}}},
+                                                                                    "type": {"variable": "t1"}}},
+                                                                                "type": {"variable": "t2"}}},
+                                                                            "type": {"variable": "t3"}}}}}}}}},
                                                             "function": {
-                                                              "typeApplication": {
-                                                                "body": {
-                                                                  "typeApplication": {
-                                                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.bind"}, "type": {"variable": "t2"}}},
-                                                                    "type": {"pair": {"first": {"variable": "t3"}, "second": {"variable": "t0"}}}}},
-                                                                "type": {"pair": {"first": {"list": {"variable": "t3"}}, "second": {"variable": "t0"}}}}}}}}},
-                                                    "domain": {"pair": {"first": {"variable": "t1"}, "second": {"list": {"variable": "t1"}}}},
-                                                    "parameter": "p"}},
-                                                "function": {
-                                                  "application": {
-                                                    "argument": {
-                                                      "typeApplication": {
-                                                        "body": {
-                                                          "typeApplication": {
-                                                            "body": {
-                                                              "either": {
-                                                                "right": {
+                                                              "application": {
+                                                                "argument": {
+                                                                  "lambda": {
+                                                                    "body": {
+                                                                      "typeApplication": {
+                                                                        "body": {
+                                                                          "typeApplication": {
+                                                                            "body": {
+                                                                              "pair": {
+                                                                                "first": {
+                                                                                  "application": {
+                                                                                    "argument": {
+                                                                                      "application": {
+                                                                                        "argument": {"variable": "__rest"},
+                                                                                        "function": {
+                                                                                          "typeApplication": {
+                                                                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.pairs.first"}, "type": {"list": {"variable": "t3"}}}},
+                                                                                            "type": {"variable": "t0"}}}}},
+                                                                                    "function": {
+                                                                                      "application": {
+                                                                                        "argument": {
+                                                                                          "application": {
+                                                                                            "argument": {"variable": "__r"},
+                                                                                            "function": {
+                                                                                              "typeApplication": {
+                                                                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.pairs.first"}, "type": {"variable": "t3"}}},
+                                                                                                "type": {"variable": "t0"}}}}},
+                                                                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.cons"}, "type": {"variable": "t3"}}}}}}},
+                                                                                "second": {
+                                                                                  "application": {
+                                                                                    "argument": {"variable": "__rest"},
+                                                                                    "function": {
+                                                                                      "typeApplication": {
+                                                                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.pairs.second"}, "type": {"list": {"variable": "t3"}}}},
+                                                                                        "type": {"variable": "t0"}}}}}}},
+                                                                            "type": {"list": {"variable": "t3"}}}},
+                                                                        "type": {"variable": "t0"}}},
+                                                                    "domain": {"pair": {"first": {"list": {"variable": "t3"}}, "second": {"variable": "t0"}}},
+                                                                    "parameter": "__rest"}},
+                                                                "function": {
                                                                   "typeApplication": {
                                                                     "body": {
                                                                       "typeApplication": {
                                                                         "body": {
-                                                                          "pair": {"first": {"typeApplication": {"body": {"list": []}, "type": {"variable": "t3"}}}, "second": {"variable": "cx"}}},
-                                                                        "type": {"list": {"variable": "t3"}}}},
-                                                                    "type": {"variable": "t0"}}}}},
-                                                            "type": {"variable": "t2"}}},
-                                                        "type": {"pair": {"first": {"list": {"variable": "t3"}}, "second": {"variable": "t0"}}}}},
+                                                                          "typeApplication": {
+                                                                            "body": {"variable": "hydra.lib.eithers.map"},
+                                                                            "type": {"pair": {"first": {"list": {"variable": "t3"}}, "second": {"variable": "t0"}}}}},
+                                                                        "type": {"pair": {"first": {"list": {"variable": "t3"}}, "second": {"variable": "t0"}}}}},
+                                                                    "type": {"variable": "t2"}}}}}}},
+                                                        "domain": {"pair": {"first": {"variable": "t3"}, "second": {"variable": "t0"}}},
+                                                        "parameter": "__r"}},
+                                                    "function": {
+                                                      "application": {
+                                                        "argument": {
+                                                          "application": {
+                                                            "argument": {
+                                                              "application": {
+                                                                "argument": {"variable": "p"},
+                                                                "function": {
+                                                                  "typeApplication": {
+                                                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.pairs.first"}, "type": {"variable": "t1"}}},
+                                                                    "type": {"list": {"variable": "t1"}}}}}},
+                                                            "function": {"application": {"argument": {"variable": "cx"}, "function": {"variable": "f"}}}}},
+                                                        "function": {
+                                                          "typeApplication": {
+                                                            "body": {
+                                                              "typeApplication": {
+                                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.bind"}, "type": {"variable": "t2"}}},
+                                                                "type": {"pair": {"first": {"variable": "t3"}, "second": {"variable": "t0"}}}}},
+                                                            "type": {"pair": {"first": {"list": {"variable": "t3"}}, "second": {"variable": "t0"}}}}}}}}},
+                                                "domain": {"pair": {"first": {"variable": "t1"}, "second": {"list": {"variable": "t1"}}}},
+                                                "parameter": "p"}},
+                                            "function": {
+                                              "application": {
+                                                "argument": {
+                                                  "typeApplication": {
+                                                    "body": {
+                                                      "typeApplication": {
+                                                        "body": {
+                                                          "either": {
+                                                            "right": {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "pair": {"first": {"typeApplication": {"body": {"list": []}, "type": {"variable": "t3"}}}, "second": {"variable": "cx"}}},
+                                                                    "type": {"list": {"variable": "t3"}}}},
+                                                                "type": {"variable": "t0"}}}}},
+                                                        "type": {"variable": "t2"}}},
+                                                    "type": {"pair": {"first": {"list": {"variable": "t3"}}, "second": {"variable": "t0"}}}}},
+                                                "function": {
+                                                  "application": {
+                                                    "argument": {
+                                                      "application": {
+                                                        "argument": {"variable": "xs"},
+                                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.uncons"}, "type": {"variable": "t1"}}}}},
                                                     "function": {
                                                       "typeApplication": {
                                                         "body": {
                                                           "typeApplication": {
-                                                            "body": {"variable": "hydra.lib.maybes.maybe"},
-                                                            "type": {
-                                                              "either": {"left": {"variable": "t2"}, "right": {"pair": {"first": {"list": {"variable": "t3"}}, "second": {"variable": "t0"}}}}}}},
-                                                        "type": {"pair": {"first": {"variable": "t1"}, "second": {"list": {"variable": "t1"}}}}}}}}}}}},
+                                                            "body": {"variable": "hydra.lib.maybes.cases"},
+                                                            "type": {"pair": {"first": {"variable": "t1"}, "second": {"list": {"variable": "t1"}}}}}},
+                                                        "type": {
+                                                          "either": {"left": {"variable": "t2"}, "right": {"pair": {"first": {"list": {"variable": "t3"}}, "second": {"variable": "t0"}}}}}}}}}}}}},
                                         "domain": {"list": {"variable": "t1"}},
                                         "parameter": "xs"}},
                                     "domain": {"variable": "t0"},

@@ -67,10 +67,10 @@ checkingError cx raw =
                       (
                         Core.Name "untypedTermVariable",
                         (\input -> Eithers.map (\t -> Checking.CheckingErrorUntypedTermVariable t) (untypedTermVariableCheckingError cx input)))]
-        in (Maybes.maybe (Left (Errors.DecodingError (Strings.cat [
+        in (Maybes.cases (Maps.lookup fname variantMap) (Left (Errors.DecodingError (Strings.cat [
           "no such field ",
           (Core.unName fname),
-          " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
+          " in union"]))) (\f -> f fterm))
       _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.error.checking.IncorrectUnificationError
 incorrectUnificationError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Checking.IncorrectUnificationError

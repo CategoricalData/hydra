@@ -1927,30 +1927,33 @@
                                                                                                                                 "name": "calleeParamCount",
                                                                                                                                 "term": {
                                                                                                                                   "application": {
-                                                                                                                                    "argument": {"variable": "mSig"},
+                                                                                                                                    "argument": {
+                                                                                                                                      "lambda": {
+                                                                                                                                        "body": {
+                                                                                                                                          "application": {
+                                                                                                                                            "argument": {
+                                                                                                                                              "application": {
+                                                                                                                                                "argument": {"variable": "sig"},
+                                                                                                                                                "function": {
+                                                                                                                                                  "typeApplication": {
+                                                                                                                                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.pairs.first"}, "type": {"list": {"variable": "t2"}}}},
+                                                                                                                                                    "type": {"variable": "t3"}}}}},
+                                                                                                                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.length"}, "type": {"variable": "t2"}}}}},
+                                                                                                                                        "domain": {"pair": {"first": {"list": {"variable": "t2"}}, "second": {"variable": "t3"}}},
+                                                                                                                                        "parameter": "sig"}},
                                                                                                                                     "function": {
                                                                                                                                       "application": {
-                                                                                                                                        "argument": {
-                                                                                                                                          "lambda": {
-                                                                                                                                            "body": {
-                                                                                                                                              "application": {
-                                                                                                                                                "argument": {
-                                                                                                                                                  "application": {
-                                                                                                                                                    "argument": {"variable": "sig"},
-                                                                                                                                                    "function": {
-                                                                                                                                                      "typeApplication": {
-                                                                                                                                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.pairs.first"}, "type": {"list": {"variable": "t2"}}}},
-                                                                                                                                                        "type": {"variable": "t3"}}}}},
-                                                                                                                                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.length"}, "type": {"variable": "t2"}}}}},
-                                                                                                                                            "domain": {"pair": {"first": {"list": {"variable": "t2"}}, "second": {"variable": "t3"}}},
-                                                                                                                                            "parameter": "sig"}},
+                                                                                                                                        "argument": {"variable": "callerArgCount"},
                                                                                                                                         "function": {
                                                                                                                                           "application": {
-                                                                                                                                            "argument": {"variable": "callerArgCount"},
+                                                                                                                                            "argument": {"variable": "mSig"},
                                                                                                                                             "function": {
                                                                                                                                               "typeApplication": {
-                                                                                                                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.maybe"}, "type": {"literal": {"integer": {"int32": {}}}}}},
-                                                                                                                                                "type": {"pair": {"first": {"list": {"variable": "t2"}}, "second": {"variable": "t3"}}}}}}}}}}},
+                                                                                                                                                "body": {
+                                                                                                                                                  "typeApplication": {
+                                                                                                                                                    "body": {"variable": "hydra.lib.maybes.cases"},
+                                                                                                                                                    "type": {"pair": {"first": {"list": {"variable": "t2"}}, "second": {"variable": "t3"}}}}},
+                                                                                                                                                "type": {"literal": {"integer": {"int32": {}}}}}}}}}}}},
                                                                                                                                 "typeScheme": {"body": {"literal": {"integer": {"int32": {}}}}, "variables": []}}],
                                                                                                                             "body": {
                                                                                                                               "let": {
@@ -5577,64 +5580,61 @@
                                                                                     "body": {
                                                                                       "application": {
                                                                                         "argument": {
-                                                                                          "application": {
-                                                                                            "argument": {"variable": "stringOffsets"},
-                                                                                            "function": {
-                                                                                              "application": {
-                                                                                                "argument": {"variable": "s"},
-                                                                                                "function": {
-                                                                                                  "typeApplication": {
-                                                                                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.maps.lookup"}, "type": {"literal": {"string": {}}}}},
-                                                                                                    "type": {"literal": {"integer": {"int32": {}}}}}}}}}},
-                                                                                        "function": {
-                                                                                          "application": {
-                                                                                            "argument": {
-                                                                                              "lambda": {
+                                                                                          "lambda": {
+                                                                                            "body": {
+                                                                                              "typeApplication": {
                                                                                                 "body": {
                                                                                                   "typeApplication": {
                                                                                                     "body": {
-                                                                                                      "typeApplication": {
-                                                                                                        "body": {
-                                                                                                          "either": {
-                                                                                                            "right": {
-                                                                                                              "list": [
-                                                                                                                {
-                                                                                                                  "inject": {
-                                                                                                                    "field": {
-                                                                                                                      "name": "const",
-                                                                                                                      "term": {"inject": {"field": {"name": "i32", "term": {"variable": "off"}}, "typeName": "hydra.wasm.syntax.ConstValue"}}},
-                                                                                                                    "typeName": "hydra.wasm.syntax.Instruction"}}]}}},
-                                                                                                        "type": {"variable": "hydra.errors.Error"}}},
-                                                                                                    "type": {"list": {"variable": "hydra.wasm.syntax.Instruction"}}}},
-                                                                                                "domain": {"literal": {"integer": {"int32": {}}}},
-                                                                                                "parameter": "off"}},
+                                                                                                      "either": {
+                                                                                                        "right": {
+                                                                                                          "list": [
+                                                                                                            {
+                                                                                                              "inject": {
+                                                                                                                "field": {
+                                                                                                                  "name": "const",
+                                                                                                                  "term": {"inject": {"field": {"name": "i32", "term": {"variable": "off"}}, "typeName": "hydra.wasm.syntax.ConstValue"}}},
+                                                                                                                "typeName": "hydra.wasm.syntax.Instruction"}}]}}},
+                                                                                                    "type": {"variable": "hydra.errors.Error"}}},
+                                                                                                "type": {"list": {"variable": "hydra.wasm.syntax.Instruction"}}}},
+                                                                                            "domain": {"literal": {"integer": {"int32": {}}}},
+                                                                                            "parameter": "off"}},
+                                                                                        "function": {
+                                                                                          "application": {
+                                                                                            "argument": {
+                                                                                              "typeApplication": {
+                                                                                                "body": {
+                                                                                                  "typeApplication": {
+                                                                                                    "body": {
+                                                                                                      "either": {
+                                                                                                        "right": {
+                                                                                                          "list": [
+                                                                                                            {
+                                                                                                              "inject": {
+                                                                                                                "field": {
+                                                                                                                  "name": "const",
+                                                                                                                  "term": {
+                                                                                                                    "inject": {"field": {"name": "i32", "term": {"literal": {"integer": {"int32": 0}}}}, "typeName": "hydra.wasm.syntax.ConstValue"}}},
+                                                                                                                "typeName": "hydra.wasm.syntax.Instruction"}}]}}},
+                                                                                                    "type": {"variable": "hydra.errors.Error"}}},
+                                                                                                "type": {"list": {"variable": "hydra.wasm.syntax.Instruction"}}}},
                                                                                             "function": {
                                                                                               "application": {
                                                                                                 "argument": {
-                                                                                                  "typeApplication": {
-                                                                                                    "body": {
-                                                                                                      "typeApplication": {
-                                                                                                        "body": {
-                                                                                                          "either": {
-                                                                                                            "right": {
-                                                                                                              "list": [
-                                                                                                                {
-                                                                                                                  "inject": {
-                                                                                                                    "field": {
-                                                                                                                      "name": "const",
-                                                                                                                      "term": {
-                                                                                                                        "inject": {"field": {"name": "i32", "term": {"literal": {"integer": {"int32": 0}}}}, "typeName": "hydra.wasm.syntax.ConstValue"}}},
-                                                                                                                    "typeName": "hydra.wasm.syntax.Instruction"}}]}}},
-                                                                                                        "type": {"variable": "hydra.errors.Error"}}},
-                                                                                                    "type": {"list": {"variable": "hydra.wasm.syntax.Instruction"}}}},
+                                                                                                  "application": {
+                                                                                                    "argument": {"variable": "stringOffsets"},
+                                                                                                    "function": {
+                                                                                                      "application": {
+                                                                                                        "argument": {"variable": "s"},
+                                                                                                        "function": {
+                                                                                                          "typeApplication": {
+                                                                                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.maps.lookup"}, "type": {"literal": {"string": {}}}}},
+                                                                                                            "type": {"literal": {"integer": {"int32": {}}}}}}}}}},
                                                                                                 "function": {
                                                                                                   "typeApplication": {
-                                                                                                    "body": {
-                                                                                                      "typeApplication": {
-                                                                                                        "body": {"variable": "hydra.lib.maybes.maybe"},
-                                                                                                        "type": {
-                                                                                                          "either": {"left": {"variable": "hydra.errors.Error"}, "right": {"list": {"variable": "hydra.wasm.syntax.Instruction"}}}}}},
-                                                                                                    "type": {"literal": {"integer": {"int32": {}}}}}}}}}}}},
+                                                                                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.cases"}, "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                                                                    "type": {
+                                                                                                      "either": {"left": {"variable": "hydra.errors.Error"}, "right": {"list": {"variable": "hydra.wasm.syntax.Instruction"}}}}}}}}}}}},
                                                                                     "domain": {"literal": {"string": {}}},
                                                                                     "parameter": "s"}},
                                                                                 "name": "string"}],
@@ -7312,29 +7312,29 @@
                                                                         "name": "typ",
                                                                         "term": {
                                                                           "application": {
-                                                                            "argument": {
-                                                                              "application": {
-                                                                                "argument": {
-                                                                                  "application": {
-                                                                                    "argument": {"variable": "tdef"},
-                                                                                    "function": {"project": {"fieldName": "signature", "typeName": "hydra.packaging.TermDefinition"}}}},
-                                                                                "function": {
-                                                                                  "application": {
-                                                                                    "argument": {"variable": "hydra.scoping.termSignatureToTypeScheme"},
-                                                                                    "function": {
-                                                                                      "typeApplication": {
-                                                                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.map"}, "type": {"variable": "hydra.typing.TermSignature"}}},
-                                                                                        "type": {"variable": "hydra.core.TypeScheme"}}}}}}},
+                                                                            "argument": {"project": {"fieldName": "body", "typeName": "hydra.core.TypeScheme"}},
                                                                             "function": {
                                                                               "application": {
-                                                                                "argument": {"project": {"fieldName": "body", "typeName": "hydra.core.TypeScheme"}},
+                                                                                "argument": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.core.Type"}},
                                                                                 "function": {
                                                                                   "application": {
-                                                                                    "argument": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.core.Type"}},
+                                                                                    "argument": {
+                                                                                      "application": {
+                                                                                        "argument": {
+                                                                                          "application": {
+                                                                                            "argument": {"variable": "tdef"},
+                                                                                            "function": {"project": {"fieldName": "signature", "typeName": "hydra.packaging.TermDefinition"}}}},
+                                                                                        "function": {
+                                                                                          "application": {
+                                                                                            "argument": {"variable": "hydra.scoping.termSignatureToTypeScheme"},
+                                                                                            "function": {
+                                                                                              "typeApplication": {
+                                                                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.map"}, "type": {"variable": "hydra.typing.TermSignature"}}},
+                                                                                                "type": {"variable": "hydra.core.TypeScheme"}}}}}}},
                                                                                     "function": {
                                                                                       "typeApplication": {
-                                                                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.maybe"}, "type": {"variable": "hydra.core.Type"}}},
-                                                                                        "type": {"variable": "hydra.core.TypeScheme"}}}}}}}}},
+                                                                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.cases"}, "type": {"variable": "hydra.core.TypeScheme"}}},
+                                                                                        "type": {"variable": "hydra.core.Type"}}}}}}}}},
                                                                         "typeScheme": {"body": {"variable": "hydra.core.Type"}, "variables": []}}],
                                                                     "body": {
                                                                       "let": {

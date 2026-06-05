@@ -31,10 +31,10 @@ caseConvention cx raw =
                       (Core.Name "pascal", (\input -> Eithers.map (\t -> Util.CaseConventionPascal) (ExtractCore.decodeUnit cx input))),
                       (Core.Name "lowerSnake", (\input -> Eithers.map (\t -> Util.CaseConventionLowerSnake) (ExtractCore.decodeUnit cx input))),
                       (Core.Name "upperSnake", (\input -> Eithers.map (\t -> Util.CaseConventionUpperSnake) (ExtractCore.decodeUnit cx input)))]
-        in (Maybes.maybe (Left (Errors.DecodingError (Strings.cat [
+        in (Maybes.cases (Maps.lookup fname variantMap) (Left (Errors.DecodingError (Strings.cat [
           "no such field ",
           (Core.unName fname),
-          " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
+          " in union"]))) (\f -> f fterm))
       _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.util.Comparison
 comparison :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Util.Comparison
@@ -49,10 +49,10 @@ comparison cx raw =
                       (Core.Name "lessThan", (\input -> Eithers.map (\t -> Util.ComparisonLessThan) (ExtractCore.decodeUnit cx input))),
                       (Core.Name "equalTo", (\input -> Eithers.map (\t -> Util.ComparisonEqualTo) (ExtractCore.decodeUnit cx input))),
                       (Core.Name "greaterThan", (\input -> Eithers.map (\t -> Util.ComparisonGreaterThan) (ExtractCore.decodeUnit cx input)))]
-        in (Maybes.maybe (Left (Errors.DecodingError (Strings.cat [
+        in (Maybes.cases (Maps.lookup fname variantMap) (Left (Errors.DecodingError (Strings.cat [
           "no such field ",
           (Core.unName fname),
-          " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
+          " in union"]))) (\f -> f fterm))
       _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.util.FileExtension
 fileExtension :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Util.FileExtension
@@ -94,10 +94,10 @@ precision cx raw =
                               _ -> Left (Errors.DecodingError "expected int32 value")
                             _ -> Left (Errors.DecodingError "expected int32 literal")
                           _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx input))))]
-        in (Maybes.maybe (Left (Errors.DecodingError (Strings.cat [
+        in (Maybes.cases (Maps.lookup fname variantMap) (Left (Errors.DecodingError (Strings.cat [
           "no such field ",
           (Core.unName fname),
-          " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
+          " in union"]))) (\f -> f fterm))
       _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.util.QualifiedName
 qualifiedName :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Util.QualifiedName

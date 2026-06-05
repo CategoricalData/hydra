@@ -77,31 +77,31 @@
                               "application": {
                                 "argument": {
                                   "application": {
-                                    "argument": {"variable": "sname"},
+                                    "argument": {
+                                      "lambda": {
+                                        "body": {
+                                          "application": {
+                                            "argument": {"literal": {"string": "."}},
+                                            "function": {
+                                              "application": {
+                                                "argument": {
+                                                  "application": {
+                                                    "argument": {"variable": "n"},
+                                                    "function": {
+                                                      "application": {"argument": {"literal": {"boolean": true}}, "function": {"variable": "hydra.scala.utils.scalaTypeName"}}}}},
+                                                "function": {"variable": "hydra.lib.strings.cat2"}}}}},
+                                        "domain": {"variable": "hydra.core.Name"},
+                                        "parameter": "n"}},
                                     "function": {
                                       "application": {
-                                        "argument": {
-                                          "lambda": {
-                                            "body": {
-                                              "application": {
-                                                "argument": {"literal": {"string": "."}},
-                                                "function": {
-                                                  "application": {
-                                                    "argument": {
-                                                      "application": {
-                                                        "argument": {"variable": "n"},
-                                                        "function": {
-                                                          "application": {"argument": {"literal": {"boolean": true}}, "function": {"variable": "hydra.scala.utils.scalaTypeName"}}}}},
-                                                    "function": {"variable": "hydra.lib.strings.cat2"}}}}},
-                                            "domain": {"variable": "hydra.core.Name"},
-                                            "parameter": "n"}},
+                                        "argument": {"variable": "dlft"},
                                         "function": {
                                           "application": {
-                                            "argument": {"variable": "dlft"},
+                                            "argument": {"variable": "sname"},
                                             "function": {
                                               "typeApplication": {
-                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.maybe"}, "type": {"literal": {"string": {}}}}},
-                                                "type": {"variable": "hydra.core.Name"}}}}}}}}},
+                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.cases"}, "type": {"variable": "hydra.core.Name"}}},
+                                                "type": {"literal": {"string": {}}}}}}}}}}},
                                 "function": {"variable": "hydra.lib.strings.cat2"}}}}},
                         "domain": {"variable": "hydra.core.Name"},
                         "parameter": "fname"}},
