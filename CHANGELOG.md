@@ -97,6 +97,11 @@ and primitive-metadata reification.
 
 ### Bug fixes
 
+- Encode `uint32` JSON literals as numbers, not strings (#431):
+  `uint32`'s maximum (`2^32 - 1`) is well below JavaScript's `2^53 - 1` safe-integer
+  boundary, so the string encoding was unnecessary and asymmetric with `int32`.
+  The decoder accepts either a number or a string for `uint32` (forward compatibility);
+  `formatVersion` is unchanged.
 - Satisfied or suppressed warnings in generated Java (#349).
 - Restored JSON parser test cases (#336):
   fixed polymorphic case-statement handling in the eta-expander

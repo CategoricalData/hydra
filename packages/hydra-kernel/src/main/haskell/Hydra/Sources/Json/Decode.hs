@@ -143,8 +143,9 @@ decodeFloat = define "decodeFloat" $
 -- The -0.0 case is here so that IEEE negative zero survives a round trip through JSON via
 -- the encoder's string-escape path; Scientific-backed number decoding would normalize it to 0.
 -- | Decode a JSON value to an integer term
--- Small integers (int8, int16, int32, uint8, uint16) are decoded from JSON numbers
--- Large integers (int64, uint32, uint64, bigint) are decoded from JSON strings
+-- Small integers (int8, int16, int32, uint8, uint16, uint32) are decoded from JSON numbers;
+-- uint32 also accepts a string for forward compatibility with pre-change JSON.
+-- Large integers (int64, uint64, bigint) are decoded from JSON strings.
 decodeInteger :: TypedTermDefinition (IntegerType -> Value -> Either String Term)
 decodeInteger = define "decodeInteger" $
   doc "Decode a JSON value to an integer term. Small ints from numbers; large ints from strings." $
@@ -171,17 +172,6 @@ decodeInteger = define "decodeInteger" $
           Maybes.maybe
             (left $ Strings.cat $ list [string "invalid int64: ", var "s"])
             ("v" ~> right $ Core.termLiteral $ Core.literalInteger $ Core.integerValueInt64 $ var "v")
-            (var "parsed"))
-        (var "strResult"),
-    _IntegerType_uint32>>: constant $
-      "strResult" <~ (expectString @@ var "value") $
-      Eithers.either_
-        ("err" ~> left $ var "err")
-        ("s" ~>
-          "parsed" <~ (Literals.readUint32 $ var "s") $
-          Maybes.maybe
-            (left $ Strings.cat $ list [string "invalid uint32: ", var "s"])
-            ("v" ~> right $ Core.termLiteral $ Core.literalInteger $ Core.integerValueUint32 $ var "v")
             (var "parsed"))
         (var "strResult"),
     _IntegerType_uint64>>: constant $
@@ -225,7 +215,21 @@ decodeInteger = define "decodeInteger" $
       Eithers.map
         ("n" ~> Core.termLiteral $ Core.literalInteger $ Core.integerValueUint16 $
           Literals.bigintToUint16 $ Literals.decimalToBigint $ var "n")
-        (var "numResult")]
+        (var "numResult"),
+    -- uint32 fits within JS's 2^53-1 safe range, so it decodes from a JSON number.
+    -- For forward compatibility with format-version-1 JSON written before this change,
+    -- a string-encoded uint32 is still accepted.
+    _IntegerType_uint32>>: constant $
+      cases _Value (var "value")
+        (Just $ left $ string "expected number or string for uint32") [
+        _Value_number>>: "n" ~> right $ Core.termLiteral $ Core.literalInteger $ Core.integerValueUint32 $
+          Literals.bigintToUint32 $ Literals.decimalToBigint $ var "n",
+        _Value_string>>: "s" ~>
+          "parsed" <~ (Literals.readUint32 $ var "s") $
+          Maybes.maybe
+            (left $ Strings.cat $ list [string "invalid uint32: ", var "s"])
+            ("v" ~> right $ Core.termLiteral $ Core.literalInteger $ Core.integerValueUint32 $ var "v")
+            (var "parsed")]]
 
 -- | Extract a string from a JSON value
 -- | Decode a JSON value to a literal term given a literal type
@@ -558,7 +562,3 @@ parseSpecialFloat32 = define "parseSpecialFloat32" $
                 (Equality.equal (var "s") (string "-0.0")))
       (Literals.readFloat32 $ var "s")
       Phantoms.nothing
-
--- | Decode a JSON value to an integer term
--- Small integers (int8, int16, int32, uint8, uint16) are decoded from JSON numbers
--- Large integers (int64, uint32, uint64, bigint) are decoded from JSON strings

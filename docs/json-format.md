@@ -274,6 +274,12 @@ have arbitrary-precision integer types and don't need the string protection,
 but JavaScript's `Number` is the only integer type its `JSON.parse` produces,
 and the format protects against silent corruption on the JS side.
 
+`uint32` moved from the string group to the number group; earlier output quoted
+it as a string. For backward compatibility the decoder accepts `uint32` as
+*either* a JSON number or a JSON string, so JSON written before the change still
+reads. This is a clarification of the existing format and does **not** bump
+`formatVersion`.
+
 ### Float formatting
 
 `Literal.float` values — including both `float32` and `float64` precisions — encode symmetrically:
