@@ -342,20 +342,25 @@
 (defvar hydra--annotation-cache (make-hash-table :test 'equal))
 
 (defun hydra--install-annotation-cache ()
-  "Wrap hydra_strip_deannotate_term to cache annotations before stripping."
+  "Wrap hydra_strip_deannotate_term to cache annotations before stripping.
+No-op when the symbol is undefined — the wrapper is a memoization aid,
+not a correctness requirement, so installs that arrive before the kernel
+is loaded (e.g. host-coder bootstraps that don't emit hydra.strip) just
+skip silently."
   (let ((original (or (and (fboundp 'hydra_strip_deannotate_term)
                            (symbol-function 'hydra_strip_deannotate_term))
-                      hydra_strip_deannotate_term)))
-    (let ((wrapper (lambda (t_)
-                     (when (hydra--is-annotated-p t_)
-                       (let ((body (funcall original t_))
-                             (anns (hydra--term-annotations t_)))
-                         (when anns
-                           (puthash body anns hydra--annotation-cache))))
-                     (funcall original t_))))
-      ;; Set both value and function cells
-      (setq hydra_strip_deannotate_term wrapper)
-      (fset 'hydra_strip_deannotate_term wrapper))))
+                      (and (boundp 'hydra_strip_deannotate_term)
+                           hydra_strip_deannotate_term))))
+    (when original
+      (let ((wrapper (lambda (t_)
+                       (when (hydra--is-annotated-p t_)
+                         (let ((body (funcall original t_))
+                               (anns (hydra--term-annotations t_)))
+                           (when anns
+                             (puthash body anns hydra--annotation-cache))))
+                       (funcall original t_))))
+        (setq hydra_strip_deannotate_term wrapper)
+        (fset 'hydra_strip_deannotate_term wrapper)))))
 
 (defun hydra--lookup-cached-annotations (term)
   (gethash term hydra--annotation-cache))
