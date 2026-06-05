@@ -4,11 +4,12 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {"string": "Reorder definitions: types first (with hydra.core.Name first among types), then topologically sorted terms"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {"string": "Reorder definitions: types first (with hydra.core.Name first among types), then topologically sorted terms"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -253,10 +254,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [
-                  {
-                    "key": "description",
-                    "value": {"literal": {"string": "Analyze a function term with Python-specific Graph management"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Analyze a function term with Python-specific Graph management"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -314,10 +316,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Create a class pattern for a unit variant (no value captured)"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Create a class pattern for a unit variant (no value captured)"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -349,7 +352,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Create a class pattern for a variant with captured value"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Create a class pattern for a variant with captured value"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -445,7 +452,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Collect type variables from a type"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Collect type variables from a type"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -557,8 +564,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [
-                  {"key": "description", "value": {"literal": {"string": "Conditionally include a symbol name based on a boolean flag"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Conditionally include a symbol name based on a boolean flag"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -589,7 +599,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Create a @dataclass(frozen=True) decorator"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Create a @dataclass(frozen=True) decorator"}}}]},
             "body": {
               "inject": {
                 "field": {
@@ -655,10 +666,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Deconflict a variant name to avoid collisions with type names"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Deconflict a variant name to avoid collisions with type names"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -796,7 +808,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Rewrite case statements to avoid variable name collisions"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Rewrite case statements to avoid variable name collisions"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1159,7 +1175,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Recursively dig through forall types to find wrap types"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Recursively dig through forall types to find wrap types"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1226,10 +1246,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Substitute unit for a variable in a term (for unit variant case handling)"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Substitute unit for a variable in a term (for unit variant case handling)"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1966,10 +1987,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Create an initial empty metadata record with given namespaces"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Create an initial empty metadata record with given namespaces"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2018,7 +2040,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Encode a function application to a Python expression"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Encode a function application to a Python expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2289,7 +2315,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Inner helper for encodeApplication"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Inner helper for encodeApplication"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3252,7 +3278,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Encode an application type to Python expression"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Encode an application type to Python expression"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -3613,10 +3643,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Encode a binding as a Python statement (function definition or assignment)"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Encode a binding as a Python statement (function definition or assignment)"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -5275,7 +5306,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Encode a binding as a walrus operator assignment"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Encode a binding as a walrus operator assignment"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -5499,7 +5534,8 @@
                       "typeLambda": {
                         "body": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "Encode bindings as function definitions"}}}],
+                            "annotation": {
+                              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Encode bindings as function definitions"}}}]},
                             "body": {
                               "lambda": {
                                 "body": {
@@ -5560,10 +5596,11 @@
               "typeLambda": {
                 "body": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {"literal": {"string": "Encode a single case (Field) into a CaseBlock for a match statement"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "Encode a single case (Field) into a CaseBlock for a match statement"}}}]},
                     "body": {
                       "lambda": {
                         "body": {
@@ -5900,10 +5937,11 @@
               "typeLambda": {
                 "body": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {"literal": {"string": "Encode the default (wildcard) case block for a match statement"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "Encode the default (wildcard) case block for a match statement"}}}]},
                     "body": {
                       "lambda": {
                         "body": {
@@ -6073,7 +6111,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Encode a definition (term or type) to Python statements"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Encode a definition (term or type) to Python statements"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -6352,10 +6394,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [
-                  {
-                    "key": "description",
-                    "value": {"literal": {"string": "Encode an enum value assignment statement with optional comment"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Encode an enum value assignment statement with optional comment"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -6523,10 +6566,11 @@
                   "typeLambda": {
                     "body": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "Encode a field (name-value pair) to a Python (Name, Expression) pair"}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "Encode a field (name-value pair) to a Python (Name, Expression) pair"}}}]},
                         "body": {
                           "lambda": {
                             "body": {
@@ -6627,10 +6671,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [
-                  {
-                    "key": "description",
-                    "value": {"literal": {"string": "Encode a field type for record definitions (field: type annotation)"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Encode a field type for record definitions (field: type annotation)"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -6778,7 +6823,8 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Encode a float value to a Python expression"}}}],
+                "annotation": {
+                  "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Encode a float value to a Python expression"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -7131,7 +7177,8 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Encode a forall type to Python expression"}}}],
+                "annotation": {
+                  "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Encode a forall type to Python expression"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -7719,7 +7766,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Encode a function definition with parameters and body"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Encode a function definition with parameters and body"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -8311,7 +8362,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Encode a function type to Python Callable expression"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Encode a function type to Python Callable expression"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -8948,7 +9003,9 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Encode an integer value to a Python expression"}}}],
+                "annotation": {
+                  "map": [
+                    {"key": {"variable": "description"}, "value": {"literal": {"string": "Encode an integer value to a Python expression"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -9097,7 +9154,9 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Encode a literal value to a Python expression"}}}],
+                "annotation": {
+                  "map": [
+                    {"key": {"variable": "description"}, "value": {"literal": {"string": "Encode a literal value to a Python expression"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -9293,7 +9352,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Encode a literal type to a Python type expression"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Encode a literal type to a Python type expression"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -9476,8 +9539,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {"key": "description", "value": {"literal": {"string": "Generate name constants for a type as class-level attributes"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Generate name constants for a type as class-level attributes"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -9662,7 +9728,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Encode a Hydra module to a Python module AST"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Encode a Hydra module to a Python module AST"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -10046,7 +10113,8 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Encode a record type as a Python dataclass"}}}],
+                "annotation": {
+                  "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Encode a record type as a Python dataclass"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -10258,7 +10326,9 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Encode a term assignment to a Python statement"}}}],
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "Encode a term assignment to a Python statement"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -10686,7 +10756,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Encode a term to a Python expression (inline form)"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Encode a term to a Python expression (inline form)"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -12986,10 +13060,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Encode a term to a list of statements with return as final statement"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Encode a term to a list of statements with return as final statement"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -13581,10 +13656,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Encode a term body for TCO: tail self-calls become param reassignment + continue"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Encode a term body for TCO: tail self-calls become param reassignment + continue"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -14298,7 +14374,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Encode a Hydra type to a Python type expression"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Encode a Hydra type to a Python type expression"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -14844,10 +14924,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [
-                  {
-                    "key": "description",
-                    "value": {"literal": {"string": "Encode a type definition, dispatching based on type structure"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Encode a type definition, dispatching based on type structure"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -14938,7 +15019,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Encode the inner type definition, unwrapping forall types"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Encode the inner type definition, unwrapping forall types"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -15170,7 +15255,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Encode a simple type alias definition"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Encode a simple type alias definition"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -15242,10 +15328,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [
-                  {
-                    "key": "description",
-                    "value": {"literal": {"string": "Encode a type to a Python expression, quoting if the type has free variables"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Encode a type to a Python expression, quoting if the type has free variables"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -15316,10 +15403,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Encode a union elimination as an inline conditional chain (isinstance-based ternary)"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Encode a union elimination as an inline conditional chain (isinstance-based ternary)"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -15907,7 +15995,8 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Encode a union field as a variant class"}}}],
+                "annotation": {
+                  "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Encode a union field as a variant class"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -16179,10 +16268,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Encode a union field as a primary expression for | alternatives"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Encode a union field as a primary expression for | alternatives"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -16309,10 +16399,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [
-                  {
-                    "key": "description",
-                    "value": {"literal": {"string": "Encode a union type as an enum (for unit-only fields) or variant classes"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Encode a union type as an enum (for unit-only fields) or variant classes"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -16648,7 +16739,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Encode a variable reference to a Python expression"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Encode a variable reference to a Python expression"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -17895,8 +17990,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [
-                  {"key": "description", "value": {"literal": {"string": "Encode a wrapped type (newtype) to a Python class definition"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Encode a wrapped type (newtype) to a Python class definition"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -18093,7 +18191,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Create a value pattern for an enum variant"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Create a value pattern for an enum variant"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -18145,10 +18244,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Get type parameters from environment as Python TypeParameters"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Get type parameters from environment as Python TypeParameters"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -18188,7 +18288,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Extend environment with lambda parameters from a term"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Extend environment with lambda parameters from a term"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -18276,7 +18380,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Extend a PythonEnvironment with a new bound type variable"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Extend a PythonEnvironment with a new bound type variable"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -18422,10 +18530,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Extend metadata based on a term (used during module encoding)"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Extend metadata based on a term (used during module encoding)"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -18783,10 +18892,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Extend metadata based on a type (used during module encoding)"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Extend metadata based on a type (used during module encoding)"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -19184,7 +19294,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Extend metadata for a list of types"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Extend metadata for a list of types"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -19307,7 +19417,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Extract CaseStatement from a case elimination term"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Extract CaseStatement from a case elimination term"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -19333,10 +19447,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Find type parameters in a type that are bound in the environment"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Find type parameters in a type that are bound in the environment"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -19409,7 +19524,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Extract lambdas and their bodies from a term"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Extract lambdas and their bodies from a term"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -19489,7 +19605,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Gather metadata from definitions"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Gather metadata from definitions"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -19745,8 +19861,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {"key": "description", "value": {"literal": {"string": "Create Generic[...] argument expression for class definition"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Create Generic[...] argument expression for class definition"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -19919,7 +20038,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Create an initial Python environment for code generation"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Create an initial Python environment for code generation"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -19973,7 +20096,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Create initial empty metadata for a Python module"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Create initial empty metadata for a Python module"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -20054,10 +20181,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Check if a term is a case statement applied to exactly one argument"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Check if a term is a case statement applied to exactly one argument"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -20238,7 +20366,8 @@
               "typeLambda": {
                 "body": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "Check if union cases are fully covered"}}}],
+                    "annotation": {
+                      "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Check if union cases are fully covered"}}}]},
                     "body": {
                       "lambda": {
                         "body": {
@@ -20290,10 +20419,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Check whether a list of definitions contains any type definitions"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Check whether a list of definitions contains any type definitions"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -20336,7 +20466,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Check if a name is a type variable (unqualified - no dots)"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Check if a name is a type variable (unqualified - no dots)"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -20363,7 +20497,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Check if a variant field has unit type"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Check if a variant field has unit type"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -20434,10 +20569,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Wrap an expression in a .get() method call (for Lazy unwrap at use sites)"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Wrap an expression in a .get() method call (for Lazy unwrap at use sites)"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -20465,12 +20601,13 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {
-                    "string": "Per-parameter isLazy flags of a primitive (by name), or empty if not a primitive. Single source of truth for which arguments coders thunk; replaces hard-coded name tables (issue #391)."}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {
+                      "string": "Per-parameter isLazy flags of a primitive (by name), or empty if not a primitive. Single source of truth for which arguments coders thunk; replaces hard-coded name tables (issue #391)."}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -20554,10 +20691,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Decorator for @lru_cache(1) to memoize zero-argument function results"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Decorator for @lru_cache(1) to memoize zero-argument function results"}}}]},
             "body": {
               "inject": {
                 "field": {
@@ -20589,10 +20727,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Create a curried lambda chain from a list of parameter names and a body"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Create a curried lambda chain from a list of parameter names and a body"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -20664,10 +20803,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Wrap an expression in Lazy(lambda: ...) for one-shot lazy memoization"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Wrap an expression in Lazy(lambda: ...) for one-shot lazy memoization"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -20698,7 +20838,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Constructor for PyGraph record"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Constructor for PyGraph record"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -20722,10 +20862,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Wrap a bare reference to a polymorphic function in an uncurried lambda"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Wrap a bare reference to a polymorphic function in an uncurried lambda"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -20962,10 +21103,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Create a thunk (zero-argument lambda) wrapped with lru_cache(1) for memoization"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Create a thunk (zero-argument lambda) wrapped with lru_cache(1) for memoization"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -21010,7 +21152,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Create an uncurried lambda with multiple parameters"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Create an uncurried lambda with multiple parameters"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -21071,7 +21217,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Generate domain import statements from namespace mappings"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Generate domain import statements from namespace mappings"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -21144,7 +21294,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Generate all import statements for a Python module"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Generate all import statements for a Python module"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -21197,8 +21351,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {"key": "description", "value": {"literal": {"string": "Generate standard import statements based on module metadata"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Generate standard import statements based on module metadata"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -21685,7 +21842,9 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a Hydra module to Python source files"}}}],
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a Hydra module to Python source files"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -21792,7 +21951,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Accessor for the graph field of PyGraph"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Accessor for the graph field of PyGraph"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -21810,7 +21970,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Accessor for the metadata field of PyGraph"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Accessor for the metadata field of PyGraph"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -21828,7 +21989,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Create integer literal expression"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Create integer literal expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -21851,10 +22012,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Like bindingMetadata, but only for bindings that will actually be thunked"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Like bindingMetadata, but only for bindings that will actually be thunked"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -21907,7 +22069,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Get the Graph from a PythonEnvironment"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Get the Graph from a PythonEnvironment"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -21925,7 +22088,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Set the Graph in a PythonEnvironment"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Set the Graph in a PythonEnvironment"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -25533,10 +25697,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Determine if a binding should be thunked based on its complexity and triviality"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Determine if a binding should be thunked based on its complexity and triviality"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -25573,7 +25738,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Generate a single from-import statement"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Generate a single from-import statement"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -25638,7 +25804,9 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "The target Python version for code generation"}}}],
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "The target Python version for code generation"}}}]},
             "body": {"variable": "hydra.python.utils.targetPythonVersion"}}},
         "name": "hydra.python.coder.targetPythonVersion",
         "signature": {"parameters": [], "result": {"type": {"variable": "hydra.python.environment.PythonVersion"}}, "typeParameters": []}}},
@@ -25646,7 +25814,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Calculate term arity with proper primitive handling"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Calculate term arity with proper primitive handling"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -25771,10 +25943,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Create a TypeVar assignment statement for a type variable name"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Create a TypeVar assignment statement for a type variable name"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -25811,7 +25984,9 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Version-aware type alias statement generation"}}}],
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "Version-aware type alias statement generation"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -25887,7 +26062,9 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Version-aware union type statement generation"}}}],
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "Version-aware union type statement generation"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -25972,10 +26149,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Create an expression that calls hydra.dsl.python.unsupported(message) at runtime"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Create an expression that calls hydra.dsl.python.unsupported(message) at runtime"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -26137,10 +26315,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Legacy constant for backward compatibility; use useInlineTypeParamsFor in new code"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Legacy constant for backward compatibility; use useInlineTypeParamsFor in new code"}}}]},
             "body": {
               "application": {
                 "argument": {"variable": "hydra.python.utils.targetPythonVersion"},
@@ -26151,7 +26330,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Version-aware inline type parameters"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Version-aware inline type parameters"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -26173,7 +26353,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Create args for variant (Node[type], Generic[tparams])"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Create args for variant (Node[type], Generic[tparams])"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -26224,10 +26408,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [
-                  {
-                    "key": "description",
-                    "value": {"literal": {"string": "Create a ClosedPattern for a variant based on its characteristics"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Create a ClosedPattern for a variant based on its characteristics"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -26313,7 +26498,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Create a wildcard case block with a given body statement"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Create a wildcard case block with a given body statement"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -26351,7 +26540,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Execute a computation with definitions in scope"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Execute a computation with definitions in scope"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -26490,10 +26683,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [
-                  {
-                    "key": "description",
-                    "value": {"literal": {"string": "Execute a computation with lambda context (adds lambda parameter to Graph)"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Execute a computation with lambda context (adds lambda parameter to Graph)"}}}]},
                 "body": {
                   "application": {
                     "argument": {"variable": "hydra.python.coder.pythonEnvironmentSetGraph"},
@@ -26528,10 +26722,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [
-                  {
-                    "key": "description",
-                    "value": {"literal": {"string": "Execute a computation with let context (adds let bindings to Graph)"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Execute a computation with let context (adds let bindings to Graph)"}}}]},
                 "body": {
                   "application": {
                     "argument": {"variable": "hydra.python.coder.pythonBindingMetadata"},
@@ -26569,10 +26764,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [
-                  {
-                    "key": "description",
-                    "value": {"literal": {"string": "Execute a computation with inline let context (for walrus operators)"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Execute a computation with inline let context (for walrus operators)"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -26760,7 +26956,9 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Execute a computation with type lambda context"}}}],
+                "annotation": {
+                  "map": [
+                    {"key": {"variable": "description"}, "value": {"literal": {"string": "Execute a computation with type lambda context"}}}]},
                 "body": {
                   "application": {
                     "argument": {"variable": "hydra.python.coder.pythonEnvironmentSetGraph"},
@@ -26793,10 +26991,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Wrap a Python expression in a nullary lambda (thunk) for lazy evaluation"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Wrap a Python expression in a nullary lambda (thunk) for lazy evaluation"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -26838,11 +27037,12 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {"string": "Wrap lazy-flagged arguments of a primitive call in nullary lambdas, per isLazy metadata (issue #391)"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {"string": "Wrap lazy-flagged arguments of a primitive call in nullary lambdas, per isLazy metadata (issue #391)"}}}]},
             "body": {
               "lambda": {
                 "body": {
