@@ -3,6 +3,9 @@
 This document specifies Hydra's JSON encoding for terms and types.
 It covers the rules of the JSON coder itself, independent of the shape of the `Module` type
 or any other particular kernel type being encoded.
+It also specifies the three JSON **sidecar and metadata files** that travel alongside the
+encoded modules — `manifest.json`, `package.json`, and `digest.json` — in
+[Sidecar and metadata files](#sidecar-and-metadata-files).
 
 The encoding is intended to be stable for the lifetime of the v1 series.
 A `moduleFormatVersion` field on the per-package `build/<set>/digest.json` records the encoding version,
@@ -258,7 +261,8 @@ rule applied separately).
 ### Manifest array values
 
 `manifest.json` files (per package, under `dist/json/<pkg>/src/main/json/manifest.json`) list each module
-name owned by the package, grouped by category (`mainModules`, `dslModules`, `evalLibModules`, etc.).
+name owned by the package, grouped by category (`mainModules`, `dslModules`, `defaultLibModules`, etc.;
+see [Sidecar and metadata files](#sidecar-and-metadata-files) for the full field set).
 Each array's entries must be sorted **lexicographically by module name string**.
 This is independent of the source code's enumeration order — the wire-format requirement is
 sorted; the runtime code that drives the writer should sort before encoding.
@@ -317,10 +321,10 @@ Module files themselves carry no version field;
 the package's `build/<set>/digest.json` is the single source of truth for the format
 version of all JSON files in the same package's source set.
 
-Two sibling metadata files carry their own schema-version fields, also reset to `1` for 0.16.0:
-`manifest.json` (the per-package module listing) carries `manifestFormatVersion`, and the
-hand-authored `packages/<pkg>/package.json` descriptor carries `packageFormatVersion`.
-These version those files' own schemas and are independent of `moduleFormatVersion`.
+The two sibling metadata files — `manifest.json` and `package.json` — carry their own
+schema-version fields (`manifestFormatVersion`, `packageFormatVersion`), independent of
+`moduleFormatVersion` and also reset to `1` for 0.16.0. See
+[Sidecar and metadata files](#sidecar-and-metadata-files) for their full schemas.
 
 ## Conformance
 
@@ -338,3 +342,110 @@ A conforming decoder must:
 - Accept all of the above shapes and decode them to the corresponding Hydra terms/types.
 - Reject any tagged-union object with zero or more than one key.
 - Reject any `Either` object carrying both `left` and `right` keys.
+
+## Sidecar and metadata files
+
+Three JSON files describe and track the encoded modules rather than encoding terms themselves.
+Unlike module files (which are pure `Module` serializations governed by `moduleFormatVersion`),
+each of these carries its own schema-version field, all reset to `1` for the 0.16.0 release.
+They are plain JSON objects: 2-space indent, LF line endings, and the same lexicographic key
+ordering described in [Stability of byte order](#stability-of-byte-order).
+
+### `manifest.json` — per-package module listing
+
+One per package at `dist/json/<pkg>/src/main/json/manifest.json` (generated; tracked in git).
+It lists the modules each package owns, grouped by role, so a host can load a package without
+scanning the filesystem. Each array is sorted lexicographically by module name.
+
+| Field | Type | Meaning |
+|-------|------|---------|
+| `manifestFormatVersion` | integer | Schema version of this manifest file. Currently `1`. |
+| `package` | string | The package name (e.g. `hydra-rdf`). |
+| `mainModules` | array of string | Module names making up the package's main source set. |
+| `testModules` | array of string | Module names in the package's test source set (empty for most packages). |
+| `dslModules` | array of string | Generated DSL-wrapper module names (empty when the package defines no DSL-wrapped types). |
+| `defaultLibModules` | array of string | Default-implementation library module names owned by the package. |
+
+Example (`mainModules` abbreviated):
+
+```json
+{
+  "defaultLibModules": [],
+  "dslModules": [],
+  "mainModules": ["hydra.owl.syntax", "hydra.rdf.serde", "hydra.rdf.syntax"],
+  "manifestFormatVersion": 1,
+  "package": "hydra-rdf",
+  "testModules": []
+}
+```
+
+The monolithic universe manifest (written to `dist/json/manifest.json` rather than per package)
+carries one additional `kernelModules` array; the per-package manifests above do not.
+
+### `package.json` — hand-authored package descriptor
+
+One per package at `packages/<pkg>/package.json` (hand-authored; the canonical source of package
+metadata). It is the single source of truth for a package's identity and dependency edges, which
+drive build ordering and per-language packaging. This is **distinct** from the npm `package.json`
+files under `heads/typescript/` and `heads/wasm/`, which follow npm's own schema and are unrelated.
+
+| Field | Type | Required | Meaning |
+|-------|------|----------|---------|
+| `packageFormatVersion` | integer | yes | Schema version of this descriptor. Currently `1`. |
+| `name` | string | yes | The package name (matches the directory, e.g. `hydra-kernel`). |
+| `description` | string | yes | One-line human-readable summary; flows into per-language package metadata. |
+| `sourceLanguage` | string | yes | The host language the package's DSL sources are authored in (today always `haskell`). |
+| `dependencies` | array of string | yes | Other package names this package depends on; build order is a topological sort over these edges. May be empty. |
+| `targetLanguages` | array of string | no | Restricts which target languages the package is regenerated to. Omitted means every target. |
+
+```json
+{
+  "packageFormatVersion": 1,
+  "name": "hydra-rdf",
+  "description": "RDF ecosystem support for Hydra: RDF, OWL, SHACL, ShEx, XML Schema",
+  "sourceLanguage": "haskell",
+  "targetLanguages": ["haskell", "java", "python"],
+  "dependencies": ["hydra-kernel"]
+}
+```
+
+### `digest.json` — build-cache sidecar
+
+The digest tracks content hashes so the build can skip regenerating unchanged work. It lives under
+`dist/json/<pkg>/build/<set>/digest.json` (and a universe digest at `dist/json/build/digest.json`).
+It is **gitignored and regenerated every sync**, so it is not shipped in a published package. Parsing
+is deliberately tolerant: unknown keys are ignored and a malformed digest degrades to an empty cache,
+so renaming or adding fields never breaks an older reader, and no migration step is needed.
+
+Two layouts exist, both carrying the two version fields and a content-hash core:
+
+- **Hashes layout** — a flat per-namespace hash map. Used for source-set digests.
+- **Inputs/outputs layout** — records each input and output file with its `kind` and `hash`,
+  plus a `generator` stamp. Used by the `digest-check` executable.
+
+| Field | Type | Layout | Meaning |
+|-------|------|--------|---------|
+| `digestFormatVersion` | integer | both | Schema version of the digest file's own format. Currently `1`. |
+| `moduleFormatVersion` | integer | both | The [module wire-format version](#format-versioning) the sibling `*.json` files were written at. Currently `1`. |
+| `hashes` | object | hashes | Map of module namespace → content hash (hex), sorted by namespace. |
+| `selfHash` | string | both | Hash over this package's own `hashes`; empty on legacy digests. |
+| `depHash:<pkg>` | string | both | Recorded `selfHash` of dependency `<pkg>` at write time. The `depHash:` prefix keeps these distinct from namespace keys; transitive invalidation compares them against deps' current `selfHash`. |
+| `generator` | string | inputs/outputs | Per-target generator-stamp identity (see [build-system.md](build-system.md)). |
+| `inputs` | object | inputs/outputs | Map of input path → `{ "kind": ..., "hash": ... }`. |
+| `outputs` | object | inputs/outputs | Map of output path → `{ "kind": ..., "hash": ... }`. |
+
+```json
+{
+  "digestFormatVersion": 1,
+  "moduleFormatVersion": 1,
+  "selfHash": "…",
+  "depHash:hydra-kernel": "…",
+  "hashes": {
+    "hydra.rdf.syntax": "…",
+    "hydra.rdf.utils": "…"
+  }
+}
+```
+
+See [Format versioning](#format-versioning) for the distinction between the two version fields and the
+bump rules, and [build-system.md](build-system.md) for the digest's role in the cache hierarchy.
