@@ -968,7 +968,8 @@ def _import_from_as_name_to_expr():
             field("name", _proj("ImportFromAsName", "name", "ifan")),
             field("alias", _proj("ImportFromAsName", "as", "ifan")),
         ],
-        Maybes.maybe(
+        Maybes.cases(
+            var("alias"),
             _local("nameToExpr")(var("name")),
             lam(
                 "a",
@@ -978,7 +979,6 @@ def _import_from_as_name_to_expr():
                     _local("nameToExpr")(var("a")),
                 ])),
             ),
-            var("alias"),
         ),
     )
     return _def(
@@ -1987,7 +1987,7 @@ def _string_to_expr():
     body = lets(
         [
             field("content", _proj("String", "value", "s")),
-            field("prefix", Maybes.maybe(string(""), _local("stringPrefixToText"), _proj("String", "prefix", "s"))),
+            field("prefix", Maybes.cases(_proj("String", "prefix", "s"), string(""), _local("stringPrefixToText"))),
             field("style", _proj("String", "quoteStyle", "s")),
         ],
         cases(

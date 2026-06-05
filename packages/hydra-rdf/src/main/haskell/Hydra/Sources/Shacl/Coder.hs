@@ -217,9 +217,7 @@ encodeList = define "encodeList" $
           Rdf._Description_subject>>: inject Rdf._Node Rdf._Node_iri (wrap Rdf._Iri (string "http://www.w3.org/1999/02/22-rdf-syntax-ns#nil")),
           Rdf._Description_graph>>: wrap Rdf._Graph Sets.empty]])
         (var "cx0"))
-      (Maybes.maybe
-        (right $ pair (list ([] :: [TypedTerm Rdf.Description])) (var "cx0"))
-        (lambda "p" $ lets [
+      (Maybes.cases (Lists.uncons (var "terms")) (right $ pair (list ([] :: [TypedTerm Rdf.Description])) (var "cx0")) (lambda "p" $ lets [
           "pair1">: nextBlankNode @@ var "cx0",
           "node1">: Pairs.first (var "pair1"),
           "cx1">: Pairs.second (var "pair1")] $
@@ -246,8 +244,7 @@ encodeList = define "encodeList" $
                       Rdf._Description_subject>>: resourceToNode @@ var "subj",
                       Rdf._Description_graph>>: wrap Rdf._Graph (Sets.fromList (Lists.concat2 (var "firstTriples") (var "restTriples")))]])
                     (var "cx4"))
-                (encodeList @@ var "next" @@ Pairs.second (var "p") @@ var "cx3" @@ var "g")))
-        (Lists.uncons (var "terms")))
+                (encodeList @@ var "next" @@ Pairs.second (var "p") @@ var "cx3" @@ var "g"))))
 
 -- | Encode a Hydra Literal as an RDF Literal
 encodeLiteral :: TypedTerm (Literal -> Rdf.Literal)
@@ -334,10 +331,7 @@ encodeTerm = define "encodeTerm" $
               (var "cx1"))
           (encodeTerm @@ var "subject" @@ (Core.wrappedTermBody (var "wt")) @@ var "cx" @@ var "g"),
       _Term_maybe>>: lambda "mterm" $
-        Maybes.maybe
-          (right (pair (list ([] :: [TypedTerm Rdf.Description])) (var "cx")))
-          ("__inner" ~> encodeTerm @@ var "subject" @@ var "__inner" @@ var "cx" @@ var "g")
-          (var "mterm"),
+        Maybes.cases (var "mterm") (right (pair (list ([] :: [TypedTerm Rdf.Description])) (var "cx"))) ("__inner" ~> encodeTerm @@ var "subject" @@ var "__inner" @@ var "cx" @@ var "g"),
       _Term_record>>: lambda "rec" $ lets [
         "rname">: Core.recordTypeName (var "rec"),
         "fields">: Core.recordFields (var "rec")] $
@@ -431,9 +425,7 @@ foldAccumResult :: TypedTermDefinition ((I.Int32 -> a -> Either Error (b, I.Int3
 foldAccumResult = define "foldAccumResult" $
   doc "Fold over a list, accumulating results and threading context through each step" $
   lambda "f" $ lambda "cx" $ lambda "xs" $
-    Maybes.maybe
-      (right (pair (list ([] :: [TypedTerm b])) (var "cx")))
-      (lambda "p" $
+    Maybes.cases (Lists.uncons (var "xs")) (right (pair (list ([] :: [TypedTerm b])) (var "cx"))) (lambda "p" $
         Eithers.bind
           (var "f" @@ var "cx" @@ Pairs.first (var "p"))
           ("__r" ~> Eithers.map
@@ -441,7 +433,6 @@ foldAccumResult = define "foldAccumResult" $
               (Lists.cons (Pairs.first (var "__r")) (Pairs.first (var "__rest")))
               (Pairs.second (var "__rest")))
             (foldAccumResult @@ var "f" @@ (Pairs.second (var "__r")) @@ Pairs.second (var "p"))))
-      (Lists.uncons (var "xs"))
 
 -- | Construct triples from a subject, predicate IRI, and list of object nodes
 forObjects :: TypedTerm (Rdf.Resource -> Rdf.Iri -> [Rdf.Node] -> [Rdf.Triple])

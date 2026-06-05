@@ -151,10 +151,7 @@ instantiateTemplate = define "instantiateTemplate" $
       (Eithers.bind (var "inst" @@ var "tname" @@ var "et") (
         "e" ~> right (Core.termSet (Sets.fromList (list [var "e"]))))),
     _Type_variable>>: "vname" ~>
-      Maybes.maybe
-        (left (Error.errorResolution $ Error.resolutionErrorUnexpectedShape $ Error.unexpectedShapeError (string "bound type variable") (Strings.cat2 (string "unbound variable ") (Core.unName (var "vname")))))
-        (var "inst" @@ var "vname")
-        (Maps.lookup (var "vname") (var "schema")),
+      Maybes.cases (Maps.lookup (var "vname") (var "schema")) (left (Error.errorResolution $ Error.resolutionErrorUnexpectedShape $ Error.unexpectedShapeError (string "bound type variable") (Strings.cat2 (string "unbound variable ") (Core.unName (var "vname"))))) (var "inst" @@ var "vname"),
     _Type_wrap>>: "wt" ~>
       Eithers.bind (var "inst" @@ var "tname" @@ var "wt") (
         "e" ~> right (Core.termWrap (Core.wrappedTerm (var "tname") (var "e"))))]

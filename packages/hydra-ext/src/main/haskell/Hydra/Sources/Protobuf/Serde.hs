@@ -305,9 +305,7 @@ optDesc = define "optDesc" $
     "descs">: Lists.filter
       (lambda "opt" $ Equality.equal (project P3._Option P3._Option_name @@ var "opt") (string "_description"))
       (var "opts")] $
-    Maybes.maybe
-      (var "expr")
-      (lambda "firstDesc" $ lets [
+    Maybes.cases (Lists.maybeHead (var "descs")) (var "expr") (lambda "firstDesc" $ lets [
         "descValue">: project P3._Option P3._Option_value @@ var "firstDesc",
         "descStr">: cases P3._Value (var "descValue") Nothing [
           P3._Value_boolean>>: lambda "b" $ Logic.ifElse (var "b") (string "true") (string "false"),
@@ -322,7 +320,6 @@ optDesc = define "optDesc" $
           (Serialization.doubleNewlineSep @@ list [var "comment", var "expr"])
           (Serialization.newlineSep @@ list [var "comment", var "expr"])] $
         var "sep")
-      (Lists.maybeHead (var "descs"))
 
 protoBlock :: TypedTermDefinition ([Expr] -> Expr)
 protoBlock = define "protoBlock" $

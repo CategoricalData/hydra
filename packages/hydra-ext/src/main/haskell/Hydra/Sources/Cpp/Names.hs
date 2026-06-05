@@ -174,13 +174,7 @@ encodeName = def "encodeName" $
       (Lists.map (Formatting.convertCase @@ Util.caseConventionCamel @@ Util.caseConventionLowerSnake)
         (Strings.splitOn (string ".") (Packaging.unModuleName $ var "nsVal")))] $
     Logic.ifElse (var "isQualified")
-      (Maybes.maybe
-        (Maybes.maybe
-          (var "cppLocal")
-          (lambda "nsVal" $ Strings.cat2 (var "cppNs" @@ var "nsVal") (Strings.cat2 (string "::") (var "cppLocal")))
-          (var "mns"))
-        (lambda "n" $ var "n")
-        (Maps.lookup (var "name") (var "boundVars")))
+      (Maybes.cases (Maps.lookup (var "name") (var "boundVars")) (Maybes.cases (var "mns") (var "cppLocal") (lambda "nsVal" $ Strings.cat2 (var "cppNs" @@ var "nsVal") (Strings.cat2 (string "::") (var "cppLocal")))) (lambda "n" $ var "n"))
       (var "cppLocal")
 
 -- | Encode a qualified name with namespace
@@ -196,14 +190,11 @@ encodeNameQualified = def "encodeNameQualified" $
     "qualName">: Names.qualifyName @@ var "name",
     "mns">: Util.qualifiedNameModuleName $ var "qualName",
     "local">: Util.qualifiedNameLocal $ var "qualName"] $
-    Maybes.maybe
-      (Logic.ifElse (Equality.equal (var "mns") (just $ var "focusNs"))
+    Maybes.cases (Maps.lookup (var "name") (var "boundVars")) (Logic.ifElse (Equality.equal (var "mns") (just $ var "focusNs"))
         (sanitizeCppName @@ var "local")
         (Strings.intercalate (string "::")
           (Lists.map sanitizeCppName
-            (Strings.splitOn (string ".") (Core.unName $ var "name")))))
-      (lambda "n" $ var "n")
-      (Maps.lookup (var "name") (var "boundVars"))
+            (Strings.splitOn (string ".") (Core.unName $ var "name"))))) (lambda "n" $ var "n")
 
 -- | Encode a namespace as a C++ namespace string
 encodeNamespace :: TypedTermDefinition (ModuleName -> String)

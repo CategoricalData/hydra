@@ -243,14 +243,11 @@ satisfy = define "satisfy" $
   "pred" ~>
   "parse" <~ ("input" ~>
     "codes" <~ Strings.toList (var "input") $
-    Maybes.maybe
-      (Parsing.parseResultFailure (Parsing.parseError (string "unexpected end of input") (var "input")))
-      ("c" ~>
+    Maybes.cases (Lists.maybeHead $ var "codes") (Parsing.parseResultFailure (Parsing.parseError (string "unexpected end of input") (var "input"))) ("c" ~>
        "rest" <~ Strings.fromList (Lists.drop (int32 1) (var "codes")) $
        Logic.ifElse (var "pred" @@ var "c")
          (Parsing.parseResultSuccess (Parsing.parseSuccess (var "c") (var "rest")))
-         (Parsing.parseResultFailure (Parsing.parseError (string "character did not satisfy predicate") (var "input"))))
-      (Lists.maybeHead $ var "codes")) $
+         (Parsing.parseResultFailure (Parsing.parseError (string "character did not satisfy predicate") (var "input"))))) $
   Parsing.parser (var "parse")
 
 -- | Parse zero or more occurrences separated by a separator

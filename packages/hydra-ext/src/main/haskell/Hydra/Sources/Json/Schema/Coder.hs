@@ -297,9 +297,7 @@ nameToPath = define "nameToPath" $
     "qn">: Names.qualifyName @@ var "name",
     "mns">: Util.qualifiedNameModuleName (var "qn"),
     "local">: Util.qualifiedNameLocal (var "qn"),
-    "nsPart">: Maybes.maybe (string "")
-      ("ns" ~> Strings.cat2 (Packaging.unModuleName (var "ns")) (string "."))
-      (var "mns")] $
+    "nsPart">: Maybes.cases (var "mns") (string "") ("ns" ~> Strings.cat2 (Packaging.unModuleName (var "ns")) (string "."))] $
     Names.moduleNameToFilePath
       @@ Util.caseConventionCamel
       @@ wrap _FileExtension (string "json")
@@ -339,9 +337,7 @@ transitiveTypeDeps = define "transitiveTypeDeps" $
       Logic.ifElse (Sets.member (var "n") (var "acc"))
         (var "acc")
         (lets ["acc1">: Sets.insert (var "n") (var "acc")] $
-          Maybes.maybe (var "acc1")
-            ("t" ~> asTerm transitiveTypeDeps @@ var "typeMap" @@ var "acc1" @@ var "t")
-            (Maps.lookup (var "n") (var "typeMap")))] $
+          Maybes.cases (Maps.lookup (var "n") (var "typeMap")) (var "acc1") ("t" ~> asTerm transitiveTypeDeps @@ var "typeMap" @@ var "acc1" @@ var "t"))] $
     Lists.foldl (var "step") (var "visited") (Sets.toList (var "directDeps"))
 
 typeDefToDocument :: TypedTermDefinition (InferenceContext -> Graph -> M.Map Name Type -> Name -> Type -> Either Error (FilePath, JS.Document))
@@ -385,9 +381,7 @@ typeToExpr = define "typeToExpr" $
           ("res" ~> Eithers.bind
             (Annotations.getTypeDescription @@ var "cx" @@ var "g" @@ var "typ")
             ("mdesc" ~> right (Lists.concat2
-              (Maybes.maybe (list ([] :: [TypedTerm JS.Restriction]))
-                ("d" ~> list [inject JS._Restriction JS._Restriction_description (var "d")])
-                (var "mdesc"))
+              (Maybes.cases (var "mdesc") (list ([] :: [TypedTerm JS.Restriction])) ("d" ~> list [inject JS._Restriction JS._Restriction_description (var "d")]))
               (var "res"))))),
 
       _Type_application>>: ("at" ~>

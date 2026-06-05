@@ -762,11 +762,9 @@ gatherMetadata = haskellCoderDefinition "gatherMetadata" $
           "term" <~ Packaging.termDefinitionBody (var "termDef") $
           "metaWithTerm" <~ (Rewriting.foldOverTerm @@ Coders.traversalOrderPre
             @@ ("m" ~> "t" ~> extendMetaForTerm @@ var "m" @@ var "t") @@ var "meta" @@ var "term") $
-          Maybes.maybe (var "metaWithTerm")
-            ("ts" ~>
+          Maybes.cases (Maybes.map Scoping.termSignatureToTypeScheme $ Packaging.termDefinitionSignature $ var "termDef") (var "metaWithTerm") ("ts" ~>
               Rewriting.foldOverType @@ Coders.traversalOrderPre
-                @@ ("m" ~> "t" ~> extendMetaForType @@ var "m" @@ var "t") @@ var "metaWithTerm" @@ (Core.typeSchemeBody $ var "ts"))
-            (Maybes.map Scoping.termSignatureToTypeScheme $ Packaging.termDefinitionSignature $ var "termDef"),
+                @@ ("m" ~> "t" ~> extendMetaForType @@ var "m" @@ var "t") @@ var "metaWithTerm" @@ (Core.typeSchemeBody $ var "ts")),
         _Definition_type>>: "typeDef" ~>
           "typ" <~ (Core.typeSchemeBody $ Packaging.typeDefinitionBody (var "typeDef")) $
           Rewriting.foldOverType @@ Coders.traversalOrderPre
@@ -951,7 +949,7 @@ toDataDeclaration = haskellCoderDefinition "toDataDeclaration" $
           "hterms" <<~ Eithers.mapList ("t" ~> encodeTerm @@ int32 0 @@ var "namespaces" @@ var "t" @@ var "cx" @@ var "g") (var "terms") $ lets [
           "hbindings">: Lists.zipWith (var "toTermDefinition") (var "hnames") (var "hterms"),
           -- Merge new bindings with any previously accumulated bindings from outer lets
-          "prevBindings">: Maybes.maybe (list ([] :: [TypedTerm H.LocalBinding])) ("lb" ~> unwrap H._LocalBindings @@ var "lb") (var "bindings"),
+          "prevBindings">: Maybes.cases (var "bindings") (list ([] :: [TypedTerm H.LocalBinding])) ("lb" ~> unwrap H._LocalBindings @@ var "lb"),
           "allBindings">: Lists.concat2 (var "prevBindings") (var "hbindings")] $
           var "toDecl" @@ var "comments" @@ var "hname'" @@ var "env" @@ (just $ wrap H._LocalBindings $ var "allBindings")]] $
     "comments" <<~ Annotations.getTermDescription @@ var "cx" @@ var "g" @@ var "term" $
@@ -1137,14 +1135,11 @@ typeSchemeConstraintsToClassMap = haskellCoderDefinition "typeSchemeConstraintsT
   "maybeConstraints" ~> lets [
     "constraintToName">: "tcc" ~> match _TypeClassConstraint Nothing [
       _TypeClassConstraint_simple>>: "className" ~> just (var "className")] @@ (var "tcc")] $
-    Maybes.maybe
-      Maps.empty
-      ("constraints" ~>
+    Maybes.cases (var "maybeConstraints") Maps.empty ("constraints" ~>
         Maps.map
           ("meta" ~> Sets.fromList $
             Maybes.cat $ Lists.map (var "constraintToName") $ Core.typeVariableConstraintsClasses (var "meta"))
           (var "constraints"))
-      (var "maybeConstraints")
 
 useCoreImport :: TypedTermDefinition Bool
 useCoreImport = haskellCoderDefinition "useCoreImport" $

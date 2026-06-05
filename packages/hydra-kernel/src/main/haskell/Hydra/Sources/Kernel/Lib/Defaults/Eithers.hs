@@ -299,7 +299,8 @@ mapMaybe_ = define "mapMaybe" $
   cases _Term (var "maybeTerm")
     (Just (ExtractCore.unexpected (string "maybe value") (ShowCore.term @@ var "maybeTerm"))) [
     _Term_maybe>>: "opt" ~>
-      right $ Maybes.maybe
+      right $ Maybes.cases
+        (var "opt")
         -- Nothing: return Right Nothing
         (Core.termEither $ right $ Core.termMaybe nothing)
         -- Just val: apply funTerm, wrap result in Just
@@ -312,8 +313,7 @@ mapMaybe_ = define "mapMaybe" $
                   Core.termEither $ left $ Core.termVariable $ wrap _Name $ string "err"))
               (Core.termLambda $ Core.lambda (wrap _Name $ string "y") nothing $
                 Core.termEither $ right $ Core.termMaybe $ just $ Core.termVariable $ wrap _Name $ string "y"))
-            (Core.termApplication $ Core.application (var "funTerm") (var "val")))
-        (var "opt")]
+            (Core.termApplication $ Core.application (var "funTerm") (var "val")))]
 
 -- | Interpreter-friendly mapSet for Either (traverse over Set).
 -- mapSet funTerm setTerm: applies funTerm to each element, collecting results as a set.

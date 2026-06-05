@@ -258,9 +258,7 @@ normalizeTypeVariablesInTerm = define "normalizeTypeVariablesInTerm" $
         "body0"     <~ Core.letBody (var "lt") $
         -- Sequentially rewrite bindings without advancing 'next' across siblings
         "step" <~ ("acc" ~> "bs" ~>
-          Maybes.maybe
-            (Lists.reverse (var "acc"))
-            ("uc" ~>
+          Maybes.cases (Lists.uncons $ var "bs") (Lists.reverse (var "acc")) ("uc" ~>
           "b"  <~ Pairs.first (var "uc") $
           "tl" <~ Pairs.second (var "uc") $
           "noType" <~ (
@@ -306,8 +304,7 @@ normalizeTypeVariablesInTerm = define "normalizeTypeVariablesInTerm" $
                -- Untyped binding: rewrite its term with current state; 'next' unchanged for siblings
                (var "noType")
                -- Typed binding: allocate |vars| fresh t{next+i}; bump 'next' only for the binding's TERM
-               ("ts" ~> var "withType" @@ var "ts"))
-          (Lists.uncons $ var "bs")) $
+               ("ts" ~> var "withType" @@ var "ts"))) $
         "bindings1" <~ var "step" @@ (list ([] :: [TypedTerm Binding])) @@ (var "bindings0") $
         Core.termLet $ Core.let_
           (var "bindings1")
@@ -398,10 +395,7 @@ substituteVariables = define "substituteVariables" $
       _Term_variable>>: "n" ~>
         Core.termVariable $ Maybes.fromMaybe (var "n") $ Maps.lookup (var "n") (var "subst"),
       _Term_lambda>>: "l" ~>
-        Maybes.maybe
-          (var "recurse" @@ var "term")
-          (constant $ var "term")
-          (Maps.lookup (Core.lambdaParameter $ var "l") (var "subst"))]) $
+        Maybes.cases (Maps.lookup (Core.lambdaParameter $ var "l") (var "subst")) (var "recurse" @@ var "term") (constant $ var "term")]) $
   Rewriting.rewriteTerm @@ var "replace" @@ var "term"
 
 unshadowVariables :: TypedTermDefinition (Term -> Term)

@@ -259,11 +259,9 @@ checkDefinitionDocumentation = define "checkDefinitionDocumentation" $
                 _Type_annotated>>: "at" ~>
                   Annotations.hasDescription @@ (Annotations.getAnnotationMap @@ (Core.annotatedTypeAnnotation $ var "at"))],
             _Definition_primitive>>: "pd" ~>
-              Maybes.maybe false
-                ("em" ~> Logic.not (Equality.equal
+              Maybes.cases (Packaging.primitiveDefinitionMetadata $ var "pd") false ("em" ~> Logic.not (Equality.equal
                   (Maybes.fromMaybe (string "") (Packaging.entityMetadataDescription $ var "em"))
-                  (string "")))
-                (Packaging.primitiveDefinitionMetadata $ var "pd")] $
+                  (string "")))] $
           Logic.ifElse (var "documented")
             nothing
             (just $ ErrorPackaging.invalidModuleErrorMissingDocumentation $

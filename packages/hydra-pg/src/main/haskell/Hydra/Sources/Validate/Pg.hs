@@ -355,18 +355,10 @@ validateEdge = validationDefinition "validateEdge" $
       -- for vertex-existence checks). When labelForVertexId is Nothing,
       -- both outVertexNotFound and outVertexLabel are skipped.
       guardedEdgeRule (var "p") _InvalidEdgeError _InvalidEdgeError_outVertexNotFound
-        (Maybes.maybe nothing
-          ("f" ~> Maybes.maybe
-            (just (inject _InvalidEdgeError _InvalidEdgeError_outVertexNotFound $ unit))
-            ("_label" ~> nothing)
-            (var "f" @@ (project _Edge _Edge_out @@ var "el")))
-          (var "labelForVertexId")),
+        (Maybes.cases (var "labelForVertexId") nothing ("f" ~> Maybes.cases (var "f" @@ (project _Edge _Edge_out @@ var "el")) (just (inject _InvalidEdgeError _InvalidEdgeError_outVertexNotFound $ unit)) ("_label" ~> nothing))),
       -- outVertexLabel: out-vertex's label doesn't match the EdgeType's expected out label.
       guardedEdgeRule (var "p") _InvalidEdgeError _InvalidEdgeError_outVertexLabel
-        (Maybes.maybe nothing
-          ("f" ~> Maybes.maybe
-            nothing
-            ("label" ~> Logic.ifElse
+        (Maybes.cases (var "labelForVertexId") nothing ("f" ~> Maybes.cases (var "f" @@ (project _Edge _Edge_out @@ var "el")) nothing ("label" ~> Logic.ifElse
               (Equality.equal
                 (unwrap _VertexLabel @@ var "label")
                 (unwrap _VertexLabel @@ (project _EdgeType _EdgeType_out @@ var "typ")))
@@ -374,23 +366,13 @@ validateEdge = validationDefinition "validateEdge" $
               (just $ inject _InvalidEdgeError _InvalidEdgeError_outVertexLabel $
                 record _WrongVertexLabelError [
                   _WrongVertexLabelError_expected>>: project _EdgeType _EdgeType_out @@ var "typ",
-                  _WrongVertexLabelError_actual>>: var "label"]))
-            (var "f" @@ (project _Edge _Edge_out @@ var "el")))
-          (var "labelForVertexId")),
+                  _WrongVertexLabelError_actual>>: var "label"])))),
       -- inVertexNotFound: same as outVertexNotFound but for the in-vertex.
       guardedEdgeRule (var "p") _InvalidEdgeError _InvalidEdgeError_inVertexNotFound
-        (Maybes.maybe nothing
-          ("f" ~> Maybes.maybe
-            (just (inject _InvalidEdgeError _InvalidEdgeError_inVertexNotFound $ unit))
-            ("_label" ~> nothing)
-            (var "f" @@ (project _Edge _Edge_in @@ var "el")))
-          (var "labelForVertexId")),
+        (Maybes.cases (var "labelForVertexId") nothing ("f" ~> Maybes.cases (var "f" @@ (project _Edge _Edge_in @@ var "el")) (just (inject _InvalidEdgeError _InvalidEdgeError_inVertexNotFound $ unit)) ("_label" ~> nothing))),
       -- inVertexLabel
       guardedEdgeRule (var "p") _InvalidEdgeError _InvalidEdgeError_inVertexLabel
-        (Maybes.maybe nothing
-          ("f" ~> Maybes.maybe
-            nothing
-            ("label" ~> Logic.ifElse
+        (Maybes.cases (var "labelForVertexId") nothing ("f" ~> Maybes.cases (var "f" @@ (project _Edge _Edge_in @@ var "el")) nothing ("label" ~> Logic.ifElse
               (Equality.equal
                 (unwrap _VertexLabel @@ var "label")
                 (unwrap _VertexLabel @@ (project _EdgeType _EdgeType_in @@ var "typ")))
@@ -398,9 +380,7 @@ validateEdge = validationDefinition "validateEdge" $
               (just $ inject _InvalidEdgeError _InvalidEdgeError_inVertexLabel $
                 record _WrongVertexLabelError [
                   _WrongVertexLabelError_expected>>: project _EdgeType _EdgeType_in @@ var "typ",
-                  _WrongVertexLabelError_actual>>: var "label"]))
-            (var "f" @@ (project _Edge _Edge_in @@ var "el")))
-          (var "labelForVertexId"))])
+                  _WrongVertexLabelError_actual>>: var "label"]))))])
 
 -- | Validate a property graph against a schema under the given
 -- ValidationProfile. Walks vertices first, then edges, lifting each
@@ -443,16 +423,13 @@ validateGraph = validationDefinition "validateGraph" $
         "tOpt">: Maps.lookup
           (project _Vertex _Vertex_label @@ var "el")
           (project _GraphSchema _GraphSchema_vertices @@ var "schema"),
-        "perVertex">: Maybes.maybe
-          (Validation.validationResult
+        "perVertex">: Maybes.cases (var "tOpt") (Validation.validationResult
             (list [
               inject _InvalidVertexError _InvalidVertexError_label $
                 record _NoSuchVertexLabelError [
                   _NoSuchVertexLabelError_label>>:
                     project _Vertex _Vertex_label @@ var "el"]])
-            (list ([] :: [TypedTerm InvalidVertexError])))
-          ("t" ~> validateVertex @@ var "p" @@ var "checkValue" @@ var "t" @@ var "el")
-          (var "tOpt")]
+            (list ([] :: [TypedTerm InvalidVertexError]))) ("t" ~> validateVertex @@ var "p" @@ var "checkValue" @@ var "t" @@ var "el")]
         $ Lists.map
             ("ve" ~> inject _InvalidGraphError _InvalidGraphError_vertex $
               record _InvalidGraphVertexError [
@@ -466,16 +443,13 @@ validateGraph = validationDefinition "validateGraph" $
         "tOpt">: Maps.lookup
           (project _Edge _Edge_label @@ var "el")
           (project _GraphSchema _GraphSchema_edges @@ var "schema"),
-        "perEdge">: Maybes.maybe
-          (Validation.validationResult
+        "perEdge">: Maybes.cases (var "tOpt") (Validation.validationResult
             (list [
               inject _InvalidEdgeError _InvalidEdgeError_label $
                 record _NoSuchEdgeLabelError [
                   _NoSuchEdgeLabelError_label>>:
                     project _Edge _Edge_label @@ var "el"]])
-            (list ([] :: [TypedTerm InvalidEdgeError])))
-          ("t" ~> validateEdge @@ var "p" @@ var "checkValue" @@ var "labelForVertexId" @@ var "t" @@ var "el")
-          (var "tOpt")]
+            (list ([] :: [TypedTerm InvalidEdgeError]))) ("t" ~> validateEdge @@ var "p" @@ var "checkValue" @@ var "labelForVertexId" @@ var "t" @@ var "el")]
         $ Lists.map
             ("ee" ~> inject _InvalidGraphError _InvalidGraphError_edge $
               record _InvalidGraphEdgeError [
@@ -522,14 +496,11 @@ validateProperties = validationDefinition "validateProperties" $
     "missingChecks">: Lists.map
       ("t" ~> guardedPropertyRule (var "p") _InvalidPropertyError _InvalidPropertyError_missingRequired
         (Logic.ifElse (project _PropertyType _PropertyType_required @@ var "t")
-          (Maybes.maybe
-            (just (record _InvalidElementPropertyError [
+          (Maybes.cases (Maps.lookup (project _PropertyType _PropertyType_key @@ var "t") $ var "props") (just (record _InvalidElementPropertyError [
               _InvalidElementPropertyError_key>>: project _PropertyType _PropertyType_key @@ var "t",
               _InvalidElementPropertyError_error>>:
                 inject _InvalidPropertyError _InvalidPropertyError_missingRequired $
-                  project _PropertyType _PropertyType_key @@ var "t"]))
-            (constant nothing)
-            (Maps.lookup (project _PropertyType _PropertyType_key @@ var "t") $ var "props"))
+                  project _PropertyType _PropertyType_key @@ var "t"])) (constant nothing))
           nothing))
       (var "types"),
     -- For each actual property, build two guarded checks: unexpectedKey
@@ -544,23 +515,17 @@ validateProperties = validationDefinition "validateProperties" $
         "val">: Pairs.second $ var "kv"]
         $ list [
           guardedPropertyRule (var "p") _InvalidPropertyError _InvalidPropertyError_unexpectedKey
-            (Maybes.maybe
-              (just (record _InvalidElementPropertyError [
+            (Maybes.cases (Maps.lookup (var "key") (var "m")) (just (record _InvalidElementPropertyError [
                 _InvalidElementPropertyError_key>>: var "key",
                 _InvalidElementPropertyError_error>>:
-                  inject _InvalidPropertyError _InvalidPropertyError_unexpectedKey $ var "key"]))
-              (constant nothing)
-              (Maps.lookup (var "key") (var "m"))),
+                  inject _InvalidPropertyError _InvalidPropertyError_unexpectedKey $ var "key"])) (constant nothing)),
           guardedPropertyRule (var "p") _InvalidPropertyError _InvalidPropertyError_invalidValue
-            (Maybes.maybe
-              nothing
-              ("typ" ~> Maybes.map
+            (Maybes.cases (Maps.lookup (var "key") (var "m")) nothing ("typ" ~> Maybes.map
                 ("err" ~> record _InvalidElementPropertyError [
                   _InvalidElementPropertyError_key>>: var "key",
                   _InvalidElementPropertyError_error>>:
                     inject _InvalidPropertyError _InvalidPropertyError_invalidValue $ var "err"])
-                (var "checkValue" @@ var "typ" @@ var "val"))
-              (Maps.lookup (var "key") (var "m")))])]
+                (var "checkValue" @@ var "typ" @@ var "val")))])]
     $ Lists.foldl
       ("acc" ~> "guarded" ~>
         Logic.ifElse

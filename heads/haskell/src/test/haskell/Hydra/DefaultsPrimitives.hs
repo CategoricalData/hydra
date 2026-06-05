@@ -286,9 +286,6 @@ defaultLibMaybes = standardLibrary _hydra_lib_maybes [
   mkPrim _maybes_mapMaybe 2 $ \cx g args -> case args of
     [f, t] -> DefaultMaybes.mapMaybe cx g f t
     _ -> unexpected cx "maybes.mapMaybe" 2,
-  mkPrim _maybes_maybe 3 $ \cx g args -> case args of
-    [def, f, t] -> DefaultMaybes.maybe cx g def f t
-    _ -> unexpected cx "maybes.maybe" 3,
   mkPrim _maybes_pure 1 $ \cx g args -> case args of
     [x] -> coerceError $ DefaultMaybes.pure cx g x
     _ -> unexpected cx "maybes.pure" 1,

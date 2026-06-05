@@ -723,9 +723,7 @@ rewriteTermM = define "rewriteTermM" $
         "n" <~ Core.caseStatementTypeName (var "cs") $
         "def" <~ Core.caseStatementDefault (var "cs") $
         "csCases" <~ Core.caseStatementCases (var "cs") $
-        "rdef" <<~ Maybes.maybe (right nothing)
-          ("t" ~> Eithers.map (reify just) $ var "recurse" @@ var "t")
-          (var "def") $
+        "rdef" <<~ Maybes.cases (var "def") (right nothing) ("t" ~> Eithers.map (reify just) $ var "recurse" @@ var "t") $
         Eithers.map
           ("rcases" ~> Core.termCases $
             Core.caseStatement (var "n") (var "rdef") (var "rcases"))
@@ -899,9 +897,7 @@ rewriteTermWithContextM = define "rewriteTermWithContextM" $
         "n" <~ Core.caseStatementTypeName (var "cs") $
         "def" <~ Core.caseStatementDefault (var "cs") $
         "csCases" <~ Core.caseStatementCases (var "cs") $
-        "rdef" <<~ Maybes.maybe (right nothing)
-          ("t" ~> Eithers.map (reify just) $ var "recurse" @@ var "t")
-          (var "def") $
+        "rdef" <<~ Maybes.cases (var "def") (right nothing) ("t" ~> Eithers.map (reify just) $ var "recurse" @@ var "t") $
         Eithers.map
           ("rcases" ~> Core.termCases $
             Core.caseStatement (var "n") (var "rdef") (var "rcases"))
@@ -1112,7 +1108,7 @@ subterms = define "subterms" $
       Core.applicationFunction $ var "p",
       Core.applicationArgument $ var "p"],
     _Term_cases>>: "cs" ~> Lists.concat2
-      (Maybes.maybe (list ([] :: [TypedTerm Term])) ("t" ~> list [var "t"]) (Core.caseStatementDefault $ var "cs"))
+      (Maybes.cases (Core.caseStatementDefault $ var "cs") (list ([] :: [TypedTerm Term])) ("t" ~> list [var "t"]))
       (Lists.map (reify Core.caseAlternativeHandler) (Core.caseStatementCases $ var "cs")),
     _Term_either>>: "e" ~> Eithers.either_
       ("l" ~> list [var "l"])
@@ -1127,7 +1123,7 @@ subterms = define "subterms" $
     _Term_map>>: "m" ~> Lists.concat $ Lists.map
       ("p" ~> list [Pairs.first $ var "p", Pairs.second $ var "p"])
       (Maps.toList $ var "m"),
-    _Term_maybe>>: "m" ~> Maybes.maybe (list ([] :: [TypedTerm Term])) ("t" ~> list [var "t"]) (var "m"),
+    _Term_maybe>>: "m" ~> Maybes.cases (var "m") (list ([] :: [TypedTerm Term])) ("t" ~> list [var "t"]),
     _Term_pair>>: "p" ~> list [Pairs.first $ var "p", Pairs.second $ var "p"],
     _Term_project>>: constant $ list ([] :: [TypedTerm Term]),
     _Term_record>>: "rt" ~> Lists.map (reify Core.fieldTerm) (Core.recordFields $ var "rt"),
@@ -1149,9 +1145,7 @@ subtermsWithSteps = define "subtermsWithSteps" $
       result Paths.subtermStepApplicationFunction $ Core.applicationFunction $ var "p",
       result Paths.subtermStepApplicationArgument $ Core.applicationArgument $ var "p"],
     _Term_cases>>: "cs" ~> Lists.concat2
-      (Maybes.maybe none
-        ("t" ~> single Paths.subtermStepUnionCasesDefault $ var "t")
-        (Core.caseStatementDefault $ var "cs"))
+      (Maybes.cases (Core.caseStatementDefault $ var "cs") none ("t" ~> single Paths.subtermStepUnionCasesDefault $ var "t"))
       (Lists.map
         ("f" ~> result (Paths.subtermStepUnionCasesBranch $ Core.caseAlternativeName $ var "f") $ Core.caseAlternativeHandler $ var "f")
         (Core.caseStatementCases $ var "cs")),
@@ -1174,9 +1168,7 @@ subtermsWithSteps = define "subtermsWithSteps" $
           result (Paths.subtermStepMapKey $ int32 0) $ Pairs.first $ var "p",
           result (Paths.subtermStepMapValue $ int32 0) $ Pairs.second $ var "p"])
         (Maps.toList $ var "m")),
-    _Term_maybe>>: "m" ~> Maybes.maybe none
-      ("t" ~> single Paths.subtermStepMaybeTerm $ var "t")
-      (var "m"),
+    _Term_maybe>>: "m" ~> Maybes.cases (var "m") none ("t" ~> single Paths.subtermStepMaybeTerm $ var "t"),
     _Term_pair>>: "p" ~> none, -- TODO: add steps when SubtermStep type is updated
     _Term_project>>: constant none,
     _Term_record>>: "rt" ~> Lists.map

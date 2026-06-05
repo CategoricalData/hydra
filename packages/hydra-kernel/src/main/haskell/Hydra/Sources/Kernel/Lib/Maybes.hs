@@ -37,9 +37,10 @@ module_ = Module {
         "Total. Corresponds to Haskell's (>>=) :: Maybe a -> (a -> Maybe b) -> Maybe b."] bind_,
       primNoDef "cases" "Case analysis on a maybe, with cases-style argument order." casesSig [
         "cases(m, def, f) returns f(x) when m is Just(x), and def when m is Nothing.",
-        "Identical in behavior to the maybe primitive but with the maybe value as the first argument\
-        \ (matching the convention for case-statement-like elimination).",
-        "Total. Argument order is (m, def, f) rather than Haskell's (def, f, m)."],
+        "The fundamental eliminator for the maybe type; every other primitive in this namespace can be\
+        \ derived from it. The maybe value is the first argument, matching the convention for\
+        \ case-statement-like elimination.",
+        "Total. Argument order is (m, def, f) rather than Haskell's maybe :: (def, f, m)."],
       toPrimitive "Concatenate maybes, keeping only the present values." catSig [
         "cat(xs) returns the list of contained values from Just elements of xs, in original order; Nothing\
         \ elements are discarded.",
@@ -66,11 +67,6 @@ module_ = Module {
         "mapMaybe(f, xs) applies f to each element of xs and returns the list of contained values from Just\
         \ results in original order; Nothing results are discarded.",
         "Total. Corresponds to Haskell's Data.Maybe.mapMaybe :: (a -> Maybe b) -> [a] -> [b]."] mapMaybe_,
-      primNoDef "maybe" "Case analysis on a maybe, applying a function if present or returning a default if absent." maybeSig [
-        "maybe(def, f, m) returns f(x) when m is Just(x), and def when m is Nothing.",
-        "The fundamental eliminator for the maybe type; every other primitive in this namespace can be\
-        \ derived from it.",
-        "Total. Corresponds to Haskell's maybe :: b -> (a -> b) -> Maybe a -> b."],
       toPrimitive "Wrap a value in Just." pureSig [
         "pure(x) = Just(x). The applicative pure for maybe.",
         "Total. Corresponds to Haskell's pure :: a -> Maybe a / Just."] pure_,
@@ -173,17 +169,6 @@ mapSig = sig $ TypeScheme [Name "x", Name "y"]
    Types.optional (Types.var "y"))
   Nothing
 
--- maybe : forall a b. b -> (a -> b) -> Maybe a -> b
--- The default value (position 0) is lazy: it is only evaluated when the
--- optional is empty.
-maybeSig :: TermSignature
-maybeSig = lazySig [0] $ TypeScheme [Name "y", Name "x"]
-  (Types.var "y" Types.~>
-   (Types.var "x" Types.~> Types.var "y") Types.~>
-   Types.optional (Types.var "x") Types.~>
-   Types.var "y")
-  Nothing
-
 -- pure : forall a. a -> Maybe a
 pureSig :: TermSignature
 pureSig = sig $ TypeScheme [Name "x"]
@@ -205,20 +190,20 @@ apply_ = define "apply" $
   "mf" ~> "mx" ~> Maybes.bind (var "mf")
     ("f" ~> Maybes.map ("x" ~> var "f" @@ var "x") (var "mx"))
 
--- bind m f = maybe Nothing f m
+-- bind m f = cases m Nothing f
 bind_ :: TypedTermDefinition (Maybe a -> (a -> Maybe b) -> Maybe b)
 bind_ = define "bind" $
-  doc "Monadic bind for optionals, defined in terms of maybe." $
-  "m" ~> "f" ~> Maybes.maybe nothing (var "f") (var "m")
+  doc "Monadic bind for optionals, defined in terms of cases." $
+  "m" ~> "f" ~> Maybes.cases (var "m") nothing (var "f")
 
--- cat xs = foldr (\m acc -> maybe acc (\v -> v : acc) m) [] xs
+-- cat xs = foldr (\m acc -> cases m acc (\v -> v : acc)) [] xs
 cat_ :: TypedTermDefinition ([Maybe a] -> [a])
 cat_ = define "cat" $
   doc "Catenate a list of optionals, keeping only the present values." $
   "xs" ~> Lists.foldr
-    ("m" ~> "acc" ~> Maybes.maybe (var "acc" :: TypedTerm [a])
-      ("v" ~> Lists.cons (var "v") (var "acc"))
-      (var "m"))
+    ("m" ~> "acc" ~> Maybes.cases (var "m")
+      (var "acc" :: TypedTerm [a])
+      ("v" ~> Lists.cons (var "v") (var "acc")))
     (list ([] :: [TypedTerm a]))
     (var "xs")
 
@@ -228,23 +213,23 @@ compose_ = define "compose" $
   doc "Kleisli composition for optionals, defined in terms of bind." $
   "f" ~> "g" ~> "x" ~> Maybes.bind (var "f" @@ var "x") (var "g")
 
--- fromMaybe def m = maybe def (\x -> x) m
+-- fromMaybe def m = cases m def (\x -> x)
 fromMaybe_ :: TypedTermDefinition (a -> Maybe a -> a)
 fromMaybe_ = define "fromMaybe" $
-  doc "Return the contained value or a default, defined in terms of maybe." $
-  "def" ~> "m" ~> Maybes.maybe (var "def" :: TypedTerm a) ("x" ~> var "x") (var "m")
+  doc "Return the contained value or a default, defined in terms of cases." $
+  "def" ~> "m" ~> Maybes.cases (var "m") (var "def" :: TypedTerm a) ("x" ~> var "x")
 
--- isJust m = maybe false (\_ -> true) m
+-- isJust m = cases m false (\_ -> true)
 isJust_ :: TypedTermDefinition (Maybe a -> Bool)
 isJust_ = define "isJust" $
-  doc "Test for presence, defined in terms of maybe." $
-  "m" ~> Maybes.maybe false ("_" ~> true) (var "m")
+  doc "Test for presence, defined in terms of cases." $
+  "m" ~> Maybes.cases (var "m") false ("_" ~> true)
 
--- isNothing m = maybe true (\_ -> false) m
+-- isNothing m = cases m true (\_ -> false)
 isNothing_ :: TypedTermDefinition (Maybe a -> Bool)
 isNothing_ = define "isNothing" $
-  doc "Test for absence, defined in terms of maybe." $
-  "m" ~> Maybes.maybe true ("_" ~> false) (var "m")
+  doc "Test for absence, defined in terms of cases." $
+  "m" ~> Maybes.cases (var "m") true ("_" ~> false)
 
 -- mapMaybe f xs = cat (Lists.map f xs)
 mapMaybe_ :: TypedTermDefinition ((a -> Maybe b) -> [a] -> [b])
@@ -252,11 +237,11 @@ mapMaybe_ = define "mapMaybe" $
   doc "Map a partial function and keep only the present results, defined in terms of lists.map and cat." $
   "f" ~> "xs" ~> Maybes.cat (Lists.map (var "f") (var "xs"))
 
--- map f m = maybe Nothing (\x -> Just (f x)) m
+-- map f m = cases m Nothing (\x -> Just (f x))
 map_ :: TypedTermDefinition ((a -> b) -> Maybe a -> Maybe b)
 map_ = define "map" $
-  doc "Map a function over an optional, defined in terms of maybe." $
-  "f" ~> "m" ~> Maybes.maybe nothing ("x" ~> just (var "f" @@ var "x")) (var "m")
+  doc "Map a function over an optional, defined in terms of cases." $
+  "f" ~> "m" ~> Maybes.cases (var "m") nothing ("x" ~> just (var "f" @@ var "x"))
 
 -- pure x = Just x
 pure_ :: TypedTermDefinition (a -> Maybe a)
@@ -264,10 +249,10 @@ pure_ = define "pure" $
   doc "Wrap a value in Just." $
   "x" ~> just (var "x")
 
--- toList m = maybe [] (\x -> [x]) m
+-- toList m = cases m [] (\x -> [x])
 toList_ :: TypedTermDefinition (Maybe a -> [a])
 toList_ = define "toList" $
-  doc "Convert an optional to a list, defined in terms of maybe." $
-  "m" ~> Maybes.maybe (list ([] :: [TypedTerm a]))
+  doc "Convert an optional to a list, defined in terms of cases." $
+  "m" ~> Maybes.cases (var "m")
+    (list ([] :: [TypedTerm a]))
     ("x" ~> list [var "x"])
-    (var "m")

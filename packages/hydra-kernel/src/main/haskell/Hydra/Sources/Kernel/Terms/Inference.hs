@@ -183,10 +183,7 @@ atOrFail :: TypedTermDefinition (Int -> String -> [a] -> Prelude.Either Error a)
 atOrFail = define "atOrFail" $
   doc "Return the element at the given index, or Left(Other) with the given description if out of range" $
   "i" ~> "desc" ~> "xs" ~>
-  Maybes.maybe
-    (left $ Error.errorOther $ Error.otherError $ (string "atOrFail: ") ++ var "desc")
-    (reify right)
-    (Lists.maybeAt (var "i") (var "xs"))
+  Maybes.cases (Lists.maybeAt (var "i") (var "xs")) (left $ Error.errorOther $ Error.otherError $ (string "atOrFail: ") ++ var "desc") (reify right)
 
 bindConstraints :: TypedTermDefinition (InferenceContext -> Graph -> [TypeConstraint] -> Either Error TypeSubst)
 bindConstraints = define "bindConstraints" $
@@ -333,10 +330,7 @@ headOrFail :: TypedTermDefinition (String -> [a] -> Prelude.Either Error a)
 headOrFail = define "headOrFail" $
   doc "Return the first element of a list, or Left(Other) with the given description if the list is empty" $
   "desc" ~> "xs" ~>
-  Maybes.maybe
-    (left $ Error.errorOther $ Error.otherError $ (string "headOrFail: ") ++ var "desc")
-    (reify right)
-    (Lists.maybeHead $ var "xs")
+  Maybes.cases (Lists.maybeHead $ var "xs") (left $ Error.errorOther $ Error.otherError $ (string "headOrFail: ") ++ var "desc") (reify right)
 inferGraphTypes :: TypedTermDefinition (InferenceContext -> [Binding] -> Graph -> Prelude.Either Error ((Graph, [Binding]), InferenceContext))
 inferGraphTypes = define "inferGraphTypes" $
   doc ("Infer types for all elements in a graph, using the provided ordered bindings."
@@ -374,8 +368,7 @@ inferMany = define "inferMany" $
   doc "Infer types for multiple terms, propagating class constraints from sub-expressions" $
   "fcx" ~> "cx" ~> "pairs" ~>
   "emptyResult" <~ (right $ pair (pair (list ([] :: [TypedTerm Term])) $ pair (list ([] :: [TypedTerm Type])) (pair Substitution.idTypeSubst Maps.empty)) (var "fcx")) $
-  Maybes.maybe (var "emptyResult")
-    ("pairsUc" ~>
+  Maybes.cases (Lists.uncons (var "pairs")) (var "emptyResult") ("pairsUc" ~>
     "headPair" <~ Pairs.first (var "pairsUc") $
     "tl" <~ Pairs.second (var "pairsUc") $
     "e" <~ Pairs.first (var "headPair") $
@@ -400,7 +393,6 @@ inferMany = define "inferMany" $
       (pair
         (Lists.cons (Substitution.substInType @@ var "s2" @@ var "t1") (var "t2"))
         (pair (Substitution.composeTypeSubst @@ var "s1" @@ var "s2") (var "mergedConstraints")))) (var "fcx3"))
-    (Lists.uncons (var "pairs"))
 
 
 inferTypeOf :: TypedTermDefinition (InferenceContext -> Graph -> Term -> Prelude.Either Error ((Term, TypeScheme), InferenceContext))
@@ -420,12 +412,9 @@ inferTypeOf = define "inferTypeOf" $
     ("binding" <<~ headOrFail @@ string "inferTypeOf: single binding expected" @@ var "bindings" $
      "term1" <~ Core.bindingTerm (var "binding") $
      "mts" <~ Core.bindingTypeScheme (var "binding") $
-     Maybes.maybe
-       (left (Error.errorInference $ Error.inferenceErrorOther $ Error.otherInferenceError
+     Maybes.cases (var "mts") (left (Error.errorInference $ Error.inferenceErrorOther $ Error.otherInferenceError
          (Paths.subtermPath (Lists.reverse $ Typing.inferenceContextTrace (var "fcx2")))
-         (string "Expected a type scheme")))
-       ("ts" ~> right $ pair (pair (var "term1") (var "ts")) (var "fcx2"))
-       (var "mts"))
+         (string "Expected a type scheme"))) ("ts" ~> right $ pair (pair (var "term1") (var "ts")) (var "fcx2")))
     (left (Error.errorInference $ Error.inferenceErrorOther $ Error.otherInferenceError
       (Paths.subtermPath (Lists.reverse $ Typing.inferenceContextTrace (var "fcx2")))
       (Strings.cat $ list [
@@ -818,13 +807,7 @@ inferTypeOfLetNormalized = define "inferTypeOfLetNormalized" $
   "composedSubst" <~ Substitution.composeTypeSubst @@ var "s1" @@ var "s2" $
   "originalBindingConstraints" <~ Lists.foldl
     ("acc" ~> "b" ~>
-      Maybes.maybe
-        (var "acc")
-        ("ts" ~> Maybes.maybe
-          (var "acc")
-          ("c" ~> mergeClassConstraints @@ var "acc" @@ var "c")
-          (Core.typeSchemeConstraints $ var "ts"))
-        (Core.bindingTypeScheme $ var "b"))
+      Maybes.cases (Core.bindingTypeScheme $ var "b") (var "acc") ("ts" ~> Maybes.cases (Core.typeSchemeConstraints $ var "ts") (var "acc") ("c" ~> mergeClassConstraints @@ var "acc" @@ var "c")))
     Maps.empty
     (var "bins0") $
   "originalConstraintsSubst" <~ Substitution.substInClassConstraints @@ var "composedSubst" @@ var "originalBindingConstraints" $
@@ -980,7 +963,7 @@ inferTypeOfOptional = define "inferTypeOfOptional" $
     @@ var "trmCons"
     @@ (string "optional element")
     @@ (Sets.empty :: TypedTerm (S.Set Name))
-    @@ (Maybes.maybe (list ([] :: [TypedTerm Term])) (reify Lists.singleton) $ var "m")
+    @@ (Maybes.cases (var "m") (list ([] :: [TypedTerm Term])) (reify Lists.singleton))
 
 inferTypeOfPair :: TypedTermDefinition (InferenceContext -> Graph -> (Term, Term) -> Prelude.Either Error InferenceResult)
 inferTypeOfPair = define "inferTypeOfPair" $
@@ -1015,9 +998,7 @@ inferTypeOfPrimitive :: TypedTermDefinition (InferenceContext -> Graph -> Name -
 inferTypeOfPrimitive = define "inferTypeOfPrimitive" $
   doc "Infer the type of a primitive function (Either version)" $
   "fcx" ~> "cx" ~> "name" ~>
-  Maybes.maybe
-    (left (Error.errorResolution $ Error.resolutionErrorNoSuchPrimitive $ Error.noSuchPrimitiveError (var "name")))
-    ("scheme" ~>
+  Maybes.cases (Maybes.map ("_p" ~> Scoping.termSignatureToTypeScheme @@ (Packaging.primitiveDefinitionSignature $ Graph.primitiveDefinition (var "_p"))) $ Maps.lookup (var "name") (Graph.graphPrimitives $ var "cx")) (left (Error.errorResolution $ Error.resolutionErrorNoSuchPrimitive $ Error.noSuchPrimitiveError (var "name"))) ("scheme" ~>
       "tsResult" <~ Resolution.instantiateTypeScheme @@ var "fcx" @@ var "scheme" $
       "ts" <~ Pairs.first (var "tsResult") $
       "fcx2" <~ Pairs.second (var "tsResult") $
@@ -1030,7 +1011,6 @@ inferTypeOfPrimitive = define "inferTypeOfPrimitive" $
         @@ Core.typeSchemeBody (var "ts")
         @@ Substitution.idTypeSubst
         @@ var "constraints"))
-    (Maybes.map ("_p" ~> Scoping.termSignatureToTypeScheme @@ (Packaging.primitiveDefinitionSignature $ Graph.primitiveDefinition (var "_p"))) $ Maps.lookup (var "name") (Graph.graphPrimitives $ var "cx"))
 
 inferTypeOfProjection :: TypedTermDefinition (InferenceContext -> Graph -> Projection -> Prelude.Either Error InferenceResult)
 inferTypeOfProjection = define "inferTypeOfProjection" $
@@ -1201,11 +1181,10 @@ inferTypeOfVariable :: TypedTermDefinition (InferenceContext -> Graph -> Name ->
 inferTypeOfVariable = define "inferTypeOfVariable" $
   doc "Infer the type of a variable (Either version)" $
   "fcx" ~> "cx" ~> "name" ~>
-  Maybes.maybe
+  Maybes.cases
+    (Maps.lookup (var "name") (Graph.graphBoundTypes $ var "cx"))
     -- Not found in graphBoundTypes: fall through to graphPrimitives
-    (Maybes.maybe
-      (left (Error.errorResolution $ Error.resolutionErrorNoSuchBinding $ Error.noSuchBindingError (var "name")))
-      ("scheme" ~>
+    (Maybes.cases (Maybes.map ("_p" ~> Scoping.termSignatureToTypeScheme @@ (Packaging.primitiveDefinitionSignature $ Graph.primitiveDefinition (var "_p"))) $ Maps.lookup (var "name") (Graph.graphPrimitives $ var "cx")) (left (Error.errorResolution $ Error.resolutionErrorNoSuchBinding $ Error.noSuchBindingError (var "name"))) ("scheme" ~>
         "tsResult" <~ Resolution.instantiateTypeScheme @@ var "fcx" @@ var "scheme" $
         "ts" <~ Pairs.first (var "tsResult") $
         "fcx2" <~ Pairs.second (var "tsResult") $
@@ -1217,8 +1196,7 @@ inferTypeOfVariable = define "inferTypeOfVariable" $
             @@ Core.termVariable (var "name"))
           @@ Core.typeSchemeBody (var "ts")
           @@ Substitution.idTypeSubst
-          @@ var "constraints"))
-      (Maybes.map ("_p" ~> Scoping.termSignatureToTypeScheme @@ (Packaging.primitiveDefinitionSignature $ Graph.primitiveDefinition (var "_p"))) $ Maps.lookup (var "name") (Graph.graphPrimitives $ var "cx")))
+          @@ var "constraints")))
     -- Found in graphBoundTypes: use the type scheme directly
     ("scheme" ~>
       "tsResult" <~ Resolution.instantiateTypeScheme @@ var "fcx" @@ var "scheme" $
@@ -1233,7 +1211,6 @@ inferTypeOfVariable = define "inferTypeOfVariable" $
         (asTerm Substitution.idTypeSubst)
         (var "constraints")
         (var "fcx2")))
-    (Maps.lookup (var "name") (Graph.graphBoundTypes $ var "cx"))
 
 inferTypeOfWrappedTerm :: TypedTermDefinition (InferenceContext -> Graph -> WrappedTerm -> Prelude.Either Error InferenceResult)
 inferTypeOfWrappedTerm = define "inferTypeOfWrappedTerm" $
@@ -1269,8 +1246,7 @@ inferTypesOfTemporaryBindings = define "inferTypesOfTemporaryBindings" $
   doc "Infer types for temporary let bindings (Either version)" $
   "fcx" ~> "cx" ~> "bins" ~>
   "emptyResult" <~ (right $ pair (pair (list ([] :: [TypedTerm Term])) (pair (list ([] :: [TypedTerm Type])) (pair (Substitution.idTypeSubst) Maps.empty))) (var "fcx")) $
-  Maybes.maybe (var "emptyResult")
-    ("binsUc" ~>
+  Maybes.cases (Lists.uncons (var "bins")) (var "emptyResult") ("binsUc" ~>
     "binding" <~ Pairs.first (var "binsUc") $
     "tl" <~ Pairs.second (var "binsUc") $
     "k" <~ Core.bindingName (var "binding") $
@@ -1290,9 +1266,7 @@ inferTypesOfTemporaryBindings = define "inferTypesOfTemporaryBindings" $
     "c1Inferred" <~ Typing.inferenceResultClassConstraints (var "result1") $
 
     -- Extract constraints from the original binding's TypeScheme
-    "originalBindingConstraints" <<~ Maybes.maybe
-      (right Maps.empty)
-      ("ts" ~>
+    "originalBindingConstraints" <<~ Maybes.cases (Core.bindingTypeScheme $ var "binding") (right Maps.empty) ("ts" ~>
         "tsResult" <~ Resolution.instantiateTypeScheme @@ var "fcx2" @@ var "ts" $
         "instantiatedTs" <~ Pairs.first (var "tsResult") $
         "freshConstraints" <~ Maybes.fromMaybe Maps.empty (Core.typeSchemeConstraints $ var "instantiatedTs") $
@@ -1306,8 +1280,7 @@ inferTypesOfTemporaryBindings = define "inferTypesOfTemporaryBindings" $
             @@ (Core.typeSchemeBody $ var "instantiatedTs")
             @@ var "u_prime"
             @@ string "original binding type") $
-        right (Substitution.substInClassConstraints @@ var "unifySubst" @@ var "freshConstraints"))
-      (Core.bindingTypeScheme $ var "binding") $
+        right (Substitution.substInClassConstraints @@ var "unifySubst" @@ var "freshConstraints")) $
 
     "c1" <~ mergeClassConstraints @@ var "c1Inferred" @@ var "originalBindingConstraints" $
 
@@ -1328,7 +1301,6 @@ inferTypesOfTemporaryBindings = define "inferTypesOfTemporaryBindings" $
       (pair
         (Lists.cons (Substitution.substInType @@ var "r" @@ var "u_prime") (var "r_prime"))
         (pair (Substitution.composeTypeSubst @@ var "u" @@ var "r") (var "mergedConstraints")))) (var "fcx3"))
-    (Lists.uncons (var "bins"))
 
 isUnbound :: TypedTermDefinition (Graph -> Name -> Bool)
 isUnbound = define "isUnbound" $
@@ -1357,12 +1329,9 @@ mergeClassConstraints = define "mergeClassConstraints" $
     ("acc" ~> "pair" ~>
       "k" <~ Pairs.first (var "pair") $
       "v" <~ Pairs.second (var "pair") $
-      Maybes.maybe
-        (Maps.insert (var "k") (var "v") (var "acc"))
-        ("existing" ~>
+      Maybes.cases (Maps.lookup (var "k") (var "acc")) (Maps.insert (var "k") (var "v") (var "acc")) ("existing" ~>
           "merged" <~ Core.typeVariableConstraints (Lists.nub $ Lists.concat2 (Core.typeVariableConstraintsClasses $ var "existing") (Core.typeVariableConstraintsClasses $ var "v")) $
-          Maps.insert (var "k") (var "merged") (var "acc"))
-        (Maps.lookup (var "k") (var "acc")))
+          Maps.insert (var "k") (var "merged") (var "acc")))
     (var "m1")
     (Maps.toList $ var "m2")
 

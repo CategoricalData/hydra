@@ -158,22 +158,22 @@ isComplexVariable = define "isComplexVariable" $
       (boolean True)
       -- Check if the variable is in the graph's bound types
       ("typeLookup" <~ Maps.lookup (var "name") (Graph.graphBoundTypes $ var "tc") $
-       Maybes.maybe
+       Maybes.cases
+         (var "typeLookup")
          -- Not in graphBoundTypes: fall through to graphPrimitives
          ("primLookup" <~ Maps.lookup (var "name") (Graph.graphPrimitives $ var "tc") $
-          Maybes.maybe
+          Maybes.cases
+            (var "primLookup")
             -- If not in graph at all, assume mutual recursion (complex)
             (boolean True)
             -- If a primitive, non-nullary iff type arity > 0
-            ("prim" ~> Equality.gt (Arity.typeSchemeArity @@ (Scoping.termSignatureToTypeScheme @@ (Packaging.primitiveDefinitionSignature $ Graph.primitiveDefinition (var "prim")))) (int32 0))
-            (var "primLookup"))
+            ("prim" ~> Equality.gt (Arity.typeSchemeArity @@ (Scoping.termSignatureToTypeScheme @@ (Packaging.primitiveDefinitionSignature $ Graph.primitiveDefinition (var "prim")))) (int32 0)))
          -- If in graph, check if the binding itself is non-nullary (a function).
          -- Non-nullary bindings are always complex (they take parameters).
          -- Nullary bindings are assumed non-complex from this check;
          -- their actual complexity will be determined by isComplexBinding
          -- at the reference site.
-         ("ts" ~> Equality.gt (Arity.typeSchemeArity @@ var "ts") (int32 0))
-         (var "typeLookup")))
+         ("ts" ~> Equality.gt (Arity.typeSchemeArity @@ var "ts") (int32 0))))
 
 isEncodedTerm :: TypedTermDefinition (Term -> Bool)
 isEncodedTerm = define "isEncodedTerm" $
@@ -282,7 +282,7 @@ isTrivialTerm = define "isTrivialTerm" $
         _Term_unwrap>>: constant (isTrivialTerm @@ var "arg")],
     -- Maybe term (just x) where x is trivial; nothing is also trivial
     _Term_maybe>>: "opt" ~>
-      Maybes.maybe (boolean True) ("inner" ~> isTrivialTerm @@ var "inner") (var "opt"),
+      Maybes.cases (var "opt") (boolean True) ("inner" ~> isTrivialTerm @@ var "inner"),
     -- Record construction is trivial if all field terms are trivial
     _Term_record>>: "rec" ~>
       Lists.foldl ("acc" ~> "fld" ~> Logic.and (var "acc") (isTrivialTerm @@ (Core.fieldTerm $ var "fld")))

@@ -656,11 +656,11 @@ higherOrderPrimitivesTests = define "higherOrderPrimitivesTests" $
     (primitive _lists_filter)
     (tylam "t0" $ tyapp (primitive _lists_filter) (T.var "t0"))
     (T.forAll "t0" $ T.function (T.function (T.var "t0") T.boolean) (T.function (T.list $ T.var "t0") (T.list $ T.var "t0"))),
-  checkTest "optionals maybe" []
-    (primitive _maybes_maybe)
-    (tylams ["t0", "t1"] $ tyapps (primitive _maybes_maybe) [T.var "t0", T.var "t1"])
+  checkTest "optionals cases" []
+    (primitive _maybes_cases)
+    (tylams ["t0", "t1"] $ tyapps (primitive _maybes_cases) [T.var "t0", T.var "t1"])
     (T.forAlls ["t0", "t1"] $
-      T.function (T.var "t0") (T.function (T.function (T.var "t1") (T.var "t0")) (T.function (T.optional $ T.var "t1") (T.var "t0"))))]
+      T.function (T.optional $ T.var "t0") (T.function (T.var "t1") (T.function (T.function (T.var "t0") (T.var "t1")) (T.var "t1"))))]
 
 monomorphicVsPolymorphicTests :: TypedTermDefinition TestGroup
 monomorphicVsPolymorphicTests = define "monomorphicVsPolymorphicTests" $

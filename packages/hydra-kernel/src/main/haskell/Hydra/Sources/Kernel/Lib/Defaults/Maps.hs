@@ -95,26 +95,28 @@ alter_ = define "alter" $
       -- Result depends on newVal:
       -- If newVal is Nothing, delete the key
       -- If newVal is Just v', insert/update with v'
+      -- cases newVal (delete key) (\newV -> insert key newV mapTerm)
       right $ Core.termApplication $ Core.application
         (Core.termApplication $ Core.application
           (Core.termApplication $ Core.application
-            (Core.termVariable $ encodedName _maybes_maybe)
-            -- default: delete key from map
+            (Core.termVariable $ encodedName _maybes_cases)
+            -- scrutinee: newVal
+            (var "newVal"))
+          -- default: delete key from map
+          (Core.termApplication $ Core.application
+            (Core.termApplication $ Core.application
+              (Core.termVariable $ encodedName _maps_delete)
+              (var "keyTerm"))
+            (var "mapTerm")))
+        -- function: insert new value (as a term-level lambda)
+        (Core.termLambda $ Core.lambda (wrap _Name $ string "newV") nothing $
+          Core.termApplication $ Core.application
             (Core.termApplication $ Core.application
               (Core.termApplication $ Core.application
-                (Core.termVariable $ encodedName _maps_delete)
+                (Core.termVariable $ encodedName _maps_insert)
                 (var "keyTerm"))
-              (var "mapTerm")))
-          -- function: insert new value (as a term-level lambda)
-          (Core.termLambda $ Core.lambda (wrap _Name $ string "newV") nothing $
-            Core.termApplication $ Core.application
-              (Core.termApplication $ Core.application
-                (Core.termApplication $ Core.application
-                  (Core.termVariable $ encodedName _maps_insert)
-                  (var "keyTerm"))
-                (Core.termVariable $ wrap _Name $ string "newV"))
-              (var "mapTerm")))
-        (var "newVal")]
+              (Core.termVariable $ wrap _Name $ string "newV"))
+            (var "mapTerm"))]
 
 -- | Interpreter-friendly bimap for Map terms.
 -- Applies keyFun to each key and valFun to each value.

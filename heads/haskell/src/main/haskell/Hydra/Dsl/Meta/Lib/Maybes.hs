@@ -20,8 +20,10 @@ bind :: TypedTerm (Maybe a) -> TypedTerm (a -> Maybe b) -> TypedTerm (Maybe b)
 bind = primitive2 _maybes_bind
 
 -- | Handle an optional value with the maybe value as the first argument.
-cases :: TypedTerm (Maybe a) -> TypedTerm b -> TypedTerm (a -> b) -> TypedTerm b
-cases = primitive3 _maybes_cases
+-- The default and function arguments accept anything coercible to a term (AsTerm),
+-- mirroring the ergonomics of the former 'maybe' eliminator.
+cases :: (AsTerm t1 b, AsTerm t2 (a -> b)) => TypedTerm (Maybe a) -> t1 -> t2 -> TypedTerm b
+cases m def f = primitive3 _maybes_cases m (asTerm def) (asTerm f)
 
 -- | Filter out Nothing values from a list.
 cat :: TypedTerm [Maybe a] -> TypedTerm [a]
@@ -50,10 +52,6 @@ map f = primitive2 _maybes_map (asTerm f)
 -- | Map a function over a list and collect Just results.
 mapMaybe :: TypedTerm (a -> Maybe b) -> TypedTerm [a] -> TypedTerm [b]
 mapMaybe = primitive2 _maybes_mapMaybe
-
--- | Eliminate an optional value with a default and a function.
-maybe :: (AsTerm t1 b, AsTerm t2 (a -> b)) => t1 -> t2 -> TypedTerm (Maybe a) -> TypedTerm b
-maybe def f = primitive3 _maybes_maybe (asTerm def) (asTerm f)
 
 -- | Lift a value into the Maybe type.
 pure :: TypedTerm a -> TypedTerm (Maybe a)

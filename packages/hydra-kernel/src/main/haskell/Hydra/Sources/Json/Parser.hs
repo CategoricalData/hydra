@@ -235,7 +235,7 @@ jsonExponentPart = define "jsonExponentPart" $
             Parsers.map @@
               ("digits" ~>
                 string "e" ++
-                Maybes.maybe (string "") (reify Strings.fromList <.> reify Lists.pure) (var "sign") ++
+                Maybes.cases (var "sign") (string "") (reify Strings.fromList <.> reify Lists.pure) ++
                 var "digits") @@
               digits)))
 
@@ -258,10 +258,7 @@ jsonIntegerPart = define "jsonIntegerPart" $
     ("sign" ~>
       Parsers.bind @@ digits @@ ("digits" ~>
         Parsers.pure @@
-          (Maybes.maybe
-            (var "digits")
-            (constant $ string "-" ++ var "digits")
-            (var "sign"))))
+          (Maybes.cases (var "sign") (var "digits") (constant $ string "-" ++ var "digits"))))
 
 -- | Parse the fractional part of a JSON number
 -- | Parse a JSON key-value pair
@@ -297,10 +294,10 @@ jsonNumber = define "jsonNumber" $
         Parsers.bind @@ jsonExponentPart @@ ("expPart" ~>
           "numStr" <~
             (var "intPart" ++
-             Maybes.maybe (string "") (reify Equality.identity) (var "fracPart") ++
-             Maybes.maybe (string "") (reify Equality.identity) (var "expPart")) $
+             Maybes.cases (var "fracPart") (string "") (reify Equality.identity) ++
+             Maybes.cases (var "expPart") (string "") (reify Equality.identity)) $
           Parsers.pure @@
-            (Json.valueNumber (Maybes.maybe (decimal 0) (reify Equality.identity) (Literals.readDecimal (var "numStr"))))))))
+            (Json.valueNumber (Maybes.cases (Literals.readDecimal (var "numStr")) (decimal 0) (reify Equality.identity)))))))
 
 -- | Parse a JSON escape character
 -- | Parse a JSON object

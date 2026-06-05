@@ -55,7 +55,7 @@ numPolyWalkers = 400
 -- | Body of @polyWalker_K@.
 --
 -- Base case @k = 0@ is the identity on @Maybe a@.
--- Inductive case @k > 0@ chains through @Maybes.bind@ and @Maybes.maybe@,
+-- Inductive case @k > 0@ chains through @Maybes.bind@ and @Maybes.cases@,
 -- recursing on @polyWalker_(k-1)@.
 polyWalkerBody :: Int -> TypedTerm (Maybe a -> Maybe a)
 polyWalkerBody 0 =
@@ -65,7 +65,7 @@ polyWalkerBody k =
     -- Pattern: a let-binding that holds a polymorphic Maybe a, then bind
     -- through. The forall a propagates through the bind.
     "stepped" <~ (Maybes.bind (var "m") ("v" ~> polyWalkerRef (k-1) @@ just (var "v"))) $
-    Maybes.maybe nothing ("w" ~> just (var "w")) (var "stepped")
+    Maybes.cases (var "stepped") nothing ("w" ~> just (var "w"))
 
 -- | Hydra-level fully-qualified name for the @k@th polyWalker.
 polyWalkerName :: Int -> Name

@@ -149,7 +149,7 @@ blockInstructionToExpr = define "blockInstructionToExpr" $
     "label">: project W._BlockInstruction W._BlockInstruction_label @@ var "b",
     "bt">: project W._BlockInstruction W._BlockInstruction_blockType @@ var "b",
     "body">: project W._BlockInstruction W._BlockInstruction_body @@ var "b",
-    "labelStr">: Maybes.maybe (string "") (lambda "l" $ Strings.cat2 (string " $") (var "l")) (var "label"),
+    "labelStr">: Maybes.cases (var "label") (string "") (lambda "l" $ Strings.cat2 (string " $") (var "l")),
     "btPart">: blockTypeToExpr @@ var "bt",
     "bodyParts">: Lists.map instructionToExpr (var "body"),
     "header">: Serialization.spaceSep @@ Maybes.cat (list [
@@ -197,7 +197,7 @@ dataSegmentToExpr = define "dataSegmentToExpr" $
     "name">: project W._DataSegment W._DataSegment_name @@ var "d",
     "mode">: project W._DataSegment W._DataSegment_mode @@ var "d",
     "bytes">: project W._DataSegment W._DataSegment_bytes @@ var "d",
-    "nameStr">: Maybes.maybe (string "") (lambda "n" $ Strings.cat2 (string " $") (var "n")) (var "name")] $
+    "nameStr">: Maybes.cases (var "name") (string "") (lambda "n" $ Strings.cat2 (string " $") (var "n"))] $
     cases W._DataMode (var "mode") Nothing [
       W._DataMode_active>>: lambda "offset" $
         Serialization.spaceSep @@ list [
@@ -249,7 +249,7 @@ funcLocalToExpr = define "funcLocalToExpr" $
   lambda "l" $ lets [
     "name">: project W._FuncLocal W._FuncLocal_name @@ var "l",
     "typ">: project W._FuncLocal W._FuncLocal_type @@ var "l",
-    "nameStr">: Maybes.maybe (string "") (lambda "n" $ Strings.cat2 (string " $") (var "n")) (var "name")] $
+    "nameStr">: Maybes.cases (var "name") (string "") (lambda "n" $ Strings.cat2 (string " $") (var "n"))] $
     Serialization.cst @@ Strings.cat (list [
       string "(local", var "nameStr", string " ", valTypeToStr @@ var "typ", string ")"])
 
@@ -266,7 +266,7 @@ funcToExpr = define "funcToExpr" $
     "typeUse">: project W._Func W._Func_typeUse @@ var "f",
     "locals">: project W._Func W._Func_locals @@ var "f",
     "body">: project W._Func W._Func_body @@ var "f",
-    "nameStr">: Maybes.maybe (string "") (lambda "n" $ Strings.cat2 (string " $") (var "n")) (var "name"),
+    "nameStr">: Maybes.cases (var "name") (string "") (lambda "n" $ Strings.cat2 (string " $") (var "n")),
     "headerStr">: Strings.cat2 (string "(func") (var "nameStr"),
     "typeUsePart">: typeUseToExpr @@ var "typeUse",
     "localParts">: Lists.map funcLocalToExpr (var "locals"),
@@ -307,7 +307,7 @@ globalDefToExpr = define "globalDefToExpr" $
     "name">: project W._GlobalDef W._GlobalDef_name @@ var "g",
     "gt">: project W._GlobalDef W._GlobalDef_type @@ var "g",
     "init">: project W._GlobalDef W._GlobalDef_init @@ var "g",
-    "nameStr">: Maybes.maybe (string "") (lambda "n" $ Strings.cat2 (string " $") (var "n")) (var "name")] $
+    "nameStr">: Maybes.cases (var "name") (string "") (lambda "n" $ Strings.cat2 (string " $") (var "n"))] $
     Serialization.spaceSep @@ list [
       Serialization.cst @@ Strings.cat2 (string "(global") (var "nameStr"),
       globalTypeToExpr @@ var "gt",
@@ -337,7 +337,7 @@ ifInstructionToExpr = define "ifInstructionToExpr" $
     "bt">: project W._IfInstruction W._IfInstruction_blockType @@ var "i",
     "thenBranch">: project W._IfInstruction W._IfInstruction_then @@ var "i",
     "elseBranch">: project W._IfInstruction W._IfInstruction_else @@ var "i",
-    "labelStr">: Maybes.maybe (string "") (lambda "l" $ Strings.cat2 (string " $") (var "l")) (var "label"),
+    "labelStr">: Maybes.cases (var "label") (string "") (lambda "l" $ Strings.cat2 (string " $") (var "l")),
     "btPart">: blockTypeToExpr @@ var "bt",
     "thenParts">: Lists.map instructionToExpr (var "thenBranch"),
     "elseParts">: Lists.map instructionToExpr (var "elseBranch"),
@@ -383,7 +383,7 @@ importDescToExpr = define "importDescToExpr" $
       W._ImportDesc_func>>: lambda "f" $ lets [
         "name">: project W._ImportFunc W._ImportFunc_name @@ var "f",
         "tu">: project W._ImportFunc W._ImportFunc_typeUse @@ var "f",
-        "nameStr">: Maybes.maybe (string "") (lambda "n" $ Strings.cat2 (string " $") (var "n")) (var "name")] $
+        "nameStr">: Maybes.cases (var "name") (string "") (lambda "n" $ Strings.cat2 (string " $") (var "n"))] $
         Serialization.spaceSep @@ list [
           Serialization.cst @@ Strings.cat2 (string "(func") (var "nameStr"),
           typeUseToExpr @@ var "tu",
@@ -391,7 +391,7 @@ importDescToExpr = define "importDescToExpr" $
       W._ImportDesc_memory>>: lambda "m" $ lets [
         "name">: project W._ImportMemory W._ImportMemory_name @@ var "m",
         "lim">: project W._ImportMemory W._ImportMemory_limits @@ var "m",
-        "nameStr">: Maybes.maybe (string "") (lambda "n" $ Strings.cat2 (string " $") (var "n")) (var "name")] $
+        "nameStr">: Maybes.cases (var "name") (string "") (lambda "n" $ Strings.cat2 (string " $") (var "n"))] $
         Serialization.spaceSep @@ list [
           Serialization.cst @@ Strings.cat2 (string "(memory") (var "nameStr"),
           limitsToExpr @@ var "lim",
@@ -400,7 +400,7 @@ importDescToExpr = define "importDescToExpr" $
         "name">: project W._ImportTable W._ImportTable_name @@ var "t",
         "rt">: project W._ImportTable W._ImportTable_refType @@ var "t",
         "lim">: project W._ImportTable W._ImportTable_limits @@ var "t",
-        "nameStr">: Maybes.maybe (string "") (lambda "n" $ Strings.cat2 (string " $") (var "n")) (var "name")] $
+        "nameStr">: Maybes.cases (var "name") (string "") (lambda "n" $ Strings.cat2 (string " $") (var "n"))] $
         Serialization.spaceSep @@ list [
           Serialization.cst @@ Strings.cat2 (string "(table") (var "nameStr"),
           limitsToExpr @@ var "lim",
@@ -409,7 +409,7 @@ importDescToExpr = define "importDescToExpr" $
       W._ImportDesc_global>>: lambda "g" $ lets [
         "name">: project W._ImportGlobal W._ImportGlobal_name @@ var "g",
         "gt">: project W._ImportGlobal W._ImportGlobal_type @@ var "g",
-        "nameStr">: Maybes.maybe (string "") (lambda "n" $ Strings.cat2 (string " $") (var "n")) (var "name")] $
+        "nameStr">: Maybes.cases (var "name") (string "") (lambda "n" $ Strings.cat2 (string " $") (var "n"))] $
         Serialization.spaceSep @@ list [
           Serialization.cst @@ Strings.cat2 (string "(global") (var "nameStr"),
           globalTypeToExpr @@ var "gt",
@@ -528,7 +528,7 @@ memoryDefToExpr = define "memoryDefToExpr" $
   lambda "m" $ lets [
     "name">: project W._MemoryDef W._MemoryDef_name @@ var "m",
     "lim">: project W._MemoryDef W._MemoryDef_limits @@ var "m",
-    "nameStr">: Maybes.maybe (string "") (lambda "n" $ Strings.cat2 (string " $") (var "n")) (var "name")] $
+    "nameStr">: Maybes.cases (var "name") (string "") (lambda "n" $ Strings.cat2 (string " $") (var "n"))] $
     Serialization.spaceSep @@ list [
       Serialization.cst @@ Strings.cat2 (string "(memory") (var "nameStr"),
       limitsToExpr @@ var "lim",
@@ -562,7 +562,7 @@ moduleToExpr = define "moduleToExpr" $
   lambda "mod" $ lets [
     "name">: project W._Module W._Module_name @@ var "mod",
     "fields">: project W._Module W._Module_fields @@ var "mod",
-    "nameStr">: Maybes.maybe (string "") (lambda "n" $ Strings.cat2 (string " $") (var "n")) (var "name"),
+    "nameStr">: Maybes.cases (var "name") (string "") (lambda "n" $ Strings.cat2 (string " $") (var "n")),
     "fieldExprs">: Lists.map moduleFieldToExpr (var "fields")] $
     Serialization.newlineSep @@ Lists.concat (list [
       list [Serialization.cst @@ Strings.cat2 (string "(module") (var "nameStr")],
@@ -575,7 +575,7 @@ paramToExpr = define "paramToExpr" $
   lambda "p" $ lets [
     "name">: project W._Param W._Param_name @@ var "p",
     "typ">: project W._Param W._Param_type @@ var "p",
-    "nameStr">: Maybes.maybe (string "") (lambda "n" $ Strings.cat2 (string " $") (var "n")) (var "name")] $
+    "nameStr">: Maybes.cases (var "name") (string "") (lambda "n" $ Strings.cat2 (string " $") (var "n"))] $
     Serialization.cst @@ Strings.cat (list [string "(param", var "nameStr", string " ", valTypeToStr @@ var "typ", string ")"])
 
 
@@ -598,7 +598,7 @@ tableDefToExpr = define "tableDefToExpr" $
     "name">: project W._TableDef W._TableDef_name @@ var "t",
     "rt">: project W._TableDef W._TableDef_refType @@ var "t",
     "lim">: project W._TableDef W._TableDef_limits @@ var "t",
-    "nameStr">: Maybes.maybe (string "") (lambda "n" $ Strings.cat2 (string " $") (var "n")) (var "name")] $
+    "nameStr">: Maybes.cases (var "name") (string "") (lambda "n" $ Strings.cat2 (string " $") (var "n"))] $
     Serialization.spaceSep @@ list [
       Serialization.cst @@ Strings.cat2 (string "(table") (var "nameStr"),
       limitsToExpr @@ var "lim",
@@ -622,7 +622,7 @@ typeDefToExpr = define "typeDefToExpr" $
   lambda "td" $ lets [
     "name">: project W._TypeDef W._TypeDef_name @@ var "td",
     "ft">: project W._TypeDef W._TypeDef_type @@ var "td",
-    "nameStr">: Maybes.maybe (string "") (lambda "n" $ Strings.cat2 (string " $") (var "n")) (var "name")] $
+    "nameStr">: Maybes.cases (var "name") (string "") (lambda "n" $ Strings.cat2 (string " $") (var "n"))] $
     Serialization.spaceSep @@ list [
       Serialization.cst @@ Strings.cat2 (string "(type") (var "nameStr"),
       funcTypeToExpr @@ var "ft",
