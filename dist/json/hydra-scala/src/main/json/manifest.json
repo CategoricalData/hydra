@@ -2,5 +2,6 @@
   "defaultLibModules": [],
   "dslModules": ["hydra.dsl.scala.syntax"],
   "mainModules": ["hydra.scala.coder", "hydra.scala.language", "hydra.scala.serde", "hydra.scala.syntax", "hydra.scala.utils"],
+  "manifestFormatVersion": 1,
   "package": "hydra-scala",
   "testModules": []}
